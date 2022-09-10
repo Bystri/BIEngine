@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <list>
 #include <cassert>
@@ -8,8 +8,8 @@
 namespace BIEngine
 {
 
-	//Данный класс реализован за счет шаблона "одиночка" и доступ к нему может быть получен через вызов  ProcessManager::Get()
-	//Перед использованием класса требуется предварительная инициализация через Create()
+	//Р”Р°РЅРЅС‹Р№ РєР»Р°СЃСЃ СЂРµР°Р»РёР·РѕРІР°РЅ Р·Р° СЃС‡РµС‚ С€Р°Р±Р»РѕРЅР° "РѕРґРёРЅРѕС‡РєР°" Рё РґРѕСЃС‚СѓРї Рє РЅРµРјСѓ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїРѕР»СѓС‡РµРЅ С‡РµСЂРµР· РІС‹Р·РѕРІ  ProcessManager::Get()
+	//РџРµСЂРµРґ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РєР»Р°СЃСЃР° С‚СЂРµР±СѓРµС‚СЃСЏ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅР°СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С‡РµСЂРµР· Create()
 	class ProcessManager
 	{
 		typedef std::list<StrongProcessPtr> ProcessList;
@@ -22,7 +22,7 @@ namespace BIEngine
 		static void Destroy();
 		static ProcessManager* Get() { assert(s_pSingleton); return s_pSingleton; }
 
-		//Выполняет один тик работы для всех активных процессов
+		//Р’С‹РїРѕР»РЅСЏРµС‚ РѕРґРёРЅ С‚РёРє СЂР°Р±РѕС‚С‹ РґР»СЏ РІСЃРµС… Р°РєС‚РёРІРЅС‹С… РїСЂРѕС†РµСЃСЃРѕРІ
 		unsigned int UpdateProcesses(unsigned long deltaMs);
 
 		WeakProcessPtr AttachProcess(StrongProcessPtr pProcess);

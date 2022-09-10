@@ -1,10 +1,10 @@
-#pragma once
+п»ї#pragma once
 
 #include "../ResourceCache/ResCache.h"
 
 namespace BIEngine
 {
-    //Загружает и тут же выполняет lua-скрипт
+    //Р—Р°РіСЂСѓР¶Р°РµС‚ Рё С‚СѓС‚ Р¶Рµ РІС‹РїРѕР»РЅСЏРµС‚ lua-СЃРєСЂРёРїС‚
     class ScriptResourceLoader : public IResourceLoader
     {
     public:

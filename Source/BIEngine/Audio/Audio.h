@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "../ResourceCache/ResCache.h"
 
@@ -15,14 +15,14 @@ namespace BIEngine
 		SOUND_TYPE_MIDI,
 		SOUND_TYPE_OGG,
 
-		//Счетчик наших доступных форматов. Должен быть последним.
+		//РЎС‡РµС‚С‡РёРє РЅР°С€РёС… РґРѕСЃС‚СѓРїРЅС‹С… С„РѕСЂРјР°С‚РѕРІ. Р”РѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРѕСЃР»РµРґРЅРёРј.
 		SOUND_TYPE_COUNT,
 		SOUND_TYPE_UNKNOWN,
 	};
 
 	extern char* gSoundExtentions[];
 
-	//Буффер загруженного аудио
+	//Р‘СѓС„С„РµСЂ Р·Р°РіСЂСѓР¶РµРЅРЅРѕРіРѕ Р°СѓРґРёРѕ
 	class IAudioBuffer
 	{
 	public:
@@ -45,7 +45,7 @@ namespace BIEngine
 		virtual float GetProgress() = 0;
 	};
 
-	//Реализация аудио-буфера реализаованная над системой ресурсов движка
+	//Р РµР°Р»РёР·Р°С†РёСЏ Р°СѓРґРёРѕ-Р±СѓС„РµСЂР° СЂРµР°Р»РёР·Р°РѕРІР°РЅРЅР°СЏ РЅР°Рґ СЃРёСЃС‚РµРјРѕР№ СЂРµСЃСѓСЂСЃРѕРІ РґРІРёР¶РєР°
 	class AudioBuffer : public IAudioBuffer
 	{
 	public:
@@ -86,7 +86,7 @@ namespace BIEngine
 		virtual void Shutdown() = 0;
 	};
 
-	//Главная аудио система, управляющая аудио-буферами
+	//Р“Р»Р°РІРЅР°СЏ Р°СѓРґРёРѕ СЃРёСЃС‚РµРјР°, СѓРїСЂР°РІР»СЏСЋС‰Р°СЏ Р°СѓРґРёРѕ-Р±СѓС„РµСЂР°РјРё
 	class Audio : public IAudio
 	{
 	public:

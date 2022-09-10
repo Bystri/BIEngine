@@ -1,4 +1,4 @@
-#include "ScriptEvent.h"
+ï»¿#include "ScriptEvent.h"
 
 #include <cassert>
 #include <iostream>
@@ -65,7 +65,7 @@ namespace BIEngine
 
 	void ScriptEvent::BuildEventData()
 	{
-		//Ïîâåäåíèå ïîóìîë÷àíèþ äëÿ BuildEventData çàäàåò ïðèðàâíèâàåò äàííûå ñîáûòèÿ ê íóëþ.
+		//ÐŸÐ¾Ð²ÐµÐ´ÐµÐ½Ð¸Ðµ Ð¿Ð¾ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ Ð´Ð»Ñ BuildEventData Ð·Ð°Ð´Ð°ÐµÑ‚ Ð¿Ñ€Ð¸Ñ€Ð°Ð²Ð½Ð¸Ð²Ð°ÐµÑ‚ Ð´Ð°Ð½Ð½Ñ‹Ðµ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ Ðº Ð½ÑƒÐ»ÑŽ.
 		m_eventData.AssignNil(LuaStateManager::Get()->GetLuaState());
 	}
 

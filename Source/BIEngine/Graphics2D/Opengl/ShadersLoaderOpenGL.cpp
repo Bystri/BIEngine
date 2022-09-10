@@ -1,4 +1,4 @@
-#include "ShadersLoaderOpenGL.h"
+п»ї#include "ShadersLoaderOpenGL.h"
 
 #include <iostream>
 
@@ -44,11 +44,11 @@ namespace BIEngine
 
         unsigned int sVertex;
 
-        //Загружаем код шейдера
+        //Р—Р°РіСЂСѓР¶Р°РµРј РєРѕРґ С€РµР№РґРµСЂР°
         std::string shaderCode(rawBuffer, rawSize);
         const char* code = shaderCode.c_str();
 
-        //Компилируем шейдер
+        //РљРѕРјРїРёР»РёСЂСѓРµРј С€РµР№РґРµСЂ
         sVertex = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(sVertex, 1, &code, NULL);
         glCompileShader(sVertex);
@@ -67,11 +67,11 @@ namespace BIEngine
 
         unsigned int sFragment;
         
-        //Загружаем код шейдера
+        //Р—Р°РіСЂСѓР¶Р°РµРј РєРѕРґ С€РµР№РґРµСЂР°
         std::string shaderCode(rawBuffer, rawSize);
         const char* code = shaderCode.c_str();
 
-        //Компилируем шейдер
+        //РљРѕРјРїРёР»РёСЂСѓРµРј С€РµР№РґРµСЂ
         sFragment = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(sFragment, 1, &code, NULL);
         glCompileShader(sFragment);

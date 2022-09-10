@@ -28,6 +28,9 @@
     <ClInclude Include="..\BIGameController.h" />
     <ClInclude Include="..\BIGameEvents.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3C07E7ED-5C5D-4F40-B6DF-34C690F758BE}</ProjectGuid>
     <RootNamespace>BIAirHockey</RootNamespace>

@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <LuaPlus/LuaPlus.h>
 
@@ -17,7 +17,7 @@ namespace BIEngine
 	ScriptEvent::RegisterEventTypeWithScript(#eventClass, eventType); \
 	ScriptEvent::AddCreationFunction(eventType, &eventClass::CreateEventForScript)
 
-//Данный макрос должен быть вставлен в определение класса для каждого производного от ScriptEvent события для дальнейшего корректного вызова REGISTER_SCRIPT_EVENT
+//Р”Р°РЅРЅС‹Р№ РјР°РєСЂРѕСЃ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІСЃС‚Р°РІР»РµРЅ РІ РѕРїСЂРµРґРµР»РµРЅРёРµ РєР»Р°СЃСЃР° РґР»СЏ РєР°Р¶РґРѕРіРѕ РїСЂРѕРёР·РІРѕРґРЅРѕРіРѕ РѕС‚ ScriptEvent СЃРѕР±С‹С‚РёСЏ РґР»СЏ РґР°Р»СЊРЅРµР№С€РµРіРѕ РєРѕСЂСЂРµРєС‚РЅРѕРіРѕ РІС‹Р·РѕРІР° REGISTER_SCRIPT_EVENT
 #define EXPORT_FOR_SCRIPT_EVENT(eventClass) \
 	public: \
 		static ScriptEvent* CreateEventForScript() \
@@ -25,10 +25,10 @@ namespace BIEngine
 			return new eventClass; \
 		}
 
-	//Данный класс предназначен как родитель для всех событий, которые должны переходить от C++ к Lua и обратно
-	//Если надо, чтобы событие шло от C++ к Lua: требутеся переопределить функцию BuildEventData
-	//Если надо, чтобы событие шло от Lua к C++: требутеся переопределить функцию BuildEventFromScript
-	//Если надо, чтобы событие шло в обе стороны, требуется переопределить обу эти функции
+	//Р”Р°РЅРЅС‹Р№ РєР»Р°СЃСЃ РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅ РєР°Рє СЂРѕРґРёС‚РµР»СЊ РґР»СЏ РІСЃРµС… СЃРѕР±С‹С‚РёР№, РєРѕС‚РѕСЂС‹Рµ РґРѕР»Р¶РЅС‹ РїРµСЂРµС…РѕРґРёС‚СЊ РѕС‚ C++ Рє Lua Рё РѕР±СЂР°С‚РЅРѕ
+	//Р•СЃР»Рё РЅР°РґРѕ, С‡С‚РѕР±С‹ СЃРѕР±С‹С‚РёРµ С€Р»Рѕ РѕС‚ C++ Рє Lua: С‚СЂРµР±СѓС‚РµСЃСЏ РїРµСЂРµРѕРїСЂРµРґРµР»РёС‚СЊ С„СѓРЅРєС†РёСЋ BuildEventData
+	//Р•СЃР»Рё РЅР°РґРѕ, С‡С‚РѕР±С‹ СЃРѕР±С‹С‚РёРµ С€Р»Рѕ РѕС‚ Lua Рє C++: С‚СЂРµР±СѓС‚РµСЃСЏ РїРµСЂРµРѕРїСЂРµРґРµР»РёС‚СЊ С„СѓРЅРєС†РёСЋ BuildEventFromScript
+	//Р•СЃР»Рё РЅР°РґРѕ, С‡С‚РѕР±С‹ СЃРѕР±С‹С‚РёРµ С€Р»Рѕ РІ РѕР±Рµ СЃС‚РѕСЂРѕРЅС‹, С‚СЂРµР±СѓРµС‚СЃСЏ РїРµСЂРµРѕРїСЂРµРґРµР»РёС‚СЊ РѕР±Сѓ СЌС‚Рё С„СѓРЅРєС†РёРё
 	class ScriptEvent : public BaseEventData
 	{
 		typedef std::map<EventType, CreateEventForScriptFunctionType> CreationFunctions;
@@ -39,15 +39,15 @@ namespace BIEngine
 		LuaPlus::LuaObject GetEventData();
 		bool SetEventData(LuaPlus::LuaObject eventData);
 
-		//Регестрирует тип события в глобальной таблице внутри Lua
+		//Р РµРіРµСЃС‚СЂРёСЂСѓРµС‚ С‚РёРї СЃРѕР±С‹С‚РёСЏ РІ РіР»РѕР±Р°Р»СЊРЅРѕР№ С‚Р°Р±Р»РёС†Рµ РІРЅСѓС‚СЂРё Lua
 		static void RegisterEventTypeWithScript(const char* key, EventType type);
 		static void AddCreationFunction(EventType type, CreateEventForScriptFunctionType pCreationFunctionPtr);
 		static ScriptEvent* CreateEventFromScript(EventType type);
 
 	protected:
-		//Здесь должны быть определны дейтсвия, которые будут сделаны с данными, попадающими внутрь Lua-скрипта
+		//Р—РґРµСЃСЊ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РѕРїСЂРµРґРµР»РЅС‹ РґРµР№С‚СЃРІРёСЏ, РєРѕС‚РѕСЂС‹Рµ Р±СѓРґСѓС‚ СЃРґРµР»Р°РЅС‹ СЃ РґР°РЅРЅС‹РјРё, РїРѕРїР°РґР°СЋС‰РёРјРё РІРЅСѓС‚СЂСЊ Lua-СЃРєСЂРёРїС‚Р°
 		virtual void BuildEventData();
-		//Здесь должныть быть определны дейтсвия, которые будут сделаны с данными, пришедшими из Lua-скрипта
+		//Р—РґРµСЃСЊ РґРѕР»Р¶РЅС‹С‚СЊ Р±С‹С‚СЊ РѕРїСЂРµРґРµР»РЅС‹ РґРµР№С‚СЃРІРёСЏ, РєРѕС‚РѕСЂС‹Рµ Р±СѓРґСѓС‚ СЃРґРµР»Р°РЅС‹ СЃ РґР°РЅРЅС‹РјРё, РїСЂРёС€РµРґС€РёРјРё РёР· Lua-СЃРєСЂРёРїС‚Р°
 		virtual bool BuildEventFromScript() { return true; }
 
 	protected:

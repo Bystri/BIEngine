@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <map>
 #include <string>
@@ -27,7 +27,7 @@ namespace BIEngine
 		void ModifyActor(std::shared_ptr<Actor> pActor, tinyxml2::XMLElement* pOverrides);
 
 	protected:
-		//Создает компонент на основе информации из XML-структуры. Вернет нулевой указатель, если данный компонент не может быть создан
+		//РЎРѕР·РґР°РµС‚ РєРѕРјРїРѕРЅРµРЅС‚ РЅР° РѕСЃРЅРѕРІРµ РёРЅС„РѕСЂРјР°С†РёРё РёР· XML-СЃС‚СЂСѓРєС‚СѓСЂС‹. Р’РµСЂРЅРµС‚ РЅСѓР»РµРІРѕР№ СѓРєР°Р·Р°С‚РµР»СЊ, РµСЃР»Рё РґР°РЅРЅС‹Р№ РєРѕРјРїРѕРЅРµРЅС‚ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СЃРѕР·РґР°РЅ
 		virtual std::shared_ptr<ActorComponent> CreateComponent(std::shared_ptr<Actor> pActor, tinyxml2::XMLElement* pData);
 
 	private:

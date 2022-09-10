@@ -1,4 +1,4 @@
-#include "Scene.h"
+п»ї#include "Scene.h"
 
 #include "../Actors/CameraComponent.h"
 
@@ -23,7 +23,7 @@ namespace BIEngine
 	{
 		if (m_pRoot && m_pCamera) 
 		{
-			//Камера задает значения для всех необходимых матриц
+			//РљР°РјРµСЂР° Р·Р°РґР°РµС‚ Р·РЅР°С‡РµРЅРёСЏ РґР»СЏ РІСЃРµС… РЅРµРѕР±С…РѕРґРёРјС‹С… РјР°С‚СЂРёС†
 			m_pCamera->OnRender(this);
 
 			if (m_pRoot->PreRender(this)) 
@@ -66,7 +66,7 @@ namespace BIEngine
 		return m_pRoot->RemoveChild(id);
 	}
 
-	//Вызывается, когда создается новый актер с графическим компонентом
+	//Р’С‹Р·С‹РІР°РµС‚СЃСЏ, РєРѕРіРґР° СЃРѕР·РґР°РµС‚СЃСЏ РЅРѕРІС‹Р№ Р°РєС‚РµСЂ СЃ РіСЂР°С„РёС‡РµСЃРєРёРј РєРѕРјРїРѕРЅРµРЅС‚РѕРј
 	void Scene::NewRenderComponentDelegate(IEventDataPtr pEventData)
 	{
 		std::shared_ptr<EvtData_New_Render_Component> pCastEventData = std::static_pointer_cast<EvtData_New_Render_Component>(pEventData);
@@ -77,7 +77,7 @@ namespace BIEngine
 		AddChild(actorId, pSceneNode);
 	}
 
-	//Вызывается, когда создается новый актер с компонентой-камерой.
+	//Р’С‹Р·С‹РІР°РµС‚СЃСЏ, РєРѕРіРґР° СЃРѕР·РґР°РµС‚СЃСЏ РЅРѕРІС‹Р№ Р°РєС‚РµСЂ СЃ РєРѕРјРїРѕРЅРµРЅС‚РѕР№-РєР°РјРµСЂРѕР№.
 	void Scene::NewCameraComponentDelegate(IEventDataPtr pEventData)
 	{
 		std::shared_ptr<EvtData_New_Camera_Component> pCastEventData = std::static_pointer_cast<EvtData_New_Camera_Component>(pEventData);

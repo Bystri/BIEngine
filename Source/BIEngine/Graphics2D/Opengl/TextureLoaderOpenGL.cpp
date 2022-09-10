@@ -1,4 +1,4 @@
-#include "TextureLoaderOpenGL.h"
+п»ї#include "TextureLoaderOpenGL.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../3rdParty/stb/stb_image.h"
@@ -8,7 +8,7 @@ namespace BIEngine
 
 	unsigned int TextureResourceLoader::GetLoadedResourceSize(char* rawBuffer, unsigned int rawSize)
 	{
-		//Мы не выделяем память в кэше для текстуры
+		//РњС‹ РЅРµ РІС‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РІ РєСЌС€Рµ РґР»СЏ С‚РµРєСЃС‚СѓСЂС‹
 		return 0;
 	}
 
@@ -20,22 +20,22 @@ namespace BIEngine
 
 	bool PngResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
 	{
-		//Создаем объект текстуры
+		//РЎРѕР·РґР°РµРј РѕР±СЉРµРєС‚ С‚РµРєСЃС‚СѓСЂС‹
 		std::shared_ptr<TextureExtraData> pExtra = std::make_shared<TextureExtraData>();
 		pExtra->m_pTexture = std::make_shared<Texture2D>();
 
-		//TODO: Сделать возможность загружать текстуры без альфа канала
+		//TODO: РЎРґРµР»Р°С‚СЊ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ Р·Р°РіСЂСѓР¶Р°С‚СЊ С‚РµРєСЃС‚СѓСЂС‹ Р±РµР· Р°Р»СЊС„Р° РєР°РЅР°Р»Р°
 		pExtra->m_pTexture->SetInternalFormat(GL_RGBA);
 		pExtra->m_pTexture->SetImageFormat(GL_RGBA);
 
-		//Загружаем изображение
+		//Р—Р°РіСЂСѓР¶Р°РµРј РёР·РѕР±СЂР°Р¶РµРЅРёРµ
 		int width, height, nrChannels;
 		unsigned char* pData = stbi_load_from_memory((stbi_uc*)pRawBuffer, rawSize, &width, &height, &nrChannels, 0);
 		
-		// Генерируем текстуру
+		// Р“РµРЅРµСЂРёСЂСѓРµРј С‚РµРєСЃС‚СѓСЂСѓ
 		pExtra->m_pTexture->Generate(width, height, pData);
 		
-		//Освобождаем ресурсы изображения
+		//РћСЃРІРѕР±РѕР¶РґР°РµРј СЂРµСЃСѓСЂСЃС‹ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 		stbi_image_free(pData);
 		pHandle->SetExtra(pExtra);
 

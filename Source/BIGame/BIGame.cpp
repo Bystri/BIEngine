@@ -1,4 +1,4 @@
-#include "BIGame.h"
+п»ї#include "BIGame.h"
 
 #include <glm/glm.hpp>
 
@@ -219,7 +219,7 @@ bool BIGameHumanView::Init()
 	if (!BIEngine::HumanView::Init())
 		return false;
 
-	//Загружаем и запускаем музыку
+	//Р—Р°РіСЂСѓР¶Р°РµРј Рё Р·Р°РїСѓСЃРєР°РµРј РјСѓР·С‹РєСѓ
 	std::shared_ptr<BIEngine::ResHandle> pAudioResHandle = BIEngine::ResCache::Get()->GetHandle("Sounds/Space.ogg");
 	BIEngine::IAudioBuffer* buffer = BIEngine::g_pAudio->InitAudioBuffer(pAudioResHandle);
 	if (buffer)
@@ -228,7 +228,7 @@ bool BIGameHumanView::Init()
 		m_pMainMusic->Play(100, true);
 	}
 
-	//Устанавливаем на экране текст
+	//РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РЅР° СЌРєСЂР°РЅРµ С‚РµРєСЃС‚
 	m_userInterface.CreateStatic(10.f, 20.0f, 1.0f, "Player1 : 0");
 	m_userInterface.CreateStatic(240.f, 20.0f, 1.0f, "Player2 : 0");
 

@@ -1,4 +1,4 @@
-#include "SpriteNode.h"
+﻿#include "SpriteNode.h"
 
 namespace BIEngine
 {

@@ -1,4 +1,4 @@
-#include "ScriptProcess.h"
+ï»¿#include "ScriptProcess.h"
 
 #include <iostream>
 
@@ -16,7 +16,7 @@ namespace BIEngine
 		m_frequency = 0;
 		m_time = 0;
 
-		//Ïðèðàâíèâàåì âñå ôóíêöèè ê íóëþ äëÿ äàííîãî ýêçåìïëÿðà ïðîöåññà
+		//ÐŸÑ€Ð¸Ñ€Ð°Ð²Ð½Ð¸Ð²Ð°ÐµÐ¼ Ð²ÑÐµ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ Ðº Ð½ÑƒÐ»ÑŽ Ð´Ð»Ñ Ð´Ð°Ð½Ð½Ð¾Ð³Ð¾ ÑÐºÐ·ÐµÐ¼Ð¿Ð»ÑÑ€Ð° Ð¿Ñ€Ð¾Ñ†ÐµÑÑÐ°
 		m_scriptInitFunction.AssignNil(pLuaState);
 		m_scriptUpdateFunction.AssignNil(pLuaState);
 		m_scriptSuccessFunction.AssignNil(pLuaState);
@@ -26,7 +26,7 @@ namespace BIEngine
 
 	void ScriptProcess::RegisterScriptClass()
 	{
-		//Ñîçäàåì ìåòà òàáëèöó âíóòðè lua, êîòîðàÿ áóäåò èñïîëüçîâàòüñÿ äëÿ ñîçäàíèÿ lua-ïðîöåññîâ
+		//Ð¡Ð¾Ð·Ð´Ð°ÐµÐ¼ Ð¼ÐµÑ‚Ð° Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñƒ Ð²Ð½ÑƒÑ‚Ñ€Ð¸ lua, ÐºÐ¾Ñ‚Ð¾Ñ€Ð°Ñ Ð±ÑƒÐ´ÐµÑ‚ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒÑÑ Ð´Ð»Ñ ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ lua-Ð¿Ñ€Ð¾Ñ†ÐµÑÑÐ¾Ð²
 		LuaPlus::LuaObject metaTableObj = LuaStateManager::Get()->GetGlobalVars().CreateTable(SCRIPT_PROCESS_NAME);
 		metaTableObj.SetObject("__index", metaTableObj);
 		metaTableObj.SetObject("base", metaTableObj);

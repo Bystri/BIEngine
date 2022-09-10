@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <tinyxml2.h>
 
@@ -7,7 +7,7 @@
 namespace BIEngine
 {
 
-	//TODO: Надо добавить конструкторы/операторы копирования из-за своеобразного деструктора
+	//TODO: РќР°РґРѕ РґРѕР±Р°РІРёС‚СЊ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹/РѕРїРµСЂР°С‚РѕСЂС‹ РєРѕРїРёСЂРѕРІР°РЅРёСЏ РёР·-Р·Р° СЃРІРѕРµРѕР±СЂР°Р·РЅРѕРіРѕ РґРµСЃС‚СЂСѓРєС‚РѕСЂР°
 	class XmlExtraData : public IResourceExtraData
 	{
 		friend class XmlResourceLoader;

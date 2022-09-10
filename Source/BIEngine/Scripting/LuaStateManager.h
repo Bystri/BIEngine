@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <string>
 #include <cassert>
@@ -12,18 +12,18 @@ namespace BIEngine
 	class LuaStateManager
 	{
 	public:
-		//Инициализация экземпляра одиночки 
+		//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЌРєР·РµРјРїР»СЏСЂР° РѕРґРёРЅРѕС‡РєРё 
 		static bool Create();
-		//Уничтожение экземпляра одиночки
+		//РЈРЅРёС‡С‚РѕР¶РµРЅРёРµ СЌРєР·РµРјРїР»СЏСЂР° РѕРґРёРЅРѕС‡РєРё
 		static void Destroy();
 		static LuaStateManager* Get() { assert(s_pSingleton); return s_pSingleton; }
 
 		bool Init();
-		//Выполняет указанный lua-скрипт
-		//Может быть вызван внутри самого скрипта
+		//Р’С‹РїРѕР»РЅСЏРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ lua-СЃРєСЂРёРїС‚
+		//РњРѕР¶РµС‚ Р±С‹С‚СЊ РІС‹Р·РІР°РЅ РІРЅСѓС‚СЂРё СЃР°РјРѕРіРѕ СЃРєСЂРёРїС‚Р°
 		void ExecuteFile(const char* resource);
-		//Выполняет указанный lua-код
-		//Может быть вызван внутри самого скрипта
+		//Р’С‹РїРѕР»РЅСЏРµС‚ СѓРєР°Р·Р°РЅРЅС‹Р№ lua-РєРѕРґ
+		//РњРѕР¶РµС‚ Р±С‹С‚СЊ РІС‹Р·РІР°РЅ РІРЅСѓС‚СЂРё СЃР°РјРѕРіРѕ СЃРєСЂРёРїС‚Р°
 		void ExecuteString(const char* str);
 
 		LuaPlus::LuaObject GetGlobalVars();
@@ -36,7 +36,7 @@ namespace BIEngine
 		void SetError(int errorNum);
 		void ClearStack();
 
-		//Конструктуры приватны из-за того, что LuaStateManager реализован с помощью паттерна "одиночка"
+		//РљРѕРЅСЃС‚СЂСѓРєС‚СѓСЂС‹ РїСЂРёРІР°С‚РЅС‹ РёР·-Р·Р° С‚РѕРіРѕ, С‡С‚Рѕ LuaStateManager СЂРµР°Р»РёР·РѕРІР°РЅ СЃ РїРѕРјРѕС‰СЊСЋ РїР°С‚С‚РµСЂРЅР° "РѕРґРёРЅРѕС‡РєР°"
 		explicit LuaStateManager();
 		~LuaStateManager();
 

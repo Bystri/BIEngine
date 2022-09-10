@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <glm/glm.hpp>
 
@@ -21,7 +21,7 @@ namespace BIEngine
 	extern const Color GRAY25;
 	extern const Color GRAY65;
 
-	//Материал отвечает за прозрачность и цвет спрайта
+	//РњР°С‚РµСЂРёР°Р» РѕС‚РІРµС‡Р°РµС‚ Р·Р° РїСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊ Рё С†РІРµС‚ СЃРїСЂР°Р№С‚Р°
 	class Material
 	{
 	public:

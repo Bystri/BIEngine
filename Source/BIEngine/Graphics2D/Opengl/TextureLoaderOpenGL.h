@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "../../ResourceCache/ResCache.h"
 #include "../Texture.h"
@@ -6,7 +6,7 @@
 namespace BIEngine
 {
 
-	//TODO: Надо добавить конструкторы/операторы копирования из-за своеобразного деструктора
+	//TODO: РќР°РґРѕ РґРѕР±Р°РІРёС‚СЊ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹/РѕРїРµСЂР°С‚РѕСЂС‹ РєРѕРїРёСЂРѕРІР°РЅРёСЏ РёР·-Р·Р° СЃРІРѕРµРѕР±СЂР°Р·РЅРѕРіРѕ РґРµСЃС‚СЂСѓРєС‚РѕСЂР°
 	class TextureExtraData : public IResourceExtraData
 	{
 		friend class AlphaPngResourceLoader;

@@ -1,10 +1,10 @@
-#pragma once
+п»ї#pragma once
 
 #include <map>
 #include <string>
 #include <fstream>
 
-//Загрузчик ZIP-архивов. Оригинальный код пренадлежит Javier Arevalo.
+//Р—Р°РіСЂСѓР·С‡РёРє ZIP-Р°СЂС…РёРІРѕРІ. РћСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ РєРѕРґ РїСЂРµРЅР°РґР»РµР¶РёС‚ Javier Arevalo.
 //https://www.flipcode.com/archives/Zip_File_Loader.shtml
 
 namespace BIEngine

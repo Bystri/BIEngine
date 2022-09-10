@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "../BIEngine/UserInterface/InputDevices.h"
 #include "../BIEngine/Actors/Actor.h"
@@ -18,7 +18,7 @@ public:
 	bool OnKeyUp(int key, int scancode);
 
 protected:
-	//Состояние клавиш клавиатуры
+	//РЎРѕСЃС‚РѕСЏРЅРёРµ РєР»Р°РІРёС€ РєР»Р°РІРёР°С‚СѓСЂС‹
 	bool m_isKeyPressed[1024];
 
 	BIEngine::ActorId m_firstPlayerActorId;

@@ -1,4 +1,4 @@
-#include "GameApp.h"
+п»ї#include "GameApp.h"
 
 #include "../ResourceCache/ResCache.h"
 #include "../Graphics2D/Opengl/ShadersLoaderOpenGL.h"
@@ -13,10 +13,10 @@ namespace BIEngine
 {
 	GameApp* g_pApp = nullptr;
 
-	//Константы для хранилища инициализации кэша ресурсов
-	const unsigned int RESOURCE_CACHE_SIZE = 50 * 1024; //Размер кэша ресурсов в Мб
-	const char* RESOURCE_CACHE_DIR_FILE_NAME = "../Assets"; //Имя папки-хранилища ресурсов для кэша. Мы делаем шаг назад, так как предпологается, что сырая папка ресурсов и папка редактора находтся в корне
-	const char* RESOURCE_CACHE_ZIP_FILE_NAME = "Assets.zip"; //Имя архива-хранилища ресурсов для кэша
+	//РљРѕРЅСЃС‚Р°РЅС‚С‹ РґР»СЏ С…СЂР°РЅРёР»РёС‰Р° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РєСЌС€Р° СЂРµСЃСѓСЂСЃРѕРІ
+	const unsigned int RESOURCE_CACHE_SIZE = 50 * 1024; //Р Р°Р·РјРµСЂ РєСЌС€Р° СЂРµСЃСѓСЂСЃРѕРІ РІ РњР±
+	const char* RESOURCE_CACHE_DIR_FILE_NAME = "../Assets"; //РРјСЏ РїР°РїРєРё-С…СЂР°РЅРёР»РёС‰Р° СЂРµСЃСѓСЂСЃРѕРІ РґР»СЏ РєСЌС€Р°. РњС‹ РґРµР»Р°РµРј С€Р°Рі РЅР°Р·Р°Рґ, С‚Р°Рє РєР°Рє РїСЂРµРґРїРѕР»РѕРіР°РµС‚СЃСЏ, С‡С‚Рѕ СЃС‹СЂР°СЏ РїР°РїРєР° СЂРµСЃСѓСЂСЃРѕРІ Рё РїР°РїРєР° СЂРµРґР°РєС‚РѕСЂР° РЅР°С…РѕРґС‚СЃСЏ РІ РєРѕСЂРЅРµ
+	const char* RESOURCE_CACHE_ZIP_FILE_NAME = "Assets.zip"; //РРјСЏ Р°СЂС…РёРІР°-С…СЂР°РЅРёР»РёС‰Р° СЂРµСЃСѓСЂСЃРѕРІ РґР»СЏ РєСЌС€Р°
 
 	const char* SCRIPT_PREINIT_FILE = "scripts/init.lua";
 
@@ -33,7 +33,7 @@ namespace BIEngine
 
 	bool GameApp::Init()
 	{
-		//Инициализация кэша ресурсов
+		//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєСЌС€Р° СЂРµСЃСѓСЂСЃРѕРІ
 		std::shared_ptr<IResourceFile> pZipFile;
 		if (m_options.useDevelopmentAssets)
 			pZipFile = std::make_shared<ResourceDirFile>(RESOURCE_CACHE_DIR_FILE_NAME);
@@ -50,17 +50,17 @@ namespace BIEngine
 		//ResCache::Get()->RegisterLoader(CreateScriptResourceLoader());
 		//ResCache::Get()->RegisterLoader(CreateWavResourceLoader());
 
-		//Создаем экземпляр одиночки нашей системы скриптов
+		//РЎРѕР·РґР°РµРј СЌРєР·РµРјРїР»СЏСЂ РѕРґРёРЅРѕС‡РєРё РЅР°С€РµР№ СЃРёСЃС‚РµРјС‹ СЃРєСЂРёРїС‚РѕРІ
 		if (!LuaStateManager::Create())
 		{
 			Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize Lua");
 			return false;
 		}
 
-		//Загружаем скрипт инициализации lua системы. Скрипт будет выполнен во время самой загрузки ресурса, поэтомы мы игнорируем возвращаемый хэндлер. 
+		//Р—Р°РіСЂСѓР¶Р°РµРј СЃРєСЂРёРїС‚ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё lua СЃРёСЃС‚РµРјС‹. РЎРєСЂРёРїС‚ Р±СѓРґРµС‚ РІС‹РїРѕР»РЅРµРЅ РІРѕ РІСЂРµРјСЏ СЃР°РјРѕР№ Р·Р°РіСЂСѓР·РєРё СЂРµСЃСѓСЂСЃР°, РїРѕСЌС‚РѕРјС‹ РјС‹ РёРіРЅРѕСЂРёСЂСѓРµРј РІРѕР·РІСЂР°С‰Р°РµРјС‹Р№ С…СЌРЅРґР»РµСЂ. 
 		ResCache::Get()->GetHandle(SCRIPT_PREINIT_FILE);
 
-		//Регистрируем функции в скрипте, которые будут иметь доступ к системам движка, написанным на C++
+		//Р РµРіРёСЃС‚СЂРёСЂСѓРµРј С„СѓРЅРєС†РёРё РІ СЃРєСЂРёРїС‚Рµ, РєРѕС‚РѕСЂС‹Рµ Р±СѓРґСѓС‚ РёРјРµС‚СЊ РґРѕСЃС‚СѓРї Рє СЃРёСЃС‚РµРјР°Рј РґРІРёР¶РєР°, РЅР°РїРёСЃР°РЅРЅС‹Рј РЅР° C++
 		ScriptExports::Register();
 		ScriptProcess::RegisterScriptClass();
 
@@ -71,7 +71,7 @@ namespace BIEngine
 
 	void GameApp::Close()
 	{
-		//Освобождение кэша ресурсов
+		//РћСЃРІРѕР±РѕР¶РґРµРЅРёРµ РєСЌС€Р° СЂРµСЃСѓСЂСЃРѕРІ
 		ResCache::Destroy();
 	}
 

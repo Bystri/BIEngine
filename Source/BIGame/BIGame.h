@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../BIEngine/EngineCore/BIEngine.h"
 #include "../BIEngine/Audio/irrKlangAudio.h"

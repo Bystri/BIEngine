@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <iostream>
 #include <memory>
@@ -12,12 +12,12 @@
 namespace BIEngine
 {
 
-	//Обратные вызовы для GLFW
+	//РћР±СЂР°С‚РЅС‹Рµ РІС‹Р·РѕРІС‹ РґР»СЏ GLFW
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-	//Главная функция, с которой начинается работа всего приложения.
-	//Перед ее вызовом должен быть инициализирован класс pGameApp
+	//Р“Р»Р°РІРЅР°СЏ С„СѓРЅРєС†РёСЏ, СЃ РєРѕС‚РѕСЂРѕР№ РЅР°С‡РёРЅР°РµС‚СЃСЏ СЂР°Р±РѕС‚Р° РІСЃРµРіРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ.
+	//РџРµСЂРµРґ РµРµ РІС‹Р·РѕРІРѕРј РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ РєР»Р°СЃСЃ pGameApp
 	int Run(int argc, char* argv[])
 	{
 		if (!g_pApp)
@@ -51,16 +51,16 @@ namespace BIEngine
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		//Инициализация игры
+		//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РёРіСЂС‹
 		if (!g_pApp->Init())
 		{
-			//Мы не пишем ничего в лог, так как предпологается, что инициализация оставит более подробное сообщение об ошибке
+			//РњС‹ РЅРµ РїРёС€РµРј РЅРёС‡РµРіРѕ РІ Р»РѕРі, С‚Р°Рє РєР°Рє РїСЂРµРґРїРѕР»РѕРіР°РµС‚СЃСЏ, С‡С‚Рѕ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РѕСЃС‚Р°РІРёС‚ Р±РѕР»РµРµ РїРѕРґСЂРѕР±РЅРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
 			return -1;
 		}
 
 		float deltaTime = 0.0f;
 		float lastFrame = 0.0f;
-		//Основной цикл
+		//РћСЃРЅРѕРІРЅРѕР№ С†РёРєР»
 		while (!glfwWindowShouldClose(window))
 		{
 			float currentFrame = glfwGetTime();
@@ -69,12 +69,12 @@ namespace BIEngine
 			glfwPollEvents();
 
 			g_pApp->ProcessInput(deltaTime);
-			//Обновление логики
+			//РћР±РЅРѕРІР»РµРЅРёРµ Р»РѕРіРёРєРё
 			g_pApp->OnUpdate(deltaTime);
 
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
-			//Отрисовка
+			//РћС‚СЂРёСЃРѕРІРєР°
 			g_pApp->OnRender(currentFrame, deltaTime);
 
 			glfwSwapBuffers(window);
@@ -88,7 +88,7 @@ namespace BIEngine
 
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 	{
-		//Выходим из приложения, если нажата клавиша Esc
+		//Р’С‹С…РѕРґРёРј РёР· РїСЂРёР»РѕР¶РµРЅРёСЏ, РµСЃР»Рё РЅР°Р¶Р°С‚Р° РєР»Р°РІРёС€Р° Esc
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, true);
 
@@ -99,7 +99,7 @@ namespace BIEngine
 			g_pApp->InputProc(key, scancode, false);
 	}
 
-	//Адпатируем Viewport под новые размеры экрана
+	//РђРґРїР°С‚РёСЂСѓРµРј Viewport РїРѕРґ РЅРѕРІС‹Рµ СЂР°Р·РјРµСЂС‹ СЌРєСЂР°РЅР°
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	{
 		glViewport(0, 0, width, height);

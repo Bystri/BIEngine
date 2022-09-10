@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "ActorComponent.h"
 #include "../Graphics2D/SceneNodes.h"
@@ -6,7 +6,7 @@
 namespace BIEngine
 {
 
-    //Привязывает камеру к актеру
+    //РџСЂРёРІСЏР·С‹РІР°РµС‚ РєР°РјРµСЂСѓ Рє Р°РєС‚РµСЂСѓ
     class CameraComponent : public ActorComponent
     {
     public:

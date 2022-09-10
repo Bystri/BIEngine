@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "../SceneNodes.h"
 #include "../Texture.h"
@@ -6,7 +6,7 @@
 
 namespace BIEngine
 {
-	//Графический узел, отвечающий за работу со спрайтами в OpenGL
+	//Р“СЂР°С„РёС‡РµСЃРєРёР№ СѓР·РµР», РѕС‚РІРµС‡Р°СЋС‰РёР№ Р·Р° СЂР°Р±РѕС‚Сѓ СЃРѕ СЃРїСЂР°Р№С‚Р°РјРё РІ OpenGL
 	class SpriteNode : public SceneNode
 	{
 	public:

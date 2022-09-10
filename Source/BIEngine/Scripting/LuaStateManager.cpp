@@ -1,4 +1,4 @@
-#include "LuaStateManager.h"
+п»ї#include "LuaStateManager.h"
 
 #include <iostream>
 
@@ -58,7 +58,7 @@ namespace BIEngine
         if (m_pLuaState == nullptr)
             return false;
 
-        //Регестрируем функции, которые будут вызываться из скрипта
+        //Р РµРіРµСЃС‚СЂРёСЂСѓРµРј С„СѓРЅРєС†РёРё, РєРѕС‚РѕСЂС‹Рµ Р±СѓРґСѓС‚ РІС‹Р·С‹РІР°С‚СЊСЃСЏ РёР· СЃРєСЂРёРїС‚Р°
         m_pLuaState->GetGlobals().RegisterDirect("ExecuteFile", (*this), &LuaStateManager::ExecuteFile);
         m_pLuaState->GetGlobals().RegisterDirect("ExecuteString", (*this), &LuaStateManager::ExecuteString);
 
@@ -76,14 +76,14 @@ namespace BIEngine
     {
         int result = 0;
 
-        //Направляет строку напрямую в интерпритатор
+        //РќР°РїСЂР°РІР»СЏРµС‚ СЃС‚СЂРѕРєСѓ РЅР°РїСЂСЏРјСѓСЋ РІ РёРЅС‚РµСЂРїСЂРёС‚Р°С‚РѕСЂ
         if (strlen(chunk) <= 1 || chunk[0] != '=')
         {
             result = m_pLuaState->DoString(chunk);
             if (result != 0)
                 SetError(result);
         }
-        //Если строка начинается с символа '=', оборачивает lua-код в функцию print()
+        //Р•СЃР»Рё СЃС‚СЂРѕРєР° РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ СЃРёРјРІРѕР»Р° '=', РѕР±РѕСЂР°С‡РёРІР°РµС‚ lua-РєРѕРґ РІ С„СѓРЅРєС†РёСЋ print()
         else
         {
             std::string buffer("print(");

@@ -1,4 +1,4 @@
-#include "EventManager.h"
+﻿#include "EventManager.h"
 
 #include <cassert>
 #include <chrono>

@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "IGameView.h"
 #include "InputDevices.h"
@@ -15,7 +15,7 @@ namespace BIEngine
 		HumanView(unsigned int screenWidth, unsigned int screenHeight);
 		virtual ~HumanView();			
 
-		//Аудио
+		//РђСѓРґРёРѕ
 		//bool InitAudio();
 		virtual bool Init();
 		virtual void Shutdown();
@@ -37,18 +37,18 @@ namespace BIEngine
 		unsigned int m_screenWidth;
 		unsigned int m_screenHeight;
 
-		//Графическая часть
+		//Р“СЂР°С„РёС‡РµСЃРєР°СЏ С‡Р°СЃС‚СЊ
 		UserInterface m_userInterface;
 		std::shared_ptr<Actor> m_pCameraActor;
 		std::shared_ptr<Renderer> m_pRenderer;
 		Scene* m_scene;	
 
-		//Переменные для контроля скорости обновления кадров
-		float m_currTick; //Текущее время отображения
-		float m_lastDraw; //Последнее время, когда был отображен кадр
+		//РџРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ РєРѕРЅС‚СЂРѕР»СЏ СЃРєРѕСЂРѕСЃС‚Рё РѕР±РЅРѕРІР»РµРЅРёСЏ РєР°РґСЂРѕРІ
+		float m_currTick; //РўРµРєСѓС‰РµРµ РІСЂРµРјСЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
+		float m_lastDraw; //РџРѕСЃР»РµРґРЅРµРµ РІСЂРµРјСЏ, РєРѕРіРґР° Р±С‹Р» РѕС‚РѕР±СЂР°Р¶РµРЅ РєР°РґСЂ
 		bool m_isRunFullSpeed;
 
-		//Устройства ввода
+		//РЈСЃС‚СЂРѕР№СЃС‚РІР° РІРІРѕРґР°
 		std::shared_ptr<IPointerHandler> m_pPointerHandler;
 		int m_pointerRadius;
 		std::shared_ptr<IKeyboardHandler> m_pKeyboardHandler;

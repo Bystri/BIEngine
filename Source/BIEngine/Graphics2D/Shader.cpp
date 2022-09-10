@@ -1,4 +1,4 @@
-#include "shader.h"
+п»ї#include "shader.h"
 
 #include <iostream>
 
@@ -8,7 +8,7 @@
 namespace BIEngine
 {
 
-    //Делает шейдер активным
+    //Р”РµР»Р°РµС‚ С€РµР№РґРµСЂ Р°РєС‚РёРІРЅС‹Рј
     Shader& Shader::Use()
     {
         glUseProgram(m_id);
@@ -88,7 +88,7 @@ namespace BIEngine
     }
 
 
-    //Проверяет и, в случае обнаружуения, выводит сообщения об ошибках во время компиляции шейдера
+    //РџСЂРѕРІРµСЂСЏРµС‚ Рё, РІ СЃР»СѓС‡Р°Рµ РѕР±РЅР°СЂСѓР¶СѓРµРЅРёСЏ, РІС‹РІРѕРґРёС‚ СЃРѕРѕР±С‰РµРЅРёСЏ РѕР± РѕС€РёР±РєР°С… РІРѕ РІСЂРµРјСЏ РєРѕРјРїРёР»СЏС†РёРё С€РµР№РґРµСЂР°
     void Shader::checkCompileErrors(unsigned int object, std::string type)
     {
         int success;

@@ -1,4 +1,4 @@
-#include "ScriptExports.h"
+п»ї#include "ScriptExports.h"
 
 #include <iostream>
 #include <set>
@@ -13,7 +13,7 @@
 
 namespace BIEngine
 {
-	//Слушатель событий внутри C++ кода, который будет вызывать функцию внутри lua, при возникновении события нужного типа
+	//РЎР»СѓС€Р°С‚РµР»СЊ СЃРѕР±С‹С‚РёР№ РІРЅСѓС‚СЂРё C++ РєРѕРґР°, РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ РІС‹Р·С‹РІР°С‚СЊ С„СѓРЅРєС†РёСЋ РІРЅСѓС‚СЂРё lua, РїСЂРё РІРѕР·РЅРёРєРЅРѕРІРµРЅРёРё СЃРѕР±С‹С‚РёСЏ РЅСѓР¶РЅРѕРіРѕ С‚РёРїР°
 	class ScriptEventListener
 	{
 	public:
@@ -27,7 +27,7 @@ namespace BIEngine
 		LuaPlus::LuaObject m_scriptCallbackFunction;
 	};
 
-	//Знает обо всех слушателях событий внутри скрипта
+	//Р—РЅР°РµС‚ РѕР±Рѕ РІСЃРµС… СЃР»СѓС€Р°С‚РµР»СЏС… СЃРѕР±С‹С‚РёР№ РІРЅСѓС‚СЂРё СЃРєСЂРёРїС‚Р°
 	class ScriptEventListenerMgr
 	{
 		typedef std::set<ScriptEventListener*> ScriptEventListenerSet;
@@ -41,7 +41,7 @@ namespace BIEngine
 		ScriptEventListenerSet m_listeners;
 	};
 
-	//Данный класс содержит в себе функции, которые являются обертками над системами движка, доступными из скрипта
+	//Р”Р°РЅРЅС‹Р№ РєР»Р°СЃСЃ СЃРѕРґРµСЂР¶РёС‚ РІ СЃРµР±Рµ С„СѓРЅРєС†РёРё, РєРѕС‚РѕСЂС‹Рµ СЏРІР»СЏСЋС‚СЃСЏ РѕР±РµСЂС‚РєР°РјРё РЅР°Рґ СЃРёСЃС‚РµРјР°РјРё РґРІРёР¶РєР°, РґРѕСЃС‚СѓРїРЅС‹РјРё РёР· СЃРєСЂРёРїС‚Р°
 	class InternalScriptExports
 	{
 	public:
@@ -72,13 +72,13 @@ namespace BIEngine
 
 		InternalScriptExports::Init();
 
-		//ЗАГРУЗКА РЕСУРСОВ:
+		//Р—РђР“Р РЈР—РљРђ Р Р•РЎРЈР РЎРћР’:
 		globals.RegisterDirect("LoadAndExecuteScriptResource", &InternalScriptExports::LoadAndExecuteScriptResource);
 
-		//СИСТЕМА ПРОЦЕССОВ
+		//РЎРРЎРўР•РњРђ РџР РћР¦Р•РЎРЎРћР’
 		globals.RegisterDirect("AttachProcess", &InternalScriptExports::AttachScriptProcess);
 
-		//СИСТЕМА СОБЫТИЙ
+		//РЎРРЎРўР•РњРђ РЎРћР‘Р«РўРР™
 		globals.RegisterDirect("RegisterEventListener", &InternalScriptExports::RegisterEventListener);
 		globals.RegisterDirect("RemoveEventListener", &InternalScriptExports::RemoveEventListener);
 		globals.RegisterDirect("QueueEvent", &InternalScriptExports::QueueEvent);
@@ -110,7 +110,7 @@ namespace BIEngine
 
 	bool InternalScriptExports::LoadAndExecuteScriptResource(const char* scriptResource)
 	{
-		//Само выполнение скрипта происходит прямо внутри системы кэширования во время его загрузки
+		//РЎР°РјРѕ РІС‹РїРѕР»РЅРµРЅРёРµ СЃРєСЂРёРїС‚Р° РїСЂРѕРёСЃС…РѕРґРёС‚ РїСЂСЏРјРѕ РІРЅСѓС‚СЂРё СЃРёСЃС‚РµРјС‹ РєСЌС€РёСЂРѕРІР°РЅРёСЏ РІРѕ РІСЂРµРјСЏ РµРіРѕ Р·Р°РіСЂСѓР·РєРё
 		std::shared_ptr<ResHandle> pResourceHandle = ResCache::Get()->GetHandle(scriptResource);
 		if (pResourceHandle)
 			return true;
@@ -139,7 +139,7 @@ namespace BIEngine
 
 		if (callbackFunction.IsFunction())
 		{
-			//Создаем C++ прокси-слушателя, который ссылает на настоящую функцию-слушателя внутри скрипта
+			//РЎРѕР·РґР°РµРј C++ РїСЂРѕРєСЃРё-СЃР»СѓС€Р°С‚РµР»СЏ, РєРѕС‚РѕСЂС‹Р№ СЃСЃС‹Р»Р°РµС‚ РЅР° РЅР°СЃС‚РѕСЏС‰СѓСЋ С„СѓРЅРєС†РёСЋ-СЃР»СѓС€Р°С‚РµР»СЏ РІРЅСѓС‚СЂРё СЃРєСЂРёРїС‚Р°
 			ScriptEventListener* pListener = new ScriptEventListener(eventType, callbackFunction);
 			s_pScriptEventListenerMgr->AddListener(pListener);
 			EventManager::Get()->AddListener(pListener->GetDelegate(), eventType);
@@ -239,12 +239,12 @@ namespace BIEngine
 		EventManager::Get()->RemoveListener(GetDelegate(), m_eventType);
 	}
 
-	//Вызов настоящей функции-слушателя внутри скрипта
+	//Р’С‹Р·РѕРІ РЅР°СЃС‚РѕСЏС‰РµР№ С„СѓРЅРєС†РёРё-СЃР»СѓС€Р°С‚РµР»СЏ РІРЅСѓС‚СЂРё СЃРєСЂРёРїС‚Р°
 	void ScriptEventListener::ScriptEventDelegate(IEventDataPtr pEvent)
 	{
 		assert(m_scriptCallbackFunction.IsFunction()); 
 
-		//Вызов lua-функции
+		//Р’С‹Р·РѕРІ lua-С„СѓРЅРєС†РёРё
 		std::shared_ptr<ScriptEvent> pScriptEvent = std::static_pointer_cast<ScriptEvent>(pEvent);
 		LuaPlus::LuaFunction<void> Callback = m_scriptCallbackFunction;
 		Callback(pScriptEvent->GetEventData());

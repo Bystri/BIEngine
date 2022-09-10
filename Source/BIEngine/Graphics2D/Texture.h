@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <glad/glad.h>
 
@@ -8,32 +8,32 @@ public:
     Texture2D();
 
     void Generate(unsigned int width, unsigned int height, unsigned char* data);
-    //Сделаеть текстуру активной
+    //РЎРґРµР»Р°РµС‚СЊ С‚РµРєСЃС‚СѓСЂСѓ Р°РєС‚РёРІРЅРѕР№
     void Bind() const;
 
-    //Ширина изображения в пикселях
+    //РЁРёСЂРёРЅР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РІ РїРёРєСЃРµР»СЏС…
     unsigned int GetWidth() const { return m_width; }
-    //Высота изображения в пикселях
+    //Р’С‹СЃРѕС‚Р° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РІ РїРёРєСЃРµР»СЏС…
     unsigned int GetHeight() const { return m_height; }
 
-    //Задает формат цветов текстуры
+    //Р—Р°РґР°РµС‚ С„РѕСЂРјР°С‚ С†РІРµС‚РѕРІ С‚РµРєСЃС‚СѓСЂС‹
     void SetInternalFormat(unsigned int format) { m_internalFormat = format; }
-    //Отдает формат цветов текстуры
+    //РћС‚РґР°РµС‚ С„РѕСЂРјР°С‚ С†РІРµС‚РѕРІ С‚РµРєСЃС‚СѓСЂС‹
     unsigned int GetInternalFormat() const { return m_internalFormat; }
-    //Задает формат цветов изображения
+    //Р—Р°РґР°РµС‚ С„РѕСЂРјР°С‚ С†РІРµС‚РѕРІ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
     void SetImageFormat(unsigned int format) { m_imageFormat = format; }
-    //Отдает формат цветов изображения
+    //РћС‚РґР°РµС‚ С„РѕСЂРјР°С‚ С†РІРµС‚РѕРІ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
     unsigned int GetImageFormat() const { return m_imageFormat; }
 
 private:
     unsigned int m_id;
 
-    //Размеры загруженного изображения в пикселях
+    //Р Р°Р·РјРµСЂС‹ Р·Р°РіСЂСѓР¶РµРЅРЅРѕРіРѕ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РІ РїРёРєСЃРµР»СЏС…
     unsigned int m_width, m_height; 
 
-    //Формат текстуры
+    //Р¤РѕСЂРјР°С‚ С‚РµРєСЃС‚СѓСЂС‹
     unsigned int m_internalFormat;
-    //Формат изображения
+    //Р¤РѕСЂРјР°С‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
     unsigned int m_imageFormat;
 
   

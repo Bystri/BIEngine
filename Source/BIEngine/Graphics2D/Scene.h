@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <map>
 #include <memory>
@@ -12,7 +12,7 @@ namespace BIEngine
 
 	typedef std::map<ActorId, std::shared_ptr<ISceneNode>> SceneActorMap;
 
-	//Владеет всеми графическими элементами, необходимым для отрисовки
+	//Р’Р»Р°РґРµРµС‚ РІСЃРµРјРё РіСЂР°С„РёС‡РµСЃРєРёРјРё СЌР»РµРјРµРЅС‚Р°РјРё, РЅРµРѕР±С…РѕРґРёРјС‹Рј РґР»СЏ РѕС‚СЂРёСЃРѕРІРєРё
 	class Scene
 	{
 	public:
@@ -33,17 +33,17 @@ namespace BIEngine
 		std::shared_ptr<Renderer> GetRenderer() { return m_pRenderer; }
 
 	protected:
-		//Регистрация компонента, который необохдимо отрисовать
+		//Р РµРіРёСЃС‚СЂР°С†РёСЏ РєРѕРјРїРѕРЅРµРЅС‚Р°, РєРѕС‚РѕСЂС‹Р№ РЅРµРѕР±РѕС…РґРёРјРѕ РѕС‚СЂРёСЃРѕРІР°С‚СЊ
 		void NewRenderComponentDelegate(IEventDataPtr pEventData);
-		//Регистрация камеры, являющейся компонентом актера. Каждая новая созданная камера перезаписывает старую.
+		//Р РµРіРёСЃС‚СЂР°С†РёСЏ РєР°РјРµСЂС‹, СЏРІР»СЏСЋС‰РµР№СЃСЏ РєРѕРјРїРѕРЅРµРЅС‚РѕРј Р°РєС‚РµСЂР°. РљР°Р¶РґР°СЏ РЅРѕРІР°СЏ СЃРѕР·РґР°РЅРЅР°СЏ РєР°РјРµСЂР° РїРµСЂРµР·Р°РїРёСЃС‹РІР°РµС‚ СЃС‚Р°СЂСѓСЋ.
 		void NewCameraComponentDelegate(IEventDataPtr pEventData);
 
 	protected:
-		//Основной узел дерева графических элементов
+		//РћСЃРЅРѕРІРЅРѕР№ СѓР·РµР» РґРµСЂРµРІР° РіСЂР°С„РёС‡РµСЃРєРёС… СЌР»РµРјРµРЅС‚РѕРІ
 		std::shared_ptr<SceneNode> m_pRoot;
 
 		std::shared_ptr<CameraNode> m_pCamera;
-		//Рисовальщик
+		//Р РёСЃРѕРІР°Р»СЊС‰РёРє
 		std::shared_ptr<Renderer> m_pRenderer;
 
 		SceneActorMap m_actorMap;

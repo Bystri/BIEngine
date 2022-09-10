@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <string>
 
@@ -21,7 +21,7 @@ namespace BIEngine
 
         unsigned int GetId() const { return m_id; }
 
-        //Функции, позволяющие задать значения переменным внутри шейдера
+        //Р¤СѓРЅРєС†РёРё, РїРѕР·РІРѕР»СЏСЋС‰РёРµ Р·Р°РґР°С‚СЊ Р·РЅР°С‡РµРЅРёСЏ РїРµСЂРµРјРµРЅРЅС‹Рј РІРЅСѓС‚СЂРё С€РµР№РґРµСЂР°
 
         void    SetFloat(const char* name, float value, bool useShader = false);
         void    SetInteger(const char* name, int value, bool useShader = false);

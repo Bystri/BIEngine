@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "../ProcessManager/Process.h"
 #include "Audio.h"
@@ -16,7 +16,7 @@ namespace BIEngine
         void Play(const int volume, const bool looping);
         void Stop();
 
-        //Задает громкость звука. Громкость может быть от 0 до 100
+        //Р—Р°РґР°РµС‚ РіСЂРѕРјРєРѕСЃС‚СЊ Р·РІСѓРєР°. Р“СЂРѕРјРєРѕСЃС‚СЊ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚ 0 РґРѕ 100
         void SetVolume(int volume);
         int GetVolume();
         int GetLengthMilli();
@@ -27,7 +27,7 @@ namespace BIEngine
         void PauseSound();
 
     protected:
-        //Не позволяет использовать конструктор по-умолчанию из вне
+        //РќРµ РїРѕР·РІРѕР»СЏРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ-СѓРјРѕР»С‡Р°РЅРёСЋ РёР· РІРЅРµ
         SoundProcess();
 
         virtual void OnInit();

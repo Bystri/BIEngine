@@ -1,4 +1,4 @@
-#include "SceneNodes.h"
+п»ї#include "SceneNodes.h"
 
 #include "../Graphics2D/Scene.h"
 
@@ -45,7 +45,7 @@ namespace BIEngine
 	bool SceneNode::AddChild(std::shared_ptr<ISceneNode> pChild) {
 		m_children.push_back(pChild);
 
-		//TODO: Что насчет, если наш ребенок будет БОЛЬШЕ родителя? Что насчет удаления?
+		//TODO: Р§С‚Рѕ РЅР°СЃС‡РµС‚, РµСЃР»Рё РЅР°С€ СЂРµР±РµРЅРѕРє Р±СѓРґРµС‚ Р‘РћР›Р¬РЁР• СЂРѕРґРёС‚РµР»СЏ? Р§С‚Рѕ РЅР°СЃС‡РµС‚ СѓРґР°Р»РµРЅРёСЏ?
 
 		return true;
 	}
@@ -102,19 +102,19 @@ namespace BIEngine
 	/***CameraNode***/
 	bool CameraNode::OnRender(Scene* pScene)
 	{
-		//Берем позицию камеры из свойств
+		//Р‘РµСЂРµРј РїРѕР·РёС†РёСЋ РєР°РјРµСЂС‹ РёР· СЃРІРѕР№СЃС‚РІ
 		glm::vec3 cameraPosition = glm::vec3(m_props.GetPosition().x, m_props.GetPosition().y, 1);
 
-		//Далее мы находим направлением камеры
+		//Р”Р°Р»РµРµ РјС‹ РЅР°С…РѕРґРёРј РЅР°РїСЂР°РІР»РµРЅРёРµРј РєР°РјРµСЂС‹
 		glm::vec3 cameraTarget = cameraPosition;
-		cameraPosition.z = 0; //Камера стоит на позиции z = 1, а смотрим мы в z = 0
+		cameraPosition.z = 0; //РљР°РјРµСЂР° СЃС‚РѕРёС‚ РЅР° РїРѕР·РёС†РёРё z = 1, Р° СЃРјРѕС‚СЂРёРј РјС‹ РІ z = 0
 		glm::vec3 cameraReverseDir = glm::normalize(cameraPosition - cameraTarget);
 
-		//Правая ось
+		//РџСЂР°РІР°СЏ РѕСЃСЊ
 		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraReverseDir));
 
-		//Верхняя ось
+		//Р’РµСЂС…РЅСЏСЏ РѕСЃСЊ
 		glm::vec3 cameraUp = glm::cross(cameraReverseDir, cameraRight);
 
 		glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);

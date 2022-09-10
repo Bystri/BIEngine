@@ -1,4 +1,4 @@
-#include "ScriptResource.h"
+﻿#include "ScriptResource.h"
 
 #include "LuaStateManager.h"
 

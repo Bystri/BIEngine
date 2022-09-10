@@ -1,4 +1,4 @@
-#include "BIGameController.h"
+п»ї#include "BIGameController.h"
 
 #include <GLFW/glfw3.h>
 
@@ -11,17 +11,17 @@ const float PADDLE_X_VELOCITY = 250.0f;
 
 bool BIGameController::OnKeyDown(int key, int scancode)
 {
-    //Обновляем таблицу клавиш
+    //РћР±РЅРѕРІР»СЏРµРј С‚Р°Р±Р»РёС†Сѓ РєР»Р°РІРёС€
     m_isKeyPressed[key] = true;
 
-    //Отправляем начало движения для первого игрока, если нужно
+    //РћС‚РїСЂР°РІР»СЏРµРј РЅР°С‡Р°Р»Рѕ РґРІРёР¶РµРЅРёСЏ РґР»СЏ РїРµСЂРІРѕРіРѕ РёРіСЂРѕРєР°, РµСЃР»Рё РЅСѓР¶РЅРѕ
     if (key == GLFW_KEY_A || key == GLFW_KEY_D)
     {
         std::shared_ptr<EvtData_StartPaddleMove> pEvent = std::make_shared<EvtData_StartPaddleMove>(m_firstPlayerActorId, (key == GLFW_KEY_D ? PADDLE_X_VELOCITY : (-PADDLE_X_VELOCITY)));
         BIEngine::EventManager::Get()->QueueEvent(pEvent);
     }
 
-    //Отправляем начало движения для второго игрока, если нужно
+    //РћС‚РїСЂР°РІР»СЏРµРј РЅР°С‡Р°Р»Рѕ РґРІРёР¶РµРЅРёСЏ РґР»СЏ РІС‚РѕСЂРѕРіРѕ РёРіСЂРѕРєР°, РµСЃР»Рё РЅСѓР¶РЅРѕ
     if (key == GLFW_KEY_J || key == GLFW_KEY_L)
     {
         std::shared_ptr<EvtData_StartPaddleMove> pEvent = std::make_shared<EvtData_StartPaddleMove>(m_secondPlayerActorId, (key == GLFW_KEY_L ? PADDLE_X_VELOCITY : (-PADDLE_X_VELOCITY)));
@@ -33,17 +33,17 @@ bool BIGameController::OnKeyDown(int key, int scancode)
 
 bool BIGameController::OnKeyUp(int key, int scancode)
 {
-    //Обновляем таблицу клавиш
+    //РћР±РЅРѕРІР»СЏРµРј С‚Р°Р±Р»РёС†Сѓ РєР»Р°РІРёС€
     m_isKeyPressed[key] = false;
 
-    //Отправляем окончание движения для первого игрока, если нужно
+    //РћС‚РїСЂР°РІР»СЏРµРј РѕРєРѕРЅС‡Р°РЅРёРµ РґРІРёР¶РµРЅРёСЏ РґР»СЏ РїРµСЂРІРѕРіРѕ РёРіСЂРѕРєР°, РµСЃР»Рё РЅСѓР¶РЅРѕ
     if (key == GLFW_KEY_A || key == GLFW_KEY_D)
     {
         std::shared_ptr<EvtData_EndPaddleMove> pEvent = std::make_shared<EvtData_EndPaddleMove>(m_firstPlayerActorId);
         BIEngine::EventManager::Get()->QueueEvent(pEvent);
     }
 
-    //Отправляем окончание движения для второго игрока, если нужно
+    //РћС‚РїСЂР°РІР»СЏРµРј РѕРєРѕРЅС‡Р°РЅРёРµ РґРІРёР¶РµРЅРёСЏ РґР»СЏ РІС‚РѕСЂРѕРіРѕ РёРіСЂРѕРєР°, РµСЃР»Рё РЅСѓР¶РЅРѕ
     if (key == GLFW_KEY_J || key == GLFW_KEY_L)
     {
         std::shared_ptr<EvtData_EndPaddleMove> pEvent = std::make_shared<EvtData_EndPaddleMove>(m_secondPlayerActorId);

@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <list>
 #include <memory>
@@ -6,9 +6,9 @@
 enum class GameViewType
 {
 	Human,
-	Remote, //В процессе
-	AI, //В процессе
-	Recorder, //В процессе
+	Remote, //Р’ РїСЂРѕС†РµСЃСЃРµ
+	AI, //Р’ РїСЂРѕС†РµСЃСЃРµ
+	Recorder, //Р’ РїСЂРѕС†РµСЃСЃРµ
 	Other
 };
 

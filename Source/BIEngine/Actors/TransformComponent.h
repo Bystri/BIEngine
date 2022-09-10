@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "ActorComponent.h"
 
@@ -7,7 +7,7 @@
 namespace BIEngine
 {
 
-    //Компонент, отвечающий за положение и размер актера
+    //РљРѕРјРїРѕРЅРµРЅС‚, РѕС‚РІРµС‡Р°СЋС‰РёР№ Р·Р° РїРѕР»РѕР¶РµРЅРёРµ Рё СЂР°Р·РјРµСЂ Р°РєС‚РµСЂР°
     class TransformComponent : public ActorComponent
     {
     public:
@@ -19,7 +19,7 @@ namespace BIEngine
 
         virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
-        //Задание и получение свойств 
+        //Р—Р°РґР°РЅРёРµ Рё РїРѕР»СѓС‡РµРЅРёРµ СЃРІРѕР№СЃС‚РІ 
         glm::vec2 GetPosition() const { return m_position; }
         void SetPosition(const glm::vec2& pos) { m_position = pos; }
 

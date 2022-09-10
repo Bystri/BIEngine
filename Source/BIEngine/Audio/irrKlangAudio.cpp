@@ -1,4 +1,4 @@
-#include "irrKlangAudio.h"
+ï»¿#include "irrKlangAudio.h"
 
 #include "soundLoader.h"
 
@@ -142,7 +142,7 @@ namespace BIEngine
 		return !m_pSound->isFinished() && !m_pSound->getIsPaused();
 	}
 
-	//Ãðîìêîñòü ìîæåò áûòü â äèàïàçîíå îò 0 äî 100
+	//Ð“Ñ€Ð¾Ð¼ÐºÐ¾ÑÑ‚ÑŒ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð² Ð´Ð¸Ð°Ð¿Ð°Ð·Ð¾Ð½Ðµ Ð¾Ñ‚ 0 Ð´Ð¾ 100
 	void irrKlangAudioBuffer::SetVolume(int volume)
 	{
 		if (!g_pAudio->Active() || !m_pSound)
@@ -167,7 +167,7 @@ namespace BIEngine
 		return true;
 	}
 
-	//Âîçâðàùàåò äîëþ âåëè÷èíû óæå ïðîèãðàííîé ÷àñòè ìóçûêè. Âîçâðàùàåòñÿ â äèàïàçîíå îò 0.0 äî 1.0
+	//Ð’Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ Ð´Ð¾Ð»ÑŽ Ð²ÐµÐ»Ð¸Ñ‡Ð¸Ð½Ñ‹ ÑƒÐ¶Ðµ Ð¿Ñ€Ð¾Ð¸Ð³Ñ€Ð°Ð½Ð½Ð¾Ð¹ Ñ‡Ð°ÑÑ‚Ð¸ Ð¼ÑƒÐ·Ñ‹ÐºÐ¸. Ð’Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ÑÑ Ð² Ð´Ð¸Ð°Ð¿Ð°Ð·Ð¾Ð½Ðµ Ð¾Ñ‚ 0.0 Ð´Ð¾ 1.0
 	float irrKlangAudioBuffer::GetProgress()
 	{
 		if (!g_pAudio->Active() || !m_pSound)

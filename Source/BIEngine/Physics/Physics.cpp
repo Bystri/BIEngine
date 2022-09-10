@@ -1,4 +1,4 @@
-
+п»ї
 #include "Physics.h"
 
 #define _USE_MATH_DEFINES
@@ -12,7 +12,7 @@
 namespace BIEngine
 {
 
-	//Данные о материале, из которого "изготовлен объект". Загружается из компонента актера, отвечающего за физику
+	//Р”Р°РЅРЅС‹Рµ Рѕ РјР°С‚РµСЂРёР°Р»Рµ, РёР· РєРѕС‚РѕСЂРѕРіРѕ "РёР·РіРѕС‚РѕРІР»РµРЅ РѕР±СЉРµРєС‚". Р—Р°РіСЂСѓР¶Р°РµС‚СЃСЏ РёР· РєРѕРјРїРѕРЅРµРЅС‚Р° Р°РєС‚РµСЂР°, РѕС‚РІРµС‡Р°СЋС‰РµРіРѕ Р·Р° С„РёР·РёРєСѓ
 	struct MaterialData
 	{
 		float m_restitution;
@@ -31,7 +31,7 @@ namespace BIEngine
 		}
 	};
 
-	//Определение отсутсвующей физи с помощью паттерна "нулевой объект"
+	//РћРїСЂРµРґРµР»РµРЅРёРµ РѕС‚СЃСѓС‚СЃРІСѓСЋС‰РµР№ С„РёР·Рё СЃ РїРѕРјРѕС‰СЊСЋ РїР°С‚С‚РµСЂРЅР° "РЅСѓР»РµРІРѕР№ РѕР±СЉРµРєС‚"
 	class NullPhysics : public IGamePhysics2D
 	{
 	public:
@@ -91,38 +91,38 @@ namespace BIEngine
 		ChipmunkPhysics(const ChipmunkPhysics& orig) = delete;
 		ChipmunkPhysics& operator=(const ChipmunkPhysics& rhs) = delete;
 
-		//Инициализация физического движка и загузка информации о физических материалах из XML-файла
+		//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С„РёР·РёС‡РµСЃРєРѕРіРѕ РґРІРёР¶РєР° Рё Р·Р°РіСѓР·РєР° РёРЅС„РѕСЂРјР°С†РёРё Рѕ С„РёР·РёС‡РµСЃРєРёС… РјР°С‚РµСЂРёР°Р»Р°С… РёР· XML-С„Р°Р№Р»Р°
 		virtual bool Initialize() override;
-		//Задает двумерный вектор гравитации. 
+		//Р—Р°РґР°РµС‚ РґРІСѓРјРµСЂРЅС‹Р№ РІРµРєС‚РѕСЂ РіСЂР°РІРёС‚Р°С†РёРё. 
 		virtual void SetGravity(const glm::vec2& gravity) override;
-		//Сравнивает сохраненное местоположение актеров и то местоположение, которое хранится внутри физической симуляции.
-		//В случае различия, местоположение актера обновляется
+		//РЎСЂР°РІРЅРёРІР°РµС‚ СЃРѕС…СЂР°РЅРµРЅРЅРѕРµ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ Р°РєС‚РµСЂРѕРІ Рё С‚Рѕ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ, РєРѕС‚РѕСЂРѕРµ С…СЂР°РЅРёС‚СЃСЏ РІРЅСѓС‚СЂРё С„РёР·РёС‡РµСЃРєРѕР№ СЃРёРјСѓР»СЏС†РёРё.
+		//Р’ СЃР»СѓС‡Р°Рµ СЂР°Р·Р»РёС‡РёСЏ, РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ Р°РєС‚РµСЂР° РѕР±РЅРѕРІР»СЏРµС‚СЃСЏ
 		virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override;
-		//Шаг симуляции
+		//РЁР°Рі СЃРёРјСѓР»СЏС†РёРё
 		virtual void OnUpdate(float const deltaSeconds) override;
 
-		//Добавляет физический объект в виде круга в физическую симуляцию
+		//Р”РѕР±Р°РІР»СЏРµС‚ С„РёР·РёС‡РµСЃРєРёР№ РѕР±СЉРµРєС‚ РІ РІРёРґРµ РєСЂСѓРіР° РІ С„РёР·РёС‡РµСЃРєСѓСЋ СЃРёРјСѓР»СЏС†РёСЋ
 		virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
-		//Добавляет физический объект в виде прямоугольника в физическую симуляцию
+		//Р”РѕР±Р°РІР»СЏРµС‚ С„РёР·РёС‡РµСЃРєРёР№ РѕР±СЉРµРєС‚ РІ РІРёРґРµ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР° РІ С„РёР·РёС‡РµСЃРєСѓСЋ СЃРёРјСѓР»СЏС†РёСЋ
 		virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
 		virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
 		virtual void RemoveActor(ActorId id) override;
 
-		//Добавляет триггер-объект с нулевой физикой в симуляцию
+		//Р”РѕР±Р°РІР»СЏРµС‚ С‚СЂРёРіРіРµСЂ-РѕР±СЉРµРєС‚ СЃ РЅСѓР»РµРІРѕР№ С„РёР·РёРєРѕР№ РІ СЃРёРјСѓР»СЏС†РёСЋ
 		virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim) override;
-		//Применяет силу к объекту
+		//РџСЂРёРјРµРЅСЏРµС‚ СЃРёР»Сѓ Рє РѕР±СЉРµРєС‚Сѓ
 		virtual void ApplyForce(const glm::vec2& dir, float newtons, ActorId aid) override;
-		//Применить момент силы к объекту
+		//РџСЂРёРјРµРЅРёС‚СЊ РјРѕРјРµРЅС‚ СЃРёР»С‹ Рє РѕР±СЉРµРєС‚Сѓ
 		virtual void ApplyTorque(const glm::vec2& dir, float newtons, ActorId aid) override;
 
-		//Напрямую задает положение и поворот физического объекта.
-		//Следует быть с этим аккуратнее, так как данная процедура способна сломать физическую симуляцию
+		//РќР°РїСЂСЏРјСѓСЋ Р·Р°РґР°РµС‚ РїРѕР»РѕР¶РµРЅРёРµ Рё РїРѕРІРѕСЂРѕС‚ С„РёР·РёС‡РµСЃРєРѕРіРѕ РѕР±СЉРµРєС‚Р°.
+		//РЎР»РµРґСѓРµС‚ Р±С‹С‚СЊ СЃ СЌС‚РёРј Р°РєРєСѓСЂР°С‚РЅРµРµ, С‚Р°Рє РєР°Рє РґР°РЅРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР° СЃРїРѕСЃРѕР±РЅР° СЃР»РѕРјР°С‚СЊ С„РёР·РёС‡РµСЃРєСѓСЋ СЃРёРјСѓР»СЏС†РёСЋ
 		virtual bool KinematicMove(ActorId aid, const glm::vec2& position, float rotate) override;
-		//Напрямую задает поворот физического объекта.
-		//Следует быть с этим аккуратнее, так как данная процедура способна сломать физическую симуляцию
+		//РќР°РїСЂСЏРјСѓСЋ Р·Р°РґР°РµС‚ РїРѕРІРѕСЂРѕС‚ С„РёР·РёС‡РµСЃРєРѕРіРѕ РѕР±СЉРµРєС‚Р°.
+		//РЎР»РµРґСѓРµС‚ Р±С‹С‚СЊ СЃ СЌС‚РёРј Р°РєРєСѓСЂР°С‚РЅРµРµ, С‚Р°Рє РєР°Рє РґР°РЅРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР° СЃРїРѕСЃРѕР±РЅР° СЃР»РѕРјР°С‚СЊ С„РёР·РёС‡РµСЃРєСѓСЋ СЃРёРјСѓР»СЏС†РёСЋ
 		virtual void Rotate(ActorId actorId, float angleRadians) override;
 		virtual float GetOrientation(ActorId actorId) const override;
-		//Приравниваем скорость актера к нулевому вектору
+		//РџСЂРёСЂР°РІРЅРёРІР°РµРј СЃРєРѕСЂРѕСЃС‚СЊ Р°РєС‚РµСЂР° Рє РЅСѓР»РµРІРѕРјСѓ РІРµРєС‚РѕСЂСѓ
 		virtual void StopActor(ActorId actorId) override;
 		virtual glm::vec2 GetVelocity(ActorId actorId) const override;
 		virtual void SetVelocity(ActorId actorId, const glm::vec2& vel) override;
@@ -133,7 +133,7 @@ namespace BIEngine
 
 	private:
 
-		//Инициализация и работа с физическими материалами
+		//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Рё СЂР°Р±РѕС‚Р° СЃ С„РёР·РёС‡РµСЃРєРёРјРё РјР°С‚РµСЂРёР°Р»Р°РјРё
 		void LoadXml(tinyxml2::XMLElement* pRoot);
 		float LookupSpecificGravity(const std::string& densityStr);
 		MaterialData LookupMaterialData(const std::string& materialStr);
@@ -141,7 +141,7 @@ namespace BIEngine
 		cpBody* FindChipmunkRigidBody(ActorId const id) const;
 		ActorId FindActorID(cpBody const*) const;
 
-		//Работа с коллизией объектов
+		//Р Р°Р±РѕС‚Р° СЃ РєРѕР»Р»РёР·РёРµР№ РѕР±СЉРµРєС‚РѕРІ
 		void RemoveCollisionObject(cpBody* removeMe);
 		void SendCollisionPairAddEvent(cpArbiter const* arb, cpShape const* shape0, cpShape const* shape1);
 		void SendCollisionPairRemoveEvent(cpArbiter const* arb, cpShape const* shape0, cpShape const* shape1);
@@ -151,7 +151,7 @@ namespace BIEngine
 	private:
 		cpSpace* m_cpSpace;
 
-		//Физические свойства материалов
+		//Р¤РёР·РёС‡РµСЃРєРёРµ СЃРІРѕР№СЃС‚РІР° РјР°С‚РµСЂРёР°Р»РѕРІ
 		typedef std::map<std::string, float> DensityTable;
 		typedef std::map<std::string, MaterialData> MaterialTable;
 		DensityTable m_densityTable;
@@ -177,7 +177,7 @@ namespace BIEngine
 		m_cpSpace = cpSpaceNew();
 		cpCollisionHandler* pCollisionHandler = cpSpaceAddDefaultCollisionHandler(m_cpSpace);
 
-		//Назначаем наши функции для обработки начала и конца столкновений
+		//РќР°Р·РЅР°С‡Р°РµРј РЅР°С€Рё С„СѓРЅРєС†РёРё РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё РЅР°С‡Р°Р»Р° Рё РєРѕРЅС†Р° СЃС‚РѕР»РєРЅРѕРІРµРЅРёР№
 		pCollisionHandler->beginFunc = ChipmunkBeginCollisionCallback;
 		pCollisionHandler->separateFunc = ChipmunkSeparateCollisionCallback;
 		cpSpaceSetUserData(m_cpSpace, this);
@@ -340,7 +340,7 @@ namespace BIEngine
 		m_rigidBodyToActorId[pBody] = actorID;
 	}
 
-	//Добавляет физических объект состоящий из произвольного набора точек в физическую симуляцию
+	//Р”РѕР±Р°РІР»СЏРµС‚ С„РёР·РёС‡РµСЃРєРёС… РѕР±СЉРµРєС‚ СЃРѕСЃС‚РѕСЏС‰РёР№ РёР· РїСЂРѕРёР·РІРѕР»СЊРЅРѕРіРѕ РЅР°Р±РѕСЂР° С‚РѕС‡РµРє РІ С„РёР·РёС‡РµСЃРєСѓСЋ СЃРёРјСѓР»СЏС†РёСЋ
 	void ChipmunkPhysics::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial)
 	{
 		std::shared_ptr<Actor> pStrongActor = gameActor.lock();
@@ -406,7 +406,7 @@ namespace BIEngine
 		m_rigidBodyToActorId[pBody] = actorID;
 	}
 
-	//Удаляет физический объект из симуляции
+	//РЈРґР°Р»СЏРµС‚ С„РёР·РёС‡РµСЃРєРёР№ РѕР±СЉРµРєС‚ РёР· СЃРёРјСѓР»СЏС†РёРё
 	void ChipmunkPhysics::RemoveActor(ActorId id)
 	{
 		if (cpBody* const body = FindChipmunkRigidBody(id))
@@ -640,7 +640,7 @@ namespace BIEngine
 
 	void ChipmunkPhysics::SendCollisionPairAddEvent(cpArbiter const* arb, cpShape const* shape0, cpShape const* shape1)
 	{
-		//Sensor - это объект без физических свойств, то есть "триггер"
+		//Sensor - СЌС‚Рѕ РѕР±СЉРµРєС‚ Р±РµР· С„РёР·РёС‡РµСЃРєРёС… СЃРІРѕР№СЃС‚РІ, С‚Рѕ РµСЃС‚СЊ "С‚СЂРёРіРіРµСЂ"
 		if (cpShapeGetSensor(shape0) || cpShapeGetSensor(shape1))
 		{
 			cpBody const* triggerBody, * otherBody;
@@ -694,7 +694,7 @@ namespace BIEngine
 
 	void ChipmunkPhysics::SendCollisionPairRemoveEvent(cpArbiter const* arb, cpShape const* shape0, cpShape const* shape1)
 	{
-		//Sensor - это объект без физических свойств, то есть "триггер"
+		//Sensor - СЌС‚Рѕ РѕР±СЉРµРєС‚ Р±РµР· С„РёР·РёС‡РµСЃРєРёС… СЃРІРѕР№СЃС‚РІ, С‚Рѕ РµСЃС‚СЊ "С‚СЂРёРіРіРµСЂ"
 		if (cpShapeGetSensor(shape0) || cpShapeGetSensor(shape1))
 		{
 			cpBody const* triggerBody, * otherBody;

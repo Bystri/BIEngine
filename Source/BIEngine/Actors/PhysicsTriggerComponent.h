@@ -1,11 +1,11 @@
-#pragma once
+п»ї#pragma once
 
 #include "ActorComponent.h"
 #include "../Physics/Physics.h"
 
 namespace BIEngine
 {
-   //Прикрепляет к актеру триггерную зону в виде куба
+   //РџСЂРёРєСЂРµРїР»СЏРµС‚ Рє Р°РєС‚РµСЂСѓ С‚СЂРёРіРіРµСЂРЅСѓСЋ Р·РѕРЅСѓ РІ РІРёРґРµ РєСѓР±Р°
     class PhysicsTriggerComponent : public ActorComponent
     {
     public:

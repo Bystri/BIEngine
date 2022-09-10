@@ -1,4 +1,4 @@
-#include "UserInterface.h"
+п»ї#include "UserInterface.h"
 
 #include <memory>
 
@@ -16,22 +16,22 @@
 namespace BIEngine
 {
 
-    //Содержит всю информацию о символе загруженного используя FreeType
+    //РЎРѕРґРµСЂР¶РёС‚ РІСЃСЋ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЃРёРјРІРѕР»Рµ Р·Р°РіСЂСѓР¶РµРЅРЅРѕРіРѕ РёСЃРїРѕР»СЊР·СѓСЏ FreeType
     struct Character {
-        unsigned int TextureID; //ID текстуры с глифой
-        glm::ivec2   Size;      //Размер глифы
-        glm::ivec2   Bearing;   //Отступ от основания глифы до верхнего-левого угла
-        unsigned int Advance;   //Горизонтальный отступ до следующей глифы
+        unsigned int TextureID; //ID С‚РµРєСЃС‚СѓСЂС‹ СЃ РіР»РёС„РѕР№
+        glm::ivec2   Size;      //Р Р°Р·РјРµСЂ РіР»РёС„С‹
+        glm::ivec2   Bearing;   //РћС‚СЃС‚СѓРї РѕС‚ РѕСЃРЅРѕРІР°РЅРёСЏ РіР»РёС„С‹ РґРѕ РІРµСЂС…РЅРµРіРѕ-Р»РµРІРѕРіРѕ СѓРіР»Р°
+        unsigned int Advance;   //Р“РѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅС‹Р№ РѕС‚СЃС‚СѓРї РґРѕ СЃР»РµРґСѓСЋС‰РµР№ РіР»РёС„С‹
     };
 
 
-    //Класс отвечающий за отрисовку текста. Может единоразово хранить информация для отрисовки только одного шрифта и размера
+    //РљР»Р°СЃСЃ РѕС‚РІРµС‡Р°СЋС‰РёР№ Р·Р° РѕС‚СЂРёСЃРѕРІРєСѓ С‚РµРєСЃС‚Р°. РњРѕР¶РµС‚ РµРґРёРЅРѕСЂР°Р·РѕРІРѕ С…СЂР°РЅРёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЏ РґР»СЏ РѕС‚СЂРёСЃРѕРІРєРё С‚РѕР»СЊРєРѕ РѕРґРЅРѕРіРѕ С€СЂРёС„С‚Р° Рё СЂР°Р·РјРµСЂР°
     class TextRenderer
     {
     public:
         TextRenderer(unsigned int width, unsigned int height);
 
-        //Создает набор текстур символов для заданного шрифта
+        //РЎРѕР·РґР°РµС‚ РЅР°Р±РѕСЂ С‚РµРєСЃС‚СѓСЂ СЃРёРјРІРѕР»РѕРІ РґР»СЏ Р·Р°РґР°РЅРЅРѕРіРѕ С€СЂРёС„С‚Р°
         void Load(std::string font, unsigned int fontSize);
 
         void RenderText(std::string text, float x, float y, float scale, glm::vec3 color = glm::vec3(1.0f));
@@ -45,7 +45,7 @@ namespace BIEngine
 
     TextRenderer::TextRenderer(unsigned int width, unsigned int height)
     {
-        //Загрузка шейдеров
+        //Р—Р°РіСЂСѓР·РєР° С€РµР№РґРµСЂРѕРІ
         std::shared_ptr<OpenglShaderData> vertTextShaderData = std::static_pointer_cast<OpenglShaderData>(ResCache::Get()->GetHandle("Effects/text_2d.vs")->GetExtra());
         std::shared_ptr<OpenglShaderData> fragTextShaderxData = std::static_pointer_cast<OpenglShaderData>(ResCache::Get()->GetHandle("Effects/text_2d.frag")->GetExtra());
 
@@ -54,7 +54,7 @@ namespace BIEngine
         m_textShader.SetMatrix4("projection", glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f), true);
         m_textShader.SetInteger("text", 0);
 
-        //Создаем буферы для текстур
+        //РЎРѕР·РґР°РµРј Р±СѓС„РµСЂС‹ РґР»СЏ С‚РµРєСЃС‚СѓСЂ
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glBindVertexArray(VAO);
@@ -84,9 +84,9 @@ namespace BIEngine
 
         FT_Set_Pixel_Sizes(face, 0, fontSize);
 
-        //Отключить ограничение байтового выравнивания
+        //РћС‚РєР»СЋС‡РёС‚СЊ РѕРіСЂР°РЅРёС‡РµРЅРёРµ Р±Р°Р№С‚РѕРІРѕРіРѕ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        //Предзагружаем текстуры для первых 128 ASKII-символов
+        //РџСЂРµРґР·Р°РіСЂСѓР¶Р°РµРј С‚РµРєСЃС‚СѓСЂС‹ РґР»СЏ РїРµСЂРІС‹С… 128 ASKII-СЃРёРјРІРѕР»РѕРІ
         for (GLubyte c = 0; c < 128; ++c)
         {
             if (FT_Load_Char(face, c, FT_LOAD_RENDER))
@@ -167,7 +167,7 @@ namespace BIEngine
             glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glDrawArrays(GL_TRIANGLES, 0, 6);
-            //Перемещаем курсор к следующему символу
+            //РџРµСЂРµРјРµС‰Р°РµРј РєСѓСЂСЃРѕСЂ Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЃРёРјРІРѕР»Сѓ
             x += (ch.Advance >> 6) * scale;
         }
         glBindVertexArray(0);

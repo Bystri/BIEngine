@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "../3rdParty/FastDelegate/FastDelegate.h"
 
@@ -18,11 +18,11 @@ namespace BIEngine
 		virtual const EventType& GetEventType() const = 0;
 		virtual float GetTimeStamp() const = 0;
 
-		//Методы передачи данных в потоке
+		//РњРµС‚РѕРґС‹ РїРµСЂРµРґР°С‡Рё РґР°РЅРЅС‹С… РІ РїРѕС‚РѕРєРµ
 
-		//Отправляет в поток вывода сериализованное представление события
+		//РћС‚РїСЂР°РІР»СЏРµС‚ РІ РїРѕС‚РѕРє РІС‹РІРѕРґР° СЃРµСЂРёР°Р»РёР·РѕРІР°РЅРЅРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ СЃРѕР±С‹С‚РёСЏ
 		virtual void Serialize(std::ostrstream& os) const = 0;
-		//Отправляет в поток ввода десериализованное представление события
+		//РћС‚РїСЂР°РІР»СЏРµС‚ РІ РїРѕС‚РѕРє РІРІРѕРґР° РґРµСЃРµСЂРёР°Р»РёР·РѕРІР°РЅРЅРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ СЃРѕР±С‹С‚РёСЏ
 		virtual void Deserialize(std::istrstream& is) const = 0;
 
 		virtual const char* GetName() const = 0;
@@ -88,7 +88,7 @@ namespace BIEngine
 	};
 
 
-	//Менеджер событий является Singleton-объектом, так как должен быть доступен практически из каждой системы
+	//РњРµРЅРµРґР¶РµСЂ СЃРѕР±С‹С‚РёР№ СЏРІР»СЏРµС‚СЃСЏ Singleton-РѕР±СЉРµРєС‚РѕРј, С‚Р°Рє РєР°Рє РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РґРѕСЃС‚СѓРїРµРЅ РїСЂР°РєС‚РёС‡РµСЃРєРё РёР· РєР°Р¶РґРѕР№ СЃРёСЃС‚РµРјС‹
 	class EventManager
 	{
 		typedef std::list<EventListenerDelegate> EventListenerList;
@@ -105,12 +105,12 @@ namespace BIEngine
 		virtual bool AddListener(const EventListenerDelegate& eventDelegate, const EventType& type);
 		virtual bool RemoveListener(const EventListenerDelegate& eventDelegate, const EventType& type);
 
-		//Выполнение события сразу, не дожидаясь выполнения событий из очереди
+		//Р’С‹РїРѕР»РЅРµРЅРёРµ СЃРѕР±С‹С‚РёСЏ СЃСЂР°Р·Сѓ, РЅРµ РґРѕР¶РёРґР°СЏСЃСЊ РІС‹РїРѕР»РЅРµРЅРёСЏ СЃРѕР±С‹С‚РёР№ РёР· РѕС‡РµСЂРµРґРё
 		virtual bool TriggerEvent(const IEventDataPtr& pEvent) const;
-		//Поставить событие в очередь на выполнение
+		//РџРѕСЃС‚Р°РІРёС‚СЊ СЃРѕР±С‹С‚РёРµ РІ РѕС‡РµСЂРµРґСЊ РЅР° РІС‹РїРѕР»РЅРµРЅРёРµ
 		virtual bool QueueEvent(const IEventDataPtr& pEvent);
 		virtual bool AbortEvent(const EventType& type, bool allOfType = false);
-		//Выполнить соытия из очереди. Можно поставить ограничение времени выполнения на текущий тик оновления.
+		//Р’С‹РїРѕР»РЅРёС‚СЊ СЃРѕС‹С‚РёСЏ РёР· РѕС‡РµСЂРµРґРё. РњРѕР¶РЅРѕ РїРѕСЃС‚Р°РІРёС‚СЊ РѕРіСЂР°РЅРёС‡РµРЅРёРµ РІСЂРµРјРµРЅРё РІС‹РїРѕР»РЅРµРЅРёСЏ РЅР° С‚РµРєСѓС‰РёР№ С‚РёРє РѕРЅРѕРІР»РµРЅРёСЏ.
 		virtual bool TickUpdate(long long maxMillis = INFINITE_TIME);
 
 	private:

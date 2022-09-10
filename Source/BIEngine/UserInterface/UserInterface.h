@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <map>
 #include <string>
@@ -23,7 +23,7 @@ namespace BIEngine
 		virtual void OnRender(float dt) = 0;
 
 	protected:
-		//Только UserInterface класс может создавать и удалять элементы интерфейса
+		//РўРѕР»СЊРєРѕ UserInterface РєР»Р°СЃСЃ РјРѕР¶РµС‚ СЃРѕР·РґР°РІР°С‚СЊ Рё СѓРґР°Р»СЏС‚СЊ СЌР»РµРјРµРЅС‚С‹ РёРЅС‚РµСЂС„РµР№СЃР°
 		explicit IElementUI(int id) : m_id(id), m_x(0.0f), m_y(0.0f), m_scale(0.0f) {}
 
 	protected:
@@ -65,7 +65,7 @@ namespace BIEngine
 		void OnRender(float dt);
 
 	private:
-		//Хранит ID, который будет присвоен следующему элементу
+		//РҐСЂР°РЅРёС‚ ID, РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ РїСЂРёСЃРІРѕРµРЅ СЃР»РµРґСѓСЋС‰РµРјСѓ СЌР»РµРјРµРЅС‚Сѓ
 		int m_nextId;
 
 		std::map<int, IElementUI* const> m_elements;

@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <memory>
 #include <string>
@@ -23,25 +23,25 @@ namespace BIEngine
 
 		virtual ~IGamePhysics2D() { };
 
-		//Служебные функции
+		//РЎР»СѓР¶РµР±РЅС‹Рµ С„СѓРЅРєС†РёРё
 		virtual bool Initialize() = 0;
 		virtual void SetGravity(const glm::vec2& gravity) = 0;
 		virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& pActorMap) = 0;
 		virtual void OnUpdate(float deltaSeconds) = 0;
 		
-		//Инициализация физических объектов
+		//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С„РёР·РёС‡РµСЃРєРёС… РѕР±СЉРµРєС‚РѕРІ
 		virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> actor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
 		virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
 		virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
 		virtual void RemoveActor(ActorId id) = 0;
 
-		//Взаимодейтсвие с физическим миром
+		//Р’Р·Р°РёРјРѕРґРµР№С‚СЃРІРёРµ СЃ С„РёР·РёС‡РµСЃРєРёРј РјРёСЂРѕРј
 		virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim) = 0;
 		virtual void ApplyForce(const glm::vec2& dir, float newtons, ActorId aid) = 0;
 		virtual void ApplyTorque(const glm::vec2& dir, float newtons, ActorId aid) = 0;
 		virtual bool KinematicMove(ActorId aid, const glm::vec2& position, float rotate) = 0;
 
-		//Явные способы задать актерам пространственные характеристики
+		//РЇРІРЅС‹Рµ СЃРїРѕСЃРѕР±С‹ Р·Р°РґР°С‚СЊ Р°РєС‚РµСЂР°Рј РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµРЅРЅС‹Рµ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё
 		virtual void Rotate(ActorId actorId, float angleRadians) = 0;
 		virtual float GetOrientation(ActorId actorId) const = 0;
 		virtual void StopActor(ActorId actorId) = 0;

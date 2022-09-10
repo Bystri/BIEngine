@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "../Actors/ActorFactory.h"
 #include "../UserInterface/HumanView.h"
@@ -24,12 +24,12 @@ namespace BIEngine
 
 		bool LoadLevel(const std::string& path);
 
-		//Должен быть переопределен дочерним классом, если нужно сделать что-то особое во время загрузки мира.
-		//Такая необохдимость в отдельной функции возникает из-за выполнение скриптов перед и после загрузки мира.
+		//Р”РѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРµСЂРµРѕРїСЂРµРґРµР»РµРЅ РґРѕС‡РµСЂРЅРёРј РєР»Р°СЃСЃРѕРј, РµСЃР»Рё РЅСѓР¶РЅРѕ СЃРґРµР»Р°С‚СЊ С‡С‚Рѕ-С‚Рѕ РѕСЃРѕР±РѕРµ РІРѕ РІСЂРµРјСЏ Р·Р°РіСЂСѓР·РєРё РјРёСЂР°.
+		//РўР°РєР°СЏ РЅРµРѕР±РѕС…РґРёРјРѕСЃС‚СЊ РІ РѕС‚РґРµР»СЊРЅРѕР№ С„СѓРЅРєС†РёРё РІРѕР·РЅРёРєР°РµС‚ РёР·-Р·Р° РІС‹РїРѕР»РЅРµРЅРёРµ СЃРєСЂРёРїС‚РѕРІ РїРµСЂРµРґ Рё РїРѕСЃР»Рµ Р·Р°РіСЂСѓР·РєРё РјРёСЂР°.
 		virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) { return true; }
 
 		std::shared_ptr<Actor> CreateActor(tinyxml2::XMLElement* pRoot);
-		//Принимает на вход XML-структуру актера, компоненты в котором будут заменены или добавлены.
+		//РџСЂРёРЅРёРјР°РµС‚ РЅР° РІС…РѕРґ XML-СЃС‚СЂСѓРєС‚СѓСЂСѓ Р°РєС‚РµСЂР°, РєРѕРјРїРѕРЅРµРЅС‚С‹ РІ РєРѕС‚РѕСЂРѕРј Р±СѓРґСѓС‚ Р·Р°РјРµРЅРµРЅС‹ РёР»Рё РґРѕР±Р°РІР»РµРЅС‹.
 		void ModifyActor(ActorId actorId, tinyxml2::XMLElement* pOverrides);
 
 		virtual void AddGameView(std::shared_ptr<IGameView> pView);
@@ -40,7 +40,7 @@ namespace BIEngine
 
 		int GetNumActors() const { return m_actors.size(); };
 
-		//Обработчики событий устройств ввода
+		//РћР±СЂР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№ СѓСЃС‚СЂРѕР№СЃС‚РІ РІРІРѕРґР°
 		void SetKey(int key, int scancode, bool state);
 
 	protected:

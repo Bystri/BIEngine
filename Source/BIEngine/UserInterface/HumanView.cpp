@@ -1,4 +1,4 @@
-#include "HumanView.h"
+п»ї#include "HumanView.h"
 
 #include "../Graphics2D/Opengl/ShadersLoaderOpenGL.h"
 #include "../Graphics2D/Shader.h"
@@ -51,10 +51,10 @@ namespace BIEngine
 
 		m_userInterface.Init(m_screenWidth, m_screenHeight);
 
-		//Матрица камеры
+		//РњР°С‚СЂРёС†Р° РєР°РјРµСЂС‹
 		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(m_screenWidth), static_cast<float>(m_screenHeight), 0.0f, -1.0f, 1.0f);
 
-		//Загрузка шейдеров
+		//Р—Р°РіСЂСѓР·РєР° С€РµР№РґРµСЂРѕРІ
 		std::shared_ptr<OpenglShaderData> pVertShaderData = std::static_pointer_cast<OpenglShaderData>(ResCache::Get()->GetHandle("Effects/sprite.vs")->GetExtra());
 		std::shared_ptr<OpenglShaderData> pFragShaderxData = std::static_pointer_cast<OpenglShaderData>(ResCache::Get()->GetHandle("Effects/sprite.frag")->GetExtra());
 		Shader shader;
@@ -63,9 +63,9 @@ namespace BIEngine
 		shader.SetInteger("image", 0);
 		shader.SetMatrix4("projection", projection);
 
-		//Создание отображения
+		//РЎРѕР·РґР°РЅРёРµ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
 		m_pRenderer = std::make_shared<Renderer>(shader);
-		//Создания сцены на основе отоьбражения
+		//РЎРѕР·РґР°РЅРёСЏ СЃС†РµРЅС‹ РЅР° РѕСЃРЅРѕРІРµ РѕС‚РѕСЊР±СЂР°Р¶РµРЅРёСЏ
 		m_scene = new Scene(m_pRenderer);
 
 		return true;
@@ -102,7 +102,7 @@ namespace BIEngine
 				m_pKeyboardHandler->OnKeyUp(key, scancode);
 	}
 
-	//Вызывается, когда создается новый актер с компонентой-камерой.
+	//Р’С‹Р·С‹РІР°РµС‚СЃСЏ, РєРѕРіРґР° СЃРѕР·РґР°РµС‚СЃСЏ РЅРѕРІС‹Р№ Р°РєС‚РµСЂ СЃ РєРѕРјРїРѕРЅРµРЅС‚РѕР№-РєР°РјРµСЂРѕР№.
 	void HumanView::NewCameraComponentDelegate(IEventDataPtr pEventData)
 	{
 		std::shared_ptr<EvtData_New_Camera_Component> pCastEventData = std::static_pointer_cast<EvtData_New_Camera_Component>(pEventData);

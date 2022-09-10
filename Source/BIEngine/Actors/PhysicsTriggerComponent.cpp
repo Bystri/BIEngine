@@ -1,4 +1,4 @@
-
+ï»¿
 #include "PhysicsTriggerComponent.h"
 #include "TransformComponent.h"
 #include "../Physics/Physics.h"
@@ -24,7 +24,7 @@ namespace BIEngine
     {
         m_gamePhysics = g_pApp->m_pGameLogic->GetGamePhysics();
         if (!m_gamePhysics)
-            return false; //Åñëè íåò ôèçè÷åñêîãî äâèæêà, òî è ñìûñëà â äàëüíåéøåì èñïîëüçîâàíèè êîìïîíåíòà òîæå íåò
+            return false; //Ð•ÑÐ»Ð¸ Ð½ÐµÑ‚ Ñ„Ð¸Ð·Ð¸Ñ‡ÐµÑÐºÐ¾Ð³Ð¾ Ð´Ð²Ð¸Ð¶ÐºÐ°, Ñ‚Ð¾ Ð¸ ÑÐ¼Ñ‹ÑÐ»Ð° Ð² Ð´Ð°Ð»ÑŒÐ½ÐµÐ¹ÑˆÐµÐ¼ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½Ð¸Ð¸ ÐºÐ¾Ð¼Ð¿Ð¾Ð½ÐµÐ½Ñ‚Ð° Ñ‚Ð¾Ð¶Ðµ Ð½ÐµÑ‚
 
 
         tinyxml2::XMLElement* pScaleElement = pData->FirstChildElement("Scale");

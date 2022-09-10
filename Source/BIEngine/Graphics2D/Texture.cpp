@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 
 #include "texture.h"
 
@@ -14,17 +14,17 @@ void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char*
     m_width = width;
     m_height = height;
 
-    // Создание текстуры
+    // РЎРѕР·РґР°РЅРёРµ С‚РµРєСЃС‚СѓСЂС‹
     glBindTexture(GL_TEXTURE_2D, m_id);
     glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, width, height, 0, m_imageFormat, GL_UNSIGNED_BYTE, data);
 
-    //Задаем параметры текстуры
+    //Р—Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ С‚РµРєСЃС‚СѓСЂС‹
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrapS);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrapT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_filterMin);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_filterMax);
 
-    //Отвязываем текстуру, чтобы она не учавствовала в дальнейшей работе
+    //РћС‚РІСЏР·С‹РІР°РµРј С‚РµРєСЃС‚СѓСЂСѓ, С‡С‚РѕР±С‹ РѕРЅР° РЅРµ СѓС‡Р°РІСЃС‚РІРѕРІР°Р»Р° РІ РґР°Р»СЊРЅРµР№С€РµР№ СЂР°Р±РѕС‚Рµ
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

@@ -1,8 +1,8 @@
-#include "String.h"
+п»ї#include "String.h"
 
 namespace BIEngine
 {
-    //Данная реализация взята с ответа от пользователя iFreilicht на этот пост https://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
+    //Р”Р°РЅРЅР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ РІР·СЏС‚Р° СЃ РѕС‚РІРµС‚Р° РѕС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ iFreilicht РЅР° СЌС‚РѕС‚ РїРѕСЃС‚ https://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
     template<typename ...Args>
     std::string Format(const std::string& format, Args ... args)
     {
@@ -12,8 +12,8 @@ namespace BIEngine
         return std::string(buf.get(), buf.get() + size_s - 1); // We don't want the '\0' inside
     }
 
-    /*Данная реализация может быть найдена по следущей ссылке: http://xoomer.virgilio.it/acantato/dev/wildcard/wildmatch.html
-    Цитата из источника:
+    /*Р”Р°РЅРЅР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅР°Р№РґРµРЅР° РїРѕ СЃР»РµРґСѓС‰РµР№ СЃСЃС‹Р»РєРµ: http://xoomer.virgilio.it/acantato/dev/wildcard/wildmatch.html
+    Р¦РёС‚Р°С‚Р° РёР· РёСЃС‚РѕС‡РЅРёРєР°:
     "The original code is from the C/C++ Users Journal. The author is Mike Cornelison."
     "No use restriction is mentioned in the source file or the other files I found in the CD."*/
     bool WildcardMatch(const char* pat, const char* str) {

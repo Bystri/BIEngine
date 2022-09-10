@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <map>
 #include <memory>
@@ -16,7 +16,7 @@ namespace BIEngine
 
 	typedef unsigned long ActorId;
 
-	//Объект, который является главным дейтсвующим механизмом на сцене. Основные его свойства задаются с помощью компонентов, которые описываются в XML-файле актера
+	//РћР±СЉРµРєС‚, РєРѕС‚РѕСЂС‹Р№ СЏРІР»СЏРµС‚СЃСЏ РіР»Р°РІРЅС‹Рј РґРµР№С‚СЃРІСѓСЋС‰РёРј РјРµС…Р°РЅРёР·РјРѕРј РЅР° СЃС†РµРЅРµ. РћСЃРЅРѕРІРЅС‹Рµ РµРіРѕ СЃРІРѕР№СЃС‚РІР° Р·Р°РґР°СЋС‚СЃСЏ СЃ РїРѕРјРѕС‰СЊСЋ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ, РєРѕС‚РѕСЂС‹Рµ РѕРїРёСЃС‹РІР°СЋС‚СЃСЏ РІ XML-С„Р°Р№Р»Рµ Р°РєС‚РµСЂР°
 	class Actor
 	{
 		friend class ActorFactory;
@@ -29,7 +29,7 @@ namespace BIEngine
 		explicit Actor(ActorId id);
 		~Actor();
 
-		//Инициализация актера на основе настроек в XML файле
+		//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р°РєС‚РµСЂР° РЅР° РѕСЃРЅРѕРІРµ РЅР°СЃС‚СЂРѕРµРє РІ XML С„Р°Р№Р»Рµ
 		bool Init(tinyxml2::XMLElement* pData);
 		void PostInit();
 		void Destroy();
@@ -41,7 +41,7 @@ namespace BIEngine
 		ActorId GetId() const { return m_id; }
 		std::string GetName() const { return m_name; }
 
-		//Шаблон функции для получения компонентов
+		//РЁР°Р±Р»РѕРЅ С„СѓРЅРєС†РёРё РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ
 		template <class ComponentType> std::weak_ptr<ComponentType> GetComponent(ComponentId id) 
 		{
 			ActorComponents::iterator findIt = m_components.find(id);
@@ -49,9 +49,9 @@ namespace BIEngine
 			{
 				std::shared_ptr<ActorComponent> pBase(findIt->second);
 
-				//Приведение к подклассу типа компонента
+				//РџСЂРёРІРµРґРµРЅРёРµ Рє РїРѕРґРєР»Р°СЃСЃСѓ С‚РёРїР° РєРѕРјРїРѕРЅРµРЅС‚Р°
 				std::shared_ptr<ComponentType> pSub(std::static_pointer_cast<ComponentType>(pBase));
-				std::weak_ptr<ComponentType> pWeakSub(pSub); //Приведение сильного указателя к слабому
+				std::weak_ptr<ComponentType> pWeakSub(pSub); //РџСЂРёРІРµРґРµРЅРёРµ СЃРёР»СЊРЅРѕРіРѕ СѓРєР°Р·Р°С‚РµР»СЏ Рє СЃР»Р°Р±РѕРјСѓ
 				return pWeakSub;
 			}
 			else 
@@ -61,12 +61,12 @@ namespace BIEngine
 		}
 
 	private:
-		//Данный метод может вызываться только фабрикой
+		//Р”Р°РЅРЅС‹Р№ РјРµС‚РѕРґ РјРѕР¶РµС‚ РІС‹Р·С‹РІР°С‚СЊСЃСЏ С‚РѕР»СЊРєРѕ С„Р°Р±СЂРёРєРѕР№
 		void AddComponent(std::shared_ptr<ActorComponent> pComponent);
 
 	private:
 		ActorId m_id;
-		std::string m_name; //Поле несет чисто косметический характер. Используется в редакторе.
+		std::string m_name; //РџРѕР»Рµ РЅРµСЃРµС‚ С‡РёСЃС‚Рѕ РєРѕСЃРјРµС‚РёС‡РµСЃРєРёР№ С…Р°СЂР°РєС‚РµСЂ. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІ СЂРµРґР°РєС‚РѕСЂРµ.
 		ActorComponents m_components;
 	};
 

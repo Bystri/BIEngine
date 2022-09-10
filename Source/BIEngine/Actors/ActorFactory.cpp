@@ -1,4 +1,4 @@
-#include "ActorFactory.h"
+п»ї#include "ActorFactory.h"
 
 #include <iostream>
 
@@ -33,14 +33,14 @@ namespace BIEngine
 			return std::shared_ptr<Actor>();
 		}
 
-		//Создаем актера
+		//РЎРѕР·РґР°РµРј Р°РєС‚РµСЂР°
 		std::shared_ptr<Actor> pActor(new Actor(GetNextActorId()));
 		if (!pActor->Init(pRoot)) {
 			Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize actor from XML");
 			return std::shared_ptr<Actor>();
 		}
 
-		//Загружаем компоненты
+		//Р—Р°РіСЂСѓР¶Р°РµРј РєРѕРјРїРѕРЅРµРЅС‚С‹
 		for (tinyxml2::XMLElement* pNode = pRoot->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
 			std::shared_ptr<ActorComponent> pComponent(CreateComponent(pActor, pNode));
 			if (pComponent) {
@@ -51,7 +51,7 @@ namespace BIEngine
 			}
 		}
 
-		//Теперь можем инициализировать компоненты
+		//РўРµРїРµСЂСЊ РјРѕР¶РµРј РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РєРѕРјРїРѕРЅРµРЅС‚С‹
 		pActor->PostInit();
 		return pActor;
 	}
@@ -68,7 +68,7 @@ namespace BIEngine
 		}
 		else 
 		{
-			Logger::WriteLog(Logger::LogType::ERROR, "Couldn’t find ActorComponent named " + name);
+			Logger::WriteLog(Logger::LogType::ERROR, "CouldnвЂ™t find ActorComponent named " + name);
 			return std::shared_ptr<ActorComponent>();
 		}
 

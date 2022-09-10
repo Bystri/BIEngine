@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <LuaPlus/LuaPlus.h>
 
@@ -22,13 +22,13 @@ namespace BIEngine
 		virtual void OnAbort();
 
 	private:
-		//Привязывает основные функции для работы с процессов к функциям мета-таблицы
+		//РџСЂРёРІСЏР·С‹РІР°РµС‚ РѕСЃРЅРѕРІРЅС‹Рµ С„СѓРЅРєС†РёРё РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ РїСЂРѕС†РµСЃСЃРѕРІ Рє С„СѓРЅРєС†РёСЏРј РјРµС‚Р°-С‚Р°Р±Р»РёС†С‹
 		static void RegisterScriptClassFunctions(LuaPlus::LuaObject& metaTableObj);
 		static LuaPlus::LuaObject CreateFromScript(LuaPlus::LuaObject self,
 			LuaPlus::LuaObject constructionData,
 			LuaPlus::LuaObject originalSubClass);
 
-		//Инициализирует ScriptProcess-объект в cpp-коде на основе заранее подготовленного "класса" из lua-скрипта
+		//РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ ScriptProcess-РѕР±СЉРµРєС‚ РІ cpp-РєРѕРґРµ РЅР° РѕСЃРЅРѕРІРµ Р·Р°СЂР°РЅРµРµ РїРѕРґРіРѕС‚РѕРІР»РµРЅРЅРѕРіРѕ "РєР»Р°СЃСЃР°" РёР· lua-СЃРєСЂРёРїС‚Р°
 		virtual bool BuildCppDataFromScript(LuaPlus::LuaObject scriptClass,
 			LuaPlus::LuaObject constructionData);
 
