@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="EngineCore">
+      <UniqueIdentifier>{c322f8da-782d-4c09-9a1f-db94ee0fc45d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty">
+      <UniqueIdentifier>{ac327ea9-f67f-4043-a0a5-d4564eb2eb73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\glad">
+      <UniqueIdentifier>{377c93b3-c7f4-4ff0-ad7f-8a98c2a708c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface">
+      <UniqueIdentifier>{8a46a46b-8c0b-424b-81d1-3a74b21ef972}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceCache">
+      <UniqueIdentifier>{a831fdb3-41d1-4ce8-b8d8-e56f847fb2fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{2434e532-7d43-44ab-b72d-695418e408e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics2D">
+      <UniqueIdentifier>{6bfbea0d-e2a9-4beb-ae1e-d62ef844cb10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics2D\OpenGL">
+      <UniqueIdentifier>{07a226bf-0408-47a1-824d-a301724e60b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actors">
+      <UniqueIdentifier>{91c24a16-9afb-4cbf-9cd5-5a9efb5860d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\tinyxml2">
+      <UniqueIdentifier>{0b123965-d076-4011-9463-9c4bf00d04c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\stb">
+      <UniqueIdentifier>{da91a749-c9ef-48b3-a63f-bfcedf2e6af6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventManager">
+      <UniqueIdentifier>{a26e3b6b-902e-4fa2-9034-d59a7b33e902}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\FastDelegate">
+      <UniqueIdentifier>{f68a87e8-d1a3-4313-845c-3124c2402cd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{eb336de6-cf03-4f85-9bd1-04e12ac16280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripting">
+      <UniqueIdentifier>{99aa2093-a9c3-4ea3-83ac-daa781b9973f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ProcessManager">
+      <UniqueIdentifier>{50ca0263-27cb-4d66-92cd-d410aa8739c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{0f451174-342b-4458-a683-439ebb34b677}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\EngineCore\GameApp.cpp">
+      <Filter>EngineCore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\glad\src\glad.c">
+      <Filter>3rdParty\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\EngineCore\GameLogic.cpp">
+      <Filter>EngineCore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UserInterface\HumanView.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ResourceCache\ResCache.cpp">
+      <Filter>ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ResourceCache\ZipFile.cpp">
+      <Filter>ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Utilities\String.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Utilities\Logger.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\Material.cpp">
+      <Filter>Graphics2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\Renderer.cpp">
+      <Filter>Graphics2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\Scene.cpp">
+      <Filter>Graphics2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\SceneNodes.cpp">
+      <Filter>Graphics2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\Shader.cpp">
+      <Filter>Graphics2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\Texture.cpp">
+      <Filter>Graphics2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\Opengl\SpriteNode.cpp">
+      <Filter>Graphics2D\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\Actor.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\ActorFactory.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\TransformComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\tinyxml2\tinyxml2.cpp">
+      <Filter>3rdParty\tinyxml2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\Opengl\ShadersLoaderOpenGL.cpp">
+      <Filter>Graphics2D\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\Opengl\TextureLoaderOpenGL.cpp">
+      <Filter>Graphics2D\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\RenderComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\EventManager\EventManager.cpp">
+      <Filter>EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\EventManager\Events.cpp">
+      <Filter>EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ResourceCache\XmlLoader.cpp">
+      <Filter>ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Physics\Physics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Physics\PhysicsEventListener.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Scripting\LuaStateManager.cpp">
+      <Filter>Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Scripting\ScriptEvent.cpp">
+      <Filter>Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Scripting\ScriptExports.cpp">
+      <Filter>Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Scripting\ScriptProcess.cpp">
+      <Filter>Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Scripting\ScriptResource.cpp">
+      <Filter>Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ProcessManager\DelayProcess.cpp">
+      <Filter>ProcessManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ProcessManager\Process.cpp">
+      <Filter>ProcessManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ProcessManager\ProcessManager.cpp">
+      <Filter>ProcessManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\PhysicsComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Audio\Audio.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Audio\irrKlangAudio.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Audio\SoundProcess.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Audio\SoundLoader.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UserInterface\UserInterface.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\PhysicsTriggerComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ResourceCache\DirFile.cpp">
+      <Filter>ResourceCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\CameraComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\EngineCore\GameApp.h">
+      <Filter>EngineCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EngineCore\BIEngine.h">
+      <Filter>EngineCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\glad\include\glad\glad.h">
+      <Filter>3rdParty\glad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EngineCore\GameLogic.h">
+      <Filter>EngineCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UserInterface\HumanView.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UserInterface\IGameView.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UserInterface\InputDevices.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ResourceCache\ResCache.h">
+      <Filter>ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ResourceCache\ZipFile.h">
+      <Filter>ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Utilities\String.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Utilities\Logger.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\Material.h">
+      <Filter>Graphics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\Renderer.h">
+      <Filter>Graphics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\Scene.h">
+      <Filter>Graphics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\SceneNodes.h">
+      <Filter>Graphics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\Shader.h">
+      <Filter>Graphics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\Texture.h">
+      <Filter>Graphics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\Opengl\SpriteNode.h">
+      <Filter>Graphics2D\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\Actor.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\ActorComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\ActorFactory.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\TransformComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\tinyxml2\tinyxml2.h">
+      <Filter>3rdParty\tinyxml2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\Opengl\ShadersLoaderOpenGL.h">
+      <Filter>Graphics2D\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\Opengl\TextureLoaderOpenGL.h">
+      <Filter>Graphics2D\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\stb\stb_image.h">
+      <Filter>3rdParty\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\RenderComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EventManager\EventManager.h">
+      <Filter>EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EventManager\Events.h">
+      <Filter>EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\FastDelegate\FastDelegate.h">
+      <Filter>3rdParty\FastDelegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\FastDelegate\FastDelegateBind.h">
+      <Filter>3rdParty\FastDelegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ResourceCache\XmlLoader.h">
+      <Filter>ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Physics\Physics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Physics\PhysicsEventListener.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Scripting\LuaStateManager.h">
+      <Filter>Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Scripting\ScriptEvent.h">
+      <Filter>Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Scripting\ScriptExports.h">
+      <Filter>Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Scripting\ScriptProcess.h">
+      <Filter>Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Scripting\ScriptResource.h">
+      <Filter>Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ProcessManager\DelayProcess.h">
+      <Filter>ProcessManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ProcessManager\Process.h">
+      <Filter>ProcessManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ProcessManager\ProcessManager.h">
+      <Filter>ProcessManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\PhysicsComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\Audio.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\irrKlangAudio.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\SoundProcess.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\SoundLoader.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UserInterface\UserInterface.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\PhysicsTriggerComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ResourceCache\DirFile.h">
+      <Filter>ResourceCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\CameraComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
