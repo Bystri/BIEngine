@@ -24,7 +24,7 @@ BIEngine - это графический движок с открытым исх
 ----------
 Редаток для игрового мира написан на QT и позволяет управлять актерами и их компонентами.
 
-![](https://github.com/Bystri/BIEngine/editor_show.gif)
+![](https://github.com/Bystri/BIEngine/blob/main/editor_show.gif)
 		
 Список функций в производстве
 ----------
