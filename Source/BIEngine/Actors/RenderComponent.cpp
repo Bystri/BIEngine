@@ -78,12 +78,6 @@ namespace BIEngine
 
             m_pSpriteNode->SetTexture(texData->GetTexture());
         }
-        else
-        {
-            Logger::WriteLog(Logger::LogType::ERROR, "There is no Sprite element in SpriteRenderComponent for Actor with id: " + std::to_string(m_pOwner->GetId()));
-            m_pSpriteNode.reset();
-            return false;
-        }
 
         return true;
     }

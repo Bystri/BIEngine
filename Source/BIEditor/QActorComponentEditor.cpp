@@ -3,6 +3,7 @@
 #include <QGroupBox>
 #include <QValidator>
 #include <QComboBox>
+#include <QMessageBox>
 #include <QLabel>
 
 #include "QBIEditor.h"
@@ -10,14 +11,19 @@
 QActorComponentEditor::QActorComponentEditor(QWidget *parent, QString assetsDirectory)
     : QWidget(parent)
     , m_assetsDirectory(assetsDirectory)
+    , m_pMainWidget(nullptr)
     , m_pMainLayout(nullptr)
     , m_componentsSettings()
     , m_xmlComponentDoc()
+    , m_pLabelAddComponent(nullptr)
+    , m_pComboBoxAddComponent(nullptr)
     , m_selectedActorId(-1)
     , m_nComponents(0)
 {
-    m_pMainLayout = new QBoxLayout(QBoxLayout::Up, this);
-    setLayout(m_pMainLayout);
+    //Создаем layout
+    m_pMainWidget = new QWidget(this);
+    m_pMainLayout = new QBoxLayout(QBoxLayout::Up, m_pMainWidget);
+    m_pMainWidget->setLayout(m_pMainLayout);
 
     tinyxml2::XMLError eResult = m_xmlComponentDoc.LoadFile(std::string(m_assetsDirectory.toStdString() + "/Editor/components.xml").c_str());
     if (eResult != tinyxml2::XML_SUCCESS)
@@ -28,6 +34,7 @@ QActorComponentEditor::QActorComponentEditor(QWidget *parent, QString assetsDire
     {
         for (tinyxml2::XMLElement* pNode = pComponentsNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
         {
+            //Добавляем структуру для создания панели компнента
             const char *namecstr;
             pNode->QueryStringAttribute("name", &namecstr);
             std::string elementName = namecstr;
@@ -36,21 +43,102 @@ QActorComponentEditor::QActorComponentEditor(QWidget *parent, QString assetsDire
     }
 }
 
-void QActorComponentEditor::ShowActorComponents(int selectedActorId, const tinyxml2::XMLDocument& actorDocXml)
+void QActorComponentEditor::ShowActorComponents(int selectedActorId)
 {
+    delete m_pMainLayout;
+    delete m_pMainWidget;
+    m_pMainWidget = new QWidget(this);
+    m_pMainLayout = new QBoxLayout(QBoxLayout::Up, m_pMainWidget);
+    m_pMainWidget->setLayout(m_pMainLayout);
+
+    auto pEditorLogic = std::dynamic_pointer_cast<BIEditorLogic>(BIEngine::g_pApp->m_pGameLogic);
+    auto actorMap = pEditorLogic->GetActorMap();
+    tinyxml2::XMLDocument actorXmlDoc;
+    actorMap[selectedActorId]->ToXML(&actorXmlDoc);
+
+    AddComboBoxComponent();
+
     m_selectedActorId = selectedActorId;
 
-    actorDocXml.DeepCopy(&m_selectedActorComponents);
+    actorXmlDoc.DeepCopy(&m_selectedActorComponents);
 
     for (tinyxml2::XMLElement* pNode = m_selectedActorComponents.RootElement()->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement())
     {
-        QGroupBox* pComponentGroupBox = new QGroupBox(pNode->Name());
+        QGroupBox* pComponentGroupBox = new QGroupBox(pNode->Name(), m_pMainWidget);
         QGridLayout* pComponentLayout = new QGridLayout();
         std::string name = pNode->Name();
         AddComponentUI(pComponentLayout, pNode, m_componentsSettings[name]);
         pComponentGroupBox->setLayout(pComponentLayout);
         m_pMainLayout->addWidget(pComponentGroupBox);
     }
+
+    m_pMainWidget->setGeometry(0, 0, geometry().width(), geometry().height());
+    m_pMainWidget->show();
+}
+
+void QActorComponentEditor::AddComboBoxComponent()
+{
+    //Создаем все необходимое для кнопки добавления компонентов
+
+    //Текст
+    QGridLayout* pLayoutAddComponent = new QGridLayout();
+    m_pLabelAddComponent = new QLabel(m_pMainWidget);
+    m_pLabelAddComponent->setText(tr("Add component"));
+
+    //Выпадающий список
+    m_pComboBoxAddComponent = new QComboBox(m_pMainWidget);
+
+    //Кнопка
+    m_pPushButtonAddComponent = new QPushButton(m_pMainWidget);
+    m_pPushButtonAddComponent->setText(tr("Add"));
+    connect(m_pPushButtonAddComponent, SIGNAL (clicked()), this, SLOT (ButtonAddComponentClicked()));
+
+    //Размещаем все в layout
+    pLayoutAddComponent->addWidget(m_pLabelAddComponent, 1, 0);
+    pLayoutAddComponent->addWidget(m_pComboBoxAddComponent, 1, 1);
+    pLayoutAddComponent->addWidget(m_pPushButtonAddComponent, 1, 2);
+    m_pMainLayout->addLayout(pLayoutAddComponent);
+
+    m_pComboBoxAddComponent->clearEditText();
+
+    for (const auto& elemName : m_componentsSettings)
+    {
+        //Добавляем опцию для добавления данного компонента в QComboBox
+        m_pComboBoxAddComponent->addItem(elemName.first.c_str());
+    }
+}
+
+void QActorComponentEditor::ButtonAddComponentClicked()
+{
+    QString componentName = m_pComboBoxAddComponent->currentText();
+
+    //Проверяем, что компонент с таким именем вооще существует в природе
+    if (m_componentsSettings.find(componentName.toStdString()) == m_componentsSettings.end())
+    {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.setText(tr("No such component element with this name"));
+        msgBox.exec();
+        return;
+    }
+
+    //Проверяем, что компонента с таким именем у актера еще нет
+    if (m_selectedActorComponents.RootElement()->FirstChildElement(componentName.toStdString().c_str()) != nullptr)
+    {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.setText(tr("Cannot add another component with this type.\nThe actor already has it"));
+        msgBox.exec();
+        return;
+    }
+
+    tinyxml2::XMLDocument changedActorParametrs;
+    tinyxml2::XMLElement* pRoot = changedActorParametrs.NewElement("Actor");
+    tinyxml2::XMLElement* pComponentElement = changedActorParametrs.NewElement(componentName.toStdString().c_str());
+    pRoot->LinkEndChild(pComponentElement);
+    BIEngine::g_pApp->m_pGameLogic->ModifyActor(m_selectedActorId, pRoot);
+
+    ShowActorComponents(m_selectedActorId);
 }
 
 void QActorComponentEditor::AddComponentUI(QGridLayout* pComponentLayout, tinyxml2::XMLElement* actorComponentValues, tinyxml2::XMLElement* editorComponentValues)
@@ -109,18 +197,18 @@ void QActorComponentEditor::AddComponentUI(QGridLayout* pComponentLayout, tinyxm
 
 void QActorComponentEditor::AddElementLabel(QGridLayout* pComponentLayout, const QString& labelText)
 {
-    QLabel *pLabel = new QLabel(this);
+    QLabel *pLabel = new QLabel(m_pMainWidget);
     pLabel->setText(labelText);
     pComponentLayout->addWidget(pLabel, m_nComponents, 0);
 }
 
 void QActorComponentEditor::AddNumEdit(QGridLayout* pComponentLayout, const QString& elementName, tinyxml2::XMLElement* pActorValues, QValidator* pValidator)
 {
-    QLabel *pLabel = new QLabel(this);
+    QLabel *pLabel = new QLabel(m_pMainWidget);
     pLabel->setText(elementName);
     pComponentLayout->addWidget(pLabel, m_nComponents, 0);
 
-    QRealTimeLineEdit *pRTLineEdit = new QRealTimeLineEdit(this);
+    QRealTimeLineEdit *pRTLineEdit = new QRealTimeLineEdit(m_pMainWidget);
     pRTLineEdit->setValidator(pValidator);
     pRTLineEdit->setText(std::to_string(pActorValues->FirstAttribute()->DoubleValue()).c_str());
 
@@ -164,7 +252,7 @@ void QActorComponentEditor::NumElementEdited(const QRealTimeLineEdit* sender, co
 
 void QActorComponentEditor::AddVec2(QGridLayout* pComponentLayout, const QString& elementName, tinyxml2::XMLElement* pActorValues)
 {
-    QLabel *pLabel = new QLabel(this);
+    QLabel *pLabel = new QLabel(m_pMainWidget);
     pLabel->setText(elementName);
     pComponentLayout->addWidget(pLabel, m_nComponents, 0);
 
@@ -174,8 +262,10 @@ void QActorComponentEditor::AddVec2(QGridLayout* pComponentLayout, const QString
         if (!pAttribute)
             break;
 
-        QRealTimeLineEdit *pRTLineEdit = new QRealTimeLineEdit(this);
-        pRTLineEdit->setValidator(new QDoubleValidator());
+        QRealTimeLineEdit *pRTLineEdit = new QRealTimeLineEdit(m_pMainWidget);
+        QDoubleValidator* pValidator = new QDoubleValidator(pRTLineEdit);
+        pValidator->setNotation(QDoubleValidator::StandardNotation);
+        pRTLineEdit->setValidator(pValidator);
         pRTLineEdit->setText(std::to_string(pAttribute->DoubleValue()).c_str());
 
         //Назначаем правильные имена для каждого поля, чтобы они потом корректно нашлись в XML-документе актера
@@ -194,11 +284,11 @@ void QActorComponentEditor::AddVec2(QGridLayout* pComponentLayout, const QString
 
 void QActorComponentEditor::AddRGB(QGridLayout* pComponentLayout, const QString& elementName, tinyxml2::XMLElement* pActorValues)
 {
-    QLabel *pLabel = new QLabel(this);
+    QLabel *pLabel = new QLabel(m_pMainWidget);
     pLabel->setText(elementName);
     pComponentLayout->addWidget(pLabel, m_nComponents, 0);
 
-    QColorPicker *pColorPicker = new QColorPicker(this);
+    QColorPicker *pColorPicker = new QColorPicker(m_pMainWidget);
     double r, g, b;
     pActorValues->QueryDoubleAttribute("r", &r);
     pActorValues->QueryDoubleAttribute("g", &g);
@@ -251,11 +341,11 @@ void QActorComponentEditor::ColorElementEdited(const QColorPicker* sender, const
 
 void QActorComponentEditor::AddFileElement(QGridLayout* pComponentLayout, const QString& elementName, tinyxml2::XMLElement* pActorValues)
 {
-    QLabel *pLabel = new QLabel(this);
+    QLabel *pLabel = new QLabel(m_pMainWidget);
     pLabel->setText(elementName);
     pComponentLayout->addWidget(pLabel, m_nComponents, 0);
 
-    QFilePicker *pFilePicker = new QFilePicker(this, m_assetsDirectory, tr("PNG files (*.png)"));
+    QFilePicker *pFilePicker = new QFilePicker(m_pMainWidget, m_assetsDirectory, tr("PNG files (*.png)"));
     pFilePicker->SetFilePath(pActorValues->FirstAttribute()->Value());
 
     //Путь различает элементы ввода между собой и по нему мы потом понимает, какой именно параметр из всего XML-файла актера мы меняем
@@ -297,11 +387,11 @@ void QActorComponentEditor::PathElementEdited(const QFilePicker* sender, const Q
 
 void QActorComponentEditor::AddCompobox(QGridLayout* pComponentLayout, const QString& elementName, tinyxml2::XMLElement* pActorValues, const QStringList& items)
 {
-    QLabel *pLabel = new QLabel(this);
+    QLabel *pLabel = new QLabel(m_pMainWidget);
     pLabel->setText(elementName);
     pComponentLayout->addWidget(pLabel, m_nComponents, 0);
 
-    QComboBox* pComboBox = new QComboBox(this);
+    QComboBox* pComboBox = new QComboBox(m_pMainWidget);
     pComboBox->addItems(items);
     pComboBox->setCurrentText(pActorValues->Value());
     pComponentLayout->addWidget(pComboBox, m_nComponents, 1);

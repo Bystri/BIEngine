@@ -99,6 +99,7 @@ namespace BIEngine
 				{
 					pActor->AddComponent(pComponent);
 					pComponent->SetOwner(pActor);
+					pComponent->PostInit();
 				}
 			}
 		}

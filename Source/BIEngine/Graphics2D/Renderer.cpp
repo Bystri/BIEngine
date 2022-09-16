@@ -50,6 +50,9 @@ namespace BIEngine
     void Renderer::DrawSprite(std::shared_ptr<Texture2D> pTexture, glm::vec2 position,
         glm::vec2 size, float rotate, glm::vec3 color)
     {
+        if (!pTexture)
+            return;
+
         m_shader.Use();
         glm::mat4 model = glm::mat4(1.0f);
         

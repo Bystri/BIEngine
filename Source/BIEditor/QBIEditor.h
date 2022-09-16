@@ -33,6 +33,8 @@ private slots:
     void OpenWorld();
     void SaveWorld();
 
+    void CreateEmptyActor();
+
     //Обработка нажатия клавиш
     void keyPressEvent(QKeyEvent *ev);
     void keyReleaseEvent(QKeyEvent *ev);
@@ -43,6 +45,7 @@ private:
     QString m_assetsDirectory;
 
     QMenu* m_pFileMenu;
+    QMenu* m_pActorMenu;
 
     QDisplayWidget* m_pDisplayWidget;
 

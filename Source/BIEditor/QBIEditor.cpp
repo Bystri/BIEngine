@@ -13,6 +13,7 @@ QBIEditor::QBIEditor(QWidget *parent)
     , m_parentDirectory()
     , m_assetsDirectory("Assets")
     , m_pFileMenu(nullptr)
+    , m_pActorMenu(nullptr)
     , m_pDisplayWidget(nullptr)
     , m_pAssetsTreeView(nullptr)
     , m_pAssetDirModel(nullptr)
@@ -61,6 +62,13 @@ void QBIEditor::InitializeMenu()
     pSaveWorldAct->setStatusTip(tr("Save world to xml-file"));
     connect(pSaveWorldAct, &QAction::triggered, this, &QBIEditor::SaveWorld);
     m_pFileMenu->addAction(pSaveWorldAct);
+
+    m_pActorMenu = menuBar()->addMenu(tr("&Actor"));
+
+    QAction* pCreateEmptyActor = new QAction(tr("&Create Empty Actor"), this);
+    pOpenWorldAct->setStatusTip(tr("Create Actor with TransformComponent only"));
+    connect(pCreateEmptyActor, &QAction::triggered, this, &QBIEditor::CreateEmptyActor);
+    m_pActorMenu->addAction(pCreateEmptyActor);
 }
 
 void QBIEditor::InitializeAssetTreeWidget()
@@ -107,12 +115,8 @@ void QBIEditor::ActorTreeClicked(QTreeWidgetItem* item, int column)
     m_pActorComponentEditor = new QActorComponentEditor(this, m_parentDirectory + "/" + m_assetsDirectory);
     m_pActorComponentEditor->setGeometry(1130, 30, 540, 540);
 
-    int actorId = std::atoi(item->text(0).toStdString().c_str());
-    auto pEditorLogic = std::dynamic_pointer_cast<BIEditorLogic>(BIEngine::g_pApp->m_pGameLogic);
-    auto actorMap = pEditorLogic->GetActorMap();
-    tinyxml2::XMLDocument actorXmlDoc;
-    actorMap[actorId]->ToXML(&actorXmlDoc);
-    m_pActorComponentEditor->ShowActorComponents(actorId, actorXmlDoc);
+    int actorId = std::atoi(item->text(0).toStdString().c_str());;
+    m_pActorComponentEditor->ShowActorComponents(actorId);
     m_pActorComponentEditor->show();
 }
 
@@ -146,6 +150,18 @@ void QBIEditor::SaveWorld()
     worldDoc.LinkEndChild(pWorldRootElement);
 
     worldDoc.SaveFile(fileName.toStdString().c_str());
+}
+
+void QBIEditor::CreateEmptyActor()
+{
+    //Создаем XML для актера с TransformComponent и отправляем его в логику
+    tinyxml2::XMLDocument changedActorParametrs;
+    tinyxml2::XMLElement* pRoot = changedActorParametrs.NewElement("Actor");
+    pRoot->SetAttribute("name", "EmptyActor");
+    tinyxml2::XMLElement* pComponentElement = changedActorParametrs.NewElement("TransformComponent");
+    pRoot->LinkEndChild(pComponentElement);
+    BIEngine::g_pApp->m_pGameLogic->CreateActor(pRoot);
+    InitializeActorTreeWidget();
 }
 
 void QBIEditor::keyPressEvent(QKeyEvent *ev)
