@@ -8,6 +8,7 @@
 #include "../Scripting/ScriptExports.h"
 #include "../Scripting/ScriptProcess.h"
 #include "../Scripting/ScriptResource.h"
+#include "../Actors/ScriptComponent.h"
 
 namespace BIEngine
 {
@@ -63,6 +64,7 @@ namespace BIEngine
 		//Регистрируем функции в скрипте, которые будут иметь доступ к системам движка, написанным на C++
 		ScriptExports::Register();
 		ScriptProcess::RegisterScriptClass();
+		ScriptComponent::RegisterScriptFunctions();
 
 		m_pGameLogic->Init();
 

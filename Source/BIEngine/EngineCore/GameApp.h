@@ -17,6 +17,9 @@ namespace BIEngine
 		//Если значение false - архив
 		bool useDevelopmentAssets = false;
 
+		//Имя мира, который загрузится первым
+		std::string mainWorldResName = "Worlds/MainWorld.xml";
+
 		unsigned int screenWidth = 720;
 		unsigned int screenHeight = 540;
 	};

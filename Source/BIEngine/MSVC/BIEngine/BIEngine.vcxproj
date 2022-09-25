@@ -139,6 +139,7 @@
     <ClCompile Include="..\..\Actors\PhysicsComponent.cpp" />
     <ClCompile Include="..\..\Actors\PhysicsTriggerComponent.cpp" />
     <ClCompile Include="..\..\Actors\RenderComponent.cpp" />
+    <ClCompile Include="..\..\Actors\ScriptComponent.cpp" />
     <ClCompile Include="..\..\Actors\TransformComponent.cpp" />
     <ClCompile Include="..\..\Audio\Audio.cpp" />
     <ClCompile Include="..\..\Audio\irrKlangAudio.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="..\..\Actors\PhysicsComponent.h" />
     <ClInclude Include="..\..\Actors\PhysicsTriggerComponent.h" />
     <ClInclude Include="..\..\Actors\RenderComponent.h" />
+    <ClInclude Include="..\..\Actors\ScriptComponent.h" />
     <ClInclude Include="..\..\Actors\TransformComponent.h" />
     <ClInclude Include="..\..\Audio\Audio.h" />
     <ClInclude Include="..\..\Audio\irrKlangAudio.h" />

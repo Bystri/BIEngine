@@ -186,6 +186,9 @@
     <ClCompile Include="..\..\Actors\CameraComponent.cpp">
       <Filter>Actors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Actors\ScriptComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -339,6 +342,9 @@
       <Filter>ResourceCache</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Actors\CameraComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\ScriptComponent.h">
       <Filter>Actors</Filter>
     </ClInclude>
   </ItemGroup>

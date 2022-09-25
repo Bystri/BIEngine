@@ -65,9 +65,12 @@ bool BIGameLogic::Init()
 	m_pPhysics->Initialize();
 
 	std::shared_ptr<BIGameHumanView> pHumanView = std::make_shared<BIGameHumanView>(g_pApp->m_options.screenWidth, g_pApp->m_options.screenHeight);
-	pHumanView->Init();
+	AddGameView(pHumanView);
 
-	std::shared_ptr<BIEngine::XmlExtraData> pCameraData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("actors/camera.xml")->GetExtra());
+	//Загружаем стартовый мир
+	LoadLevel(g_pApp->m_options.mainWorldResName);
+
+	/*std::shared_ptr<BIEngine::XmlExtraData> pCameraData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("actors/camera.xml")->GetExtra());
 	auto cameraActor = CreateActor(pCameraData->GetRootElement());
 
 	std::shared_ptr<BIEngine::XmlExtraData> pBackgroundData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("actors/background.xml")->GetExtra());
@@ -102,18 +105,17 @@ bool BIGameLogic::Init()
 	t1Transofrm->SetPosition(180, 30);
 	m_pPlayer2Trigger = CreateActor(pTrigData->GetRootElement());
 	auto t2Transofrm = m_pPlayer2Trigger->GetComponent<BIEngine::PhysicsTriggerComponent>(BIEngine::PhysicsTriggerComponent::g_CompId).lock();
-	t2Transofrm->SetPosition(180, 610);
+	t2Transofrm->SetPosition(180, 610);*/
 
-	std::shared_ptr<BIGameController> pController = std::make_shared<BIGameController>(m_pPlayer1->GetId(), m_pPlayer2->GetId());
-	pHumanView->SetController(pController);
-	AddGameView(pHumanView);
+	//std::shared_ptr<BIGameController> pController = std::make_shared<BIGameController>(m_pPlayer1->GetId(), m_pPlayer2->GetId());
+	//pHumanView->SetController(pController);
 
-	m_ballSpeed = glm::vec2(0, INITIAL_Y_BALL_SPEED);
+	/*m_ballSpeed = glm::vec2(0, INITIAL_Y_BALL_SPEED);
 
 	BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIGameLogic::ChangeBallDirection), BIEngine::EvtData_PhysCollision::sk_EventType);
 	BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIGameLogic::AddPoint), BIEngine::EvtData_PhysTrigger_Enter::sk_EventType);
 	BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIGameLogic::MovePaddle), EvtData_StartPaddleMove::sk_EventType);
-	BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIGameLogic::StopPaddle), EvtData_EndPaddleMove::sk_EventType);
+	BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIGameLogic::StopPaddle), EvtData_EndPaddleMove::sk_EventType);*/
 
 	return true;
 }
@@ -122,8 +124,8 @@ void BIGameLogic::OnUpdate(float dt)
 {
 	GameLogic::OnUpdate(dt);
 
-	auto physComp = m_pBall->GetComponent<BIEngine::PhysicsComponent>(BIEngine::PhysicsComponent::g_CompId).lock();
-	physComp->SetVelocity(m_ballSpeed);
+	//auto physComp = m_pBall->GetComponent<BIEngine::PhysicsComponent>(BIEngine::PhysicsComponent::g_CompId).lock();
+	//physComp->SetVelocity(m_ballSpeed);
 }
 
 void BIGameLogic::ChangeBallDirection(BIEngine::IEventDataPtr pEventData)
@@ -220,7 +222,7 @@ bool BIGameHumanView::Init()
 		return false;
 
 	//Загружаем и запускаем музыку
-	std::shared_ptr<BIEngine::ResHandle> pAudioResHandle = BIEngine::ResCache::Get()->GetHandle("Sounds/Space.ogg");
+	/*std::shared_ptr<BIEngine::ResHandle> pAudioResHandle = BIEngine::ResCache::Get()->GetHandle("Sounds/Space.ogg");
 	BIEngine::IAudioBuffer* buffer = BIEngine::g_pAudio->InitAudioBuffer(pAudioResHandle);
 	if (buffer)
 	{
@@ -230,7 +232,7 @@ bool BIGameHumanView::Init()
 
 	//Устанавливаем на экране текст
 	m_userInterface.CreateStatic(10.f, 20.0f, 1.0f, "Player1 : 0");
-	m_userInterface.CreateStatic(240.f, 20.0f, 1.0f, "Player2 : 0");
+	m_userInterface.CreateStatic(240.f, 20.0f, 1.0f, "Player2 : 0");*/
 
 	RegisterAllDelegates();
 }

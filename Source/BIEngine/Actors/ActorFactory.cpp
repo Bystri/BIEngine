@@ -9,6 +9,7 @@
 #include "PhysicsComponent.h"
 #include "PhysicsTriggerComponent.h"
 #include "CameraComponent.h"
+#include "ScriptComponent.h"
 #include "../Utilities/Logger.h"
 
 namespace BIEngine
@@ -23,6 +24,7 @@ namespace BIEngine
 		m_actorComponentCreators[PhysicsComponent::g_CompId] = CreatePhysicsComponent;
 		m_actorComponentCreators[PhysicsTriggerComponent::g_CompId] = CreatePhysicsTriggerComponent;
 		m_actorComponentCreators[CameraComponent::g_CompId] = CreateCameraComponent;
+		m_actorComponentCreators[ScriptComponent::g_CompId] = CreateScriptComponent;
 	}
 
 	std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot)

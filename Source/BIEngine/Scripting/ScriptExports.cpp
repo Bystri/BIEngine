@@ -113,7 +113,10 @@ namespace BIEngine
 		//Само выполнение скрипта происходит прямо внутри системы кэширования во время его загрузки
 		std::shared_ptr<ResHandle> pResourceHandle = ResCache::Get()->GetHandle(scriptResource);
 		if (pResourceHandle)
+		{
+			Logger::WriteLog(Logger::LogType::MESSAGE, "Script " + std::string(scriptResource) + " got successful!");
 			return true;
+		}
 
 		return false;
 	}
