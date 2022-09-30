@@ -1,4 +1,4 @@
-
+п»ї
 #include "ScriptComponent.h"
 #include "../Scripting/LuaStateManager.h"
 #include "../Utilities/String.h"
@@ -10,7 +10,7 @@
 namespace BIEngine
 {
 
-    // Имя метатблицы, где будут жить все экспортированные функции в Lua-среде
+    // РРјСЏ РјРµС‚Р°С‚Р±Р»РёС†С‹, РіРґРµ Р±СѓРґСѓС‚ Р¶РёС‚СЊ РІСЃРµ СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹Рµ С„СѓРЅРєС†РёРё РІ Lua-СЃСЂРµРґРµ
     static const char* METATABLE_NAME = "ScriptComponentMetaTable";
 
     ComponentId ScriptComponent::g_CompId = "ScriptComponent";
@@ -23,14 +23,14 @@ namespace BIEngine
 
     ScriptComponent::~ScriptComponent(void)
     {
-        // Вызываем деструктор, если есть такой
+        // Р’С‹Р·С‹РІР°РµРј РґРµСЃС‚СЂСѓРєС‚РѕСЂ, РµСЃР»Рё РµСЃС‚СЊ С‚Р°РєРѕР№
         if (m_scriptDestructor.IsFunction())
         {
             LuaPlus::LuaFunction<void> func(m_scriptDestructor);
             func(m_scriptObject);
         }
 
-        // Чистим обэект скрипта
+        // Р§РёСЃС‚РёРј РѕР±СЌРµРєС‚ СЃРєСЂРёРїС‚Р°
         m_scriptObject.AssignNil(LuaStateManager::Get()->GetLuaState());
     }
 
@@ -56,13 +56,13 @@ namespace BIEngine
         if (temp)
             m_destructorName = temp;
 
-        // Если у нас есть конструктор для объекта, то мы этот самый оъект и создаем
+        // Р•СЃР»Рё Сѓ РЅР°СЃ РµСЃС‚СЊ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ РѕР±СЉРµРєС‚Р°, С‚Рѕ РјС‹ СЌС‚РѕС‚ СЃР°РјС‹Р№ РѕСЉРµРєС‚ Рё СЃРѕР·РґР°РµРј
         if (!m_constructorName.empty())
         {
             m_scriptConstructor = pStateMgr->GetGlobalVars().Lookup(m_constructorName.c_str());
             if (m_scriptConstructor.IsFunction())
             {
-                //Само создание объекта
+                //РЎР°РјРѕ СЃРѕР·РґР°РЅРёРµ РѕР±СЉРµРєС‚Р°
                 if (m_scriptObject.IsNil())
                 {
                     m_scriptObject.AssignNewTable(pStateMgr->GetLuaState());
@@ -71,13 +71,13 @@ namespace BIEngine
             }
         }
 
-        // Если есть, деструктор вызывается как функция, в которую передает скриптовый объект во время вызова деструктора компонента
+        // Р•СЃР»Рё РµСЃС‚СЊ, РґРµСЃС‚СЂСѓРєС‚РѕСЂ РІС‹Р·С‹РІР°РµС‚СЃСЏ РєР°Рє С„СѓРЅРєС†РёСЏ, РІ РєРѕС‚РѕСЂСѓСЋ РїРµСЂРµРґР°РµС‚ СЃРєСЂРёРїС‚РѕРІС‹Р№ РѕР±СЉРµРєС‚ РІРѕ РІСЂРµРјСЏ РІС‹Р·РѕРІР° РґРµСЃС‚СЂСѓРєС‚РѕСЂР° РєРѕРјРїРѕРЅРµРЅС‚Р°
         if (!m_destructorName.empty())
         {
             m_scriptDestructor = pStateMgr->GetGlobalVars().Lookup(m_destructorName.c_str());
         }
 
-        // читаем данные из <ScriptData>
+        // С‡РёС‚Р°РµРј РґР°РЅРЅС‹Рµ РёР· <ScriptData>
         tinyxml2::XMLElement* pScriptDataElement = pData->FirstChildElement("ScriptData");
         if (pScriptDataElement)
         {
