@@ -16,7 +16,7 @@ namespace BIEngine
 
 	protected:
 		virtual void OnInit();
-		virtual void OnUpdate(unsigned long deltaMs);
+		virtual void OnUpdate(double dt);
 		virtual void OnSuccess();
 		virtual void OnFail();
 		virtual void OnAbort();
@@ -41,7 +41,7 @@ namespace BIEngine
 		explicit ScriptProcess();
 
 	private:
-		unsigned long m_frequency, m_time;
+		double m_frequency, m_time;
 		LuaPlus::LuaObject m_scriptInitFunction, m_scriptUpdateFunction;
 		LuaPlus::LuaObject m_scriptSuccessFunction, m_scriptFailFunction;
 		LuaPlus::LuaObject m_scriptAbortFunction;

@@ -5,15 +5,15 @@
 namespace BIEngine
 {
 
-	DelayProcess::DelayProcess(unsigned long timeToDelay)
+	DelayProcess::DelayProcess(double timeToDelay)
 		: m_timeToDelay(timeToDelay)
 		, m_timeDelayedSoFar(0)
 	{
 	}
 
-	void DelayProcess::OnUpdate(unsigned long deltaMs)
+	void DelayProcess::OnUpdate(double dt)
 	{
-		m_timeDelayedSoFar += deltaMs;
+		m_timeDelayedSoFar += dt;
 		if (m_timeDelayedSoFar >= m_timeToDelay)
 			Succeed();
 	}

@@ -40,9 +40,9 @@ namespace BIEngine
 
 		virtual const char* GetGameTitle() = 0; //Принудительный метод заставить пользователя дать явное название игре
 
-		void ProcessInput(float dt);
-		void OnUpdate(float dt);
-		void OnRender(float time, float dt);
+		void ProcessInput(double dt);
+		void OnUpdate(double dt);
+		void OnRender(double time, double dt);
 
 		//Обработчик событий устройств ввода
 		void InputProc(int key, int scancode, bool pressed);

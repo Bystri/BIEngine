@@ -77,17 +77,17 @@ namespace BIEngine
 		ResCache::Destroy();
 	}
 
-	void GameApp::OnUpdate(float dt)
+	void GameApp::OnUpdate(double dt)
 	{
 		m_pGameLogic->OnUpdate(dt);
 	}
 
-	void GameApp::ProcessInput(float dt)
+	void GameApp::ProcessInput(double dt)
 	{
 
 	}
 
-	void GameApp::OnRender(float time, float dt)
+	void GameApp::OnRender(double time, double dt)
 	{
 		m_pGameLogic->OnRender(time, dt);
 	}

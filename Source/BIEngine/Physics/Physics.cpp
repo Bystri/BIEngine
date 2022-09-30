@@ -41,7 +41,7 @@ namespace BIEngine
 		virtual bool Initialize() override { return true; }
 		virtual void SetGravity(const glm::vec2& gravity) override {};
 		virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override { };
-		virtual void OnUpdate(float) override { }
+		virtual void OnUpdate(double) override { }
 
 		virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override { }
 		virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override { }
@@ -99,7 +99,7 @@ namespace BIEngine
 		//В случае различия, местоположение актера обновляется
 		virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override;
 		//Шаг симуляции
-		virtual void OnUpdate(float const deltaSeconds) override;
+		virtual void OnUpdate(double dt) override;
 
 		//Добавляет физический объект в виде круга в физическую симуляцию
 		virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
@@ -120,7 +120,7 @@ namespace BIEngine
 		virtual bool KinematicMove(ActorId aid, const glm::vec2& position, float rotate) override;
 		//Напрямую задает поворот физического объекта.
 		//Следует быть с этим аккуратнее, так как данная процедура способна сломать физическую симуляцию
-		virtual void Rotate(ActorId actorId, float angleRadians) override;
+		virtual void Rotate(ActorId actorId, float const deltaAngleRadians) override;
 		virtual float GetOrientation(ActorId actorId) const override;
 		//Приравниваем скорость актера к нулевому вектору
 		virtual void StopActor(ActorId actorId) override;
@@ -221,9 +221,9 @@ namespace BIEngine
 		}
 	}
 
-	void ChipmunkPhysics::OnUpdate(float const deltaSeconds)
+	void ChipmunkPhysics::OnUpdate(double dt)
 	{
-		cpSpaceStep(m_cpSpace, deltaSeconds);
+		cpSpaceStep(m_cpSpace, dt);
 	}
 
 	void ChipmunkPhysics::AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial)

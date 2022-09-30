@@ -31,7 +31,7 @@ namespace BIEngine
         SoundProcess();
 
         virtual void OnInit();
-        virtual void OnUpdate(unsigned long deltaMs);
+        virtual void OnUpdate(double dt);
 
     protected:
         std::shared_ptr<ResHandle> m_pHandle;

@@ -27,7 +27,7 @@ namespace BIEngine
 		virtual bool Initialize() = 0;
 		virtual void SetGravity(const glm::vec2& gravity) = 0;
 		virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& pActorMap) = 0;
-		virtual void OnUpdate(float deltaSeconds) = 0;
+		virtual void OnUpdate(double dt) = 0;
 		
 		//Инициализация физических объектов
 		virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> actor, const std::string& densityStr, const std::string& physicsMaterial) = 0;

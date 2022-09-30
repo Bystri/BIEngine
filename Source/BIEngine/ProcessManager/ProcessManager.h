@@ -23,7 +23,7 @@ namespace BIEngine
 		static ProcessManager* Get() { assert(s_pSingleton); return s_pSingleton; }
 
 		//Выполняет один тик работы для всех активных процессов
-		unsigned int UpdateProcesses(unsigned long deltaMs);
+		unsigned int UpdateProcesses(double dt);
 
 		WeakProcessPtr AttachProcess(StrongProcessPtr pProcess);
 		void AbortAllProcesses(bool immediate);

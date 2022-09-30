@@ -46,7 +46,7 @@ namespace BIEngine
 
 	protected:
 		virtual void OnInit() { m_state = State::RUNNING; }
-		virtual void OnUpdate(unsigned long deltaMs) = 0;
+		virtual void OnUpdate(double dt) = 0;
 		virtual void OnSuccess() {}
 		virtual void OnFail() {}
 		virtual void OnAbort() {}

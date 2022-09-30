@@ -43,10 +43,10 @@ namespace BIEngine
 		m_components.clear();
 	}
 
-	void Actor::Update(int deltaMs)
+	void Actor::Update(double dt)
 	{
 		for (auto it = m_components.begin(); it != m_components.end(); ++it)
-			it->second->Update(deltaMs);
+			it->second->Update(dt);
 	}
 
 	void Actor::AddComponent(std::shared_ptr<ActorComponent> pComponent) 

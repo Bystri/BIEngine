@@ -58,12 +58,12 @@ namespace BIEngine
 			return -1;
 		}
 
-		float deltaTime = 0.0f;
-		float lastFrame = 0.0f;
+		double deltaTime = 0.0;
+		double lastFrame = 0.0;
 		//Основной цикл
 		while (!glfwWindowShouldClose(window))
 		{
-			float currentFrame = glfwGetTime();
+			double currentFrame = glfwGetTime();
 			deltaTime = currentFrame - lastFrame;
 			lastFrame = currentFrame;
 			glfwPollEvents();

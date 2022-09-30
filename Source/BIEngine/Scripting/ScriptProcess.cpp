@@ -48,9 +48,9 @@ namespace BIEngine
 			Fail();
 	}
 
-	void ScriptProcess::OnUpdate(unsigned long deltaMs)
+	void ScriptProcess::OnUpdate(double dt)
 	{
-		m_time += deltaMs;
+		m_time += dt;
 		if (m_time >= m_frequency)
 		{
 			LuaPlus::LuaFunction<void> func(m_scriptUpdateFunction);
@@ -137,7 +137,7 @@ namespace BIEngine
 				LuaPlus::LuaObject val = constructionDataIt.GetValue();
 
 				if (strcmp(key, "frequency") == 0 && val.IsInteger())
-					m_frequency = val.GetInteger();
+					m_frequency = val.GetFloat();
 				else
 					m_self.SetObject(key, val);
 			}

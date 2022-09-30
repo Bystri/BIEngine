@@ -47,7 +47,7 @@ namespace BIEngine
 		Play(m_volume, m_isLooping);
 	}
 
-	void SoundProcess::OnUpdate(unsigned long deltaMs)
+	void SoundProcess::OnUpdate(double dt)
 	{
 		if (!IsPlaying())
 		{

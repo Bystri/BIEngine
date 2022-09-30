@@ -34,7 +34,7 @@ namespace BIEngine
 		void PostInit();
 		void Destroy();
 
-		void Update(int deltaMs);
+		void Update(double dt);
 
 		tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc);
 

@@ -46,7 +46,7 @@ namespace BIEngine
 		}
 	}
 
-	unsigned int ProcessManager::UpdateProcesses(unsigned long deltaMs) 
+	unsigned int ProcessManager::UpdateProcesses(double dt) 
 	{
 		unsigned short int successCount = 0;
 		unsigned short int failCount = 0;
@@ -60,7 +60,7 @@ namespace BIEngine
 				pCurrProcess->OnInit();
 
 			if (pCurrProcess->GetState() == Process::State::RUNNING)
-				pCurrProcess->OnUpdate(deltaMs);
+				pCurrProcess->OnUpdate(dt);
 
 			if (pCurrProcess->IsDead()) 
 			{
@@ -94,7 +94,10 @@ namespace BIEngine
 				}
 
 				it = m_processList.erase(it);
+				--it;
 			}
+
+			++it;
 		}
 
 		return ((successCount << 16) | failCount);

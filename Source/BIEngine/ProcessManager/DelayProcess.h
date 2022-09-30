@@ -8,14 +8,14 @@ namespace BIEngine
 	class DelayProcess : public Process
 	{
 	public:
-		explicit DelayProcess(unsigned long timeToDelay);
+		explicit DelayProcess(double timeToDelay);
 
 	protected:
-		virtual void OnUpdate(unsigned long deltaMs) override;
+		virtual void OnUpdate(double dt) override;
 
 	protected:
-		unsigned long m_timeToDelay;
-		unsigned long m_timeDelayedSoFar;
+		double m_timeToDelay;
+		double m_timeDelayedSoFar;
 	};
 
 }
