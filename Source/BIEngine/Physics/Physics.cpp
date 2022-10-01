@@ -452,8 +452,7 @@ namespace BIEngine
 		if (cpBody* const pBody = FindChipmunkRigidBody(aid))
 		{
 
-			const cpVect force = cpv(dir.x * newtons,
-				dir.y * newtons);
+			const cpVect force = cpv(dir.x * newtons, dir.y * newtons);
 
 			cpBodyApplyForceAtLocalPoint(pBody, force, cpvzero);
 		}
@@ -464,8 +463,7 @@ namespace BIEngine
 		if (cpBody* const pBody = FindChipmunkRigidBody(aid))
 		{
 
-			const cpVect force = cpv(dir.x * newtons,
-				dir.y * newtons);
+			const cpVect force = cpv(dir.x * newtons, dir.y * newtons);
 
 			cpBodyApplyImpulseAtLocalPoint(pBody, force, cpvzero);
 		}

@@ -5,8 +5,10 @@
 
 #include <LuaPlus/LuaPlus.h>
 
+#include "../EngineCore/GameApp.h"
 #include "LuaStateManager.h"
 #include "ScriptEvent.h"
+#include "../Actors/Actor.h"
 #include "../ProcessManager/ProcessManager.h"
 #include "../ResourceCache/ResCache.h"
 #include "../Utilities/Logger.h"
@@ -50,12 +52,19 @@ namespace BIEngine
 
 		static bool LoadAndExecuteScriptResource(const char* pScriptResource);
 
+		static int CreateActor(const char* actorArchetype);
+
 		static void AttachScriptProcess(LuaPlus::LuaObject scriptProcess);
 
 		static unsigned long RegisterEventListener(EventType eventType, LuaPlus::LuaObject callbackFunction);
 		static void RemoveEventListener(unsigned long listenerId);
 		static bool QueueEvent(EventType eventType, LuaPlus::LuaObject eventData);
 		static bool TriggerEvent(EventType eventType, LuaPlus::LuaObject eventData);
+
+		static void SetVelocity(LuaPlus::LuaObject velocityLua, int actorId);
+		static void StopActor(int actorId);
+		static void ApplyForce(LuaPlus::LuaObject normalDirLua, float force, int actorId);
+		static void ApplyTorque(LuaPlus::LuaObject axisLua, float force, int actorId);
 
 	private:
 		static std::shared_ptr<ScriptEvent> BuildEvent(EventType eventType, LuaPlus::LuaObject& eventData);
@@ -75,6 +84,9 @@ namespace BIEngine
 		//ЗАГРУЗКА РЕСУРСОВ:
 		globals.RegisterDirect("LoadAndExecuteScriptResource", &InternalScriptExports::LoadAndExecuteScriptResource);
 
+		//АКТЕРЫ
+		globals.RegisterDirect("CreateActor", &InternalScriptExports::CreateActor);
+
 		//СИСТЕМА ПРОЦЕССОВ
 		globals.RegisterDirect("AttachProcess", &InternalScriptExports::AttachScriptProcess);
 
@@ -83,6 +95,12 @@ namespace BIEngine
 		globals.RegisterDirect("RemoveEventListener", &InternalScriptExports::RemoveEventListener);
 		globals.RegisterDirect("QueueEvent", &InternalScriptExports::QueueEvent);
 		globals.RegisterDirect("TriggerEvent", &InternalScriptExports::TriggerEvent);
+
+		//ФИЗИКА
+		globals.RegisterDirect("SetVelocity", &InternalScriptExports::SetVelocity);
+		globals.RegisterDirect("StopActor", &InternalScriptExports::StopActor);
+		globals.RegisterDirect("ApplyForce", &InternalScriptExports::ApplyForce);
+		globals.RegisterDirect("ApplyTorque", &InternalScriptExports::ApplyTorque);
 	}
 
 	void ScriptExports::Unregister()
@@ -119,6 +137,21 @@ namespace BIEngine
 		}
 
 		return false;
+	}
+
+	int InternalScriptExports::CreateActor(const char* actorArchetype)
+	{
+		std::shared_ptr<BIEngine::XmlExtraData> pActorData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle(actorArchetype)->GetExtra());
+		std::shared_ptr<Actor> pActor = g_pApp->m_pGameLogic->CreateActor(pActorData->GetRootElement());
+
+		if (pActor)
+		{
+			//std::shared_ptr<EvtData_New_Actor> pNewActorEvent(GCC_NEW EvtData_New_Actor(pActor->GetId()));
+			//IEventManager::Get()->VQueueEvent(pNewActorEvent);
+			return pActor->GetId();
+		}
+
+		return Actor::INBALID_ACTOR_ID;
 	}
 
 	void InternalScriptExports::AttachScriptProcess(LuaPlus::LuaObject scriptProcess)
@@ -198,6 +231,46 @@ namespace BIEngine
 		return pEvent;
 	}
 
+	void InternalScriptExports::SetVelocity(LuaPlus::LuaObject velocityLua, int actorId)
+	{
+		if (velocityLua.IsTable())
+		{
+			glm::vec2 velocity(velocityLua["x"].GetFloat(), velocityLua["y"].GetFloat());
+			g_pApp->m_pGameLogic->GetGamePhysics()->SetVelocity(actorId, velocity);
+			return;
+		}
+
+		Logger::WriteLog(Logger::LogType::ERROR, "Invalid object passed to ApplyForce(); type = " + std::string(velocityLua.TypeName()));
+	}
+
+	void InternalScriptExports::StopActor(int actorId)
+	{
+		g_pApp->m_pGameLogic->GetGamePhysics()->StopActor(actorId);
+	}
+
+	void InternalScriptExports::ApplyForce(LuaPlus::LuaObject normalDirLua, float force, int actorId)
+	{
+		if (normalDirLua.IsTable())
+		{
+			glm::vec2 normalDir(normalDirLua["x"].GetFloat(), normalDirLua["y"].GetFloat());
+			g_pApp->m_pGameLogic->GetGamePhysics()->ApplyForce(normalDir, force, actorId);
+			return;
+		}
+
+		Logger::WriteLog(Logger::LogType::ERROR, "Invalid object passed to ApplyForce(); type = " + std::string(normalDirLua.TypeName()));
+	}
+
+	void InternalScriptExports::ApplyTorque(LuaPlus::LuaObject axisLua, float force, int actorId)
+	{
+		if (axisLua.IsTable())
+		{
+			glm::vec2 axis(axisLua["x"].GetFloat(), axisLua["y"].GetFloat());
+			g_pApp->m_pGameLogic->GetGamePhysics()->ApplyTorque(axis, force, actorId);
+			return;
+		}
+		
+		Logger::WriteLog(Logger::LogType::ERROR, "Invalid object passed to ApplyTorque(); type = " + std::string(axisLua.TypeName()));
+	}
 
 
 	ScriptEventListenerMgr::~ScriptEventListenerMgr()
