@@ -13,10 +13,14 @@ namespace BIEngine
 
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::NewRenderComponentDelegate), EvtData_New_Render_Component::sk_EventType);
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::NewCameraComponentDelegate), EvtData_New_Camera_Component::sk_EventType);
+		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
 	}
 
 	Scene::~Scene()
 	{
+		EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Scene::NewRenderComponentDelegate), EvtData_New_Render_Component::sk_EventType);
+		EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Scene::NewCameraComponentDelegate), EvtData_New_Camera_Component::sk_EventType);
+		EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Scene::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
 	}
 
 	int Scene::OnRender() 
@@ -89,5 +93,11 @@ namespace BIEngine
 		{
 			m_pCamera = pCameraComponent->GetCameraNode();
 		}
+	}
+
+	void Scene::DestroyActorDelegate(IEventDataPtr pEventData)
+	{
+		std::shared_ptr<EvtData_Destroy_Actor> pCastEventData = std::static_pointer_cast<EvtData_Destroy_Actor>(pEventData);
+		RemoveChild(pCastEventData->GetId());
 	}
 }

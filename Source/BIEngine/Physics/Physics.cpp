@@ -85,7 +85,7 @@ namespace BIEngine
 	class ChipmunkPhysics : public IGamePhysics2D
 	{
 	public:
-		ChipmunkPhysics() { }
+		ChipmunkPhysics();
 		virtual ~ChipmunkPhysics();
 
 		ChipmunkPhysics(const ChipmunkPhysics& orig) = delete;
@@ -148,6 +148,9 @@ namespace BIEngine
 		static cpBool ChipmunkBeginCollisionCallback(cpArbiter* arb, cpSpace* space, void* data);
 		static void ChipmunkSeparateCollisionCallback(cpArbiter* arb, cpSpace* space, void* data);
 
+		//Удаление уничтоженного актера из симуляции
+		void DestroyActorDelegate(IEventDataPtr pEventData);
+
 	private:
 		cpSpace* m_cpSpace;
 
@@ -164,8 +167,16 @@ namespace BIEngine
 		RigidBodyToActorIDMap m_rigidBodyToActorId;
 	};
 
+	ChipmunkPhysics::ChipmunkPhysics()
+		: IGamePhysics2D()
+	{
+		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &ChipmunkPhysics::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
+	}
+
 	ChipmunkPhysics::~ChipmunkPhysics()
 	{
+		EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &ChipmunkPhysics::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
+
 		cpSpaceFree(m_cpSpace);
 	}
 	
@@ -748,6 +759,12 @@ namespace BIEngine
 
 		cpShape* a, * b; cpArbiterGetShapes(arb, &a, &b);
 		chipmunkPhysics->SendCollisionPairRemoveEvent(arb, a, b);
+	}
+
+	void ChipmunkPhysics::DestroyActorDelegate(IEventDataPtr pEventData)
+	{
+		std::shared_ptr<EvtData_Destroy_Actor> pCastEventData = std::static_pointer_cast<EvtData_Destroy_Actor>(pEventData);
+		RemoveActor(pCastEventData->GetId());
 	}
 
 #endif 

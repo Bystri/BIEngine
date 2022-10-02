@@ -65,6 +65,7 @@ namespace BIEngine
 		ScriptExports::Register();
 		ScriptProcess::RegisterScriptClass();
 		ScriptComponent::RegisterScriptFunctions();
+		RegisterEngineScriptEvents();
 
 		m_pGameLogic->Init();
 

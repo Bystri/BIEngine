@@ -30,6 +30,9 @@ namespace BIEngine
 	bool GameLogic::Init()
 	{
 		ProcessManager::Create();
+
+		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &GameLogic::RequestDestroyActorDelegate), EvtData_Request_Destroy_Actor::sk_EventType);
+
 		return true;
 	}
 
@@ -170,5 +173,26 @@ namespace BIEngine
 			m_pActorFactory->ModifyActor(itr->second, pOverrides);
 		else
 			Logger::WriteLog(Logger::LogType::ERROR, "Attempt to change a non-existent actor");
+	}
+
+
+	void GameLogic::RequestDestroyActorDelegate(IEventDataPtr pEventData)
+	{
+		std::shared_ptr<EvtData_Request_Destroy_Actor> pCastEventData = std::static_pointer_cast<EvtData_Request_Destroy_Actor>(pEventData);
+		DestroyActor(pCastEventData->GetActorId());
+	}
+
+	void GameLogic::DestroyActor(const ActorId actorId)
+	{
+		// TODO: нам необходимо создать и триггерить событие фактического уничтожения актера, чтобы все системы успели выполнить подготовку к уничтожению
+		std::shared_ptr<EvtData_Destroy_Actor> pEvent = std::make_shared<EvtData_Destroy_Actor>(actorId);
+		EventManager::Get()->TriggerEvent(pEvent);
+
+		auto findIt = m_actors.find(actorId);
+		if (findIt != m_actors.end())
+		{
+			findIt->second->Destroy();
+			m_actors.erase(findIt);
+		}
 	}
 }

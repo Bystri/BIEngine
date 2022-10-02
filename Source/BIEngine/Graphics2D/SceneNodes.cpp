@@ -55,6 +55,10 @@ namespace BIEngine
 		for (auto itr = m_children.begin(); itr != m_children.end(); ++itr)
 		{
 			const SceneNodeProperties* pProps = (*itr)->Get();
+
+			if ((*itr)->RemoveChild(id))
+				return true;
+
 			if (id == pProps->GetActorId())
 			{
 				itr = m_children.erase(itr);

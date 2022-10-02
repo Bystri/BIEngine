@@ -37,6 +37,8 @@ namespace BIEngine
 		void NewRenderComponentDelegate(IEventDataPtr pEventData);
 		//Регистрация камеры, являющейся компонентом актера. Каждая новая созданная камера перезаписывает старую.
 		void NewCameraComponentDelegate(IEventDataPtr pEventData);
+		//Удаление уничтоженного актера из сцены
+		void DestroyActorDelegate(IEventDataPtr pEventData);
 
 	protected:
 		//Основной узел дерева графических элементов

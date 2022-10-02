@@ -31,6 +31,9 @@ namespace BIEngine
 		std::shared_ptr<Actor> CreateActor(tinyxml2::XMLElement* pRoot);
 		//Принимает на вход XML-структуру актера, компоненты в котором будут заменены или добавлены.
 		void ModifyActor(ActorId actorId, tinyxml2::XMLElement* pOverrides);
+		//Является ответчиком на запрос об уничтожении актера
+		void RequestDestroyActorDelegate(IEventDataPtr pEventData);
+		virtual void DestroyActor(const ActorId actorId);
 
 		virtual void AddGameView(std::shared_ptr<IGameView> pView);
 		virtual void RemoveGameView(std::shared_ptr<IGameView> pView);

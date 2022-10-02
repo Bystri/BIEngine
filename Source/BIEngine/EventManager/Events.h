@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "EventManager.h"
+#include "../Scripting/ScriptEvent.h"
 #include "../Actors/Actor.h"
 #include "../Graphics2D/SceneNodes.h"
 #include "../UserInterface/IGameView.h"
@@ -10,6 +11,51 @@
 
 namespace BIEngine
 {
+    //Регестрирует события, которые могут быть посла/обработы в среде выполнения скриптов
+    void RegisterEngineScriptEvents();
+
+
+    //Данное событие отправляется, когда актер уничтожен
+    class EvtData_Destroy_Actor : public BaseEventData
+    {
+        ActorId m_id;
+
+    public:
+        static const EventType sk_EventType;
+
+        explicit EvtData_Destroy_Actor(ActorId id = Actor::INBALID_ACTOR_ID)
+            : m_id(id)
+        {
+        }
+
+        virtual const EventType& GetEventType(void) const
+        {
+            return sk_EventType;
+        }
+
+        virtual IEventDataPtr Copy(void) const
+        {
+            return std::make_shared<EvtData_Destroy_Actor>(m_id);
+        }
+
+        virtual void Serialize(std::ostrstream& out) const
+        {
+            out << m_id;
+        }
+
+        virtual void Deserialize(std::istrstream& in)
+        {
+            in >> m_id;
+        }
+
+        virtual const char* GetName(void) const
+        {
+            return "EvtData_Destroy_Actor";
+        }
+
+        ActorId GetId(void) const { return m_id; }
+    };
+
     //Данное событие возникает, когда актер перемещается
     class EvtData_Move_Actor : public BaseEventData
     {
@@ -177,6 +223,68 @@ namespace BIEngine
         {
             return m_pCameraActor;
         }
+    };
+
+    //Событие является запросом на уничтожение актера
+    //TODO: а зачем уничтожение актера идет через событие? Не проще сразу предоставить прямой вызов к GameLogic::DestroyActor в скрипт? Как вообще это сделано в Unity?
+    class EvtData_Request_Destroy_Actor : public ScriptEvent
+    {
+        ActorId m_actorId;
+
+    public:
+        static const EventType sk_EventType;
+
+        EvtData_Request_Destroy_Actor()
+        {
+            m_actorId = Actor::INBALID_ACTOR_ID;
+        }
+
+        EvtData_Request_Destroy_Actor(ActorId actorId)
+        {
+            m_actorId = actorId;
+        }
+
+        virtual const EventType& GetEventType() const
+        {
+            return sk_EventType;
+        }
+
+        virtual void Deserialize(std::istrstream& in)
+        {
+            in >> m_actorId;
+        }
+
+        virtual IEventDataPtr Copy() const
+        {
+            return std::make_shared<EvtData_Request_Destroy_Actor>(m_actorId);
+        }
+
+        virtual void Serialize(std::ostrstream& out) const
+        {
+            out << m_actorId;
+        }
+
+        virtual const char* GetName(void) const
+        {
+            return "EvtData_Request_Destroy_Actor";
+        }
+
+        ActorId GetActorId(void) const
+        {
+            return m_actorId;
+        }
+
+        virtual bool BuildEventFromScript(void)
+        {
+            if (m_eventData.IsInteger())
+            {
+                m_actorId = m_eventData.GetInteger();
+                return true;
+            }
+            return false;
+        }
+
+        EXPORT_FOR_SCRIPT_EVENT(EvtData_Request_Destroy_Actor);
     };
 
 }
