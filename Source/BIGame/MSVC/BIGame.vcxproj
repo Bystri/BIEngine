@@ -21,12 +21,10 @@
   <ItemGroup>
     <ClCompile Include="..\BIGame.cpp" />
     <ClCompile Include="..\BIGameController.cpp" />
-    <ClCompile Include="..\BIGameEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGame.h" />
     <ClInclude Include="..\BIGameController.h" />
-    <ClInclude Include="..\BIGameEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
