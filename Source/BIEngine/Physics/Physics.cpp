@@ -676,7 +676,7 @@ namespace BIEngine
 			ActorId const id0 = FindActorID(body0);
 			ActorId const id1 = FindActorID(body1);
 
-			if (id0 == Actor::INBALID_ACTOR_ID || id1 == Actor::INBALID_ACTOR_ID)
+			if (id0 == Actor::INVALID_ACTOR_ID || id1 == Actor::INVALID_ACTOR_ID)
 				return;
 
 			int numContacts = cpArbiterGetCount(arb);
@@ -730,7 +730,7 @@ namespace BIEngine
 			ActorId const id0 = FindActorID(body0);
 			ActorId const id1 = FindActorID(body1);
 
-			if (id0 == Actor::INBALID_ACTOR_ID || id1 == Actor::INBALID_ACTOR_ID)
+			if (id0 == Actor::INVALID_ACTOR_ID || id1 == Actor::INVALID_ACTOR_ID)
 				return;
 
 			std::shared_ptr<EvtData_PhysSeparation> pEvent = std::make_shared<EvtData_PhysSeparation>(id0, id1);

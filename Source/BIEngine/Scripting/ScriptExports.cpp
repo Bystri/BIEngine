@@ -151,7 +151,7 @@ namespace BIEngine
 			return pActor->GetId();
 		}
 
-		return Actor::INBALID_ACTOR_ID;
+		return Actor::INVALID_ACTOR_ID;
 	}
 
 	void InternalScriptExports::AttachScriptProcess(LuaPlus::LuaObject scriptProcess)

@@ -28,7 +28,7 @@ namespace BIEngine
 		EvtData_PhysTrigger_Enter()
 		{
 			m_triggerID = -1;
-			m_other = Actor::INBALID_ACTOR_ID;
+			m_other = Actor::INVALID_ACTOR_ID;
 		}
 
 		explicit EvtData_PhysTrigger_Enter(int triggerID, ActorId other)
@@ -74,7 +74,7 @@ namespace BIEngine
 		EvtData_PhysTrigger_Leave()
 		{
 			m_triggerID = -1;
-			m_other = Actor::INBALID_ACTOR_ID;
+			m_other = Actor::INVALID_ACTOR_ID;
 		}
 
 		explicit EvtData_PhysTrigger_Leave(int triggerID, ActorId other)
@@ -124,8 +124,8 @@ namespace BIEngine
 
 		EvtData_PhysCollision()
 		{
-			m_ActorA = Actor::INBALID_ACTOR_ID;
-			m_ActorB = Actor::INBALID_ACTOR_ID;
+			m_ActorA = Actor::INVALID_ACTOR_ID;
+			m_ActorB = Actor::INVALID_ACTOR_ID;
 			m_SumNormalForce = glm::vec2();
 			m_friction = 0.0f;
 		}
@@ -206,8 +206,8 @@ namespace BIEngine
 		EvtData_PhysSeparation()
 		{
 
-			m_ActorA = Actor::INBALID_ACTOR_ID;
-			m_ActorB = Actor::INBALID_ACTOR_ID;
+			m_ActorA = Actor::INVALID_ACTOR_ID;
+			m_ActorB = Actor::INVALID_ACTOR_ID;
 		}
 
 		explicit EvtData_PhysSeparation(ActorId actorA, ActorId actorB)

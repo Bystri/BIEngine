@@ -151,7 +151,7 @@ namespace BIEngine
 	{
 	public:
 		CameraNode()
-			: SceneNode(Actor::INBALID_ACTOR_ID, RenderLayer::BEGIN)
+			: SceneNode(Actor::INVALID_ACTOR_ID, RenderLayer::BEGIN)
 		{
 		}
 

@@ -11,9 +11,6 @@
 
 namespace BIEngine
 {
-
-	class Actor;
-
 	typedef unsigned long ActorId;
 
 	//Объект, который является главным дейтсвующим механизмом на сцене. Основные его свойства задаются с помощью компонентов, которые описываются в XML-файле актера
@@ -24,21 +21,34 @@ namespace BIEngine
 		typedef std::map<ComponentId, std::shared_ptr<ActorComponent>> ActorComponents;
 
 	public:
-		const static ActorId INBALID_ACTOR_ID = -1;
+		const static ActorId INVALID_ACTOR_ID = -1;
 
 		explicit Actor(ActorId id);
 		~Actor();
 
-		//Инициализация актера на основе настроек в XML файле
-		bool Init(tinyxml2::XMLElement* pData);
-		void PostInit();
+		/*
+		Актеры хранят компоненты в виде умных указателей, поэтому стандартные конструкторы присванивания и копирования для них неприемлемо.
+		Но, так как за создание полноценного актера отвечает фабрика, которая контролирует этапы создания и инициализации актера и его компонентов, 
+		сам актер не имеет возможности сделать свою полноценную копию.
+		*/
+		Actor(const Actor& orig) = delete;
+		Actor& operator=(const Actor& orig) = delete;
+
+		Actor(Actor&& orig) = default;
+		Actor& operator=(Actor&& orig) = default;
+
+		//Удаление всех умных указателей на компоненты текущего актера.
 		void Destroy();
 
+		//Обновление состояния компонентов
 		void Update(double dt);
 
-		tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc);
+		//Генерация XML-файла, по которому можно будет создать копию актера с помощью объекта ActorFactory
+		tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const;
 
+		//Идентификатор актера, по которому к нему идет обращение из других систем
 		ActorId GetId() const { return m_id; }
+		//Поле несет чисто косметический характер. Используется в редакторе для распознования объектов
 		std::string GetName() const { return m_name; }
 
 		//Шаблон функции для получения компонентов
@@ -61,12 +71,22 @@ namespace BIEngine
 		}
 
 	private:
+		//Так как создание/инициализация/модификация актера идет через ActorFactory, то следующие методы доступны только ему.
+
+		//Инициализация информации об актера на основе настроек в XML файле
+		//Не отвечает за создание или инициализацию компонентов
+		bool Init(tinyxml2::XMLElement* pData);
+		//Вызывается после инициализации актера и его компонентов. Вызывает PostInit() для каждого компонента актера
+		void PostInit();
+
 		//Данный метод может вызываться только фабрикой
 		void AddComponent(std::shared_ptr<ActorComponent> pComponent);
 
 	private:
+		//Идентификатор актера, по которому к нему идет обращение из других систем
 		ActorId m_id;
-		std::string m_name; //Поле несет чисто косметический характер. Используется в редакторе.
+		//Поле несет чисто косметический характер. Используется в редакторе.
+		std::string m_name;
 		ActorComponents m_components;
 	};
 

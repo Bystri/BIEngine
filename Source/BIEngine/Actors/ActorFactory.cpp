@@ -19,6 +19,7 @@ namespace BIEngine
 	{
 		m_lastActorId = -1;
 
+		//Сюда должны добавлять все функции-конструкторы компонентов актера
 		m_actorComponentCreators[TransformComponent::g_CompId] = CreateTransformComponent;
 		m_actorComponentCreators[SpriteRenderComponent::g_CompId] = CreateSpriteRenderComponent;
 		m_actorComponentCreators[PhysicsComponent::g_CompId] = CreatePhysicsComponent;
@@ -31,12 +32,12 @@ namespace BIEngine
 	{
 		if (!pRoot) 
 		{
-			Logger::WriteLog(Logger::LogType::ERROR, "Failed to create actor from given XML");
+			Logger::WriteLog(Logger::LogType::ERROR, "Failed to create actor from null XML-element");
 			return std::shared_ptr<Actor>();
 		}
 
 		//Создаем актера
-		std::shared_ptr<Actor> pActor(new Actor(GetNextActorId()));
+		std::shared_ptr<Actor> pActor = std::make_shared<Actor>(GetNextActorId());
 		if (!pActor->Init(pRoot)) {
 			Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize actor from XML");
 			return std::shared_ptr<Actor>();
@@ -60,6 +61,7 @@ namespace BIEngine
 
 	std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(std::shared_ptr<Actor> pActor, tinyxml2::XMLElement* pData)
 	{
+		//Создаем нового актера
 		std::string name(pData->Value());
 		std::shared_ptr<ActorComponent> pComponent;
 		auto findIt = m_actorComponentCreators.find(name);
@@ -74,8 +76,10 @@ namespace BIEngine
 			return std::shared_ptr<ActorComponent>();
 		}
 
+		//Назначаем владельца компонента
 		pComponent->SetOwner(pActor);
 		
+		//Инициализируем компонент
 		if (pComponent) {
 			if (!pComponent->Init(pData)) {
 				Logger::WriteLog(Logger::LogType::ERROR, "Component failed to initialize : " + name);
@@ -100,7 +104,6 @@ namespace BIEngine
 				if (pComponent)
 				{
 					pActor->AddComponent(pComponent);
-					pComponent->SetOwner(pActor);
 					pComponent->PostInit();
 				}
 			}

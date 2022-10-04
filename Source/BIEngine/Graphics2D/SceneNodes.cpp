@@ -70,11 +70,11 @@ namespace BIEngine
 
 
 	RootNode::RootNode()
-		:SceneNode(Actor::INBALID_ACTOR_ID, RenderLayer::BEGIN)
+		:SceneNode(Actor::INVALID_ACTOR_ID, RenderLayer::BEGIN)
 	{
 		m_children.reserve(static_cast<size_t>(RenderLayer::END));
 
-		m_children.push_back(std::make_shared<SceneNode>(Actor::INBALID_ACTOR_ID, RenderLayer::OPAQUE));
+		m_children.push_back(std::make_shared<SceneNode>(Actor::INVALID_ACTOR_ID, RenderLayer::OPAQUE));
 	}
 
 	bool RootNode::AddChild(std::shared_ptr<ISceneNode> pChild) 

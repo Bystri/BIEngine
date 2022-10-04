@@ -5,6 +5,7 @@
 #include <cassert>
 
 #include "../Utilities/Logger.h"
+#include "ActorFactory.h"
 
 namespace BIEngine
 {
@@ -55,19 +56,23 @@ namespace BIEngine
 		assert(success.second);
 	}
 
-	tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc)
+	tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const
 	{
+		if (!pDoc)
+			return nullptr;
+
+		//Создание и присоединение основного корня XML-элемента
 		tinyxml2::XMLElement* pActorElement = pDoc->NewElement("Actor");
 		pActorElement->SetAttribute("name", m_name.c_str());
+		pDoc->LinkEndChild(pActorElement);
 
+		//Создание и присоединение XML-элементов компонентов 
 		for (auto it = m_components.begin(); it != m_components.end(); ++it)
 		{
 			auto pComponent = it->second;
 			tinyxml2::XMLElement* pComponentElement = pComponent->GenerateXml(pDoc);
 			pActorElement->LinkEndChild(pComponentElement);
 		}
-
-		pDoc->LinkEndChild(pActorElement);
 
 		return pActorElement;
 	}

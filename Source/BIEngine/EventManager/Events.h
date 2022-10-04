@@ -23,7 +23,7 @@ namespace BIEngine
     public:
         static const EventType sk_EventType;
 
-        explicit EvtData_Destroy_Actor(ActorId id = Actor::INBALID_ACTOR_ID)
+        explicit EvtData_Destroy_Actor(ActorId id = Actor::INVALID_ACTOR_ID)
             : m_id(id)
         {
         }
@@ -73,7 +73,7 @@ namespace BIEngine
 
         EvtData_Move_Actor()
         {
-            m_id = Actor::INBALID_ACTOR_ID;
+            m_id = Actor::INVALID_ACTOR_ID;
         }
 
         EvtData_Move_Actor(ActorId id, const glm::vec2& pos, float rot)
@@ -130,7 +130,7 @@ namespace BIEngine
 
         EvtData_New_Render_Component()
         {
-            m_actorId = Actor::INBALID_ACTOR_ID;
+            m_actorId = Actor::INVALID_ACTOR_ID;
         }
 
         EvtData_New_Render_Component(ActorId actorId, std::shared_ptr<SceneNode> pSceneNode)
@@ -236,7 +236,7 @@ namespace BIEngine
 
         EvtData_Request_Destroy_Actor()
         {
-            m_actorId = Actor::INBALID_ACTOR_ID;
+            m_actorId = Actor::INVALID_ACTOR_ID;
         }
 
         EvtData_Request_Destroy_Actor(ActorId actorId)
