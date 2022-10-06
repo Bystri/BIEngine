@@ -23,7 +23,6 @@ namespace BIEngine
 	public:
 		const static ActorId INVALID_ACTOR_ID = -1;
 
-		explicit Actor(ActorId id);
 		~Actor();
 
 		/*
@@ -39,9 +38,6 @@ namespace BIEngine
 
 		//Удаление всех умных указателей на компоненты текущего актера.
 		void Destroy();
-
-		//Обновление состояния компонентов
-		void Update(double dt);
 
 		//Генерация XML-файла, по которому можно будет создать копию актера с помощью объекта ActorFactory
 		tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const;
@@ -72,6 +68,8 @@ namespace BIEngine
 
 	private:
 		//Так как создание/инициализация/модификация актера идет через ActorFactory, то следующие методы доступны только ему.
+
+		explicit Actor(ActorId id);
 
 		//Инициализация информации об актера на основе настроек в XML файле
 		//Не отвечает за создание или инициализацию компонентов

@@ -37,7 +37,7 @@ namespace BIEngine
 		}
 
 		//Создаем актера
-		std::shared_ptr<Actor> pActor = std::make_shared<Actor>(GetNextActorId());
+		std::shared_ptr<Actor> pActor = std::shared_ptr<Actor>(new Actor(GetNextActorId()));
 		if (!pActor->Init(pRoot)) {
 			Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize actor from XML");
 			return std::shared_ptr<Actor>();
