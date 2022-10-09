@@ -61,6 +61,7 @@ namespace BIEngine
 		static bool QueueEvent(EventType eventType, LuaPlus::LuaObject eventData);
 		static bool TriggerEvent(EventType eventType, LuaPlus::LuaObject eventData);
 
+		static void SetPosition(LuaPlus::LuaObject positionLua, int actorId);
 		static void SetVelocity(LuaPlus::LuaObject velocityLua, int actorId);
 		static void StopActor(int actorId);
 		static void ApplyForce(LuaPlus::LuaObject normalDirLua, float force, int actorId);
@@ -97,6 +98,7 @@ namespace BIEngine
 		globals.RegisterDirect("TriggerEvent", &InternalScriptExports::TriggerEvent);
 
 		//ФИЗИКА
+		globals.RegisterDirect("SetPosition", &InternalScriptExports::SetPosition);
 		globals.RegisterDirect("SetVelocity", &InternalScriptExports::SetVelocity);
 		globals.RegisterDirect("StopActor", &InternalScriptExports::StopActor);
 		globals.RegisterDirect("ApplyForce", &InternalScriptExports::ApplyForce);
@@ -231,6 +233,18 @@ namespace BIEngine
 		return pEvent;
 	}
 
+	void InternalScriptExports::SetPosition(LuaPlus::LuaObject velocityLua, int actorId)
+	{
+		if (velocityLua.IsTable())
+		{
+			glm::vec2 velocity(velocityLua["x"].GetFloat(), velocityLua["y"].GetFloat());
+			g_pApp->m_pGameLogic->GetGamePhysics()->SetPosition(actorId, velocity);
+			return;
+		}
+
+		Logger::WriteLog(Logger::LogType::ERROR, "Invalid object passed to SetPosition(); type = " + std::string(velocityLua.TypeName()));
+	}
+
 	void InternalScriptExports::SetVelocity(LuaPlus::LuaObject velocityLua, int actorId)
 	{
 		if (velocityLua.IsTable())
@@ -240,7 +254,7 @@ namespace BIEngine
 			return;
 		}
 
-		Logger::WriteLog(Logger::LogType::ERROR, "Invalid object passed to ApplyForce(); type = " + std::string(velocityLua.TypeName()));
+		Logger::WriteLog(Logger::LogType::ERROR, "Invalid object passed to SetVelocity(); type = " + std::string(velocityLua.TypeName()));
 	}
 
 	void InternalScriptExports::StopActor(int actorId)

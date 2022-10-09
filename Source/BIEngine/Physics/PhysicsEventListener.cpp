@@ -18,6 +18,10 @@ namespace BIEngine
         m_eventData.AssignNewTable(LuaStateManager::Get()->GetLuaState());
         m_eventData.SetInteger("actorA", m_ActorA);
         m_eventData.SetInteger("actorB", m_ActorB);
+
+        LuaPlus::LuaObject luaNormalForceObj;
+        LuaStateManager::Get()->ConvertVec2ToTable(m_SumNormalForce, luaNormalForceObj);
+        m_eventData.SetObject("sumNormalForce", luaNormalForceObj);
     }
 
 }
