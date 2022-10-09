@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../../ResourceCache/ResCache.h"
-#include "../Texture.h"
+#include "Texture.h"
 
 namespace BIEngine
 {

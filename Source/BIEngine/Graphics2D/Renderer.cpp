@@ -3,9 +3,9 @@
 namespace BIEngine
 {
 
-    Renderer::Renderer(Shader& shader)
+    Renderer::Renderer(std::shared_ptr<Shader> pShader)
     {
-        m_shader = shader;
+        m_pShader = pShader;
         initRenderData();
     }
 
@@ -43,8 +43,8 @@ namespace BIEngine
 
     void Renderer::SetViewTransform(const glm::mat4& view)
     {
-        m_shader.Use();
-        m_shader.SetMatrix4("view", view);
+        m_pShader->Use();
+        m_pShader->SetMatrix4("view", view);
     }
 
     void Renderer::DrawSprite(std::shared_ptr<Texture2D> pTexture, glm::vec2 position,
@@ -53,7 +53,7 @@ namespace BIEngine
         if (!pTexture)
             return;
 
-        m_shader.Use();
+        m_pShader->Use();
         glm::mat4 model = glm::mat4(1.0f);
         
         //Мы сдвигаем спрайт так, чтобы опорная точка объекта была по центру, а не слева-сверху
@@ -68,8 +68,8 @@ namespace BIEngine
 
         model = glm::scale(model, glm::vec3(size, 1.0f));
 
-        m_shader.SetMatrix4("model", model);
-        m_shader.SetVector3f("spriteColor", color);
+        m_pShader->SetMatrix4("model", model);
+        m_pShader->SetVector3f("spriteColor", color);
 
         glActiveTexture(GL_TEXTURE0);
         pTexture->Bind();

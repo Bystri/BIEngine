@@ -1,9 +1,9 @@
 ﻿#include "HumanView.h"
 
-#include "../Graphics2D/Opengl/ShadersLoaderOpenGL.h"
+#include "../Graphics2D/ShadersLoader.h"
 #include "../Graphics2D/Shader.h"
-#include "../Graphics2D/Opengl/TextureLoaderOpenGL.h"
-#include "../Graphics2D/Opengl/SpriteNode.h"
+#include "../Graphics2D/TextureLoader.h"
+#include "../Graphics2D/SpriteNode.h"
 #include "../EngineCore/GameApp.h"
 #include "../Audio/irrKlangAudio.h"
 
@@ -55,16 +55,16 @@ namespace BIEngine
 		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(m_screenWidth), static_cast<float>(m_screenHeight), 0.0f, -1.0f, 1.0f);
 
 		//Загрузка шейдеров
-		std::shared_ptr<OpenglShaderData> pVertShaderData = std::static_pointer_cast<OpenglShaderData>(ResCache::Get()->GetHandle("Effects/sprite.vs")->GetExtra());
-		std::shared_ptr<OpenglShaderData> pFragShaderxData = std::static_pointer_cast<OpenglShaderData>(ResCache::Get()->GetHandle("Effects/sprite.frag")->GetExtra());
-		Shader shader;
-		shader.Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
-		shader.Use();
-		shader.SetInteger("image", 0);
-		shader.SetMatrix4("projection", projection);
+		std::shared_ptr<ShaderData> pVertShaderData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle("Effects/sprite.vs")->GetExtra());
+		std::shared_ptr<ShaderData> pFragShaderxData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle("Effects/sprite.frag")->GetExtra());
+		std::shared_ptr<Shader> pShader = std::make_shared<Shader>();
+		pShader->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
+		pShader->Use();
+		pShader->SetInteger("image", 0);
+		pShader->SetMatrix4("projection", projection);
 
 		//Создание отображения
-		m_pRenderer = std::make_shared<Renderer>(shader);
+		m_pRenderer = std::make_shared<Renderer>(pShader);
 		//Создания сцены на основе отоьбражения
 		m_scene = new Scene(m_pRenderer);
 

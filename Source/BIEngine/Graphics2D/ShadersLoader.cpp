@@ -1,4 +1,4 @@
-﻿#include "ShadersLoaderOpenGL.h"
+﻿#include "ShadersLoader.h"
 
 #include <iostream>
 
@@ -7,7 +7,7 @@
 namespace BIEngine
 {
 
-    OpenglShaderData::OpenglShaderData()
+    ShaderData::ShaderData()
         : m_shaderIndex(0)
     {
     }
@@ -40,7 +40,7 @@ namespace BIEngine
 
     bool VertexShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
     {
-        std::shared_ptr<OpenglShaderData> pExtra = std::make_shared<OpenglShaderData>();
+        std::shared_ptr<ShaderData> pExtra = std::make_shared<ShaderData>();
 
         unsigned int sVertex;
 
@@ -63,7 +63,7 @@ namespace BIEngine
 
     bool FragmentShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
     {
-        std::shared_ptr<OpenglShaderData> pExtra = std::make_shared<OpenglShaderData>();
+        std::shared_ptr<ShaderData> pExtra = std::make_shared<ShaderData>();
 
         unsigned int sFragment;
         

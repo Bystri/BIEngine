@@ -22,9 +22,6 @@
     <Filter Include="Graphics2D">
       <UniqueIdentifier>{6bfbea0d-e2a9-4beb-ae1e-d62ef844cb10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics2D\OpenGL">
-      <UniqueIdentifier>{07a226bf-0408-47a1-824d-a301724e60b6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Actors">
       <UniqueIdentifier>{91c24a16-9afb-4cbf-9cd5-5a9efb5860d0}</UniqueIdentifier>
     </Filter>
@@ -96,9 +93,6 @@
     <ClCompile Include="..\..\Graphics2D\Texture.cpp">
       <Filter>Graphics2D</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\Opengl\SpriteNode.cpp">
-      <Filter>Graphics2D\OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Actors\Actor.cpp">
       <Filter>Actors</Filter>
     </ClCompile>
@@ -110,12 +104,6 @@
     </ClCompile>
     <ClCompile Include="..\..\3rdParty\tinyxml2\tinyxml2.cpp">
       <Filter>3rdParty\tinyxml2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\Opengl\ShadersLoaderOpenGL.cpp">
-      <Filter>Graphics2D\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\Opengl\TextureLoaderOpenGL.cpp">
-      <Filter>Graphics2D\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Actors\RenderComponent.cpp">
       <Filter>Actors</Filter>
@@ -189,6 +177,15 @@
     <ClCompile Include="..\..\Actors\ScriptComponent.cpp">
       <Filter>Actors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\ShadersLoader.cpp">
+      <Filter>Graphics2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\SpriteNode.cpp">
+      <Filter>Graphics2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics2D\TextureLoader.cpp">
+      <Filter>Graphics2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -242,9 +239,6 @@
     <ClInclude Include="..\..\Graphics2D\Texture.h">
       <Filter>Graphics2D</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\Opengl\SpriteNode.h">
-      <Filter>Graphics2D\OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Actors\Actor.h">
       <Filter>Actors</Filter>
     </ClInclude>
@@ -259,12 +253,6 @@
     </ClInclude>
     <ClInclude Include="..\..\3rdParty\tinyxml2\tinyxml2.h">
       <Filter>3rdParty\tinyxml2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\Opengl\ShadersLoaderOpenGL.h">
-      <Filter>Graphics2D\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\Opengl\TextureLoaderOpenGL.h">
-      <Filter>Graphics2D\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3rdParty\stb\stb_image.h">
       <Filter>3rdParty\stb</Filter>
@@ -346,6 +334,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Actors\ScriptComponent.h">
       <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\ShadersLoader.h">
+      <Filter>Graphics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\SpriteNode.h">
+      <Filter>Graphics2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics2D\TextureLoader.h">
+      <Filter>Graphics2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

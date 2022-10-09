@@ -12,7 +12,7 @@ namespace BIEngine
     class Renderer
     {
     public:
-        Renderer(Shader& shader);
+        Renderer(std::shared_ptr<Shader> pShader);
         Renderer(const Renderer& orig) = delete;
         Renderer& operator=(const Renderer& rhs) = delete;
 
@@ -26,7 +26,7 @@ namespace BIEngine
 
     private:
         //Скомпилированная шейдер программа, с помощью которой идет отрисовка спрайтов
-        Shader       m_shader;        
+        std::shared_ptr<Shader> m_pShader;        
         unsigned int m_quadVAO;
 
         void initRenderData();

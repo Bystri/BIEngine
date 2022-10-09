@@ -6,6 +6,13 @@ class Texture2D
 {
 public:
     Texture2D();
+    ~Texture2D();
+
+    Texture2D(const Texture2D& orig);
+    Texture2D& operator=(const Texture2D& orig);
+
+    Texture2D(Texture2D&& orig);
+    Texture2D& operator=(Texture2D&& orig);
 
     void Generate(unsigned int width, unsigned int height, unsigned char* data);
     //Сделаеть текстуру активной

@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "../SceneNodes.h"
-#include "../Texture.h"
-#include "../Scene.h"
+#include "SceneNodes.h"
+#include "Texture.h"
+#include "Scene.h"
 
 namespace BIEngine
 {

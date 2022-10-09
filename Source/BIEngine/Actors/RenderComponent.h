@@ -2,8 +2,8 @@
 
 #include "ActorComponent.h"
 
-#include "../Graphics2D/Opengl/SpriteNode.h"
-#include "../Graphics2D/Opengl/TextureLoaderOpenGL.h"
+#include "../Graphics2D/SpriteNode.h"
+#include "../Graphics2D/TextureLoader.h"
 
 namespace BIEngine
 {

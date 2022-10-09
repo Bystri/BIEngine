@@ -3,10 +3,36 @@
 #include <iostream>
 
 #include "../Utilities/Logger.h"
-#include "Opengl/ShadersLoaderOpenGL.h"
+#include "ShadersLoader.h"
 
 namespace BIEngine
 {
+
+    Shader::~Shader()
+    {
+        glDeleteProgram(m_id);
+    }
+
+    Shader::Shader(Shader&& orig)
+    {
+        m_id = orig.m_id;
+
+        //Нулевой id является аналогом нулевому указателю, то есть шейдерной программы с таким id не существует
+        orig.m_id = 0;
+    }
+
+    Shader& Shader::operator=(Shader&& orig)
+    {
+        if (this == &orig)
+            return *this;
+
+        glDeleteProgram(m_id);
+        m_id = orig.m_id;
+
+        orig.m_id = 0;
+
+        return *this;
+    }
 
     //Делает шейдер активным
     Shader& Shader::Use()
@@ -21,7 +47,7 @@ namespace BIEngine
         glAttachShader(m_id, sVertex);
         glAttachShader(m_id, sFragment);
         glLinkProgram(m_id);
-        checkCompileErrors(m_id, "PROGRAM");
+        CheckCompileErrors(m_id, "PROGRAM");
     }
 
     void Shader::SetFloat(const char* name, float value, bool useShader)
@@ -89,7 +115,7 @@ namespace BIEngine
 
 
     //Проверяет и, в случае обнаружуения, выводит сообщения об ошибках во время компиляции шейдера
-    void Shader::checkCompileErrors(unsigned int object, std::string type)
+    void Shader::CheckCompileErrors(unsigned int object, std::string type)
     {
         int success;
         char infoLog[1024];

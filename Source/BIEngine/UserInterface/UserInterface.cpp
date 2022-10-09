@@ -10,7 +10,7 @@
 
 #include "../Graphics2D/Texture.h"
 #include "../Graphics2D/Shader.h"
-#include "../Graphics2D/Opengl/ShadersLoaderOpenGL.h"
+#include "../Graphics2D/ShadersLoader.h"
 #include "../Utilities/Logger.h"
 
 namespace BIEngine
@@ -46,8 +46,8 @@ namespace BIEngine
     TextRenderer::TextRenderer(unsigned int width, unsigned int height)
     {
         //Загрузка шейдеров
-        std::shared_ptr<OpenglShaderData> vertTextShaderData = std::static_pointer_cast<OpenglShaderData>(ResCache::Get()->GetHandle("Effects/text_2d.vs")->GetExtra());
-        std::shared_ptr<OpenglShaderData> fragTextShaderxData = std::static_pointer_cast<OpenglShaderData>(ResCache::Get()->GetHandle("Effects/text_2d.frag")->GetExtra());
+        std::shared_ptr<ShaderData> vertTextShaderData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle("Effects/text_2d.vs")->GetExtra());
+        std::shared_ptr<ShaderData> fragTextShaderxData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle("Effects/text_2d.frag")->GetExtra());
 
         m_textShader.Compile(vertTextShaderData->GetShaderIndex(), fragTextShaderxData->GetShaderIndex());
 

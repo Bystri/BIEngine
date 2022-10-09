@@ -7,16 +7,21 @@
 namespace BIEngine
 {
 
-	//TODO: Надо добавить конструкторы/операторы копирования из-за своеобразного деструктора
-	class OpenglShaderData : public IResourceExtraData
+	class ShaderData : public IResourceExtraData
 	{
 		friend class VertexShaderResourceLoader;
 		friend class FragmentShaderResourceLoader;
 
 	public:
-		OpenglShaderData();
-		~OpenglShaderData() { glDeleteShader(m_shaderIndex); }
-		virtual std::string ToString() { return "OpenglShaderData"; }
+		ShaderData();
+		~ShaderData() { glDeleteShader(m_shaderIndex); }
+
+		//Удаляем их, так как шейдеры используются только для генерации шейдер-программы, 
+		//и маловероятно событие, что нам нужно будет копирование, чтобы тратиться на реализацию поддержки контроля копирования
+		ShaderData(const ShaderData& orig) = delete;
+		ShaderData& operator=(const ShaderData& orig) = delete;
+
+		virtual std::string ToString() { return "ShaderData"; }
 
 		unsigned int GetShaderIndex() const { return m_shaderIndex; }
 
