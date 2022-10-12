@@ -155,6 +155,7 @@ namespace BIEngine
         metaTableObj.RegisterObjectDirect("GetActorId", (ScriptComponent*)0, &ScriptComponent::GetActorId);
         metaTableObj.RegisterObjectDirect("GetPos", (ScriptComponent*)0, &ScriptComponent::GetPos);
         metaTableObj.RegisterObjectDirect("SetPos", (ScriptComponent*)0, &ScriptComponent::SetPos);
+        metaTableObj.RegisterObjectDirect("GetOrientation", (ScriptComponent*)0, &ScriptComponent::GetOrientation);
     }
 
     void ScriptComponent::UnregisterScriptFunctions()
@@ -199,4 +200,17 @@ namespace BIEngine
         }
     }
 
+
+    float ScriptComponent::GetOrientation()
+    {
+        float angle = 0;
+
+        std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+        if (pTransformComponent)
+        {
+            angle = pTransformComponent->GetRotation();
+        }
+
+        return angle;
+    }
 }

@@ -64,6 +64,8 @@ namespace BIEngine
 		static void SetPosition(LuaPlus::LuaObject positionLua, int actorId);
 		static void SetVelocity(LuaPlus::LuaObject velocityLua, int actorId);
 		static void StopActor(int actorId);
+		static void SetAngularVelocity(float angVelLua, int actorId);
+		static void SetOrientation(float angleLua, int actorId);
 		static void ApplyForce(LuaPlus::LuaObject normalDirLua, float force, int actorId);
 		static void ApplyTorque(LuaPlus::LuaObject axisLua, float force, int actorId);
 
@@ -103,6 +105,8 @@ namespace BIEngine
 		globals.RegisterDirect("StopActor", &InternalScriptExports::StopActor);
 		globals.RegisterDirect("ApplyForce", &InternalScriptExports::ApplyForce);
 		globals.RegisterDirect("ApplyTorque", &InternalScriptExports::ApplyTorque);
+		globals.RegisterDirect("SetOrientation", &InternalScriptExports::SetOrientation);
+		globals.RegisterDirect("SetAngularVelocity", &InternalScriptExports::SetAngularVelocity);
 	}
 
 	void ScriptExports::Unregister()
@@ -260,6 +264,16 @@ namespace BIEngine
 	void InternalScriptExports::StopActor(int actorId)
 	{
 		g_pApp->m_pGameLogic->GetGamePhysics()->StopActor(actorId);
+	}
+
+	void InternalScriptExports::SetAngularVelocity(float angVelLua, int actorId)
+	{
+		g_pApp->m_pGameLogic->GetGamePhysics()->SetAngularVelocity(actorId, angVelLua);
+	}
+
+	void InternalScriptExports::SetOrientation(float angleLua, int actorId)
+	{
+		g_pApp->m_pGameLogic->GetGamePhysics()->Rotate(actorId, angleLua);
 	}
 
 	void InternalScriptExports::ApplyForce(LuaPlus::LuaObject normalDirLua, float force, int actorId)
