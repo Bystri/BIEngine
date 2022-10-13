@@ -144,6 +144,10 @@ namespace BIEngine
 		RootNode();
 		virtual bool AddChild(std::shared_ptr<ISceneNode> pChild);
 		virtual bool RenderChildren(Scene* pScene);
+
+		//В стандартной имплементации, мы во время pre и post обработки сохраняем относительные координаты для renderera. У рута нет координат - значит не надо пушить данные в стэк
+		virtual bool PreRender(Scene* pScene) override { return true; }
+		virtual bool PostRender(Scene* pScene) override { return true; }
 	};
 
 

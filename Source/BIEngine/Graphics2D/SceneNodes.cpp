@@ -15,11 +15,13 @@ namespace BIEngine
 
 	bool SceneNode::PreRender(Scene* pScene)
 	{
+		pScene->PushMatrix(m_props.GetPosition(), m_props.GetSize(), m_props.GetRotation());
 		return true;
 	}
 
 	bool SceneNode::PostRender(Scene* pScene)
 	{
+		pScene->PopMatrix();
 		return true;
 	}
 

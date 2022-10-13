@@ -2,6 +2,7 @@
 
 #include <map>
 #include <memory>
+#include <stack>
 
 #include "SceneNodes.h"
 #include "Renderer.h"
@@ -33,6 +34,9 @@ namespace BIEngine
 		int OnRender();
 		int OnUpdate(float dt);
 
+		void PushMatrix(const glm::vec2& position, const glm::vec2& size, float angle);
+		void PopMatrix();
+
 		std::shared_ptr<ISceneNode> FindActor(ActorId id);
 
 		void SetCamera(std::shared_ptr<CameraNode> pCamera) { m_pCamera = pCamera; }
@@ -60,6 +64,9 @@ namespace BIEngine
 		std::shared_ptr<Renderer> m_pRenderer;
 
 		SceneActorMap m_actorMap;
+
+		//Данная структура нужна для сохранения поворота и начала координаты для текущего базиса родителя, относительного которого будут сопзиционированы дети. 
+		std::stack<std::tuple<glm::vec2, glm::vec2, float>> m_coordStack;
 	};
 
 }

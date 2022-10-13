@@ -19,10 +19,9 @@ namespace BIEngine
         ~Renderer();
 
         void SetViewTransform(const glm::mat4& view);
+        void SetModelTransform(glm::vec2 position, glm::vec2 size, float rotate);
 
-        void DrawSprite(std::shared_ptr<Texture2D> texture, glm::vec2 position,
-            glm::vec2 size = glm::vec2(1.0f, 1.0f), float rotate = 0.0f,
-            glm::vec3 color = glm::vec3(1.0f));
+        void DrawSprite(std::shared_ptr<Texture2D> texture, glm::vec3 color = glm::vec3(1.0f));
 
     private:
         //Скомпилированная шейдер программа, с помощью которой идет отрисовка спрайтов

@@ -14,6 +14,8 @@ namespace BIEngine
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::NewRenderComponentDelegate), EvtData_New_Render_Component::sk_EventType);
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::NewCameraComponentDelegate), EvtData_New_Camera_Component::sk_EventType);
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
+
+		m_coordStack.push({ glm::vec2(0.0, 0.0), glm::vec2(0.0, 0.0), 0 });
 	}
 
 	Scene::~Scene()
@@ -34,8 +36,8 @@ namespace BIEngine
 			{
 				m_pRoot->OnRender(this);
 				m_pRoot->RenderChildren(this);
-				m_pRoot->PostRender(this);
 			}
+			m_pRoot->PostRender(this);
 		}
 
 		return 0;
@@ -46,6 +48,45 @@ namespace BIEngine
 			return 0;
 
 		return m_pRoot->OnUpdate(this, dt);
+	}
+
+	void Scene::PushMatrix(const glm::vec2& position, const glm::vec2& size, float angle)
+	{
+		auto topCoords = m_coordStack.top();
+		glm::vec2 rotatedCoords = std::get<0>(topCoords);
+
+		//Получаем новый угол на основе сложения текущего угла с углом родителя
+		float newAngle = std::get<2>(topCoords) + angle;
+
+
+		//TODO: мы не проверяем, какой нам угол пришел, если будет угол больше, чем |360|, то эта проверка не поможет
+		if (newAngle > 360.0)
+			newAngle -= 360.0;
+
+		if (newAngle < -360.0)
+			newAngle += 360.0;
+
+
+		//Переводим наш старый угол в раидана и высчитываем синусы/косинусы
+		const float pi = 3.141592;
+		const float radians = (std::get<2>(topCoords) * (pi / 180));
+
+		const float sinOfAng = std::sin(radians);
+		const float cosOfAng = std::cos(radians);
+
+		//Получаем координаты объекта в новом базисе
+		rotatedCoords.x += position.x * cosOfAng - position.y * sinOfAng;
+		rotatedCoords.y += position.x * sinOfAng + position.y * cosOfAng;
+
+		m_coordStack.push({ rotatedCoords, size, newAngle });
+		m_pRenderer->SetModelTransform(rotatedCoords, size, newAngle);
+	}
+
+	void Scene::PopMatrix()
+	{
+		m_coordStack.pop();
+		auto topCoords = m_coordStack.top();
+		m_pRenderer->SetModelTransform(std::get<0>(topCoords), std::get<1>(topCoords), std::get<2>(topCoords));
 	}
 
 	std::shared_ptr<ISceneNode> Scene::FindActor(ActorId id) {
