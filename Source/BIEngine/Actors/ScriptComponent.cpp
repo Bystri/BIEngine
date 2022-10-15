@@ -155,7 +155,9 @@ namespace BIEngine
         metaTableObj.RegisterObjectDirect("GetActorId", (ScriptComponent*)0, &ScriptComponent::GetActorId);
         metaTableObj.RegisterObjectDirect("GetPos", (ScriptComponent*)0, &ScriptComponent::GetPos);
         metaTableObj.RegisterObjectDirect("SetPos", (ScriptComponent*)0, &ScriptComponent::SetPos);
+        metaTableObj.RegisterObjectDirect("GetVelocity", (ScriptComponent*)0, &ScriptComponent::GetVelocity);
         metaTableObj.RegisterObjectDirect("GetOrientation", (ScriptComponent*)0, &ScriptComponent::GetOrientation);
+        metaTableObj.RegisterObjectDirect("GetRotation", (ScriptComponent*)0, &ScriptComponent::GetRotation);
     }
 
     void ScriptComponent::UnregisterScriptFunctions()
@@ -172,7 +174,7 @@ namespace BIEngine
         return ret;
     }
 
-    LuaPlus::LuaObject ScriptComponent::GetPos()
+    LuaPlus::LuaObject ScriptComponent::GetPos() const
     {
         LuaPlus::LuaObject ret;
 
@@ -200,6 +202,18 @@ namespace BIEngine
         }
     }
 
+    LuaPlus::LuaObject ScriptComponent::GetVelocity() const
+    {
+        LuaPlus::LuaObject ret;
+
+        std::shared_ptr<PhysicsComponent> pPhysicsComponent = m_pOwner->GetComponent<PhysicsComponent>(PhysicsComponent::g_CompId).lock();
+        if (pPhysicsComponent)
+            LuaStateManager::Get()->ConvertVec2ToTable(pPhysicsComponent->GetVelocity(), ret);
+        else
+            ret.AssignNil(LuaStateManager::Get()->GetLuaState());
+
+        return ret;
+    }
 
     float ScriptComponent::GetOrientation()
     {
@@ -210,6 +224,18 @@ namespace BIEngine
         {
             angle = pTransformComponent->GetRotation();
         }
+
+        return angle;
+    }
+
+    float ScriptComponent::GetRotation()
+    {
+        float angle = 0;
+
+        std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+        std::shared_ptr<PhysicsComponent> pPhysicsComponent = m_pOwner->GetComponent<PhysicsComponent>(PhysicsComponent::g_CompId).lock();
+        if (pPhysicsComponent)
+            angle = pPhysicsComponent->GetRotation();
 
         return angle;
     }

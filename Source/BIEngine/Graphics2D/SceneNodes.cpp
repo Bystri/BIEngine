@@ -63,7 +63,7 @@ namespace BIEngine
 
 			if (id == pProps->GetActorId())
 			{
-				itr = m_children.erase(itr);
+				m_children.erase(itr);
 				return true;
 			}
 		}

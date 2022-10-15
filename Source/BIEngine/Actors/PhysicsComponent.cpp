@@ -159,14 +159,14 @@ namespace BIEngine
         return pBaseElement;
     }
 
-    void PhysicsComponent::ApplyForce(const glm::vec2& direction, float forceNewtons)
+    void PhysicsComponent::ApplyForce(const glm::vec2& direction)
     {
-        m_gamePhysics->ApplyForce(direction, forceNewtons, m_pOwner->GetId());
+        m_gamePhysics->ApplyForce(direction, m_pOwner->GetId());
     }
 
-    void PhysicsComponent::ApplyTorque(const glm::vec2& direction, float forceNewtons)
+    void PhysicsComponent::ApplyTorque(float torque)
     {
-        m_gamePhysics->ApplyTorque(direction, forceNewtons, m_pOwner->GetId());
+        m_gamePhysics->ApplyTorque(torque, m_pOwner->GetId());
     }
 
     bool PhysicsComponent::KinematicMove(const glm::vec2& position, float rotate)
@@ -174,7 +174,7 @@ namespace BIEngine
         return m_gamePhysics->KinematicMove(m_pOwner->GetId(), position, rotate);
     }
 
-    glm::vec2 PhysicsComponent::GetVelocity()
+    glm::vec2 PhysicsComponent::GetVelocity() const
     {
         return m_gamePhysics->GetVelocity(m_pOwner->GetId());
     }
@@ -187,6 +187,11 @@ namespace BIEngine
     void PhysicsComponent::Rotate(float angleRadians)
     {
         m_gamePhysics->Rotate(m_pOwner->GetId(), angleRadians);
+    }
+
+    float PhysicsComponent::GetRotation() const
+    {
+        return m_gamePhysics->GetAngularVelocity(m_pOwner->GetId());
     }
 
     void PhysicsComponent::SetPosition(float x, float y)

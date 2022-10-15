@@ -49,8 +49,8 @@ namespace BIEngine
 		virtual void RemoveActor(ActorId id) override { }
 
 		virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim) override { }
-		virtual void ApplyForce(const glm::vec2& dir, float newtons, ActorId aid) override { }
-		virtual void ApplyTorque(const glm::vec2& dir, float newtons, ActorId aid) override { }
+		virtual void ApplyForce(const glm::vec2& dir, ActorId aid) override { }
+		virtual void ApplyTorque(float torque, ActorId aid) override { }
 		virtual bool KinematicMove(ActorId aid, const glm::vec2& position, float rotate) override { return true; }
 
 		virtual void Rotate(ActorId actorId, float angleRadians) override { }
@@ -111,9 +111,9 @@ namespace BIEngine
 		//Добавляет триггер-объект с нулевой физикой в симуляцию
 		virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim) override;
 		//Применяет силу к объекту
-		virtual void ApplyForce(const glm::vec2& dir, float newtons, ActorId aid) override;
+		virtual void ApplyForce(const glm::vec2& dir, ActorId aid) override;
 		//Применить момент силы к объекту
-		virtual void ApplyTorque(const glm::vec2& dir, float newtons, ActorId aid) override;
+		virtual void ApplyTorque(float torque, ActorId aid) override;
 
 		//Напрямую задает положение и поворот физического объекта.
 		//Следует быть с этим аккуратнее, так как данная процедура способна сломать физическую симуляцию
@@ -220,7 +220,7 @@ namespace BIEngine
 					const glm::vec2 pos = glm::vec2(cpPos.x, cpPos.y);
 					const float rot = cpBodyGetAngle(it->second);
 
-					if (pTransformComponent->GetPosition() != pos || pTransformComponent->GetRotation() != rot)
+					if (pTransformComponent->GetPosition() != pos || std::abs(pTransformComponent->GetRotation() - rot) > std::numeric_limits<float>::epsilon())
 					{
 						pTransformComponent->SetPosition(pos);
 						pTransformComponent->SetRotation(rot);
@@ -285,6 +285,7 @@ namespace BIEngine
 
 		pBody = cpSpaceAddBody(m_cpSpace, pBody);
 		cpBodySetPosition(pBody, cpv(position.x, position.y));
+		cpBodySetAngle(pBody, (cpFloat)rotation);
 		cpShape* pShape = cpSpaceAddShape(m_cpSpace, cpCircleShapeNew(pBody, radius, cpvzero));
 		cpShapeSetFriction(pShape, material.m_friction);
 		cpShapeSetElasticity(pShape, material.m_restitution);
@@ -342,6 +343,7 @@ namespace BIEngine
 
 		pBody = cpSpaceAddBody(m_cpSpace, pBody);
 		cpBodySetPosition(pBody, cpv(position.x, position.y));
+		cpBodySetAngle(pBody, (cpFloat)rotation);
 		cpShape* pShape = cpSpaceAddShape(m_cpSpace, cpBoxShapeNew(pBody, dimensions.x, dimensions.y, 0.0f));
 		cpShapeSetFriction(pShape, material.m_friction);
 		cpShapeSetElasticity(pShape, material.m_restitution);
@@ -406,6 +408,7 @@ namespace BIEngine
 
 		pBody = cpSpaceAddBody(m_cpSpace, pBody);
 		cpBodySetPosition(pBody, cpv(position.x, position.y));
+		cpBodySetAngle(pBody, (cpFloat)rotation);
 		cpShape* pShape = cpSpaceAddShape(m_cpSpace, cpPolyShapeNewRaw(pBody, numPoints, cpVerts, 0.0));
 		cpShapeSetFriction(pShape, material.m_friction);
 		cpShapeSetElasticity(pShape, material.m_restitution);
@@ -458,25 +461,22 @@ namespace BIEngine
 		m_rigidBodyToActorId[pBody] = actorID;
 	}
 
-	void ChipmunkPhysics::ApplyForce(const glm::vec2& dir, float newtons, ActorId aid)
+	void ChipmunkPhysics::ApplyForce(const glm::vec2& dir, ActorId aid)
 	{
 		if (cpBody* const pBody = FindChipmunkRigidBody(aid))
 		{
 
-			const cpVect force = cpv(dir.x * newtons, dir.y * newtons);
+			const cpVect force = cpv(dir.x, dir.y);
 
 			cpBodyApplyForceAtLocalPoint(pBody, force, cpvzero);
 		}
 	}
 
-	void ChipmunkPhysics::ApplyTorque(const glm::vec2& dir, float newtons, ActorId aid)
+	void ChipmunkPhysics::ApplyTorque(float torque, ActorId aid)
 	{
 		if (cpBody* const pBody = FindChipmunkRigidBody(aid))
 		{
-
-			const cpVect force = cpv(dir.x * newtons, dir.y * newtons);
-
-			cpBodyApplyImpulseAtLocalPoint(pBody, force, cpvzero);
+			cpBodySetTorque(pBody, (cpFloat)torque);
 		}
 	}
 	

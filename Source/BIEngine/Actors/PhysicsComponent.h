@@ -21,13 +21,14 @@ namespace BIEngine
 
         virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
-        void ApplyForce(const glm::vec2& direction, float forceNewtons);
-        void ApplyTorque(const glm::vec2& direction, float forceNewtons);
+        void ApplyForce(const glm::vec2& direction);
+        void ApplyTorque(float torque);
         bool KinematicMove(const glm::vec2& position, float rotate);
 
-        glm::vec2 GetVelocity();
         void SetVelocity(const glm::vec2& velocity);
+        glm::vec2 GetVelocity() const;
         void Rotate(float angle);
+        float GetRotation() const;
         void SetPosition(float x, float y);
         void Stop();
 

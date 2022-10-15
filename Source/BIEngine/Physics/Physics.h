@@ -37,8 +37,8 @@ namespace BIEngine
 
 		//Взаимодейтсвие с физическим миром
 		virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim) = 0;
-		virtual void ApplyForce(const glm::vec2& dir, float newtons, ActorId aid) = 0;
-		virtual void ApplyTorque(const glm::vec2& dir, float newtons, ActorId aid) = 0;
+		virtual void ApplyForce(const glm::vec2& dir, ActorId aid) = 0;
+		virtual void ApplyTorque(float torque, ActorId aid) = 0;
 		virtual bool KinematicMove(ActorId aid, const glm::vec2& position, float rotate) = 0;
 
 		//Явные способы задать актерам пространственные характеристики

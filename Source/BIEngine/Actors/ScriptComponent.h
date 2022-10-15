@@ -34,9 +34,11 @@ namespace BIEngine
 		LuaPlus::LuaObject GetActorId();
 
 		//Функции физики для скрипта
-		LuaPlus::LuaObject GetPos();
+		LuaPlus::LuaObject GetPos() const;
 		void SetPos(LuaPlus::LuaObject newPos);
+		LuaPlus::LuaObject GetVelocity() const;
 		float GetOrientation();
+		float GetRotation();
 		//TODO: добавить остальные функции для управления физическими свойствами актера
 
 	private:

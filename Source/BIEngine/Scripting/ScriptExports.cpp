@@ -66,8 +66,8 @@ namespace BIEngine
 		static void StopActor(int actorId);
 		static void SetAngularVelocity(float angVelLua, int actorId);
 		static void SetOrientation(float angleLua, int actorId);
-		static void ApplyForce(LuaPlus::LuaObject normalDirLua, float force, int actorId);
-		static void ApplyTorque(LuaPlus::LuaObject axisLua, float force, int actorId);
+		static void ApplyForce(LuaPlus::LuaObject normalDirLua, int actorId);
+		static void ApplyTorque(float torque, int actorId);
 
 	private:
 		static std::shared_ptr<ScriptEvent> BuildEvent(EventType eventType, LuaPlus::LuaObject& eventData);
@@ -276,28 +276,21 @@ namespace BIEngine
 		g_pApp->m_pGameLogic->GetGamePhysics()->Rotate(actorId, angleLua);
 	}
 
-	void InternalScriptExports::ApplyForce(LuaPlus::LuaObject normalDirLua, float force, int actorId)
+	void InternalScriptExports::ApplyForce(LuaPlus::LuaObject normalDirLua, int actorId)
 	{
 		if (normalDirLua.IsTable())
 		{
 			glm::vec2 normalDir(normalDirLua["x"].GetFloat(), normalDirLua["y"].GetFloat());
-			g_pApp->m_pGameLogic->GetGamePhysics()->ApplyForce(normalDir, force, actorId);
+			g_pApp->m_pGameLogic->GetGamePhysics()->ApplyForce(normalDir, actorId);
 			return;
 		}
 
 		Logger::WriteLog(Logger::LogType::ERROR, "Invalid object passed to ApplyForce(); type = " + std::string(normalDirLua.TypeName()));
 	}
 
-	void InternalScriptExports::ApplyTorque(LuaPlus::LuaObject axisLua, float force, int actorId)
+	void InternalScriptExports::ApplyTorque(float torque, int actorId)
 	{
-		if (axisLua.IsTable())
-		{
-			glm::vec2 axis(axisLua["x"].GetFloat(), axisLua["y"].GetFloat());
-			g_pApp->m_pGameLogic->GetGamePhysics()->ApplyTorque(axis, force, actorId);
-			return;
-		}
-		
-		Logger::WriteLog(Logger::LogType::ERROR, "Invalid object passed to ApplyTorque(); type = " + std::string(axisLua.TypeName()));
+		g_pApp->m_pGameLogic->GetGamePhysics()->ApplyTorque(torque, actorId);
 	}
 
 
