@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <vector>
+#include <map>
 
 #include <LuaPlus/LuaPlus.h>
 
@@ -46,7 +47,7 @@ namespace BIEngine
 		std::string m_destructorName;
 
 		//Здесь мы храним данные скрипта, чтобы добавить из в генерируемый XML при необходимости
-		std::vector<std::pair<std::string, std::string>> m_scriptData;
+		std::map<std::string, std::string> m_scriptData;
 
 		LuaPlus::LuaObject m_scriptObject;
 		LuaPlus::LuaObject m_scriptConstructor;

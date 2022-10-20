@@ -39,35 +39,42 @@ namespace BIEngine
         LuaStateManager* pStateMgr = LuaStateManager::Get();
         assert(pStateMgr);
 
+        //Пересоздаем объект, так как к нам могут прийти новые составляющие элемента 
+        m_scriptObject.AssignNil(LuaStateManager::Get()->GetLuaState());
+        m_scriptObject.AssignNewTable(pStateMgr->GetLuaState());
+        m_scriptData.clear();
+        CreateScriptObject();
+
+        m_scriptConstructor.AssignNil(LuaStateManager::Get()->GetLuaState());
+        m_scriptDestructor.AssignNil(LuaStateManager::Get()->GetLuaState());
+
         tinyxml2::XMLElement* pScriptObjectElement = pData->FirstChildElement("ScriptObject");
-        if (!pScriptObjectElement)
+        if (!pScriptObjectElement && m_scriptObject.IsNil())
         {
             Logger::WriteLog(Logger::LogType::ERROR, "No <ScriptObject> tag in XML");
             return false;
         }
 
-        const char* temp = NULL;
+        const char* temp = nullptr;
 
         temp = pScriptObjectElement->Attribute("constructor");
-        if (temp)
+        if (temp && strlen(temp) != 0)
             m_constructorName = temp;
 
         temp = pScriptObjectElement->Attribute("destructor");
-        if (temp)
+        if (temp && strlen(temp) != 0)
             m_destructorName = temp;
 
         // Если у нас есть конструктор для объекта, то мы этот самый оъект и создаем
         if (!m_constructorName.empty())
         {
             m_scriptConstructor = pStateMgr->GetGlobalVars().Lookup(m_constructorName.c_str());
-            if (m_scriptConstructor.IsFunction())
+
+            //Если lua-объект с таким названием оказался не функцией - обнуляем ссылку на этот объект
+            if (!m_scriptConstructor.IsFunction())
             {
-                //Само создание объекта
-                if (m_scriptObject.IsNil())
-                {
-                    m_scriptObject.AssignNewTable(pStateMgr->GetLuaState());
-                    CreateScriptObject();
-                }
+                Logger::WriteLog(Logger::LogType::WARNING, m_constructorName + " is not a function!");
+                m_scriptConstructor.AssignNil(LuaStateManager::Get()->GetLuaState());
             }
         }
 
@@ -75,6 +82,13 @@ namespace BIEngine
         if (!m_destructorName.empty())
         {
             m_scriptDestructor = pStateMgr->GetGlobalVars().Lookup(m_destructorName.c_str());
+
+            //Если lua-объект с таким названием оказался не функцией - обнуляем ссылку на этот объект
+            if (!m_scriptDestructor.IsFunction())
+            {
+                Logger::WriteLog(Logger::LogType::WARNING, m_destructorName + " is not a function!");
+                m_scriptDestructor.AssignNil(LuaStateManager::Get()->GetLuaState());
+            }
         }
 
         // читаем данные из <ScriptData>
@@ -89,7 +103,7 @@ namespace BIEngine
 
             for (const tinyxml2::XMLAttribute* pAttribute = pScriptDataElement->FirstAttribute(); pAttribute != nullptr; pAttribute = pAttribute->Next())
             {
-                m_scriptData.push_back({pAttribute->Name(), pAttribute->Value() });
+                m_scriptData[pAttribute->Name()] =  pAttribute->Value();
                 m_scriptObject.SetString(pAttribute->Name(), pAttribute->Value());
             }
         }
@@ -99,7 +113,6 @@ namespace BIEngine
 
     void ScriptComponent::PostInit()
     {
-        // call the script constructor if one exists
         if (m_scriptConstructor.IsFunction())
         {
             LuaPlus::LuaFunction<bool> func(m_scriptConstructor);
