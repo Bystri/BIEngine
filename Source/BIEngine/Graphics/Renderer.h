@@ -3,8 +3,9 @@
 #include <memory>
 
 #include "Shader.h"
-#include "Texture.h"
 #include "Material.h"
+#include "Sprite.h"
+#include "Mesh.h"
 
 namespace BIEngine
 {
@@ -16,18 +17,15 @@ namespace BIEngine
         Renderer(const Renderer& orig) = delete;
         Renderer& operator=(const Renderer& rhs) = delete;
 
-        ~Renderer();
-
         void SetViewTransform(const glm::mat4& view);
         void SetModelTransform(glm::vec2 position, glm::vec2 size, float rotate);
+        void SetColor(glm::vec3 color);
 
-        void DrawSprite(std::shared_ptr<Texture2D> texture, glm::vec3 color = glm::vec3(1.0f));
+        void DrawSprite(std::shared_ptr<Sprite> sprite);
+        void DrawMesh(std::shared_ptr<Mesh> mesh);
 
     private:
         //Скомпилированная шейдер программа, с помощью которой идет отрисовка спрайтов
         std::shared_ptr<Shader> m_pShader;        
-        unsigned int m_quadVAO;
-
-        void initRenderData();
     };
 }

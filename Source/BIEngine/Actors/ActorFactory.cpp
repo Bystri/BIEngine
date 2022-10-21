@@ -22,6 +22,7 @@ namespace BIEngine
 		//Сюда должны добавлять все функции-конструкторы компонентов актера
 		m_actorComponentCreators[TransformComponent::g_CompId] = CreateTransformComponent;
 		m_actorComponentCreators[SpriteRenderComponent::g_CompId] = CreateSpriteRenderComponent;
+		m_actorComponentCreators[BoxRenderComponent::g_CompId] = CreateBoxRenderComponent;
 		m_actorComponentCreators[PhysicsComponent::g_CompId] = CreatePhysicsComponent;
 		m_actorComponentCreators[PhysicsTriggerComponent::g_CompId] = CreatePhysicsTriggerComponent;
 		m_actorComponentCreators[CameraComponent::g_CompId] = CreateCameraComponent;

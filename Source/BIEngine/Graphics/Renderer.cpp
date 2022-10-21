@@ -6,41 +6,7 @@ namespace BIEngine
     Renderer::Renderer(std::shared_ptr<Shader> pShader)
     {
         m_pShader = pShader;
-        initRenderData();
     }
-
-    Renderer::~Renderer()
-    {
-        glDeleteVertexArrays(1, &m_quadVAO);
-    }
-
-    void Renderer::initRenderData()
-    {
-        unsigned int VBO;
-        float vertices[] = {
-            // Позиция     // Текстура
-            0.0f, 1.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-
-            0.0f, 1.0f, 0.0f, 1.0f,
-            1.0f, 1.0f, 1.0f, 1.0f,
-            1.0f, 0.0f, 1.0f, 0.0f
-        };
-
-        glGenVertexArrays(1, &m_quadVAO);
-        glGenBuffers(1, &VBO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        glBindVertexArray(m_quadVAO);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
-    }
-
     void Renderer::SetViewTransform(const glm::mat4& view)
     {
         m_pShader->Use();
@@ -67,20 +33,29 @@ namespace BIEngine
         m_pShader->SetMatrix4("model", model);
     }
 
-    void Renderer::DrawSprite(std::shared_ptr<Texture2D> pTexture, glm::vec3 color)
+    void Renderer::SetColor(glm::vec3 color)
     {
-        if (!pTexture)
+        m_pShader->Use();
+        m_pShader->SetVector3f("objectColor", color);
+    }
+
+    void Renderer::DrawSprite(std::shared_ptr<Sprite> sprite)
+    {
+        if (!sprite->GetTexture())
             return;
 
-        m_pShader->Use();
-        m_pShader->SetVector3f("spriteColor", color);
-
         glActiveTexture(GL_TEXTURE0);
-        pTexture->Bind();
+        sprite->GetTexture()->Bind();
 
-        glBindVertexArray(m_quadVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(sprite->GetMesh()->m_VAO);
+        glDrawElements(GL_TRIANGLES, sprite->GetMesh()->m_indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 
+    void Renderer::DrawMesh(std::shared_ptr<Mesh> mesh)
+    {
+        glBindVertexArray(mesh->m_VAO);
+        glDrawElements(GL_TRIANGLES, mesh->m_indices.size(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    }
 }

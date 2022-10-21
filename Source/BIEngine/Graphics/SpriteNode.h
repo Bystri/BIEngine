@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "SceneNodes.h"
-#include "Texture.h"
+#include "Sprite.h"
 #include "Scene.h"
 
 namespace BIEngine
@@ -13,19 +13,19 @@ namespace BIEngine
 		SpriteNode(const ActorId actorId,
 			RenderLayer renderLayer)
 			: SceneNode(actorId, renderLayer)
-			, m_pTexture(nullptr)
+			, m_pSprite(nullptr)
 		{
 		}
 
 		virtual ~SpriteNode() {}
 
-		void SetTexture(std::shared_ptr<Texture2D> texture) { m_pTexture = texture; }
-		std::shared_ptr<Texture2D> GetTexture() const { return m_pTexture; }
+		void SetSprite(std::shared_ptr<Sprite> sprite) { m_pSprite = sprite; }
+		std::shared_ptr<Sprite> GetSprite() const { return m_pSprite; }
 
 		virtual bool OnRender(Scene* pScene);
 
 	protected:
-		std::shared_ptr<Texture2D> m_pTexture;
+		std::shared_ptr<Sprite> m_pSprite;
 	};
 
 }

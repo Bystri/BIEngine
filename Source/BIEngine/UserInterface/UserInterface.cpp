@@ -8,9 +8,9 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "../Graphics2D/Texture.h"
-#include "../Graphics2D/Shader.h"
-#include "../Graphics2D/ShadersLoader.h"
+#include "../Graphics/Texture.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/ShadersLoader.h"
 #include "../Utilities/Logger.h"
 
 namespace BIEngine

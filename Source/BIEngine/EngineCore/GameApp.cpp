@@ -1,8 +1,8 @@
 ﻿#include "GameApp.h"
 
 #include "../ResourceCache/ResCache.h"
-#include "../Graphics2D/ShadersLoader.h"
-#include "../Graphics2D/TextureLoader.h"
+#include "../Graphics/ShadersLoader.h"
+#include "../Graphics/TextureLoader.h"
 #include "../ResourceCache/XmlLoader.h"
 #include "../UserInterface/HumanView.h"
 #include "../Scripting/ScriptExports.h"

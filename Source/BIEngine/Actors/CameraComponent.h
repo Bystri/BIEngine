@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "ActorComponent.h"
-#include "../Graphics2D/SceneNodes.h"
+#include "../Graphics/SceneNodes.h"
 
 namespace BIEngine
 {

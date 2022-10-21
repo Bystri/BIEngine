@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 
-#include "../Graphics2D/Material.h"
+#include "../Graphics/Material.h"
 #include "../Actors/TransformComponent.h"
 #include "../Actors/Actor.h"
 

@@ -5,7 +5,7 @@
 #include "EventManager.h"
 #include "../Scripting/ScriptEvent.h"
 #include "../Actors/Actor.h"
-#include "../Graphics2D/SceneNodes.h"
+#include "../Graphics/SceneNodes.h"
 #include "../UserInterface/IGameView.h"
 #include "../Utilities/Logger.h"
 

@@ -2,8 +2,9 @@
 
 #include "ActorComponent.h"
 
-#include "../Graphics2D/SpriteNode.h"
-#include "../Graphics2D/TextureLoader.h"
+#include "../Graphics/SpriteNode.h"
+#include "../Graphics/MeshNode.h"
+#include "../Graphics/TextureLoader.h"
 
 namespace BIEngine
 {
@@ -61,5 +62,34 @@ namespace BIEngine
     static ActorComponent* CreateSpriteRenderComponent()
     {
         return new SpriteRenderComponent;
+    }
+
+    //Создает и регестрирует в сцене меш сферы для отрисовки
+    class BoxRenderComponent : public BaseRenderComponent
+    {
+    public:
+        BoxRenderComponent() : BaseRenderComponent(), m_pMeshNode(nullptr), m_width(1.0f), m_height(1.0f), m_depth(1.0f) {}
+
+        static ComponentId g_CompId;
+        virtual ComponentId GetComponentId() const { return BoxRenderComponent::g_CompId; }
+
+        virtual bool Init(tinyxml2::XMLElement* pData);
+
+        virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
+
+    protected:
+        virtual std::shared_ptr<SceneNode> CreateSceneNode();
+
+    protected:
+        std::shared_ptr<MeshNode> m_pMeshNode; //Узел на сцене, который отвечает за отрисовку этого компонента
+
+        float m_width;
+        float m_height;
+        float m_depth;
+    };
+
+    static ActorComponent* CreateBoxRenderComponent()
+    {
+        return new BoxRenderComponent;
     }
 }

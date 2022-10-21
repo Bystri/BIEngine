@@ -1,6 +1,6 @@
 ﻿#include "SceneNodes.h"
 
-#include "../Graphics2D/Scene.h"
+#include "../Graphics/Scene.h"
 
 namespace BIEngine
 {

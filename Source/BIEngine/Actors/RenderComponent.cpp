@@ -2,13 +2,18 @@
 
 #include "../EventManager/EventManager.h"
 #include "../EventManager/Events.h"
+#include "../Graphics/MeshGeometryGenerator.h"
 #include "../Actors/TransformComponent.h"
 #include "../Utilities/Logger.h"
 
 namespace BIEngine
 {
     ComponentId SpriteRenderComponent::g_CompId = "SpriteRenderComponent";
+    ComponentId BoxRenderComponent::g_CompId = "BoxRenderComponent";
 
+    /***********************************************************
+    * BaseRenderComponent
+    ************************************************************/
 
     bool BaseRenderComponent::Init(tinyxml2::XMLElement* pData)
     {
@@ -51,6 +56,10 @@ namespace BIEngine
         return m_pSceneNode;
     }
 
+    /***********************************************************
+    * SpriteRenderComponent
+    ************************************************************/
+
     bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
     {
         BaseRenderComponent::Init(pData);
@@ -76,7 +85,7 @@ namespace BIEngine
                 return false;
             }
 
-            m_pSpriteNode->SetTexture(texData->GetTexture());
+            m_pSpriteNode->SetSprite(std::make_shared<Sprite>(texData->GetTexture()));
         }
 
         return true;
@@ -111,4 +120,67 @@ namespace BIEngine
         return m_pSpriteNode;
     }
 
+   /***********************************************************
+   * BoxRenderComponent
+   ************************************************************/
+
+    bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
+    {
+        BaseRenderComponent::Init(pData);
+        assert(pData);
+
+        if (m_pMeshNode == nullptr)
+        {
+            m_pMeshNode = std::make_shared<MeshNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
+        }
+
+        tinyxml2::XMLElement* pSizeElement = pData->FirstChildElement("Size");
+        if (pSizeElement)
+        {
+            double w, h, d;
+            pSizeElement->QueryDoubleAttribute("w", &w);
+            pSizeElement->QueryDoubleAttribute("h", &h);
+            pSizeElement->QueryDoubleAttribute("d", &d);
+
+            m_width = (float)w;
+            m_height = (float)h;
+            m_depth = (float)d;
+        }
+
+        std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 6u));
+        m_pMeshNode->SetMesh(boxMesh);
+
+        return true;
+    }
+
+    tinyxml2::XMLElement* BoxRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
+    {
+        tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+
+        tinyxml2::XMLElement* pSize = pDoc->NewElement("Size");
+        pSize->SetAttribute("w", std::to_string(m_width).c_str());
+        pSize->SetAttribute("h", std::to_string(m_height).c_str());
+        pSize->SetAttribute("d", std::to_string(m_depth).c_str());
+        pBaseElement->LinkEndChild(pSize);
+
+        tinyxml2::XMLElement* pColor = BaseRenderComponent::GenerateXml(pDoc);
+        pBaseElement->LinkEndChild(pColor);
+
+        return pBaseElement;
+    }
+
+    std::shared_ptr<SceneNode> BoxRenderComponent::CreateSceneNode()
+    {
+        if (m_pMeshNode == nullptr)
+            return std::shared_ptr<SceneNode>();
+
+        std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+        if (pTransformComponent)
+        {
+            m_pMeshNode->SetTransform(pTransformComponent);
+            m_pMeshNode->SetMaterial(m_pMaterial);
+        }
+
+        return m_pMeshNode;
+    }
 }

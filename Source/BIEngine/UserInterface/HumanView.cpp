@@ -1,9 +1,9 @@
 ﻿#include "HumanView.h"
 
-#include "../Graphics2D/ShadersLoader.h"
-#include "../Graphics2D/Shader.h"
-#include "../Graphics2D/TextureLoader.h"
-#include "../Graphics2D/SpriteNode.h"
+#include "../Graphics/ShadersLoader.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/TextureLoader.h"
+#include "../Graphics/SpriteNode.h"
 #include "../EngineCore/GameApp.h"
 #include "../Audio/irrKlangAudio.h"
 

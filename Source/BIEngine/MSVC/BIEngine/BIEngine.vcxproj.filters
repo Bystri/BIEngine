@@ -19,9 +19,6 @@
     <Filter Include="Utilities">
       <UniqueIdentifier>{2434e532-7d43-44ab-b72d-695418e408e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics2D">
-      <UniqueIdentifier>{6bfbea0d-e2a9-4beb-ae1e-d62ef844cb10}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Actors">
       <UniqueIdentifier>{91c24a16-9afb-4cbf-9cd5-5a9efb5860d0}</UniqueIdentifier>
     </Filter>
@@ -49,6 +46,9 @@
     <Filter Include="Audio">
       <UniqueIdentifier>{0f451174-342b-4458-a683-439ebb34b677}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{6bfbea0d-e2a9-4beb-ae1e-d62ef844cb10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCore\GameApp.cpp">
@@ -74,24 +74,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Utilities\Logger.cpp">
       <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\Material.cpp">
-      <Filter>Graphics2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\Renderer.cpp">
-      <Filter>Graphics2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\Scene.cpp">
-      <Filter>Graphics2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\SceneNodes.cpp">
-      <Filter>Graphics2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\Shader.cpp">
-      <Filter>Graphics2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\Texture.cpp">
-      <Filter>Graphics2D</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Actors\Actor.cpp">
       <Filter>Actors</Filter>
@@ -177,14 +159,44 @@
     <ClCompile Include="..\..\Actors\ScriptComponent.cpp">
       <Filter>Actors</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\ShadersLoader.cpp">
-      <Filter>Graphics2D</Filter>
+    <ClCompile Include="..\..\Graphics\Material.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\SpriteNode.cpp">
-      <Filter>Graphics2D</Filter>
+    <ClCompile Include="..\..\Graphics\Mesh.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Graphics2D\TextureLoader.cpp">
-      <Filter>Graphics2D</Filter>
+    <ClCompile Include="..\..\Graphics\MeshGeometryGenerator.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\MeshNode.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\Renderer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\Scene.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\SceneNodes.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\Shader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\ShadersLoader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\Sprite.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\SpriteNode.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\Texture.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\TextureLoader.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,24 +232,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Utilities\Logger.h">
       <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\Material.h">
-      <Filter>Graphics2D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\Renderer.h">
-      <Filter>Graphics2D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\Scene.h">
-      <Filter>Graphics2D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\SceneNodes.h">
-      <Filter>Graphics2D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\Shader.h">
-      <Filter>Graphics2D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\Texture.h">
-      <Filter>Graphics2D</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Actors\Actor.h">
       <Filter>Actors</Filter>
@@ -335,14 +329,44 @@
     <ClInclude Include="..\..\Actors\ScriptComponent.h">
       <Filter>Actors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\ShadersLoader.h">
-      <Filter>Graphics2D</Filter>
+    <ClInclude Include="..\..\Graphics\Material.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\SpriteNode.h">
-      <Filter>Graphics2D</Filter>
+    <ClInclude Include="..\..\Graphics\Mesh.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Graphics2D\TextureLoader.h">
-      <Filter>Graphics2D</Filter>
+    <ClInclude Include="..\..\Graphics\MeshGeometryGenerator.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\MeshNode.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\Renderer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\Scene.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\SceneNodes.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\Shader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\ShadersLoader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\Sprite.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\SpriteNode.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\Texture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\TextureLoader.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
