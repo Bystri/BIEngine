@@ -11,12 +11,29 @@ namespace BIEngine
     {
         assert(pData);
 
+        if (m_pCameraNode == nullptr)
+        {
+            m_pCameraNode = std::make_shared<CameraNode>();
+        }
+
+        tinyxml2::XMLElement* pShape = pData->FirstChildElement("Projection");
+        if (pShape)
+        {
+            std::string shapeStr = pShape->FirstChild()->Value();
+            if (shapeStr == "Ortho")
+                m_projType = CameraNode::ProjectionType::ORTHO;
+            else if (shapeStr == "Perspective")
+                m_projType = CameraNode::ProjectionType::PERSPECTIVE;
+        }
+
+        m_pCameraNode->SetProjType(m_projType);
+
         return true;
     }
 
     void CameraComponent::PostInit()
     {
-        m_pCameraNode = CreateCameraNode();
+        CreateCameraNode();
         std::shared_ptr<EvtData_New_Camera_Component> pEvent = std::make_shared< EvtData_New_Camera_Component>(m_pOwner);
         EventManager::Get()->TriggerEvent(pEvent);
     }
@@ -30,15 +47,16 @@ namespace BIEngine
 
     std::shared_ptr<CameraNode> CameraComponent::CreateCameraNode()
     {
-        auto pCameraNode = std::make_shared<CameraNode>();
+        if (!m_pCameraNode)
+            return std::shared_ptr<CameraNode>();
 
         std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
         if (pTransformComponent)
         {
-            pCameraNode->SetTransform(pTransformComponent);
+            m_pCameraNode->SetTransform(pTransformComponent);
         }
 
-        return pCameraNode;
+        return m_pCameraNode;
     }
 
 }

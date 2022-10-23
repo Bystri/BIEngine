@@ -10,7 +10,7 @@ namespace BIEngine
     class CameraComponent : public ActorComponent
     {
     public:
-        CameraComponent() {}
+        CameraComponent() : m_pCameraNode(nullptr), m_projType(CameraNode::ProjectionType::ORTHO) {}
 
         static ComponentId g_CompId;
         virtual ComponentId GetComponentId() const { return CameraComponent::g_CompId; }
@@ -27,6 +27,7 @@ namespace BIEngine
 
     protected:
         std::shared_ptr<CameraNode> m_pCameraNode;
+        CameraNode::ProjectionType m_projType;
     };
 
     static ActorComponent* CreateCameraComponent()

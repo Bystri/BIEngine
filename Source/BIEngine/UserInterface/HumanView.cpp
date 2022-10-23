@@ -51,9 +51,6 @@ namespace BIEngine
 
 		m_userInterface.Init(m_screenWidth, m_screenHeight);
 
-		//Матрица камеры
-		glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(m_screenWidth), static_cast<float>(m_screenHeight), 0.0f, -1.0f, 1.0f);
-
 		//Загрузка шейдеров
 		std::shared_ptr<ShaderData> pVertShaderData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle("Effects/sprite.vs")->GetExtra());
 		std::shared_ptr<ShaderData> pFragShaderxData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle("Effects/sprite.frag")->GetExtra());
@@ -61,7 +58,6 @@ namespace BIEngine
 		pShader->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
 		pShader->Use();
 		pShader->SetInteger("image", 0);
-		pShader->SetMatrix4("projection", projection);
 
 		//Создание отображения
 		m_pRenderer = std::make_shared<Renderer>(pShader);

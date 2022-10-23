@@ -17,6 +17,7 @@ namespace BIEngine
         Renderer(const Renderer& orig) = delete;
         Renderer& operator=(const Renderer& rhs) = delete;
 
+        void SetProjection(const glm::mat4& proj);
         void SetViewTransform(const glm::mat4& view);
         void SetModelTransform(glm::vec2 position, glm::vec2 size, float rotate);
         void SetColor(glm::vec3 color);

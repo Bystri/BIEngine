@@ -7,6 +7,13 @@ namespace BIEngine
     {
         m_pShader = pShader;
     }
+
+    void Renderer::SetProjection(const glm::mat4& proj)
+    {
+        m_pShader->Use();
+        m_pShader->SetMatrix4("projection", proj);
+    }
+
     void Renderer::SetViewTransform(const glm::mat4& view)
     {
         m_pShader->Use();

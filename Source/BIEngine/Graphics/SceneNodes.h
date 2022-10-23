@@ -154,14 +154,26 @@ namespace BIEngine
 	class CameraNode : public SceneNode
 	{
 	public:
+		enum class ProjectionType
+		{
+			ORTHO,
+			PERSPECTIVE
+		};
+
 		CameraNode()
 			: SceneNode(Actor::INVALID_ACTOR_ID, RenderLayer::BEGIN)
+			, m_projType(ProjectionType::ORTHO)
 		{
 		}
+
+		void SetProjType(ProjectionType type) { m_projType = type; }
 
 		//Здесь происходит обсчет матриц, которые отправляются в Renderer, чтобы задать позицию камеры
 		virtual bool OnRender(Scene* pScene) override;
 		//Всегда возвращает "true", так как для вызова OnRender требуется, чтобы объект был видимым
 		virtual bool IsVisible(Scene* pScene) const { return true; }
+
+	private:
+		ProjectionType m_projType;
 	};
 }
