@@ -112,12 +112,11 @@ namespace BIEngine
 		glm::mat4 proj;
 
 		if (m_projType == ProjectionType::ORTHO)
-			proj = glm::ortho(0.0f,	(float)g_pApp->m_options.screenWidth, 0.0f, (float)g_pApp->m_options.screenHeight, 0.1f, 100.0f);
+			proj = glm::ortho(0.0f,	(float)g_pApp->m_options.screenWidth, (float)g_pApp->m_options.screenHeight, 0.0f, -1.0f, 1.0f);
 		else
 			proj = glm::perspective(glm::radians(45.0f), (float)g_pApp->m_options.screenWidth / (float)g_pApp->m_options.screenHeight, 0.1f, 100.0f);
 
 		pScene->GetRenderer()->SetProjection(proj);
-		g_pApp->m_options.screenWidth;
 
 		//Берем позицию камеры из свойств
 		glm::vec3 cameraPosition = glm::vec3(m_props.GetPosition().x, m_props.GetPosition().y, 1);

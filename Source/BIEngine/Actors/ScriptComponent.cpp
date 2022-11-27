@@ -42,7 +42,8 @@ namespace BIEngine
         //Пересоздаем объект, так как к нам могут прийти новые составляющие элемента 
         m_scriptObject.AssignNil(LuaStateManager::Get()->GetLuaState());
         m_scriptObject.AssignNewTable(pStateMgr->GetLuaState());
-        m_scriptData.clear();
+        m_stringData.clear();
+        m_numberData.clear();
         CreateScriptObject();
 
         m_scriptConstructor.AssignNil(LuaStateManager::Get()->GetLuaState());
@@ -91,9 +92,9 @@ namespace BIEngine
             }
         }
 
-        // читаем данные из <ScriptData>
-        tinyxml2::XMLElement* pScriptDataElement = pData->FirstChildElement("ScriptData");
-        if (pScriptDataElement)
+        // читаем данные из <StringData>
+        tinyxml2::XMLElement* pStringDataElement = pData->FirstChildElement("StringData");
+        if (pStringDataElement)
         {
             if (m_scriptObject.IsNil())
             {
@@ -101,10 +102,27 @@ namespace BIEngine
                 return false;
             }
 
-            for (const tinyxml2::XMLAttribute* pAttribute = pScriptDataElement->FirstAttribute(); pAttribute != nullptr; pAttribute = pAttribute->Next())
+            for (const tinyxml2::XMLAttribute* pAttribute = pStringDataElement->FirstAttribute(); pAttribute != nullptr; pAttribute = pAttribute->Next())
             {
-                m_scriptData[pAttribute->Name()] =  pAttribute->Value();
+                m_stringData[pAttribute->Name()] =  pAttribute->Value();
                 m_scriptObject.SetString(pAttribute->Name(), pAttribute->Value());
+            }
+        }
+
+        // читаем данные из <NumberData>
+        tinyxml2::XMLElement* pNumberDataElement = pData->FirstChildElement("NumberData");
+        if (pNumberDataElement)
+        {
+            if (m_scriptObject.IsNil())
+            {
+                Logger::WriteLog(Logger::LogType::ERROR, "m_scriptObject cannot be nil when ScriptData has been defined");
+                return false;
+            }
+
+            for (const tinyxml2::XMLAttribute* pAttribute = pNumberDataElement->FirstAttribute(); pAttribute != nullptr; pAttribute = pAttribute->Next())
+            {
+                m_numberData[pAttribute->Name()] = pAttribute->Value();
+                m_scriptObject.SetNumber(pAttribute->Name(), pAttribute->DoubleValue());
             }
         }
 
@@ -133,14 +151,23 @@ namespace BIEngine
             pScriptObjectElement->SetAttribute("destructor", m_destructorName.c_str());
         pBaseElement->LinkEndChild(pScriptObjectElement);
 
-        // ScriptData
-        tinyxml2::XMLElement* pScriptData = pDoc->NewElement("ScriptData");
+        // StringData
+        tinyxml2::XMLElement* pStringData = pDoc->NewElement("StringData");
 
-        for (const auto& data : m_scriptData)
+        for (const auto& data : m_stringData)
         {
-            pScriptData->SetAttribute(data.first.c_str(), data.second.c_str());
+            pStringData->SetAttribute(data.first.c_str(), data.second.c_str());
         }
-        pBaseElement->LinkEndChild(pScriptData);
+        pBaseElement->LinkEndChild(pStringData);
+
+        // NumberData
+        tinyxml2::XMLElement* pNumberData = pDoc->NewElement("NumberData");
+
+        for (const auto& data : m_numberData)
+        {
+            pNumberData->SetAttribute(data.first.c_str(), data.second.c_str());
+        }
+        pBaseElement->LinkEndChild(pNumberData);
 
         return pBaseElement;
     }
@@ -205,9 +232,9 @@ namespace BIEngine
         std::shared_ptr<PhysicsComponent> pPhysicsComponent = m_pOwner->GetComponent<PhysicsComponent>(PhysicsComponent::g_CompId).lock();
         if (pPhysicsComponent)
         {
-            glm::vec2 pos;
-            LuaStateManager::Get()->ConvertTableToVec2(newPos, pos);
-            pPhysicsComponent->SetPosition(pos.x, pos.y);
+            glm::vec3 pos;
+            LuaStateManager::Get()->ConvertTableToVec3(newPos, pos);
+            pPhysicsComponent->SetPosition(pos.x, pos.y, pos.z);
         }
         else
         {

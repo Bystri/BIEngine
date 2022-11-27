@@ -21,15 +21,15 @@ namespace BIEngine
 
         virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
-        void ApplyForce(const glm::vec2& direction);
+        void ApplyForce(const glm::vec3& direction);
         void ApplyTorque(float torque);
-        bool KinematicMove(const glm::vec2& position, float rotate);
+        bool KinematicMove(const glm::vec3& position, float rotate);
 
-        void SetVelocity(const glm::vec2& velocity);
-        glm::vec2 GetVelocity() const;
+        void SetVelocity(const glm::vec3& velocity);
+        glm::vec3 GetVelocity() const;
         void Rotate(float angle);
         float GetRotation() const;
-        void SetPosition(float x, float y);
+        void SetPosition(float x, float y, float z);
         void Stop();
 
     protected:
@@ -43,13 +43,13 @@ namespace BIEngine
 
 
         Shape m_shape;
-        IGamePhysics2D::BodyType m_bodyType;
+        IGamePhysics::BodyType m_bodyType;
         std::string m_density;
         std::string m_material;
 
-        glm::vec2 m_rigidBodyScale;
+        glm::vec3 m_rigidBodyScale;
 
-        std::shared_ptr<IGamePhysics2D> m_gamePhysics;
+        std::shared_ptr<IGamePhysics> m_gamePhysics;
     };
 
     static ActorComponent* CreatePhysicsComponent()

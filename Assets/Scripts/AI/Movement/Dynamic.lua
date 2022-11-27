@@ -28,17 +28,12 @@ DynamicSeek = class(nil,
 --Высчитывает необходимую скорость чтобы добраться до цели
 function DynamicSeek:getSteering()
 	--Сначала получаем позицию до цели
-	local linear = Vec2:Create(
-		{
-			x = self._target._position.x - self._character._position.x, 
-			y = self._target._position.y - self._character._position.y
-		});
+	local linear = self._target._position - self._character._position;
 		
 	--Затем назначаем максимальное ускорость 
 	linear:Normalize();
 	
-	linear.x = linear.x * self._maxAcceleration;
-	linear.y = linear.y * self._maxAcceleration;
+	linear = linear * self._maxAcceleration;
 	
 	local result = DynamicSteeringOutput:Create({_linear = linear, _angular = 0});
 
@@ -59,17 +54,12 @@ DynamicFlee = class(nil,
 --Высчитывает необходимую скорость чтобы убежать от цели
 function DynamicFlee:getSteering()
 	--Сначала получаем позицию до цели
-	local linear = Vec2:Create(
-		{
-			x = self._character._position.x - self._target._position.x, 
-			y = self._character._position.y - self._target._position.y
-		});
+	local linear = self._target._position - self._character._position;
 		
 	--Затем назначаем максимальную скорость 
 	linear:Normalize();
 	
-	linear.x = linear.x * self._maxAcceleration;
-	linear.y = linear.y * self._maxAcceleration;
+	linear = linear * self._maxAcceleration;
 	
 	local result = DynamicSteeringOutput:Create({_linear = linear, _angular = 0});
 
@@ -98,11 +88,7 @@ DynamicArrive = class(nil,
 --Высчитывает необходимую скорость чтобы достичь цели
 function DynamicArrive:getSteering()
 	--Сначала получаем позицию до цели
-	local direction = Vec2:Create(
-		{
-			x = self._target._position.x - self._character._position.x, 
-			y = self._target._position.y - self._character._position.y
-		});
+	local direction = self._target._position - self._character._position;
 		
 	local dist = direction:Length();	
 	--Если мы в необходимой близости от цели - можем остановиться
@@ -116,19 +102,16 @@ function DynamicArrive:getSteering()
 		targetSpeed = targetSpeed * dist / self._slowRadius;
 	end
 	
-	local targetVelocity = Vec2:Create({x = direction.x, y = direction.y});
+	local targetVelocity = Vec3:Create({x = direction.x, y = direction.y, z = direction.z});
 	targetVelocity:Normalize();
-	targetVelocity.x = targetVelocity.x * targetSpeed;
-	targetVelocity.y = targetVelocity.y * targetSpeed;
-	
+	targetVelocity = targetVelocity * targetSpeed;
+
 	--Пытаемся найти ускорение, необходимое для нужной скорости
-	targetVelocity.x = (targetVelocity.x - self._character._velocity.x) / self._timeToTarget;
-	targetVelocity.y = (targetVelocity.y - self._character._velocity.y) / self._timeToTarget;
+	targetVelocity = (targetVelocity - self._character._velocity) / self._timeToTarget;
 	
 	if (targetVelocity:Length() > self._maxAcceleration) then
 		targetVelocity:Normalize();
-		targetVelocity.x = targetVelocity.x * self._maxAcceleration;
-		targetVelocity.y = targetVelocity.y * self._maxAcceleration;
+		targetVelocity = targetVelocity * self._maxAcceleration;
 	end
 	
 	local result = DynamicSteeringOutput:Create({_linear = targetVelocity, _angular = 0});
@@ -199,7 +182,7 @@ function DynamicAlign:getSteering()
 		angularAcceleration = angularAcceleration * self._maxAngularAcceleration;
 	end
 	
-	local result = DynamicSteeringOutput:Create({_linear = Vec2:Create({x = 0, y = 0}), _angular = angularAcceleration});
+	local result = DynamicSteeringOutput:Create({_linear = Vec3:Create({x = 0, y = 0, z = 0}), _angular = angularAcceleration});
 	
 	return result;
 end
@@ -219,16 +202,11 @@ DynamicVelocityMatch = class(nil,
 --Высчитывает необходимое ускорение, чтобы сравнять скорость персонажа со скоростью цели
 function DynamicVelocityMatch:getSteering()
 	--Сначала получаем вектор ускорения, которого нам нехватает, чтобы достичь скорости цели
-	local acceleration = Vec2:Create(
-		{
-			x = (self._target._velocity.x - self._character._velocity.x) / self._timeToTarget, 
-			y = (self._target._velocity.y - self._character._velocity.y) / self._timeToTarget
-		});
+	local acceleration = (self._target._velocity - self._character._velocity) / self._timeToTarget;
 		
 	if (acceleration:Length() > self._maxAcceleration) then
 		acceleration:Normalize();
-		acceleration.x = acceleration.x * self._maxAcceleration;
-		acceleration.y = acceleration.y * self._maxAcceleration;
+		acceleration = acceleration * self._maxAcceleration;
 	end
 	
 	local result = DynamicSteeringOutput:Create({_linear = acceleration, _angular = 0});

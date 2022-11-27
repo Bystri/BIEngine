@@ -9,14 +9,11 @@ namespace BIEngine
 		std::vector<Vertex> v;
 		v.resize(4);
 
-		float w2 = 0.5f * width;
-		float h2 = 0.5f * height;
-
 		//ѕередн€€ сторона
-		v[0] = Vertex(-w2, -h2, 0, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f);
-		v[1] = Vertex(-w2, +h2, 0, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f);
-		v[2] = Vertex(+w2, +h2, 0, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f);
-		v[3] = Vertex(+w2, -h2, 0, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f);
+		v[0] = Vertex(0.0f, 0.0f, 0, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f);
+		v[1] = Vertex(0.0f, height, 0, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f);
+		v[2] = Vertex(width, height, 0, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f);
+		v[3] = Vertex(width, 0.0f, 0, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f);
 
 
 		//»ндексы

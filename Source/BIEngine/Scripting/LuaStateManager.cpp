@@ -150,4 +150,34 @@ namespace BIEngine
             std::cerr << "luaTable.y is not a number" << std::endl;
     }
 
+    void LuaStateManager::ConvertVec3ToTable(const glm::vec3& vec, LuaPlus::LuaObject& outLuaTable) const
+    {
+        outLuaTable.AssignNewTable(GetLuaState());
+        outLuaTable.SetNumber("x", vec.x);
+        outLuaTable.SetNumber("y", vec.y);
+        outLuaTable.SetNumber("z", vec.z);
+    }
+
+    void LuaStateManager::ConvertTableToVec3(const LuaPlus::LuaObject& luaTable, glm::vec3& outVec3) const
+    {
+        LuaPlus::LuaObject temp;
+
+        temp = luaTable.Get("x");
+        if (temp.IsNumber())
+            outVec3.x = temp.GetFloat();
+        else
+            std::cerr << "luaTable.x is not a number" << std::endl;
+
+        temp = luaTable.Get("y");
+        if (temp.IsNumber())
+            outVec3.y = temp.GetFloat();
+        else
+            std::cerr << "luaTable.y is not a number" << std::endl;
+
+        temp = luaTable.Get("z");
+        if (temp.IsNumber())
+            outVec3.z = temp.GetFloat();
+        else
+            std::cerr << "luaTable.z is not a number" << std::endl;
+    }
 }

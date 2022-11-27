@@ -16,9 +16,11 @@ namespace BIEngine
         {
             double x = 0;
             double y = 0;
+            double z = 0;
             pPositionElement->QueryDoubleAttribute("x", &x);
             pPositionElement->QueryDoubleAttribute("y", &y);
-            m_position = glm::vec2(x, y);
+            pPositionElement->QueryDoubleAttribute("z", &z);
+            m_position = glm::vec3(x, y, z);
         }
 
         tinyxml2::XMLElement* pSizeElement = pData->FirstChildElement("Size");
@@ -49,6 +51,7 @@ namespace BIEngine
         tinyxml2::XMLElement* pPosition = pDoc->NewElement("Position");
         pPosition->SetAttribute("x", std::to_string(m_position.x).c_str());
         pPosition->SetAttribute("y", std::to_string(m_position.y).c_str());
+        pPosition->SetAttribute("z", std::to_string(m_position.z).c_str());
         pBaseElement->LinkEndChild(pPosition);
 
         tinyxml2::XMLElement* pSize = pDoc->NewElement("Size");

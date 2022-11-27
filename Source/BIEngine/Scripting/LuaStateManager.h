@@ -32,6 +32,9 @@ namespace BIEngine
 		void ConvertVec2ToTable(const glm::vec2& vec, LuaPlus::LuaObject& outLuaTable) const;
 		void ConvertTableToVec2(const LuaPlus::LuaObject& luaTable, glm::vec2& outVec) const;
 
+		void ConvertVec3ToTable(const glm::vec3& vec, LuaPlus::LuaObject& outLuaTable) const;
+		void ConvertTableToVec3(const LuaPlus::LuaObject& luaTable, glm::vec3& outVec3) const;
+
 	private:
 		void SetError(int errorNum);
 		void ClearStack();

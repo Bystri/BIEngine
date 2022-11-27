@@ -32,36 +32,36 @@ namespace BIEngine
 	};
 
 	//Определение отсутсвующей физи с помощью паттерна "нулевой объект"
-	class NullPhysics : public IGamePhysics2D
+	class NullPhysics : public IGamePhysics
 	{
 	public:
 		NullPhysics() { }
 		virtual ~NullPhysics() { }
 
 		virtual bool Initialize() override { return true; }
-		virtual void SetGravity(const glm::vec2& gravity) override {};
+		virtual void SetGravity(const glm::vec3& gravity) override {};
 		virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override { };
 		virtual void OnUpdate(double) override { }
 
 		virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override { }
-		virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override { }
-		virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override { }
+		virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override { }
+		virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override { }
 		virtual void RemoveActor(ActorId id) override { }
 
-		virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim) override { }
-		virtual void ApplyForce(const glm::vec2& dir, ActorId aid) override { }
+		virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec3& dim) override { }
+		virtual void ApplyForce(const glm::vec3& dir, ActorId aid) override { }
 		virtual void ApplyTorque(float torque, ActorId aid) override { }
-		virtual bool KinematicMove(ActorId aid, const glm::vec2& position, float rotate) override { return true; }
+		virtual bool KinematicMove(ActorId aid, const glm::vec3& position, float rotate) override { return true; }
 
 		virtual void Rotate(ActorId actorId, float angleRadians) override { }
 		virtual float GetOrientation(ActorId actorId) const override { return 0.0; }
 		virtual void StopActor(ActorId actorId) override { }
-		virtual glm::vec2 GetVelocity(ActorId actorId) const override { return glm::vec2(); }
-		virtual void SetVelocity(ActorId actorId, const glm::vec2& vel) override { }
+		virtual glm::vec3 GetVelocity(ActorId actorId) const override { return glm::vec3(); }
+		virtual void SetVelocity(ActorId actorId, const glm::vec3& vel) override { }
 		virtual float GetAngularVelocity(ActorId actorId) const override { return 0.0f; }
 		virtual void SetAngularVelocity(ActorId actorId, float vel) override { }
-		virtual void SetPosition(const ActorId id, const glm::vec2& position) override {}
-		virtual glm::vec2 GetPosition(const ActorId id) const override { return glm::vec2(); }
+		virtual void SetPosition(const ActorId id, const glm::vec3& position) override {}
+		virtual glm::vec3 GetPosition(const ActorId id) const override { return glm::vec3(); }
 	};
 
 }
@@ -82,7 +82,7 @@ namespace BIEngine
 namespace BIEngine
 {
 
-	class ChipmunkPhysics : public IGamePhysics2D
+	class ChipmunkPhysics : public IGamePhysics
 	{
 	public:
 		ChipmunkPhysics();
@@ -94,7 +94,7 @@ namespace BIEngine
 		//Инициализация физического движка и загузка информации о физических материалах из XML-файла
 		virtual bool Initialize() override;
 		//Задает двумерный вектор гравитации. 
-		virtual void SetGravity(const glm::vec2& gravity) override;
+		virtual void SetGravity(const glm::vec3& gravity) override;
 		//Сравнивает сохраненное местоположение актеров и то местоположение, которое хранится внутри физической симуляции.
 		//В случае различия, местоположение актера обновляется
 		virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override;
@@ -104,32 +104,32 @@ namespace BIEngine
 		//Добавляет физический объект в виде круга в физическую симуляцию
 		virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
 		//Добавляет физический объект в виде прямоугольника в физическую симуляцию
-		virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
-		virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
+		virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
+		virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
 		virtual void RemoveActor(ActorId id) override;
 
 		//Добавляет триггер-объект с нулевой физикой в симуляцию
-		virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim) override;
+		virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec3& dim) override;
 		//Применяет силу к объекту
-		virtual void ApplyForce(const glm::vec2& dir, ActorId aid) override;
+		virtual void ApplyForce(const glm::vec3& dir, ActorId aid) override;
 		//Применить момент силы к объекту
 		virtual void ApplyTorque(float torque, ActorId aid) override;
 
 		//Напрямую задает положение и поворот физического объекта.
 		//Следует быть с этим аккуратнее, так как данная процедура способна сломать физическую симуляцию
-		virtual bool KinematicMove(ActorId aid, const glm::vec2& position, float rotate) override;
+		virtual bool KinematicMove(ActorId aid, const glm::vec3& position, float rotate) override;
 		//Напрямую задает поворот физического объекта.
 		//Следует быть с этим аккуратнее, так как данная процедура способна сломать физическую симуляцию
 		virtual void Rotate(ActorId actorId, float const deltaAngleRadians) override;
 		virtual float GetOrientation(ActorId actorId) const override;
 		//Приравниваем скорость актера к нулевому вектору
 		virtual void StopActor(ActorId actorId) override;
-		virtual glm::vec2 GetVelocity(ActorId actorId) const override;
-		virtual void SetVelocity(ActorId actorId, const glm::vec2& vel) override;
+		virtual glm::vec3 GetVelocity(ActorId actorId) const override;
+		virtual void SetVelocity(ActorId actorId, const glm::vec3& vel) override;
 		virtual float GetAngularVelocity(ActorId actorId) const override;
 		virtual void SetAngularVelocity(ActorId actorId, float vel) override;
-		virtual void SetPosition(const ActorId id, const glm::vec2& position) override;
-		virtual glm::vec2 GetPosition(const ActorId id) const override;
+		virtual void SetPosition(const ActorId id, const glm::vec3& position) override;
+		virtual glm::vec3 GetPosition(const ActorId id) const override;
 
 	private:
 
@@ -168,7 +168,7 @@ namespace BIEngine
 	};
 
 	ChipmunkPhysics::ChipmunkPhysics()
-		: IGamePhysics2D()
+		: IGamePhysics()
 	{
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &ChipmunkPhysics::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
 	}
@@ -196,7 +196,7 @@ namespace BIEngine
 		return true;
 	}
 
-	void ChipmunkPhysics::SetGravity(const glm::vec2& gravity)
+	void ChipmunkPhysics::SetGravity(const glm::vec3& gravity)
 	{
 		cpVect grav = cpv(gravity.x, gravity.y);
 		cpSpaceSetGravity(m_cpSpace, grav);
@@ -217,7 +217,7 @@ namespace BIEngine
 				if (pTransformComponent)
 				{
 					const cpVect cpPos = cpBodyGetPosition(it->second);
-					const glm::vec2 pos = glm::vec2(cpPos.x, cpPos.y);
+					const glm::vec3 pos = glm::vec3(cpPos.x, cpPos.y, 0.0);
 					const float rot = cpBodyGetAngle(it->second);
 
 					if (pTransformComponent->GetPosition() != pos || std::abs(pTransformComponent->GetRotation() - rot) > std::numeric_limits<float>::epsilon())
@@ -253,7 +253,7 @@ namespace BIEngine
 		const float mass = area * specificGravity;
 		const float moment = cpMomentForCircle(mass, 0, radius, cpvzero);
 
-		glm::vec2 position;
+		glm::vec3 position;
 		float rotation = 0.0f;
 		std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
 		assert(pTransformComponent);
@@ -295,7 +295,7 @@ namespace BIEngine
 		m_rigidBodyToActorId[pBody] = actorID;
 	}
 
-	void ChipmunkPhysics::AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial)
+	void ChipmunkPhysics::AddBox(const glm::vec3& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial)
 	{
 		std::shared_ptr<Actor> pStrongActor = gameActor.lock();
 		if (!pStrongActor)
@@ -311,7 +311,7 @@ namespace BIEngine
 		const float mass = area * specificGravity;
 		const float moment = cpMomentForBox(mass, dimensions.x, dimensions.y);
 
-		glm::vec2 position;
+		glm::vec3 position;
 		float rotation = 0.0f;
 		std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
 		assert(pTransformComponent);
@@ -354,7 +354,7 @@ namespace BIEngine
 	}
 
 	//Добавляет физических объект состоящий из произвольного набора точек в физическую симуляцию
-	void ChipmunkPhysics::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial)
+	void ChipmunkPhysics::AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial)
 	{
 		std::shared_ptr<Actor> pStrongActor = gameActor.lock();
 		if (!pStrongActor)
@@ -375,7 +375,7 @@ namespace BIEngine
 		const float mass = area * specificGravity;
 		const float moment = cpMomentForPoly(mass, numPoints, cpVerts, cpvzero, 0.0f);
 
-		glm::vec2 position;
+		glm::vec3 position;
 		float rotation = 0.0f;
 		std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
 		assert(pTransformComponent);
@@ -431,7 +431,7 @@ namespace BIEngine
 		}
 	}
 
-	void ChipmunkPhysics::CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim)
+	void ChipmunkPhysics::CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec3& dim)
 	{
 		std::shared_ptr<Actor> pStrongActor = pGameActor.lock();
 		if (!pStrongActor)
@@ -440,7 +440,7 @@ namespace BIEngine
 		ActorId actorID = pStrongActor->GetId();
 		assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end() && "Actor with more than one physics body?");
 
-		glm::vec2 position;
+		glm::vec3 position;
 
 		std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
 		assert(pTransformComponent);
@@ -461,7 +461,7 @@ namespace BIEngine
 		m_rigidBodyToActorId[pBody] = actorID;
 	}
 
-	void ChipmunkPhysics::ApplyForce(const glm::vec2& dir, ActorId aid)
+	void ChipmunkPhysics::ApplyForce(const glm::vec3& dir, ActorId aid)
 	{
 		if (cpBody* const pBody = FindChipmunkRigidBody(aid))
 		{
@@ -480,7 +480,7 @@ namespace BIEngine
 		}
 	}
 	
-	bool ChipmunkPhysics::KinematicMove(ActorId aid, const glm::vec2& position, float rotation)
+	bool ChipmunkPhysics::KinematicMove(ActorId aid, const glm::vec3& position, float rotation)
 	{
 		if (cpBody* const pBody = FindChipmunkRigidBody(aid))
 		{
@@ -515,21 +515,21 @@ namespace BIEngine
 
 	void ChipmunkPhysics::StopActor(ActorId actorId)
 	{
-		SetVelocity(actorId, glm::vec2(0.f, 0.f));
+		SetVelocity(actorId, glm::vec3(0.f, 0.f, 0.f));
 	}
 
-	glm::vec2 ChipmunkPhysics::GetVelocity(ActorId actorId) const
+	glm::vec3 ChipmunkPhysics::GetVelocity(ActorId actorId) const
 	{
 		cpBody* pRigidBody = FindChipmunkRigidBody(actorId);
 		assert(pRigidBody);
 		if (!pRigidBody)
-			return glm::vec2();
+			return glm::vec3();
 
 		cpVect cpVel = cpBodyGetVelocity(pRigidBody);
-		return glm::vec2(cpVel.x, cpVel.y);
+		return glm::vec3(cpVel.x, cpVel.y, 0.0);
 	}
 
-	void ChipmunkPhysics::SetVelocity(ActorId actorId, const glm::vec2& vel)
+	void ChipmunkPhysics::SetVelocity(ActorId actorId, const glm::vec3& vel)
 	{
 		cpBody* pRigidBody = FindChipmunkRigidBody(actorId);
 		assert(pRigidBody);
@@ -558,7 +558,7 @@ namespace BIEngine
 		cpBodySetAngularVelocity(pRigidBody, vel);
 	}
 
-	void ChipmunkPhysics::SetPosition(const ActorId id, const glm::vec2& position)
+	void ChipmunkPhysics::SetPosition(const ActorId id, const glm::vec3& position)
 	{
 		cpBody* pRigidBody = FindChipmunkRigidBody(id);
 		assert(pRigidBody);
@@ -568,15 +568,15 @@ namespace BIEngine
 		cpBodySetPosition(pRigidBody, cpv(position.x, position.y));
 	}
 
-	glm::vec2 ChipmunkPhysics::GetPosition(const ActorId id) const
+	glm::vec3 ChipmunkPhysics::GetPosition(const ActorId id) const
 	{
 		cpBody* pRigidBody = FindChipmunkRigidBody(id);
 		assert(pRigidBody);
 		if (!pRigidBody)
-			return glm::vec2();
+			return glm::vec3();
 		cpVect pos = cpBodyGetPosition(pRigidBody);
 
-		return glm::vec2(pos.x, pos.y);
+		return glm::vec3(pos.x, pos.y, 0.0);
 	}
 
 	void ChipmunkPhysics::LoadXml(tinyxml2::XMLElement* pRoot)
@@ -681,10 +681,10 @@ namespace BIEngine
 
 			int numContacts = cpArbiterGetCount(arb);
 
-			std::vector<glm::vec2> collisionPointsA;
-			std::vector<glm::vec2> collisionPointsB;
+			std::vector<glm::vec3> collisionPointsA;
+			std::vector<glm::vec3> collisionPointsB;
 			const cpVect cpVectNorm = cpArbiterGetNormal(arb);
-			glm::vec2 normalForce = glm::vec2(cpVectNorm.x, cpVectNorm.y);
+			glm::vec3 normalForce = glm::vec3(cpVectNorm.x, cpVectNorm.y, 0.0);
 			float friction = cpArbiterGetFriction(arb);
 
 			for (int pointIdx = 0; pointIdx < numContacts; ++pointIdx)
@@ -692,8 +692,8 @@ namespace BIEngine
 				const cpVect pointA = cpArbiterGetPointA(arb, pointIdx);
 				const cpVect pointB = cpArbiterGetPointB(arb, pointIdx);
 
-				collisionPointsA.push_back(glm::vec2(pointA.x, pointA.y));
-				collisionPointsB.push_back(glm::vec2(pointB.x, pointB.y));
+				collisionPointsA.push_back(glm::vec3(pointA.x, pointA.y, 0.0));
+				collisionPointsB.push_back(glm::vec3(pointB.x, pointB.y, 0.0));
 			}
 
 			IEventDataPtr pEvent = std::make_shared<EvtData_PhysCollision>(id0, id1, normalForce, friction, collisionPointsA, collisionPointsB);
@@ -769,16 +769,16 @@ namespace BIEngine
 
 #endif 
 
-	IGamePhysics2D* CreateGamePhysics()
+	IGamePhysics* CreateGamePhysics()
 	{
-		IGamePhysics2D* pGamePhysics = new ChipmunkPhysics();
+		IGamePhysics* pGamePhysics = new ChipmunkPhysics();
 		assert(pGamePhysics);
 		return pGamePhysics;
 	}
 
-	IGamePhysics2D* CreateNullPhysics()
+	IGamePhysics* CreateNullPhysics()
 	{
-		IGamePhysics2D* pGamePhysics = new NullPhysics();
+		IGamePhysics* pGamePhysics = new NullPhysics();
 		assert(pGamePhysics);
 		return pGamePhysics;
 	}

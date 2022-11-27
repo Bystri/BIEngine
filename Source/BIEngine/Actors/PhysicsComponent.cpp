@@ -12,10 +12,10 @@ namespace BIEngine
 
     PhysicsComponent::PhysicsComponent()
     {
-        m_rigidBodyScale = glm::vec2(1.f, 1.f);
+        m_rigidBodyScale = glm::vec3(1.f, 1.f, 1.f);
 
         m_shape = Shape::NONE;
-        m_bodyType = IGamePhysics2D::BodyType::DYNAMIC;
+        m_bodyType = IGamePhysics::BodyType::DYNAMIC;
     }
 
     PhysicsComponent::~PhysicsComponent()
@@ -46,11 +46,11 @@ namespace BIEngine
         {
             std::string typeStr = pBodyType->FirstChild()->Value();
             if (typeStr == "Dynamic")
-                m_bodyType = IGamePhysics2D::BodyType::DYNAMIC;
+                m_bodyType = IGamePhysics::BodyType::DYNAMIC;
             else if (typeStr == "Kinematic")
-                m_bodyType = IGamePhysics2D::BodyType::KINEMATIC;
+                m_bodyType = IGamePhysics::BodyType::KINEMATIC;
             else if (typeStr == "Static")
-                m_bodyType = IGamePhysics2D::BodyType::STATIC;
+                m_bodyType = IGamePhysics::BodyType::STATIC;
         }
 
         tinyxml2::XMLElement* pDensity = pData->FirstChildElement("Density");
@@ -68,7 +68,7 @@ namespace BIEngine
             double h = 0;
             pSizeElement->QueryDoubleAttribute("w", &w);
             pSizeElement->QueryDoubleAttribute("h", &h);
-            m_rigidBodyScale = glm::vec2(w, h);
+            m_rigidBodyScale = glm::vec3(w, h, 1);
         }
 
         return true;
@@ -124,13 +124,13 @@ namespace BIEngine
         tinyxml2::XMLText* pBodyTypeText = nullptr;
         switch (m_bodyType)
         {
-        case IGamePhysics2D::BodyType::DYNAMIC:
+        case IGamePhysics::BodyType::DYNAMIC:
             pBodyTypeText = pDoc->NewText("Dynamic");
             break;
-        case IGamePhysics2D::BodyType::KINEMATIC:
+        case IGamePhysics::BodyType::KINEMATIC:
             pBodyTypeText = pDoc->NewText("Kinematic");
             break;
-        case IGamePhysics2D::BodyType::STATIC:
+        case IGamePhysics::BodyType::STATIC:
             pBodyTypeText = pDoc->NewText("Static");
             break;
         default:
@@ -159,7 +159,7 @@ namespace BIEngine
         return pBaseElement;
     }
 
-    void PhysicsComponent::ApplyForce(const glm::vec2& direction)
+    void PhysicsComponent::ApplyForce(const glm::vec3& direction)
     {
         m_gamePhysics->ApplyForce(direction, m_pOwner->GetId());
     }
@@ -169,17 +169,17 @@ namespace BIEngine
         m_gamePhysics->ApplyTorque(torque, m_pOwner->GetId());
     }
 
-    bool PhysicsComponent::KinematicMove(const glm::vec2& position, float rotate)
+    bool PhysicsComponent::KinematicMove(const glm::vec3& position, float rotate)
     {
         return m_gamePhysics->KinematicMove(m_pOwner->GetId(), position, rotate);
     }
 
-    glm::vec2 PhysicsComponent::GetVelocity() const
+    glm::vec3 PhysicsComponent::GetVelocity() const
     {
         return m_gamePhysics->GetVelocity(m_pOwner->GetId());
     }
 
-    void PhysicsComponent::SetVelocity(const glm::vec2& velocity)
+    void PhysicsComponent::SetVelocity(const glm::vec3& velocity)
     {
         m_gamePhysics->SetVelocity(m_pOwner->GetId(), velocity);
     }
@@ -194,9 +194,9 @@ namespace BIEngine
         return m_gamePhysics->GetAngularVelocity(m_pOwner->GetId());
     }
 
-    void PhysicsComponent::SetPosition(float x, float y)
+    void PhysicsComponent::SetPosition(float x, float y, float z)
     {
-        m_gamePhysics->SetPosition(m_pOwner->GetId(), glm::vec2(x, y));
+        m_gamePhysics->SetPosition(m_pOwner->GetId(), glm::vec3(x, y, z));
     }
 
     void PhysicsComponent::Stop()

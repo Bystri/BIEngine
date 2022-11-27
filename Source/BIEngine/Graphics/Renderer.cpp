@@ -57,6 +57,8 @@ namespace BIEngine
         glBindVertexArray(sprite->GetMesh()->m_VAO);
         glDrawElements(GL_TRIANGLES, sprite->GetMesh()->m_indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
+
+        //glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     void Renderer::DrawMesh(std::shared_ptr<Mesh> mesh)

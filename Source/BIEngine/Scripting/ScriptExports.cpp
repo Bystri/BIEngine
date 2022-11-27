@@ -241,7 +241,7 @@ namespace BIEngine
 	{
 		if (velocityLua.IsTable())
 		{
-			glm::vec2 velocity(velocityLua["x"].GetFloat(), velocityLua["y"].GetFloat());
+			glm::vec3 velocity(velocityLua["x"].GetFloat(), velocityLua["y"].GetFloat(), velocityLua["z"].GetFloat());
 			g_pApp->m_pGameLogic->GetGamePhysics()->SetPosition(actorId, velocity);
 			return;
 		}
@@ -253,7 +253,7 @@ namespace BIEngine
 	{
 		if (velocityLua.IsTable())
 		{
-			glm::vec2 velocity(velocityLua["x"].GetFloat(), velocityLua["y"].GetFloat());
+			glm::vec3 velocity(velocityLua["x"].GetFloat(), velocityLua["y"].GetFloat(), velocityLua["z"].GetFloat());
 			g_pApp->m_pGameLogic->GetGamePhysics()->SetVelocity(actorId, velocity);
 			return;
 		}
@@ -280,7 +280,7 @@ namespace BIEngine
 	{
 		if (normalDirLua.IsTable())
 		{
-			glm::vec2 normalDir(normalDirLua["x"].GetFloat(), normalDirLua["y"].GetFloat());
+			glm::vec3 normalDir(normalDirLua["x"].GetFloat(), normalDirLua["y"].GetFloat(), normalDirLua["z"].GetFloat());
 			g_pApp->m_pGameLogic->GetGamePhysics()->ApplyForce(normalDir, actorId);
 			return;
 		}

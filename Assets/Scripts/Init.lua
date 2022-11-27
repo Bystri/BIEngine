@@ -153,6 +153,88 @@ function Vec2.__operators.__div(left, right)
 	return temp;
 end
 
+-----------------------------------------------------------------------------------------------------------------------
+-- Vec3 class
+-----------------------------------------------------------------------------------------------------------------------
+Vec3 = class(nil, 
+{
+	x = 0,
+	y = 0,
+	z = 0,
+	__operators = {},
+});
+
+function Vec3:Length()
+	return math.sqrt((self.x * self.x) + (self.y * self.y) + (self.z * self.z));
+end
+
+function Vec3:Length2()
+	return ((self.x * self.x) + (self.y * self.y) + (self.z * self.z));
+end
+
+function Vec3:Normalize()
+	local len = self:Length();
+	self.x = self.x / len;
+	self.y = self.y / len;
+	self.z = self.z / len;
+end
+
+function Vec3.__operators.__add(left, right)
+	local temp = Vec2:Create();
+	if (type(right) == "number") then
+		temp.x = left.x + right;
+		temp.y = left.y + right;
+		temp.z = left.z + right;
+	else
+		temp.x = left.x + right.x;
+		temp.y = left.y + right.y;
+		temp.z = left.z + right.z;
+	end
+	return temp;
+end
+
+function Vec3.__operators.__sub(left, right)
+	local temp = Vec2:Create();
+	if (type(right) == "number") then
+		temp.x = left.x - right;
+		temp.y = left.y - right;
+		temp.z = left.z - right;
+	else
+		temp.x = left.x - right.x;
+		temp.y = left.y - right.y;
+		temp.z = left.z - right.z;
+	end
+	return temp;
+end
+
+function Vec3.__operators.__mul(left, right)
+	local temp = Vec2:Create();
+	if (type(right) == "number") then
+		temp.x = left.x * right;
+		temp.y = left.y * right;
+		temp.z = left.z * right;
+	else
+		temp.x = left.x * right.x;
+		temp.y = left.y * right.y;
+		temp.z = left.z * right.z;
+	end
+	return temp;
+end
+
+function Vec3.__operators.__div(left, right)
+	local temp = Vec2:Create();
+	if (type(right) == "number") then
+		temp.x = left.x / right;
+		temp.y = left.y / right;
+		temp.z = left.z / right;
+	else
+		temp.x = left.x / right.x;
+		temp.y = left.y / right.y;
+		temp.z = left.z / right.z;
+	end
+	return temp;
+end
+
 
 -----------------------------------------------------------------------------------------------------------------------
 -- Event system

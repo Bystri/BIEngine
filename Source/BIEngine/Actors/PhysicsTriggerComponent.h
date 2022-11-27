@@ -21,10 +21,10 @@ namespace BIEngine
 
         virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
-        glm::vec2 GetVelocity();
-        void SetVelocity(const glm::vec2& velocity);
+        glm::vec3 GetVelocity();
+        void SetVelocity(const glm::vec3& velocity);
         void Rotate(float angle);
-        void SetPosition(float x, float y);
+        void SetPosition(float x, float y, float z);
         void Stop();
 
 
@@ -32,9 +32,9 @@ namespace BIEngine
         void BuildRigidBodyTransform(tinyxml2::XMLElement* pTransformElement);
 
     protected:
-        glm::vec2 m_dimension;
+        glm::vec3 m_dimension;
 
-        std::shared_ptr<IGamePhysics2D> m_gamePhysics;
+        std::shared_ptr<IGamePhysics> m_gamePhysics;
     };
 
     static ActorComponent* CreatePhysicsTriggerComponent()

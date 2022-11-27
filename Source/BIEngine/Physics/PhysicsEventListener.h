@@ -109,10 +109,10 @@ namespace BIEngine
 	{
 		ActorId m_ActorA;
 		ActorId m_ActorB;
-		glm::vec2 m_SumNormalForce;
+		glm::vec3 m_SumNormalForce;
 		float m_friction;
-		std::vector<glm::vec2> m_CollisionPointsA;
-		std::vector<glm::vec2> m_CollisionPointsB;
+		std::vector<glm::vec3> m_CollisionPointsA;
+		std::vector<glm::vec3> m_CollisionPointsB;
 
 	public:
 		static const EventType sk_EventType;
@@ -126,16 +126,16 @@ namespace BIEngine
 		{
 			m_ActorA = Actor::INVALID_ACTOR_ID;
 			m_ActorB = Actor::INVALID_ACTOR_ID;
-			m_SumNormalForce = glm::vec2();
+			m_SumNormalForce = glm::vec3();
 			m_friction = 0.0f;
 		}
 
 		explicit EvtData_PhysCollision(ActorId actorA,
 			ActorId actorB,
-			const glm::vec2& sumNormalForce,
+			const glm::vec3& sumNormalForce,
 			float friction,
-			const std::vector<glm::vec2>& collisionPointsA,
-			const std::vector<glm::vec2>& collisionPointsB)
+			const std::vector<glm::vec3>& collisionPointsA,
+			const std::vector<glm::vec3>& collisionPointsB)
 			: m_ActorA(actorA),
 			m_ActorB(actorB),
 			m_SumNormalForce(sumNormalForce),
@@ -174,12 +174,12 @@ namespace BIEngine
 			return m_friction;
 		}
 
-		const std::vector<glm::vec2>& GetCollisionPointsA() const
+		const std::vector<glm::vec3>& GetCollisionPointsA() const
 		{
 			return m_CollisionPointsA;
 		}
 
-		const std::vector<glm::vec2>& GetCollisionPointsB() const
+		const std::vector<glm::vec3>& GetCollisionPointsB() const
 		{
 			return m_CollisionPointsB;
 		}

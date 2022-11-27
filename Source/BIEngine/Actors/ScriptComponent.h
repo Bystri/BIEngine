@@ -47,7 +47,8 @@ namespace BIEngine
 		std::string m_destructorName;
 
 		//Здесь мы храним данные скрипта, чтобы добавить из в генерируемый XML при необходимости
-		std::map<std::string, std::string> m_scriptData;
+		std::map<std::string, std::string> m_stringData;
+		std::map<std::string, std::string> m_numberData;
 
 		LuaPlus::LuaObject m_scriptObject;
 		LuaPlus::LuaObject m_scriptConstructor;

@@ -18,7 +18,7 @@ namespace BIEngine
 		GameLogic(const GameLogic& orig) = delete;
 		GameLogic& operator=(const GameLogic& rhs) = delete;
 
-		std::shared_ptr<IGamePhysics2D> GetGamePhysics() const { return m_pPhysics; }
+		std::shared_ptr<IGamePhysics> GetGamePhysics() const { return m_pPhysics; }
 
 		virtual bool Init();
 
@@ -52,7 +52,7 @@ namespace BIEngine
 		ActorMap m_actors;
 		ActorFactory* m_pActorFactory;
 
-		std::shared_ptr<IGamePhysics2D> m_pPhysics;
+		std::shared_ptr<IGamePhysics> m_pPhysics;
 	};
 
 }

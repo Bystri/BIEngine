@@ -12,7 +12,7 @@ namespace BIEngine
 
     PhysicsTriggerComponent::PhysicsTriggerComponent()
     {
-        m_dimension = glm::vec2(1.f, 1.f);
+        m_dimension = glm::vec3(1.f, 1.f, 1.f);
     }
 
     PhysicsTriggerComponent::~PhysicsTriggerComponent()
@@ -34,7 +34,7 @@ namespace BIEngine
             double h = 0;
             pScaleElement->QueryDoubleAttribute("w", &w);
             pScaleElement->QueryDoubleAttribute("h", &h);
-            m_dimension = glm::vec2(w, h);
+            m_dimension = glm::vec3(w, h, 1);
         }
 
         return true;
@@ -57,12 +57,12 @@ namespace BIEngine
         return pBaseElement;
     }
 
-    glm::vec2 PhysicsTriggerComponent::GetVelocity()
+    glm::vec3 PhysicsTriggerComponent::GetVelocity()
     {
         return m_gamePhysics->GetVelocity(m_pOwner->GetId());
     }
 
-    void PhysicsTriggerComponent::SetVelocity(const glm::vec2& velocity)
+    void PhysicsTriggerComponent::SetVelocity(const glm::vec3& velocity)
     {
         m_gamePhysics->SetVelocity(m_pOwner->GetId(), velocity);
     }
@@ -72,9 +72,9 @@ namespace BIEngine
         m_gamePhysics->Rotate(m_pOwner->GetId(), angleRadians);
     }
 
-    void PhysicsTriggerComponent::SetPosition(float x, float y)
+    void PhysicsTriggerComponent::SetPosition(float x, float y, float z)
     {
-        m_gamePhysics->SetPosition(m_pOwner->GetId(), glm::vec2(x, y));
+        m_gamePhysics->SetPosition(m_pOwner->GetId(), glm::vec3(x, y, z));
     }
 
     void PhysicsTriggerComponent::Stop()

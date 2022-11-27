@@ -34,17 +34,12 @@ KinematicSeek = class(nil,
 --Высчитывает необходимую скорость чтобы убежать от цели
 function KinematicSeek:getSteering()
 	--Сначала получаем позицию до цели
-	local velocity = Vec2:Create(
-		{
-			x = self._target._position.x - self._character._position.x, 
-			y = self._target._position.y - self._character._position.y
-		});
+	local velocity = self._target._position - self._character._position;
 		
 	--Затем назначаем максимальную скорость 
 	velocity:Normalize();
 	
-	velocity.x = velocity.x * self._maxSpeed;
-	velocity.y = velocity.y * self._maxSpeed;
+	velocity = velocity * self._maxSpeed;
 	
 	local result = KinematicSteeringOutput:Create({_linear = velocity, _angular = 0});
 	
@@ -68,17 +63,12 @@ KinematicFlee = class(nil,
 --Высчитывает необходимую скорость чтобы убежать от цели
 function KinematicFlee:getSteering()
 	--Сначала получаем позицию до цели
-	local velocity = Vec2:Create(
-		{
-			x = self._character._position.x - self._target._position.x, 
-			y = self._character._position.y - self._target._position.y
-		});
+	local velocity = self._character._position - self._target._position;
 		
 	--Затем назначаем максимальную скорость 
 	velocity:Normalize();
 	
-	velocity.x = velocity.x * self._maxSpeed;
-	velocity.y = velocity.y * self._maxSpeed;
+	velocity = velocity * self._maxSpeed;
 	
 	local result = KinematicSteeringOutput:Create({_linear = velocity, _angular = 0});
 	
@@ -107,11 +97,7 @@ KinematicArrive = class(nil,
 --Высчитывает необходимую скорость чтобы достичь цели
 function KinematicArrive:getSteering()
 	--Сначала получаем позицию до цели
-	local velocity = Vec2:Create(
-		{
-			x = self._target._position.x - self._character._position.x, 
-			y = self._target._position.y - self._character._position.y
-		});
+	local velocity = self._target._position - self._character._position;
 		
 	--Если мы в необходимой близости от цели - можем остановиться
 	if (velocity:Length() < self._radius) then
@@ -119,14 +105,12 @@ function KinematicArrive:getSteering()
 	end
 	
 	--Если нам нужно двигаться к цели, то мы бы хотели оказаться там за _timeToTarget секунд
-	velocity.x = velocity.x / self._timeToTarget;
-	velocity.y = velocity.y / self._timeToTarget;
+	velocity = velocity / self._timeToTarget;
 	
 	--Если это слишком быстро - ограничиваем скорость
 	if (velocity:Length() > self._maxSpeed) then 
 		velocity:Normalize();
-		velocity.x = velocity.x * self._maxSpeed;
-		velocity.y = velocity.y * self._maxSpeed;
+		velocity = velocity * self._maxSpeed;
 	end;
 	
 	local result = KinematicSteeringOutput:Create({_linear = velocity, _angular = 0});
@@ -157,14 +141,14 @@ end
 --Высчитывает необходимую скорость чтобы достичь цели
 function KinematicWander:getSteering()
 	--Сначала получаем вектор скорости вдоль направления обзора
-	local velocity = Vec2:Create(
+	local velocity = Vec3:Create(
 		{
 			x = -math.cos(math.rad(self._character._orientation)), 
-			y = math.sin(math.rad(self._character._orientation))
+			y = math.sin(math.rad(self._character._orientation)),
+			z = 0
 		});
 
-	velocity.x = velocity.x * self._maxSpeed;
-	velocity.y = velocity.y * self._maxSpeed;
+	velocity = velocity * self._maxSpeed;
 	
 	--Случайно меняем нашу ориентацию
 	local rotation = randomBinomial() * self._maxRotation;
