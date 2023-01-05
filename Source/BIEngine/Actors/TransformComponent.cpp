@@ -28,17 +28,23 @@ namespace BIEngine
         {
             double w = 0;
             double h = 0;
+            double d = 0;
             pSizeElement->QueryDoubleAttribute("w", &w);
             pSizeElement->QueryDoubleAttribute("h", &h);
-            m_size = glm::vec2(w, h);
+            pSizeElement->QueryDoubleAttribute("d", &d);
+            m_size = glm::vec3(w, h, d);
         }
 
         tinyxml2::XMLElement* pRotationElement = pData->FirstChildElement("Rotation");
         if (pRotationElement)
         {
-            double angle = 0;
-            pRotationElement->QueryDoubleAttribute("angle", &angle);
-            m_rotation = angle;
+            double x = 0;
+            double y = 0;
+            double z = 0;
+            pRotationElement->QueryDoubleAttribute("x", &x);
+            pRotationElement->QueryDoubleAttribute("y", &y);
+            pRotationElement->QueryDoubleAttribute("z", &z);
+            m_rotation = glm::vec3(x, y, z);
         }
 
         return true;
@@ -57,10 +63,13 @@ namespace BIEngine
         tinyxml2::XMLElement* pSize = pDoc->NewElement("Size");
         pSize->SetAttribute("w", std::to_string(m_size.x).c_str());
         pSize->SetAttribute("h", std::to_string(m_size.y).c_str());
+        pSize->SetAttribute("d", std::to_string(m_size.z).c_str());
         pBaseElement->LinkEndChild(pSize);
 
         tinyxml2::XMLElement* pRotation = pDoc->NewElement("Rotation");
-        pRotation->SetAttribute("angle", std::to_string(m_rotation).c_str());
+        pRotation->SetAttribute("x", std::to_string(m_position.x).c_str());
+        pRotation->SetAttribute("y", std::to_string(m_position.y).c_str());
+        pRotation->SetAttribute("z", std::to_string(m_position.z).c_str());
         pBaseElement->LinkEndChild(pRotation);
 
         return pBaseElement;

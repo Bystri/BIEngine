@@ -3,7 +3,7 @@
 #include "ActorComponent.h"
 
 #include "../Graphics/SpriteNode.h"
-#include "../Graphics/MeshNode.h"
+#include "../Graphics/Model3dNode.h"
 #include "../Graphics/TextureLoader.h"
 
 namespace BIEngine
@@ -68,7 +68,7 @@ namespace BIEngine
     class BoxRenderComponent : public BaseRenderComponent
     {
     public:
-        BoxRenderComponent() : BaseRenderComponent(), m_pMeshNode(nullptr), m_width(1.0f), m_height(1.0f), m_depth(1.0f) {}
+        BoxRenderComponent() : BaseRenderComponent(), m_pModelNode(nullptr), m_width(1.0f), m_height(1.0f), m_depth(1.0f) {}
 
         static ComponentId g_CompId;
         virtual ComponentId GetComponentId() const { return BoxRenderComponent::g_CompId; }
@@ -81,7 +81,9 @@ namespace BIEngine
         virtual std::shared_ptr<SceneNode> CreateSceneNode();
 
     protected:
-        std::shared_ptr<MeshNode> m_pMeshNode; //Узел на сцене, который отвечает за отрисовку этого компонента
+        std::shared_ptr<Model3dNode> m_pModelNode; //Узел на сцене, который отвечает за отрисовку этого компонента
+
+        std::string m_texturePath; //Сохраняем путь текстуре, чтобы потом вставить его в XML, если понадобится
 
         float m_width;
         float m_height;

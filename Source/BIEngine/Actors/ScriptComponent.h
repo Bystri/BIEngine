@@ -38,7 +38,7 @@ namespace BIEngine
 		LuaPlus::LuaObject GetPos() const;
 		void SetPos(LuaPlus::LuaObject newPos);
 		LuaPlus::LuaObject GetVelocity() const;
-		float GetOrientation();
+		LuaPlus::LuaObject GetOrientation() const;
 		float GetRotation();
 		//TODO: добавить остальные функции для управления физическими свойствами актера
 

@@ -5,7 +5,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "Sprite.h"
-#include "Mesh.h"
+#include "Model3d.h"
 
 namespace BIEngine
 {
@@ -19,11 +19,11 @@ namespace BIEngine
 
         void SetProjection(const glm::mat4& proj);
         void SetViewTransform(const glm::mat4& view);
-        void SetModelTransform(glm::vec2 position, glm::vec2 size, float rotate);
+        void SetModelTransform(const glm::mat4& model);
         void SetColor(glm::vec3 color);
 
-        void DrawSprite(std::shared_ptr<Sprite> sprite);
-        void DrawMesh(std::shared_ptr<Mesh> mesh);
+        void DrawSprite(std::shared_ptr<Sprite> pSprite);
+        void DrawModel(std::shared_ptr<Model3d> pModel);
 
     private:
         //Скомпилированная шейдер программа, с помощью которой идет отрисовка спрайтов

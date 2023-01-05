@@ -220,7 +220,7 @@ namespace BIEngine
 
         std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
         if (pTransformComponent)
-            LuaStateManager::Get()->ConvertVec2ToTable(pTransformComponent->GetPosition(), ret);
+            LuaStateManager::Get()->ConvertVec3ToTable(pTransformComponent->GetPosition(), ret);
         else
             ret.AssignNil(LuaStateManager::Get()->GetLuaState());
 
@@ -255,17 +255,17 @@ namespace BIEngine
         return ret;
     }
 
-    float ScriptComponent::GetOrientation()
+    LuaPlus::LuaObject ScriptComponent::GetOrientation() const
     {
-        float angle = 0;
+        LuaPlus::LuaObject ret;
 
         std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
         if (pTransformComponent)
-        {
-            angle = pTransformComponent->GetRotation();
-        }
+            LuaStateManager::Get()->ConvertVec3ToTable(pTransformComponent->GetRotation(), ret);
+        else
+            ret.AssignNil(LuaStateManager::Get()->GetLuaState());
 
-        return angle;
+        return ret;
     }
 
     float ScriptComponent::GetRotation()

@@ -168,7 +168,7 @@
     <ClCompile Include="..\..\Graphics\MeshGeometryGenerator.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Graphics\MeshNode.cpp">
+    <ClCompile Include="..\..\Graphics\Model3dNode.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Graphics\Renderer.cpp">
@@ -196,6 +196,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Graphics\TextureLoader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\Model3d.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -338,7 +341,7 @@
     <ClInclude Include="..\..\Graphics\MeshGeometryGenerator.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Graphics\MeshNode.h">
+    <ClInclude Include="..\..\Graphics\Model3dNode.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Graphics\Renderer.h">
@@ -366,6 +369,9 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Graphics\TextureLoader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\Model3d.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

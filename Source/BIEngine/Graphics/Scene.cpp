@@ -8,6 +8,7 @@ namespace BIEngine
 	Scene::Scene(std::shared_ptr<Renderer> pRenderer)
 		: m_pRenderer(pRenderer)
 		, m_pCamera(nullptr)
+		, m_localMatrixStack()
 	{
 		m_pRoot = std::make_shared<RootNode>();
 
@@ -15,7 +16,7 @@ namespace BIEngine
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::NewCameraComponentDelegate), EvtData_New_Camera_Component::sk_EventType);
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
 
-		m_coordStack.push({ glm::vec2(0.0, 0.0), glm::vec2(0.0, 0.0), 0 });
+		m_localMatrixStack.push(glm::mat4(1.0f));
 	}
 
 	Scene::~Scene()
@@ -50,43 +51,18 @@ namespace BIEngine
 		return m_pRoot->OnUpdate(this, dt);
 	}
 
-	void Scene::PushMatrix(const glm::vec2& position, const glm::vec2& size, float angle)
+	void Scene::PushMatrix(const glm::mat4& modelMatrix)
 	{
-		auto topCoords = m_coordStack.top();
-		glm::vec2 rotatedCoords = std::get<0>(topCoords);
+		const glm::mat4 newModelMatrix = m_localMatrixStack.top() * modelMatrix;
 
-		//Получаем новый угол на основе сложения текущего угла с углом родителя
-		float newAngle = std::get<2>(topCoords) + angle;
+		m_pRenderer->SetModelTransform(newModelMatrix);
 
-
-		//TODO: мы не проверяем, какой нам угол пришел, если будет угол больше, чем |360|, то эта проверка не поможет
-		if (newAngle > 360.0)
-			newAngle -= 360.0;
-
-		if (newAngle < -360.0)
-			newAngle += 360.0;
-
-
-		//Переводим наш старый угол в раидана и высчитываем синусы/косинусы
-		const float pi = 3.141592;
-		const float radians = (std::get<2>(topCoords) * (pi / 180));
-
-		const float sinOfAng = std::sin(radians);
-		const float cosOfAng = std::cos(radians);
-
-		//Получаем координаты объекта в новом базисе
-		rotatedCoords.x += position.x * cosOfAng - position.y * sinOfAng;
-		rotatedCoords.y += position.x * sinOfAng + position.y * cosOfAng;
-
-		m_coordStack.push({ rotatedCoords, size, newAngle });
-		m_pRenderer->SetModelTransform(rotatedCoords, size, newAngle);
+		m_localMatrixStack.push(newModelMatrix);
 	}
 
 	void Scene::PopMatrix()
 	{
-		m_coordStack.pop();
-		auto topCoords = m_coordStack.top();
-		m_pRenderer->SetModelTransform(std::get<0>(topCoords), std::get<1>(topCoords), std::get<2>(topCoords));
+		m_localMatrixStack.pop();
 	}
 
 	std::shared_ptr<ISceneNode> Scene::FindActor(ActorId id) {

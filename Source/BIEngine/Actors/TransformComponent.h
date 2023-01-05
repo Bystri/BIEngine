@@ -14,7 +14,7 @@ namespace BIEngine
         static const ComponentId g_CompId;
         virtual ComponentId GetComponentId() const { return TransformComponent::g_CompId; };
 
-        TransformComponent() : m_position(0.0, 0.0, 0.0), m_size(1.0, 1.0), m_rotation(0) { }
+        TransformComponent() : m_position(0.0, 0.0, 0.0), m_size(1.0, 1.0, 1.0), m_rotation(0) { }
         virtual bool Init(tinyxml2::XMLElement* pData);
 
         virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
@@ -23,16 +23,16 @@ namespace BIEngine
         glm::vec3 GetPosition() const { return m_position; }
         void SetPosition(const glm::vec3& pos) { m_position = pos; }
 
-        float GetRotation() const { return m_rotation; }
-        void SetRotation(float rot) { m_rotation = rot; }
+        glm::vec3 GetRotation() const { return m_rotation; }
+        void SetRotation(const glm::vec3& rot) { m_rotation = rot; }
 
-        glm::vec2 GetSize() const { return m_size; }
-        void SetSize(const glm::vec2& size) { m_size = size; }
+        glm::vec3 GetSize() const { return m_size; }
+        void SetSize(const glm::vec3& size) { m_size = size; }
 
     private:
         glm::vec3 m_position;
-        glm::vec2 m_size;
-        float m_rotation;
+        glm::vec3 m_size;
+        glm::vec3 m_rotation;
     };
 
     static ActorComponent* CreateTransformComponent()

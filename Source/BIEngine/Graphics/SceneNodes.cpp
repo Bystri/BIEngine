@@ -6,6 +6,27 @@
 namespace BIEngine
 {
 
+	glm::mat4 SceneNode::GetLocalModelMaatrix() const
+	{
+		const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f),
+			glm::radians(m_props.GetRotation().x),
+			glm::vec3(1.0f, 0.0f, 0.0f));
+		const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f),
+			glm::radians(m_props.GetRotation().y),
+			glm::vec3(0.0f, 1.0f, 0.0f));
+		const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f),
+			glm::radians(m_props.GetRotation().z),
+			glm::vec3(0.0f, 0.0f, 1.0f));
+
+		// Y * X * Z
+		const glm::mat4 roationMatrix = transformY * transformX * transformZ;
+
+		// translation * rotation * scale 
+		return glm::translate(glm::mat4(1.0f), m_props.GetPosition()) *
+			roationMatrix *
+			glm::scale(glm::mat4(1.0f), m_props.GetSize());
+	}
+
 	bool SceneNode::OnUpdate(Scene* pScene, float dt) {
 		for (auto itr = m_children.begin(); itr != m_children.end(); ++itr) {
 			(*itr)->OnUpdate(pScene, dt);
@@ -16,7 +37,7 @@ namespace BIEngine
 
 	bool SceneNode::PreRender(Scene* pScene)
 	{
-		pScene->PushMatrix(m_props.GetPosition(), m_props.GetSize(), m_props.GetRotation());
+		pScene->PushMatrix(GetLocalModelMaatrix());
 		return true;
 	}
 
@@ -118,22 +139,21 @@ namespace BIEngine
 
 		pScene->GetRenderer()->SetProjection(proj);
 
-		//Берем позицию камеры из свойств
-		glm::vec3 cameraPosition = glm::vec3(m_props.GetPosition().x, m_props.GetPosition().y, 1);
+		//Вектор направления взгляда камеры
+		glm::vec3 front;
+		const float pitch = m_props.GetRotation().x;
+		const float yaw = m_props.GetRotation().y;
+		const float roll = m_props.GetRotation().z;
+		front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+		front.y = sin(glm::radians(pitch));
+		front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+		front = glm::normalize(front);
+		// Пересчитываем правый и верхний вектор
+		const glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+		glm::vec3 right = glm::normalize(glm::cross(front, worldUp));
+		glm::vec3 up = glm::normalize(glm::cross(right, front));
 
-		//Далее мы находим направлением камеры
-		glm::vec3 cameraTarget = cameraPosition;
-		cameraPosition.z = 0; //Камера стоит на позиции z = 1, а смотрим мы в z = 0
-		glm::vec3 cameraReverseDir = glm::normalize(cameraPosition - cameraTarget);
-
-		//Правая ось
-		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraReverseDir));
-
-		//Верхняя ось
-		glm::vec3 cameraUp = glm::cross(cameraReverseDir, cameraRight);
-
-		glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
+		glm::mat4 view = glm::lookAt(m_props.GetPosition(), m_props.GetPosition() + front, up);
 
 		pScene->GetRenderer()->SetViewTransform(view);
 		return true;

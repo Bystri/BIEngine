@@ -35,9 +35,9 @@ namespace BIEngine
 
 		void SetTransform(std::shared_ptr<TransformComponent> pTransform) { m_pTransformComponent = pTransform; }
 
-		glm::vec2 GetPosition() const { return m_pTransformComponent->GetPosition(); }
-		glm::vec2 GetSize() const { return m_pTransformComponent->GetSize(); };
-		float GetRotation() const { return m_pTransformComponent->GetRotation(); }
+		glm::vec3 GetPosition() const { return m_pTransformComponent->GetPosition(); }
+		glm::vec3 GetSize() const { return m_pTransformComponent->GetSize(); };
+		glm::vec3 GetRotation() const { return m_pTransformComponent->GetRotation(); }
 
 		RenderLayer GetRenderLayer() const { return m_renderLayer; }
 
@@ -77,9 +77,9 @@ namespace BIEngine
 		virtual const SceneNodeProperties* const Get() const = 0;
 
 		virtual void SetTransform(std::shared_ptr<TransformComponent> pTransform) = 0;
-		virtual glm::vec2 GetPosition() const = 0;
-		virtual glm::vec2 GetSize() const = 0;
-		virtual float GetRotation() const = 0;
+		virtual glm::vec3 GetPosition() const = 0;
+		virtual glm::vec3 GetSize() const = 0;
+		virtual glm::vec3 GetRotation() const = 0;
 
 		virtual bool OnUpdate(Scene* pScene, float dt) = 0;
 		virtual bool PreRender(Scene* pScene) = 0;
@@ -111,9 +111,10 @@ namespace BIEngine
 		virtual const SceneNodeProperties* const Get() const { return &m_props; }
 
 		virtual void SetTransform(std::shared_ptr<TransformComponent> pTransform) { m_props.SetTransform(pTransform); }
-		virtual glm::vec2 GetPosition() const { return  m_props.GetPosition(); }
-		virtual glm::vec2 GetSize() const { return  m_props.GetSize(); };
-		virtual float GetRotation() const { return  m_props.GetRotation(); }
+		virtual glm::vec3 GetPosition() const { return  m_props.GetPosition(); }
+		virtual glm::vec3 GetSize() const { return  m_props.GetSize(); };
+		virtual glm::vec3 GetRotation() const { return  m_props.GetRotation(); }
+		virtual glm::mat4 GetLocalModelMaatrix() const;
 
 		virtual bool OnUpdate(Scene* pScene, float dt);
 		//Если данное событие вернут "false", то отрисовка объекта в данном кадре будет отменена, но событие PostRender будет выполнено

@@ -34,7 +34,7 @@ namespace BIEngine
 		int OnRender();
 		int OnUpdate(float dt);
 
-		void PushMatrix(const glm::vec2& position, const glm::vec2& size, float angle);
+		void PushMatrix(const glm::mat4& modelMatrix);
 		void PopMatrix();
 
 		std::shared_ptr<ISceneNode> FindActor(ActorId id);
@@ -66,7 +66,7 @@ namespace BIEngine
 		SceneActorMap m_actorMap;
 
 		//Данная структура нужна для сохранения поворота и начала координаты для текущего базиса родителя, относительного которого будут сопзиционированы дети. 
-		std::stack<std::tuple<glm::vec2, glm::vec2, float>> m_coordStack;
+		std::stack<glm::mat4> m_localMatrixStack;
 	};
 
 }

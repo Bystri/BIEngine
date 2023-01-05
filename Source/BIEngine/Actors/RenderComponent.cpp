@@ -129,9 +129,9 @@ namespace BIEngine
         BaseRenderComponent::Init(pData);
         assert(pData);
 
-        if (m_pMeshNode == nullptr)
+        if (m_pModelNode == nullptr)
         {
-            m_pMeshNode = std::make_shared<MeshNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
+            m_pModelNode = std::make_shared<Model3dNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
         }
 
         tinyxml2::XMLElement* pSizeElement = pData->FirstChildElement("Size");
@@ -147,8 +147,24 @@ namespace BIEngine
             m_depth = (float)d;
         }
 
-        std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 6u));
-        m_pMeshNode->SetMesh(boxMesh);
+        tinyxml2::XMLElement* pTextureElement = pData->FirstChildElement("Texture");
+        if (pTextureElement)
+        {
+            const char* texturePath;
+            pTextureElement->QueryStringAttribute("path", &texturePath);
+            m_texturePath = texturePath;
+            auto texData = std::static_pointer_cast<TextureExtraData>(ResCache::Get()->GetHandle(texturePath)->GetExtra());
+
+            if (texData == nullptr)
+            {
+                Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + std::to_string(m_pOwner->GetId()));
+                m_pModelNode.reset();
+                return false;
+            }
+
+            std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 6u));
+            m_pModelNode->SetModel(std::make_shared<Model3d>(boxMesh, texData->GetTexture()));
+        }
 
         return true;
     }
@@ -163,6 +179,10 @@ namespace BIEngine
         pSize->SetAttribute("d", std::to_string(m_depth).c_str());
         pBaseElement->LinkEndChild(pSize);
 
+        tinyxml2::XMLElement* pSprite = pDoc->NewElement("Texture");
+        pSprite->SetAttribute("path", m_texturePath.c_str());
+        pBaseElement->LinkEndChild(pSprite);
+
         tinyxml2::XMLElement* pColor = BaseRenderComponent::GenerateXml(pDoc);
         pBaseElement->LinkEndChild(pColor);
 
@@ -171,16 +191,16 @@ namespace BIEngine
 
     std::shared_ptr<SceneNode> BoxRenderComponent::CreateSceneNode()
     {
-        if (m_pMeshNode == nullptr)
+        if (m_pModelNode == nullptr)
             return std::shared_ptr<SceneNode>();
 
         std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
         if (pTransformComponent)
         {
-            m_pMeshNode->SetTransform(pTransformComponent);
-            m_pMeshNode->SetMaterial(m_pMaterial);
+            m_pModelNode->SetTransform(pTransformComponent);
+            m_pModelNode->SetMaterial(m_pMaterial);
         }
 
-        return m_pMeshNode;
+        return m_pModelNode;
     }
 }

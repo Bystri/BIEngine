@@ -152,7 +152,8 @@
     <ClCompile Include="..\..\Graphics\Material.cpp" />
     <ClCompile Include="..\..\Graphics\Mesh.cpp" />
     <ClCompile Include="..\..\Graphics\MeshGeometryGenerator.cpp" />
-    <ClCompile Include="..\..\Graphics\MeshNode.cpp" />
+    <ClCompile Include="..\..\Graphics\Model3dNode.cpp" />
+    <ClCompile Include="..\..\Graphics\Model3d.cpp" />
     <ClCompile Include="..\..\Graphics\Renderer.cpp" />
     <ClCompile Include="..\..\Graphics\Scene.cpp" />
     <ClCompile Include="..\..\Graphics\SceneNodes.cpp" />
@@ -208,7 +209,8 @@
     <ClInclude Include="..\..\Graphics\Material.h" />
     <ClInclude Include="..\..\Graphics\Mesh.h" />
     <ClInclude Include="..\..\Graphics\MeshGeometryGenerator.h" />
-    <ClInclude Include="..\..\Graphics\MeshNode.h" />
+    <ClInclude Include="..\..\Graphics\Model3dNode.h" />
+    <ClInclude Include="..\..\Graphics\Model3d.h" />
     <ClInclude Include="..\..\Graphics\Renderer.h" />
     <ClInclude Include="..\..\Graphics\Scene.h" />
     <ClInclude Include="..\..\Graphics\SceneNodes.h" />

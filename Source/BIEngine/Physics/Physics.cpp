@@ -220,10 +220,10 @@ namespace BIEngine
 					const glm::vec3 pos = glm::vec3(cpPos.x, cpPos.y, 0.0);
 					const float rot = cpBodyGetAngle(it->second);
 
-					if (pTransformComponent->GetPosition() != pos || std::abs(pTransformComponent->GetRotation() - rot) > std::numeric_limits<float>::epsilon())
+					if (pTransformComponent->GetPosition() != pos || pTransformComponent->GetRotation().z != rot)
 					{
 						pTransformComponent->SetPosition(pos);
-						pTransformComponent->SetRotation(rot);
+						pTransformComponent->SetRotation(glm::vec3(0.0f, 0.0f, rot));
 						std::shared_ptr<EvtData_Move_Actor> pEvent = std::make_shared<EvtData_Move_Actor>(id, pos, rot);
 						EventManager::Get()->QueueEvent(pEvent);
 					}
@@ -260,7 +260,7 @@ namespace BIEngine
 		if (pTransformComponent) 
 		{
 			position = pTransformComponent->GetPosition();
-			rotation = pTransformComponent->GetRotation();
+			rotation = pTransformComponent->GetRotation().z;
 		}
 		else
 			return;
@@ -318,7 +318,7 @@ namespace BIEngine
 		if (pTransformComponent) 
 		{
 			position = pTransformComponent->GetPosition();
-			rotation = pTransformComponent->GetRotation();
+			rotation = pTransformComponent->GetRotation().z;
 		}
 		else
 			return;
@@ -382,7 +382,7 @@ namespace BIEngine
 		if (pTransformComponent) 
 		{
 			position = pTransformComponent->GetPosition();
-			rotation = pTransformComponent->GetRotation();
+			rotation = pTransformComponent->GetRotation().z;
 		}
 		else
 			return;
