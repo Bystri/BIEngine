@@ -49,6 +49,9 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{6bfbea0d-e2a9-4beb-ae1e-d62ef844cb10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripting\ScriptExports">
+      <UniqueIdentifier>{df87cbe9-1ec9-4b97-8015-4935301f5339}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCore\GameApp.cpp">
@@ -105,16 +108,7 @@
     <ClCompile Include="..\..\Physics\PhysicsEventListener.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Scripting\LuaStateManager.cpp">
-      <Filter>Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Scripting\ScriptEvent.cpp">
-      <Filter>Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Scripting\ScriptExports.cpp">
-      <Filter>Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Scripting\ScriptProcess.cpp">
+    <ClCompile Include="..\..\Scripting\PythonStateManager.cpp">
       <Filter>Scripting</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Scripting\ScriptResource.cpp">
@@ -278,16 +272,7 @@
     <ClInclude Include="..\..\Physics\PhysicsEventListener.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Scripting\LuaStateManager.h">
-      <Filter>Scripting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Scripting\ScriptEvent.h">
-      <Filter>Scripting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Scripting\ScriptExports.h">
-      <Filter>Scripting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Scripting\ScriptProcess.h">
+    <ClInclude Include="..\..\Scripting\PythonStateManager.h">
       <Filter>Scripting</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Scripting\ScriptResource.h">
@@ -373,6 +358,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Graphics\Model3d.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsActors.h">
+      <Filter>Scripting\ScriptExports</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsEvents.h">
+      <Filter>Scripting\ScriptExports</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsProcess.h">
+      <Filter>Scripting\ScriptExports</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Scripting\ScriptExports.h">
+      <Filter>Scripting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

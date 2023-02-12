@@ -184,19 +184,14 @@ namespace BIEngine
         m_gamePhysics->SetVelocity(m_pOwner->GetId(), velocity);
     }
 
-    void PhysicsComponent::Rotate(float angleRadians)
+    void PhysicsComponent::SetAngularVelocity(float angleRadians)
     {
-        m_gamePhysics->Rotate(m_pOwner->GetId(), angleRadians);
+        m_gamePhysics->SetAngularVelocity(m_pOwner->GetId(), angleRadians);
     }
 
-    float PhysicsComponent::GetRotation() const
+    float PhysicsComponent::GetAngularVelocity() const
     {
         return m_gamePhysics->GetAngularVelocity(m_pOwner->GetId());
-    }
-
-    void PhysicsComponent::SetPosition(float x, float y, float z)
-    {
-        m_gamePhysics->SetPosition(m_pOwner->GetId(), glm::vec3(x, y, z));
     }
 
     void PhysicsComponent::Stop()

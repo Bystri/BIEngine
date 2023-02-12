@@ -71,18 +71,21 @@ namespace BIEngine
 	class BaseEventData : public IEventData
 	{
 	public:
+		static const EventType sk_EventType;
+
 		explicit BaseEventData(const float timeStamp = 0.0f)
 			: m_timeStamp(timeStamp)
 		{}
 
 		virtual ~BaseEventData() {}
 
-		virtual const EventType& GetEventType() const = 0;
+		virtual const EventType& GetEventType() const override { return sk_EventType; }
 
-		float GetTimeStamp() const { return m_timeStamp; }
-		virtual void Serialize(std::ostrstream& out) const {}
-		virtual void Deserialize(std::istrstream& in) const {}
+		float GetTimeStamp() const override { return m_timeStamp; }
+		virtual void Serialize(std::ostrstream& out) const override {}
+		virtual void Deserialize(std::istrstream& in) const override {}
 
+		virtual const char* GetName() const { return "Unknown"; }
 	private:
 		const float m_timeStamp;
 	};

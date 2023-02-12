@@ -1,27 +1,5 @@
-﻿#pragma once
+#pragma once
 
-namespace BIEngine
-{
-	//Данная область относится к системам движка внутри интерпритатора. 
-	namespace ScriptExports
-	{
-		/*
-		Регистрирует функции внутри lua, которые будут работать с системами движка.
-		Внутри скрипта доступны следующие функции:
-		ЗАГРУЗКА РЕСУРСОВ:
-		LoadAndExecuteScriptResource - загружает и исполняет lua-скрипт
-
-		СИСТЕМА ПРОЦЕССОВ
-		AttachProcess - создает процесс на основе данных привязанных к передаваемому lua-объекту
-
-		СИСТЕМА СОБЫТИЙ
-		RegisterEventListener - регистрирует функцию внутри lua, которая будет реагировать на возникновение опредленный событий
-		RemoveEventListener - убирает слушателя событий
-		QueueEvent - добавляет событие в очередь
-		TriggerEvent - выполняет событие без очереди
-		*/
-		void Register();
-		void Unregister();
-	}
-
-}
+#include "ScriptExports/ScriptExportsActors.h"
+#include "ScriptExports/ScriptExportsEvents.h"
+#include "ScriptExports/ScriptExportsProcess.h"

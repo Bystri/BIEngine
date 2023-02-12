@@ -5,7 +5,6 @@
 #include <glm/glm.hpp>
 
 #include "../EventManager/EventManager.h"
-#include "../Scripting/ScriptEvent.h"
 #include "../Actors/Actor.h"
 
 namespace BIEngine
@@ -104,8 +103,8 @@ namespace BIEngine
 	};
 
 	//Данное событие возникает, когда между физическими объектами возникает столкновение
-	//Данное событие может быть получено внутри lua-скрипта
-	class EvtData_PhysCollision : public ScriptEvent
+	//Данное событие может быть получено внутри Python-скрипта
+	class EvtData_PhysCollision : public BaseEventData
 	{
 		ActorId m_ActorA;
 		ActorId m_ActorB;
@@ -183,10 +182,6 @@ namespace BIEngine
 		{
 			return m_CollisionPointsB;
 		}
-
-		virtual void BuildEventData();
-
-		EXPORT_FOR_SCRIPT_EVENT(EvtData_PhysCollision);
 	};
 
 	//Данное событие возникает, когда прекращается столкновение между двумя физическими объектами

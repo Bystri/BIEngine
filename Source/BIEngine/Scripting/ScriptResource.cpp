@@ -1,6 +1,6 @@
 ﻿#include "ScriptResource.h"
 
-#include "LuaStateManager.h"
+#include "PythonStateManager.h"
 
 namespace BIEngine
 {
@@ -10,7 +10,7 @@ namespace BIEngine
         if (rawSize <= 0)
             return false;
 
-        LuaStateManager::Get()->ExecuteString(pRawBuffer);
+        PythonStateManager::Get()->ExecuteString(pRawBuffer);
 
         return true;
     }

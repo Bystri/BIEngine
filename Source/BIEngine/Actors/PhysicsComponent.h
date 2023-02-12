@@ -27,9 +27,8 @@ namespace BIEngine
 
         void SetVelocity(const glm::vec3& velocity);
         glm::vec3 GetVelocity() const;
-        void Rotate(float angle);
-        float GetRotation() const;
-        void SetPosition(float x, float y, float z);
+        void SetAngularVelocity(float angle);
+        float GetAngularVelocity() const;
         void Stop();
 
     protected:

@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 
 #include "EventManager.h"
-#include "../Scripting/ScriptEvent.h"
 #include "../Actors/Actor.h"
 #include "../Graphics/SceneNodes.h"
 #include "../UserInterface/IGameView.h"
@@ -11,9 +10,6 @@
 
 namespace BIEngine
 {
-    //Регестрирует события, которые могут быть посла/обработы в среде выполнения скриптов
-    void RegisterEngineScriptEvents();
-
 
     //Данное событие отправляется, когда актер уничтожен
     class EvtData_Destroy_Actor : public BaseEventData
@@ -227,7 +223,7 @@ namespace BIEngine
 
     //Событие является запросом на уничтожение актера
     //TODO: а зачем уничтожение актера идет через событие? Не проще сразу предоставить прямой вызов к GameLogic::DestroyActor в скрипт? Как вообще это сделано в Unity?
-    class EvtData_Request_Destroy_Actor : public ScriptEvent
+    class EvtData_Request_Destroy_Actor : public BaseEventData
     {
         ActorId m_actorId;
 
@@ -273,18 +269,6 @@ namespace BIEngine
         {
             return m_actorId;
         }
-
-        virtual bool BuildEventFromScript(void)
-        {
-            if (m_eventData.IsInteger())
-            {
-                m_actorId = m_eventData.GetInteger();
-                return true;
-            }
-            return false;
-        }
-
-        EXPORT_FOR_SCRIPT_EVENT(EvtData_Request_Destroy_Actor);
     };
 
 }

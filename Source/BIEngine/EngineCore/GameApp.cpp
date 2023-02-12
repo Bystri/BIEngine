@@ -5,8 +5,8 @@
 #include "../Graphics/TextureLoader.h"
 #include "../ResourceCache/XmlLoader.h"
 #include "../UserInterface/HumanView.h"
+#include "../Scripting/PythonStateManager.h"
 #include "../Scripting/ScriptExports.h"
-#include "../Scripting/ScriptProcess.h"
 #include "../Scripting/ScriptResource.h"
 #include "../Actors/ScriptComponent.h"
 
@@ -19,7 +19,7 @@ namespace BIEngine
 	const char* RESOURCE_CACHE_DIR_FILE_NAME = "../Assets"; //Имя папки-хранилища ресурсов для кэша. Мы делаем шаг назад, так как предпологается, что сырая папка ресурсов и папка редактора находтся в корне
 	const char* RESOURCE_CACHE_ZIP_FILE_NAME = "Assets.zip"; //Имя архива-хранилища ресурсов для кэша
 
-	const char* SCRIPT_PREINIT_FILE = "scripts/init.lua";
+	const char* SCRIPT_PREINIT_FILE = "scripts/init.py";
 
 	GameApp::GameApp(std::shared_ptr<GameLogic> pGameLogic)
 		: m_pGameLogic(pGameLogic)
@@ -48,24 +48,17 @@ namespace BIEngine
 		ResCache::Get()->RegisterLoader(std::make_shared<VertexShaderResourceLoader>());
 		ResCache::Get()->RegisterLoader(std::make_shared<FragmentShaderResourceLoader>());
 		ResCache::Get()->RegisterLoader(std::make_shared<ScriptResourceLoader>());
-		//ResCache::Get()->RegisterLoader(CreateScriptResourceLoader());
 		//ResCache::Get()->RegisterLoader(CreateWavResourceLoader());
 
 		//Создаем экземпляр одиночки нашей системы скриптов
-		if (!LuaStateManager::Create())
+		if (!PythonStateManager::Create())
 		{
-			Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize Lua");
+			Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize Python interpreter");
 			return false;
 		}
 
-		//Загружаем скрипт инициализации lua системы. Скрипт будет выполнен во время самой загрузки ресурса, поэтомы мы игнорируем возвращаемый хэндлер. 
+		//Загружаем скрипт инициализации Python системы. Скрипт будет выполнен во время самой загрузки ресурса, поэтомы мы игнорируем возвращаемый хэндлер. 
 		ResCache::Get()->GetHandle(SCRIPT_PREINIT_FILE);
-
-		//Регистрируем функции в скрипте, которые будут иметь доступ к системам движка, написанным на C++
-		ScriptExports::Register();
-		ScriptProcess::RegisterScriptClass();
-		ScriptComponent::RegisterScriptFunctions();
-		RegisterEngineScriptEvents();
 
 		m_pGameLogic->Init();
 

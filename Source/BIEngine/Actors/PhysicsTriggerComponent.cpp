@@ -67,7 +67,7 @@ namespace BIEngine
         m_gamePhysics->SetVelocity(m_pOwner->GetId(), velocity);
     }
 
-    void PhysicsTriggerComponent::Rotate(float angleRadians)
+    void PhysicsTriggerComponent::SetRotation(float angleRadians)
     {
         m_gamePhysics->Rotate(m_pOwner->GetId(), angleRadians);
     }
