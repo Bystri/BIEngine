@@ -48,6 +48,7 @@ namespace BIEngine
 		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 		glViewport(0, 0, g_pApp->m_options.screenWidth, g_pApp->m_options.screenHeight);
+		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -73,7 +74,8 @@ namespace BIEngine
 			g_pApp->OnUpdate(deltaTime);
 
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 			//Отрисовка
 			g_pApp->OnRender(currentFrame, deltaTime);
 

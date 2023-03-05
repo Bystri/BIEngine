@@ -6,8 +6,10 @@
 
 #include "../../EngineCore/GameApp.h"
 #include "../../Actors/CameraComponent.h"
-#include "../../Actors/PhysicsComponent.h"
-#include "../../Actors/PhysicsTriggerComponent.h"
+#include "../../Actors/Physics2DComponent.h"
+#include "../../Actors/Physics2DTriggerComponent.h"
+#include "../../Actors/Physics3DComponent.h"
+#include "../../Actors/Physics3DTriggerComponent.h"
 #include "../../Actors/RenderComponent.h"
 #include "../../Actors/ScriptComponent.h"
 
@@ -25,22 +27,39 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
     
     py::class_<BIEngine::CameraComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::CameraComponent>>(m, "CameraComponent");
     
-    py::class_<BIEngine::PhysicsComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::PhysicsComponent>>(m, "PhysicsComponent")
-        .def("ApplyForce", &BIEngine::PhysicsComponent::ApplyForce)
-        .def("ApplyTorque", &BIEngine::PhysicsComponent::ApplyTorque)
-        .def("KinematicMove", &BIEngine::PhysicsComponent::KinematicMove)
-        .def("SetVelocity", &BIEngine::PhysicsComponent::SetVelocity)
-        .def("GetVelocity", &BIEngine::PhysicsComponent::GetVelocity)
-        .def("SetAngularVelocity", &BIEngine::PhysicsComponent::SetAngularVelocity)
-        .def("GetAngularVelocity", &BIEngine::PhysicsComponent::GetAngularVelocity)
-        .def("Stop", &BIEngine::PhysicsComponent::Stop);
+    py::class_<BIEngine::Physics2DComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::Physics2DComponent>>(m, "Physics2DComponent")
+        .def("ApplyForce", &BIEngine::Physics2DComponent::ApplyForce)
+        .def("ApplyTorque", &BIEngine::Physics2DComponent::ApplyTorque)
+        .def("KinematicMove", &BIEngine::Physics2DComponent::KinematicMove)
+        .def("SetVelocity", &BIEngine::Physics2DComponent::SetVelocity)
+        .def("GetVelocity", &BIEngine::Physics2DComponent::GetVelocity)
+        .def("SetAngularVelocity", &BIEngine::Physics2DComponent::SetAngularVelocity)
+        .def("GetAngularVelocity", &BIEngine::Physics2DComponent::GetAngularVelocity)
+        .def("Stop", &BIEngine::Physics2DComponent::Stop);
     
-    py::class_<BIEngine::PhysicsTriggerComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::PhysicsTriggerComponent>>(m, "PhysicsTriggerComponent")
-        .def("GetVelocity", &BIEngine::PhysicsTriggerComponent::GetVelocity)
-        .def("SetVelocity", &BIEngine::PhysicsTriggerComponent::SetVelocity)
-        .def("SetRotation", &BIEngine::PhysicsTriggerComponent::SetRotation)
-        .def("SetPosition", &BIEngine::PhysicsTriggerComponent::SetPosition)
-        .def("Stop", &BIEngine::PhysicsTriggerComponent::Stop);
+    py::class_<BIEngine::Physics2DTriggerComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::Physics2DTriggerComponent>>(m, "Physics2DTriggerComponent")
+        .def("GetVelocity", &BIEngine::Physics2DTriggerComponent::GetVelocity)
+        .def("SetVelocity", &BIEngine::Physics2DTriggerComponent::SetVelocity)
+        .def("SetRotation", &BIEngine::Physics2DTriggerComponent::Rotate)
+        .def("SetPosition", &BIEngine::Physics2DTriggerComponent::SetPosition)
+        .def("Stop", &BIEngine::Physics2DTriggerComponent::Stop);
+
+    py::class_<BIEngine::Physics3DComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::Physics3DComponent>>(m, "Physics3DComponent")
+        .def("ApplyForce", &BIEngine::Physics3DComponent::ApplyForce)
+        .def("ApplyTorque", &BIEngine::Physics3DComponent::ApplyTorque)
+        .def("KinematicMove", &BIEngine::Physics3DComponent::KinematicMove)
+        .def("SetVelocity", &BIEngine::Physics3DComponent::SetVelocity)
+        .def("GetVelocity", &BIEngine::Physics3DComponent::GetVelocity)
+        .def("SetAngularVelocity", &BIEngine::Physics3DComponent::SetAngularVelocity)
+        .def("GetAngularVelocity", &BIEngine::Physics3DComponent::GetAngularVelocity)
+        .def("Stop", &BIEngine::Physics3DComponent::Stop);
+
+    py::class_<BIEngine::Physics3DTriggerComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::Physics3DTriggerComponent>>(m, "Physics3DTriggerComponent")
+        .def("GetVelocity", &BIEngine::Physics3DTriggerComponent::GetVelocity)
+        .def("SetVelocity", &BIEngine::Physics3DTriggerComponent::SetVelocity)
+        .def("SetRotation", &BIEngine::Physics3DTriggerComponent::RotateY)
+        .def("SetPosition", &BIEngine::Physics3DTriggerComponent::SetPosition)
+        .def("Stop", &BIEngine::Physics3DTriggerComponent::Stop);
 
     
     py::class_<BIEngine::BaseRenderComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::BaseRenderComponent>>(m, "BaseRenderComponent");

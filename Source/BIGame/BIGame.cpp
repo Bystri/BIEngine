@@ -36,7 +36,8 @@ void BIGameApp::Close()
 
 BIGameLogic::BIGameLogic()
 {
-	m_pPhysics.reset(BIEngine::CreateGamePhysics());
+	m_pPhysics2D.reset(BIEngine::CreateGamePhysics2D());
+	m_pPhysics3D.reset(BIEngine::CreateGamePhysics3D());
 }
 
 bool BIGameLogic::Init()
@@ -44,7 +45,8 @@ bool BIGameLogic::Init()
 	if (!GameLogic::Init())
 		return false;
 
-	m_pPhysics->Initialize();
+	m_pPhysics2D->Initialize();
+	m_pPhysics3D->Initialize();
 
 	std::shared_ptr<BIGameHumanView> pHumanView = std::make_shared<BIGameHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
 	AddGameView(pHumanView);

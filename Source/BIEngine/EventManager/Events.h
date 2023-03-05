@@ -56,8 +56,8 @@ namespace BIEngine
     class EvtData_Move_Actor : public BaseEventData
     {
         ActorId m_id;
-        glm::vec2 m_postion;
-        float m_rotation;
+        glm::vec3 m_postion;
+        glm::vec3 m_rotation;
 
     public:
         static const EventType sk_EventType;
@@ -72,21 +72,21 @@ namespace BIEngine
             m_id = Actor::INVALID_ACTOR_ID;
         }
 
-        EvtData_Move_Actor(ActorId id, const glm::vec2& pos, float rot)
+        EvtData_Move_Actor(ActorId id, const glm::vec3& pos, const glm::vec3& rot)
             : m_id(id), m_postion(pos), m_rotation(rot)
         {
         }
 
         virtual void Serialize(std::ostrstream& out) const
         {
-            out << m_id << " " << m_postion.x << " " << m_postion.y << " " << m_rotation;
+            out << m_id << " " << m_postion.x << " " << m_postion.y << " " << m_postion.z << " " << m_rotation.x << " " << m_rotation.y << " " << m_rotation.z;
         }
 
         virtual void Deserialize(std::istrstream& in)
         {
             in >> m_id;
-            in >> m_postion.x >> m_postion.y;
-            in >> m_rotation;
+            in >> m_postion.x >> m_postion.y >> m_postion.z;
+            in >> m_rotation.x >> m_rotation.y >> m_rotation.z;
         }
 
         virtual IEventDataPtr Copy() const
@@ -104,12 +104,12 @@ namespace BIEngine
             return m_id;
         }
 
-        const glm::vec2& GetPosition() const
+        const glm::vec3& GetPosition() const
         {
             return m_postion;
         }
 
-        float GetRotation() const
+        const glm::vec3& GetRotation() const
         {
             return m_rotation;
         }

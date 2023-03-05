@@ -1,31 +1,31 @@
-﻿
-#include "PhysicsComponent.h"
+﻿#include "Physics3DComponent.h"
+
 #include "TransformComponent.h"
-#include "../Physics/Physics.h"
+#include "../Physics/Physics3D.h"
 #include "../Utilities/String.h"
 #include "../EngineCore/GameApp.h"
 
 namespace BIEngine
 {
 
-    const ComponentId PhysicsComponent::g_CompId = "PhysicsComponent";
+    const ComponentId Physics3DComponent::g_CompId = "Physics3DComponent";
 
-    PhysicsComponent::PhysicsComponent()
+    Physics3DComponent::Physics3DComponent()
     {
         m_rigidBodyScale = glm::vec3(1.f, 1.f, 1.f);
 
-        m_shape = Shape::NONE;
-        m_bodyType = IGamePhysics::BodyType::DYNAMIC;
+        m_shape = Shape3D::NONE;
+        m_bodyType = IGamePhysics3D::BodyType::DYNAMIC;
     }
 
-    PhysicsComponent::~PhysicsComponent()
+    Physics3DComponent::~Physics3DComponent()
     {
         m_gamePhysics->RemoveActor(m_pOwner->GetId());
     }
 
-    bool PhysicsComponent::Init(tinyxml2::XMLElement* pData)
+    bool Physics3DComponent::Init(tinyxml2::XMLElement* pData)
     {
-        m_gamePhysics = g_pApp->m_pGameLogic->GetGamePhysics();
+        m_gamePhysics = g_pApp->m_pGameLogic->GetGamePhysics3D();
         if (!m_gamePhysics)
             return false; //Если нет физического движка, то и смысла в дальнейшем использовании компонента тоже нет
 
@@ -33,12 +33,12 @@ namespace BIEngine
         if (pShape)
         {
             std::string shapeStr = pShape->FirstChild()->Value();
-            if (shapeStr == "Circle")
-                m_shape = Shape::CIRCLE;
+            if (shapeStr == "Sphere")
+                m_shape = Shape3D::SPHERE;
             else if (shapeStr == "Box")
-                m_shape = Shape::BOX;
+                m_shape = Shape3D::BOX;
             else if (shapeStr == "PointCloud")
-                m_shape = Shape::POINT_CLOUD;
+                m_shape = Shape3D::POINT_CLOUD;
         }
 
         tinyxml2::XMLElement* pBodyType = pData->FirstChildElement("BodyType");
@@ -46,11 +46,11 @@ namespace BIEngine
         {
             std::string typeStr = pBodyType->FirstChild()->Value();
             if (typeStr == "Dynamic")
-                m_bodyType = IGamePhysics::BodyType::DYNAMIC;
+                m_bodyType = IGamePhysics3D::BodyType::DYNAMIC;
             else if (typeStr == "Kinematic")
-                m_bodyType = IGamePhysics::BodyType::KINEMATIC;
+                m_bodyType = IGamePhysics3D::BodyType::KINEMATIC;
             else if (typeStr == "Static")
-                m_bodyType = IGamePhysics::BodyType::STATIC;
+                m_bodyType = IGamePhysics3D::BodyType::STATIC;
         }
 
         tinyxml2::XMLElement* pDensity = pData->FirstChildElement("Density");
@@ -66,27 +66,29 @@ namespace BIEngine
         {
             double w = 0;
             double h = 0;
+            double d = 0;
             pSizeElement->QueryDoubleAttribute("w", &w);
             pSizeElement->QueryDoubleAttribute("h", &h);
-            m_rigidBodyScale = glm::vec3(w, h, 1);
+            pSizeElement->QueryDoubleAttribute("d", &d);
+            m_rigidBodyScale = glm::vec3(w, h, d);
         }
 
         return true;
     }
 
-    void PhysicsComponent::PostInit()
+    void Physics3DComponent::PostInit()
     {
         if (m_pOwner)
         {
             switch (m_shape)
             {
-            case Shape::CIRCLE:
-                m_gamePhysics->AddCircle((float)m_rigidBodyScale.x, m_bodyType, m_pOwner, m_density, m_material);
+            case Shape3D::SPHERE:
+                m_gamePhysics->AddSphere((float)m_rigidBodyScale.x, m_bodyType, m_pOwner, m_density, m_material);
                 break;
-            case Shape::BOX:
+            case Shape3D::BOX:
                 m_gamePhysics->AddBox(m_rigidBodyScale, m_bodyType, m_pOwner, m_density, m_material);
                 break;
-            case Shape::POINT_CLOUD:
+            case Shape3D::POINT_CLOUD:
                 Logger::WriteLog(Logger::LogType::ERROR, "Not supported yet!");
                 break;
             default:
@@ -95,7 +97,7 @@ namespace BIEngine
         }
     }
 
-    tinyxml2::XMLElement* PhysicsComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
+    tinyxml2::XMLElement* Physics3DComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
     {
         tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
 
@@ -104,17 +106,17 @@ namespace BIEngine
         tinyxml2::XMLText* pShapeText = nullptr;
         switch(m_shape)
         {
-        case Shape::CIRCLE:
-            pShapeText = pDoc->NewText("Circle");
+        case Shape3D::SPHERE:
+            pShapeText = pDoc->NewText("Sphere");
             break;
-        case Shape::BOX:
+        case Shape3D::BOX:
             pShapeText = pDoc->NewText("Box");
             break;
-        case Shape::POINT_CLOUD:
+        case Shape3D::POINT_CLOUD:
             pShapeText = pDoc->NewText("PointCloud");
             break;
         default:
-            Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics shape type in PhysicsComponent for actor with ActorID: " + std::to_string(m_pOwner->GetId()));
+            Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics shape type in Physics3DComponent for actor with ActorID: " + std::to_string(m_pOwner->GetId()));
         }
         pShape->LinkEndChild(pShapeText);
         pBaseElement->LinkEndChild(pShape);
@@ -124,17 +126,17 @@ namespace BIEngine
         tinyxml2::XMLText* pBodyTypeText = nullptr;
         switch (m_bodyType)
         {
-        case IGamePhysics::BodyType::DYNAMIC:
+        case IGamePhysics3D::BodyType::DYNAMIC:
             pBodyTypeText = pDoc->NewText("Dynamic");
             break;
-        case IGamePhysics::BodyType::KINEMATIC:
+        case IGamePhysics3D::BodyType::KINEMATIC:
             pBodyTypeText = pDoc->NewText("Kinematic");
             break;
-        case IGamePhysics::BodyType::STATIC:
+        case IGamePhysics3D::BodyType::STATIC:
             pBodyTypeText = pDoc->NewText("Static");
             break;
         default:
-            Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics body shape type in PhysicsComponent for actor with ActorID: " + std::to_string(m_pOwner->GetId()));
+            Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics body shape type in Physics3DComponent for actor with ActorID: " + std::to_string(m_pOwner->GetId()));
         }
         pBodyType->LinkEndChild(pBodyTypeText);
         pBaseElement->LinkEndChild(pBodyType);
@@ -154,47 +156,48 @@ namespace BIEngine
         tinyxml2::XMLElement* pScale = pDoc->NewElement("Scale");
         pScale->SetAttribute("w", std::to_string(m_rigidBodyScale.x).c_str());
         pScale->SetAttribute("h", std::to_string(m_rigidBodyScale.y).c_str());
+        pScale->SetAttribute("d", std::to_string(m_rigidBodyScale.z).c_str());
         pBaseElement->LinkEndChild(pScale);
 
         return pBaseElement;
     }
 
-    void PhysicsComponent::ApplyForce(const glm::vec3& direction)
+    void Physics3DComponent::ApplyForce(const glm::vec3& direction)
     {
         m_gamePhysics->ApplyForce(direction, m_pOwner->GetId());
     }
 
-    void PhysicsComponent::ApplyTorque(float torque)
+    void Physics3DComponent::ApplyTorque(const glm::vec3& torque)
     {
         m_gamePhysics->ApplyTorque(torque, m_pOwner->GetId());
     }
 
-    bool PhysicsComponent::KinematicMove(const glm::vec3& position, float rotate)
+    bool Physics3DComponent::KinematicMove(const glm::vec3& position, const glm::vec3& rotation)
     {
-        return m_gamePhysics->KinematicMove(m_pOwner->GetId(), position, rotate);
+        return m_gamePhysics->KinematicMove(m_pOwner->GetId(), position, rotation);
     }
 
-    glm::vec3 PhysicsComponent::GetVelocity() const
+    glm::vec3 Physics3DComponent::GetVelocity() const
     {
         return m_gamePhysics->GetVelocity(m_pOwner->GetId());
     }
 
-    void PhysicsComponent::SetVelocity(const glm::vec3& velocity)
+    void Physics3DComponent::SetVelocity(const glm::vec3& velocity)
     {
         m_gamePhysics->SetVelocity(m_pOwner->GetId(), velocity);
     }
 
-    void PhysicsComponent::SetAngularVelocity(float angleRadians)
+    void Physics3DComponent::SetAngularVelocity(const glm::vec3& angles)
     {
-        m_gamePhysics->SetAngularVelocity(m_pOwner->GetId(), angleRadians);
+        m_gamePhysics->SetAngularVelocity(m_pOwner->GetId(), angles);
     }
 
-    float PhysicsComponent::GetAngularVelocity() const
+    glm::vec3 Physics3DComponent::GetAngularVelocity() const
     {
         return m_gamePhysics->GetAngularVelocity(m_pOwner->GetId());
     }
 
-    void PhysicsComponent::Stop()
+    void Physics3DComponent::Stop()
     {
         return m_gamePhysics->StopActor(m_pOwner->GetId());
     }

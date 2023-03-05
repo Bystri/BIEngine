@@ -38,6 +38,8 @@ namespace BIEngine
 		virtual bool Init();
 		virtual void Close();
 
+		std::shared_ptr<HumanView> TryGetHumanView(unsigned int playerId);
+
 		virtual const char* GetGameTitle() = 0; //Принудительный метод заставить пользователя дать явное название игре
 
 		void ProcessInput(double dt);

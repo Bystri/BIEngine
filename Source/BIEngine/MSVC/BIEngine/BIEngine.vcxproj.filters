@@ -102,10 +102,7 @@
     <ClCompile Include="..\..\ResourceCache\XmlLoader.cpp">
       <Filter>ResourceCache</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Physics\Physics.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Physics\PhysicsEventListener.cpp">
+    <ClCompile Include="..\..\Physics\Physics2DEventListener.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Scripting\PythonStateManager.cpp">
@@ -123,7 +120,7 @@
     <ClCompile Include="..\..\ProcessManager\ProcessManager.cpp">
       <Filter>ProcessManager</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Actors\PhysicsComponent.cpp">
+    <ClCompile Include="..\..\Actors\Physics3DComponent.cpp">
       <Filter>Actors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Audio\Audio.cpp">
@@ -141,7 +138,7 @@
     <ClCompile Include="..\..\UserInterface\UserInterface.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Actors\PhysicsTriggerComponent.cpp">
+    <ClCompile Include="..\..\Actors\Physics3DTriggerComponent.cpp">
       <Filter>Actors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ResourceCache\DirFile.cpp">
@@ -194,6 +191,27 @@
     </ClCompile>
     <ClCompile Include="..\..\Graphics\Model3d.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Physics\Physics2D.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Physics\Physics3D.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\Physics2DComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\Physics2DTriggerComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Physics\Physics3DEventListener.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Physics\PhysicsDebugDrawer.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Utilities\DebugDraw.cpp">
+      <Filter>Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -269,7 +287,7 @@
     <ClInclude Include="..\..\Physics\Physics.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Physics\PhysicsEventListener.h">
+    <ClInclude Include="..\..\Physics\Physics2DEventListener.h">
       <Filter>Physics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Scripting\PythonStateManager.h">
@@ -287,7 +305,7 @@
     <ClInclude Include="..\..\ProcessManager\ProcessManager.h">
       <Filter>ProcessManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Actors\PhysicsComponent.h">
+    <ClInclude Include="..\..\Actors\Physics3DComponent.h">
       <Filter>Actors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Audio\Audio.h">
@@ -305,7 +323,7 @@
     <ClInclude Include="..\..\UserInterface\UserInterface.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Actors\PhysicsTriggerComponent.h">
+    <ClInclude Include="..\..\Actors\Physics3DTriggerComponent.h">
       <Filter>Actors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ResourceCache\DirFile.h">
@@ -370,6 +388,30 @@
     </ClInclude>
     <ClInclude Include="..\..\Scripting\ScriptExports.h">
       <Filter>Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Physics\Physics2D.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Physics\Physics3D.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\Physics2DComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\Physics2DTriggerComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Physics\Physics3DEventListener.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Physics\PhysicsDebugDrawer.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Utilities\DebugDraw.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsDebug.h">
+      <Filter>Scripting\ScriptExports</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

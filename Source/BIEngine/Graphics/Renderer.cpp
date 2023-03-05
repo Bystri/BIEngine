@@ -1,5 +1,7 @@
 ﻿#include "Renderer.h"
 
+#include "../Utilities/DebugDraw.h"
+
 namespace BIEngine
 {
 
@@ -8,22 +10,31 @@ namespace BIEngine
         m_pShader = pShader;
     }
 
+    void Renderer::Init()
+    {
+    }
+
     void Renderer::SetProjection(const glm::mat4& proj)
     {
         m_pShader->Use();
         m_pShader->SetMatrix4("projection", proj);
+        projMatrix = proj;
+        DebugDraw::SetProjection(proj);
     }
 
     void Renderer::SetViewTransform(const glm::mat4& view)
     {
         m_pShader->Use();
         m_pShader->SetMatrix4("view", view);
+        viewMatrix = view;
+        DebugDraw::SetViewTransform(view);
     }
 
     void Renderer::SetModelTransform(const glm::mat4& model)
     {   
         m_pShader->Use();
         m_pShader->SetMatrix4("model", model);
+        modelMatrix = model;
     }
 
     void Renderer::SetColor(glm::vec3 color)

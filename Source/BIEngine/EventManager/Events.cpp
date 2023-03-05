@@ -1,6 +1,7 @@
 ﻿#include "Events.h"
 
-#include "../Physics/PhysicsEventListener.h"
+#include "../Physics/Physics2DEventListener.h"
+#include "../Physics/Physics3DEventListener.h"
 
 namespace BIEngine
 {

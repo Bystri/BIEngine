@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include <glm/gtx/matrix_decompose.hpp>
+
 namespace BIEngine
 {
 
@@ -20,7 +22,7 @@ namespace BIEngine
             pPositionElement->QueryDoubleAttribute("x", &x);
             pPositionElement->QueryDoubleAttribute("y", &y);
             pPositionElement->QueryDoubleAttribute("z", &z);
-            m_position = glm::vec3(x, y, z);
+            SetPosition(glm::vec3(x, y, z));
         }
 
         tinyxml2::XMLElement* pSizeElement = pData->FirstChildElement("Size");
@@ -32,7 +34,7 @@ namespace BIEngine
             pSizeElement->QueryDoubleAttribute("w", &w);
             pSizeElement->QueryDoubleAttribute("h", &h);
             pSizeElement->QueryDoubleAttribute("d", &d);
-            m_size = glm::vec3(w, h, d);
+            SetSize(glm::vec3(w, h, d));
         }
 
         tinyxml2::XMLElement* pRotationElement = pData->FirstChildElement("Rotation");
@@ -44,7 +46,7 @@ namespace BIEngine
             pRotationElement->QueryDoubleAttribute("x", &x);
             pRotationElement->QueryDoubleAttribute("y", &y);
             pRotationElement->QueryDoubleAttribute("z", &z);
-            m_rotation = glm::vec3(x, y, z);
+            SetRotation(glm::vec3(x, y, z));
         }
 
         return true;
@@ -73,6 +75,62 @@ namespace BIEngine
         pBaseElement->LinkEndChild(pRotation);
 
         return pBaseElement;
+    }
+
+    void TransformComponent::SetPosition(const glm::vec3& pos)
+    {
+        m_position = pos;
+        m_transform[3][0] = m_size.x;
+        m_transform[3][1] = m_size.y;
+        m_transform[3][2] = m_size.z;
+    }
+
+    void TransformComponent::SetRotation(const glm::vec3& rot) 
+    {
+        m_rotation = rot;
+        RecalculateTransformMatrix();
+    }
+
+    void TransformComponent::SetSize(const glm::vec3& size) 
+    {
+        m_size = size;
+        RecalculateTransformMatrix();
+    }
+
+    void TransformComponent::SetTransformMatrix(const glm::mat4& trans)
+    {
+        glm::quat qRotation;
+        glm::vec3 translation;
+        glm::vec3 skew;
+        glm::vec4 perspective;
+        glm::decompose(trans, m_size, qRotation, m_position, skew, perspective);
+
+        m_rotation = glm::eulerAngles(qRotation);
+        m_rotation.x = glm::degrees(m_rotation.x);
+        m_rotation.y = glm::degrees(m_rotation.y);
+        m_rotation.z = glm::degrees(m_rotation.z);
+
+        m_transform = trans;
+    }
+
+    void TransformComponent::RecalculateTransformMatrix()
+    {
+        const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f),
+            glm::radians(m_rotation.x),
+            glm::vec3(1.0f, 0.0f, 0.0f));
+        const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f),
+            glm::radians(m_rotation.y),
+            glm::vec3(0.0f, 1.0f, 0.0f));
+        const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f),
+            glm::radians(m_rotation.z),
+            glm::vec3(0.0f, 0.0f, 1.0f));
+
+        const glm::mat4 roationMatrix = transformZ * transformY * transformX;
+
+        // translation * rotation * scale 
+        m_transform = glm::translate(glm::mat4(1.0f), m_position) *
+            roationMatrix *
+            glm::scale(glm::mat4(1.0f), m_size);
     }
 }
 

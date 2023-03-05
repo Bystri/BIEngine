@@ -22,9 +22,11 @@ namespace BIEngine
 		const glm::mat4 roationMatrix = transformY * transformX * transformZ;
 
 		// translation * rotation * scale 
-		return glm::translate(glm::mat4(1.0f), m_props.GetPosition()) *
+		auto ans = glm::translate(glm::mat4(1.0f), m_props.GetPosition()) *
 			roationMatrix *
 			glm::scale(glm::mat4(1.0f), m_props.GetSize());
+
+		return m_props.GetTransformMatrix();
 	}
 
 	bool SceneNode::OnUpdate(Scene* pScene, float dt) {

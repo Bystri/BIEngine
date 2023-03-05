@@ -39,6 +39,8 @@ namespace BIEngine
 		glm::vec3 GetSize() const { return m_pTransformComponent->GetSize(); };
 		glm::vec3 GetRotation() const { return m_pTransformComponent->GetRotation(); }
 
+		glm::mat4 GetTransformMatrix() const { return m_pTransformComponent->GetTransformMatrix(); }
+
 		RenderLayer GetRenderLayer() const { return m_renderLayer; }
 
 		bool Hasalpha() const { return m_pMaterial->HasAlpha(); }

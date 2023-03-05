@@ -2,13 +2,16 @@
 
 #include "../Actors/ActorFactory.h"
 #include "../UserInterface/HumanView.h"
-#include "../Physics/Physics.h"
+#include "../Physics/Physics2D.h"
+#include "../Physics/Physics3D.h"
 
 namespace BIEngine
 {
 
 	class GameLogic
 	{
+		friend class GameApp;
+
 	public:
 		typedef std::map<ActorId, std::shared_ptr<Actor>> ActorMap;
 
@@ -18,7 +21,8 @@ namespace BIEngine
 		GameLogic(const GameLogic& orig) = delete;
 		GameLogic& operator=(const GameLogic& rhs) = delete;
 
-		std::shared_ptr<IGamePhysics> GetGamePhysics() const { return m_pPhysics; }
+		std::shared_ptr<IGamePhysics2D> GetGamePhysics2D() const { return m_pPhysics2D; }
+		std::shared_ptr<IGamePhysics3D> GetGamePhysics3D() const { return m_pPhysics3D; }
 
 		virtual bool Init();
 
@@ -52,7 +56,8 @@ namespace BIEngine
 		ActorMap m_actors;
 		ActorFactory* m_pActorFactory;
 
-		std::shared_ptr<IGamePhysics> m_pPhysics;
+		std::shared_ptr<IGamePhysics2D> m_pPhysics2D;
+		std::shared_ptr<IGamePhysics3D> m_pPhysics3D;
 	};
 
 }

@@ -11,7 +11,7 @@ namespace BIEngine
 {
 
 	//Данное событие возникает, когда физический объект входит в триггерную зону
-	class EvtData_PhysTrigger_Enter : public BaseEventData
+	class EvtData_Phys2DTrigger_Enter : public BaseEventData
 	{
 		int m_triggerID;
 		ActorId m_other;
@@ -24,25 +24,25 @@ namespace BIEngine
 			return sk_EventType;
 		}
 
-		EvtData_PhysTrigger_Enter()
+		EvtData_Phys2DTrigger_Enter()
 		{
 			m_triggerID = -1;
 			m_other = Actor::INVALID_ACTOR_ID;
 		}
 
-		explicit EvtData_PhysTrigger_Enter(int triggerID, ActorId other)
+		explicit EvtData_Phys2DTrigger_Enter(int triggerID, ActorId other)
 			: m_triggerID(triggerID),
 			m_other(other)
 		{}
 
 		IEventDataPtr Copy() const
 		{
-			return std::make_shared<EvtData_PhysTrigger_Enter>(m_triggerID, m_other);
+			return std::make_shared<EvtData_Phys2DTrigger_Enter>(m_triggerID, m_other);
 		}
 
 		virtual const char* GetName() const
 		{
-			return "EvtData_PhysTrigger_Enter";
+			return "EvtData_Phys2DTrigger_Enter";
 		}
 
 		int GetTriggerId() const
@@ -57,7 +57,7 @@ namespace BIEngine
 	};
 
 	//Данное событие возникает, когда физический объект выходит из триггерной зоны
-	class EvtData_PhysTrigger_Leave : public BaseEventData
+	class EvtData_Phys2DTrigger_Leave : public BaseEventData
 	{
 		int m_triggerID;
 		ActorId m_other;
@@ -70,25 +70,25 @@ namespace BIEngine
 			return sk_EventType;
 		}
 
-		EvtData_PhysTrigger_Leave()
+		EvtData_Phys2DTrigger_Leave()
 		{
 			m_triggerID = -1;
 			m_other = Actor::INVALID_ACTOR_ID;
 		}
 
-		explicit EvtData_PhysTrigger_Leave(int triggerID, ActorId other)
+		explicit EvtData_Phys2DTrigger_Leave(int triggerID, ActorId other)
 			: m_triggerID(triggerID),
 			m_other(other)
 		{}
 
 		virtual IEventDataPtr Copy() const
 		{
-			return std::make_shared<EvtData_PhysTrigger_Leave>(m_triggerID, m_other);
+			return std::make_shared<EvtData_Phys2DTrigger_Leave>(m_triggerID, m_other);
 		}
 
 		virtual const char* GetName() const
 		{
-			return "EvtData_PhysTrigger_Leave";
+			return "EvtData_Phys2DTrigger_Leave";
 		}
 
 		int GetTriggerId() const
@@ -104,14 +104,13 @@ namespace BIEngine
 
 	//Данное событие возникает, когда между физическими объектами возникает столкновение
 	//Данное событие может быть получено внутри Python-скрипта
-	class EvtData_PhysCollision : public BaseEventData
+	class EvtData_Phys2DCollision : public BaseEventData
 	{
 		ActorId m_ActorA;
 		ActorId m_ActorB;
-		glm::vec3 m_SumNormalForce;
+		glm::vec2 m_SumNormalForce;
 		float m_friction;
-		std::vector<glm::vec3> m_CollisionPointsA;
-		std::vector<glm::vec3> m_CollisionPointsB;
+		std::vector<glm::vec2> m_CollisionPoints;
 
 	public:
 		static const EventType sk_EventType;
@@ -121,36 +120,34 @@ namespace BIEngine
 			return sk_EventType;
 		}
 
-		EvtData_PhysCollision()
+		EvtData_Phys2DCollision()
 		{
 			m_ActorA = Actor::INVALID_ACTOR_ID;
 			m_ActorB = Actor::INVALID_ACTOR_ID;
-			m_SumNormalForce = glm::vec3();
+			m_SumNormalForce = glm::vec2();
 			m_friction = 0.0f;
 		}
 
-		explicit EvtData_PhysCollision(ActorId actorA,
+		explicit EvtData_Phys2DCollision(ActorId actorA,
 			ActorId actorB,
-			const glm::vec3& sumNormalForce,
+			const glm::vec2& sumNormalForce,
 			float friction,
-			const std::vector<glm::vec3>& collisionPointsA,
-			const std::vector<glm::vec3>& collisionPointsB)
+			const std::vector<glm::vec2>& collisionPoints)
 			: m_ActorA(actorA),
 			m_ActorB(actorB),
 			m_SumNormalForce(sumNormalForce),
 			m_friction(friction),
-			m_CollisionPointsA(collisionPointsA),
-			m_CollisionPointsB(collisionPointsB)
+			m_CollisionPoints(collisionPoints)
 		{}
 
 		virtual IEventDataPtr Copy() const
 		{
-			return std::make_shared<EvtData_PhysCollision>(m_ActorA, m_ActorB, m_SumNormalForce, m_friction, m_CollisionPointsA, m_CollisionPointsB);
+			return std::make_shared<EvtData_Phys2DCollision>(m_ActorA, m_ActorB, m_SumNormalForce, m_friction, m_CollisionPoints);
 		}
 
 		virtual const char* GetName() const
 		{
-			return "EvtData_PhysCollision";
+			return "EvtData_Phys2DCollision";
 		}
 
 		ActorId GetActorA() const
@@ -173,19 +170,14 @@ namespace BIEngine
 			return m_friction;
 		}
 
-		const std::vector<glm::vec3>& GetCollisionPointsA() const
+		const std::vector<glm::vec2>& GetCollisionPoints() const
 		{
-			return m_CollisionPointsA;
-		}
-
-		const std::vector<glm::vec3>& GetCollisionPointsB() const
-		{
-			return m_CollisionPointsB;
+			return m_CollisionPoints;
 		}
 	};
 
 	//Данное событие возникает, когда прекращается столкновение между двумя физическими объектами
-	class EvtData_PhysSeparation : public BaseEventData
+	class EvtData_Phys2DSeparation : public BaseEventData
 	{
 		ActorId m_ActorA;
 		ActorId m_ActorB;
@@ -198,26 +190,26 @@ namespace BIEngine
 			return sk_EventType;
 		}
 
-		EvtData_PhysSeparation()
+		EvtData_Phys2DSeparation()
 		{
 
 			m_ActorA = Actor::INVALID_ACTOR_ID;
 			m_ActorB = Actor::INVALID_ACTOR_ID;
 		}
 
-		explicit EvtData_PhysSeparation(ActorId actorA, ActorId actorB)
+		explicit EvtData_Phys2DSeparation(ActorId actorA, ActorId actorB)
 			: m_ActorA(actorA)
 			, m_ActorB(actorB)
 		{}
 
 		virtual IEventDataPtr Copy() const
 		{
-			return std::make_shared<EvtData_PhysSeparation>(m_ActorA, m_ActorB);
+			return std::make_shared<EvtData_Phys2DSeparation>(m_ActorA, m_ActorB);
 		}
 
 		virtual const char* GetName() const
 		{
-			return "EvtData_PhysSeparation";
+			return "EvtData_Phys2DSeparation";
 		}
 
 		ActorId GetActorA() const

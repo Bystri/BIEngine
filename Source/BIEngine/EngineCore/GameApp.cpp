@@ -65,6 +65,26 @@ namespace BIEngine
 		return true;
 	}
 
+	std::shared_ptr<HumanView> GameApp::TryGetHumanView(unsigned int playerId)
+	{
+		unsigned int currentPlayerId = 0;
+		for (GameViewList::iterator i = m_pGameLogic->m_gameViews.begin(); i != m_pGameLogic->m_gameViews.end(); ++i)
+		{
+			if ((*i)->GetType() == GameViewType::Human)
+			{
+				if (currentPlayerId != playerId)
+				{
+					++currentPlayerId;
+					continue;
+				}
+
+				return std::static_pointer_cast<HumanView>(*i);
+			}
+		}
+
+		return std::shared_ptr<HumanView>();
+	}
+
 	void GameApp::Close()
 	{
 		//Освобождение кэша ресурсов

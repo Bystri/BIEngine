@@ -6,6 +6,7 @@
 #include "../Graphics/SpriteNode.h"
 #include "../EngineCore/GameApp.h"
 #include "../Audio/irrKlangAudio.h"
+#include "../Utilities/DebugDraw.h"
 
 namespace BIEngine
 {
@@ -61,6 +62,8 @@ namespace BIEngine
 
 		//Создание отображения
 		m_pRenderer = std::make_shared<Renderer>(pShader);
+		m_pRenderer->Init();
+		DebugDraw::Init();
 		//Создания сцены на основе отоьбражения
 		m_scene = new Scene(m_pRenderer);
 
@@ -80,7 +83,7 @@ namespace BIEngine
 
 	void HumanView::OnUpdate(float dt)
 	{
-
+		
 	}
 
 	void HumanView::OnRender(float fTime, float dt)

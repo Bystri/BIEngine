@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include "../Utilities/Logger.h"
+#include "../Utilities/DebugDraw.h"
 #include "../ProcessManager/ProcessManager.h"
 
 namespace BIEngine
@@ -130,8 +131,11 @@ namespace BIEngine
 
 		EventManager::Get()->TickUpdate();
 
-		m_pPhysics->OnUpdate(dt);
-		m_pPhysics->SyncVisibleScene(m_actors);
+		m_pPhysics2D->OnUpdate(dt);
+		m_pPhysics2D->SyncVisibleScene(m_actors);
+
+		m_pPhysics3D->OnUpdate(dt);
+		m_pPhysics3D->SyncVisibleScene(m_actors);
 
 		for (const auto view : m_gameViews)
 			view->OnUpdate(dt);
@@ -141,6 +145,9 @@ namespace BIEngine
 	{
 		for (const auto view : m_gameViews)
 			view->OnRender(time, dt);
+
+		m_pPhysics3D->DrawRenderDiagnostics();
+		DebugDraw::Draw();
 	}
 
 	void GameLogic::SetKey(int key, int scancode, bool state)

@@ -1,20 +1,20 @@
 ﻿#pragma once
 
 #include "ActorComponent.h"
-#include "../Physics/Physics.h"
+#include "../Physics/Physics3D.h"
 
 namespace BIEngine
 {
    //Прикрепляет к актеру триггерную зону в виде куба
-    class PhysicsTriggerComponent : public ActorComponent
+    class Physics3DTriggerComponent : public ActorComponent
     {
     public:
         static const ComponentId g_CompId;
-        virtual ComponentId GetComponentId() const { return PhysicsTriggerComponent::g_CompId; };
+        virtual ComponentId GetComponentId() const { return Physics3DTriggerComponent::g_CompId; };
 
     public:
-        PhysicsTriggerComponent();
-        virtual ~PhysicsTriggerComponent();
+        Physics3DTriggerComponent();
+        virtual ~Physics3DTriggerComponent();
 
         virtual bool Init(tinyxml2::XMLElement* pData) override;
         virtual void PostInit() override;
@@ -23,8 +23,8 @@ namespace BIEngine
 
         glm::vec3 GetVelocity();
         void SetVelocity(const glm::vec3& velocity);
-        void SetRotation(float angle);
-        void SetPosition(float x, float y, float z);
+        void RotateY(float angle);
+        void SetPosition(const glm::vec3& position);
         void Stop();
 
 
@@ -34,12 +34,12 @@ namespace BIEngine
     protected:
         glm::vec3 m_dimension;
 
-        std::shared_ptr<IGamePhysics> m_gamePhysics;
+        std::shared_ptr<IGamePhysics3D> m_gamePhysics;
     };
 
-    static ActorComponent* CreatePhysicsTriggerComponent()
+    static ActorComponent* CreatePhysics3DTriggerComponent()
     {
-        return new PhysicsTriggerComponent;
+        return new Physics3DTriggerComponent;
     }
 }
 
