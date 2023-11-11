@@ -77,10 +77,10 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
         .def("GetSize", &BIEngine::TransformComponent::GetSize)
         .def("SetSize", &BIEngine::TransformComponent::SetSize);
 
-    m.def("CreateActor", [](const char* actorArchetypeXmlPath)
+    m.def("CreateActor", [](const char* actorArchetypeXmlPath, const glm::vec3& pos, const glm::vec3& rot)
     {
         std::shared_ptr<BIEngine::XmlExtraData> pActorData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle(actorArchetypeXmlPath)->GetExtra());
-        std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->CreateActor(pActorData->GetRootElement());
+        std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->CreateActor(pActorData->GetRootElement(), &pos, &rot);
 
         if (pActor)
         {
@@ -90,5 +90,10 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
         }
 
         return std::shared_ptr<BIEngine::Actor>();
+    });
+
+    m.def("DestroyActor", [](const std::shared_ptr<BIEngine::Actor>& act)
+    {
+        BIEngine::g_pApp->m_pGameLogic->DestroyActor(act->GetId());
     });
 }

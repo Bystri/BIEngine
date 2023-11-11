@@ -33,7 +33,7 @@ namespace BIEngine
 		m_actorComponentCreators[ScriptComponent::g_CompId] = CreateScriptComponent;
 	}
 
-	std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot)
+	std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation)
 	{
 		if (!pRoot) 
 		{
@@ -58,6 +58,15 @@ namespace BIEngine
 				return std::shared_ptr<Actor>();
 			}
 		}
+
+		//Немного хаков для изменения позиции перед тем, как ее считают другие компоненты (например физика)
+		auto pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+
+		if (pPosition)
+			pTransformComponent->SetPosition(*pPosition);
+
+		if (pRotation)
+			pTransformComponent->SetRotation(*pRotation);
 
 		//Теперь можем инициализировать компоненты
 		pActor->PostInit();

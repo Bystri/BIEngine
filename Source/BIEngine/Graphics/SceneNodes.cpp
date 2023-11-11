@@ -137,7 +137,7 @@ namespace BIEngine
 		if (m_projType == ProjectionType::ORTHO)
 			proj = glm::ortho(0.0f,	(float)g_pApp->m_options.screenWidth, (float)g_pApp->m_options.screenHeight, 0.0f, -1.0f, 1.0f);
 		else
-			proj = glm::perspective(glm::radians(45.0f), (float)g_pApp->m_options.screenWidth / (float)g_pApp->m_options.screenHeight, 0.1f, 100.0f);
+			proj = glm::perspective(glm::radians(45.0f), (float)g_pApp->m_options.screenWidth / (float)g_pApp->m_options.screenHeight, 0.1f, 1000.0f);
 
 		pScene->GetRenderer()->SetProjection(proj);
 

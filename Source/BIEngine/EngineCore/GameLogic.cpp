@@ -150,17 +150,27 @@ namespace BIEngine
 		DebugDraw::Draw();
 	}
 
+	std::shared_ptr<Actor> GameLogic::GetActor(ActorId id) const
+	{
+		auto it = m_actors.find(id);
+
+		if (it == m_actors.end())
+			return std::shared_ptr<Actor>();
+
+		return it->second;
+	}
+
 	void GameLogic::SetKey(int key, int scancode, bool state)
 	{
 		for (const auto view : m_gameViews)
 			view->SetKey(key, scancode, state);
 	}
 
-	std::shared_ptr<Actor> GameLogic::CreateActor(tinyxml2::XMLElement* pRoot)
+	std::shared_ptr<Actor> GameLogic::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation)
 	{
 		assert(m_pActorFactory);
 
-		std::shared_ptr<Actor> pActor = m_pActorFactory->CreateActor(pRoot);
+		std::shared_ptr<Actor> pActor = m_pActorFactory->CreateActor(pRoot, pPosition, pRotation);
 		if (pActor)
 		{
 			m_actors.insert(std::make_pair(pActor->GetId(), pActor));

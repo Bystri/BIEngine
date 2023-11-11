@@ -13,7 +13,9 @@
 #include <glm/ext/matrix_relational.hpp>
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
+#include <BulletCollision/NarrowPhaseCollision/btRaycastCallback.h>
 
+#include "../EngineCore/GameApp.h"
 #include "../Actors/Actor.h"
 #include "../Actors/TransformComponent.h"
 #include "../EventManager/EventManager.h"
@@ -65,6 +67,8 @@ namespace BIEngine
 		virtual void ApplyForce(const glm::vec3& forceVec, ActorId aid) override { }
 		virtual void ApplyTorque(const glm::vec3& torque, ActorId aid) override { }
 		virtual bool KinematicMove(ActorId aid, const glm::vec3& position, const glm::vec3& angles) override { return true; }
+
+		virtual RaycastInfo Raycast(const glm::vec3& from, const glm::vec3& to) override { return RaycastInfo();  }
 
 		virtual void RotateY(ActorId actorId, float angleRadians) override { }
 		virtual float GetOrientationY(ActorId actorId) const override { return 0.0; }
@@ -177,7 +181,9 @@ namespace BIEngine
 		//Применяет силу к объекту
 		virtual void ApplyForce(const glm::vec3& forceVec, ActorId aid) override;
 		//Применить момент силы к объекту
-		void ApplyTorque(const glm::vec3& torque, ActorId aid);
+		virtual void ApplyTorque(const glm::vec3& torque, ActorId aid) override;
+
+		virtual RaycastInfo Raycast(const glm::vec3& from, const glm::vec3& to) override;
 
 		//Напрямую задает положение и поворот физического объекта.
 		//Следует быть с этим аккуратнее, так как данная процедура способна сломать физическую симуляцию
@@ -609,15 +615,44 @@ namespace BIEngine
 
 			glm::mat4 trans = glm::mat4(1.0f);
 			trans = glm::translate(trans, position);
-			trans = glm::rotate(trans, glm::radians(angles.x), glm::vec3(1.0f, 0.0f, 0.0f));
-			trans = glm::rotate(trans, glm::radians(angles.y), glm::vec3(0.0f, 1.0f, 0.0f));
 			trans = glm::rotate(trans, glm::radians(angles.z), glm::vec3(0.0f, 0.0f, 1.0f));
+			trans = glm::rotate(trans, glm::radians(angles.y), glm::vec3(0.0f, 1.0f, 0.0f));
+			trans = glm::rotate(trans, glm::radians(angles.x), glm::vec3(1.0f, 0.0f, 0.0f));
 
 			body->setWorldTransform(Mat4x4_to_btTransform(trans));
 			return true;
 		}
 
 		return false;
+	}
+
+	IGamePhysics3D::RaycastInfo Physics3D::Raycast(const glm::vec3& from, const glm::vec3& to)
+	{
+		const btVector3 btFrom = Vec3_to_btVector3(from);
+		const btVector3 btTo = Vec3_to_btVector3(to);
+
+		btCollisionWorld::ClosestRayResultCallback closestResults(btFrom, btTo);
+		closestResults.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+
+		m_pDynamicsWorld->rayTest(btFrom, btTo, closestResults);
+
+		IGamePhysics3D::RaycastInfo info;
+
+		if (closestResults.hasHit())
+		{
+			info.hasHit = true;
+
+			btVector3 p = btFrom.lerp(btTo, closestResults.m_closestHitFraction);
+			info.hitPosition = btVector3_to_Vec3(p);
+
+			if (closestResults.m_collisionObject)
+			{
+				const btRigidBody* const body = btRigidBody::upcast(closestResults.m_collisionObject);
+				info.hitActor = g_pApp->m_pGameLogic->GetActor(FindActorID(body));
+			}
+		}
+
+		return info;
 	}
 
 	void Physics3D::RotateY(ActorId const actorId, float const deltaAngleRadians)
@@ -798,7 +833,7 @@ namespace BIEngine
 		if (found != m_rigidBodyToActorId.end())
 			return found->second;
 
-		return ActorId();
+		return Actor::INVALID_ACTOR_ID;
 	}
 
 	void Physics3D::RemoveCollisionObject(btCollisionObject* const pBodyToRemove)

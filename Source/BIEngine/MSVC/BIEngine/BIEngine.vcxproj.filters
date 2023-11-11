@@ -413,6 +413,9 @@
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsDebug.h">
       <Filter>Scripting\ScriptExports</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsPhysics3D.h">
+      <Filter>Scripting\ScriptExports</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

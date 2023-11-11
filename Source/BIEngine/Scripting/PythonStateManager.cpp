@@ -67,6 +67,11 @@ namespace BIEngine
         m_main.def("ExecuteFile", [this](const char* path) {PythonStateManager::ExecuteFile(path); });
         m_main.def("ExecuteString", [this](const char* str) {PythonStateManager::ExecuteString(str); });
 
+        //TODO: HACK FOR LOADING SCRIPTS. Replace to resource manager
+        py::list sysPaths = py::module::import("sys").attr("path");
+        sysPaths.append("C:/BystrovI/Projects/BIEngine/Assets/Scripts");
+        py::module::import("sys").attr("path") = sysPaths;
+
         return true;
     }
 
@@ -137,7 +142,9 @@ PYBIND11_EMBEDDED_MODULE(BIEVector, m)
         .def_readwrite("x", &glm::vec3::x)
         .def_readwrite("y", &glm::vec3::y)
         .def_readwrite("z", &glm::vec3::z)
-        .def("Length", &glm::vec3::length)
+        .def("Length", [](const glm::vec3& vec) {
+            return glm::length(vec);
+        })
 
         //Перегрузка операторов
         .def(py::self + py::self)

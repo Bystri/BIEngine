@@ -3,6 +3,7 @@
 
 #include "../Scripting/PythonStateManager.h"
 #include "../Utilities/Logger.h"
+#include "Actor.h"
 
 namespace BIEngine
 {
@@ -46,6 +47,7 @@ namespace BIEngine
 
         auto componentModule = pybind11::module_::import(m_componentScriptPath.c_str());
         m_pyObject = componentModule.attr("__dict__").cast<pybind11::dict>()[m_className.c_str()]().cast<pybind11::object>();
+        m_pyObject.attr("owner") = m_pOwner;
 
         // читаем данные из <StringData>
         tinyxml2::XMLElement* pStringDataElement = pData->FirstChildElement("StringData");
@@ -62,7 +64,7 @@ namespace BIEngine
         tinyxml2::XMLElement* pNumberDataElement = pData->FirstChildElement("NumberData");
         if (pNumberDataElement)
         {
-            for (const tinyxml2::XMLAttribute* pAttribute = pStringDataElement->FirstAttribute(); pAttribute != nullptr; pAttribute = pAttribute->Next())
+            for (const tinyxml2::XMLAttribute* pAttribute = pNumberDataElement->FirstAttribute(); pAttribute != nullptr; pAttribute = pAttribute->Next())
             {
                 float val = std::atof(pAttribute->Value());
                 m_numVars.push_back(std::pair<std::string, float>(pAttribute->Name(), val));

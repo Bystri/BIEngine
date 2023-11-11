@@ -14,6 +14,13 @@ namespace BIEngine
 	class IGamePhysics3D
 	{
 	public:
+		struct RaycastInfo
+		{
+			bool hasHit = false;
+			glm::vec3 hitPosition;
+			std::shared_ptr<Actor> hitActor = nullptr;
+		};
+
 		enum class BodyType
 		{
 			DYNAMIC, //Учавствуют в полноценной физической симуляции
@@ -41,6 +48,8 @@ namespace BIEngine
 		virtual void ApplyForce(const glm::vec3& forceVec, ActorId aid) = 0;
 		virtual void ApplyTorque(const glm::vec3& torque, ActorId aid) = 0;
 		virtual bool KinematicMove(ActorId aid, const glm::vec3& position, const glm::vec3& angles) = 0;
+
+		virtual RaycastInfo Raycast(const glm::vec3& from, const glm::vec3& to) = 0;
 
 		//Явные способы задать актерам пространственные характеристики
 		virtual void RotateY(ActorId actorId, float angleRadians) = 0;

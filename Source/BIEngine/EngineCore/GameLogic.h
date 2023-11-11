@@ -32,7 +32,7 @@ namespace BIEngine
 		//Такая необохдимость в отдельной функции возникает из-за выполнение скриптов перед и после загрузки мира.
 		virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) { return true; }
 
-		std::shared_ptr<Actor> CreateActor(tinyxml2::XMLElement* pRoot);
+		std::shared_ptr<Actor> CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition = nullptr, const glm::vec3* const pRotation = nullptr);
 		//Принимает на вход XML-структуру актера, компоненты в котором будут заменены или добавлены.
 		void ModifyActor(ActorId actorId, tinyxml2::XMLElement* pOverrides);
 		//Является ответчиком на запрос об уничтожении актера
@@ -45,6 +45,7 @@ namespace BIEngine
 		virtual void OnUpdate(float dt);
 		virtual void OnRender(float time, float dt);
 
+		std::shared_ptr<Actor> GetActor(ActorId id) const;
 		int GetNumActors() const { return m_actors.size(); };
 
 		//Обработчики событий устройств ввода
