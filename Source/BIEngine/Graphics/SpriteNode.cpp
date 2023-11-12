@@ -5,8 +5,7 @@ namespace BIEngine
 
 	bool SpriteNode::OnRender(Scene* pScene)
 	{
-		pScene->GetRenderer()->SetColor(m_props.GetMaterial()->GetColor());
-		pScene->GetRenderer()->DrawSprite(m_pSprite);
+		pScene->GetRenderer()->DrawSprite(m_props.GetMaterial()->GetRenderState(), m_props.GetMaterial()->GetShaderProgramState(), m_props.GetMaterial()->GetColor(), m_pSprite);
 		return true;
 	}
 

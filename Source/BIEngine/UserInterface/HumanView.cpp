@@ -1,7 +1,7 @@
 ﻿#include "HumanView.h"
 
-#include "../Graphics/ShadersLoader.h"
-#include "../Graphics/Shader.h"
+#include "../Renderer/ShadersLoader.h"
+#include "../Renderer/ShaderProgram.h"
 #include "../Graphics/TextureLoader.h"
 #include "../Graphics/SpriteNode.h"
 #include "../EngineCore/GameApp.h"
@@ -52,16 +52,8 @@ namespace BIEngine
 
 		m_userInterface.Init(m_screenWidth, m_screenHeight);
 
-		//Загрузка шейдеров
-		std::shared_ptr<ShaderData> pVertShaderData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle("Effects/sprite.vs")->GetExtra());
-		std::shared_ptr<ShaderData> pFragShaderxData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle("Effects/sprite.frag")->GetExtra());
-		std::shared_ptr<Shader> pShader = std::make_shared<Shader>();
-		pShader->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
-		pShader->Use();
-		pShader->SetInteger("image", 0);
-
 		//Создание отображения
-		m_pRenderer = std::make_shared<Renderer>(pShader);
+		m_pRenderer = std::make_shared<Renderer>();
 		m_pRenderer->Init();
 		DebugDraw::Init();
 		//Создания сцены на основе отоьбражения

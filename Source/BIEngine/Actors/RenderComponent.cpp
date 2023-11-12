@@ -2,6 +2,7 @@
 
 #include "../EventManager/EventManager.h"
 #include "../EventManager/Events.h"
+#include "../Renderer/ShadersLoader.h"
 #include "../Graphics/MeshGeometryGenerator.h"
 #include "../Actors/TransformComponent.h"
 #include "../Utilities/Logger.h"
@@ -17,6 +18,27 @@ namespace BIEngine
 
     bool BaseRenderComponent::Init(tinyxml2::XMLElement* pData)
     {
+        tinyxml2::XMLElement* pShaderProgramInfo = pData->FirstChildElement("ShaderProgram");
+
+        if (pShaderProgramInfo == nullptr) {
+            Logger::WriteLog(Logger::LogType::ERROR, "Error while loading RenderComponent for Actor with id: " + std::to_string(m_pOwner->GetId()) + "; No Shader was specified");
+            return false;
+        }
+
+        const char* vertexShaderPath;
+        pShaderProgramInfo->QueryStringAttribute("vertexShaderPath", &vertexShaderPath);
+            
+        const char* fragmentShaderPath;
+        pShaderProgramInfo->QueryStringAttribute("fragmentShaderPath", &fragmentShaderPath);
+
+        std::shared_ptr<ShaderData> pVertShaderData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(vertexShaderPath)->GetExtra());
+        std::shared_ptr<ShaderData> pFragShaderxData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(fragmentShaderPath)->GetExtra());
+        std::shared_ptr<ShaderProgram> pShaderProgram = std::make_shared<ShaderProgram>();
+        pShaderProgram->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
+
+        m_pMaterial = std::make_shared<Material>(pShaderProgram);
+        m_pMaterial->SetColor(WHITE);
+
         tinyxml2::XMLElement* pColorElement = pData->FirstChildElement("Color");
         if (pColorElement)
         {

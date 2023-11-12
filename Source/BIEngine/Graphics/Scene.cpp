@@ -56,13 +56,13 @@ namespace BIEngine
 		const glm::mat4 newModelMatrix = m_localMatrixStack.top() * modelMatrix;
 
 		m_pRenderer->SetModelTransform(newModelMatrix);
-
 		m_localMatrixStack.push(newModelMatrix);
 	}
 
 	void Scene::PopMatrix()
 	{
 		m_localMatrixStack.pop();
+		m_pRenderer->SetModelTransform(m_localMatrixStack.top());
 	}
 
 	std::shared_ptr<ISceneNode> Scene::FindActor(ActorId id) {

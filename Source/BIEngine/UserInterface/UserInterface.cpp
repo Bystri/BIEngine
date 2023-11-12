@@ -9,8 +9,8 @@
 #include FT_FREETYPE_H
 
 #include "../Graphics/Texture.h"
-#include "../Graphics/Shader.h"
-#include "../Graphics/ShadersLoader.h"
+#include "../Renderer/ShaderProgram.h"
+#include "../Renderer/ShadersLoader.h"
 #include "../Utilities/Logger.h"
 
 namespace BIEngine
@@ -38,7 +38,7 @@ namespace BIEngine
     private:
         unsigned int VAO, VBO;
 
-        Shader m_textShader;
+        ShaderProgram m_textShader;
 
         std::map<char, Character> m_characters;
     };

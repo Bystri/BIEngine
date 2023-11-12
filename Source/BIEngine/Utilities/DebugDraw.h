@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Graphics/Renderer.h"
+#include "../Renderer/Renderer.h"
 
 namespace BIEngine
 {

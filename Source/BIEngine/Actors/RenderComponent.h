@@ -17,8 +17,6 @@ namespace BIEngine
     public:
         BaseRenderComponent() 
         {
-            m_pMaterial = std::make_shared<Material>();
-            m_pMaterial->SetColor(WHITE);
         }
 
         virtual bool Init(tinyxml2::XMLElement* pData);

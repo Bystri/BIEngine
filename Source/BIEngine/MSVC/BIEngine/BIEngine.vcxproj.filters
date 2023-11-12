@@ -52,6 +52,9 @@
     <Filter Include="Scripting\ScriptExports">
       <UniqueIdentifier>{df87cbe9-1ec9-4b97-8015-4935301f5339}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{7d2b02d0-d82c-41e6-8559-6eacebae44fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCore\GameApp.cpp">
@@ -162,19 +165,10 @@
     <ClCompile Include="..\..\Graphics\Model3dNode.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Graphics\Renderer.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Graphics\Scene.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Graphics\SceneNodes.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics\Shader.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics\ShadersLoader.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Graphics\Sprite.cpp">
@@ -212,6 +206,24 @@
     </ClCompile>
     <ClCompile Include="..\..\Utilities\DebugDraw.cpp">
       <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\ShaderProgramState.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\ShaderProgram.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\ShadersLoader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\Renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\RenderState.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\RenderDevice.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -347,19 +359,10 @@
     <ClInclude Include="..\..\Graphics\Model3dNode.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Graphics\Renderer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Graphics\Scene.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Graphics\SceneNodes.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics\Shader.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics\ShadersLoader.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Graphics\Sprite.h">
@@ -415,6 +418,24 @@
     </ClInclude>
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsPhysics3D.h">
       <Filter>Scripting\ScriptExports</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\ShaderProgramState.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\ShaderProgram.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\ShadersLoader.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\RenderState.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\RenderDevice.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

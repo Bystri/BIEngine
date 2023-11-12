@@ -5,7 +5,7 @@
 namespace BIEngine
 {
 
-    std::shared_ptr<Shader> g_pDebugShader;
+    std::shared_ptr<ShaderProgram> g_pDebugShader;
     glm::mat4 projMatrix;
     glm::mat4 viewMatrix;
 
@@ -34,7 +34,7 @@ namespace BIEngine
         glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
         glCompileShader(fragmentShader);
 
-        g_pDebugShader = std::make_shared<Shader>();
+        g_pDebugShader = std::make_shared<ShaderProgram>();
         g_pDebugShader->Compile(vertexShader, fragmentShader);
 
         glDeleteShader(vertexShader);

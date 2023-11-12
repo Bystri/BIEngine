@@ -6,7 +6,7 @@
 namespace BIEngine
 {
 
-	glm::mat4 SceneNode::GetLocalModelMaatrix() const
+	glm::mat4 SceneNode::GetLocalModelMatrix() const
 	{
 		const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f),
 			glm::radians(m_props.GetRotation().x),
@@ -39,7 +39,7 @@ namespace BIEngine
 
 	bool SceneNode::PreRender(Scene* pScene)
 	{
-		pScene->PushMatrix(GetLocalModelMaatrix());
+		pScene->PushMatrix(GetLocalModelMatrix());
 		return true;
 	}
 

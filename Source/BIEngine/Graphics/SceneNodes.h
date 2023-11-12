@@ -43,7 +43,7 @@ namespace BIEngine
 
 		RenderLayer GetRenderLayer() const { return m_renderLayer; }
 
-		bool Hasalpha() const { return m_pMaterial->HasAlpha(); }
+		bool HasAlpha() const { return m_pMaterial->HasAlpha(); }
 		virtual float Alpha() const { return m_pMaterial->GetAlpha(); }
 
 		void SetMaterial(std::shared_ptr<Material> pMat) { m_pMaterial = pMat; }
@@ -116,7 +116,7 @@ namespace BIEngine
 		virtual glm::vec3 GetPosition() const { return  m_props.GetPosition(); }
 		virtual glm::vec3 GetSize() const { return  m_props.GetSize(); };
 		virtual glm::vec3 GetRotation() const { return  m_props.GetRotation(); }
-		virtual glm::mat4 GetLocalModelMaatrix() const;
+		virtual glm::mat4 GetLocalModelMatrix() const;
 
 		virtual bool OnUpdate(Scene* pScene, float dt);
 		//Если данное событие вернут "false", то отрисовка объекта в данном кадре будет отменена, но событие PostRender будет выполнено

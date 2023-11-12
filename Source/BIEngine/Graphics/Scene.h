@@ -5,7 +5,7 @@
 #include <stack>
 
 #include "SceneNodes.h"
-#include "Renderer.h"
+#include "../Renderer/Renderer.h"
 #include "../EventManager/Events.h"
 
 namespace BIEngine

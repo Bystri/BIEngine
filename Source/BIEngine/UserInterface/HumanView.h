@@ -3,7 +3,7 @@
 #include "IGameView.h"
 #include "InputDevices.h"
 #include "UserInterface.h"
-#include "../Graphics/Renderer.h"
+#include "../Renderer/Renderer.h"
 #include "../Graphics/Scene.h"
 
 namespace BIEngine

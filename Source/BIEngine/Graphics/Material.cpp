@@ -17,20 +17,23 @@ namespace BIEngine
 	const Color GRAY25 = Color(0.25f, 0.25f, 0.25f);
 	const Color GRAY65 = Color(0.65f, 0.65f, 0.65f);
 
-	Material::Material()
-		: m_Color(WHITE)
-		, m_Alpha(ALPHA_OPAQUE)
+	Material::Material(const std::shared_ptr<ShaderProgram>& pShader)
+		: m_color(WHITE)
+		, m_alpha(ALPHA_OPAQUE)
+
+		, m_renderState()
+		, m_shaderProgramState(pShader)
 	{
 	}
 
 	void Material::SetColor(const Color& color)
 	{
-		m_Color = color;
+		m_color = color;
 	}
 
 	void Material::SetAlpha(const float alpha)
 	{
-		m_Alpha = alpha;
+		m_alpha = alpha;
 	}
 
 }
