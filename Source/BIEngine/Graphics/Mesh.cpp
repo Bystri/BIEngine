@@ -1,5 +1,7 @@
 #include "Mesh.h"
 
+#include <glad/glad.h>
+
 namespace BIEngine
 {
 	Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)

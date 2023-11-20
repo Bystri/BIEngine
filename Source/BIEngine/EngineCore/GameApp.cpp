@@ -2,7 +2,7 @@
 
 #include "../ResourceCache/ResCache.h"
 #include "../Renderer/ShadersLoader.h"
-#include "../Graphics/TextureLoader.h"
+#include "../Renderer/ImageLoader.h"
 #include "../ResourceCache/XmlLoader.h"
 #include "../UserInterface/HumanView.h"
 #include "../Scripting/PythonStateManager.h"
@@ -44,6 +44,7 @@ namespace BIEngine
 		ResCache::Create(RESOURCE_CACHE_SIZE, pZipFile);
 
 		ResCache::Get()->RegisterLoader(std::make_shared<XmlResourceLoader>());
+		ResCache::Get()->RegisterLoader(std::make_shared<JpgResourceLoader>());
 		ResCache::Get()->RegisterLoader(std::make_shared<PngResourceLoader>());
 		ResCache::Get()->RegisterLoader(std::make_shared<VertexShaderResourceLoader>());
 		ResCache::Get()->RegisterLoader(std::make_shared<FragmentShaderResourceLoader>());

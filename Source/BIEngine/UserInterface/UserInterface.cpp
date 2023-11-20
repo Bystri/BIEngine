@@ -8,7 +8,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "../Graphics/Texture.h"
+#include "../Renderer/Texture.h"
 #include "../Renderer/ShaderProgram.h"
 #include "../Renderer/ShadersLoader.h"
 #include "../Utilities/Logger.h"

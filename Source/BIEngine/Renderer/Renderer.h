@@ -9,6 +9,39 @@
 
 namespace BIEngine
 {
+    struct RenderCommand
+    {
+        RenderCommand(std::shared_ptr<Mesh> pMesh, std::shared_ptr<ShaderProgram> pShader)
+            : pMesh(pMesh)
+            , m_shaderProgramState(pShader)
+        {
+
+        }
+
+
+        std::shared_ptr<Mesh> GetMeshPtr() const
+        {
+            return pMesh;
+        }
+
+
+        ShaderProgramState& GetShaderProgramState()
+        {
+            return m_shaderProgramState;
+        }
+
+        glm::mat4 Transform;
+
+        RenderState RenderState;
+
+        std::shared_ptr<Texture> pTexture;
+
+    private:
+        const std::shared_ptr<Mesh> pMesh;
+        ShaderProgramState m_shaderProgramState;
+    };
+
+
     //Отвечает за отрисвоку спрайтов 
     class Renderer
     {
@@ -19,14 +52,15 @@ namespace BIEngine
 
         void Init();
 
+        void Clear(RenderDevice::ClearFlag flags, const Color& color);
+
         void SetProjection(const glm::mat4& proj);
         void SetViewTransform(const glm::mat4& view);
         void SetModelTransform(const glm::mat4& model);
 
         RenderDevice& GetRenderDevice() { return m_renderDevice; }
 
-        void DrawSprite(RenderState renderState, ShaderProgramState& pShaderProgramState, Color color, std::shared_ptr<Sprite> pSprite);
-        void DrawModel(RenderState renderState, ShaderProgramState& pShaderProgramState, Color color, std::shared_ptr<Model3d> pModel);
+        void DrawRenderCommand(RenderCommand& renderCommand);
 
     private:
         RenderDevice m_renderDevice;

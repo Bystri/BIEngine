@@ -8,6 +8,7 @@ namespace BIEngine
 	Scene::Scene(std::shared_ptr<Renderer> pRenderer)
 		: m_pRenderer(pRenderer)
 		, m_pCamera(nullptr)
+		, m_pSkybox(nullptr)
 		, m_localMatrixStack()
 	{
 		m_pRoot = std::make_shared<RootNode>();
@@ -30,6 +31,9 @@ namespace BIEngine
 	{
 		if (m_pRoot && m_pCamera) 
 		{
+			static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
+			m_pRenderer->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
+
 			//Камера задает значения для всех необходимых матриц
 			m_pCamera->OnRender(this);
 
@@ -39,6 +43,10 @@ namespace BIEngine
 				m_pRoot->RenderChildren(this);
 			}
 			m_pRoot->PostRender(this);
+
+			if (m_pSkybox) {
+				m_pSkybox->OnRender(this);
+			}
 		}
 
 		return 0;

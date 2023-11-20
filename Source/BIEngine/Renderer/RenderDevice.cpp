@@ -5,6 +5,89 @@
 namespace BIEngine
 {
 
+    static GLenum renderEnumBlendFuncToGlEnum(RenderDevice::BlendFunc src)
+    {
+        if (src == RenderDevice::BlendFunc::ZERO || src == RenderDevice::BlendFunc::ONE) {
+            return static_cast<int>(src);
+        }
+
+        return GL_SRC_COLOR + static_cast<char>(src);
+    }
+
+
+
+    void RenderDevice::Init()
+    {
+        if (m_depthTest) {
+            glEnable(GL_DEPTH_TEST);
+        }
+        else {
+            glDisable(GL_DEPTH_TEST);
+        }
+
+
+        glDepthMask(m_depthWrite);
+
+
+        glDepthFunc(GL_NEVER + static_cast<char>(m_depthFunc));
+
+
+        if (m_blend) {
+            glEnable(GL_BLEND);
+        }
+        else {
+            glDisable(GL_BLEND);
+        }
+        
+
+        glBlendFunc(renderEnumBlendFuncToGlEnum(m_blendSrc), renderEnumBlendFuncToGlEnum(m_blendDst));
+
+
+        glBlendEquation(GL_FUNC_ADD + static_cast<char>(m_blendEquation));
+
+
+        if (m_cullFace) {
+            glEnable(GL_CULL_FACE);
+        }
+        else {
+            glDisable(GL_CULL_FACE);
+        }
+
+
+        glCullFace(GL_FRONT_LEFT + static_cast<char>(m_frontFace));
+
+
+        glFrontFace(GL_CW + static_cast<char>(m_windingOrder));
+
+
+
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FRONT_LEFT + static_cast<char>(m_polygonMode));
+    }
+
+
+    void RenderDevice::Clear(ClearFlag flags, const glm::vec4& ClearColor)
+    {
+        unsigned int clearBits = 0u;
+
+        if (static_cast<bool>(flags & RenderDevice::ClearFlag::COLOR)) {
+            clearBits |= GL_COLOR_BUFFER_BIT;
+        }
+
+        if (static_cast<bool>(flags & RenderDevice::ClearFlag::DEPTH)) {
+            clearBits |= GL_DEPTH_BUFFER_BIT;
+            SetDepthTest(true);
+            SetDepthWrite(true);
+        }
+
+        if (static_cast<bool>(flags & RenderDevice::ClearFlag::STENCIL)) {
+            clearBits |= GL_STENCIL_BUFFER_BIT;
+        }
+
+        glClearColor(ClearColor.r, ClearColor.g, ClearColor.b, ClearColor.a);
+        glClear(clearBits);
+    }
+
+
     void RenderDevice::SetDepthTest(bool enable)
     {
         if (m_depthTest == enable) {
@@ -19,6 +102,17 @@ namespace BIEngine
         else {
             glDisable(GL_DEPTH_TEST);
         }
+    }
+
+
+    void RenderDevice::SetDepthWrite(bool enable)
+    {
+        if (m_depthWrite == enable) {
+            return;
+        }
+
+        m_depthWrite = enable;
+        glDepthMask(m_depthWrite);
     }
 
 
@@ -47,16 +141,6 @@ namespace BIEngine
         else {
             glDisable(GL_BLEND);
         }
-    }
-
-
-    static GLenum renderEnumBlendFuncToGlEnum(RenderDevice::BlendFunc src)
-    {
-        if (src == RenderDevice::BlendFunc::ZERO || src == RenderDevice::BlendFunc::ONE) {
-            return static_cast<int>(src);
-        }
-
-        return GL_SRC_COLOR + static_cast<char>(src);
     }
 
 

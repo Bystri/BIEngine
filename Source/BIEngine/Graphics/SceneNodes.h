@@ -44,16 +44,11 @@ namespace BIEngine
 		RenderLayer GetRenderLayer() const { return m_renderLayer; }
 
 		bool HasAlpha() const { return m_pMaterial->HasAlpha(); }
-		virtual float Alpha() const { return m_pMaterial->GetAlpha(); }
 
 		void SetMaterial(std::shared_ptr<Material> pMat) { m_pMaterial = pMat; }
 		std::shared_ptr<Material> GetMaterial() const { return m_pMaterial; }
 
 	protected:
-		void SetAlpha(const float alpha) {
-			m_pMaterial->SetAlpha(alpha);
-		}
-
 		void SetRenderLayer(RenderLayer renderLayer) {
 			m_renderLayer = renderLayer;
 		}
@@ -175,6 +170,9 @@ namespace BIEngine
 		virtual bool OnRender(Scene* pScene) override;
 		//Всегда возвращает "true", так как для вызова OnRender требуется, чтобы объект был видимым
 		virtual bool IsVisible(Scene* pScene) const { return true; }
+
+		glm::mat4 GetViewMatrix() const;
+		glm::mat4 GetProjMatrix() const;
 
 	private:
 		ProjectionType m_projType;

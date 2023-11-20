@@ -5,6 +5,7 @@
 #include <stack>
 
 #include "SceneNodes.h"
+#include "Skybox.h"
 #include "../Renderer/Renderer.h"
 #include "../EventManager/Events.h"
 
@@ -42,6 +43,8 @@ namespace BIEngine
 		void SetCamera(std::shared_ptr<CameraNode> pCamera) { m_pCamera = pCamera; }
 		const std::shared_ptr<CameraNode> GetCamera() const { return m_pCamera; }
 
+		void SetSkybox(std::shared_ptr<Skybox> pSkybox) { m_pSkybox = pSkybox; }
+
 		bool AddChild(ActorId id, std::shared_ptr<ISceneNode> pChild);
 		bool RemoveChild(ActorId id);
 
@@ -60,6 +63,7 @@ namespace BIEngine
 		std::shared_ptr<SceneNode> m_pRoot;
 
 		std::shared_ptr<CameraNode> m_pCamera;
+		std::shared_ptr<Skybox> m_pSkybox;
 		//Рисовальщик
 		std::shared_ptr<Renderer> m_pRenderer;
 

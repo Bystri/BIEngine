@@ -1,0 +1,4 @@
+<Scene>
+    <Skybox cubemapTextureBackPath="Texures/skybox/back.jpg" cubemapTextureBottomPath="Texures/skybox/bottom.jpg" cubemapTextureFrontPath="Texures/skybox/front.jpg" cubemapTextureLeftPath="Texures/skybox/left.jpg" cubemapTextureRightPath="Texures/skybox/right.jpg" cubemapTextureTopPath="Texures/skybox/top.jpg" vertexShaderPath="Effects/skybox.vs" fragmentShaderPath="Effects/skybox.frag"/>
+</Scene>
+

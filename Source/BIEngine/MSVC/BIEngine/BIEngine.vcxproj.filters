@@ -177,12 +177,6 @@
     <ClCompile Include="..\..\Graphics\SpriteNode.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Graphics\Texture.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics\TextureLoader.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Graphics\Model3d.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -223,6 +217,15 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Renderer\RenderDevice.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\Skybox.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\ImageLoader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\Texture.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
@@ -296,9 +299,6 @@
     <ClInclude Include="..\..\ResourceCache\XmlLoader.h">
       <Filter>ResourceCache</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Physics\Physics.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Physics\Physics2DEventListener.h">
       <Filter>Physics</Filter>
     </ClInclude>
@@ -371,12 +371,6 @@
     <ClInclude Include="..\..\Graphics\SpriteNode.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Graphics\Texture.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics\TextureLoader.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Graphics\Model3d.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -435,6 +429,15 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Renderer\RenderDevice.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\Skybox.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\ImageLoader.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\Texture.h">
       <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>

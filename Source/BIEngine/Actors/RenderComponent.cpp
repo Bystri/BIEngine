@@ -6,6 +6,7 @@
 #include "../Graphics/MeshGeometryGenerator.h"
 #include "../Actors/TransformComponent.h"
 #include "../Utilities/Logger.h"
+#include "../Renderer/ImageLoader.h"
 
 namespace BIEngine
 {
@@ -48,7 +49,7 @@ namespace BIEngine
             pColorElement->QueryFloatAttribute("r", &r);
             pColorElement->QueryFloatAttribute("g", &g);
             pColorElement->QueryFloatAttribute("b", &b);
-            m_pMaterial->SetColor(Color(r, g, b));
+            m_pMaterial->SetColor(Color(r, g, b, 1.0f));
         }
 
         return true;
@@ -98,16 +99,20 @@ namespace BIEngine
             const char* spritePath;
             pSpriteElement->QueryStringAttribute("path", &spritePath);
             m_spritePath = spritePath;
-            auto texData = std::static_pointer_cast<TextureExtraData>(ResCache::Get()->GetHandle(spritePath)->GetExtra());
+            auto imgData = std::static_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(spritePath)->GetExtra());
 
-            if (texData == nullptr)
+            if (imgData == nullptr)
             {
                 Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + std::to_string(m_pOwner->GetId()));
                 m_pSpriteNode.reset();
                 return false;
             }
 
-            m_pSpriteNode->SetSprite(std::make_shared<Sprite>(texData->GetTexture()));
+            std::shared_ptr<Texture2D> pTexture = std::make_shared<Texture2D>();
+            pTexture->SetInternalFormat(GL_RGBA);
+            pTexture->SetImageFormat(GL_RGBA);
+            pTexture->Generate(imgData->GetWidth(), imgData->GetHeight(), imgData->GetData());
+            m_pSpriteNode->SetSprite(std::make_shared<Sprite>(pTexture));
         }
 
         return true;
@@ -175,9 +180,9 @@ namespace BIEngine
             const char* texturePath;
             pTextureElement->QueryStringAttribute("path", &texturePath);
             m_texturePath = texturePath;
-            auto texData = std::static_pointer_cast<TextureExtraData>(ResCache::Get()->GetHandle(texturePath)->GetExtra());
+            auto imgData = std::static_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(texturePath)->GetExtra());
 
-            if (texData == nullptr)
+            if (imgData == nullptr)
             {
                 Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + std::to_string(m_pOwner->GetId()));
                 m_pModelNode.reset();
@@ -185,7 +190,13 @@ namespace BIEngine
             }
 
             std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 6u));
-            m_pModelNode->SetModel(std::make_shared<Model3d>(boxMesh, texData->GetTexture()));
+
+            std::shared_ptr<Texture2D> pTexture = std::make_shared<Texture2D>();
+            pTexture->SetInternalFormat(GL_RGBA);
+            pTexture->SetImageFormat(GL_RGBA);
+            pTexture->Generate(imgData->GetWidth(), imgData->GetHeight(), imgData->GetData());
+
+            m_pModelNode->SetModel(std::make_shared<Model3d>(boxMesh, pTexture));
         }
 
         return true;

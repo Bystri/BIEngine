@@ -1,11 +1,25 @@
 #pragma once
 
+#include <type_traits>
+
+#include <glm/glm.hpp>
+
 namespace BIEngine
 {
 
 	class RenderDevice
 	{
 	public:
+		enum class ClearFlag : unsigned char
+		{
+			NONE,
+			COLOR = 1,
+			DEPTH = 1 << 1,
+			STENCIL = 1 << 2,
+			ALL = COLOR | DEPTH | STENCIL
+		};
+
+
 		enum class Func : char
 		{
 			NEVER,
@@ -76,6 +90,7 @@ namespace BIEngine
 	public:
 		RenderDevice()
 			: m_depthTest(true)
+			, m_depthWrite(true)
 			, m_depthFunc(Func::LESS)
 
 			, m_blend(false)
@@ -90,7 +105,12 @@ namespace BIEngine
 			, m_polygonMode(PolygonMode::FILL)
 		{}
 
+		void Init();
+
+		void Clear(ClearFlag flags, const glm::vec4& color);
+
 		void SetDepthTest(bool enable);
+		void SetDepthWrite(bool enable);
 		void SetDepthFunc(Func func);
 		void SetBlend(bool enable);
 		void SetBlendFunc(BlendFunc src, BlendFunc dst);
@@ -102,6 +122,7 @@ namespace BIEngine
 
 	private:
 		bool m_depthTest;
+		bool m_depthWrite;
 		Func m_depthFunc;
 
 		bool m_blend;
@@ -115,5 +136,33 @@ namespace BIEngine
 		
 		PolygonMode m_polygonMode;
 	};
+
+
+	inline RenderDevice::ClearFlag operator | (RenderDevice::ClearFlag lhs, RenderDevice::ClearFlag rhs)
+	{
+		using T = std::underlying_type_t <RenderDevice::ClearFlag>;
+		return static_cast<RenderDevice::ClearFlag>(static_cast<T>(lhs) | static_cast<T>(rhs));
+	}
+
+
+	inline RenderDevice::ClearFlag& operator |= (RenderDevice::ClearFlag& lhs, RenderDevice::ClearFlag rhs)
+	{
+		lhs = lhs | rhs;
+		return lhs;
+	}
+
+
+	inline RenderDevice::ClearFlag operator & (RenderDevice::ClearFlag lhs, RenderDevice::ClearFlag rhs)
+	{
+		using T = std::underlying_type_t <RenderDevice::ClearFlag>;
+		return static_cast<RenderDevice::ClearFlag>(static_cast<T>(lhs) & static_cast<T>(rhs));
+	}
+
+
+	inline RenderDevice::ClearFlag& operator &= (RenderDevice::ClearFlag& lhs, RenderDevice::ClearFlag rhs)
+	{
+		lhs = lhs & rhs;
+		return lhs;
+	}
 
 }

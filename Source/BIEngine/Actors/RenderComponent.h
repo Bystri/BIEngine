@@ -4,7 +4,6 @@
 
 #include "../Graphics/SpriteNode.h"
 #include "../Graphics/Model3dNode.h"
-#include "../Graphics/TextureLoader.h"
 
 namespace BIEngine
 {

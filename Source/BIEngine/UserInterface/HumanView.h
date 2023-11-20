@@ -43,7 +43,7 @@ namespace BIEngine
 		UserInterface m_userInterface;
 		std::shared_ptr<Actor> m_pCameraActor;
 		std::shared_ptr<Renderer> m_pRenderer;
-		Scene* m_scene;	
+		Scene* m_pScene;	
 
 		//Переменные для контроля скорости обновления кадров
 		float m_currTick; //Текущее время отображения

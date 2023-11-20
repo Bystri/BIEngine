@@ -8,7 +8,7 @@
 namespace BIEngine
 {
 
-	typedef glm::vec3 Color;
+	typedef glm::vec4 Color;
 
 	extern const float ALPHA_OPAQUE;
 	extern const float ALPHA_TRANSPARENT;
@@ -33,19 +33,16 @@ namespace BIEngine
 		void SetColor(const Color& color);
 		const Color GetColor() { return m_color; }
 
-		void SetAlpha(const float alpha);
-		bool HasAlpha() const { return std::abs(GetAlpha() - ALPHA_OPAQUE) > std::numeric_limits<float>::epsilon(); }
-		float GetAlpha() const { return m_alpha; }
+		bool HasAlpha() const { return std::abs(m_color.a - ALPHA_OPAQUE) > std::numeric_limits<float>::epsilon(); }
 
 		RenderState& GetRenderState() { return m_renderState; }
-		ShaderProgramState& GetShaderProgramState() { return m_shaderProgramState; }
+		std::shared_ptr<ShaderProgram> GetShaderProgramPtr() { return m_pShaderProgram; }
 
 	private:
 		Color m_color;
-		float m_alpha;
 
 		RenderState m_renderState;
-		ShaderProgramState m_shaderProgramState;
+		std::shared_ptr<ShaderProgram> m_pShaderProgram;
 	};
 
 }
