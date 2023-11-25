@@ -65,8 +65,8 @@ namespace BIEngine
     private:
         RenderDevice m_renderDevice;
 
-        glm::mat4 m_projMatrix;
-        glm::mat4 m_viewMatrix;
+        unsigned int m_uniformBufferBlock;
+
         glm::mat4 m_modelMatrix;
     };
 }

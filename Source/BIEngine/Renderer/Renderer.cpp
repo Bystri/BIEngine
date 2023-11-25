@@ -12,17 +12,28 @@ namespace BIEngine
     void Renderer::Init()
     {
         m_renderDevice.Init();
+
+        glGenBuffers(1, &m_uniformBufferBlock);
+        glBindBuffer(GL_UNIFORM_BUFFER, m_uniformBufferBlock);
+        glBufferData(GL_UNIFORM_BUFFER, 128, NULL, GL_STATIC_DRAW); // allocate 128 bytes of memory
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+        glBindBufferBase(GL_UNIFORM_BUFFER, 0, m_uniformBufferBlock);
     }
 
     void Renderer::SetProjection(const glm::mat4& proj)
     {
-        m_projMatrix = proj;
+        glBindBuffer(GL_UNIFORM_BUFFER, m_uniformBufferBlock);
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(proj));
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
         DebugDraw::SetProjection(proj);
     }
 
     void Renderer::SetViewTransform(const glm::mat4& view)
     {
-        m_viewMatrix = view;
+        glBindBuffer(GL_UNIFORM_BUFFER, m_uniformBufferBlock);
+        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
         DebugDraw::SetViewTransform(view);
     }
 
@@ -51,8 +62,6 @@ namespace BIEngine
         m_renderDevice.SetCullFace(renderState.CullFace);
         m_renderDevice.SetCullWindingOrder(renderState.CullWindingOrder);
 
-        renderCommand.GetShaderProgramState().SetMatrix4("projection", m_projMatrix);
-        renderCommand.GetShaderProgramState().SetMatrix4("view", m_viewMatrix);
         renderCommand.GetShaderProgramState().SetMatrix4("model", m_modelMatrix);
         renderCommand.GetShaderProgramState().Use();
 

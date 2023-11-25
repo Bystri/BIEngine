@@ -1,10 +1,11 @@
-#version 330 core
+#version 420 core
 
 layout (location = 0) in vec3 aPos;
 
+#include effects/common/uniforms.glsl
+
 out vec3 TexCoords;
 
-uniform mat4 projection;
 uniform mat4 skyboxView;
 
 void main()
