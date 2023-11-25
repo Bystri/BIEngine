@@ -11,10 +11,10 @@
 
 namespace BIEngine
 {
-
 	//Обратные вызовы для GLFW
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
+	void MouseCallback(GLFWwindow* window, double xpos, double ypos);
 
 	//Главная функция, с которой начинается работа всего приложения.
 	//Перед ее вызовом должен быть инициализирован класс pGameApp
@@ -44,7 +44,8 @@ namespace BIEngine
 			return -1;
 		}
 
-		glfwSetKeyCallback(window, key_callback);
+		glfwSetKeyCallback(window, KeyCallback);
+		glfwSetCursorPosCallback(window, MouseCallback);
 		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 		glViewport(0, 0, g_pApp->m_options.screenWidth, g_pApp->m_options.screenHeight);
@@ -82,17 +83,20 @@ namespace BIEngine
 		return 0;
 	}
 
-	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 	{
 		//Выходим из приложения, если нажата клавиша Esc
-		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 			glfwSetWindowShouldClose(window, true);
-
+		}
 		
-		if (action == GLFW_PRESS)
-			g_pApp->InputProc(key, scancode, true);
-		else
-			g_pApp->InputProc(key, scancode, false);
+		g_pApp->InputProc(key, scancode, action);
+	}
+
+
+	void MouseCallback(GLFWwindow* window, double xpos, double ypos)
+	{
+		g_pApp->OnPointerMove(static_cast<float>(xpos), static_cast<float>(ypos));
 	}
 
 	//Адпатируем Viewport под новые размеры экрана

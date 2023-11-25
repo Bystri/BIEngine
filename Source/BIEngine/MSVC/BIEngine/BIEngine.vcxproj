@@ -135,7 +135,6 @@
     <ClCompile Include="..\..\3rdParty\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="..\..\Actors\Actor.cpp" />
     <ClCompile Include="..\..\Actors\ActorFactory.cpp" />
-    <ClCompile Include="..\..\Actors\CameraComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics3DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DTriggerComponent.cpp" />
@@ -151,6 +150,7 @@
     <ClCompile Include="..\..\EngineCore\GameLogic.cpp" />
     <ClCompile Include="..\..\EventManager\EventManager.cpp" />
     <ClCompile Include="..\..\EventManager\Events.cpp" />
+    <ClCompile Include="..\..\Graphics\Camera.cpp" />
     <ClCompile Include="..\..\Graphics\Material.cpp" />
     <ClCompile Include="..\..\Graphics\Mesh.cpp" />
     <ClCompile Include="..\..\Graphics\MeshGeometryGenerator.cpp" />
@@ -198,7 +198,6 @@
     <ClInclude Include="..\..\Actors\Actor.h" />
     <ClInclude Include="..\..\Actors\ActorComponent.h" />
     <ClInclude Include="..\..\Actors\ActorFactory.h" />
-    <ClInclude Include="..\..\Actors\CameraComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics3DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DTriggerComponent.h" />
@@ -215,6 +214,7 @@
     <ClInclude Include="..\..\EngineCore\GameLogic.h" />
     <ClInclude Include="..\..\EventManager\EventManager.h" />
     <ClInclude Include="..\..\EventManager\Events.h" />
+    <ClInclude Include="..\..\Graphics\Camera.h" />
     <ClInclude Include="..\..\Graphics\Material.h" />
     <ClInclude Include="..\..\Graphics\Mesh.h" />
     <ClInclude Include="..\..\Graphics\MeshGeometryGenerator.h" />

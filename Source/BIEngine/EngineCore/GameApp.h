@@ -47,6 +47,7 @@ namespace BIEngine
 		void OnRender(double time, double dt);
 
 		//Обработчик событий устройств ввода
+		void OnPointerMove(float xpos, float ypos);
 		void InputProc(int key, int scancode, bool pressed);
 
 	public:

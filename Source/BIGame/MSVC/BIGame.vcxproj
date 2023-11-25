@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\BIFlyCameraSystem.cpp" />
     <ClCompile Include="..\BIGame.cpp" />
     <ClCompile Include="..\BIGameController.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\BIFlyCameraSystem.h" />
     <ClInclude Include="..\BIGame.h" />
     <ClInclude Include="..\BIGameController.h" />
   </ItemGroup>

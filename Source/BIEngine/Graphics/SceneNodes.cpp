@@ -129,43 +129,4 @@ namespace BIEngine
 		return true;
 	}
 
-	/***CameraNode***/
-	bool CameraNode::OnRender(Scene* pScene)
-	{
-		pScene->GetRenderer()->SetProjection(GetProjMatrix());
-		pScene->GetRenderer()->SetViewTransform(GetViewMatrix());
-		return true;
-	}
-
-
-	glm::mat4 CameraNode::GetViewMatrix() const
-	{
-		//Вектор направления взгляда камеры
-		const float pitch = m_props.GetRotation().x;
-		const float yaw = m_props.GetRotation().y;
-		const float roll = m_props.GetRotation().z;
-
-		glm::vec3 front;
-		front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-		front.y = sin(glm::radians(pitch));
-		front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-		front = glm::normalize(front);
-
-		// Пересчитываем правый и верхний вектор
-		const glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-		glm::vec3 right = glm::normalize(glm::cross(front, worldUp));
-		glm::vec3 up = glm::normalize(glm::cross(right, front));
-
-		return glm::lookAt(m_props.GetPosition(), m_props.GetPosition() + front, up);
-	}
-
-
-	glm::mat4 CameraNode::GetProjMatrix() const
-	{
-		if (m_projType == ProjectionType::ORTHO)
-			return glm::ortho(0.0f, (float)g_pApp->m_options.screenWidth, (float)g_pApp->m_options.screenHeight, 0.0f, -1.0f, 1.0f);
-		else
-			return glm::perspective(glm::radians(45.0f), (float)g_pApp->m_options.screenWidth / (float)g_pApp->m_options.screenHeight, 0.1f, 1000.0f);
-	}
-
 }

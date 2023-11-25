@@ -154,17 +154,29 @@ namespace BIEngine
 	{
 		auto it = m_actors.find(id);
 
-		if (it == m_actors.end())
+		if (it == m_actors.end()) {
 			return std::shared_ptr<Actor>();
+		}
 
 		return it->second;
 	}
 
+
+	void GameLogic::OnPointerMove(float xpos, float ypos)
+	{
+		for (const auto view : m_gameViews) {
+			view->OnPointerMove(xpos, ypos);
+		}
+	}
+
+
 	void GameLogic::SetKey(int key, int scancode, bool state)
 	{
-		for (const auto view : m_gameViews)
+		for (const auto view : m_gameViews) {
 			view->SetKey(key, scancode, state);
+		}
 	}
+
 
 	std::shared_ptr<Actor> GameLogic::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation)
 	{

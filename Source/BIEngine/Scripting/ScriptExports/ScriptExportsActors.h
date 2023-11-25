@@ -5,7 +5,6 @@
 #include <pybind11/embed.h>
 
 #include "../../EngineCore/GameApp.h"
-#include "../../Actors/CameraComponent.h"
 #include "../../Actors/Physics2DComponent.h"
 #include "../../Actors/Physics2DTriggerComponent.h"
 #include "../../Actors/Physics3DComponent.h"
@@ -24,8 +23,6 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
         .def("GetId", &BIEngine::Actor::GetId)
         .def("GetName", &BIEngine::Actor::GetName)
         .def("GetComponent", [](std::shared_ptr<BIEngine::Actor>& self, const std::string& componentId) {return self->GetComponent<BIEngine::ActorComponent>(componentId).lock(); });
-    
-    py::class_<BIEngine::CameraComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::CameraComponent>>(m, "CameraComponent");
     
     py::class_<BIEngine::Physics2DComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::Physics2DComponent>>(m, "Physics2DComponent")
         .def("ApplyForce", &BIEngine::Physics2DComponent::ApplyForce)

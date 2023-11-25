@@ -107,6 +107,13 @@ namespace BIEngine
 		m_pGameLogic->OnRender(time, dt);
 	}
 
+
+	void GameApp::OnPointerMove(float xpos, float ypos)
+	{
+		m_pGameLogic->OnPointerMove(xpos, ypos);
+	}
+
+
 	void GameApp::InputProc(int key, int scancode, bool pressed)
 	{
 		if (key >= 0 && key < 1024)

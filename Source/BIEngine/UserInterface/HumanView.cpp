@@ -18,7 +18,6 @@ namespace BIEngine
 
 		, m_userInterface()
 		, m_pRenderer(nullptr)
-		, m_pCameraActor(nullptr)
 		, m_pScene(nullptr)
 
 		, m_currTick(0.0f)
@@ -31,7 +30,6 @@ namespace BIEngine
 		, m_screenWidth(screenWidth)
 		, m_screenHeight(screenHeight)
 	{
-		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &HumanView::NewCameraComponentDelegate), EvtData_New_Camera_Component::sk_EventType);
 	}
 
 	HumanView::~HumanView()
@@ -132,6 +130,7 @@ namespace BIEngine
 		//Создания сцены на основе отображения
 		m_pScene = new Scene(m_pRenderer);
 
+		m_pScene->SetCamera(std::make_shared<Camera>());
 		m_pScene->SetSkybox(humanViewCreateSkybox());
 
 		return true;
@@ -164,6 +163,15 @@ namespace BIEngine
 		m_userInterface.OnRender(dt);
 	}
 
+
+	void HumanView::OnPointerMove(float xpos, float ypos)
+	{
+		if (m_pPointerHandler) {
+			m_pPointerHandler->OnPointerMove(IPointerHandler::Point{xpos, ypos}, m_pointerRadius);
+		}
+	}
+
+
 	void HumanView::SetKey(int key, int scancode, bool state)
 	{
 		if (m_pKeyboardHandler) {
@@ -173,15 +181,6 @@ namespace BIEngine
 				m_pKeyboardHandler->OnKeyUp(key, scancode);
 			}
 		}
-	}
-
-	//Вызывается, когда создается новый актер с компонентой-камерой.
-	void HumanView::NewCameraComponentDelegate(IEventDataPtr pEventData)
-	{
-		std::shared_ptr<EvtData_New_Camera_Component> pCastEventData = std::static_pointer_cast<EvtData_New_Camera_Component>(pEventData);
-
-		m_pCameraActor = pCastEventData->GetCameraActor();
-		
 	}
 
 }

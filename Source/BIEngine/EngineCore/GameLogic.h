@@ -49,6 +49,7 @@ namespace BIEngine
 		int GetNumActors() const { return m_actors.size(); };
 
 		//Обработчики событий устройств ввода
+		void OnPointerMove(float xpos, float ypos);
 		void SetKey(int key, int scancode, bool state);
 
 	protected:

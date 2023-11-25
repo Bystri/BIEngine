@@ -10,7 +10,6 @@
 #include "Physics2DTriggerComponent.h"
 #include "Physics3DComponent.h"
 #include "Physics3DTriggerComponent.h"
-#include "CameraComponent.h"
 #include "ScriptComponent.h"
 #include "../Utilities/Logger.h"
 
@@ -29,7 +28,6 @@ namespace BIEngine
 		m_actorComponentCreators[Physics2DTriggerComponent::g_CompId] = CreatePhysics2DTriggerComponent;
 		m_actorComponentCreators[Physics3DComponent::g_CompId] = CreatePhysics3DComponent;
 		m_actorComponentCreators[Physics3DTriggerComponent::g_CompId] = CreatePhysics3DTriggerComponent;
-		m_actorComponentCreators[CameraComponent::g_CompId] = CreateCameraComponent;
 		m_actorComponentCreators[ScriptComponent::g_CompId] = CreateScriptComponent;
 	}
 

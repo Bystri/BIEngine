@@ -1,15 +1,5 @@
 <World>
     <Actors>
-        <Actor name="camera">
-            <CameraComponent>
-				<Projection>Perspective</Projection>
-			</CameraComponent>
-            <TransformComponent>
-                <Position x="0" y="25" z="0"/>
-                <Size w="1.000000" h="1.000000"/>
-                <Rotation x="-90" y="90.0" z="-90"/>
-            </TransformComponent>
-        </Actor>
 		<Actor name="ground">
             <TransformComponent>
                 <Position x="0" y="5" z="0"/>

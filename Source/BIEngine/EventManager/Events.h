@@ -172,55 +172,6 @@ namespace BIEngine
     };
 
 
-    //Данное событие возникает, когда создается новый актер с компонентом, являющимся камерой
-    class EvtData_New_Camera_Component : public BaseEventData
-    {
-        std::shared_ptr<Actor> m_pCameraActor;
-
-    public:
-        static const EventType sk_EventType;
-
-        EvtData_New_Camera_Component()
-            : m_pCameraActor(nullptr)
-        {
-        }
-
-        EvtData_New_Camera_Component(std::shared_ptr<Actor> pCameraActor)
-            : m_pCameraActor(pCameraActor)
-        {
-        }
-
-        virtual void Serialize(std::ostrstream& out) const
-        {
-            Logger::WriteLog(Logger::LogType::ERROR, "EvtData_New_Camera_Component should not be serialzied!");
-        }
-
-        virtual void Deserialize(std::istrstream& in)
-        {
-            Logger::WriteLog(Logger::LogType::ERROR, "EvtData_New_Camera_Component should not be serialzied!");
-        }
-
-        virtual const EventType& GetEventType() const
-        {
-            return sk_EventType;
-        }
-
-        virtual IEventDataPtr Copy() const
-        {
-            return std::make_shared<EvtData_New_Camera_Component>(m_pCameraActor);
-        }
-
-        virtual const char* GetName() const
-        {
-            return "EvtData_New_Camera_Component";
-        }
-
-        std::shared_ptr<Actor> GetCameraActor() const
-        {
-            return m_pCameraActor;
-        }
-    };
-
     //Событие является запросом на уничтожение актера
     //TODO: а зачем уничтожение актера идет через событие? Не проще сразу предоставить прямой вызов к GameLogic::DestroyActor в скрипт? Как вообще это сделано в Unity?
     class EvtData_Request_Destroy_Actor : public BaseEventData

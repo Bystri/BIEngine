@@ -6,6 +6,7 @@
 
 #include "SceneNodes.h"
 #include "Skybox.h"
+#include "Camera.h"
 #include "../Renderer/Renderer.h"
 #include "../EventManager/Events.h"
 
@@ -40,8 +41,8 @@ namespace BIEngine
 
 		std::shared_ptr<ISceneNode> FindActor(ActorId id);
 
-		void SetCamera(std::shared_ptr<CameraNode> pCamera) { m_pCamera = pCamera; }
-		const std::shared_ptr<CameraNode> GetCamera() const { return m_pCamera; }
+		void SetCamera(std::shared_ptr<Camera> pCamera) { m_pCamera = pCamera; }
+		const std::shared_ptr<Camera> GetCamera() const { return m_pCamera; }
 
 		void SetSkybox(std::shared_ptr<Skybox> pSkybox) { m_pSkybox = pSkybox; }
 
@@ -53,8 +54,6 @@ namespace BIEngine
 	protected:
 		//Регистрация компонента, который необохдимо отрисовать
 		void NewRenderComponentDelegate(IEventDataPtr pEventData);
-		//Регистрация камеры, являющейся компонентом актера. Каждая новая созданная камера перезаписывает старую.
-		void NewCameraComponentDelegate(IEventDataPtr pEventData);
 		//Удаление уничтоженного актера из сцены
 		void DestroyActorDelegate(IEventDataPtr pEventData);
 
@@ -62,7 +61,7 @@ namespace BIEngine
 		//Основной узел дерева графических элементов
 		std::shared_ptr<SceneNode> m_pRoot;
 
-		std::shared_ptr<CameraNode> m_pCamera;
+		std::shared_ptr<Camera> m_pCamera;
 		std::shared_ptr<Skybox> m_pSkybox;
 		//Рисовальщик
 		std::shared_ptr<Renderer> m_pRenderer;

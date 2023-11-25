@@ -28,10 +28,8 @@ namespace BIEngine
 		virtual GameViewType GetType() const override { return GameViewType::Human; }
 		virtual GameViewId GetId() const override { return m_viewId; }
 
+		virtual void OnPointerMove(float xpos, float ypos) override;
 		virtual void SetKey(int key, int scancode, bool state) override;
-
-	protected:
-		virtual void NewCameraComponentDelegate(IEventDataPtr pEventData);
 
 	protected:
 		GameViewId m_viewId;
@@ -41,7 +39,6 @@ namespace BIEngine
 
 		//Графическая часть
 		UserInterface m_userInterface;
-		std::shared_ptr<Actor> m_pCameraActor;
 		std::shared_ptr<Renderer> m_pRenderer;
 		Scene* m_pScene;	
 

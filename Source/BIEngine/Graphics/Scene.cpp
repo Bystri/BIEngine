@@ -1,6 +1,5 @@
 ﻿#include "Scene.h"
 
-#include "../Actors/CameraComponent.h"
 
 namespace BIEngine
 {
@@ -14,7 +13,6 @@ namespace BIEngine
 		m_pRoot = std::make_shared<RootNode>();
 
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::NewRenderComponentDelegate), EvtData_New_Render_Component::sk_EventType);
-		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::NewCameraComponentDelegate), EvtData_New_Camera_Component::sk_EventType);
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
 
 		m_localMatrixStack.push(glm::mat4(1.0f));
@@ -23,7 +21,6 @@ namespace BIEngine
 	Scene::~Scene()
 	{
 		EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Scene::NewRenderComponentDelegate), EvtData_New_Render_Component::sk_EventType);
-		EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Scene::NewCameraComponentDelegate), EvtData_New_Camera_Component::sk_EventType);
 		EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Scene::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
 	}
 
@@ -106,19 +103,6 @@ namespace BIEngine
 		AddChild(actorId, pSceneNode);
 	}
 
-	//Вызывается, когда создается новый актер с компонентой-камерой.
-	void Scene::NewCameraComponentDelegate(IEventDataPtr pEventData)
-	{
-		std::shared_ptr<EvtData_New_Camera_Component> pCastEventData = std::static_pointer_cast<EvtData_New_Camera_Component>(pEventData);
-
-		auto pCameraActor = pCastEventData->GetCameraActor();
-
-		std::shared_ptr<CameraComponent> pCameraComponent = pCameraActor->GetComponent<CameraComponent>(CameraComponent::g_CompId).lock();
-		if (pCameraComponent)
-		{
-			m_pCamera = pCameraComponent->GetCameraNode();
-		}
-	}
 
 	void Scene::DestroyActorDelegate(IEventDataPtr pEventData)
 	{

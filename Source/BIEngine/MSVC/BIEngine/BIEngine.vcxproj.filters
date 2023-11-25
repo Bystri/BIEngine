@@ -147,9 +147,6 @@
     <ClCompile Include="..\..\ResourceCache\DirFile.cpp">
       <Filter>ResourceCache</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Actors\CameraComponent.cpp">
-      <Filter>Actors</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Actors\ScriptComponent.cpp">
       <Filter>Actors</Filter>
     </ClCompile>
@@ -227,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Renderer\Texture.cpp">
       <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\Camera.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -341,9 +341,6 @@
     <ClInclude Include="..\..\ResourceCache\DirFile.h">
       <Filter>ResourceCache</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Actors\CameraComponent.h">
-      <Filter>Actors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Actors\ScriptComponent.h">
       <Filter>Actors</Filter>
     </ClInclude>
@@ -439,6 +436,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Renderer\Texture.h">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\Camera.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

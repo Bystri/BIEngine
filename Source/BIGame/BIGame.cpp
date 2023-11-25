@@ -65,10 +65,31 @@ void BIGameLogic::OnUpdate(float dt)
 
 bool BIGameHumanView::Init()
 {
-	if (!BIEngine::HumanView::Init())
+	if (!BIEngine::HumanView::Init()) {
 		return false;
+	}
+
+	std::shared_ptr<BIGameController> pGameController = std::make_shared<BIGameController>();
+	SetController(pGameController);
+
+	m_pFlyCameraSystem = new BIFlyCameraSystem(m_pScene->GetCamera(), pGameController);
+
+	return true;
 }
+
 
 void BIGameHumanView::Shutdown()
 {
+	if (m_pFlyCameraSystem) {
+		delete m_pFlyCameraSystem;
+		m_pFlyCameraSystem = nullptr;
+	}
+}
+
+
+void BIGameHumanView::OnUpdate(float dt)
+{
+	if (m_pFlyCameraSystem) {
+		m_pFlyCameraSystem->OnUpdate(dt);
+	}
 }
