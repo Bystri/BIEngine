@@ -1,4 +1,4 @@
 <Scene>
-    <Skybox cubemapTextureBackPath="Texures/skybox/back.jpg" cubemapTextureBottomPath="Texures/skybox/bottom.jpg" cubemapTextureFrontPath="Texures/skybox/front.jpg" cubemapTextureLeftPath="Texures/skybox/left.jpg" cubemapTextureRightPath="Texures/skybox/right.jpg" cubemapTextureTopPath="Texures/skybox/top.jpg" vertexShaderPath="Effects/skybox.vs" fragmentShaderPath="Effects/skybox.frag"/>
+    <Skybox cubemapTextureBackPath="Textures/skybox/back.jpg" cubemapTextureBottomPath="Textures/skybox/bottom.jpg" cubemapTextureFrontPath="Textures/skybox/front.jpg" cubemapTextureLeftPath="Textures/skybox/left.jpg" cubemapTextureRightPath="Textures/skybox/right.jpg" cubemapTextureTopPath="Textures/skybox/top.jpg" vertexShaderPath="Effects/skybox.vs" fragmentShaderPath="Effects/skybox.frag"/>
 </Scene>
 

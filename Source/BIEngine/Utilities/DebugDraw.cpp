@@ -11,14 +11,18 @@ namespace BIEngine
 
     void DebugDraw::Init()
     {
-        const char* vertexShaderSource = "#version 330 core\n"
+        const char* vertexShaderSource = "#version 420 core\n"
             "layout (location = 0) in vec3 aPos;\n"
-            "uniform mat4 MVP;\n"
+            "layout(std140, binding = 0) uniform Global\n"
+            "{\n"
+            "   mat4 projection;\n"
+            "   mat4 view;\n"
+            "};\n"
             "void main()\n"
             "{\n"
-            "   gl_Position = MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+            "   gl_Position = projection * view * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
             "}\0";
-        const char* fragmentShaderSource = "#version 330 core\n"
+        const char* fragmentShaderSource = "#version 420 core\n"
             "out vec4 FragColor;\n"
             "uniform vec3 color;\n"
             "void main()\n"
@@ -41,17 +45,6 @@ namespace BIEngine
         glDeleteShader(fragmentShader);
     }
 
-    void DebugDraw::SetProjection(const glm::mat4& proj)
-    {
-        g_pDebugShader->Use();
-        projMatrix = proj;
-    }
-
-    void DebugDraw::SetViewTransform(const glm::mat4& view)
-    {
-        g_pDebugShader->Use();
-        viewMatrix = view;
-    }
 
     class DbgLine {
         unsigned int VBO, VAO;
@@ -94,11 +87,6 @@ namespace BIEngine
             glDeleteBuffers(1, &VBO);
         }
 
-        int SetMVP(glm::mat4 mvp) {
-            MVP = mvp;
-            return 1;
-        }
-
         int SetColor(glm::vec3 color) {
             lineColor = color;
             return 1;
@@ -106,7 +94,6 @@ namespace BIEngine
 
         int Draw() {
             g_pDebugShader->Use();
-            g_pDebugShader->SetMatrix4("MVP", MVP, false);
             g_pDebugShader->SetVector3f("color", lineColor, false);
 
             glBindVertexArray(VAO);
@@ -147,7 +134,6 @@ namespace BIEngine
 
             DbgLine line(info.fromPoint, info.toPoint);
 
-            line.SetMVP(projMatrix * viewMatrix);
             line.SetColor(info.color);
             line.Draw();
         }

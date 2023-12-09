@@ -1,5 +1,29 @@
 <World>
     <Actors>
+		<Actor name="Sun">
+            <TransformComponent>
+                <Position x="0" y="25" z="0"/>
+                <Size w="1.000000" h="1.000000" d="1.0"/>
+				<Rotation x="0.000000" y="-1.000000" z="-1.000000"/>
+            </TransformComponent>
+			<DirectionalLightComponent>
+				<Ambient r="0.05" g="0.05" b="0.05"/>
+				<Diffuse r="0.4" g="0.4" b="0.4"/>
+				<Specular r="0.5" g="0.5" b="0.5"/>
+			</DirectionalLightComponent>
+        </Actor>
+		<Actor name="SpotLight">
+            <TransformComponent>
+                <Position x="0" y="5" z="0"/>
+                <Size w="1.000000" h="1.000000" d="1.0"/>
+				<Rotation x="0.000000" y="-1.000000" z="-1.000000"/>
+            </TransformComponent>
+			<SpotLightComponent>
+				<Ambient r="0.05" g="0.05" b="0.05"/>
+				<Diffuse r="1.0" g="0.1" b="0.1"/>
+				<Specular r="0.5" g="0.5" b="0.5"/>
+			</SpotLightComponent>
+        </Actor>
 		<Actor name="ground">
             <TransformComponent>
                 <Position x="0" y="5" z="0"/>
@@ -7,8 +31,8 @@
 				<Rotation x="0.000000" y="0.000000" z="0.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram vertexShaderPath="Effects/sprite.vs" fragmentShaderPath="Effects/sprite.frag"/>
-				<Texture path="Sprites/wall.png"/>
+				<ShaderProgram vertexShaderPath="Effects/mesh.vs" fragmentShaderPath="Effects/mesh.frag"/>
+				<Material shininess="64.0" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="0.000000" g="1.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -26,10 +50,15 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram vertexShaderPath="Effects/sprite.vs" fragmentShaderPath="Effects/sprite.frag"/>
-				<Texture path="Sprites/wall.png"/>
+				<ShaderProgram vertexShaderPath="Effects/mesh.vs" fragmentShaderPath="Effects/mesh.frag"/>
+				<Material shininess="64.0" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
+			<PointLightComponent>
+				<Ambient r="0.05" g="0.05" b="0.05"/>
+				<Diffuse r="0.5" g="0.5" b="0.5"/>
+				<Specular r="1.0" g="1.0" b="1.0"/>
+			</PointLightComponent>
 			<Physics3DComponent>
 				<Shape>Box</Shape>
 				<BodyType>Dynamic</BodyType>
@@ -45,8 +74,8 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram vertexShaderPath="Effects/sprite.vs" fragmentShaderPath="Effects/sprite.frag"/>
-				<Texture path="Sprites/wall.png"/>
+				<ShaderProgram vertexShaderPath="Effects/mesh.vs" fragmentShaderPath="Effects/mesh.frag"/>
+				<Material shininess="64.0" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -64,10 +93,15 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram vertexShaderPath="Effects/sprite.vs" fragmentShaderPath="Effects/sprite.frag"/>
-				<Texture path="Sprites/wall.png"/>
+				<ShaderProgram vertexShaderPath="Effects/mesh.vs" fragmentShaderPath="Effects/mesh.frag"/>
+				<Material shininess="64.0" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
+			<PointLightComponent>
+				<Ambient r="0.05" g="0.05" b="0.05"/>
+				<Diffuse r="0.5" g="0.5" b="0.5"/>
+				<Specular r="1.0" g="1.0" b="1.0"/>
+			</PointLightComponent>
 			<Physics3DComponent>
 				<Shape>Box</Shape>
 				<BodyType>Dynamic</BodyType>
@@ -83,8 +117,8 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram vertexShaderPath="Effects/sprite.vs" fragmentShaderPath="Effects/sprite.frag"/>
-				<Texture path="Sprites/wall.png"/>
+				<ShaderProgram vertexShaderPath="Effects/mesh.vs" fragmentShaderPath="Effects/mesh.frag"/>
+				<Material shininess="64.0" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -102,8 +136,8 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram vertexShaderPath="Effects/sprite.vs" fragmentShaderPath="Effects/sprite.frag"/>
-				<Texture path="Sprites/wall.png"/>
+				<ShaderProgram vertexShaderPath="Effects/mesh.vs" fragmentShaderPath="Effects/mesh.frag"/>
+				<Material shininess="64.0" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -121,8 +155,8 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram vertexShaderPath="Effects/sprite.vs" fragmentShaderPath="Effects/sprite.frag"/>
-				<Texture path="Sprites/wall.png"/>
+				<ShaderProgram vertexShaderPath="Effects/mesh.vs" fragmentShaderPath="Effects/mesh.frag"/>
+				<Material shininess="64.0" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -140,10 +174,15 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram vertexShaderPath="Effects/sprite.vs" fragmentShaderPath="Effects/sprite.frag"/>
-				<Texture path="Sprites/wall.png"/>
+				<ShaderProgram vertexShaderPath="Effects/mesh.vs" fragmentShaderPath="Effects/mesh.frag"/>
+				<Material shininess="64.0" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
+			<PointLightComponent>
+				<Ambient r="0.05" g="0.05" b="0.05"/>
+				<Diffuse r="0.5" g="0.5" b="0.5"/>
+				<Specular r="1.0" g="1.0" b="1.0"/>
+			</PointLightComponent>
 			<Physics3DComponent>
 				<Shape>Box</Shape>
 				<BodyType>Dynamic</BodyType>
@@ -159,10 +198,15 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram vertexShaderPath="Effects/sprite.vs" fragmentShaderPath="Effects/sprite.frag"/>
-				<Texture path="Sprites/wall.png"/>
+				<ShaderProgram vertexShaderPath="Effects/mesh.vs" fragmentShaderPath="Effects/mesh.frag"/>
+				<Material shininess="64.0" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
+			<PointLightComponent>
+				<Ambient r="0.05" g="0.05" b="0.05"/>
+				<Diffuse r="0.5" g="0.5" b="0.5"/>
+				<Specular r="1.0" g="1.0" b="1.0"/>
+			</PointLightComponent>
 			<Physics3DComponent>
 				<Shape>Box</Shape>
 				<BodyType>Dynamic</BodyType>
@@ -178,8 +222,8 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram vertexShaderPath="Effects/sprite.vs" fragmentShaderPath="Effects/sprite.frag"/>
-				<Texture path="Sprites/wall.png"/>
+				<ShaderProgram vertexShaderPath="Effects/mesh.vs" fragmentShaderPath="Effects/mesh.frag"/>
+				<Material shininess="64.0" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="0.000000" g="0.00" b="1.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>

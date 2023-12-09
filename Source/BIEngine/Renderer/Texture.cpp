@@ -161,8 +161,9 @@ namespace BIEngine
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    void Texture2D::Bind() const
+    void Texture2D::Bind(int textureIdx) const
     {
+        glActiveTexture(GL_TEXTURE0 + textureIdx);
         glBindTexture(GL_TEXTURE_2D, m_id);
     }
 
@@ -329,8 +330,9 @@ namespace BIEngine
     }
 
 
-    void CubemapTexture::Bind() const
+    void CubemapTexture::Bind(int textureIdx) const
     {
+        glActiveTexture(GL_TEXTURE0 + textureIdx);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
     }
 }

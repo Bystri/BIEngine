@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "../Renderer/RenderState.h"
+#include "../Renderer/Texture.h"
 #include "../Renderer/ShaderProgramState.h"
 
 namespace BIEngine
@@ -33,6 +34,15 @@ namespace BIEngine
 		void SetColor(const Color& color);
 		const Color GetColor() { return m_color; }
 
+		void SetDiffuseMap(std::shared_ptr<Texture2D> diffuseMap) { m_diffuseMap = diffuseMap; }
+		const std::shared_ptr<Texture2D>& GetDiffuseMap() const { return m_diffuseMap; }
+
+		void SetSpecularMap(std::shared_ptr<Texture2D> specularMap) { m_specularMap = specularMap; }
+		const std::shared_ptr<Texture2D>& GetSpecularMap() const { return m_specularMap; }
+
+		void SetShininess(float shininess) { m_shininess = shininess; }
+		float GetShininess() const { return m_shininess; }
+
 		bool HasAlpha() const { return std::abs(m_color.a - ALPHA_OPAQUE) > std::numeric_limits<float>::epsilon(); }
 
 		RenderState& GetRenderState() { return m_renderState; }
@@ -40,6 +50,10 @@ namespace BIEngine
 
 	private:
 		Color m_color;
+
+		std::shared_ptr<Texture2D> m_diffuseMap;
+		std::shared_ptr<Texture2D> m_specularMap;
+		float m_shininess = 64.f;
 
 		RenderState m_renderState;
 		std::shared_ptr<ShaderProgram> m_pShaderProgram;

@@ -6,23 +6,30 @@ namespace BIEngine
 
 	Scene::Scene(std::shared_ptr<Renderer> pRenderer)
 		: m_pRenderer(pRenderer)
+		, m_pRoot(std::make_shared<RootNode>())
+		, m_pConstantsBuffer(std::make_shared<ConstantsBuffer>())
 		, m_pCamera(nullptr)
 		, m_pSkybox(nullptr)
-		, m_localMatrixStack()
 	{
-		m_pRoot = std::make_shared<RootNode>();
-
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::NewRenderComponentDelegate), EvtData_New_Render_Component::sk_EventType);
 		EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
-
-		m_localMatrixStack.push(glm::mat4(1.0f));
 	}
+
 
 	Scene::~Scene()
 	{
 		EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Scene::NewRenderComponentDelegate), EvtData_New_Render_Component::sk_EventType);
 		EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Scene::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
 	}
+
+
+	void Scene::Init()
+	{
+		constexpr int CONSTANTS_BUFFER_SCENE_GLOBALS_BINDING_POINT = 0;
+
+		m_pConstantsBuffer->Init(sizeof(GlobalRenderBufferData), CONSTANTS_BUFFER_SCENE_GLOBALS_BINDING_POINT);
+	}
+
 
 	int Scene::OnRender() 
 	{
@@ -31,8 +38,9 @@ namespace BIEngine
 			static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
 			m_pRenderer->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
 
-			//Камера задает значения для всех необходимых матриц
-			m_pCamera->OnRender(this);
+			m_globalRenderBufferData.viewMat = m_pCamera->GetViewMatrix();
+			m_globalRenderBufferData.projMat = m_pCamera->GetProjMatrix();
+			m_pConstantsBuffer->SetBufferData(&m_globalRenderBufferData, 0, sizeof(m_globalRenderBufferData));
 
 			if (m_pRoot->PreRender(this)) 
 			{
@@ -49,6 +57,7 @@ namespace BIEngine
 		return 0;
 	}
 
+
 	int Scene::OnUpdate(float dt) {
 		if (!m_pRoot)
 			return 0;
@@ -56,19 +65,6 @@ namespace BIEngine
 		return m_pRoot->OnUpdate(this, dt);
 	}
 
-	void Scene::PushMatrix(const glm::mat4& modelMatrix)
-	{
-		const glm::mat4 newModelMatrix = m_localMatrixStack.top() * modelMatrix;
-
-		m_pRenderer->SetModelTransform(newModelMatrix);
-		m_localMatrixStack.push(newModelMatrix);
-	}
-
-	void Scene::PopMatrix()
-	{
-		m_localMatrixStack.pop();
-		m_pRenderer->SetModelTransform(m_localMatrixStack.top());
-	}
 
 	std::shared_ptr<ISceneNode> Scene::FindActor(ActorId id) {
 		auto itr = m_actorMap.find(id);
@@ -78,19 +74,22 @@ namespace BIEngine
 		return (*itr).second;
 	}
 
-	bool Scene::AddChild(ActorId id, std::shared_ptr<ISceneNode> pChild) {
+
+	void Scene::AddChild(ActorId id, std::shared_ptr<ISceneNode> pChild) {
 		m_actorMap[id] = pChild;
 
-		return m_pRoot->AddChild(pChild);
+		m_pRoot->AddChild(pChild);
 	}
+	
 
-	bool Scene::RemoveChild(ActorId id)
+	void Scene::RemoveChild(ActorId id)
 	{
 		std::shared_ptr<ISceneNode> pChild = FindActor(id);
 
 		m_actorMap.erase(id);
-		return m_pRoot->RemoveChild(id);
+		m_pRoot->RemoveChild(id);
 	}
+
 
 	//Вызывается, когда создается новый актер с графическим компонентом
 	void Scene::NewRenderComponentDelegate(IEventDataPtr pEventData)

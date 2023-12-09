@@ -129,6 +129,7 @@ namespace BIEngine
 		DebugDraw::Init();
 		//Создания сцены на основе отображения
 		m_pScene = new Scene(m_pRenderer);
+		m_pScene->Init();
 
 		m_pScene->SetCamera(std::make_shared<Camera>());
 		m_pScene->SetSkybox(humanViewCreateSkybox());

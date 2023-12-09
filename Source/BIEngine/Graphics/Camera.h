@@ -46,8 +46,6 @@ namespace BIEngine
         glm::mat4 GetViewMatrix() const;
         glm::mat4 GetProjMatrix() const;
 
-        bool OnRender(Scene* pScene);
-
         const glm::vec3& GetPosition() const { return m_position; }
         const glm::vec3& GetForward() const { return m_forward; }
         const glm::vec3& GetUp() const { return m_up; }

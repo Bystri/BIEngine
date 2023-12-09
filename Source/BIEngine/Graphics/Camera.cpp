@@ -24,14 +24,6 @@ namespace BIEngine
     }
 
 
-    bool Camera::OnRender(Scene* pScene)
-    {
-        pScene->GetRenderer()->SetProjection(GetProjMatrix());
-        pScene->GetRenderer()->SetViewTransform(GetViewMatrix());
-        return true;
-    }
-
-
     void Camera::MoveTo(const glm::vec3& pos)
     {
         m_position = pos;

@@ -12,7 +12,7 @@ namespace BIEngine
         virtual ~Texture();
 
         //Сделаеть текстуру активной
-        virtual void Bind() const = 0;
+        virtual void Bind(int textureIdx) const = 0;
 
         //Ширина изображения в пикселях
         virtual unsigned int GetWidth() const { return m_width; }
@@ -54,7 +54,7 @@ namespace BIEngine
 
         void Generate(unsigned int width, unsigned int height, unsigned char* data);
         //Сделаеть текстуру активной
-        virtual void Bind() const override;
+        virtual void Bind(int textureIdx) const override;
 
     private:
         unsigned int m_wrapS;
@@ -77,7 +77,7 @@ namespace BIEngine
 
         void Generate(unsigned int width, unsigned int height, const std::array<unsigned char*, 6>& data);
         //Сделаеть текстуру активной
-        virtual void Bind() const override;
+        virtual void Bind(int textureIdx) const override;
 
     private:
         unsigned int m_wrapS;

@@ -8,10 +8,6 @@ namespace BIEngine
 	{
 	public:
 		static void Init();
-		static void Terminate();
-
-		static void SetProjection(const glm::mat4& proj);
-		static void SetViewTransform(const glm::mat4& view);
 
 		static void Draw();
 

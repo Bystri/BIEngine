@@ -135,6 +135,7 @@
     <ClCompile Include="..\..\3rdParty\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="..\..\Actors\Actor.cpp" />
     <ClCompile Include="..\..\Actors\ActorFactory.cpp" />
+    <ClCompile Include="..\..\Actors\LightComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics3DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DTriggerComponent.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="..\..\EventManager\EventManager.cpp" />
     <ClCompile Include="..\..\EventManager\Events.cpp" />
     <ClCompile Include="..\..\Graphics\Camera.cpp" />
+    <ClCompile Include="..\..\Graphics\LightNodes.cpp" />
     <ClCompile Include="..\..\Graphics\Material.cpp" />
     <ClCompile Include="..\..\Graphics\Mesh.cpp" />
     <ClCompile Include="..\..\Graphics\MeshGeometryGenerator.cpp" />
@@ -169,6 +171,7 @@
     <ClCompile Include="..\..\ProcessManager\DelayProcess.cpp" />
     <ClCompile Include="..\..\ProcessManager\Process.cpp" />
     <ClCompile Include="..\..\ProcessManager\ProcessManager.cpp" />
+    <ClCompile Include="..\..\Renderer\ConstantsBuffer.cpp" />
     <ClCompile Include="..\..\Renderer\RenderDevice.cpp" />
     <ClCompile Include="..\..\Renderer\Renderer.cpp" />
     <ClCompile Include="..\..\Renderer\RenderState.cpp" />
@@ -198,6 +201,7 @@
     <ClInclude Include="..\..\Actors\Actor.h" />
     <ClInclude Include="..\..\Actors\ActorComponent.h" />
     <ClInclude Include="..\..\Actors\ActorFactory.h" />
+    <ClInclude Include="..\..\Actors\LightComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics3DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DTriggerComponent.h" />
@@ -215,6 +219,7 @@
     <ClInclude Include="..\..\EventManager\EventManager.h" />
     <ClInclude Include="..\..\EventManager\Events.h" />
     <ClInclude Include="..\..\Graphics\Camera.h" />
+    <ClInclude Include="..\..\Graphics\LightNodes.h" />
     <ClInclude Include="..\..\Graphics\Material.h" />
     <ClInclude Include="..\..\Graphics\Mesh.h" />
     <ClInclude Include="..\..\Graphics\MeshGeometryGenerator.h" />
@@ -233,6 +238,7 @@
     <ClInclude Include="..\..\ProcessManager\DelayProcess.h" />
     <ClInclude Include="..\..\ProcessManager\Process.h" />
     <ClInclude Include="..\..\ProcessManager\ProcessManager.h" />
+    <ClInclude Include="..\..\Renderer\ConstantsBuffer.h" />
     <ClInclude Include="..\..\Renderer\RenderDevice.h" />
     <ClInclude Include="..\..\Renderer\Renderer.h" />
     <ClInclude Include="..\..\Renderer\RenderState.h" />

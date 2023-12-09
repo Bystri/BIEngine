@@ -34,7 +34,7 @@ namespace BIEngine
 
         RenderState RenderState;
 
-        std::shared_ptr<Texture> pTexture;
+        std::vector<std::shared_ptr<Texture>> pTextures;
 
     private:
         const std::shared_ptr<Mesh> pMesh;
@@ -52,21 +52,12 @@ namespace BIEngine
 
         void Init();
 
-        void Clear(RenderDevice::ClearFlag flags, const Color& color);
-
-        void SetProjection(const glm::mat4& proj);
-        void SetViewTransform(const glm::mat4& view);
-        void SetModelTransform(const glm::mat4& model);
-
         RenderDevice& GetRenderDevice() { return m_renderDevice; }
 
+        void Clear(RenderDevice::ClearFlag flags, const Color& color);
         void DrawRenderCommand(RenderCommand& renderCommand);
 
     private:
         RenderDevice m_renderDevice;
-
-        unsigned int m_uniformBufferBlock;
-
-        glm::mat4 m_modelMatrix;
     };
 }

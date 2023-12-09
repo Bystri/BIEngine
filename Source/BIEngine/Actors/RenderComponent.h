@@ -14,14 +14,18 @@ namespace BIEngine
         std::shared_ptr<SceneNode> m_pSceneNode;
 
     public:
-        BaseRenderComponent() 
-        {
+        BaseRenderComponent() { }
+
+        bool Init(tinyxml2::XMLElement* pData) override 
+        { 
+            assert(pData);
+
+            return pData != nullptr;
         }
 
-        virtual bool Init(tinyxml2::XMLElement* pData);
-        virtual void PostInit() override;
+        tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override { return pDoc->NewElement(GetComponentId().c_str()); }
 
-        virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
+        virtual void PostInit() override;
     
     protected:
         //В данном методе дочерние классы создают особые узлы сцены под свой заданный тип компонента актера
@@ -29,6 +33,19 @@ namespace BIEngine
 
     private:
         virtual std::shared_ptr<SceneNode> GetSceneNode();
+    };
+
+
+    class MeshBaseRenderComponent : public BaseRenderComponent
+    {
+    protected:
+        bool Init(tinyxml2::XMLElement* pData) override;
+
+        tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
+
+    private:
+        std::string m_vertexShaderPath;
+        std::string m_fragmentShaderPath;
 
     protected:
         std::shared_ptr<Material> m_pMaterial;
@@ -36,10 +53,10 @@ namespace BIEngine
 
 
     //Создает и регестрирует в сцене спрайт для отрисовки актера
-    class SpriteRenderComponent : public BaseRenderComponent
+    class SpriteRenderComponent : public MeshBaseRenderComponent
     {
     public:
-        SpriteRenderComponent() : BaseRenderComponent(), m_pSpriteNode(nullptr) {}
+        SpriteRenderComponent() : MeshBaseRenderComponent(), m_pSpriteNode(nullptr) {}
 
         static ComponentId g_CompId;
         virtual ComponentId GetComponentId() const { return SpriteRenderComponent::g_CompId; }
@@ -56,16 +73,18 @@ namespace BIEngine
         std::string m_spritePath; //Сохраняем путь к спрайту, из которого мы делаем текстуру, чтобы потом вставить его в XML, если понадобится
     };
 
+
     static ActorComponent* CreateSpriteRenderComponent()
     {
         return new SpriteRenderComponent;
     }
 
+
     //Создает и регестрирует в сцене меш сферы для отрисовки
-    class BoxRenderComponent : public BaseRenderComponent
+    class BoxRenderComponent : public MeshBaseRenderComponent
     {
     public:
-        BoxRenderComponent() : BaseRenderComponent(), m_pModelNode(nullptr), m_width(1.0f), m_height(1.0f), m_depth(1.0f) {}
+        BoxRenderComponent() : MeshBaseRenderComponent(), m_pModelNode(nullptr), m_width(1.0f), m_height(1.0f), m_depth(1.0f) {}
 
         static ComponentId g_CompId;
         virtual ComponentId GetComponentId() const { return BoxRenderComponent::g_CompId; }
@@ -80,7 +99,8 @@ namespace BIEngine
     protected:
         std::shared_ptr<Model3dNode> m_pModelNode; //Узел на сцене, который отвечает за отрисовку этого компонента
 
-        std::string m_texturePath; //Сохраняем путь текстуре, чтобы потом вставить его в XML, если понадобится
+        std::string m_diffuseMapPath; //Сохраняем путь к текстуре, чтобы потом вставить его в XML, если понадобится
+        std::string m_specularMapPath; //Сохраняем путь к текстуре, чтобы потом вставить его в XML, если понадобится
 
         float m_width;
         float m_height;

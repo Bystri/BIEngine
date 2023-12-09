@@ -21,7 +21,8 @@ namespace BIEngine
 	enum class RenderLayer : int
 	{
 		BEGIN,
-		OPAQUE = BEGIN,
+		LIGHT = BEGIN,
+		OPAQUE,
 		END
 	};
 
@@ -85,8 +86,8 @@ namespace BIEngine
 		virtual bool PostRender(Scene* pScene) = 0;
 		virtual bool IsVisible(Scene* pScene) const = 0;
 
-		virtual bool AddChild(std::shared_ptr<ISceneNode> pChild) = 0;
-		virtual bool RemoveChild(ActorId id) = 0;
+		virtual void AddChild(std::shared_ptr<ISceneNode> pChild) = 0;
+		virtual void RemoveChild(ActorId id) = 0;
 	};
 
 
@@ -121,8 +122,8 @@ namespace BIEngine
 		virtual bool PostRender(Scene* pScene);
 		virtual bool IsVisible(Scene* pScene) const { return true; };
 
-		virtual bool AddChild(std::shared_ptr<ISceneNode> pChild);
-		virtual bool RemoveChild(ActorId id);
+		virtual void AddChild(std::shared_ptr<ISceneNode> pChild) override;
+		virtual void RemoveChild(ActorId id) override;
 
 		void SetRenderLayer(RenderLayer renderLayer) { m_props.SetRenderLayer(renderLayer); }
 		RenderLayer GetRenderLayer() const { return m_props.GetRenderLayer(); }
@@ -140,8 +141,8 @@ namespace BIEngine
 	{
 	public:
 		RootNode();
-		virtual bool AddChild(std::shared_ptr<ISceneNode> pChild);
-		virtual bool RenderChildren(Scene* pScene);
+		virtual void AddChild(std::shared_ptr<ISceneNode> pChild) override;
+		virtual bool RenderChildren(Scene* pScene) override;
 
 		//В стандартной имплементации, мы во время pre и post обработки сохраняем относительные координаты для renderera. У рута нет координат - значит не надо пушить данные в стэк
 		virtual bool PreRender(Scene* pScene) override { return true; }

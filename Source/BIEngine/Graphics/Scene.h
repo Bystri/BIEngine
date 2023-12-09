@@ -5,9 +5,11 @@
 #include <stack>
 
 #include "SceneNodes.h"
+#include "LightNodes.h"
 #include "Skybox.h"
 #include "Camera.h"
 #include "../Renderer/Renderer.h"
+#include "../Renderer/ConstantsBuffer.h"
 #include "../EventManager/Events.h"
 
 namespace BIEngine
@@ -33,11 +35,10 @@ namespace BIEngine
 		Scene(Scene&& orig) = delete;
 		Scene& operator=(Scene&& orig) = delete;
 
+		void Init();
+
 		int OnRender();
 		int OnUpdate(float dt);
-
-		void PushMatrix(const glm::mat4& modelMatrix);
-		void PopMatrix();
 
 		std::shared_ptr<ISceneNode> FindActor(ActorId id);
 
@@ -46,8 +47,8 @@ namespace BIEngine
 
 		void SetSkybox(std::shared_ptr<Skybox> pSkybox) { m_pSkybox = pSkybox; }
 
-		bool AddChild(ActorId id, std::shared_ptr<ISceneNode> pChild);
-		bool RemoveChild(ActorId id);
+		void AddChild(ActorId id, std::shared_ptr<ISceneNode> pChild);
+		void RemoveChild(ActorId id);
 
 		std::shared_ptr<Renderer> GetRenderer() { return m_pRenderer; }
 
@@ -57,6 +58,15 @@ namespace BIEngine
 		//Удаление уничтоженного актера из сцены
 		void DestroyActorDelegate(IEventDataPtr pEventData);
 
+	private:
+		struct GlobalRenderBufferData
+		{
+			glm::mat4 projMat;
+			glm::mat4 viewMat;
+		};
+
+		GlobalRenderBufferData m_globalRenderBufferData;
+
 	protected:
 		//Основной узел дерева графических элементов
 		std::shared_ptr<SceneNode> m_pRoot;
@@ -65,11 +75,9 @@ namespace BIEngine
 		std::shared_ptr<Skybox> m_pSkybox;
 		//Рисовальщик
 		std::shared_ptr<Renderer> m_pRenderer;
+		std::shared_ptr<ConstantsBuffer> m_pConstantsBuffer;
 
 		SceneActorMap m_actorMap;
-
-		//Данная структура нужна для сохранения поворота и начала координаты для текущего базиса родителя, относительного которого будут сопзиционированы дети. 
-		std::stack<glm::mat4> m_localMatrixStack;
 	};
 
 }

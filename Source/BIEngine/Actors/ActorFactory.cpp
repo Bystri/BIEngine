@@ -5,6 +5,7 @@
 #include <tinyxml2.h>
 
 #include "TransformComponent.h"
+#include "LightComponent.h"
 #include "RenderComponent.h"
 #include "Physics2DComponent.h"
 #include "Physics2DTriggerComponent.h"
@@ -22,6 +23,9 @@ namespace BIEngine
 
 		//Сюда должны добавлять все функции-конструкторы компонентов актера
 		m_actorComponentCreators[TransformComponent::g_CompId] = CreateTransformComponent;
+		m_actorComponentCreators[DirectionalLightComponent::g_CompId] = CreateDirectionalLightComponent;
+		m_actorComponentCreators[PointLightComponent::g_CompId] = CreatePointLightComponent;
+		m_actorComponentCreators[SpotLightComponent::g_CompId] = CreateSpotLightComponent;
 		m_actorComponentCreators[SpriteRenderComponent::g_CompId] = CreateSpriteRenderComponent;
 		m_actorComponentCreators[BoxRenderComponent::g_CompId] = CreateBoxRenderComponent;
 		m_actorComponentCreators[Physics2DComponent::g_CompId] = CreatePhysics2DComponent;
