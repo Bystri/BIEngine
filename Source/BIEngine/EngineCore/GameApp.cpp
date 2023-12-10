@@ -48,6 +48,7 @@ bool GameApp::Init()
    ResCache::Get()->RegisterLoader(std::make_shared<VertexShaderResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<FragmentShaderResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<UtilityShaderResourceLoader>());
+   ResCache::Get()->RegisterLoader(std::make_shared<ShaderProgramResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<ScriptResourceLoader>());
    // ResCache::Get()->RegisterLoader(CreateWavResourceLoader());
 

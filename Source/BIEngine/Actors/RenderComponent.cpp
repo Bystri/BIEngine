@@ -48,18 +48,11 @@ bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
       return false;
    }
 
-   const char* vertexShaderPath;
-   pShaderProgramInfo->QueryStringAttribute("vertexShaderPath", &vertexShaderPath);
+   const char* shaderProgramPath;
+   pShaderProgramInfo->QueryStringAttribute("shaderProgramPath", &shaderProgramPath);
 
-   const char* fragmentShaderPath;
-   pShaderProgramInfo->QueryStringAttribute("fragmentShaderPath", &fragmentShaderPath);
-
-   std::shared_ptr<ShaderData> pVertShaderData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(vertexShaderPath)->GetExtra());
-   std::shared_ptr<ShaderData> pFragShaderxData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(fragmentShaderPath)->GetExtra());
-   std::shared_ptr<ShaderProgram> pShaderProgram = std::make_shared<ShaderProgram>();
-   pShaderProgram->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
-
-   m_pMaterial = std::make_shared<Material>(pShaderProgram);
+   std::shared_ptr<ShaderProgramData> pShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(shaderProgramPath)->GetExtra());
+   m_pMaterial = std::make_shared<Material>(pShaderProgramData->GetShaderProgram());
    m_pMaterial->SetColor(WHITE);
 
    tinyxml2::XMLElement* pColorElement = pData->FirstChildElement("Color");

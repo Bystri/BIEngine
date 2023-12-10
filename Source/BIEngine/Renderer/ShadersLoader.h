@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 
+#include "ShaderProgram.h"
 #include "../../ResourceCache/ResCache.h"
 
 namespace BIEngine {
@@ -13,7 +14,7 @@ public:
    UtilityShaderData()
       : m_utilityShaderSource() {}
 
-   ~UtilityShaderData() {}
+   virtual ~UtilityShaderData() {}
 
    // Удаляем их, так как шейдеры используются только для генерации шейдер-программы,
    // и маловероятно событие, что нам нужно будет копирование, чтобы тратиться на реализацию поддержки контроля копирования
@@ -48,7 +49,7 @@ class ShaderData : public IResourceExtraData {
 public:
    ShaderData();
 
-   ~ShaderData() { glDeleteShader(m_shaderIndex); }
+   virtual ~ShaderData() { glDeleteShader(m_shaderIndex); }
 
    // Удаляем их, так как шейдеры используются только для генерации шейдер-программы,
    // и маловероятно событие, что нам нужно будет копирование, чтобы тратиться на реализацию поддержки контроля копирования
@@ -61,6 +62,25 @@ public:
 
 protected:
    unsigned int m_shaderIndex;
+};
+
+class ShaderProgramData : public IResourceExtraData {
+   friend class ShaderProgramResourceLoader;
+
+public:
+   ShaderProgramData() {}
+
+   virtual ~ShaderProgramData() {}
+
+   ShaderProgramData(const ShaderData& orig) = delete;
+   ShaderProgramData& operator=(const ShaderData& orig) = delete;
+
+   virtual std::string ToString() override { return "ShaderProgramData"; }
+
+   std::shared_ptr<ShaderProgram> GetShaderProgram() const { return m_pShaderProgram; }
+
+protected:
+   std::shared_ptr<ShaderProgram> m_pShaderProgram;
 };
 
 class ShaderResourceLoader : public IResourceLoader {
@@ -84,6 +104,19 @@ public:
 class FragmentShaderResourceLoader : public ShaderResourceLoader {
 public:
    virtual std::string GetPattern() override { return "*.frag"; }
+
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
+};
+
+class ShaderProgramResourceLoader : public IResourceLoader {
+public:
+   virtual std::string GetPattern() override { return "*.sp"; }
+
+   virtual bool UseRawFile() override { return false; }
+
+   virtual bool DiscardRawBufferAfterLoad() override { return true; }
+
+   virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize) override { return 0; }
 
    virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
 };
