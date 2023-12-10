@@ -2,15 +2,14 @@
 
 #include "../Renderer/Renderer.h"
 
-namespace BIEngine
-{
-	class DebugDraw
-	{
-	public:
-		static void Init();
+namespace BIEngine {
 
-		static void Draw();
+class DebugDraw {
+public:
+   static void Init();
 
-		static void Line(const glm::vec3& fromPoint, const glm::vec3& toPoint, const glm::vec3& color);
-	};
-}
+   static void Draw();
+
+   static void Line(const glm::vec3& fromPoint, const glm::vec3& toPoint, const glm::vec3& color);
+};
+} // namespace BIEngine

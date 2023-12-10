@@ -6,48 +6,47 @@
 
 #include "../Renderer/Texture.h"
 
-namespace BIEngine
-{
-    struct Vertex 
-    {
-        Vertex() {}
-        Vertex(
-            const glm::vec3& p,
-            const glm::vec3& n,
-            const glm::vec2& uv) :
-            Position(p),
-            Normal(n),
-            TexCoords(uv) {}
-        Vertex(
-            float px, float py, float pz,
-            float nx, float ny, float nz,
-            float u, float v) :
-            Position(px, py, pz),
-            Normal(nx, ny, nz),
-            TexCoords(u, v) {}
+namespace BIEngine {
 
+struct Vertex {
+   Vertex() {}
 
-        glm::vec3 Position;
-        glm::vec3 Normal;
-        glm::vec2 TexCoords;
-    };
+   Vertex(
+      const glm::vec3& p,
+      const glm::vec3& n,
+      const glm::vec2& uv)
+      : Position(p),
+        Normal(n),
+        TexCoords(uv) {}
 
-    class Mesh
-    {
-        friend class Renderer;
-        friend class MeshGeometryGenerator;
+   Vertex(
+      float px, float py, float pz,
+      float nx, float ny, float nz,
+      float u, float v)
+      : Position(px, py, pz),
+        Normal(nx, ny, nz),
+        TexCoords(u, v) {}
 
-    public:
-        Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
+   glm::vec3 Position;
+   glm::vec3 Normal;
+   glm::vec2 TexCoords;
+};
 
-    private:
-        void SetupMesh();
+class Mesh {
+   friend class Renderer;
+   friend class MeshGeometryGenerator;
 
-    private:
-        std::vector<Vertex> m_vertices;
-        std::vector<unsigned int> m_indices;
+public:
+   Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 
-        unsigned int m_VAO, m_VBO, m_EBO;
-    };
+private:
+   void SetupMesh();
 
-}
+private:
+   std::vector<Vertex> m_vertices;
+   std::vector<unsigned int> m_indices;
+
+   unsigned int m_VAO, m_VBO, m_EBO;
+};
+
+} // namespace BIEngine

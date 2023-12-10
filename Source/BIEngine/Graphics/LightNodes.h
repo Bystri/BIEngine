@@ -2,141 +2,151 @@
 
 #include "SceneNodes.h"
 
-namespace BIEngine
-{
+namespace BIEngine {
 
-	class DirectionalLightNode : public SceneNode
-	{
-	public:
-		DirectionalLightNode(const ActorId actorId)
-			: SceneNode(actorId, RenderLayer::LIGHT)
-		{
-		}
+class DirectionalLightNode : public SceneNode {
+public:
+   explicit DirectionalLightNode(const ActorId actorId)
+      : SceneNode(actorId, RenderLayer::LIGHT)
+   {
+   }
 
-		virtual ~DirectionalLightNode() {}
+   virtual ~DirectionalLightNode() {}
 
-		void SetAmbient(const glm::vec3& ambient) { m_ambient = ambient; }
-		const glm::vec3& GetAmbient() const { return m_ambient; }
+   void SetAmbient(const glm::vec3& ambient) { m_ambient = ambient; }
 
-		void SetDiffuse(const glm::vec3& diffuse) { m_diffuse = diffuse; }
-		const glm::vec3& GetDiffuse() const { return m_diffuse; }
+   const glm::vec3& GetAmbient() const { return m_ambient; }
 
-		void SetSpecular(const glm::vec3& specular) { m_specular = specular; }
-		const glm::vec3& GetSpecular() const { return m_specular; }
+   void SetDiffuse(const glm::vec3& diffuse) { m_diffuse = diffuse; }
 
-		virtual bool OnRender(Scene* pScene);
+   const glm::vec3& GetDiffuse() const { return m_diffuse; }
 
-	private:
-		glm::vec3 direction = glm::vec3(0.0, -1.0f, 0.0f);
+   void SetSpecular(const glm::vec3& specular) { m_specular = specular; }
 
-		glm::vec3 m_ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-		glm::vec3 m_diffuse = glm::vec3(0.4f, 0.4f, 0.4f);
-		glm::vec3 m_specular = glm::vec3(0.5f, 0.5f, 0.5f);
-	};
+   const glm::vec3& GetSpecular() const { return m_specular; }
 
+   virtual bool OnRender(Scene* pScene);
 
-	class PointLightNode : public SceneNode
-	{
-	public:
-		PointLightNode(const ActorId actorId)
-			: SceneNode(actorId, RenderLayer::LIGHT)
-		{
-		}
+private:
+   glm::vec3 direction = glm::vec3(0.0, -1.0f, 0.0f);
 
-		virtual ~PointLightNode() {}
+   glm::vec3 m_ambient = glm::vec3(0.05f, 0.05f, 0.05f);
+   glm::vec3 m_diffuse = glm::vec3(0.4f, 0.4f, 0.4f);
+   glm::vec3 m_specular = glm::vec3(0.5f, 0.5f, 0.5f);
+};
 
-		void SetAttenuationParams(float constant, float linear, float quadratic) {
-			m_attenuationConstant = constant;
-			m_attenuationLinear = linear;
-			m_attenuationQuadratic = quadratic;
-		}
+class PointLightNode : public SceneNode {
+public:
+   explicit PointLightNode(const ActorId actorId)
+      : SceneNode(actorId, RenderLayer::LIGHT)
+   {
+   }
 
-		float GetAttenuationConstant() const { return m_attenuationConstant; }
-		float GetAttenuationLinear() const { return m_attenuationLinear; }
-		float GetAttenuationQuadratic() const { return m_attenuationQuadratic; }
+   virtual ~PointLightNode() {}
 
-		void SetAmbient(const glm::vec3& ambient) { m_ambient = ambient; }
-		const glm::vec3& GetAmbient() const { return m_ambient; }
+   void SetAttenuationParams(float constant, float linear, float quadratic)
+   {
+      m_attenuationConstant = constant;
+      m_attenuationLinear = linear;
+      m_attenuationQuadratic = quadratic;
+   }
 
-		void SetDiffuse(const glm::vec3& diffuse) { m_diffuse = diffuse; }
-		const glm::vec3& GetDiffuse() const { return m_diffuse; }
+   float GetAttenuationConstant() const { return m_attenuationConstant; }
 
-		void SetSpecular(const glm::vec3& specular) { m_specular = specular; }
-		const glm::vec3& GetSpecular() const { return m_specular; }
+   float GetAttenuationLinear() const { return m_attenuationLinear; }
 
-		virtual bool OnRender(Scene* pScene);
+   float GetAttenuationQuadratic() const { return m_attenuationQuadratic; }
 
-	private:
-		float m_attenuationConstant = 1.0f;
-		float m_attenuationLinear = 0.09f;
-		float m_attenuationQuadratic = 0.032f;
+   void SetAmbient(const glm::vec3& ambient) { m_ambient = ambient; }
 
-		glm::vec3 m_ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-		glm::vec3 m_diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
-		glm::vec3 m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
-	};
+   const glm::vec3& GetAmbient() const { return m_ambient; }
 
+   void SetDiffuse(const glm::vec3& diffuse) { m_diffuse = diffuse; }
 
-	class SpotLightNode : public SceneNode
-	{
-	public:
-		SpotLightNode(const ActorId actorId)
-			: SceneNode(actorId, RenderLayer::LIGHT)
-		{
-		}
+   const glm::vec3& GetDiffuse() const { return m_diffuse; }
 
-		virtual ~SpotLightNode() {}
+   void SetSpecular(const glm::vec3& specular) { m_specular = specular; }
 
-		void SetAttenuationParams(float constant, float linear, float quadratic) {
-			m_attenuationConstant = constant;
-			m_attenuationLinear = linear;
-			m_attenuationQuadratic = quadratic;
-		}
+   const glm::vec3& GetSpecular() const { return m_specular; }
 
-		float GetAttenuationConstant() const { return m_attenuationConstant; }
-		float GetAttenuationLinear() const { return m_attenuationLinear; }
-		float GetAttenuationQuadratic() const { return m_attenuationQuadratic; }
+   virtual bool OnRender(Scene* pScene);
 
-		void SetCutOff(float cutOff) { m_cutOff = cutOff; }
-		float GetCutOff() const { return m_cutOff; }
+private:
+   float m_attenuationConstant = 1.0f;
+   float m_attenuationLinear = 0.09f;
+   float m_attenuationQuadratic = 0.032f;
 
-		void SetOuterCutOff(float outerCutOff) { m_outerCutOff = outerCutOff; }
-		float GetOuterCutOff() const { return m_outerCutOff; }
+   glm::vec3 m_ambient = glm::vec3(0.05f, 0.05f, 0.05f);
+   glm::vec3 m_diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
+   glm::vec3 m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
+};
 
-		void SetAmbient(const glm::vec3& ambient) { m_ambient = ambient; }
-		const glm::vec3& GetAmbient() const { return m_ambient; }
+class SpotLightNode : public SceneNode {
+public:
+   explicit SpotLightNode(const ActorId actorId)
+      : SceneNode(actorId, RenderLayer::LIGHT)
+   {
+   }
 
-		void SetDiffuse(const glm::vec3& diffuse) { m_diffuse = diffuse; }
-		const glm::vec3& GetDiffuse() const { return m_diffuse; }
+   virtual ~SpotLightNode() {}
 
-		void SetSpecular(const glm::vec3& specular) { m_specular = specular; }
-		const glm::vec3& GetSpecular() const { return m_specular; }
+   void SetAttenuationParams(float constant, float linear, float quadratic)
+   {
+      m_attenuationConstant = constant;
+      m_attenuationLinear = linear;
+      m_attenuationQuadratic = quadratic;
+   }
 
-		virtual bool OnRender(Scene* pScene);
+   float GetAttenuationConstant() const { return m_attenuationConstant; }
 
-	private:
-		float m_attenuationConstant = 1.0f;
-		float m_attenuationLinear = 0.09f;
-		float m_attenuationQuadratic = 0.032f;
+   float GetAttenuationLinear() const { return m_attenuationLinear; }
 
-		glm::vec3 m_ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-		glm::vec3 m_diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
-		glm::vec3 m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
+   float GetAttenuationQuadratic() const { return m_attenuationQuadratic; }
 
-		float m_cutOff = glm::cos(glm::radians(12.5f));
-		float m_outerCutOff = glm::cos(glm::radians(25.0f));
-	};
+   void SetCutOff(float cutOff) { m_cutOff = cutOff; }
 
+   float GetCutOff() const { return m_cutOff; }
 
-	class LightManagerNode : public SceneNode
-	{
-	public:
-		LightManagerNode();
-		~LightManagerNode();
+   void SetOuterCutOff(float outerCutOff) { m_outerCutOff = outerCutOff; }
 
-		virtual bool RenderChildren(Scene* pScene) override;
+   float GetOuterCutOff() const { return m_outerCutOff; }
 
-		virtual bool PreRender(Scene* pScene) override { return true; }
-		virtual bool PostRender(Scene* pScene) override { return true; }
-	};
-}
+   void SetAmbient(const glm::vec3& ambient) { m_ambient = ambient; }
+
+   const glm::vec3& GetAmbient() const { return m_ambient; }
+
+   void SetDiffuse(const glm::vec3& diffuse) { m_diffuse = diffuse; }
+
+   const glm::vec3& GetDiffuse() const { return m_diffuse; }
+
+   void SetSpecular(const glm::vec3& specular) { m_specular = specular; }
+
+   const glm::vec3& GetSpecular() const { return m_specular; }
+
+   virtual bool OnRender(Scene* pScene);
+
+private:
+   float m_attenuationConstant = 1.0f;
+   float m_attenuationLinear = 0.09f;
+   float m_attenuationQuadratic = 0.032f;
+
+   glm::vec3 m_ambient = glm::vec3(0.05f, 0.05f, 0.05f);
+   glm::vec3 m_diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
+   glm::vec3 m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
+
+   float m_cutOff = glm::cos(glm::radians(12.5f));
+   float m_outerCutOff = glm::cos(glm::radians(25.0f));
+};
+
+class LightManagerNode : public SceneNode {
+public:
+   LightManagerNode();
+   ~LightManagerNode();
+
+   virtual bool RenderChildren(Scene* pScene) override;
+
+   virtual bool PreRender(Scene* pScene) override { return true; }
+
+   virtual bool PostRender(Scene* pScene) override { return true; }
+};
+} // namespace BIEngine

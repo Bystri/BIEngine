@@ -4,21 +4,19 @@
 
 #include "Renderer.h"
 
-namespace BIEngine
-{
+namespace BIEngine {
 
-	class ConstantsBuffer
-	{
-	public:
-		ConstantsBuffer();
+class ConstantsBuffer {
+public:
+   ConstantsBuffer();
 
-		void Init(unsigned int bufferSize, unsigned int bindingPoint);
+   void Init(unsigned int bufferSize, unsigned int bindingPoint);
 
-		void SetBufferData(const void* ptrData, unsigned int offset, unsigned int dataSize);
+   void SetBufferData(const void* ptrData, unsigned int offset, unsigned int dataSize);
 
-	private:
-		unsigned int m_uniformBufferBlock;
-		unsigned int m_bufferSize;
-	};
+private:
+   unsigned int m_uniformBufferBlock;
+   unsigned int m_bufferSize;
+};
 
-}
+} // namespace BIEngine

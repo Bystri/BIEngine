@@ -4,37 +4,38 @@
 #include <string>
 #include <vector>
 
-namespace BIEngine
-{
+namespace BIEngine {
 
-	typedef std::map<std::string, int> DipContentsMap;
+typedef std::map<std::string, int> DipContentsMap;
 
-	//Является аналогией к классу ZipFile. Нужен для того, чтобы во время инициализации проверить все файлы в папке и записать всю информацию о них в контейнер
-	class DirFile {
-	public:
-		DirFile() : m_resFileName(), m_fileDatas(), m_dirContentsMap() {}
-		~DirFile() { End();}
+// Является аналогией к классу ZipFile. Нужен для того, чтобы во время инициализации проверить все файлы в папке и записать всю информацию о них в контейнер
+class DirFile {
+public:
+   DirFile()
+      : m_resFileName(), m_fileDatas(), m_dirContentsMap() {}
 
-		bool Init(const std::string& resFileName);
-		void End();
+   ~DirFile() { End(); }
 
-		int GetNumFiles() const { return m_fileDatas.size(); }
-		std::string GetFilename(int i) const;
-		int GetFileLen(int i) const;
-		bool ReadFile(int i, void* pBuf);
+   bool Init(const std::string& resFileName);
+   void End();
 
-		int Find(const std::string& path) const;
+   int GetNumFiles() const { return m_fileDatas.size(); }
 
-	private:
-		struct FileData
-		{
-			std::string name;
-			unsigned int size;
-		};
+   std::string GetFilename(int i) const;
+   int GetFileLen(int i) const;
+   bool ReadFile(int i, void* pBuf);
 
-		std::string m_resFileName;
-		std::vector<FileData> m_fileDatas;
+   int Find(const std::string& path) const;
 
-		DipContentsMap m_dirContentsMap;
-	};
-}
+private:
+   struct FileData {
+      std::string name;
+      unsigned int size;
+   };
+
+   std::string m_resFileName;
+   std::vector<FileData> m_fileDatas;
+
+   DipContentsMap m_dirContentsMap;
+};
+} // namespace BIEngine

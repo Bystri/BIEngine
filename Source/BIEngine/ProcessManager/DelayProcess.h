@@ -2,20 +2,18 @@
 
 #include "Process.h"
 
-namespace BIEngine
-{
+namespace BIEngine {
 
-	class DelayProcess : public Process
-	{
-	public:
-		explicit DelayProcess(double timeToDelay);
+class DelayProcess : public Process {
+public:
+   explicit DelayProcess(double timeToDelay);
 
-	protected:
-		virtual void OnUpdate(double dt) override;
+protected:
+   virtual void OnUpdate(double dt) override;
 
-	protected:
-		double m_timeToDelay;
-		double m_timeDelayedSoFar;
-	};
+protected:
+   double m_timeToDelay;
+   double m_timeDelayedSoFar;
+};
 
-}
+} // namespace BIEngine

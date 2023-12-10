@@ -10,5 +10,5 @@ namespace py = pybind11;
 
 PYBIND11_EMBEDDED_MODULE(BIEDebug, m)
 {
-	m.def("DbgLine", &BIEngine::DebugDraw::Line);
+   m.def("DbgLine", &BIEngine::DebugDraw::Line);
 }

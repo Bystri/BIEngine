@@ -11,6 +11,7 @@
     <ClInclude Include="..\BIFlyCameraSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".editorconfig" />
+    <None Include="..\.clang-format" />
+    <None Include="..\.clang-tidy" />
   </ItemGroup>
 </Project>

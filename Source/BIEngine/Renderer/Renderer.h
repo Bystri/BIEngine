@@ -7,57 +7,50 @@
 #include "../Graphics/Sprite.h"
 #include "../Graphics/Model3d.h"
 
-namespace BIEngine
-{
-    struct RenderCommand
-    {
-        RenderCommand(std::shared_ptr<Mesh> pMesh, std::shared_ptr<ShaderProgram> pShader)
-            : pMesh(pMesh)
-            , m_shaderProgramState(pShader)
-        {
+namespace BIEngine {
 
-        }
+struct RenderCommand {
+   RenderCommand(std::shared_ptr<Mesh> pMesh, std::shared_ptr<ShaderProgram> pShader)
+      : pMesh(pMesh), m_shaderProgramState(pShader)
+   {
+   }
 
+   std::shared_ptr<Mesh> GetMeshPtr() const
+   {
+      return pMesh;
+   }
 
-        std::shared_ptr<Mesh> GetMeshPtr() const
-        {
-            return pMesh;
-        }
+   ShaderProgramState& GetShaderProgramState()
+   {
+      return m_shaderProgramState;
+   }
 
+   glm::mat4 Transform;
 
-        ShaderProgramState& GetShaderProgramState()
-        {
-            return m_shaderProgramState;
-        }
+   RenderState RenderState;
 
-        glm::mat4 Transform;
+   std::vector<std::shared_ptr<Texture>> pTextures;
 
-        RenderState RenderState;
+private:
+   const std::shared_ptr<Mesh> pMesh;
+   ShaderProgramState m_shaderProgramState;
+};
 
-        std::vector<std::shared_ptr<Texture>> pTextures;
+// Отвечает за отрисвоку спрайтов
+class Renderer {
+public:
+   Renderer();
+   Renderer(const Renderer& orig) = delete;
+   Renderer& operator=(const Renderer& rhs) = delete;
 
-    private:
-        const std::shared_ptr<Mesh> pMesh;
-        ShaderProgramState m_shaderProgramState;
-    };
+   void Init();
 
+   RenderDevice& GetRenderDevice() { return m_renderDevice; }
 
-    //Отвечает за отрисвоку спрайтов 
-    class Renderer
-    {
-    public:
-        Renderer();
-        Renderer(const Renderer& orig) = delete;
-        Renderer& operator=(const Renderer& rhs) = delete;
+   void Clear(RenderDevice::ClearFlag flags, const Color& color);
+   void DrawRenderCommand(RenderCommand& renderCommand);
 
-        void Init();
-
-        RenderDevice& GetRenderDevice() { return m_renderDevice; }
-
-        void Clear(RenderDevice::ClearFlag flags, const Color& color);
-        void DrawRenderCommand(RenderCommand& renderCommand);
-
-    private:
-        RenderDevice m_renderDevice;
-    };
-}
+private:
+   RenderDevice m_renderDevice;
+};
+} // namespace BIEngine

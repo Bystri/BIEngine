@@ -6,20 +6,20 @@
 #include "../Renderer/Texture.h"
 #include "MeshGeometryGenerator.h"
 
-namespace BIEngine
-{
+namespace BIEngine {
 
-	class Sprite
-	{
-	public:
-		Sprite(std::shared_ptr<Texture2D> texture) : m_pSpriteMesh(std::make_shared<Mesh>(MeshGeometryGenerator::CreateQuad(1.0, 1.0))), m_pTexture(texture) {}
+class Sprite {
+public:
+   explicit Sprite(std::shared_ptr<Texture2D> texture)
+      : m_pSpriteMesh(std::make_shared<Mesh>(MeshGeometryGenerator::CreateQuad(1.0, 1.0))), m_pTexture(texture) {}
 
-		std::shared_ptr<Mesh> GetMesh() const { return m_pSpriteMesh; }
-		std::shared_ptr<Texture2D> GetTexture() const { return m_pTexture; }
+   std::shared_ptr<Mesh> GetMesh() const { return m_pSpriteMesh; }
 
-	private:
-		std::shared_ptr<Mesh> m_pSpriteMesh;
-		std::shared_ptr<Texture2D> m_pTexture;
-	};
+   std::shared_ptr<Texture2D> GetTexture() const { return m_pTexture; }
 
-}
+private:
+   std::shared_ptr<Mesh> m_pSpriteMesh;
+   std::shared_ptr<Texture2D> m_pTexture;
+};
+
+} // namespace BIEngine

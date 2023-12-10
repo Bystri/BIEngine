@@ -5,36 +5,39 @@
 
 #include "Process.h"
 
-namespace BIEngine
-{
+namespace BIEngine {
 
-	//Данный класс реализован за счет шаблона "одиночка" и доступ к нему может быть получен через вызов  ProcessManager::Get()
-	//Перед использованием класса требуется предварительная инициализация через Create()
-	class ProcessManager
-	{
-		typedef std::list<StrongProcessPtr> ProcessList;
-		ProcessList m_processList;
+// Данный класс реализован за счет шаблона "одиночка" и доступ к нему может быть получен через вызов  ProcessManager::Get()
+// Перед использованием класса требуется предварительная инициализация через Create()
+class ProcessManager {
+   typedef std::list<StrongProcessPtr> ProcessList;
+   ProcessList m_processList;
 
-		static ProcessManager* s_pSingleton;
+   static ProcessManager* s_pSingleton;
 
-	public:
-		static bool Create();
-		static void Destroy();
-		static ProcessManager* Get() { assert(s_pSingleton); return s_pSingleton; }
+public:
+   static bool Create();
+   static void Destroy();
 
-		//Выполняет один тик работы для всех активных процессов
-		unsigned int UpdateProcesses(double dt);
+   static ProcessManager* Get()
+   {
+      assert(s_pSingleton);
+      return s_pSingleton;
+   }
 
-		WeakProcessPtr AttachProcess(StrongProcessPtr pProcess);
-		void AbortAllProcesses(bool immediate);
+   // Выполняет один тик работы для всех активных процессов
+   unsigned int UpdateProcesses(double dt);
 
-		std::size_t GetProcessCount() const { return m_processList.size(); }
+   WeakProcessPtr AttachProcess(StrongProcessPtr pProcess);
+   void AbortAllProcesses(bool immediate);
 
-	private:
-		void ClearAllProcesses();
+   std::size_t GetProcessCount() const { return m_processList.size(); }
 
-		explicit ProcessManager();
-		~ProcessManager();
-	};
+private:
+   void ClearAllProcesses();
 
-}
+   explicit ProcessManager();
+   ~ProcessManager();
+};
+
+} // namespace BIEngine

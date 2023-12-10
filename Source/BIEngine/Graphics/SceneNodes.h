@@ -11,142 +11,148 @@
 #include "../Actors/TransformComponent.h"
 #include "../Actors/Actor.h"
 
-namespace BIEngine
-{
+namespace BIEngine {
 
-	class Scene;
-	class SceneNode;
+class Scene;
+class SceneNode;
 
-	//Разные слои отображения отрисовываются в разном порядке
-	enum class RenderLayer : int
-	{
-		BEGIN,
-		LIGHT = BEGIN,
-		OPAQUE,
-		END
-	};
+// Разные слои отображения отрисовываются в разном порядке
+enum class RenderLayer : int {
+   BEGIN,
+   LIGHT = BEGIN,
+   OPAQUE,
+   END
+};
 
-	class SceneNodeProperties
-	{
-		friend class SceneNode;
+class SceneNodeProperties {
+   friend class SceneNode;
 
-	public:
-		const ActorId& GetActorId() const { return m_ActorId; }
+public:
+   const ActorId& GetActorId() const { return m_ActorId; }
 
+   void SetTransform(std::shared_ptr<TransformComponent> pTransform) { m_pTransformComponent = pTransform; }
 
-		void SetTransform(std::shared_ptr<TransformComponent> pTransform) { m_pTransformComponent = pTransform; }
+   glm::vec3 GetPosition() const { return m_pTransformComponent->GetPosition(); }
 
-		glm::vec3 GetPosition() const { return m_pTransformComponent->GetPosition(); }
-		glm::vec3 GetSize() const { return m_pTransformComponent->GetSize(); };
-		glm::vec3 GetRotation() const { return m_pTransformComponent->GetRotation(); }
+   glm::vec3 GetSize() const { return m_pTransformComponent->GetSize(); };
 
-		glm::mat4 GetTransformMatrix() const { return m_pTransformComponent->GetTransformMatrix(); }
+   glm::vec3 GetRotation() const { return m_pTransformComponent->GetRotation(); }
 
-		RenderLayer GetRenderLayer() const { return m_renderLayer; }
+   glm::mat4 GetTransformMatrix() const { return m_pTransformComponent->GetTransformMatrix(); }
 
-		bool HasAlpha() const { return m_pMaterial->HasAlpha(); }
+   RenderLayer GetRenderLayer() const { return m_renderLayer; }
 
-		void SetMaterial(std::shared_ptr<Material> pMat) { m_pMaterial = pMat; }
-		std::shared_ptr<Material> GetMaterial() const { return m_pMaterial; }
+   bool HasAlpha() const { return m_pMaterial->HasAlpha(); }
 
-	protected:
-		void SetRenderLayer(RenderLayer renderLayer) {
-			m_renderLayer = renderLayer;
-		}
+   void SetMaterial(std::shared_ptr<Material> pMat) { m_pMaterial = pMat; }
 
-	protected:
-		ActorId m_ActorId;
+   std::shared_ptr<Material> GetMaterial() const { return m_pMaterial; }
 
-		//Указатель на компонент, содержащий пространственные данные для актера, которые помогают спозицианировать объект при отрисовке
-		std::shared_ptr<TransformComponent> m_pTransformComponent;
+protected:
+   void SetRenderLayer(RenderLayer renderLayer)
+   {
+      m_renderLayer = renderLayer;
+   }
 
-		RenderLayer m_renderLayer;
+protected:
+   ActorId m_ActorId;
 
-		std::shared_ptr<Material> m_pMaterial;
-	};
+   // Указатель на компонент, содержащий пространственные данные для актера, которые помогают спозицианировать объект при отрисовке
+   std::shared_ptr<TransformComponent> m_pTransformComponent;
 
-	//Основной класс узла дерева спрайтов. 
-	//Древовидная структура нужна для того, чтобы мы могли позиционировать одни графиечские элементы относительно других, взяв их координаты как за точку отсчета
-	class ISceneNode
-	{
-	public:
-		virtual ~ISceneNode() {};
+   RenderLayer m_renderLayer;
 
-		virtual const SceneNodeProperties* const Get() const = 0;
+   std::shared_ptr<Material> m_pMaterial;
+};
 
-		virtual void SetTransform(std::shared_ptr<TransformComponent> pTransform) = 0;
-		virtual glm::vec3 GetPosition() const = 0;
-		virtual glm::vec3 GetSize() const = 0;
-		virtual glm::vec3 GetRotation() const = 0;
+// Основной класс узла дерева спрайтов.
+// Древовидная структура нужна для того, чтобы мы могли позиционировать одни графиечские элементы относительно других, взяв их координаты как за точку отсчета
+class ISceneNode {
+public:
+   virtual ~ISceneNode(){};
 
-		virtual bool OnUpdate(Scene* pScene, float dt) = 0;
-		virtual bool PreRender(Scene* pScene) = 0;
-		virtual bool OnRender(Scene* pScene) = 0;
-		virtual bool RenderChildren(Scene* pScene) = 0;
-		virtual bool PostRender(Scene* pScene) = 0;
-		virtual bool IsVisible(Scene* pScene) const = 0;
+   virtual const SceneNodeProperties* const Get() const = 0;
 
-		virtual void AddChild(std::shared_ptr<ISceneNode> pChild) = 0;
-		virtual void RemoveChild(ActorId id) = 0;
-	};
+   virtual void SetTransform(std::shared_ptr<TransformComponent> pTransform) = 0;
+   virtual glm::vec3 GetPosition() const = 0;
+   virtual glm::vec3 GetSize() const = 0;
+   virtual glm::vec3 GetRotation() const = 0;
 
+   virtual bool OnUpdate(Scene* pScene, float dt) = 0;
+   virtual bool PreRender(Scene* pScene) = 0;
+   virtual bool OnRender(Scene* pScene) = 0;
+   virtual bool RenderChildren(Scene* pScene) = 0;
+   virtual bool PostRender(Scene* pScene) = 0;
+   virtual bool IsVisible(Scene* pScene) const = 0;
 
-	typedef std::vector<std::shared_ptr<ISceneNode>> SceneNodeList;
+   virtual void AddChild(std::shared_ptr<ISceneNode> pChild) = 0;
+   virtual void RemoveChild(ActorId id) = 0;
+};
 
-	class SceneNode : public ISceneNode
-	{
-		friend class Scene;
-	public:
-		SceneNode(ActorId actorId,
-			RenderLayer renderLayer)
-			: m_pParent(nullptr)
-		{
-			m_props.m_ActorId = actorId;
-			m_props.SetRenderLayer(renderLayer);
-		}
+typedef std::vector<std::shared_ptr<ISceneNode>> SceneNodeList;
 
-		virtual ~SceneNode() {};
-		virtual const SceneNodeProperties* const Get() const { return &m_props; }
+class SceneNode : public ISceneNode {
+   friend class Scene;
 
-		virtual void SetTransform(std::shared_ptr<TransformComponent> pTransform) { m_props.SetTransform(pTransform); }
-		virtual glm::vec3 GetPosition() const { return  m_props.GetPosition(); }
-		virtual glm::vec3 GetSize() const { return  m_props.GetSize(); };
-		virtual glm::vec3 GetRotation() const { return  m_props.GetRotation(); }
-		virtual glm::mat4 GetLocalModelMatrix() const;
+public:
+   SceneNode(ActorId actorId, RenderLayer renderLayer)
+      : m_pParent(nullptr)
+   {
+      m_props.m_ActorId = actorId;
+      m_props.SetRenderLayer(renderLayer);
+   }
 
-		virtual bool OnUpdate(Scene* pScene, float dt);
-		//Если данное событие вернут "false", то отрисовка объекта в данном кадре будет отменена, но событие PostRender будет выполнено
-		virtual bool PreRender(Scene* pScene);
-		virtual bool OnRender(Scene* pScene) { return 0; }
-		virtual bool RenderChildren(Scene* pScene);
-		virtual bool PostRender(Scene* pScene);
-		virtual bool IsVisible(Scene* pScene) const { return true; };
+   virtual ~SceneNode(){};
 
-		virtual void AddChild(std::shared_ptr<ISceneNode> pChild) override;
-		virtual void RemoveChild(ActorId id) override;
+   virtual const SceneNodeProperties* const Get() const { return &m_props; }
 
-		void SetRenderLayer(RenderLayer renderLayer) { m_props.SetRenderLayer(renderLayer); }
-		RenderLayer GetRenderLayer() const { return m_props.GetRenderLayer(); }
+   virtual void SetTransform(std::shared_ptr<TransformComponent> pTransform) { m_props.SetTransform(pTransform); }
 
-		void SetMaterial(std::shared_ptr<Material> pMat) { m_props.SetMaterial(pMat); }
+   virtual glm::vec3 GetPosition() const { return m_props.GetPosition(); }
 
-	protected:
-		SceneNodeList m_children;
-		SceneNode* m_pParent;
-		SceneNodeProperties m_props;
-	};
+   virtual glm::vec3 GetSize() const { return m_props.GetSize(); };
 
-	//Корневой узел сцены, с которого начинается каждая отрисовка сцены
-	class RootNode : public SceneNode
-	{
-	public:
-		RootNode();
-		virtual void AddChild(std::shared_ptr<ISceneNode> pChild) override;
-		virtual bool RenderChildren(Scene* pScene) override;
+   virtual glm::vec3 GetRotation() const { return m_props.GetRotation(); }
 
-		//В стандартной имплементации, мы во время pre и post обработки сохраняем относительные координаты для renderera. У рута нет координат - значит не надо пушить данные в стэк
-		virtual bool PreRender(Scene* pScene) override { return true; }
-		virtual bool PostRender(Scene* pScene) override { return true; }
-	};
+   virtual glm::mat4 GetLocalModelMatrix() const;
 
-}
+   virtual bool OnUpdate(Scene* pScene, float dt);
+   // Если данное событие вернут "false", то отрисовка объекта в данном кадре будет отменена, но событие PostRender будет выполнено
+   virtual bool PreRender(Scene* pScene);
+
+   virtual bool OnRender(Scene* pScene) { return 0; }
+
+   virtual bool RenderChildren(Scene* pScene);
+   virtual bool PostRender(Scene* pScene);
+
+   virtual bool IsVisible(Scene* pScene) const { return true; };
+
+   virtual void AddChild(std::shared_ptr<ISceneNode> pChild) override;
+   virtual void RemoveChild(ActorId id) override;
+
+   void SetRenderLayer(RenderLayer renderLayer) { m_props.SetRenderLayer(renderLayer); }
+
+   RenderLayer GetRenderLayer() const { return m_props.GetRenderLayer(); }
+
+   void SetMaterial(std::shared_ptr<Material> pMat) { m_props.SetMaterial(pMat); }
+
+protected:
+   SceneNodeList m_children;
+   SceneNode* m_pParent;
+   SceneNodeProperties m_props;
+};
+
+// Корневой узел сцены, с которого начинается каждая отрисовка сцены
+class RootNode : public SceneNode {
+public:
+   RootNode();
+   virtual void AddChild(std::shared_ptr<ISceneNode> pChild) override;
+   virtual bool RenderChildren(Scene* pScene) override;
+
+   // В стандартной имплементации, мы во время pre и post обработки сохраняем относительные координаты для renderera. У рута нет координат - значит не надо пушить данные в стэк
+   virtual bool PreRender(Scene* pScene) override { return true; }
+
+   virtual bool PostRender(Scene* pScene) override { return true; }
+};
+
+} // namespace BIEngine

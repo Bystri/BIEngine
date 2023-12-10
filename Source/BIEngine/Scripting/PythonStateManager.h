@@ -9,38 +9,41 @@
 
 namespace py = pybind11;
 
-namespace BIEngine
-{
+namespace BIEngine {
 
-	class PythonStateManager
-	{
-	public:
-		//Инициализация экземпляра одиночки 
-		static bool Create();
-		//Уничтожение экземпляра одиночки
-		static void Destroy();
-		static PythonStateManager* Get() { assert(s_pSingleton); return s_pSingleton; }
+class PythonStateManager {
+public:
+   // Инициализация экземпляра одиночки
+   static bool Create();
+   // Уничтожение экземпляра одиночки
+   static void Destroy();
 
-		bool Init();
-		//Выполняет указанный Python-скрипт
-		//Может быть вызван внутри самого скрипта
-		void ExecuteFile(const char* resource);
-		//Выполняет указанный Python-код
-		//Может быть вызван внутри самого скрипта
-		void ExecuteString(const char* str);
+   static PythonStateManager* Get()
+   {
+      assert(s_pSingleton);
+      return s_pSingleton;
+   }
 
-		py::module_& GetMain();
+   bool Init();
+   // Выполняет указанный Python-скрипт
+   // Может быть вызван внутри самого скрипта
+   void ExecuteFile(const char* resource);
+   // Выполняет указанный Python-код
+   // Может быть вызван внутри самого скрипта
+   void ExecuteString(const char* str);
 
-	private:
-		//Конструктуры приватны из-за того, что PythonStateManager реализован с помощью паттерна "одиночка"
-		explicit PythonStateManager();
-		~PythonStateManager();
+   py::module_& GetMain();
 
-	private:
-		static PythonStateManager* s_pSingleton;
-		py::scoped_interpreter* m_pPythonGuard;
-		py::module_ m_main;
-		py::object m_mainScope;
-	};
+private:
+   // Конструктуры приватны из-за того, что PythonStateManager реализован с помощью паттерна "одиночка"
+   explicit PythonStateManager();
+   ~PythonStateManager();
 
-}
+private:
+   static PythonStateManager* s_pSingleton;
+   py::scoped_interpreter* m_pPythonGuard;
+   py::module_ m_main;
+   py::object m_mainScope;
+};
+
+} // namespace BIEngine

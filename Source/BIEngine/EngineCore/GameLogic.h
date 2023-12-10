@@ -5,61 +5,61 @@
 #include "../Physics/Physics2D.h"
 #include "../Physics/Physics3D.h"
 
-namespace BIEngine
-{
+namespace BIEngine {
 
-	class GameLogic
-	{
-		friend class GameApp;
+class GameLogic {
+   friend class GameApp;
 
-	public:
-		typedef std::map<ActorId, std::shared_ptr<Actor>> ActorMap;
+public:
+   typedef std::map<ActorId, std::shared_ptr<Actor>> ActorMap;
 
-		GameLogic();
-		virtual ~GameLogic();
+   GameLogic();
+   virtual ~GameLogic();
 
-		GameLogic(const GameLogic& orig) = delete;
-		GameLogic& operator=(const GameLogic& rhs) = delete;
+   GameLogic(const GameLogic& orig) = delete;
+   GameLogic& operator=(const GameLogic& rhs) = delete;
 
-		std::shared_ptr<IGamePhysics2D> GetGamePhysics2D() const { return m_pPhysics2D; }
-		std::shared_ptr<IGamePhysics3D> GetGamePhysics3D() const { return m_pPhysics3D; }
+   std::shared_ptr<IGamePhysics2D> GetGamePhysics2D() const { return m_pPhysics2D; }
 
-		virtual bool Init();
+   std::shared_ptr<IGamePhysics3D> GetGamePhysics3D() const { return m_pPhysics3D; }
 
-		bool LoadLevel(const std::string& path);
+   virtual bool Init();
 
-		//Должен быть переопределен дочерним классом, если нужно сделать что-то особое во время загрузки мира.
-		//Такая необохдимость в отдельной функции возникает из-за выполнение скриптов перед и после загрузки мира.
-		virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) { return true; }
+   bool LoadLevel(const std::string& path);
 
-		std::shared_ptr<Actor> CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition = nullptr, const glm::vec3* const pRotation = nullptr);
-		//Принимает на вход XML-структуру актера, компоненты в котором будут заменены или добавлены.
-		void ModifyActor(ActorId actorId, tinyxml2::XMLElement* pOverrides);
-		//Является ответчиком на запрос об уничтожении актера
-		void RequestDestroyActorDelegate(IEventDataPtr pEventData);
-		virtual void DestroyActor(const ActorId actorId);
+   // Должен быть переопределен дочерним классом, если нужно сделать что-то особое во время загрузки мира.
+   // Такая необохдимость в отдельной функции возникает из-за выполнение скриптов перед и после загрузки мира.
+   virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) { return true; }
 
-		virtual void AddGameView(std::shared_ptr<IGameView> pView);
-		virtual void RemoveGameView(std::shared_ptr<IGameView> pView);
+   std::shared_ptr<Actor> CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition = nullptr, const glm::vec3* const pRotation = nullptr);
+   // Принимает на вход XML-структуру актера, компоненты в котором будут заменены или добавлены.
+   void ModifyActor(ActorId actorId, tinyxml2::XMLElement* pOverrides);
+   // Является ответчиком на запрос об уничтожении актера
+   void RequestDestroyActorDelegate(IEventDataPtr pEventData);
+   virtual void DestroyActor(const ActorId actorId);
 
-		virtual void OnUpdate(float dt);
-		virtual void OnRender(float time, float dt);
+   virtual void AddGameView(std::shared_ptr<IGameView> pView);
+   virtual void RemoveGameView(std::shared_ptr<IGameView> pView);
 
-		std::shared_ptr<Actor> GetActor(ActorId id) const;
-		int GetNumActors() const { return m_actors.size(); };
+   virtual void OnUpdate(float dt);
+   virtual void OnRender(float time, float dt);
 
-		//Обработчики событий устройств ввода
-		void OnPointerMove(float xpos, float ypos);
-		void SetKey(int key, int scancode, bool state);
+   std::shared_ptr<Actor> GetActor(ActorId id) const;
 
-	protected:
-		GameViewList m_gameViews;
+   int GetNumActors() const { return m_actors.size(); };
 
-		ActorMap m_actors;
-		ActorFactory* m_pActorFactory;
+   // Обработчики событий устройств ввода
+   void OnPointerMove(float xpos, float ypos);
+   void SetKey(int key, int scancode, bool state);
 
-		std::shared_ptr<IGamePhysics2D> m_pPhysics2D;
-		std::shared_ptr<IGamePhysics3D> m_pPhysics3D;
-	};
+protected:
+   GameViewList m_gameViews;
 
-}
+   ActorMap m_actors;
+   ActorFactory* m_pActorFactory;
+
+   std::shared_ptr<IGamePhysics2D> m_pPhysics2D;
+   std::shared_ptr<IGamePhysics3D> m_pPhysics3D;
+};
+
+} // namespace BIEngine

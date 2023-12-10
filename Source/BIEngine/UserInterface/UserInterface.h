@@ -3,72 +3,74 @@
 #include <map>
 #include <string>
 
-namespace BIEngine
-{
-	class IElementUI
-	{
-		friend class UserInterface;
-	public:
-		void SetCoord(float x, float y, float scale)
-		{
-			m_x = x;
-			m_y = y;
-			m_scale = scale;
-		}
+namespace BIEngine {
 
-		float GetX() const { return m_x; }
-		float GetY() const { return m_y; }
-		float GetScale() const { return m_scale; }
+class IElementUI {
+   friend class UserInterface;
 
-		virtual void OnRender(float dt) = 0;
+public:
+   void SetCoord(float x, float y, float scale)
+   {
+      m_x = x;
+      m_y = y;
+      m_scale = scale;
+   }
 
-	protected:
-		//Только UserInterface класс может создавать и удалять элементы интерфейса
-		explicit IElementUI(int id) : m_id(id), m_x(0.0f), m_y(0.0f), m_scale(0.0f) {}
+   float GetX() const { return m_x; }
 
-	protected:
-		int m_id;
+   float GetY() const { return m_y; }
 
-		float m_x;
-		float m_y;
-		float m_scale;
-	};
+   float GetScale() const { return m_scale; }
 
-	class Text : public IElementUI
-	{
-		friend class UserInterface;
-	public:
-		void SetText(const std::string& text) { m_text = text; }
+   virtual void OnRender(float dt) = 0;
 
-		virtual void OnRender(float dt);
+protected:
+   // Только UserInterface класс может создавать и удалять элементы интерфейса
+   explicit IElementUI(int id)
+      : m_id(id), m_x(0.0f), m_y(0.0f), m_scale(0.0f) {}
 
-	private:
-		explicit Text(int id);
+protected:
+   int m_id;
 
-	private:
-		std::string m_text;
-	};
+   float m_x;
+   float m_y;
+   float m_scale;
+};
 
-	class UserInterface
-	{
-	public:
-		UserInterface();
-		UserInterface(const UserInterface& orig) = delete;
-		UserInterface& operator=(const UserInterface& rhs) = delete;
+class Text : public IElementUI {
+   friend class UserInterface;
 
-		bool Init(unsigned int width, unsigned int height);
-		void Shutdown();
+public:
+   void SetText(const std::string& text) { m_text = text; }
 
-		int CreateStatic(float x, float y, float scale, const std::string& text);
-		Text* GetStatic(int id);
+   virtual void OnRender(float dt);
 
-		void OnRender(float dt);
+private:
+   explicit Text(int id);
 
-	private:
-		//Хранит ID, который будет присвоен следующему элементу
-		int m_nextId;
+private:
+   std::string m_text;
+};
 
-		std::map<int, IElementUI* const> m_elements;
-	};
+class UserInterface {
+public:
+   UserInterface();
+   UserInterface(const UserInterface& orig) = delete;
+   UserInterface& operator=(const UserInterface& rhs) = delete;
 
-}
+   bool Init(unsigned int width, unsigned int height);
+   void Shutdown();
+
+   int CreateStatic(float x, float y, float scale, const std::string& text);
+   Text* GetStatic(int id);
+
+   void OnRender(float dt);
+
+private:
+   // Хранит ID, который будет присвоен следующему элементу
+   int m_nextId;
+
+   std::map<int, IElementUI* const> m_elements;
+};
+
+} // namespace BIEngine

@@ -1,0 +1,6 @@
+---
+Checks:
+  "-*\
+  ,bugprone-use-after-move\
+  ,modernize-redundant-void-arg\
+  "
