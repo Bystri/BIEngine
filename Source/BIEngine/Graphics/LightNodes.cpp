@@ -1,59 +1,44 @@
 #include "LightNodes.h"
 
+#include <cstdint>
+
 #include "Scene.h"
 
 namespace BIEngine {
 
 struct DirectionalLightGlData {
    glm::vec3 direction = glm::vec3(0.0, -1.0f, 0.0f);
-   int pan1;
+   uint32_t pan1;
    glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-   int pan2;
+   uint32_t pan2;
    glm::vec3 diffuse = glm::vec3(0.4f, 0.4f, 0.4f);
-   int pan3;
+   uint32_t pan3;
    glm::vec3 specular = glm::vec3(0.5f, 0.5f, 0.5f);
-   int pan4;
+   uint32_t pan4;
 };
 
 struct PointLightGlData {
    glm::vec3 position = glm::vec3(0.0f);
-
    float constant = 1.0f;
-   float linear = 0.09f;
-   float quadratic = 0.032f;
-   int pan2;
-   int pan3;
-
    glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-   int pan5;
+   float linear = 0.09f;
    glm::vec3 diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
-   int pan6;
+   float quadratic = 0.032f;
    glm::vec3 specular = glm::vec3(1.0f, 1.0f, 1.0f);
-   int pan7;
+   uint32_t pan7;
 };
 
 struct SpotLightGlData {
    glm::vec3 position = glm::vec3(0.0f);
-   int pan1;
-   glm::vec3 direction = glm::vec3(0.0f, 0.0f, -1.0f);
-
    float constant = 1.0f;
+   glm::vec3 direction = glm::vec3(0.0f, 0.0f, -1.0f);
    float linear = 0.09f;
-   float quadratic = 0.032f;
-   int pan2;
-   int pan3;
-
    glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-   int pan4;
+   float quadratic = 0.032f;
    glm::vec3 diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
-   int pan5;
-   glm::vec3 specular = glm::vec3(1.0f, 1.0f, 1.0f);
-
    float cutOff = glm::cos(glm::radians(12.5f));
+   glm::vec3 specular = glm::vec3(1.0f, 1.0f, 1.0f);
    float outerCutOff = glm::cos(glm::radians(25.0f));
-   int pan7;
-   int pan8;
-   int pan9;
 };
 
 constexpr int MAX_DIRECTIONAL_LIGHTS_NUM = 4;
@@ -61,10 +46,10 @@ constexpr int MAX_POINT_LIGHTS_NUM = 16;
 constexpr int MAX_SPOT_LIGHTS_NUM = 12;
 
 struct LightUniformBufferData {
-   int DirectionalLightNum;
-   int PointLightsNum;
-   int SpotLightsNum;
-   int pan1;
+   int32_t DirectionalLightNum;
+   int32_t PointLightsNum;
+   int32_t SpotLightsNum;
+   uint32_t pan1;
    DirectionalLightGlData DirLights[MAX_DIRECTIONAL_LIGHTS_NUM];
    PointLightGlData PointLights[MAX_POINT_LIGHTS_NUM];
    SpotLightGlData SpotLights[MAX_SPOT_LIGHTS_NUM];
