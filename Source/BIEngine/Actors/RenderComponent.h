@@ -40,8 +40,7 @@ protected:
    tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
 private:
-   std::string m_vertexShaderPath;
-   std::string m_fragmentShaderPath;
+   std::string m_shaderProgrampath;
 
 protected:
    std::shared_ptr<Material> m_pMaterial;

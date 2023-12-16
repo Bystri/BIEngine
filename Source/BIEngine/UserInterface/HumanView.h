@@ -20,8 +20,8 @@ public:
 
    std::shared_ptr<Renderer> GetRenderer() const { return m_pRenderer; }
 
-   virtual void OnUpdate(float dt) override;
-   virtual void OnRender(float fTime, float dt) override;
+   virtual void OnUpdate(const GameTimer& gt) override;
+   virtual void OnRender(const GameTimer& gt) override;
 
    virtual GameViewType GetType() const override { return GameViewType::Human; }
 

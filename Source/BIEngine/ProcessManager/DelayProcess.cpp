@@ -9,11 +9,12 @@ DelayProcess::DelayProcess(double timeToDelay)
 {
 }
 
-void DelayProcess::OnUpdate(double dt)
+void DelayProcess::OnUpdate(const GameTimer& gt)
 {
-   m_timeDelayedSoFar += dt;
-   if (m_timeDelayedSoFar >= m_timeToDelay)
+   m_timeDelayedSoFar += gt.DeltaTime();
+   if (m_timeDelayedSoFar >= m_timeToDelay) {
       Succeed();
+   }
 }
 
 } // namespace BIEngine

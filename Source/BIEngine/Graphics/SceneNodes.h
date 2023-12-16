@@ -7,9 +7,10 @@
 
 #include <glm/glm.hpp>
 
-#include "../Graphics/Material.h"
-#include "../Actors/TransformComponent.h"
 #include "../Actors/Actor.h"
+#include "../Actors/TransformComponent.h"
+#include "../Graphics/Material.h"
+#include "../Utilities/GameTimer.h"
 
 namespace BIEngine {
 
@@ -78,7 +79,7 @@ public:
    virtual glm::vec3 GetSize() const = 0;
    virtual glm::vec3 GetRotation() const = 0;
 
-   virtual bool OnUpdate(Scene* pScene, float dt) = 0;
+   virtual bool OnUpdate(Scene* pScene, const GameTimer& gt) = 0;
    virtual bool PreRender(Scene* pScene) = 0;
    virtual bool OnRender(Scene* pScene) = 0;
    virtual bool RenderChildren(Scene* pScene) = 0;
@@ -116,7 +117,7 @@ public:
 
    virtual glm::mat4 GetLocalModelMatrix() const;
 
-   virtual bool OnUpdate(Scene* pScene, float dt);
+   virtual bool OnUpdate(Scene* pScene, const GameTimer& gt);
    // Если данное событие вернут "false", то отрисовка объекта в данном кадре будет отменена, но событие PostRender будет выполнено
    virtual bool PreRender(Scene* pScene);
 

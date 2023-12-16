@@ -47,6 +47,7 @@ bool GameApp::Init()
    ResCache::Get()->RegisterLoader(std::make_shared<PngResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<VertexShaderResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<FragmentShaderResourceLoader>());
+   ResCache::Get()->RegisterLoader(std::make_shared<GeometryShaderResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<UtilityShaderResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<ShaderProgramResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<ScriptResourceLoader>());
@@ -89,18 +90,18 @@ void GameApp::Close()
    ResCache::Destroy();
 }
 
-void GameApp::OnUpdate(double dt)
+void GameApp::OnUpdate(GameTimer& gt)
 {
-   m_pGameLogic->OnUpdate(dt);
+   m_pGameLogic->OnUpdate(gt);
 }
 
-void GameApp::ProcessInput(double dt)
+void GameApp::ProcessInput(const GameTimer& gt)
 {
 }
 
-void GameApp::OnRender(double time, double dt)
+void GameApp::OnRender(const GameTimer& gt)
 {
-   m_pGameLogic->OnRender(time, dt);
+   m_pGameLogic->OnRender(gt);
 }
 
 void GameApp::OnPointerMove(float xpos, float ypos)

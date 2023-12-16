@@ -15,10 +15,10 @@ glm::mat4 SceneNode::GetLocalModelMatrix() const
    return m_props.GetTransformMatrix();
 }
 
-bool SceneNode::OnUpdate(Scene* pScene, float dt)
+bool SceneNode::OnUpdate(Scene* pScene, const GameTimer& gt)
 {
    for (auto itr = m_children.begin(); itr != m_children.end(); ++itr) {
-      (*itr)->OnUpdate(pScene, dt);
+      (*itr)->OnUpdate(pScene, gt);
    }
 
    return true;

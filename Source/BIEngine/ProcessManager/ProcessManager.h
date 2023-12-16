@@ -26,7 +26,7 @@ public:
    }
 
    // Выполняет один тик работы для всех активных процессов
-   unsigned int UpdateProcesses(double dt);
+   unsigned int UpdateProcesses(const GameTimer& gt);
 
    WeakProcessPtr AttachProcess(StrongProcessPtr pProcess);
    void AbortAllProcesses(bool immediate);

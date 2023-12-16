@@ -13,9 +13,9 @@ BIFlyCameraSystem::BIFlyCameraSystem(std::shared_ptr<BIEngine::Camera> pCamera, 
 {
 }
 
-void BIFlyCameraSystem::OnUpdate(float dt)
+void BIFlyCameraSystem::OnUpdate(const BIEngine::GameTimer& gt)
 {
-   const float speed = m_movementSpeed * dt;
+   const float speed = m_movementSpeed * gt.DeltaTime();
    if (m_pInputController->IsKeyPressed(static_cast<int>(BIGameController::KEY::W))) {
       m_pCamera->MoveRelForward(speed);
    } else if (m_pInputController->IsKeyPressed(static_cast<int>(BIGameController::KEY::S))) {

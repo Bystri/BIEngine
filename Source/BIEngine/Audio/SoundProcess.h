@@ -1,8 +1,9 @@
 ﻿#pragma once
 
-#include "../ProcessManager/Process.h"
 #include "Audio.h"
 #include "SoundLoader.h"
+#include "../Utilities/GameTimer.h"
+#include "../ProcessManager/Process.h"
 
 namespace BIEngine {
 
@@ -33,7 +34,7 @@ protected:
    SoundProcess();
 
    virtual void OnInit();
-   virtual void OnUpdate(double dt);
+   virtual void OnUpdate(const GameTimer& gt);
 
 protected:
    std::shared_ptr<ResHandle> m_pHandle;

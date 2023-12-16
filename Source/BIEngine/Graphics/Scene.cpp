@@ -22,7 +22,7 @@ void Scene::Init()
    m_pConstantsBuffer->Init(sizeof(GlobalRenderBufferData), CONSTANTS_BUFFER_SCENE_GLOBALS_BINDING_POINT);
 }
 
-int Scene::OnRender()
+int Scene::OnRender(const GameTimer& gt)
 {
    if (m_pRoot && m_pCamera) {
       static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
@@ -30,6 +30,7 @@ int Scene::OnRender()
 
       m_globalRenderBufferData.viewMat = m_pCamera->GetViewMatrix();
       m_globalRenderBufferData.projMat = m_pCamera->GetProjMatrix();
+      m_globalRenderBufferData.totalTime = gt.TotalTime();
       m_pConstantsBuffer->SetBufferData(&m_globalRenderBufferData, 0, sizeof(m_globalRenderBufferData));
 
       if (m_pRoot->PreRender(this)) {
@@ -46,12 +47,12 @@ int Scene::OnRender()
    return 0;
 }
 
-int Scene::OnUpdate(float dt)
+int Scene::OnUpdate(const GameTimer& gt)
 {
    if (!m_pRoot)
       return 0;
 
-   return m_pRoot->OnUpdate(this, dt);
+   return m_pRoot->OnUpdate(this, gt);
 }
 
 std::shared_ptr<ISceneNode> Scene::FindActor(ActorId id)

@@ -7,6 +7,7 @@ bool SpriteNode::OnRender(Scene* pScene)
    RenderCommand renderCommand(m_pSprite->GetMesh(), m_props.GetMaterial()->GetShaderProgramPtr());
 
    renderCommand.RenderState = m_props.GetMaterial()->GetRenderState();
+   renderCommand.RenderState.Cull = !m_props.GetMaterial()->IsDoubleSided();
    renderCommand.Transform = GetLocalModelMatrix();
 
    renderCommand.GetShaderProgramState().SetVector3f("objectColor", m_props.GetMaterial()->GetColor());

@@ -13,6 +13,7 @@
 #include "../Actors/TransformComponent.h"
 #include "../EventManager/EventManager.h"
 #include "../EventManager/Events.h"
+#include "../Utilities/GameTimer.h"
 #include "Physics2DEventListener.h"
 
 namespace BIEngine {
@@ -29,7 +30,7 @@ public:
    virtual void SetGravity(const glm::vec2& gravity) override{};
    virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override{};
 
-   virtual void OnUpdate(double) override {}
+   virtual void OnUpdate(const GameTimer& gt) override {}
 
    virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override {}
 
@@ -107,7 +108,7 @@ public:
    // В случае различия, местоположение актера обновляется
    virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override;
    // Шаг симуляции
-   virtual void OnUpdate(double dt) override;
+   virtual void OnUpdate(const GameTimer& gt) override;
 
    // Добавляет физический объект в виде круга в физическую симуляцию
    virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
@@ -235,9 +236,9 @@ void Physics2D::SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>
    }
 }
 
-void Physics2D::OnUpdate(double dt)
+void Physics2D::OnUpdate(const GameTimer& gt)
 {
-   cpSpaceStep(m_cpSpace, dt);
+   cpSpaceStep(m_cpSpace, gt.DeltaTime());
 }
 
 void Physics2D::AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial)

@@ -9,7 +9,9 @@ namespace BIEngine {
 
 ShaderProgram::~ShaderProgram()
 {
-   glDeleteProgram(m_id);
+   if (m_id != 0) {
+      glDeleteProgram(m_id);
+   }
 }
 
 ShaderProgram::ShaderProgram(ShaderProgram&& orig)
@@ -25,7 +27,9 @@ ShaderProgram& ShaderProgram::operator=(ShaderProgram&& orig)
    if (this == &orig)
       return *this;
 
-   glDeleteProgram(m_id);
+   if (m_id != 0) {
+      glDeleteProgram(m_id);
+   }
    m_id = orig.m_id;
 
    orig.m_id = 0;
@@ -42,8 +46,28 @@ ShaderProgram& ShaderProgram::Use()
 
 void ShaderProgram::Compile(unsigned int sVertex, unsigned int sFragment)
 {
+   if (m_id != 0) {
+      Logger::WriteLog(Logger::LogType::WARNING, "Trying to compile already compiled shader program with index " + std::to_string(m_id));
+      return;
+   }
+
    m_id = glCreateProgram();
    glAttachShader(m_id, sVertex);
+   glAttachShader(m_id, sFragment);
+   glLinkProgram(m_id);
+   CheckCompileErrors(m_id, "PROGRAM");
+}
+
+void ShaderProgram::Compile(unsigned int sVertex, unsigned int sFragment, unsigned int sGeomtry)
+{
+   if (m_id != 0) {
+      Logger::WriteLog(Logger::LogType::WARNING, "Trying to compile already compiled shader program with index " + std::to_string(m_id));
+      return;
+   }
+
+   m_id = glCreateProgram();
+   glAttachShader(m_id, sVertex);
+   glAttachShader(m_id, sGeomtry);
    glAttachShader(m_id, sFragment);
    glLinkProgram(m_id);
    CheckCompileErrors(m_id, "PROGRAM");

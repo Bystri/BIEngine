@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 
 #include "GameApp.h"
+#include "../Utilities/GameTimer.h"
 #include "../Utilities/Logger.h"
 
 namespace BIEngine {
@@ -54,21 +55,20 @@ int Run(int argc, char* argv[])
       return -1;
    }
 
-   double deltaTime = 0.0;
-   double lastFrame = 0.0;
+   GameTimer gt;
+   gt.Start();
    // Основной цикл
    while (!glfwWindowShouldClose(window)) {
-      double currentFrame = glfwGetTime();
-      deltaTime = currentFrame - lastFrame;
-      lastFrame = currentFrame;
+      gt.Tick();
+
       glfwPollEvents();
 
-      g_pApp->ProcessInput(deltaTime);
+      g_pApp->ProcessInput(gt);
       // Обновление логики
-      g_pApp->OnUpdate(deltaTime);
+      g_pApp->OnUpdate(gt);
 
       // Отрисовка
-      g_pApp->OnRender(currentFrame, deltaTime);
+      g_pApp->OnRender(gt);
 
       glfwSwapBuffers(window);
    }

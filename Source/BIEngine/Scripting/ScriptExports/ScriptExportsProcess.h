@@ -8,14 +8,14 @@ namespace BIEngine {
 
 class PyProcess : public Process {
 public:
-   virtual void OnUpdate(double dt) override
+   virtual void OnUpdate(const GameTimer& gt) override
    {
       /* PYBIND11_OVERRIDE_PURE will acquire the GIL before accessing Python state */
       PYBIND11_OVERRIDE_PURE(
-         void,      /* Return type */
-         PyProcess, /* Parent class */
-         OnUpdate,  /* Name of function */
-         dt         /* Argument(s) */
+         void,          /* Return type */
+         PyProcess,     /* Parent class */
+         OnUpdate,      /* Name of function */
+         gt.DeltaTime() /* Argument(s) */
       );
    }
 };

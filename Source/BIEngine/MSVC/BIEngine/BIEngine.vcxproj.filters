@@ -237,6 +237,9 @@
     <ClCompile Include="..\..\Actors\LightComponent.cpp">
       <Filter>Actors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Utilities\GameTimer.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -457,6 +460,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Actors\LightComponent.h">
       <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Utilities\GameTimer.h">
+      <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

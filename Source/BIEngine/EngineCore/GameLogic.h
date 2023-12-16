@@ -41,8 +41,8 @@ public:
    virtual void AddGameView(std::shared_ptr<IGameView> pView);
    virtual void RemoveGameView(std::shared_ptr<IGameView> pView);
 
-   virtual void OnUpdate(float dt);
-   virtual void OnRender(float time, float dt);
+   virtual void OnUpdate(GameTimer& gt);
+   virtual void OnRender(const GameTimer& gt);
 
    std::shared_ptr<Actor> GetActor(ActorId id) const;
 

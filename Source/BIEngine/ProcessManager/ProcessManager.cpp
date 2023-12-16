@@ -42,7 +42,7 @@ void ProcessManager::Destroy()
    }
 }
 
-unsigned int ProcessManager::UpdateProcesses(double dt)
+unsigned int ProcessManager::UpdateProcesses(const GameTimer& gt)
 {
    unsigned short int successCount = 0;
    unsigned short int failCount = 0;
@@ -51,11 +51,13 @@ unsigned int ProcessManager::UpdateProcesses(double dt)
    while (it != m_processList.end()) {
       StrongProcessPtr pCurrProcess = *it;
 
-      if (pCurrProcess->GetState() == Process::State::UNINITIALIZED)
+      if (pCurrProcess->GetState() == Process::State::UNINITIALIZED) {
          pCurrProcess->OnInit();
+      }
 
-      if (pCurrProcess->GetState() == Process::State::RUNNING)
-         pCurrProcess->OnUpdate(dt);
+      if (pCurrProcess->GetState() == Process::State::RUNNING) {
+         pCurrProcess->OnUpdate(gt);
+      }
 
       if (pCurrProcess->IsDead()) {
          switch (pCurrProcess->GetState()) {

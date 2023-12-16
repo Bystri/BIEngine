@@ -17,9 +17,8 @@ const Color GRAY25 = Color(0.25f, 0.25f, 0.25f, 1.0f);
 const Color GRAY65 = Color(0.65f, 0.65f, 0.65f, 1.0f);
 
 Material::Material(const std::shared_ptr<ShaderProgram>& pShader)
-   : m_color(WHITE)
-
-     ,
+   : m_color(WHITE), m_isDoubleSided(false),
+     m_diffuseMap(nullptr), m_specularMap(nullptr), m_shininess(64.0f),
      m_renderState(), m_pShaderProgram(pShader)
 {
 }
@@ -27,6 +26,11 @@ Material::Material(const std::shared_ptr<ShaderProgram>& pShader)
 void Material::SetColor(const Color& color)
 {
    m_color = color;
+}
+
+bool Material::HasAlpha() const
+{
+   return std::abs(m_color.a - ALPHA_OPAQUE) > std::numeric_limits<float>::epsilon();
 }
 
 } // namespace BIEngine

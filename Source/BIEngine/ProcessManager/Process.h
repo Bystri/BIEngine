@@ -4,6 +4,7 @@
 #include <cassert>
 
 #include "../Utilities/Logger.h"
+#include "../Utilities/GameTimer.h"
 
 namespace BIEngine {
 
@@ -45,7 +46,7 @@ public:
 protected:
    virtual void OnInit() { m_state = State::RUNNING; }
 
-   virtual void OnUpdate(double dt) = 0;
+   virtual void OnUpdate(const GameTimer& gt) = 0;
 
    virtual void OnSuccess() {}
 

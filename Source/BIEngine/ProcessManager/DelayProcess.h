@@ -9,7 +9,7 @@ public:
    explicit DelayProcess(double timeToDelay);
 
 protected:
-   virtual void OnUpdate(double dt) override;
+   virtual void OnUpdate(const GameTimer& gt) override;
 
 protected:
    double m_timeToDelay;

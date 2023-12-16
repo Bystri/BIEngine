@@ -26,6 +26,7 @@ public:
    ShaderProgram& Use();
 
    void Compile(unsigned int sVertex, unsigned int sFragment);
+   void Compile(unsigned int sVertex, unsigned int sFragment, unsigned int sGeometry);
 
    unsigned int GetId() const { return m_id; }
 

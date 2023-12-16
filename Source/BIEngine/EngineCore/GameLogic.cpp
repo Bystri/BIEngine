@@ -111,26 +111,28 @@ void GameLogic::RemoveGameView(std::shared_ptr<IGameView> pView)
    }
 }
 
-void GameLogic::OnUpdate(float dt)
+void GameLogic::OnUpdate(GameTimer& gt)
 {
-   ProcessManager::Get()->UpdateProcesses(dt);
+   ProcessManager::Get()->UpdateProcesses(gt);
 
    EventManager::Get()->TickUpdate();
 
-   m_pPhysics2D->OnUpdate(dt);
+   m_pPhysics2D->OnUpdate(gt);
    m_pPhysics2D->SyncVisibleScene(m_actors);
 
-   m_pPhysics3D->OnUpdate(dt);
+   m_pPhysics3D->OnUpdate(gt);
    m_pPhysics3D->SyncVisibleScene(m_actors);
 
-   for (const auto view : m_gameViews)
-      view->OnUpdate(dt);
+   for (const auto view : m_gameViews) {
+      view->OnUpdate(gt);
+   }
 }
 
-void GameLogic::OnRender(float time, float dt)
+void GameLogic::OnRender(const GameTimer& gt)
 {
-   for (const auto view : m_gameViews)
-      view->OnRender(time, dt);
+   for (const auto view : m_gameViews) {
+      view->OnRender(gt);
+   }
 
    m_pPhysics3D->DrawRenderDiagnostics();
    DebugDraw::Draw();

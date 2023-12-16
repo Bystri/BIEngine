@@ -11,6 +11,7 @@
 #include "../Renderer/Renderer.h"
 #include "../Renderer/ConstantsBuffer.h"
 #include "../EventManager/Events.h"
+#include "../Utilities/GameTimer.h"
 
 namespace BIEngine {
 
@@ -35,8 +36,8 @@ public:
 
    void Init();
 
-   int OnRender();
-   int OnUpdate(float dt);
+   int OnRender(const GameTimer& gt);
+   int OnUpdate(const GameTimer& gt);
 
    std::shared_ptr<ISceneNode> FindActor(ActorId id);
 
@@ -61,6 +62,7 @@ private:
    struct GlobalRenderBufferData {
       glm::mat4 projMat;
       glm::mat4 viewMat;
+      float totalTime;
    };
 
    GlobalRenderBufferData m_globalRenderBufferData;

@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 
+#include "../Utilities/GameTimer.h"
+
 namespace BIEngine {
 
 class IElementUI {
@@ -22,7 +24,7 @@ public:
 
    float GetScale() const { return m_scale; }
 
-   virtual void OnRender(float dt) = 0;
+   virtual void OnRender(const GameTimer& gt) = 0;
 
 protected:
    // Только UserInterface класс может создавать и удалять элементы интерфейса
@@ -43,7 +45,7 @@ class Text : public IElementUI {
 public:
    void SetText(const std::string& text) { m_text = text; }
 
-   virtual void OnRender(float dt);
+   virtual void OnRender(const GameTimer& gt);
 
 private:
    explicit Text(int id);
@@ -64,7 +66,7 @@ public:
    int CreateStatic(float x, float y, float scale, const std::string& text);
    Text* GetStatic(int id);
 
-   void OnRender(float dt);
+   void OnRender(const GameTimer& gt);
 
 private:
    // Хранит ID, который будет присвоен следующему элементу

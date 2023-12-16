@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "../BIEngine/Graphics/Camera.h"
+#include "../BIEngine/Utilities/GameTimer.h"
 #include "BIGameController.h"
 
 class BIFlyCameraSystem {
@@ -13,7 +14,7 @@ public:
 
    void SetMovementSpeed(float speed) { m_movementSpeed = speed; }
 
-   void OnUpdate(float dt);
+   void OnUpdate(const BIEngine::GameTimer& gt);
 
 private:
    std::shared_ptr<BIEngine::Camera> m_pCamera;

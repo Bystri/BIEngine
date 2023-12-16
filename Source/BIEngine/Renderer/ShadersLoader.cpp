@@ -53,7 +53,7 @@ ShaderData::ShaderData()
 {
 }
 
-static void shaderLoaderCheckCompileErrors(unsigned int object, std::string type, const std::string name)
+static void shaderLoaderCheckCompileErrors(unsigned int object, const std::string& type, const std::string& name)
 {
    constexpr unsigned int INFO_LOG_BUFFER_SIZE = 1024;
 
@@ -113,9 +113,33 @@ bool FragmentShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int ra
    return true;
 }
 
+bool GeometryShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+{
+   std::shared_ptr<ShaderData> pExtra = std::make_shared<ShaderData>();
+
+   unsigned int sGeometry;
+
+   // Загружаем код шейдера
+   const std::string rawShaderCode(rawBuffer, rawSize);
+   const std::string codeToCompile = shaderLoaderReadShaderCode(std::istringstream(rawShaderCode), pHandle->GetName());
+   const char* cstrCodeToCompile = codeToCompile.c_str();
+
+   // Компилируем шейдер
+   sGeometry = glCreateShader(GL_GEOMETRY_SHADER);
+   glShaderSource(sGeometry, 1, &cstrCodeToCompile, NULL);
+   glCompileShader(sGeometry);
+   shaderLoaderCheckCompileErrors(sGeometry, "GEOMETRY", pHandle->GetName());
+
+   pExtra->m_shaderIndex = sGeometry;
+   pHandle->SetExtra(pExtra);
+
+   return true;
+}
+
 enum class ShaderType {
    VERTEX_SHADER,
-   FRAGMENT_SHADER
+   FRAGMENT_SHADER,
+   GEOMETRY_SHADER
 };
 
 static bool shaderLoaderReadShaderSettings(const std::string& shaderSettingsString, ShaderType& shaderType, std::string& fileName)
@@ -134,6 +158,8 @@ static bool shaderLoaderReadShaderSettings(const std::string& shaderSettingsStri
       shaderType = ShaderType::VERTEX_SHADER;
    } else if (typeName == "fragment") {
       shaderType = ShaderType::FRAGMENT_SHADER;
+   } else if (typeName == "geometry") {
+      shaderType = ShaderType::GEOMETRY_SHADER;
    } else {
       return false;
    }
@@ -151,6 +177,7 @@ bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int raw
 
    int vertexShaderIdx = -1;
    int fragmentShaderIdx = -1;
+   int geometryShaderIdx = -1;
 
    std::string line;
    while (std::getline(bufferStream, line)) {
@@ -173,16 +200,29 @@ bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int raw
          vertexShaderIdx = pShaderData->GetShaderIndex();
       } else if (shaderType == ShaderType::FRAGMENT_SHADER) {
          fragmentShaderIdx = pShaderData->GetShaderIndex();
+      } else if (shaderType == ShaderType::GEOMETRY_SHADER) {
+         geometryShaderIdx = pShaderData->GetShaderIndex();
       } else {
          Logger::WriteLog(Logger::LogType::ERROR, "Incorrect shader type specified in shader program file " + pHandle->GetName());
          return false;
       }
    }
 
-   std::shared_ptr<ShaderProgramData> pExtra = std::make_shared<ShaderProgramData>();
 
+   if (vertexShaderIdx == -1 || fragmentShaderIdx == -1) {
+      Logger::WriteLog(Logger::LogType::ERROR, "Shader program " + pHandle->GetName() + " must have vertex and geometry shaders!");
+      return false;
+   }
+
+
+   std::shared_ptr<ShaderProgramData> pExtra = std::make_shared<ShaderProgramData>();
    pExtra->m_pShaderProgram = std::make_shared<ShaderProgram>();
-   pExtra->m_pShaderProgram->Compile(vertexShaderIdx, fragmentShaderIdx);
+
+   if (geometryShaderIdx == -1) {
+      pExtra->m_pShaderProgram->Compile(vertexShaderIdx, fragmentShaderIdx);
+   } else {
+      pExtra->m_pShaderProgram->Compile(vertexShaderIdx, fragmentShaderIdx, geometryShaderIdx);
+   }
 
    pHandle->SetExtra(pExtra);
 

@@ -21,7 +21,7 @@ public:
 
    virtual bool Init();
 
-   virtual void OnUpdate(float dt) override;
+   virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
 };
 
 class BIGameHumanView : public BIEngine::HumanView {
@@ -34,7 +34,7 @@ public:
    virtual bool Init();
    virtual void Shutdown();
 
-   virtual void OnUpdate(float dt) override;
+   virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
 
 private:
    void SetController(std::shared_ptr<BIGameController> pController)

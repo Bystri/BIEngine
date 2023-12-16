@@ -33,6 +33,10 @@ public:
 
    const Color GetColor() { return m_color; }
 
+   void SetDoubleSided(bool enable) { m_isDoubleSided = enable; }
+
+   bool IsDoubleSided() const { return m_isDoubleSided; }
+
    void SetDiffuseMap(std::shared_ptr<Texture2D> diffuseMap) { m_diffuseMap = diffuseMap; }
 
    const std::shared_ptr<Texture2D>& GetDiffuseMap() const { return m_diffuseMap; }
@@ -45,7 +49,7 @@ public:
 
    float GetShininess() const { return m_shininess; }
 
-   bool HasAlpha() const { return std::abs(m_color.a - ALPHA_OPAQUE) > std::numeric_limits<float>::epsilon(); }
+   bool HasAlpha() const;
 
    RenderState& GetRenderState() { return m_renderState; }
 
@@ -54,9 +58,11 @@ public:
 private:
    Color m_color;
 
+   bool m_isDoubleSided;
+
    std::shared_ptr<Texture2D> m_diffuseMap;
    std::shared_ptr<Texture2D> m_specularMap;
-   float m_shininess = 64.f;
+   float m_shininess;
 
    RenderState m_renderState;
    std::shared_ptr<ShaderProgram> m_pShaderProgram;

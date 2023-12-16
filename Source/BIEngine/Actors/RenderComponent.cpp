@@ -51,7 +51,8 @@ bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
    const char* shaderProgramPath;
    pShaderProgramInfo->QueryStringAttribute("shaderProgramPath", &shaderProgramPath);
 
-   std::shared_ptr<ShaderProgramData> pShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(shaderProgramPath)->GetExtra());
+   m_shaderProgrampath = shaderProgramPath;
+   std::shared_ptr<ShaderProgramData> pShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(m_shaderProgrampath)->GetExtra());
    m_pMaterial = std::make_shared<Material>(pShaderProgramData->GetShaderProgram());
    m_pMaterial->SetColor(WHITE);
 
@@ -74,8 +75,7 @@ tinyxml2::XMLElement* MeshBaseRenderComponent::GenerateXml(tinyxml2::XMLDocument
    tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
 
    tinyxml2::XMLElement* pShader = pDoc->NewElement("ShaderProgram");
-   pShader->SetAttribute("vertexShaderPath", m_vertexShaderPath.c_str());
-   pShader->SetAttribute("fragmentShaderPath", m_fragmentShaderPath.c_str());
+   pShader->SetAttribute("shaderProgramPath", m_shaderProgrampath.c_str());
    pBaseElement->LinkEndChild(pShader);
 
    tinyxml2::XMLElement* pColor = pDoc->NewElement("Color");
@@ -181,6 +181,10 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
       pMaterialElement->QueryFloatAttribute("shininess", &shininess);
       m_pMaterial->SetShininess(shininess);
 
+      bool isDoubleSided = false;
+      pMaterialElement->QueryBoolAttribute("isDoubleSided", &isDoubleSided);
+      m_pMaterial->SetDoubleSided(isDoubleSided);
+
       const char* diffuseMapPath;
       pMaterialElement->QueryStringAttribute("diffuseMapPath", &diffuseMapPath);
       m_diffuseMapPath = diffuseMapPath;
@@ -235,6 +239,7 @@ tinyxml2::XMLElement* BoxRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDo
 
    tinyxml2::XMLElement* pMaterialElement = pDoc->NewElement("Material");
    pMaterialElement->SetAttribute("shininess", m_pMaterial->GetShininess());
+   pMaterialElement->SetAttribute("isDoubleSided", m_pMaterial->IsDoubleSided());
    pMaterialElement->SetAttribute("diffuseMapPath", m_diffuseMapPath.c_str());
    pMaterialElement->SetAttribute("specularMapPath", m_specularMapPath.c_str());
    pBaseElement->LinkEndChild(pMaterialElement);

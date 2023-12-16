@@ -7,6 +7,7 @@ bool Model3dNode::OnRender(Scene* pScene)
    RenderCommand renderCommand(m_pModel->GetMesh(), m_props.GetMaterial()->GetShaderProgramPtr());
 
    renderCommand.RenderState = m_props.GetMaterial()->GetRenderState();
+   renderCommand.RenderState.Cull = !m_props.GetMaterial()->IsDoubleSided();
    renderCommand.Transform = GetLocalModelMatrix();
 
    renderCommand.GetShaderProgramState().SetVector3f("material.color", m_props.GetMaterial()->GetColor());

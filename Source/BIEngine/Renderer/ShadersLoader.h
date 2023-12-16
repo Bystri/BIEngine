@@ -45,6 +45,7 @@ public:
 class ShaderData : public IResourceExtraData {
    friend class VertexShaderResourceLoader;
    friend class FragmentShaderResourceLoader;
+   friend class GeometryShaderResourceLoader;
 
 public:
    ShaderData();
@@ -104,6 +105,13 @@ public:
 class FragmentShaderResourceLoader : public ShaderResourceLoader {
 public:
    virtual std::string GetPattern() override { return "*.frag"; }
+
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
+};
+
+class GeometryShaderResourceLoader : public ShaderResourceLoader {
+public:
+   virtual std::string GetPattern() override { return "*.geom"; }
 
    virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
 };

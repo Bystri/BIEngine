@@ -145,14 +145,14 @@ void HumanView::Shutdown()
    }
 }
 
-void HumanView::OnUpdate(float dt)
+void HumanView::OnUpdate(const GameTimer& gt)
 {
 }
 
-void HumanView::OnRender(float fTime, float dt)
+void HumanView::OnRender(const GameTimer& gt)
 {
-   m_pScene->OnRender();
-   m_userInterface.OnRender(dt);
+   m_pScene->OnRender(gt);
+   m_userInterface.OnRender(gt);
 }
 
 void HumanView::OnPointerMove(float xpos, float ypos)

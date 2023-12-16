@@ -56,9 +56,9 @@ bool BIGameLogic::Init()
    return true;
 }
 
-void BIGameLogic::OnUpdate(float dt)
+void BIGameLogic::OnUpdate(const BIEngine::GameTimer& gt)
 {
-   GameLogic::OnUpdate(dt);
+   GameLogic::OnUpdate(gt);
 }
 
 bool BIGameHumanView::Init()
@@ -83,9 +83,9 @@ void BIGameHumanView::Shutdown()
    }
 }
 
-void BIGameHumanView::OnUpdate(float dt)
+void BIGameHumanView::OnUpdate(const BIEngine::GameTimer& gt)
 {
    if (m_pFlyCameraSystem) {
-      m_pFlyCameraSystem->OnUpdate(dt);
+      m_pFlyCameraSystem->OnUpdate(gt);
    }
 }

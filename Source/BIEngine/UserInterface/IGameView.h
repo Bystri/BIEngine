@@ -3,6 +3,10 @@
 #include <list>
 #include <memory>
 
+#include "../Utilities/GameTimer.h"
+
+namespace BIEngine {
+
 enum class GameViewType {
    Human,
    Remote,   // В процессе
@@ -21,8 +25,8 @@ public:
 
    virtual bool Init() = 0;
 
-   virtual void OnUpdate(float dt) = 0;
-   virtual void OnRender(float time, float dt) = 0;
+   virtual void OnUpdate(const GameTimer& gt) = 0;
+   virtual void OnRender(const GameTimer& gt) = 0;
 
    virtual GameViewType GetType() const = 0;
    virtual GameViewId GetId() const = 0;
@@ -32,3 +36,5 @@ public:
 };
 
 typedef std::list<std::shared_ptr<IGameView>> GameViewList;
+
+} // namespace BIEngine

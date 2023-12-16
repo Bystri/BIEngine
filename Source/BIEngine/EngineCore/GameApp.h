@@ -38,9 +38,9 @@ public:
 
    virtual const char* GetGameTitle() = 0; // Принудительный метод заставить пользователя дать явное название игре
 
-   void ProcessInput(double dt);
-   void OnUpdate(double dt);
-   void OnRender(double time, double dt);
+   void ProcessInput(const GameTimer& gt);
+   void OnUpdate(GameTimer& gt);
+   void OnRender(const GameTimer& gt);
 
    // Обработчик событий устройств ввода
    void OnPointerMove(float xpos, float ypos);

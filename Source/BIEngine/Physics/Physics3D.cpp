@@ -20,6 +20,7 @@
 #include "../Actors/TransformComponent.h"
 #include "../EventManager/EventManager.h"
 #include "../EventManager/Events.h"
+#include "../Utilities/GameTimer.h"
 #include "Physics3DEventListener.h"
 #include "PhysicsDebugDrawer.h"
 
@@ -55,7 +56,7 @@ public:
    virtual void SetGravity(const glm::vec3& gravity) override{};
    virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override{};
 
-   virtual void OnUpdate(double) override {}
+   virtual void OnUpdate(const GameTimer& gt) override {}
 
    virtual void DrawRenderDiagnostics() override {}
 
@@ -179,7 +180,7 @@ public:
    // В случае различия, местоположение актера обновляется
    virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override;
    // Шаг симуляции
-   virtual void OnUpdate(double dt) override;
+   virtual void OnUpdate(const GameTimer& gt) override;
 
    virtual void DrawRenderDiagnostics() override;
 
@@ -392,12 +393,12 @@ void Physics3D::SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>
    }
 }
 
-void Physics3D::OnUpdate(double dt)
+void Physics3D::OnUpdate(const GameTimer& gt)
 {
    // Bullet будет проводить симуляцию мира, которая должна была пройти за заданный промежуток времени, но будет делать количество проходов не больше чем MAX_PASSES
    // То есть, если dt слишком большое, Bullet может остановиться раньше
    const int MAX_PASSES = 4;
-   m_pDynamicsWorld->stepSimulation(dt, MAX_PASSES);
+   m_pDynamicsWorld->stepSimulation(gt.DeltaTime(), MAX_PASSES);
 }
 
 void Physics3D::DrawRenderDiagnostics()

@@ -174,7 +174,7 @@ Text::Text(int id)
 {
 }
 
-void Text::OnRender(float dt)
+void Text::OnRender(const GameTimer& gt)
 {
    g_TextRenderer->RenderText(m_text, m_x, m_y, m_scale);
 }
@@ -244,10 +244,10 @@ Text* UserInterface::GetStatic(int id)
    return staticElement;
 }
 
-void UserInterface::OnRender(float dt)
+void UserInterface::OnRender(const GameTimer& gt)
 {
    for (const auto& element : m_elements) {
-      element.second->OnRender(dt);
+      element.second->OnRender(gt);
    }
 }
 } // namespace BIEngine
