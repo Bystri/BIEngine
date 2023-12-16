@@ -21,7 +21,7 @@ public:
 
    virtual bool Init();
 
-   virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
+   virtual void OnUpdate(BIEngine::GameTimer& gt) override;
 };
 
 class BIGameHumanView : public BIEngine::HumanView {

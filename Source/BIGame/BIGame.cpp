@@ -56,7 +56,7 @@ bool BIGameLogic::Init()
    return true;
 }
 
-void BIGameLogic::OnUpdate(const BIEngine::GameTimer& gt)
+void BIGameLogic::OnUpdate(BIEngine::GameTimer& gt)
 {
    GameLogic::OnUpdate(gt);
 }
