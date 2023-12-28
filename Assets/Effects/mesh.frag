@@ -7,13 +7,14 @@ in VertexData {
 } fs_in;
 
 #include effects/common/lights.glsl
+#include effects/common/scene_uniforms.glsl
 
 out vec4 FragColor;
 
 void main()
 {
 	vec3 norm = normalize(fs_in.normal);
-	vec3 viewDir = normalize(-fs_in.fragPos);
+	vec3 viewDir = normalize(viewPos-fs_in.fragPos);
 	
 	FragColor = vec4(0.0, 0.0, 0.0, 1.0);
 	

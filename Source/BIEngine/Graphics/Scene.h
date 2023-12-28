@@ -62,6 +62,7 @@ private:
    struct GlobalRenderBufferData {
       glm::mat4 projMat;
       glm::mat4 viewMat;
+      glm::vec3 viewPos;
       float totalTime;
    };
 

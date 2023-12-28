@@ -25,7 +25,7 @@ vec4 explode(vec4 position, vec3 normal) {
 
 void prepareData(int idx) {
 	gs_out.fragPos = explode(vec4(gs_in[idx].fragPos, 1.0), gs_in[idx].normal).xyz;
-	gl_Position = projection * vec4(gs_out.fragPos, 1.0);
+	gl_Position = projection * view * vec4(gs_out.fragPos, 1.0);
     gs_out.texCoords = gs_in[idx].texCoords;
 	gs_out.normal = gs_in[idx].normal;
 }

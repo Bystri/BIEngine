@@ -27,6 +27,7 @@ int Scene::OnRender(const GameTimer& gt)
    if (m_pRoot && m_pCamera) {
       m_globalRenderBufferData.viewMat = m_pCamera->GetViewMatrix();
       m_globalRenderBufferData.projMat = m_pCamera->GetProjMatrix();
+      m_globalRenderBufferData.viewPos = m_pCamera->GetPosition();
       m_globalRenderBufferData.totalTime = gt.TotalTime();
       m_pConstantsBuffer->SetBufferData(&m_globalRenderBufferData, 0, sizeof(m_globalRenderBufferData));
 

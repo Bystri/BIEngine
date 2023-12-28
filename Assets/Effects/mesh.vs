@@ -15,10 +15,10 @@ out VertexData {
 uniform mat4 model;
 
 void main()
-{
-	gl_Position = projection * view * model * vec4(aPos, 1.0);
+{	
+	vs_out.texCoords = aTexCoord;
+	vs_out.fragPos = vec3(model * vec4(aPos, 1.0));
+	vs_out.normal = mat3(transpose(inverse(model))) * aNormal; 
 	
-	vs_out.texCoords = vec2(aTexCoord.x, aTexCoord.y);
-	vs_out.fragPos = vec3(view * model * vec4(aPos, 1.0));
-	vs_out.normal = mat3(transpose(inverse(view * model))) * aNormal; 
+	gl_Position = projection * view * vec4(vs_out.fragPos, 1.0);
 }
