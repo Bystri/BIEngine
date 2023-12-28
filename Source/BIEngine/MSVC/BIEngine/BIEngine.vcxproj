@@ -71,14 +71,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\..\Lib\$(ProjectName)$(Platform)$(Configuration)\</OutDir>
     <IntDir>..\..\..\Temp\$(ProjectName)$(Platform)$(Configuration)\</IntDir>
-    <IncludePath>..\..\3rdParty\bullet3\src;..\..\3rdParty\pybind11-2.10.3\include;..\..\3rdParty\Python310\include;..\..\3rdParty\luaplus51-all\Src;..\..\3rdParty\glm;..\..\3rdParty\tinyxml2;..\..\3rdParty\zlib;..\..\3rdParty\glfw\include;..\..\3rdParty\glad\include;..\..\3rdParty\Chipmunk-7.0.3\include;..\..\3rdParty\irrKlang\include;..\..\3rdParty\libogg-1.3.0\include;..\..\3rdParty\libvorbis-1.3.2\include;..\..\3rdParty\freetype-2.10.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\3rdParty\bullet3\build3\vs2010\x64\Debug;..\..\3rdParty\Python310\libs;..\..\3rdParty\glfw\x64\Debug;..\..\3rdParty\zlib\contrib\vstudio\vc14\x64\ZlibStatDebug;..\..\3rdParty\Chipmunk-7.0.3\src\Debug;..\..\3rdParty\luaplus51-all\build2017\x64\Debug;..\..\3rdParty\irrKlang\lib\Winx64-visualStudio;..\..\3rdParty\libogg-1.3.0\win32\VS2017\x64\Debug;..\..\3rdParty\libvorbis-1.3.2\win32\VS2017\x64\Debug;..\..\3rdParty\freetype-2.10.0\objs\x64\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\3rdParty\bullet3\src;..\..\3rdParty\pybind11-2.10.3\include;..\..\3rdParty\Python310\include;..\..\3rdParty\luaplus51-all\Src;..\..\3rdParty\glm;..\..\3rdParty\tinyxml2;..\..\3rdParty\zlib;..\..\3rdParty\glfw\include;..\..\3rdParty\glad\include;..\..\3rdParty\Chipmunk-7.0.3\include;..\..\3rdParty\irrKlang\include;..\..\3rdParty\libogg-1.3.0\include;..\..\3rdParty\libvorbis-1.3.2\include;..\..\3rdParty\freetype-2.10.0\include;..\..\3rdParty\assimp-5.3.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\3rdParty\bullet3\build3\vs2010\x64\Debug;..\..\3rdParty\Python310\libs;..\..\3rdParty\glfw\x64\Debug;..\..\3rdParty\zlib\contrib\vstudio\vc14\x64\ZlibStatDebug;..\..\3rdParty\Chipmunk-7.0.3\src\Debug;..\..\3rdParty\luaplus51-all\build2017\x64\Debug;..\..\3rdParty\irrKlang\lib\Winx64-visualStudio;..\..\3rdParty\libogg-1.3.0\win32\VS2017\x64\Debug;..\..\3rdParty\libvorbis-1.3.2\win32\VS2017\x64\Debug;..\..\3rdParty\freetype-2.10.0\objs\x64\Debug;..\..\3rdParty\assimp-5.3.1\build\lib\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\..\Lib\$(ProjectName)$(Platform)$(Configuration)\</OutDir>
     <IntDir>..\..\..\Temp\$(ProjectName)$(Platform)$(Configuration)\</IntDir>
     <IncludePath>..\..\3rdParty\bullet3\src;..\..\3rdParty\pybind11-2.10.3\include;..\..\3rdParty\Python310\include;..\..\3rdParty\luaplus51-all\Src;..\..\3rdParty\glm;..\..\3rdParty\tinyxml2;..\..\3rdParty\zlib;..\..\3rdParty\glfw\include;..\..\3rdParty\glad\include;..\..\3rdParty\Chipmunk-7.0.3\include;..\..\3rdParty\irrKlang\include;..\..\3rdParty\libogg-1.3.0\include;..\..\3rdParty\libvorbis-1.3.2\include;..\..\3rdParty\freetype-2.10.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\3rdParty\bullet3\build3\vs2010\x64\Release;..\..\3rdParty\Python310\libs;..\..\3rdParty\glfw\x64\Release;..\..\3rdParty\zlib\contrib\vstudio\vc14\x64\ZlibStatRelease;..\..\3rdParty\Chipmunk-7.0.3\src\Release;..\..\3rdParty\luaplus51-all\build2017\x64\Release;..\..\3rdParty\irrKlang\lib\Winx64-visualStudio;..\..\3rdParty\libogg-1.3.0\win32\VS2017\x64\Release;..\..\3rdParty\libvorbis-1.3.2\win32\VS2017\x64\Release;..\..\3rdParty\freetype-2.10.0\objs\x64\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\3rdParty\bullet3\build3\vs2010\x64\Release;..\..\3rdParty\Python310\libs;..\..\3rdParty\glfw\x64\Release;..\..\3rdParty\zlib\contrib\vstudio\vc14\x64\ZlibStatRelease;..\..\3rdParty\Chipmunk-7.0.3\src\Release;..\..\3rdParty\luaplus51-all\build2017\x64\Release;..\..\3rdParty\irrKlang\lib\Winx64-visualStudio;..\..\3rdParty\libogg-1.3.0\win32\VS2017\x64\Release;..\..\3rdParty\libvorbis-1.3.2\win32\VS2017\x64\Release;..\..\3rdParty\freetype-2.10.0\objs\x64\Release;..\..\3rdParty\assimp-5.3.1\build\lib\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -96,7 +96,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>LinearMath.lib;BulletDynamics.lib;BulletCollision.lib;python310.lib;freetype.lib;irrKlang.lib;libvorbis_static.lib;libogg_static.lib;libvorbisfile_static.lib;luaplus51-1201.lib;chipmunk.lib;zlibstat.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LinearMath.lib;BulletDynamics.lib;BulletCollision.lib;python310.lib;freetype.lib;irrKlang.lib;libvorbis_static.lib;libogg_static.lib;libvorbisfile_static.lib;luaplus51-1201.lib;chipmunk.lib;zlibstat.lib;glfw3.lib;opengl32.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,7 +127,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>LinearMath.lib;BulletDynamics.lib;BulletCollision.lib;python310.lib;freetype.lib;irrKlang.lib;libvorbis_static.lib;libogg_static.lib;libvorbisfile_static.lib;luaplus51-1201.lib;chipmunk.lib;zlibstat.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LinearMath.lib;BulletDynamics.lib;BulletCollision.lib;python310.lib;freetype.lib;irrKlang.lib;libvorbis_static.lib;libogg_static.lib;libvorbisfile_static.lib;luaplus51-1201.lib;chipmunk.lib;zlibstat.lib;glfw3.lib;opengl32.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -153,11 +153,12 @@
     <ClCompile Include="..\..\EventManager\Events.cpp" />
     <ClCompile Include="..\..\Graphics\Camera.cpp" />
     <ClCompile Include="..\..\Graphics\LightNodes.cpp" />
+    <ClCompile Include="..\..\Graphics\LightReflectiveMaterial.cpp" />
     <ClCompile Include="..\..\Graphics\Material.cpp" />
-    <ClCompile Include="..\..\Graphics\Mesh.cpp" />
     <ClCompile Include="..\..\Graphics\MeshGeometryGenerator.cpp" />
-    <ClCompile Include="..\..\Graphics\Model3dNode.cpp" />
-    <ClCompile Include="..\..\Graphics\Model3d.cpp" />
+    <ClCompile Include="..\..\Graphics\Model.cpp" />
+    <ClCompile Include="..\..\Graphics\ModelLoader.cpp" />
+    <ClCompile Include="..\..\Graphics\ModelNode.cpp" />
     <ClCompile Include="..\..\Graphics\Scene.cpp" />
     <ClCompile Include="..\..\Graphics\SceneNodes.cpp" />
     <ClCompile Include="..\..\Graphics\Skybox.cpp" />
@@ -171,7 +172,9 @@
     <ClCompile Include="..\..\ProcessManager\DelayProcess.cpp" />
     <ClCompile Include="..\..\ProcessManager\Process.cpp" />
     <ClCompile Include="..\..\ProcessManager\ProcessManager.cpp" />
+    <ClCompile Include="..\..\Renderer\Color.cpp" />
     <ClCompile Include="..\..\Renderer\ConstantsBuffer.cpp" />
+    <ClCompile Include="..\..\Renderer\Mesh.cpp" />
     <ClCompile Include="..\..\Renderer\RenderDevice.cpp" />
     <ClCompile Include="..\..\Renderer\Renderer.cpp" />
     <ClCompile Include="..\..\Renderer\RenderState.cpp" />
@@ -221,11 +224,12 @@
     <ClInclude Include="..\..\EventManager\Events.h" />
     <ClInclude Include="..\..\Graphics\Camera.h" />
     <ClInclude Include="..\..\Graphics\LightNodes.h" />
+    <ClInclude Include="..\..\Graphics\LightReflectiveMaterial.h" />
     <ClInclude Include="..\..\Graphics\Material.h" />
-    <ClInclude Include="..\..\Graphics\Mesh.h" />
     <ClInclude Include="..\..\Graphics\MeshGeometryGenerator.h" />
-    <ClInclude Include="..\..\Graphics\Model3dNode.h" />
-    <ClInclude Include="..\..\Graphics\Model3d.h" />
+    <ClInclude Include="..\..\Graphics\Model.h" />
+    <ClInclude Include="..\..\Graphics\ModelLoader.h" />
+    <ClInclude Include="..\..\Graphics\ModelNode.h" />
     <ClInclude Include="..\..\Graphics\Scene.h" />
     <ClInclude Include="..\..\Graphics\SceneNodes.h" />
     <ClInclude Include="..\..\Graphics\Skybox.h" />
@@ -239,7 +243,9 @@
     <ClInclude Include="..\..\ProcessManager\DelayProcess.h" />
     <ClInclude Include="..\..\ProcessManager\Process.h" />
     <ClInclude Include="..\..\ProcessManager\ProcessManager.h" />
+    <ClInclude Include="..\..\Renderer\Color.h" />
     <ClInclude Include="..\..\Renderer\ConstantsBuffer.h" />
+    <ClInclude Include="..\..\Renderer\Mesh.h" />
     <ClInclude Include="..\..\Renderer\RenderDevice.h" />
     <ClInclude Include="..\..\Renderer\Renderer.h" />
     <ClInclude Include="..\..\Renderer\RenderState.h" />

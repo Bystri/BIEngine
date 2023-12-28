@@ -43,12 +43,6 @@ public:
 
    RenderLayer GetRenderLayer() const { return m_renderLayer; }
 
-   bool HasAlpha() const { return m_pMaterial->HasAlpha(); }
-
-   void SetMaterial(std::shared_ptr<Material> pMat) { m_pMaterial = pMat; }
-
-   std::shared_ptr<Material> GetMaterial() const { return m_pMaterial; }
-
 protected:
    void SetRenderLayer(RenderLayer renderLayer)
    {
@@ -62,8 +56,6 @@ protected:
    std::shared_ptr<TransformComponent> m_pTransformComponent;
 
    RenderLayer m_renderLayer;
-
-   std::shared_ptr<Material> m_pMaterial;
 };
 
 // Основной класс узла дерева спрайтов.
@@ -134,8 +126,6 @@ public:
    void SetRenderLayer(RenderLayer renderLayer) { m_props.SetRenderLayer(renderLayer); }
 
    RenderLayer GetRenderLayer() const { return m_props.GetRenderLayer(); }
-
-   void SetMaterial(std::shared_ptr<Material> pMat) { m_props.SetMaterial(pMat); }
 
 protected:
    SceneNodeList m_children;

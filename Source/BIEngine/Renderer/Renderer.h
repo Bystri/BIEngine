@@ -2,10 +2,11 @@
 
 #include <memory>
 
+#include "Mesh.h"
+#include "Color.h"
+#include "RenderState.h"
 #include "ShaderProgram.h"
-#include "../Graphics/Material.h"
-#include "../Graphics/Sprite.h"
-#include "../Graphics/Model3d.h"
+#include "ShaderProgramState.h"
 
 namespace BIEngine {
 
@@ -25,11 +26,9 @@ struct RenderCommand {
       return m_shaderProgramState;
    }
 
-   glm::mat4 Transform;
+   glm::mat4 Transform = glm::mat4(1.0f);
 
-   RenderState RenderState;
-
-   std::vector<std::shared_ptr<Texture>> pTextures;
+   RenderState RenderState{};
 
 private:
    const std::shared_ptr<Mesh> pMesh;

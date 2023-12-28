@@ -3,6 +3,7 @@
 #include "../ResourceCache/ResCache.h"
 #include "../Renderer/ShadersLoader.h"
 #include "../Renderer/ImageLoader.h"
+#include "../Graphics/ModelLoader.h"
 #include "../ResourceCache/XmlLoader.h"
 #include "../UserInterface/HumanView.h"
 #include "../Scripting/PythonStateManager.h"
@@ -50,6 +51,7 @@ bool GameApp::Init()
    ResCache::Get()->RegisterLoader(std::make_shared<GeometryShaderResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<UtilityShaderResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<ShaderProgramResourceLoader>());
+   ResCache::Get()->RegisterLoader(std::make_shared<ObjModelResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<ScriptResourceLoader>());
    // ResCache::Get()->RegisterLoader(CreateWavResourceLoader());
 

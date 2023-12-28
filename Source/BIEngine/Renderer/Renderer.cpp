@@ -5,6 +5,7 @@
 namespace BIEngine {
 
 Renderer::Renderer()
+   : m_renderDevice()
 {
 }
 
@@ -33,10 +34,6 @@ void Renderer::DrawRenderCommand(RenderCommand& renderCommand)
 
    renderCommand.GetShaderProgramState().SetMatrix4("model", renderCommand.Transform);
    renderCommand.GetShaderProgramState().Use();
-
-   for (int i = 0; i < renderCommand.pTextures.size(); ++i) {
-      renderCommand.pTextures[i]->Bind(i);
-   }
 
    glBindVertexArray(renderCommand.GetMeshPtr()->m_VAO);
    glDrawElements(GL_TRIANGLES, renderCommand.GetMeshPtr()->m_indices.size(), GL_UNSIGNED_INT, 0);

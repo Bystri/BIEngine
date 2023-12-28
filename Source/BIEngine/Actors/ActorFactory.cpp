@@ -27,6 +27,7 @@ ActorFactory::ActorFactory()
    m_actorComponentCreators[SpotLightComponent::g_CompId] = CreateSpotLightComponent;
    m_actorComponentCreators[SpriteRenderComponent::g_CompId] = CreateSpriteRenderComponent;
    m_actorComponentCreators[BoxRenderComponent::g_CompId] = CreateBoxRenderComponent;
+   m_actorComponentCreators[ModelRenderComponent::g_CompId] = CreateModelRenderComponent;
    m_actorComponentCreators[Physics2DComponent::g_CompId] = CreatePhysics2DComponent;
    m_actorComponentCreators[Physics2DTriggerComponent::g_CompId] = CreatePhysics2DTriggerComponent;
    m_actorComponentCreators[Physics3DComponent::g_CompId] = CreatePhysics3DComponent;

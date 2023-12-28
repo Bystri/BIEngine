@@ -30,6 +30,12 @@ void ShaderProgramState::Use()
    for (const auto& uniform : m_uniformMatricies) {
       m_pShaderProgram->SetMatrix4(uniform.first, uniform.second);
    }
+
+   for (int i = 0; i < m_textures.size(); ++i) {
+      if (m_textures[i]) {
+         m_textures[i]->Bind(i);
+      }
+   }
 }
 
 void ShaderProgramState::SetBool(const std::string& name, bool value)
@@ -60,6 +66,11 @@ void ShaderProgramState::SetVector3f(const std::string& name, const glm::vec3& v
 void ShaderProgramState::SetMatrix4(const std::string& name, const glm::mat4& mat)
 {
    m_uniformMatricies[name] = mat;
+}
+
+void ShaderProgramState::AddTexture(std::shared_ptr<Texture> pTexture)
+{
+   m_textures.push_back(pTexture);
 }
 
 } // namespace BIEngine

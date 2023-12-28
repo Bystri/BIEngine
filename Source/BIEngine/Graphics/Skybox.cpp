@@ -21,9 +21,7 @@ bool Skybox::OnRender(Scene* pScene)
    glm::mat4 skyboxView = glm::mat4(glm::mat3(pScene->GetCamera()->GetViewMatrix()));
 
    renderCommand.GetShaderProgramState().SetMatrix4("skyboxView", skyboxView);
-   renderCommand.GetShaderProgramState().SetInteger("samplerCube", 0);
-
-   renderCommand.pTextures.push_back(m_pCubemapTexture);
+   renderCommand.GetShaderProgramState().AddTexture(m_pCubemapTexture);
 
    pScene->GetRenderer()->DrawRenderCommand(renderCommand);
    return true;

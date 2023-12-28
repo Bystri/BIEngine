@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "../Graphics/Mesh.h"
+#include "../Renderer/Mesh.h"
 #include "../Renderer/ShaderProgram.h"
 #include "../Renderer/Texture.h"
 

@@ -4,16 +4,13 @@ namespace BIEngine {
 
 bool SpriteNode::OnRender(Scene* pScene)
 {
-   RenderCommand renderCommand(m_pSprite->GetMesh(), m_props.GetMaterial()->GetShaderProgramPtr());
+   RenderCommand renderCommand(m_pSprite->GetMesh(), m_pSprite->GetShaderProgramPtr());
 
-   renderCommand.RenderState = m_props.GetMaterial()->GetRenderState();
-   renderCommand.RenderState.Cull = !m_props.GetMaterial()->IsDoubleSided();
+   renderCommand.RenderState = m_pSprite->GetRanderState();
+   renderCommand.RenderState.Cull = true;
    renderCommand.Transform = GetLocalModelMatrix();
 
-   renderCommand.GetShaderProgramState().SetVector3f("objectColor", m_props.GetMaterial()->GetColor());
-   renderCommand.GetShaderProgramState().SetInteger("sprite", 0);
-
-   renderCommand.pTextures.push_back(m_pSprite->GetTexture());
+   renderCommand.GetShaderProgramState() = m_pSprite->ConstructShaderProgramState();
 
    pScene->GetRenderer()->DrawRenderCommand(renderCommand);
    return true;

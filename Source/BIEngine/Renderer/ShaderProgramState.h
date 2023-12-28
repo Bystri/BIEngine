@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "ShaderProgram.h"
+#include "Texture.h"
 
 namespace BIEngine {
 
@@ -22,14 +23,18 @@ public:
    void SetVector3f(const std::string& name, const glm::vec3& vec);
    void SetMatrix4(const std::string& name, const glm::mat4& mat);
 
+   void AddTexture(std::shared_ptr<Texture> pTexture);
+
 private:
-   const std::shared_ptr<ShaderProgram> m_pShaderProgram;
+   std::shared_ptr<ShaderProgram> m_pShaderProgram;
 
    std::unordered_map<std::string, bool> m_uniformBools;
    std::unordered_map<std::string, int> m_uniformInts;
    std::unordered_map<std::string, float> m_uniformFloats;
    std::unordered_map<std::string, glm::vec3> m_uniformVectors;
    std::unordered_map<std::string, glm::mat4> m_uniformMatricies;
+
+   std::vector<std::shared_ptr<Texture>> m_textures;
 };
 
 } // namespace BIEngine

@@ -1,12 +1,16 @@
 #version 420 core
 
-in vec2 TexCoord;
-out vec4 color;
+struct Material {
+	sampler2D sprite;
+	vec3 color;
+};
 
-uniform sampler2D sprite;
-uniform vec3 objectColor;
+in vec2 TexCoord;
+out vec4 FragColor;
+
+uniform Material material;
 
 void main()
 {    
-    color = vec4(objectColor, 1.0) * texture(sprite, TexCoord);
+    FragColor = vec4(material.color, 1.0) * texture(material.sprite, TexCoord);
 }  
