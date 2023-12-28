@@ -25,9 +25,6 @@ void Scene::Init()
 int Scene::OnRender(const GameTimer& gt)
 {
    if (m_pRoot && m_pCamera) {
-      static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
-      m_pRenderer->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
-
       m_globalRenderBufferData.viewMat = m_pCamera->GetViewMatrix();
       m_globalRenderBufferData.projMat = m_pCamera->GetProjMatrix();
       m_globalRenderBufferData.totalTime = gt.TotalTime();

@@ -249,6 +249,9 @@
     <ClCompile Include="..\..\Graphics\LightReflectiveMaterial.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Renderer\Framebuffer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -481,6 +484,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Graphics\LightReflectiveMaterial.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\Framebuffer.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

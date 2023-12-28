@@ -3,7 +3,6 @@
 #include <cassert>
 
 #include "../Utilities/Logger.h"
-#include "../Utilities/DebugDraw.h"
 #include "../ProcessManager/ProcessManager.h"
 
 namespace BIEngine {
@@ -130,12 +129,11 @@ void GameLogic::OnUpdate(GameTimer& gt)
 
 void GameLogic::OnRender(const GameTimer& gt)
 {
+   m_pPhysics3D->DrawRenderDiagnostics();
+
    for (const auto view : m_gameViews) {
       view->OnRender(gt);
    }
-
-   m_pPhysics3D->DrawRenderDiagnostics();
-   DebugDraw::Draw();
 }
 
 std::shared_ptr<Actor> GameLogic::GetActor(ActorId id) const

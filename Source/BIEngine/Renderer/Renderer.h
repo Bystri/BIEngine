@@ -5,6 +5,7 @@
 #include "Mesh.h"
 #include "Color.h"
 #include "RenderState.h"
+#include "Framebuffer.h"
 #include "ShaderProgram.h"
 #include "ShaderProgramState.h"
 
@@ -42,14 +43,23 @@ public:
    Renderer(const Renderer& orig) = delete;
    Renderer& operator=(const Renderer& rhs) = delete;
 
-   void Init();
+   bool Init(int screenWidth, int screenHeight, int MsaaSamples = 4);
 
    RenderDevice& GetRenderDevice() { return m_renderDevice; }
+
+   void BeginFrame();
+   void EndFrame();
 
    void Clear(RenderDevice::ClearFlag flags, const Color& color);
    void DrawRenderCommand(RenderCommand& renderCommand);
 
 private:
+   int m_screenWidth;
+   int m_screenHeight;
+
    RenderDevice m_renderDevice;
+
+   std::shared_ptr<Framebuffer> m_defaultFramebuffer;
+   std::shared_ptr<Framebuffer> m_multisamplingFramebuffer;
 };
 } // namespace BIEngine

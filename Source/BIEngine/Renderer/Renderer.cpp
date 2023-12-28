@@ -5,18 +5,40 @@
 namespace BIEngine {
 
 Renderer::Renderer()
-   : m_renderDevice()
+   : m_screenWidth(-1), m_screenHeight(-1), m_renderDevice(), m_defaultFramebuffer(nullptr), m_multisamplingFramebuffer(nullptr)
 {
 }
 
-void Renderer::Init()
+bool Renderer::Init(int screenWidth, int screenHeight, int MsaaSamples)
 {
+   m_screenWidth = screenWidth;
+   m_screenHeight = screenHeight;
+
+   m_defaultFramebuffer = GetDefaultFramebuffer();
+   m_multisamplingFramebuffer = ConstructMultisampleFramebuffer(screenWidth, screenHeight, MsaaSamples);
+
+   if (m_multisamplingFramebuffer == nullptr) {
+      return false;
+   }
+
    m_renderDevice.Init();
+
+   return true;
 }
 
 void Renderer::Clear(RenderDevice::ClearFlag flags, const Color& color)
 {
    m_renderDevice.Clear(flags, color);
+}
+
+void Renderer::BeginFrame()
+{
+   m_multisamplingFramebuffer->Bind();
+}
+
+void Renderer::EndFrame()
+{
+   Blit(m_multisamplingFramebuffer, m_defaultFramebuffer, m_screenWidth, m_screenHeight);
 }
 
 void Renderer::DrawRenderCommand(RenderCommand& renderCommand)

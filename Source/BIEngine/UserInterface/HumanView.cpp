@@ -13,18 +13,8 @@ namespace BIEngine {
 const unsigned int SCREEN_REFRESH_RATE = 1000 / 60;
 
 HumanView::HumanView(unsigned int screenWidth, unsigned int screenHeight)
-   : m_viewId(INVALID_GAME_VIEW_ID)
-
-     ,
-     m_userInterface(), m_pRenderer(nullptr), m_pScene(nullptr)
-
-     ,
-     m_currTick(0.0f), m_lastDraw(0.0f), m_isRunFullSpeed(true)
-
-     ,
-     m_pointerRadius(1.0f), m_pKeyboardHandler()
-
-     ,
+   : m_viewId(INVALID_GAME_VIEW_ID), m_userInterface(), m_pRenderer(nullptr), m_pScene(nullptr),
+     m_currTick(0.0f), m_lastDraw(0.0f), m_isRunFullSpeed(true), m_pointerRadius(1.0f), m_pKeyboardHandler(),
      m_screenWidth(screenWidth), m_screenHeight(screenHeight)
 {
 }
@@ -104,20 +94,27 @@ static std::shared_ptr<Skybox> humanViewCreateSkybox()
 
 bool HumanView::Init()
 {
-   if (!g_pAudio)
+   if (!g_pAudio) {
       g_pAudio = new irrKlangAudio();
+   }
 
-   if (!g_pAudio)
+   if (!g_pAudio) {
       return false;
+   }
 
-   if (!g_pAudio->Initialize())
+   if (!g_pAudio->Initialize()) {
       return false;
+   }
 
-   m_userInterface.Init(m_screenWidth, m_screenHeight);
+   if (!m_userInterface.Init(m_screenWidth, m_screenHeight)) {
+      return false;
+   }
 
    // Создание отображения
    m_pRenderer = std::make_shared<Renderer>();
-   m_pRenderer->Init();
+   if (!m_pRenderer->Init(m_screenWidth, m_screenHeight)) {
+      return false;
+   }
    DebugDraw::Init();
    // Создания сцены на основе отображения
    m_pScene = new Scene(m_pRenderer);
@@ -151,8 +148,16 @@ void HumanView::OnUpdate(const GameTimer& gt)
 
 void HumanView::OnRender(const GameTimer& gt)
 {
+   m_pRenderer->BeginFrame();
+
+   static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
+   m_pRenderer->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
+
    m_pScene->OnRender(gt);
+   DebugDraw::Draw();
    m_userInterface.OnRender(gt);
+
+   m_pRenderer->EndFrame();
 }
 
 void HumanView::OnPointerMove(float xpos, float ypos)
