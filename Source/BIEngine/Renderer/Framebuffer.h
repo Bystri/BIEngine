@@ -1,7 +1,10 @@
+#pragma once
 
 #include <memory>
 
 namespace BIEngine {
+
+class Texture;
 
 class Framebuffer {
    friend std::shared_ptr<Framebuffer> GetDefaultFramebuffer();
@@ -11,17 +14,18 @@ class Framebuffer {
 
 public:
    Framebuffer()
-      : m_framebufferId(0), m_screenTexture(0), m_rbo(0)
+      : m_framebufferId(0), m_pScreenTexture(nullptr), m_rbo(0)
    {
    }
 
    ~Framebuffer();
 
    void Bind() const;
+   void BindTexture() const;
 
 private:
    unsigned int m_framebufferId;
-   unsigned int m_screenTexture;
+   std::shared_ptr<Texture> m_pScreenTexture;
    unsigned int m_rbo;
 };
 

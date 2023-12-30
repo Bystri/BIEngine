@@ -2,13 +2,14 @@
 
 #include <glad/glad.h>
 
+#include "Texture.h"
+
 namespace BIEngine {
 
 Framebuffer::~Framebuffer()
 {
    if (m_framebufferId != 0) {
       glDeleteFramebuffers(1, &m_framebufferId);
-      glDeleteTextures(1, &m_screenTexture);
       glDeleteRenderbuffers(1, &m_rbo);
    }
 }
@@ -16,6 +17,11 @@ Framebuffer::~Framebuffer()
 void Framebuffer::Bind() const
 {
    glBindFramebuffer(GL_FRAMEBUFFER, m_framebufferId);
+}
+
+void Framebuffer::BindTexture() const
+{
+   m_pScreenTexture->Bind(0);
 }
 
 std::shared_ptr<Framebuffer> GetDefaultFramebuffer()
@@ -33,12 +39,10 @@ std::shared_ptr<Framebuffer> ConstructFramebuffer(int screenWidth, int screenHei
    glGenFramebuffers(1, &framebuffer->m_framebufferId);
    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->m_framebufferId);
 
-   glGenTextures(1, &framebuffer->m_screenTexture);
-   glBindTexture(GL_TEXTURE_2D, framebuffer->m_screenTexture);
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebuffer->m_screenTexture, 0);
+   std::shared_ptr<Texture2D> pScreenTexture = std::make_shared<Texture2D>();
+   pScreenTexture->Generate(screenWidth, screenHeight, nullptr);
+   framebuffer->m_pScreenTexture = pScreenTexture;
+   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebuffer->m_pScreenTexture->GetId(), 0);
 
    glGenRenderbuffers(1, &framebuffer->m_rbo);
    glBindRenderbuffer(GL_RENDERBUFFER, framebuffer->m_rbo);
@@ -61,11 +65,11 @@ std::shared_ptr<Framebuffer> ConstructMultisampleFramebuffer(int screenWidth, in
    glGenFramebuffers(1, &framebuffer->m_framebufferId);
    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->m_framebufferId);
 
-   glGenTextures(1, &framebuffer->m_screenTexture);
-   glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, framebuffer->m_screenTexture);
-   glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, multisamplesCount, GL_RGB, screenWidth, screenHeight, GL_TRUE);
-   glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
-   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, framebuffer->m_screenTexture, 0);
+   std::shared_ptr<Texture2DMultisample> pScreenTexture = std::make_shared<Texture2DMultisample>();
+   pScreenTexture->SetInternalFormat(GL_RGB);
+   pScreenTexture->Generate(screenWidth, screenHeight, multisamplesCount);
+   framebuffer->m_pScreenTexture = pScreenTexture;
+   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, framebuffer->m_pScreenTexture->GetId(), 0);
 
    glGenRenderbuffers(1, &framebuffer->m_rbo);
    glBindRenderbuffer(GL_RENDERBUFFER, framebuffer->m_rbo);

@@ -3,7 +3,7 @@
 #include "../EventManager/EventManager.h"
 #include "../EventManager/Events.h"
 #include "../Renderer/ShadersLoader.h"
-#include "../Graphics/MeshGeometryGenerator.h"
+#include "../Renderer/MeshGeometryGenerator.h"
 #include "../Actors/TransformComponent.h"
 #include "../Utilities/Logger.h"
 #include "../Renderer/ImageLoader.h"

@@ -136,10 +136,58 @@ Mesh MeshGeometryGenerator::CreateBox(float width, float height, float depth, un
    // Ѕерем минимально возможное значени разделений
    numSubdivisions = std::min<unsigned int>(numSubdivisions, 6u);
 
-   for (unsigned int i = 0; i < numSubdivisions; ++i)
+   for (unsigned int i = 0; i < numSubdivisions; ++i) {
       Subdivide(meshData);
+   }
 
    return meshData;
+}
+
+Mesh MeshGeometryGenerator::CreateGrid(float width, float depth, unsigned int m, unsigned int n)
+{
+   const unsigned int vertexCount = m * n;
+   const unsigned int faceCount = (m - 1) * (n - 1) * 2;
+
+
+   const float halfWidth = 0.5f * width;
+   const float halfDepth = 0.5f * depth;
+
+   const float dx = width / (n - 1);
+   const float dz = depth / (m - 1);
+
+   const float du = 1.0f / (n - 1);
+   const float dv = 1.0f / (m - 1);
+
+   std::vector<Vertex> v(vertexCount);
+   for (int i = 0; i < m; ++i) {
+      const float z = halfDepth - i * dz;
+      for (int j = 0; j < n; ++j) {
+         const float x = -halfWidth + j * dx;
+
+         //						Position		Normal				TexCoords
+         v[i * n + j] = Vertex{x, 0.0f, z, 0.0f, 1.0f, 0.0f, j * du, i * dv};
+      }
+   }
+
+
+   std::vector<unsigned int> ind(faceCount * 3);
+
+   int k = 0;
+   for (int i = 0; i < m - 1; ++i) {
+      for (int j = 0; j < n - 1; ++j) {
+         ind[k] = i * n + j;
+         ind[k + 1] = i * n + j + 1;
+         ind[k + 2] = (i + 1) * n + j;
+
+         ind[k + 3] = (i + 1) * n + j;
+         ind[k + 4] = i * n + j + 1;
+         ind[k + 5] = (i + 1) * n + j + 1;
+
+         k += 6;
+      }
+   }
+
+   return Mesh(v, ind);
 }
 
 void MeshGeometryGenerator::Subdivide(Mesh& meshData)

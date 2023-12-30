@@ -18,8 +18,8 @@ struct Options {
    // Имя мира, который загрузится первым
    std::string mainWorldResName = "Worlds/World.xml";
 
-   unsigned int screenWidth = 720;
-   unsigned int screenHeight = 540;
+   unsigned int screenWidth = 1024;
+   unsigned int screenHeight = 768;
 };
 
 // Данный класс инициализирует все системы игрового движка и отвечает за взаимодейтсвие движка и ОС

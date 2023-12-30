@@ -36,6 +36,8 @@ private:
    ShaderProgramState m_shaderProgramState;
 };
 
+class PostProcessor;
+
 // Отвечает за отрисвоку спрайтов
 class Renderer {
 public:
@@ -59,7 +61,9 @@ private:
 
    RenderDevice m_renderDevice;
 
-   std::shared_ptr<Framebuffer> m_defaultFramebuffer;
    std::shared_ptr<Framebuffer> m_multisamplingFramebuffer;
+   std::shared_ptr<Framebuffer> m_intermediateFramebuffer;
+
+   std::shared_ptr<PostProcessor> m_pDefaultPostProcessor;
 };
 } // namespace BIEngine

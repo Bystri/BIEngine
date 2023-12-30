@@ -1,17 +1,5 @@
 <World>
     <Actors>
-		<Actor name="Sun">
-            <TransformComponent>
-                <Position x="0" y="25" z="0"/>
-                <Size w="1.000000" h="1.000000" d="1.0"/>
-				<Rotation x="0.000000" y="-1.000000" z="0.000000"/>
-            </TransformComponent>
-			<DirectionalLightComponent>
-				<Ambient r="0.05" g="0.05" b="0.05"/>
-				<Diffuse r="0.4" g="0.4" b="0.4"/>
-				<Specular r="0.5" g="0.5" b="0.5"/>
-			</DirectionalLightComponent>
-        </Actor>
 		<Actor name="SpotLight">
             <TransformComponent>
                 <Position x="-8" y="15" z="-8"/>
@@ -54,11 +42,6 @@
 				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
-			<PointLightComponent>
-				<Ambient r="0.05" g="0.05" b="0.05"/>
-				<Diffuse r="0.5" g="0.5" b="0.5"/>
-				<Specular r="1.0" g="1.0" b="1.0"/>
-			</PointLightComponent>
 			<Physics3DComponent>
 				<Shape>Box</Shape>
 				<BodyType>Dynamic</BodyType>
@@ -97,11 +80,6 @@
 				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
-			<PointLightComponent>
-				<Ambient r="0.05" g="0.05" b="0.05"/>
-				<Diffuse r="0.5" g="0.5" b="0.5"/>
-				<Specular r="1.0" g="1.0" b="1.0"/>
-			</PointLightComponent>
 			<Physics3DComponent>
 				<Shape>Box</Shape>
 				<BodyType>Dynamic</BodyType>
@@ -169,11 +147,6 @@
 				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
-			<PointLightComponent>
-				<Ambient r="0.05" g="0.05" b="0.05"/>
-				<Diffuse r="0.5" g="0.5" b="0.5"/>
-				<Specular r="1.0" g="1.0" b="1.0"/>
-			</PointLightComponent>
         </Actor>
 		<Actor name="sensor2">
             <TransformComponent>
@@ -188,7 +161,7 @@
 			</BoxRenderComponent>
 			<PointLightComponent>
 				<Ambient r="0.05" g="0.05" b="0.05"/>
-				<Diffuse r="0.5" g="0.5" b="0.5"/>
+				<Diffuse r="0.1" g="1.0" b="0.1"/>
 				<Specular r="1.0" g="1.0" b="1.0"/>
 			</PointLightComponent>
         </Actor>

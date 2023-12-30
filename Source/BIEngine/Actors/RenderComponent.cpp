@@ -4,7 +4,7 @@
 #include "../EventManager/Events.h"
 #include "../Renderer/ShadersLoader.h"
 #include "../Graphics/ModelLoader.h"
-#include "../Graphics/MeshGeometryGenerator.h"
+#include "../Renderer/MeshGeometryGenerator.h"
 #include "../Actors/TransformComponent.h"
 #include "../Utilities/Logger.h"
 #include "../Renderer/ImageLoader.h"

@@ -155,7 +155,6 @@
     <ClCompile Include="..\..\Graphics\LightNodes.cpp" />
     <ClCompile Include="..\..\Graphics\LightReflectiveMaterial.cpp" />
     <ClCompile Include="..\..\Graphics\Material.cpp" />
-    <ClCompile Include="..\..\Graphics\MeshGeometryGenerator.cpp" />
     <ClCompile Include="..\..\Graphics\Model.cpp" />
     <ClCompile Include="..\..\Graphics\ModelLoader.cpp" />
     <ClCompile Include="..\..\Graphics\ModelNode.cpp" />
@@ -176,6 +175,8 @@
     <ClCompile Include="..\..\Renderer\ConstantsBuffer.cpp" />
     <ClCompile Include="..\..\Renderer\Framebuffer.cpp" />
     <ClCompile Include="..\..\Renderer\Mesh.cpp" />
+    <ClCompile Include="..\..\Renderer\MeshGeometryGenerator.cpp" />
+    <ClCompile Include="..\..\Renderer\PostProcessor.cpp" />
     <ClCompile Include="..\..\Renderer\RenderDevice.cpp" />
     <ClCompile Include="..\..\Renderer\Renderer.cpp" />
     <ClCompile Include="..\..\Renderer\RenderState.cpp" />
@@ -227,7 +228,6 @@
     <ClInclude Include="..\..\Graphics\LightNodes.h" />
     <ClInclude Include="..\..\Graphics\LightReflectiveMaterial.h" />
     <ClInclude Include="..\..\Graphics\Material.h" />
-    <ClInclude Include="..\..\Graphics\MeshGeometryGenerator.h" />
     <ClInclude Include="..\..\Graphics\Model.h" />
     <ClInclude Include="..\..\Graphics\ModelLoader.h" />
     <ClInclude Include="..\..\Graphics\ModelNode.h" />
@@ -248,6 +248,8 @@
     <ClInclude Include="..\..\Renderer\ConstantsBuffer.h" />
     <ClInclude Include="..\..\Renderer\Framebuffer.h" />
     <ClInclude Include="..\..\Renderer\Mesh.h" />
+    <ClInclude Include="..\..\Renderer\MeshGeometryGenerator.h" />
+    <ClInclude Include="..\..\Renderer\PostProcessor.h" />
     <ClInclude Include="..\..\Renderer\RenderDevice.h" />
     <ClInclude Include="..\..\Renderer\Renderer.h" />
     <ClInclude Include="..\..\Renderer\RenderState.h" />

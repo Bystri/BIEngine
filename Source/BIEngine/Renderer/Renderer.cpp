@@ -1,11 +1,14 @@
 ﻿#include "Renderer.h"
 
 #include "../Utilities/DebugDraw.h"
+#include "ShadersLoader.h"
+#include "PostProcessor.h"
 
 namespace BIEngine {
 
 Renderer::Renderer()
-   : m_screenWidth(-1), m_screenHeight(-1), m_renderDevice(), m_defaultFramebuffer(nullptr), m_multisamplingFramebuffer(nullptr)
+   : m_screenWidth(-1), m_screenHeight(-1), m_renderDevice(),
+     m_intermediateFramebuffer(nullptr), m_multisamplingFramebuffer(nullptr), m_pDefaultPostProcessor(nullptr)
 {
 }
 
@@ -14,14 +17,21 @@ bool Renderer::Init(int screenWidth, int screenHeight, int MsaaSamples)
    m_screenWidth = screenWidth;
    m_screenHeight = screenHeight;
 
-   m_defaultFramebuffer = GetDefaultFramebuffer();
-   m_multisamplingFramebuffer = ConstructMultisampleFramebuffer(screenWidth, screenHeight, MsaaSamples);
+   m_intermediateFramebuffer = ConstructFramebuffer(m_screenWidth, m_screenHeight);
+   if (m_intermediateFramebuffer == nullptr) {
+      return false;
+   }
 
+   m_multisamplingFramebuffer = ConstructMultisampleFramebuffer(m_screenWidth, m_screenHeight, MsaaSamples);
    if (m_multisamplingFramebuffer == nullptr) {
       return false;
    }
 
    m_renderDevice.Init();
+
+   const std::string commonPostProcessingShaderProgramPath = "effects/commonPostProcessing.sp";
+   auto shaderPgrogramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPostProcessingShaderProgramPath)->GetExtra());
+   m_pDefaultPostProcessor = std::make_shared<PostProcessor>(shaderPgrogramData->GetShaderProgram(), GetDefaultFramebuffer());
 
    return true;
 }
@@ -38,7 +48,12 @@ void Renderer::BeginFrame()
 
 void Renderer::EndFrame()
 {
-   Blit(m_multisamplingFramebuffer, m_defaultFramebuffer, m_screenWidth, m_screenHeight);
+   Blit(m_multisamplingFramebuffer, m_intermediateFramebuffer, m_screenWidth, m_screenHeight);
+
+   m_renderDevice.SetDepthTest(false);
+   m_renderDevice.SetCull(false);
+
+   m_pDefaultPostProcessor->Use(m_intermediateFramebuffer);
 }
 
 void Renderer::DrawRenderCommand(RenderCommand& renderCommand)
@@ -57,8 +72,8 @@ void Renderer::DrawRenderCommand(RenderCommand& renderCommand)
    renderCommand.GetShaderProgramState().SetMatrix4("model", renderCommand.Transform);
    renderCommand.GetShaderProgramState().Use();
 
-   glBindVertexArray(renderCommand.GetMeshPtr()->m_VAO);
-   glDrawElements(GL_TRIANGLES, renderCommand.GetMeshPtr()->m_indices.size(), GL_UNSIGNED_INT, 0);
+   glBindVertexArray(renderCommand.GetMeshPtr()->GetVao());
+   glDrawElements(GL_TRIANGLES, renderCommand.GetMeshPtr()->GetIndices().size(), GL_UNSIGNED_INT, 0);
    glBindVertexArray(0);
 }
 

@@ -8,11 +8,9 @@ namespace BIEngine {
 
 class MeshGeometryGenerator {
 public:
-   // Создает квадрат. Преимущественно нужен для спрайтов.
    static Mesh CreateQuad(float width, float height);
-
-   // Создает коробку с заданными размерностями
    static Mesh CreateBox(float width, float height, float depth, unsigned int numSubdivisions);
+   static Mesh CreateGrid(float width, float depth, unsigned int m, unsigned int n);
 
 private:
    static void Subdivide(Mesh& meshData);

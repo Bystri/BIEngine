@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "../Renderer/Texture.h"
-#include "MeshGeometryGenerator.h"
+#include "../Renderer/MeshGeometryGenerator.h"
 #include "Material.h"
 
 namespace BIEngine {

@@ -153,9 +153,6 @@
     <ClCompile Include="..\..\Graphics\Material.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Graphics\MeshGeometryGenerator.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Graphics\Scene.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -250,6 +247,12 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Renderer\Framebuffer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\PostProcessor.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\MeshGeometryGenerator.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
@@ -371,9 +374,6 @@
     <ClInclude Include="..\..\Graphics\Material.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Graphics\MeshGeometryGenerator.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Graphics\Scene.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -486,6 +486,12 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Renderer\Framebuffer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\PostProcessor.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\MeshGeometryGenerator.h">
       <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>

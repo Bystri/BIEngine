@@ -33,14 +33,19 @@ struct Vertex {
 };
 
 class Mesh {
-   friend class Renderer;
    friend class MeshGeometryGenerator;
 
 public:
    Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 
+   unsigned int GetVao() const { return m_VAO; }
+
+   const std::vector<Vertex>& GetVertices() const { return m_vertices; }
+
+   const std::vector<unsigned int>& GetIndices() const { return m_indices; }
+
 private:
-   void SetupMesh();
+   void setupMesh();
 
 private:
    std::vector<Vertex> m_vertices;

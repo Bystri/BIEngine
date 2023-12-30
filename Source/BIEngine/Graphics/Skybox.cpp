@@ -1,7 +1,7 @@
 #include "Skybox.h"
 
 #include "Scene.h"
-#include "MeshGeometryGenerator.h"
+#include "../Renderer/MeshGeometryGenerator.h"
 
 namespace BIEngine {
 
