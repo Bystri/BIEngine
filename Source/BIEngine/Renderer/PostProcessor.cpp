@@ -17,7 +17,7 @@ void PostProcessor::Use(std::shared_ptr<Framebuffer> pBufferToProcess)
 {
    m_pFramebuffer->Bind();
    m_pShaderProgram->Use();
-   pBufferToProcess->BindTexture();
+   pBufferToProcess->BindColorTexture(0);
    glBindVertexArray(m_screenOutputMesh.GetVao());
    glDrawElements(GL_TRIANGLES, m_screenOutputMesh.GetIndices().size(), GL_UNSIGNED_INT, 0);
 }

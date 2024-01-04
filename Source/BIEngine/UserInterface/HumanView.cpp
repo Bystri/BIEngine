@@ -84,10 +84,7 @@ static std::shared_ptr<Skybox> humanViewCreateSkybox()
       height = cubemapTextureResExtraData->GetHeight();
    }
 
-   std::shared_ptr<CubemapTexture> pTexture = std::make_shared<CubemapTexture>();
-   pTexture->SetInternalFormat(GL_RGBA);
-   pTexture->SetImageFormat(GL_RGBA);
-   pTexture->Generate(width, height, cubemapTextureImages);
+   std::shared_ptr<CubemapTexture> pTexture = CubemapTexture::Create(width, height, CubemapTexture::Format::RGB, cubemapTextureImages);
 
    return std::make_shared<Skybox>(pTexture, pShaderProgram);
 }
@@ -148,16 +145,9 @@ void HumanView::OnUpdate(const GameTimer& gt)
 
 void HumanView::OnRender(const GameTimer& gt)
 {
-   m_pRenderer->BeginFrame();
-
-   static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
-   m_pRenderer->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
-
    m_pScene->OnRender(gt);
    DebugDraw::Draw();
    m_userInterface.OnRender(gt);
-
-   m_pRenderer->EndFrame();
 }
 
 void HumanView::OnPointerMove(float xpos, float ypos)

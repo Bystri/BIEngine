@@ -14,18 +14,20 @@ class Framebuffer {
 
 public:
    Framebuffer()
-      : m_framebufferId(0), m_pScreenTexture(nullptr), m_rbo(0)
+      : m_framebufferId(0), m_pColorTexture(nullptr), m_rbo(0)
    {
    }
 
    ~Framebuffer();
 
    void Bind() const;
-   void BindTexture() const;
+   void BindColorTexture(int slotId) const;
+   void BindDepthTexture(int slotId) const;
 
-private:
+public:
    unsigned int m_framebufferId;
-   std::shared_ptr<Texture> m_pScreenTexture;
+   std::shared_ptr<Texture> m_pColorTexture;
+   std::shared_ptr<Texture> m_pDepthTexture;
    unsigned int m_rbo;
 };
 

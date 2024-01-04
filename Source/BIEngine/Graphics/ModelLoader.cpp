@@ -29,11 +29,7 @@ static std::shared_ptr<Texture2D> modelLoadMaterialTexture(const aiMaterial* con
    }
 
    // TODO: We create new texture for each cached image. Make new texture loader
-   std::shared_ptr<Texture2D> pLoadedTexture = std::make_shared<Texture2D>();
-   pLoadedTexture->SetInternalFormat(GL_RGBA);
-   pLoadedTexture->SetImageFormat(GL_RGBA);
-   // TODO: Кстати, генерирование можно тоже убрать в лоадер
-   pLoadedTexture->Generate(textureImageData->GetWidth(), textureImageData->GetHeight(), textureImageData->GetData());
+   std::shared_ptr<Texture2D> pLoadedTexture = Texture2D::Create(textureImageData->GetWidth(), textureImageData->GetHeight(), Texture2D::Format::RGBA, textureImageData->GetData());
    return pLoadedTexture;
 }
 

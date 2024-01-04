@@ -129,10 +129,7 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
          return false;
       }
 
-      std::shared_ptr<Texture2D> pTexture = std::make_shared<Texture2D>();
-      pTexture->SetInternalFormat(GL_RGBA);
-      pTexture->SetImageFormat(GL_RGBA);
-      pTexture->Generate(imgData->GetWidth(), imgData->GetHeight(), imgData->GetData());
+      std::shared_ptr<Texture2D> pTexture = Texture2D::Create(imgData->GetWidth(), imgData->GetHeight(), Texture2D::Format::RGBA, imgData->GetData());
 
       std::shared_ptr<Sprite> pSprite = std::make_shared<Sprite>(pTexture);
       pSprite->SetColor(spriteColor);
@@ -222,10 +219,7 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
          return false;
       }
 
-      std::shared_ptr<Texture2D> pDiffuseMapTexture = std::make_shared<Texture2D>();
-      pDiffuseMapTexture->SetInternalFormat(GL_RGBA);
-      pDiffuseMapTexture->SetImageFormat(GL_RGBA);
-      pDiffuseMapTexture->Generate(diffuseMapImgData->GetWidth(), diffuseMapImgData->GetHeight(), diffuseMapImgData->GetData());
+      std::shared_ptr<Texture2D> pDiffuseMapTexture = Texture2D::Create(diffuseMapImgData->GetWidth(), diffuseMapImgData->GetHeight(), Texture2D::Format::RGBA, diffuseMapImgData->GetData());
       m_pLightReflectionMaterial->SetDiffuseMap(pDiffuseMapTexture);
 
       const char* specularMapPath;
@@ -239,10 +233,7 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
          return false;
       }
 
-      std::shared_ptr<Texture2D> pSpecularMapTexture = std::make_shared<Texture2D>();
-      pSpecularMapTexture->SetInternalFormat(GL_RGBA);
-      pSpecularMapTexture->SetImageFormat(GL_RGBA);
-      pSpecularMapTexture->Generate(specularMapImgData->GetWidth(), specularMapImgData->GetHeight(), specularMapImgData->GetData());
+      std::shared_ptr<Texture2D> pSpecularMapTexture = Texture2D::Create(specularMapImgData->GetWidth(), specularMapImgData->GetHeight(), Texture2D::Format::RGBA, specularMapImgData->GetData());
       m_pLightReflectionMaterial->SetSpecularMap(pSpecularMapTexture);
 
       std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 6u));

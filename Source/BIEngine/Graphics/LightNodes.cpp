@@ -41,7 +41,7 @@ struct SpotLightGlData {
    float outerCutOff = glm::cos(glm::radians(25.0f));
 };
 
-constexpr int MAX_DIRECTIONAL_LIGHTS_NUM = 4;
+constexpr int MAX_DIRECTIONAL_LIGHTS_NUM = 1;
 constexpr int MAX_POINT_LIGHTS_NUM = 16;
 constexpr int MAX_SPOT_LIGHTS_NUM = 12;
 
@@ -78,6 +78,7 @@ private:
 
 void LightManager::InsertDirectionalLightInfo(const DirectionalLightGlData& dirLight)
 {
+   assert(m_lightsBufferData.DirectionalLightNum < MAX_DIRECTIONAL_LIGHTS_NUM);
    if (m_lightsBufferData.DirectionalLightNum >= MAX_DIRECTIONAL_LIGHTS_NUM) {
       return;
    }
@@ -88,6 +89,7 @@ void LightManager::InsertDirectionalLightInfo(const DirectionalLightGlData& dirL
 
 void LightManager::InsertPointLightInfo(const PointLightGlData& pointLight)
 {
+   assert(m_lightsBufferData.PointLightsNum < MAX_POINT_LIGHTS_NUM);
    if (m_lightsBufferData.PointLightsNum >= MAX_POINT_LIGHTS_NUM) {
       return;
    }
@@ -99,6 +101,7 @@ void LightManager::InsertPointLightInfo(const PointLightGlData& pointLight)
 
 void LightManager::InsertSpotLightInfo(const SpotLightGlData& spotLight)
 {
+   assert(m_lightsBufferData.SpotLightsNum < MAX_SPOT_LIGHTS_NUM);
    if (m_lightsBufferData.SpotLightsNum >= MAX_SPOT_LIGHTS_NUM) {
       return;
    }

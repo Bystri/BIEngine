@@ -1,5 +1,17 @@
 <World>
     <Actors>
+		<Actor name="Sun">
+            <TransformComponent>
+                <Position x="-2" y="25" z="-1"/>
+                <Size w="1.000000" h="1.000000" d="1.0"/>
+				<Rotation x="2.000000" y="-25.000000" z="1.000000"/>
+            </TransformComponent>
+			<DirectionalLightComponent>
+				<Ambient r="0.05" g="0.05" b="0.05"/>
+				<Diffuse r="0.25" g="0.25" b="0.05"/>
+				<Specular r="0.5" g="0.5" b="0.5"/>
+			</DirectionalLightComponent>
+        </Actor>
 		<Actor name="SpotLight">
             <TransformComponent>
                 <Position x="-8" y="15" z="-8"/>
@@ -52,7 +64,7 @@
         </Actor>
 		<Actor name="sensor8">
             <TransformComponent>
-                <Position x="-8" y="6" z="8W"/>
+                <Position x="-8" y="6" z="8"/>
                 <Size w="1.000000" h="1.000000" d="1.0"/>
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
@@ -138,7 +150,7 @@
         </Actor>
 		<Actor name="sensor3">
             <TransformComponent>
-                <Position x="4" y="8" z="4"/>
+                <Position x="-8" y="8" z="-4"/>
                 <Size w="1.000000" h="1.000000" d="1.0"/>
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>

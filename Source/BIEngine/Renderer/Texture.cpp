@@ -11,7 +11,7 @@ namespace BIEngine {
 /**************/
 
 Texture::Texture()
-   : m_width(0), m_height(0), m_internalFormat(GL_RGB)
+   : m_width(0), m_height(0), m_internalFormat(Format::RGB)
 {
    glGenTextures(1, &m_id);
 }
@@ -26,139 +26,49 @@ Texture::~Texture()
 /**************/
 
 Texture2D::Texture2D()
-   : Texture(), m_wrapS(GL_REPEAT), m_wrapT(GL_REPEAT), m_filterMin(GL_LINEAR), m_filterMax(GL_LINEAR), m_imageFormat(GL_RGB)
+   : Texture()
 {
 }
 
-Texture2D::Texture2D(const Texture2D& orig)
+static unsigned int ConvertWrapToGl(Texture2D::TextureWrap wrap)
 {
-   // Копируем данные для генерации текстуры
-   m_internalFormat = orig.m_internalFormat;
-   m_imageFormat = orig.m_imageFormat;
-
-   m_wrapS = orig.m_wrapS;
-   m_wrapT = orig.m_wrapT;
-   m_filterMin = orig.m_filterMin;
-   m_filterMax = orig.m_filterMax;
-
-   m_width = 0;
-   m_height = 0;
-
-   // Если у оргинила ненулвые высота/ширина - значит он хранит текстуру и надо ее скопировать
-   if (orig.m_width != 0 && orig.m_height != 0) {
-      // Копируем данные текстуры из оригинала
-      unsigned char* data = new unsigned char[m_width * m_height * 4];
-      glBindTexture(GL_TEXTURE_2D, orig.m_id);
-      glGetTexImage(GL_TEXTURE_2D, 0, m_imageFormat, GL_UNSIGNED_BYTE, data);
-
-      // Создаем на основе скопированной текстуры текущую
-      glGenTextures(1, &m_id);
-      Generate(m_width, m_height, data);
-
-      delete[] data;
+   switch (wrap) {
+      case Texture2D::TextureWrap::CLAMP_TO_BORDER:
+         return GL_CLAMP_TO_BORDER;
+      case Texture2D::TextureWrap::REPEAT:
+         return GL_REPEAT;
+      default:
+         return 0;
    }
 }
 
-Texture2D& Texture2D::operator=(const Texture2D& orig)
+std::shared_ptr<Texture2D> Texture2D::Create(unsigned int width, unsigned int height, Texture::Format internalFormat, unsigned char* data, CreationParams params)
 {
-   if (this == &orig) {
-      return *this;
-   }
+   struct make_shared_enabler : public Texture2D {};
 
-   // НАМ ДОСТАТОЧНО ТОЛЬКО СКОПИРОВАТЬ ДАННЫЕ И ТЕКСТУРУ(ЕСЛИ ОНА ЕСТЬ). НИЧЕГО УДАЛЯТЬ ИЛИ СОЗДАВАТЬ НЕ НАДО, ТАК КАК АБСТРАКЦИЯ НАШЕЙ ТЕКСТУРЫ БЫЛА СГЕНЕРИРОВАНА В КОНСТРУКТОРЕ
+   std::shared_ptr<Texture2D> texture = std::make_shared<make_shared_enabler>();
 
-   // Копируем данные для генерации текстуры
-   m_internalFormat = orig.m_internalFormat;
-   m_imageFormat = orig.m_imageFormat;
-
-   m_wrapS = orig.m_wrapS;
-   m_wrapT = orig.m_wrapT;
-   m_filterMin = orig.m_filterMin;
-   m_filterMax = orig.m_filterMax;
-
-   m_width = 0;
-   m_height = 0;
-
-   // Если у оргинила ненулвые высота/ширина - значит он хранит текстуру и надо ее скопировать
-   if (orig.m_width != 0 && orig.m_height != 0) {
-      // Копируем данные текстуры из оригинала
-      unsigned char* data = new unsigned char[orig.m_width * orig.m_height * 4];
-      glBindTexture(GL_TEXTURE_2D, orig.m_id);
-      glGetTexImage(GL_TEXTURE_2D, 0, m_imageFormat, GL_UNSIGNED_BYTE, data);
-
-      // Создаем на основе скопированной текстуры текущую
-      Generate(orig.m_width, orig.m_height, data);
-
-      delete[] data;
-   }
-
-   return *this;
-}
-
-Texture2D::Texture2D(Texture2D&& orig)
-{
-   // Копируем данные для генерации текстуры
-   m_id = orig.m_id;
-
-   m_internalFormat = orig.m_internalFormat;
-   m_imageFormat = orig.m_imageFormat;
-
-   m_wrapS = orig.m_wrapS;
-   m_wrapT = orig.m_wrapT;
-   m_filterMin = orig.m_filterMin;
-   m_filterMax = orig.m_filterMax;
-
-   m_width = orig.m_width;
-   m_height = orig.m_height;
-
-   // Задаем id равный нулю, для безопасного удаления оригинала
-   orig.m_id = 0;
-}
-
-Texture2D& Texture2D::operator=(Texture2D&& orig)
-{
-   if (this == &orig)
-      return *this;
-
-   glDeleteTextures(1, &m_id);
-
-   // Копируем данные для генерации текстуры
-   m_id = orig.m_id;
-
-   m_internalFormat = orig.m_internalFormat;
-   m_imageFormat = orig.m_imageFormat;
-
-   m_wrapS = orig.m_wrapS;
-   m_wrapT = orig.m_wrapT;
-   m_filterMin = orig.m_filterMin;
-   m_filterMax = orig.m_filterMax;
-
-   m_width = orig.m_width;
-   m_height = orig.m_height;
-
-   // Задаем id равный нулю, для безопасного удаления оригинала
-   orig.m_id = 0;
-
-   return *this;
-}
-
-void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char* data)
-{
-   m_width = width;
-   m_height = height;
+   texture->m_width = width;
+   texture->m_height = height;
+   texture->m_internalFormat = internalFormat;
 
    // Создание текстуры
-   glBindTexture(GL_TEXTURE_2D, m_id);
-   glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, width, height, 0, m_imageFormat, GL_UNSIGNED_BYTE, data);
+   glBindTexture(GL_TEXTURE_2D, texture->m_id);
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_STENCIL_INDEX + static_cast<int>(internalFormat), width, height, 0, GL_STENCIL_INDEX + static_cast<int>(internalFormat), GL_BYTE + static_cast<int>(params.DataType), data);
 
    // Задаем параметры текстуры
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrapS);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrapT);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_filterMin);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_filterMax);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ConvertWrapToGl(params.WrapS));
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ConvertWrapToGl(params.WrapT));
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST + static_cast<int>(params.FilterMin));
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST + static_cast<int>(params.FilterMax));
+
+   float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+   glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
    // Отвязываем текстуру, чтобы она не учавствовала в дальнейшей работе
    glBindTexture(GL_TEXTURE_2D, 0);
+
+   return texture;
 }
 
 void Texture2D::Bind(int textureIdx) const
@@ -176,98 +86,25 @@ Texture2DMultisample::Texture2DMultisample()
 {
 }
 
-Texture2DMultisample::Texture2DMultisample(const Texture2DMultisample& orig)
+std::shared_ptr<Texture2DMultisample> Texture2DMultisample::Create(unsigned int width, unsigned int height, Texture::Format internalFormat, int multisamplesCount)
 {
-   // Копируем данные для генерации текстуры
-   m_internalFormat = orig.m_internalFormat;
-   m_multisamplesCount = orig.m_multisamplesCount;
+   struct make_shared_enabler : public Texture2DMultisample {};
 
-   m_width = 0;
-   m_height = 0;
+   std::shared_ptr<Texture2DMultisample> texture = std::make_shared<make_shared_enabler>();
 
-   // Если у оргинила ненулвые высота/ширина - значит он хранит текстуру и надо ее скопировать
-   if (orig.m_width != 0 && orig.m_height != 0) {
-      // Создаем на основе скопированной текстуры текущую
-      glGenTextures(1, &m_id);
-      Generate(orig.m_width, orig.m_height, m_multisamplesCount);
-   }
-}
-
-Texture2DMultisample& Texture2DMultisample::operator=(const Texture2DMultisample& orig)
-{
-   if (this == &orig) {
-      return *this;
-   }
-
-   // НАМ ДОСТАТОЧНО ТОЛЬКО СКОПИРОВАТЬ ДАННЫЕ И ТЕКСТУРУ(ЕСЛИ ОНА ЕСТЬ). НИЧЕГО УДАЛЯТЬ ИЛИ СОЗДАВАТЬ НЕ НАДО, ТАК КАК АБСТРАКЦИЯ НАШЕЙ ТЕКСТУРЫ БЫЛА СГЕНЕРИРОВАНА В КОНСТРУКТОРЕ
-
-   // Копируем данные для генерации текстуры
-   m_internalFormat = orig.m_internalFormat;
-   m_multisamplesCount = orig.m_multisamplesCount;
-
-   m_width = 0;
-   m_height = 0;
-
-   // Если у оргинила ненулвые высота/ширина - значит он хранит текстуру и надо ее скопировать
-   if (orig.m_width != 0 && orig.m_height != 0) {
-      // Создаем на основе скопированной текстуры текущую
-      Generate(orig.m_width, orig.m_height, m_multisamplesCount);
-   }
-
-   return *this;
-}
-
-Texture2DMultisample::Texture2DMultisample(Texture2DMultisample&& orig)
-{
-   // Копируем данные для генерации текстуры
-   m_id = orig.m_id;
-
-   m_internalFormat = orig.m_internalFormat;
-   m_multisamplesCount = orig.m_multisamplesCount;
-
-   m_width = orig.m_width;
-   m_height = orig.m_height;
-
-   // Задаем id равный нулю, для безопасного удаления оригинала
-   orig.m_id = 0;
-}
-
-Texture2DMultisample& Texture2DMultisample::operator=(Texture2DMultisample&& orig)
-{
-   if (this == &orig) {
-      return *this;
-   }
-
-   glDeleteTextures(1, &m_id);
-
-   // Копируем данные для генерации текстуры
-   m_id = orig.m_id;
-
-   m_internalFormat = orig.m_internalFormat;
-   m_multisamplesCount = orig.m_multisamplesCount;
-
-   m_width = orig.m_width;
-   m_height = orig.m_height;
-
-   // Задаем id равный нулю, для безопасного удаления оригинала
-   orig.m_id = 0;
-
-   return *this;
-}
-
-void Texture2DMultisample::Generate(unsigned int width, unsigned int height, int multisamplesCount)
-{
-   m_width = width;
-   m_height = height;
-
-   m_multisamplesCount = multisamplesCount;
+   texture->m_width = width;
+   texture->m_height = height;
+   texture->m_internalFormat = internalFormat;
+   texture->m_multisamplesCount = multisamplesCount;
 
    // Создание текстуры
-   glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_id);
-   glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, multisamplesCount, m_internalFormat, width, height, GL_TRUE);
+   glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture->m_id);
+   glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, multisamplesCount, GL_STENCIL_INDEX + static_cast<int>(internalFormat), width, height, GL_TRUE);
 
    // Отвязываем текстуру, чтобы она не учавствовала в дальнейшей работе
    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+
+   return texture;
 }
 
 void Texture2DMultisample::Bind(int textureIdx) const
@@ -281,160 +118,50 @@ void Texture2DMultisample::Bind(int textureIdx) const
 /**************/
 
 CubemapTexture::CubemapTexture()
-   : Texture2D(), m_wrapR(GL_REPEAT)
+   : Texture()
 {
 }
 
-CubemapTexture::CubemapTexture(const CubemapTexture& orig)
+static unsigned int ConvertWrapToGl(CubemapTexture::TextureWrap wrap)
 {
-   // Копируем данные для генерации текстуры
-   m_internalFormat = orig.m_internalFormat;
-   m_imageFormat = orig.m_imageFormat;
-
-   m_wrapS = orig.m_wrapS;
-   m_wrapT = orig.m_wrapT;
-   m_wrapR = orig.m_wrapR;
-   m_filterMin = orig.m_filterMin;
-   m_filterMax = orig.m_filterMax;
-
-   m_width = 0;
-   m_height = 0;
-
-   // Если у оргинила ненулвые высота/ширина - значит он хранит текстуру и надо ее скопировать
-   if (orig.m_width != 0 && orig.m_height != 0) {
-      // Копируем данные текстуры из оригинала
-      glBindTexture(GL_TEXTURE_2D, orig.m_id);
-
-      std::array<unsigned char*, 6> data;
-      for (int i = 0; i < 6; ++i) {
-         data[i] = new unsigned char[orig.m_width * orig.m_height * 4];
-         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, orig.m_width, orig.m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data[i]);
-      }
-
-      // Создаем на основе скопированной текстуры текущую
-      glGenTextures(1, &m_id);
-      Generate(orig.m_width, orig.m_height, data);
-
-      for (int i = 0; i < 6; ++i) {
-         delete[] data[i];
-      }
+   switch (wrap) {
+      case CubemapTexture::TextureWrap::CLAMP_TO_BORDER:
+         return GL_CLAMP_TO_BORDER;
+      case CubemapTexture::TextureWrap::REPEAT:
+         return GL_REPEAT;
+      default:
+         return 0;
    }
 }
 
-CubemapTexture& CubemapTexture::operator=(const CubemapTexture& orig)
+std::shared_ptr<CubemapTexture> CubemapTexture::Create(unsigned int width, unsigned int height, Texture::Format internalFormat, const std::array<unsigned char*, 6>& data, CreationParams params)
 {
-   if (this == &orig) {
-      return *this;
-   }
+   struct make_shared_enabler : public CubemapTexture {};
 
-   // НАМ ДОСТАТОЧНО ТОЛЬКО СКОПИРОВАТЬ ДАННЫЕ И ТЕКСТУРУ(ЕСЛИ ОНА ЕСТЬ). НИЧЕГО УДАЛЯТЬ ИЛИ СОЗДАВАТЬ НЕ НАДО, ТАК КАК АБСТРАКЦИЯ НАШЕЙ ТЕКСТУРЫ БЫЛА СГЕНЕРИРОВАНА В КОНСТРУКТОРЕ
+   std::shared_ptr<CubemapTexture> texture = std::make_shared<make_shared_enabler>();
 
-   // Копируем данные для генерации текстуры
-   m_internalFormat = orig.m_internalFormat;
-   m_imageFormat = orig.m_imageFormat;
-
-   m_wrapS = orig.m_wrapS;
-   m_wrapT = orig.m_wrapT;
-   m_wrapR = orig.m_wrapR;
-   m_filterMin = orig.m_filterMin;
-   m_filterMax = orig.m_filterMax;
-
-   m_width = 0;
-   m_height = 0;
-
-   // Если у оргинила ненулвые высота/ширина - значит он хранит текстуру и надо ее скопировать
-   if (orig.m_width != 0 && orig.m_height != 0) {
-      // Копируем данные текстуры из оригинала
-      glBindTexture(GL_TEXTURE_2D, orig.m_id);
-
-      std::array<unsigned char*, 6> data;
-      for (int i = 0; i < 6; ++i) {
-         data[i] = new unsigned char[orig.m_width * orig.m_height * 4];
-         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, orig.m_width, orig.m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data[i]);
-      }
-
-      // Создаем на основе скопированной текстуры текущую
-      Generate(orig.m_width, orig.m_height, data);
-
-      for (int i = 0; i < 6; ++i) {
-         delete[] data[i];
-      }
-   }
-
-   return *this;
-}
-
-CubemapTexture::CubemapTexture(CubemapTexture&& orig)
-{
-   // Копируем данные для генерации текстуры
-   m_id = orig.m_id;
-
-   m_internalFormat = orig.m_internalFormat;
-   m_imageFormat = orig.m_imageFormat;
-
-   m_wrapS = orig.m_wrapS;
-   m_wrapT = orig.m_wrapT;
-   m_wrapR = orig.m_wrapR;
-   m_filterMin = orig.m_filterMin;
-   m_filterMax = orig.m_filterMax;
-
-   m_width = orig.m_width;
-   m_height = orig.m_height;
-
-   // Задаем id равный нулю, для безопасного удаления оригинала
-   orig.m_id = 0;
-}
-
-CubemapTexture& CubemapTexture::operator=(CubemapTexture&& orig)
-{
-   if (this == &orig) {
-      return *this;
-   }
-
-   glDeleteTextures(1, &m_id);
-
-   // Копируем данные для генерации текстуры
-   m_id = orig.m_id;
-
-   m_internalFormat = orig.m_internalFormat;
-   m_imageFormat = orig.m_imageFormat;
-
-   m_wrapS = orig.m_wrapS;
-   m_wrapT = orig.m_wrapT;
-   m_wrapR = orig.m_wrapR;
-   m_filterMin = orig.m_filterMin;
-   m_filterMax = orig.m_filterMax;
-
-   m_width = orig.m_width;
-   m_height = orig.m_height;
-
-   // Задаем id равный нулю, для безопасного удаления оригинала
-   orig.m_id = 0;
-
-   return *this;
-}
-
-void CubemapTexture::Generate(unsigned int width, unsigned int height, const std::array<unsigned char*, 6>& data)
-{
-   m_width = width;
-   m_height = height;
+   texture->m_width = width;
+   texture->m_height = height;
+   texture->m_internalFormat = internalFormat;
 
    // Создание текстуры
-   glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
+   glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_id);
 
    for (int i = 0; i < data.size(); ++i) {
-      glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data[i]);
+      glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_STENCIL_INDEX + static_cast<int>(internalFormat), width, height, 0, GL_STENCIL_INDEX + static_cast<int>(internalFormat), GL_BYTE + static_cast<int>(params.DataType), data[i]);
    }
 
    // Задаем параметры текстуры
-   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, m_wrapS);
-   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, m_wrapT);
-   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, m_wrapR);
-   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, m_filterMin);
-   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, m_filterMax);
+   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, ConvertWrapToGl(params.WrapS));
+   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, ConvertWrapToGl(params.WrapT));
+   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, ConvertWrapToGl(params.WrapR));
+   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST + static_cast<int>(params.FilterMin));
+   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST + static_cast<int>(params.FilterMax));
 
    // Отвязываем текстуру, чтобы она не учавствовала в дальнейшей работе
    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+   return texture;
 }
 
 void CubemapTexture::Bind(int textureIdx) const

@@ -1,11 +1,23 @@
 #pragma once
 
 #include <array>
+#include <memory>
 
 namespace BIEngine {
 
 class Texture {
 public:
+   enum class Format {
+      STENCIL_INDEX,
+      DEPTH_COMPONENT,
+      RED,
+      GREEN,
+      BLUE,
+      ALPHA,
+      RGB,
+      RGBA
+   };
+
    Texture();
    virtual ~Texture();
 
@@ -20,12 +32,6 @@ public:
    // Высота изображения в пикселях
    unsigned int GetHeight() const { return m_height; }
 
-   // Задает формат цветов текстуры
-   void SetInternalFormat(unsigned int format) { m_internalFormat = format; }
-
-   // Отдает формат цветов текстуры
-   unsigned int GetInternalFormat() const { return m_internalFormat; }
-
 protected:
    unsigned int m_id;
 
@@ -33,73 +39,109 @@ protected:
    unsigned int m_width, m_height;
 
    // Формат текстуры
-   unsigned int m_internalFormat;
+   Format m_internalFormat;
 };
 
 class Texture2D : public Texture {
 public:
-   Texture2D();
+   enum class Type {
+      BYTE,
+      UNSIGNED_BYTE,
+      SHORT,
+      UNSIGNED_SHORT,
+      INT,
+      UNSIGNED_INT,
+      FLOAT
+   };
 
-   Texture2D(const Texture2D& orig);
-   Texture2D& operator=(const Texture2D& orig);
+   enum class TextureWrap {
+      CLAMP_TO_BORDER,
+      REPEAT
+   };
 
-   Texture2D(Texture2D&& orig);
-   Texture2D& operator=(Texture2D&& orig);
+   enum class TextureFunction {
+      NEAREST,
+      LINEAR
+   };
 
-   void Generate(unsigned int width, unsigned int height, unsigned char* data);
+   struct CreationParams {
+      Type DataType = Type::UNSIGNED_BYTE;
+      TextureWrap WrapS = TextureWrap::REPEAT;
+      TextureWrap WrapT = TextureWrap::REPEAT;
+      TextureFunction FilterMin = TextureFunction::LINEAR;
+      TextureFunction FilterMax = TextureFunction::LINEAR;
+   };
+
+   static std::shared_ptr<Texture2D> Create(unsigned int width, unsigned int height, Texture::Format internalFormat, unsigned char* data, CreationParams params = CreationParams());
+
    // Сделаеть текстуру активной
    virtual void Bind(int textureIdx) const override;
 
-   // Задает формат цветов изображения
-   void SetImageFormat(unsigned int format) { m_imageFormat = format; }
+private:
+   Texture2D();
 
-   // Отдает формат цветов изображения
-   unsigned int GetImageFormat() const { return m_imageFormat; }
-
-protected:
-   unsigned int m_wrapS;
-   unsigned int m_wrapT;
-   unsigned int m_filterMin;
-   unsigned int m_filterMax;
-
-   // Формат изображения
-   unsigned int m_imageFormat;
+   Texture2D(const Texture2D& orig) = delete;
+   Texture2D& operator=(const Texture2D& orig) = delete;
 };
 
 class Texture2DMultisample : public Texture {
 public:
-   Texture2DMultisample();
+   static std::shared_ptr<Texture2DMultisample> Create(unsigned int width, unsigned int height, Texture::Format internalFormat, int multisamplesCount);
 
-   Texture2DMultisample(const Texture2DMultisample& orig);
-   Texture2DMultisample& operator=(const Texture2DMultisample& orig);
-
-   Texture2DMultisample(Texture2DMultisample&& orig);
-   Texture2DMultisample& operator=(Texture2DMultisample&& orig);
-
-   void Generate(unsigned int width, unsigned int height, int multisamplesCount);
    // Сделаеть текстуру активной
    virtual void Bind(int textureIdx) const override;
+
+private:
+   Texture2DMultisample();
+
+   Texture2DMultisample(const Texture2DMultisample& orig) = delete;
+   Texture2DMultisample& operator=(const Texture2DMultisample& orig) = delete;
 
 private:
    int m_multisamplesCount;
 };
 
-class CubemapTexture : public Texture2D {
+class CubemapTexture : public Texture {
 public:
-   CubemapTexture();
+   enum class Type {
+      BYTE,
+      UNSIGNED_BYTE,
+      SHORT,
+      UNSIGNED_SHORT,
+      INT,
+      UNSIGNED_INT,
+      FLOAT
+   };
 
-   CubemapTexture(const CubemapTexture& orig);
-   CubemapTexture& operator=(const CubemapTexture& orig);
+   enum class TextureWrap {
+      CLAMP_TO_BORDER,
+      REPEAT
+   };
 
-   CubemapTexture(CubemapTexture&& orig);
-   CubemapTexture& operator=(CubemapTexture&& orig);
+   enum class TextureFunction {
+      LINEAR,
+      NEAREST
+   };
 
-   void Generate(unsigned int width, unsigned int height, const std::array<unsigned char*, 6>& data);
+   struct CreationParams {
+      Type DataType = Type::UNSIGNED_BYTE;
+      TextureWrap WrapS = TextureWrap::REPEAT;
+      TextureWrap WrapT = TextureWrap::REPEAT;
+      TextureWrap WrapR = TextureWrap::REPEAT;
+      TextureFunction FilterMin = TextureFunction::LINEAR;
+      TextureFunction FilterMax = TextureFunction::LINEAR;
+   };
+
+   static std::shared_ptr<CubemapTexture> Create(unsigned int width, unsigned int height, Texture::Format internalFormat, const std::array<unsigned char*, 6>& data, CreationParams params = CreationParams());
+
    // Сделаеть текстуру активной
    virtual void Bind(int textureIdx) const override;
 
 private:
-   unsigned int m_wrapR;
+   CubemapTexture();
+
+   CubemapTexture(const CubemapTexture& orig) = delete;
+   CubemapTexture& operator=(const CubemapTexture& orig) = delete;
 };
 
 } // namespace BIEngine

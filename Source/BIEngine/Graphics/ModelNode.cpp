@@ -14,7 +14,7 @@ bool ModelNode::OnRender(Scene* pScene)
       renderCommand.Transform = GetLocalModelMatrix();
 
       renderCommand.GetShaderProgramState() = pModelMesh->GetMaterial()->ConstructShaderProgramState();
-
+      renderCommand.GetShaderProgramState().AddTexture(pScene->GetShadowMap());
       pScene->GetRenderer()->DrawRenderCommand(renderCommand);
    }
 

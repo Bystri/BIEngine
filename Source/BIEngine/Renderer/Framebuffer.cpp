@@ -19,9 +19,14 @@ void Framebuffer::Bind() const
    glBindFramebuffer(GL_FRAMEBUFFER, m_framebufferId);
 }
 
-void Framebuffer::BindTexture() const
+void Framebuffer::BindColorTexture(int slotId) const
 {
-   m_pScreenTexture->Bind(0);
+   m_pColorTexture->Bind(slotId);
+}
+
+void Framebuffer::BindDepthTexture(int slotId) const
+{
+   m_pDepthTexture->Bind(slotId);
 }
 
 std::shared_ptr<Framebuffer> GetDefaultFramebuffer()
@@ -39,15 +44,18 @@ std::shared_ptr<Framebuffer> ConstructFramebuffer(int screenWidth, int screenHei
    glGenFramebuffers(1, &framebuffer->m_framebufferId);
    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->m_framebufferId);
 
-   std::shared_ptr<Texture2D> pScreenTexture = std::make_shared<Texture2D>();
-   pScreenTexture->Generate(screenWidth, screenHeight, nullptr);
-   framebuffer->m_pScreenTexture = pScreenTexture;
-   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebuffer->m_pScreenTexture->GetId(), 0);
+   framebuffer->m_pColorTexture = Texture2D::Create(screenWidth, screenHeight, Texture2D::Format::RGB, nullptr);
+   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebuffer->m_pColorTexture->GetId(), 0);
 
-   glGenRenderbuffers(1, &framebuffer->m_rbo);
-   glBindRenderbuffer(GL_RENDERBUFFER, framebuffer->m_rbo);
-   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, screenWidth, screenHeight);
-   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, framebuffer->m_rbo);
+   Texture2D::CreationParams depthTexCreationParams = Texture2D::CreationParams();
+   depthTexCreationParams.WrapS = Texture2D::TextureWrap::CLAMP_TO_BORDER;
+   depthTexCreationParams.WrapT = Texture2D::TextureWrap::CLAMP_TO_BORDER;
+   depthTexCreationParams.FilterMin = Texture2D::TextureFunction::NEAREST;
+   depthTexCreationParams.FilterMax = Texture2D::TextureFunction::NEAREST;
+   depthTexCreationParams.DataType = Texture2D::Type::FLOAT;
+
+   framebuffer->m_pDepthTexture = Texture2D::Create(screenWidth, screenHeight, Texture2D::Format::DEPTH_COMPONENT, nullptr, depthTexCreationParams);
+   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, framebuffer->m_pDepthTexture->GetId(), 0);
 
    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
       return nullptr;
@@ -65,11 +73,11 @@ std::shared_ptr<Framebuffer> ConstructMultisampleFramebuffer(int screenWidth, in
    glGenFramebuffers(1, &framebuffer->m_framebufferId);
    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->m_framebufferId);
 
-   std::shared_ptr<Texture2DMultisample> pScreenTexture = std::make_shared<Texture2DMultisample>();
-   pScreenTexture->SetInternalFormat(GL_RGB);
-   pScreenTexture->Generate(screenWidth, screenHeight, multisamplesCount);
-   framebuffer->m_pScreenTexture = pScreenTexture;
-   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, framebuffer->m_pScreenTexture->GetId(), 0);
+   framebuffer->m_pColorTexture = Texture2DMultisample::Create(screenWidth, screenHeight, Texture2D::Format::RGB, multisamplesCount);
+   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, framebuffer->m_pColorTexture->GetId(), 0);
+
+   framebuffer->m_pDepthTexture = Texture2DMultisample::Create(screenWidth, screenHeight, Texture2D::Format::DEPTH_COMPONENT, multisamplesCount);
+   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D_MULTISAMPLE, framebuffer->m_pDepthTexture->GetId(), 0);
 
    glGenRenderbuffers(1, &framebuffer->m_rbo);
    glBindRenderbuffer(GL_RENDERBUFFER, framebuffer->m_rbo);

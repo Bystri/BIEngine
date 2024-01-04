@@ -45,6 +45,10 @@ public:
    Renderer(const Renderer& orig) = delete;
    Renderer& operator=(const Renderer& rhs) = delete;
 
+   int GetScreenWidth() const { return m_screenWidth; }
+
+   int GetScreenHeight() const { return m_screenHeight; }
+
    bool Init(int screenWidth, int screenHeight, int MsaaSamples = 4);
 
    RenderDevice& GetRenderDevice() { return m_renderDevice; }
@@ -55,7 +59,7 @@ public:
    void Clear(RenderDevice::ClearFlag flags, const Color& color);
    void DrawRenderCommand(RenderCommand& renderCommand);
 
-private:
+public:
    int m_screenWidth;
    int m_screenHeight;
 
