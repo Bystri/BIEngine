@@ -8,7 +8,6 @@ out VertexData {
     vec2 texCoords;
 	vec3 fragPos;
 	vec3 normal;
-	vec4 fragPosLightSpace;
 } vs_out;
 
 #include effects/common/scene_uniforms.glsl
@@ -20,6 +19,5 @@ void main()
 	vs_out.texCoords = aTexCoord;
 	vs_out.fragPos = vec3(model * vec4(aPos, 1.0));
 	vs_out.normal = mat3(transpose(inverse(model))) * aNormal; 
-	vs_out.fragPosLightSpace = lightSpaceMatrix * vec4(vs_out.fragPos, 1.0);
 	gl_Position = projection * view * vec4(vs_out.fragPos, 1.0);
 }

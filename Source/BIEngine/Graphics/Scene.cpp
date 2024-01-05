@@ -26,36 +26,9 @@ void Scene::Init()
    shadowMapBuffer = ConstructFramebuffer(m_pRenderer->GetScreenWidth(), m_pRenderer->GetScreenHeight());
 }
 
-std::shared_ptr<Texture> Scene::GetShadowMap()
-{
-   return shadowMapBuffer->m_pDepthTexture;
-}
-
 int Scene::OnRender(const GameTimer& gt)
 {
    if (m_pRoot && m_pCamera) {
-
-      shadowMapBuffer->Bind();
-
-      static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
-      m_pRenderer->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
-
-      m_globalRenderBufferData.viewMat = glm::lookAt(glm::vec3(-2.0f, 25.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-      m_globalRenderBufferData.projMat = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 100.0f);
-      m_globalRenderBufferData.viewPos = glm::vec3(-2.0f, 25.0f, -1.0f);
-      m_globalRenderBufferData.totalTime = gt.TotalTime();
-      m_globalRenderBufferData.lightSpaceMatrix = m_globalRenderBufferData.projMat * m_globalRenderBufferData.viewMat;
-      m_pConstantsBuffer->SetBufferData(&m_globalRenderBufferData, 0, sizeof(m_globalRenderBufferData));
-
-      if (m_pRoot->PreRender(this)) {
-         m_pRoot->OnRender(this);
-         m_pRoot->RenderChildren(this);
-      }
-      m_pRoot->PostRender(this);
-
-      m_pRenderer->BeginFrame();
-      m_pRenderer->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
-
       m_globalRenderBufferData.viewMat = m_pCamera->GetViewMatrix();
       m_globalRenderBufferData.projMat = m_pCamera->GetProjMatrix();
       m_globalRenderBufferData.viewPos = m_pCamera->GetPosition();

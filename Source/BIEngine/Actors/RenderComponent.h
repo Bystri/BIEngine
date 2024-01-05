@@ -3,7 +3,6 @@
 #include "ActorComponent.h"
 
 #include "../Graphics/SpriteNode.h"
-#include "../Graphics/ModelNode.h"
 #include "../Graphics/LightReflectiveMaterial.h"
 #include "../Renderer/Color.h"
 

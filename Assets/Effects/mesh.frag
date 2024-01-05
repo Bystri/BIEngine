@@ -4,7 +4,6 @@ in VertexData {
     vec2 texCoords;
 	vec3 fragPos;
 	vec3 normal;
-	vec4 fragPosLightSpace;
 } fs_in;
 
 #include effects/common/lights.glsl
@@ -20,14 +19,14 @@ void main()
 	FragColor = vec4(0.0, 0.0, 0.0, 1.0);
 	
 	for(int i = 0; i < dirLightsNum; i++) {
-		FragColor += CalculateDirectionalLight(dirLights[i], norm, viewDir, fs_in.texCoords);
+		FragColor += CalculateDirectionalLight(i, norm, fs_in.fragPos, viewDir, fs_in.texCoords);
 	}
 	
 	for(int i = 0; i < pointLightsNum; i++) {
-		//FragColor += CalculatePointLight(pointLights[i], norm, fs_in.fragPos, viewDir, fs_in.texCoords);
+		FragColor += CalculatePointLight(pointLights[i], norm, fs_in.fragPos, viewDir, fs_in.texCoords);
 	}
 	
 	for(int i = 0; i < spotLightsNum; i++) {
-		//FragColor += CalculateSpotLight(spotLights[i], norm, fs_in.fragPos, viewDir, fs_in.texCoords);
+		FragColor += CalculateSpotLight(spotLights[i], norm, fs_in.fragPos, viewDir, fs_in.texCoords);
 	}
 }

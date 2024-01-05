@@ -4,8 +4,6 @@
 #include <memory>
 #include <stack>
 
-#include "SceneNodes.h"
-#include "LightNodes.h"
 #include "Skybox.h"
 #include "Camera.h"
 #include "../Renderer/Renderer.h"
@@ -41,8 +39,6 @@ public:
 
    std::shared_ptr<ISceneNode> FindActor(ActorId id);
 
-   std::shared_ptr<Texture> GetShadowMap();
-
    void SetCamera(std::shared_ptr<Camera> pCamera) { m_pCamera = pCamera; }
 
    const std::shared_ptr<Camera> GetCamera() const { return m_pCamera; }
@@ -66,7 +62,6 @@ private:
       glm::mat4 viewMat;
       glm::vec3 viewPos;
       float totalTime;
-      glm::mat4 lightSpaceMatrix;
    };
 
    GlobalRenderBufferData m_globalRenderBufferData;

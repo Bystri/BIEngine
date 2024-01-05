@@ -167,7 +167,7 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram shaderProgramPath="Effects/test_geom_mesh.sp"/>
+				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
 				<Material shininess="64.0" isDoubleSided="true" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>

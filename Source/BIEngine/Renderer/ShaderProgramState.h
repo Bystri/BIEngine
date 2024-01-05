@@ -25,6 +25,8 @@ public:
 
    void AddTexture(std::shared_ptr<Texture> pTexture);
 
+   std::size_t GetTexturesNum() const { return m_textures.size(); }
+
 private:
    std::shared_ptr<ShaderProgram> m_pShaderProgram;
 

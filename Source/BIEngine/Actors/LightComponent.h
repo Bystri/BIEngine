@@ -3,7 +3,6 @@
 #include "ActorComponent.h"
 
 #include "../Actors/RenderComponent.h"
-#include "../Graphics/LightNodes.h"
 
 namespace BIEngine {
 

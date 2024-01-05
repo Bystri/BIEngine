@@ -152,12 +152,10 @@
     <ClCompile Include="..\..\EventManager\EventManager.cpp" />
     <ClCompile Include="..\..\EventManager\Events.cpp" />
     <ClCompile Include="..\..\Graphics\Camera.cpp" />
-    <ClCompile Include="..\..\Graphics\LightNodes.cpp" />
     <ClCompile Include="..\..\Graphics\LightReflectiveMaterial.cpp" />
     <ClCompile Include="..\..\Graphics\Material.cpp" />
     <ClCompile Include="..\..\Graphics\Model.cpp" />
     <ClCompile Include="..\..\Graphics\ModelLoader.cpp" />
-    <ClCompile Include="..\..\Graphics\ModelNode.cpp" />
     <ClCompile Include="..\..\Graphics\Scene.cpp" />
     <ClCompile Include="..\..\Graphics\SceneNodes.cpp" />
     <ClCompile Include="..\..\Graphics\Skybox.cpp" />
@@ -225,12 +223,10 @@
     <ClInclude Include="..\..\EventManager\EventManager.h" />
     <ClInclude Include="..\..\EventManager\Events.h" />
     <ClInclude Include="..\..\Graphics\Camera.h" />
-    <ClInclude Include="..\..\Graphics\LightNodes.h" />
     <ClInclude Include="..\..\Graphics\LightReflectiveMaterial.h" />
     <ClInclude Include="..\..\Graphics\Material.h" />
     <ClInclude Include="..\..\Graphics\Model.h" />
     <ClInclude Include="..\..\Graphics\ModelLoader.h" />
-    <ClInclude Include="..\..\Graphics\ModelNode.h" />
     <ClInclude Include="..\..\Graphics\Scene.h" />
     <ClInclude Include="..\..\Graphics\SceneNodes.h" />
     <ClInclude Include="..\..\Graphics\Skybox.h" />
