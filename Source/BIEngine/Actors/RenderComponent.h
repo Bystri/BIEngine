@@ -93,8 +93,9 @@ protected:
 protected:
    std::shared_ptr<ModelNode> m_pModelNode; // Узел на сцене, который отвечает за отрисовку этого компонента
 
-   std::string m_diffuseMapPath;  // Сохраняем путь к текстуре, чтобы потом вставить его в XML, если понадобится
-   std::string m_specularMapPath; // Сохраняем путь к текстуре, чтобы потом вставить его в XML, если понадобится
+   std::string m_diffuseMapPath;
+   std::string m_specularMapPath;
+   std::string m_normalMapPath;
 
    float m_width;
    float m_height;

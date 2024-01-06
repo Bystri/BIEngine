@@ -129,7 +129,8 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
          return false;
       }
 
-      std::shared_ptr<Texture2D> pTexture = Texture2D::Create(imgData->GetWidth(), imgData->GetHeight(), Texture2D::Format::RGBA, imgData->GetData());
+      Texture2D::Format textureFormat = imgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
+      std::shared_ptr<Texture2D> pTexture = Texture2D::Create(imgData->GetWidth(), imgData->GetHeight(), textureFormat, imgData->GetData());
 
       std::shared_ptr<Sprite> pSprite = std::make_shared<Sprite>(pTexture);
       pSprite->SetColor(spriteColor);
@@ -214,12 +215,13 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
       auto diffuseMapImgData = std::static_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(m_diffuseMapPath)->GetExtra());
 
       if (diffuseMapImgData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + std::to_string(m_pOwner->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading diffuse map texture for Actor with id: " + std::to_string(m_pOwner->GetId()));
          m_pModelNode.reset();
          return false;
       }
 
-      std::shared_ptr<Texture2D> pDiffuseMapTexture = Texture2D::Create(diffuseMapImgData->GetWidth(), diffuseMapImgData->GetHeight(), Texture2D::Format::RGBA, diffuseMapImgData->GetData());
+      Texture2D::Format diffuseTexureFormat = diffuseMapImgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
+      std::shared_ptr<Texture2D> pDiffuseMapTexture = Texture2D::Create(diffuseMapImgData->GetWidth(), diffuseMapImgData->GetHeight(), diffuseTexureFormat, diffuseMapImgData->GetData());
       m_pLightReflectionMaterial->SetDiffuseMap(pDiffuseMapTexture);
 
       const char* specularMapPath;
@@ -228,19 +230,31 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
       auto specularMapImgData = std::static_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(m_specularMapPath)->GetExtra());
 
       if (specularMapImgData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + std::to_string(m_pOwner->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading specular map texture for Actor with id: " + std::to_string(m_pOwner->GetId()));
          m_pModelNode.reset();
          return false;
       }
 
-      std::shared_ptr<Texture2D> pSpecularMapTexture = Texture2D::Create(specularMapImgData->GetWidth(), specularMapImgData->GetHeight(), Texture2D::Format::RGBA, specularMapImgData->GetData());
+      Texture2D::Format specularTexureFormat = specularMapImgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
+      std::shared_ptr<Texture2D> pSpecularMapTexture = Texture2D::Create(specularMapImgData->GetWidth(), specularMapImgData->GetHeight(), specularTexureFormat, specularMapImgData->GetData());
       m_pLightReflectionMaterial->SetSpecularMap(pSpecularMapTexture);
+
+      const char* normalMapPath;
+      pMaterialElement->QueryStringAttribute("normalMapPath", &normalMapPath);
+      m_normalMapPath = normalMapPath;
+      auto normalMapImgData = std::static_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(m_normalMapPath)->GetExtra());
+
+      if (normalMapImgData == nullptr) {
+         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading normal map texture for Actor with id: " + std::to_string(m_pOwner->GetId()));
+         m_pModelNode.reset();
+         return false;
+      }
+
+      Texture2D::Format normalTexureFormat = normalMapImgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
+      std::shared_ptr<Texture2D> pNormalMapTexture = Texture2D::Create(normalMapImgData->GetWidth(), normalMapImgData->GetHeight(), normalTexureFormat, normalMapImgData->GetData());
+      m_pLightReflectionMaterial->SetNormalMap(pNormalMapTexture);
 
       std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 6u));
-
-
-      m_pLightReflectionMaterial->SetDiffuseMap(pDiffuseMapTexture);
-      m_pLightReflectionMaterial->SetSpecularMap(pSpecularMapTexture);
       std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, m_pLightReflectionMaterial);
 
 
@@ -267,6 +281,7 @@ tinyxml2::XMLElement* BoxRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDo
    pMaterialElement->SetAttribute("isDoubleSided", m_pLightReflectionMaterial->IsDoubleSided());
    pMaterialElement->SetAttribute("diffuseMapPath", m_diffuseMapPath.c_str());
    pMaterialElement->SetAttribute("specularMapPath", m_specularMapPath.c_str());
+   pMaterialElement->SetAttribute("normalMapPath", m_normalMapPath.c_str());
    pBaseElement->LinkEndChild(pMaterialElement);
 
    return pBaseElement;

@@ -7,34 +7,15 @@ LightReflectiveMaterial::LightReflectiveMaterial(std::shared_ptr<ShaderProgram> 
 {
 }
 
-void LightReflectiveMaterial::SetSpecularMap(std::shared_ptr<Texture2D> specularMap)
-{
-   m_specularMap = specularMap;
-}
-
-std::shared_ptr<Texture2D> LightReflectiveMaterial::GetSpecularMap() const
-{
-   return m_specularMap;
-}
-
-void LightReflectiveMaterial::SetShininess(float shininess)
-{
-   m_shininess = shininess;
-}
-
-float LightReflectiveMaterial::GetShininess() const
-{
-   return m_shininess;
-}
-
 ShaderProgramState LightReflectiveMaterial::ConstructShaderProgramState() const
 {
    ShaderProgramState shaderProgramState = Material::ConstructShaderProgramState();
    shaderProgramState.SetFloat("material.shininess", m_shininess);
    shaderProgramState.SetInteger("material.diffuse", 0);
    shaderProgramState.SetInteger("material.specular", 1);
-   shaderProgramState.SetInteger("shadowMap", 2);
+   shaderProgramState.SetInteger("material.normal", 2);
    shaderProgramState.AddTexture(m_specularMap);
+   shaderProgramState.AddTexture(m_normalMap);
 
    return shaderProgramState;
 }

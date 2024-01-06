@@ -30,6 +30,7 @@ bool ImageResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, s
    // Генерируем текстуру
    pExtra->m_width = width;
    pExtra->m_height = height;
+   pExtra->m_channelsNum = nrChannels;
    pExtra->m_pData = pData;
 
    pHandle->SetExtra(pExtra);

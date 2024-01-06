@@ -21,9 +21,12 @@ public:
 
    unsigned char* GetData() const { return m_pData; }
 
+   int GetChannelsNum() const { return m_channelsNum; }
+
 protected:
    int m_width;
    int m_height;
+   int m_channelsNum;
    unsigned char* m_pData;
 };
 
