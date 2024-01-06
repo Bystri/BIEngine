@@ -1,5 +1,7 @@
 ﻿#include "Scene.h"
 
+#include "../Utilities/DebugDraw.h"
+
 namespace BIEngine {
 
 Scene::Scene(std::shared_ptr<Renderer> pRenderer)
@@ -24,6 +26,8 @@ void Scene::Init()
    m_pConstantsBuffer->Init(sizeof(GlobalRenderBufferData), CONSTANTS_BUFFER_SCENE_GLOBALS_BINDING_POINT);
 
    shadowMapBuffer = ConstructFramebuffer(m_pRenderer->GetScreenWidth(), m_pRenderer->GetScreenHeight());
+
+   DebugDraw::Init();
 }
 
 int Scene::OnRender(const GameTimer& gt)
@@ -40,6 +44,8 @@ int Scene::OnRender(const GameTimer& gt)
          m_pRoot->RenderChildren(this);
       }
       m_pRoot->PostRender(this);
+
+      DebugDraw::Draw();
 
       if (m_pSkybox) {
          m_pSkybox->OnRender(this);

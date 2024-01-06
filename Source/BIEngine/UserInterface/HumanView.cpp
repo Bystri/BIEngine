@@ -6,7 +6,6 @@
 #include "../Graphics/SpriteNode.h"
 #include "../EngineCore/GameApp.h"
 #include "../Audio/irrKlangAudio.h"
-#include "../Utilities/DebugDraw.h"
 
 namespace BIEngine {
 
@@ -112,7 +111,6 @@ bool HumanView::Init()
    if (!m_pRenderer->Init(m_screenWidth, m_screenHeight)) {
       return false;
    }
-   DebugDraw::Init();
    // Создания сцены на основе отображения
    m_pScene = new Scene(m_pRenderer);
    m_pScene->Init();
@@ -146,7 +144,6 @@ void HumanView::OnUpdate(const GameTimer& gt)
 void HumanView::OnRender(const GameTimer& gt)
 {
    m_pScene->OnRender(gt);
-   DebugDraw::Draw();
    m_userInterface.OnRender(gt);
 }
 

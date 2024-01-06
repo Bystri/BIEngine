@@ -1,0 +1,13 @@
+<Actor name="point_trigger" resource="actors/point_trigger.xml">
+	
+	<TransformComponent>
+		<Position x="180.0" y="30.0" z="0"/>
+		<Rotation angle="0.0"/>
+		<Size w="75.0" h="20"/>
+	</TransformComponent>
+		
+	<PhysicsTriggerComponent>
+		<Scale w="360.0" h="5.0"/>
+    </PhysicsTriggerComponent>
+	
+</Actor>

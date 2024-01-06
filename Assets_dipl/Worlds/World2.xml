@@ -1,0 +1,33 @@
+<World>
+    <Actors>
+        <Actor name="background">
+            <SpriteRenderComponent>
+                <Sprite path="Sprites/background.png"/>
+                <Color r="1.000000" g="1.000000" b="1.000000"/>
+            </SpriteRenderComponent>
+            <TransformComponent>
+                <Position x="180.000000" y="320.000000"/>
+                <Size w="360.000000" h="640.000000"/>
+                <Rotation angle="0.000000"/>
+            </TransformComponent>
+        </Actor>
+        <Actor name="ball">
+            <PhysicsComponent>
+                <Shape>Circle</Shape>
+                <BodyType>Kinematic</BodyType>
+                <Density>air</Density>
+                <PhysicsMaterial>Normal</PhysicsMaterial>
+                <Scale w="25.000000" h="25.000000"/>
+            </PhysicsComponent>
+            <SpriteRenderComponent>
+                <Sprite path="Sprites/paddle.png"/>
+                <Color r="0.666667" g="0.666667" b="1.000000"/>
+            </SpriteRenderComponent>
+            <TransformComponent>
+                <Position x="155.000000" y="295.000000"/>
+                <Size w="1000.000000" h="50.000000"/>
+                <Rotation angle="0.000000"/>
+            </TransformComponent>
+        </Actor>
+    </Actors>
+</World>

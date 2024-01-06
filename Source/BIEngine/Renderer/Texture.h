@@ -56,6 +56,7 @@ public:
 
    enum class TextureWrap {
       CLAMP_TO_BORDER,
+      CLAMP_TO_EDGE,
       REPEAT
    };
 
@@ -115,6 +116,7 @@ public:
 
    enum class TextureWrap {
       CLAMP_TO_BORDER,
+      CLAMP_TO_EDGE,
       REPEAT
    };
 

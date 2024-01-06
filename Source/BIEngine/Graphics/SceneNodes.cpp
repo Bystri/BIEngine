@@ -201,15 +201,24 @@ public:
       glm::mat4 LightMatr;
    };
 
+   struct RenderPointLightShadowInfo {
+      std::shared_ptr<Framebuffer> pShadowMapBuffer;
+      glm::vec3 LightPos;
+   };
+
    ShadowManager()
-      : m_pDirLightShadowShader(nullptr),
+      : m_pDirLightShadowShader(nullptr), m_pPointLightShadowShader(nullptr),
         m_dirLights(), m_pointLights(), m_spotLights(),
         m_dirLightShadowInfos(),
         m_opaqueItems()
    {
-      const std::string commonPostProcessingShaderProgramPath = "effects/dirShadow.sp";
-      auto shaderPgrogramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPostProcessingShaderProgramPath)->GetExtra());
-      m_pDirLightShadowShader = shaderPgrogramData->GetShaderProgram();
+      const std::string commonDirShadowShaderProgramPath = "effects/dirShadow.sp";
+      auto dirShadowShaderProgram = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonDirShadowShaderProgramPath)->GetExtra());
+      m_pDirLightShadowShader = dirShadowShaderProgram->GetShaderProgram();
+
+      const std::string commonPointShadowShaderProgramPath = "effects/pointShadow.sp";
+      auto pointShadowShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPointShadowShaderProgramPath)->GetExtra());
+      m_pPointLightShadowShader = pointShadowShaderProgramData->GetShaderProgram();
 
       const int SHADOW_MAP_WIDTH = 1024;
       const int SHADOW_MAP_HEIGHT = 1024;
@@ -218,9 +227,47 @@ public:
          dirLightShadowInfo.pShadowMapBuffer = ConstructFramebuffer(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT);
          m_dirLightShadowInfos.push_back(dirLightShadowInfo);
       }
+
+      for (int i = 0; i < MAX_POINT_LIGHTS_NUM; ++i) {
+         std::array<unsigned char*, 6> data;
+         for (int j = 0; j < data.size(); ++j) {
+            data[j] = nullptr;
+         }
+
+         RenderPointLightShadowInfo pointLightShadowInfo;
+         pointLightShadowInfo.pShadowMapBuffer = ConstructFramebuffer(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT);
+
+         {
+            CubemapTexture::CreationParams params = CubemapTexture::CreationParams();
+            params.WrapS = CubemapTexture::TextureWrap::CLAMP_TO_EDGE;
+            params.WrapT = CubemapTexture::TextureWrap::CLAMP_TO_EDGE;
+            params.WrapR = CubemapTexture::TextureWrap::CLAMP_TO_EDGE;
+            params.FilterMin = CubemapTexture::TextureFunction::NEAREST;
+            params.FilterMax = CubemapTexture::TextureFunction::NEAREST;
+            params.DataType = CubemapTexture::Type::UNSIGNED_BYTE;
+            std::shared_ptr<CubemapTexture> pCubemapColorBuffer = CubemapTexture::Create(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT, Texture::Format::RGB, data, params);
+            pointLightShadowInfo.pShadowMapBuffer->SetColorBufferAttachment(pCubemapColorBuffer);
+         }
+
+         {
+            CubemapTexture::CreationParams params = CubemapTexture::CreationParams();
+            params.WrapS = CubemapTexture::TextureWrap::CLAMP_TO_EDGE;
+            params.WrapT = CubemapTexture::TextureWrap::CLAMP_TO_EDGE;
+            params.WrapR = CubemapTexture::TextureWrap::CLAMP_TO_EDGE;
+            params.FilterMin = CubemapTexture::TextureFunction::NEAREST;
+            params.FilterMax = CubemapTexture::TextureFunction::NEAREST;
+            params.DataType = CubemapTexture::Type::FLOAT;
+            std::shared_ptr<CubemapTexture> pCubemapDepthBuffer = CubemapTexture::Create(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT, Texture::Format::DEPTH_COMPONENT, data, params);
+            pointLightShadowInfo.pShadowMapBuffer->SetDepthBufferAttachment(pCubemapDepthBuffer);
+         }
+
+         m_pointLightShadowInfos.push_back(pointLightShadowInfo);
+      }
    }
 
    const std::vector<RenderDirLightShadowInfo> GetDirLightShadowInfos() const { return m_dirLightShadowInfos; }
+
+   const std::vector<RenderPointLightShadowInfo> GetPointLightShadowInfos() const { return m_pointLightShadowInfos; }
 
    void InsertDirectionalLightInfo(const DirectionalLightGlData& dirLight);
    void InsertPointLightInfo(const PointLightGlData& pointLight);
@@ -233,12 +280,14 @@ public:
 
 private:
    std::shared_ptr<ShaderProgram> m_pDirLightShadowShader;
+   std::shared_ptr<ShaderProgram> m_pPointLightShadowShader;
 
    std::vector<DirectionalLightGlData> m_dirLights;
    std::vector<PointLightGlData> m_pointLights;
    std::vector<SpotLightGlData> m_spotLights;
 
    std::vector<RenderDirLightShadowInfo> m_dirLightShadowInfos;
+   std::vector<RenderPointLightShadowInfo> m_pointLightShadowInfos;
 
    std::vector<OpaqueRenderItem> m_opaqueItems;
 };
@@ -282,7 +331,7 @@ void ShadowManager::ApplyShadowData(Scene* pScene)
 {
    m_pDirLightShadowShader->Use();
 
-   const glm::mat4 projMatr = glm::ortho(-20.0f, 20.0f, 20.0f, -20.0f, -15.0f, 100.0f);
+   const glm::mat4 dirProjMatr = glm::ortho(-20.0f, 20.0f, 20.0f, -20.0f, -15.0f, 100.0f);
 
    for (int i = 0; i < m_dirLights.size(); ++i) {
       RenderDirLightShadowInfo& dirLightShadowInfo = m_dirLightShadowInfos[i];
@@ -291,9 +340,48 @@ void ShadowManager::ApplyShadowData(Scene* pScene)
       static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
       pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
 
-      const glm::mat4 viewMatr = glm::lookAt(glm::normalize(-m_dirLights[i].direction) * 10.0f, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-      dirLightShadowInfo.LightMatr = projMatr * viewMatr;
+      const glm::mat4 viewMatr = glm::lookAt(glm::normalize(-m_dirLights[i].direction) * 20.0f, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+      dirLightShadowInfo.LightMatr = dirProjMatr * viewMatr;
       m_pDirLightShadowShader->SetMatrix4("lightSpaceMatrix", dirLightShadowInfo.LightMatr);
+
+      for (const auto& ritem : m_opaqueItems) {
+         RenderCommand renderCommand(ritem.pMesh, m_pDirLightShadowShader);
+         renderCommand.Transform = ritem.ModelTransform;
+         pScene->GetRenderer()->DrawRenderCommand(renderCommand);
+      }
+   }
+
+   m_pPointLightShadowShader->Use();
+
+   constexpr int SHADOW_MAP_WIDTH = 1024;
+   constexpr int SHADOW_MAP_HEIGHT = 1024;
+   constexpr float aspect = (float)SHADOW_MAP_WIDTH / (float)SHADOW_MAP_HEIGHT;
+   constexpr float near = 1.0f;
+   constexpr float far = 25.0f;
+   const glm::mat4 pointProjMatr = glm::perspective(glm::radians(90.0f), aspect, near, far);
+
+   for (int i = 0; i < m_pointLights.size(); ++i) {
+      const PointLightGlData& pointLight = m_pointLights[i];
+
+      std::vector<glm::mat4> shadowTransforms;
+      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
+      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
+      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
+
+      RenderPointLightShadowInfo& pointLightShadowInfo = m_pointLightShadowInfos[i];
+      pointLightShadowInfo.LightPos = pointLight.position;
+      pointLightShadowInfo.pShadowMapBuffer->Bind();
+
+      static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
+      pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
+
+      for (unsigned int i = 0; i < 6; ++i) {
+         m_pPointLightShadowShader->SetMatrix4("shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
+      }
+      m_pPointLightShadowShader->SetVector3f("lightPos", pointLight.position);
 
       for (const auto& ritem : m_opaqueItems) {
          RenderCommand renderCommand(ritem.pMesh, m_pDirLightShadowShader);
@@ -357,7 +445,15 @@ void OpaqueRenderItemManager::ApplyOpaqueItemsData(Scene* pScene)
          renderCommand.GetShaderProgramState().SetMatrix4("dirLightShadowInfos[" + std::to_string(i) + "].dirLightSpaceMatrix", dirLightShadowInfos[i].LightMatr);
          const int nextFreeTextureSlot = renderCommand.GetShaderProgramState().GetTexturesNum();
          renderCommand.GetShaderProgramState().SetInteger("dirLightShadowInfos[" + std::to_string(i) + "].shadowMap", nextFreeTextureSlot);
-         renderCommand.GetShaderProgramState().AddTexture(dirLightShadowInfos[i].pShadowMapBuffer->m_pDepthTexture);
+         renderCommand.GetShaderProgramState().AddTexture(dirLightShadowInfos[i].pShadowMapBuffer->GetDepthBufferAttachment());
+      }
+
+      const auto& pointLightShadowInfos = g_pShadowManager->GetPointLightShadowInfos();
+      for (int i = 0; i < pointLightShadowInfos.size(); ++i) {
+         renderCommand.GetShaderProgramState().SetVector3f("pointLightShadowInfos[" + std::to_string(i) + "].lightPos", pointLightShadowInfos[i].LightPos);
+         const int nextFreeTextureSlot = renderCommand.GetShaderProgramState().GetTexturesNum();
+         renderCommand.GetShaderProgramState().SetInteger("pointLightShadowInfos[" + std::to_string(i) + "].shadowMap", nextFreeTextureSlot);
+         renderCommand.GetShaderProgramState().AddTexture(pointLightShadowInfos[i].pShadowMapBuffer->GetDepthBufferAttachment());
       }
       pScene->GetRenderer()->DrawRenderCommand(renderCommand);
    }
@@ -507,8 +603,6 @@ bool RootNode::RenderChildren(Scene* pScene)
    pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
 
    g_pOpaqueRenderItemManager->ApplyOpaqueItemsData(pScene);
-
-   pScene->GetRenderer()->EndFrame();
 
    return true;
 }

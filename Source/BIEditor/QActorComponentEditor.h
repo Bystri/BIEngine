@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QLayout>
 #include <QComboBox>
+#include <QTreeWidget>
 
 #include <tinyxml2.h>
 
@@ -28,6 +29,8 @@ private:
 
     void AddElementLabel(QGridLayout* pComponentLayout, const QString& labelText);
     void AddNumEdit(QGridLayout* pComponentLayout, const QString& elementName, tinyxml2::XMLElement* pActorValues, QValidator* pValidator);
+    void AddScriptObject(QGridLayout* pComponentLayout, tinyxml2::XMLElement* pActorValues);
+    void AddScriptData(QGridLayout* pComponentLayout, tinyxml2::XMLElement* pActorValues);
     void AddVec2(QGridLayout* pComponentLayout, const QString& elementName, tinyxml2::XMLElement* pActorValues);
     void AddRGB(QGridLayout* pComponentLayout, const QString& elementName, tinyxml2::XMLElement* pActorValues);
     void AddFileElement(QGridLayout* pComponentLayout, const QString& elementName, tinyxml2::XMLElement* pActorValues);
@@ -42,6 +45,7 @@ private slots:
     void NumElementEdited(const QRealTimeLineEdit* sender, const QString& textValue);
     void ColorElementEdited(const QColorPicker* sender, const QColor& color);
     void PathElementEdited(const QFilePicker* sender, const QString& path);
+    void ScriptDataChanged(QTreeWidgetItem *item, int column);
 
 private:
     QString m_assetsDirectory;

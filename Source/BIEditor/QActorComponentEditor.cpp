@@ -4,6 +4,7 @@
 #include <QValidator>
 #include <QComboBox>
 #include <QMessageBox>
+#include <QTextEdit>
 #include <QLabel>
 
 #include "QBIEditor.h"
@@ -165,6 +166,14 @@ void QActorComponentEditor::AddComponentUI(QGridLayout* pComponentLayout, tinyxm
         {
             AddNumEdit(pComponentLayout, elementName, pActorValues, new QDoubleValidator());
         }
+        else if (elementType == "ScriptObject")
+        {
+            AddScriptObject(pComponentLayout, pActorValues);
+        }
+        else if (elementType == "ScriptData")
+        {
+            AddScriptData(pComponentLayout, pActorValues);
+        }
         else if (elementType == "Vec2")
         {
             AddVec2(pComponentLayout, elementName, pActorValues);
@@ -220,8 +229,6 @@ void QActorComponentEditor::AddNumEdit(QGridLayout* pComponentLayout, const QStr
     connect(pRTLineEdit, SIGNAL(procChangedValue(const QRealTimeLineEdit*, const QString&)), this, SLOT(NumElementEdited(const QRealTimeLineEdit*, const QString&)));
 }
 
-#include <QDebug>
-
 void QActorComponentEditor::NumElementEdited(const QRealTimeLineEdit* sender, const QString& textValue)
 {
     tinyxml2::XMLDocument changedActorParametrs;
@@ -238,9 +245,114 @@ void QActorComponentEditor::NumElementEdited(const QRealTimeLineEdit* sender, co
             {
                 tinyxml2::XMLElement* pComponentElement = pComponentNode->DeepClone(&changedActorParametrs)->ToElement();
 
-                //Меняем настройки и в облегченной копии, которая уйдет актера и в полной копии XML-описания актера
+                //Меняем настройки и в облегченной копии, которая уйдет актеру, и в полной копии XML-описания актера
                 pComponentElement->FirstChildElement(xmlPathElements[0].toStdString().c_str())->SetAttribute(xmlPathElements[1].toStdString().c_str(), textValue.toStdString().c_str());
                 pComponentNode->FirstChildElement(xmlPathElements[0].toStdString().c_str())->SetAttribute(xmlPathElements[1].toStdString().c_str(), textValue.toStdString().c_str());
+
+                pRoot->LinkEndChild(pComponentElement);
+                BIEngine::g_pApp->m_pGameLogic->ModifyActor(m_selectedActorId, pRoot);
+                return;
+            }
+        }
+    }
+}
+
+void QActorComponentEditor::AddScriptObject(QGridLayout *pComponentLayout, tinyxml2::XMLElement *pActorValues)
+{
+    QLabel *pConstructorLabel = new QLabel(m_pMainWidget);
+    pConstructorLabel->setText("constructor");
+    pComponentLayout->addWidget(pConstructorLabel, m_nComponents, 0);
+
+    const char* pConstructorValue = pActorValues->Attribute("constructor");
+    QTextEdit *pConstructorEdit = new QTextEdit(m_pMainWidget);
+    if (pConstructorValue)
+        pConstructorEdit->setText(pConstructorValue);
+
+    //Путь различает элементы ввода между собой и по нему мы потом понимает, какой именно параметр из всего XML-файла актера мы меняем
+    QString xmlConstructorParameterPath = pActorValues->Name();
+    xmlConstructorParameterPath += ".constructor";
+    pConstructorEdit->setAccessibleName(xmlConstructorParameterPath);
+
+    pComponentLayout->addWidget(pConstructorEdit, m_nComponents, 1);
+
+    //connect(pTextEdit, SIGNAL(procChangedValue(const QRealTimeLineEdit*, const QString&)), this, SLOT(NumElementEdited(const QRealTimeLineEdit*, const QString&)));
+
+
+    QLabel *pDestructorLabel = new QLabel(m_pMainWidget);
+    pDestructorLabel->setText("destructor");
+    pComponentLayout->addWidget(pDestructorLabel, m_nComponents, 2);
+
+    const char* pDestructorValue = pActorValues->Attribute("destructor");
+    QTextEdit *pDestructorEdit = new QTextEdit(m_pMainWidget);
+    if (pDestructorValue)
+        pDestructorEdit->setText(pDestructorValue);
+
+    //Путь различает элементы ввода между собой и по нему мы потом понимает, какой именно параметр из всего XML-файла актера мы меняем
+    QString xmlDestructorParameterPath = pActorValues->Name();
+    xmlDestructorParameterPath += ".destructor";
+    pDestructorEdit->setAccessibleName(xmlDestructorParameterPath);
+
+    pComponentLayout->addWidget(pDestructorEdit, m_nComponents, 3);
+
+    //connect(pTextEdit, SIGNAL(procChangedValue(const QRealTimeLineEdit*, const QString&)), this, SLOT(NumElementEdited(const QRealTimeLineEdit*, const QString&)));
+
+}
+
+void QActorComponentEditor::AddScriptData(QGridLayout *pComponentLayout, tinyxml2::XMLElement *pActorValues)
+{
+    QTreeWidget* pTreeWidget = new QTreeWidget(m_pMainWidget);
+
+    QList<QTreeWidgetItem *> items;
+    for (auto pAttribute = pActorValues->FirstAttribute(); pAttribute; pAttribute = pAttribute->Next())
+    {
+        QString name = pAttribute->Name();
+        QString value = pAttribute->Value();
+        QTreeWidgetItem* pTreeItem = new QTreeWidgetItem(static_cast<QTreeWidget *>(nullptr),  QStringList{name, value});
+        pTreeItem->setFlags(pTreeItem->flags() | Qt::ItemIsEditable);
+        items.append(pTreeItem);
+    }
+
+    pTreeWidget->setHeaderLabels(QStringList{QString("Variable Name"), QString("Value")});
+    pTreeWidget->insertTopLevelItems(0, items);
+
+    pComponentLayout->addWidget(pTreeWidget, m_nComponents, 0);
+
+    connect(pTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(ScriptDataChanged(QTreeWidgetItem*, int)));
+}
+
+void QActorComponentEditor::ScriptDataChanged(QTreeWidgetItem *item, int column)
+{
+    QTreeWidget *pTreeWidget = qobject_cast<QTreeWidget*>(QObject::sender());
+
+    tinyxml2::XMLDocument changedActorParametrs;
+    tinyxml2::XMLElement* pRoot = changedActorParametrs.NewElement("Actor");
+
+    QString senderXmlPathName = "ScriptData." + item->text(0);
+    auto xmlPathElements = senderXmlPathName.split(".");
+
+    for (tinyxml2::XMLElement* pComponentNode = m_selectedActorComponents.RootElement()->FirstChildElement(); pComponentNode; pComponentNode = pComponentNode->NextSiblingElement())
+    {
+        for (tinyxml2::XMLElement* pParameterNode = pComponentNode->FirstChildElement(); pParameterNode; pParameterNode = pParameterNode->NextSiblingElement())
+        {
+            if (pParameterNode->Name() == xmlPathElements[0])
+            {
+                for (auto pAttribute = pComponentNode->FirstChildElement(xmlPathElements[0].toStdString().c_str())->FirstAttribute(); pAttribute; )
+                {
+                    const char* name = pAttribute->Name();
+                    pAttribute = pAttribute->Next();
+                    pComponentNode->FirstChildElement(xmlPathElements[0].toStdString().c_str())->DeleteAttribute(name);
+                }
+
+                tinyxml2::XMLElement* pComponentElement = pComponentNode->DeepClone(&changedActorParametrs)->ToElement();
+
+                //Меняем настройки и в облегченной копии, которая уйдет актеру, и в полной копии XML-описания актера
+
+                QTreeWidgetItemIterator it(pTreeWidget);
+                while (*it) {
+                    pComponentElement->FirstChildElement(xmlPathElements[0].toStdString().c_str())->SetAttribute((*it)->text(0).toStdString().c_str(), (*it)->text(1).toStdString().c_str());
+                    pComponentNode->FirstChildElement(xmlPathElements[0].toStdString().c_str())->SetAttribute((*it)->text(0).toStdString().c_str(), (*it)->text(1).toStdString().c_str());
+                    ++it;
+                }
 
                 pRoot->LinkEndChild(pComponentElement);
                 BIEngine::g_pApp->m_pGameLogic->ModifyActor(m_selectedActorId, pRoot);

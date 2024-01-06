@@ -35,6 +35,8 @@ static unsigned int ConvertWrapToGl(Texture2D::TextureWrap wrap)
    switch (wrap) {
       case Texture2D::TextureWrap::CLAMP_TO_BORDER:
          return GL_CLAMP_TO_BORDER;
+      case Texture2D::TextureWrap::CLAMP_TO_EDGE:
+         return GL_CLAMP_TO_EDGE;
       case Texture2D::TextureWrap::REPEAT:
          return GL_REPEAT;
       default:
@@ -127,6 +129,8 @@ static unsigned int ConvertWrapToGl(CubemapTexture::TextureWrap wrap)
    switch (wrap) {
       case CubemapTexture::TextureWrap::CLAMP_TO_BORDER:
          return GL_CLAMP_TO_BORDER;
+      case CubemapTexture::TextureWrap::CLAMP_TO_EDGE:
+         return GL_CLAMP_TO_EDGE;
       case CubemapTexture::TextureWrap::REPEAT:
          return GL_REPEAT;
       default:
@@ -154,7 +158,7 @@ std::shared_ptr<CubemapTexture> CubemapTexture::Create(unsigned int width, unsig
    // Задаем параметры текстуры
    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, ConvertWrapToGl(params.WrapS));
    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, ConvertWrapToGl(params.WrapT));
-   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, ConvertWrapToGl(params.WrapR));
+   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, ConvertWrapToGl(params.WrapR));
    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST + static_cast<int>(params.FilterMin));
    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST + static_cast<int>(params.FilterMax));
 

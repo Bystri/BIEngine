@@ -19,14 +19,18 @@ void Framebuffer::Bind() const
    glBindFramebuffer(GL_FRAMEBUFFER, m_framebufferId);
 }
 
-void Framebuffer::BindColorTexture(int slotId) const
+void Framebuffer::SetColorBufferAttachment(std::shared_ptr<Texture> pColorAttachment)
 {
-   m_pColorTexture->Bind(slotId);
+   m_pColorTexture = pColorAttachment;
+   glBindFramebuffer(GL_FRAMEBUFFER, m_framebufferId);
+   glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_pColorTexture->GetId(), 0);
 }
 
-void Framebuffer::BindDepthTexture(int slotId) const
+void Framebuffer::SetDepthBufferAttachment(std::shared_ptr<Texture> pDepthAttachment)
 {
-   m_pDepthTexture->Bind(slotId);
+   m_pDepthTexture = pDepthAttachment;
+   glBindFramebuffer(GL_FRAMEBUFFER, m_framebufferId);
+   glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_pDepthTexture->GetId(), 0);
 }
 
 std::shared_ptr<Framebuffer> GetDefaultFramebuffer()

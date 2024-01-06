@@ -1,0 +1,22 @@
+<Actor name="sensor" resource="actors/sensor.xml">
+
+	<TransformComponent>
+		<Position x="0" y="0" z="-5"/>
+		<Size w="1.000000" h="1.000000"/>
+		<Rotation y="90.0"/>
+	</TransformComponent>
+	
+	<PhysicsComponent>
+        <Shape>Circle</Shape>
+		<BodyType>Kinematic</BodyType>
+        <Density>air</Density>
+        <PhysicsMaterial>Normal</PhysicsMaterial>
+		<Scale w="25.0" h="25.0"/>
+    </PhysicsComponent>
+	
+	<BoxRenderComponent>
+		<Texture path="Sprites/wall.png"/>
+		<Color r="1.000000" g="0" b="0.000000"/>
+	</BoxRenderComponent>
+	
+</Actor>

@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "../BIEngine/ResourceCache/ResCache.h"
-#include "../BIEngine/Graphics2D/SceneNodes.h"
+#include "../BIEngine/Graphics/SceneNodes.h"
 #include "../BIEngine/ResourceCache/XmlLoader.h"
 #include "../BIEngine/Actors/TransformComponent.h"
 #include "../BIEngine/Actors/PhysicsComponent.h"

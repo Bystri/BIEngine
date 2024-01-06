@@ -4,11 +4,11 @@
             <TransformComponent>
                 <Position x="-2" y="25" z="-1"/>
                 <Size w="1.000000" h="1.000000" d="1.0"/>
-				<Rotation x="2.000000" y="-25.000000" z="1.000000"/>
+				<Rotation x="0.000000" y="-1.000000" z="0.000000"/>
             </TransformComponent>
 			<DirectionalLightComponent>
-				<Ambient r="0.05" g="0.05" b="0.05"/>
-				<Diffuse r="0.25" g="0.25" b="0.05"/>
+				<Ambient r="0.00" g="0.00" b="0.00"/>
+				<Diffuse r="0.10" g="0.10" b="0.00"/>
 				<Specular r="0.5" g="0.5" b="0.5"/>
 			</DirectionalLightComponent>
         </Actor>
@@ -41,6 +41,44 @@
 				<Density>air</Density>
 				<PhysicsMaterial>Normal</PhysicsMaterial>
 				<Scale w="20.0" h="1.0" d="20.0"/>
+			</Physics3DComponent>
+        </Actor>
+		<Actor name="wall1">
+            <TransformComponent>
+                <Position x="10.5" y="15" z="0"/>
+                <Size w="1.000000" h="20.000000" d="20.0"/>
+				<Rotation x="0.000000" y="0.000000" z="0.000000"/>
+            </TransformComponent>
+			<BoxRenderComponent>
+				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
+				<Color r="0.000000" g="1.00" b="0.000000"/>
+			</BoxRenderComponent>
+			<Physics3DComponent>
+				<Shape>Box</Shape>
+				<BodyType>Kinematic</BodyType>
+				<Density>air</Density>
+				<PhysicsMaterial>Normal</PhysicsMaterial>
+				<Scale w="1.0" h="20.0" d="20.0"/>
+			</Physics3DComponent>
+        </Actor>
+		<Actor name="wall1">
+            <TransformComponent>
+                <Position x="0" y="15" z="-10.5"/>
+                <Size w="20.000000" h="20.000000" d="1.0"/>
+				<Rotation x="0.000000" y="0.000000" z="0.000000"/>
+            </TransformComponent>
+			<BoxRenderComponent>
+				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
+				<Color r="0.000000" g="1.00" b="0.000000"/>
+			</BoxRenderComponent>
+			<Physics3DComponent>
+				<Shape>Box</Shape>
+				<BodyType>Kinematic</BodyType>
+				<Density>air</Density>
+				<PhysicsMaterial>Normal</PhysicsMaterial>
+				<Scale w="20.0" h="20.0" d="1.0"/>
 			</Physics3DComponent>
         </Actor>
 		<Actor name="sensor9">
@@ -160,9 +198,33 @@
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
         </Actor>
+		<Actor name="pointLight">
+            <TransformComponent>
+                <Position x="5" y="10" z="0"/>
+                <Size w="1.000000" h="1.000000" d="1.0"/>
+				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
+            </TransformComponent>
+			<PointLightComponent>
+				<Ambient r="0.05" g="0.05" b="0.05"/>
+				<Diffuse r="0.1" g="1.0" b="0.1"/>
+				<Specular r="1.0" g="1.0" b="1.0"/>
+			</PointLightComponent>
+        </Actor>
+		<Actor name="pointLight2">
+            <TransformComponent>
+                <Position x="8" y="10" z="-3"/>
+                <Size w="1.000000" h="1.000000" d="1.0"/>
+				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
+            </TransformComponent>
+			<PointLightComponent>
+				<Ambient r="0.05" g="0.05" b="0.05"/>
+				<Diffuse r="0.1" g="0.0" b="1.1"/>
+				<Specular r="1.0" g="1.0" b="1.0"/>
+			</PointLightComponent>
+        </Actor>
 		<Actor name="sensor2">
             <TransformComponent>
-                <Position x="0" y="10" z="4"/>
+                <Position x="8" y="10" z="0"/>
                 <Size w="1.000000" h="1.000000" d="1.0"/>
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
@@ -171,11 +233,6 @@
 				<Material shininess="64.0" isDoubleSided="true" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
-			<PointLightComponent>
-				<Ambient r="0.05" g="0.05" b="0.05"/>
-				<Diffuse r="0.1" g="1.0" b="0.1"/>
-				<Specular r="1.0" g="1.0" b="1.0"/>
-			</PointLightComponent>
         </Actor>
 		<Actor name="sensor">
             <TransformComponent>

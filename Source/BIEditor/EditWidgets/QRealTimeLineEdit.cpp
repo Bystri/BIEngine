@@ -11,8 +11,13 @@ QRealTimeLineEdit::QRealTimeLineEdit(QWidget* parent)
 void QRealTimeLineEdit::numEdited(const QString& textValue)
 {
     const QValidator* pValidator = validator();
+
+    //Валидатор может изменить и input и pos, которые ему дают.
+    //Поэтому мы копируем нашу строку, чтобы валидот не изменял оригинал
     QString textCopy = textValue;
     int pos = 0;
-    if (pValidator == nullptr || (pValidator->validate(textCopy, pos) == QValidator::Acceptable))
+
+    QValidator::State validState = pValidator->validate(textCopy, pos);
+    if (pValidator == nullptr || (validState == QValidator::Acceptable))
         emit procChangedValue(this, textValue);
 }

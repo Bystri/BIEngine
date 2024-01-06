@@ -1,0 +1,34 @@
+<World>
+    <Actors>
+        <Actor name="camera">
+            <CameraComponent>
+				<Projection>Perspective</Projection>
+			</CameraComponent>
+            <TransformComponent>
+                <Position x="0" y="300" z="0"/>
+                <Rotation x="-90" y="90.0" z="-90"/>
+            </TransformComponent>
+        </Actor>
+		<!--<Actor name="ground">
+            <TransformComponent>
+                <Position x="0" y="5" z="0"/>
+                <Size w="500.000000" h="1.000000" d="500.0"/>
+				<Rotation x="0.000000" y="0.000000" z="0.000000"/>
+            </TransformComponent>
+			<BoxRenderComponent>
+				<Texture path="Sprites/wall.png"/>
+				<Color r="0.000000" g="1.00" b="0.000000"/>
+			</BoxRenderComponent>
+			<Physics3DComponent>
+				<Shape>Box</Shape>
+				<BodyType>Kinematic</BodyType>
+				<Density>air</Density>
+				<PhysicsMaterial>Normal</PhysicsMaterial>
+				<Scale w="100.0" h="1.0" d="100.0"/>
+			</Physics3DComponent>
+        </Actor>-->
+    </Actors>
+	
+	<!-- Данные скрипты исполняют перед (worldPreInit) и после (worldPostInit) загрузки мира -->
+    <Script preLoad="scripts/worldPreInit.py" postLoad="scripts/worldPostInit.py"/>
+</World>

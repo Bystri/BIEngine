@@ -2,7 +2,7 @@
 #define BIEDITORCONTROLLER_H
 
 #include "../BIEngine/UserInterface/InputDevices.h"
-#include "../BIEngine/Graphics2D/SceneNodes.h"
+#include "../BIEngine/Graphics/SceneNodes.h"
 #include "../BIEngine/Actors/Actor.h"
 
 class BIEditorController : public BIEngine::IPointerHandler, public BIEngine::IKeyboardHandler

@@ -36,3 +36,5 @@ HEADERS += \
     QActorComponentEditor.h \
     QBIEditor.h \
     QDisplayWidget.h
+
+DISTFILES +=

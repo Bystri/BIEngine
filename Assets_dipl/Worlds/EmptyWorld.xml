@@ -1,0 +1,21 @@
+<World>
+  
+    <!--Список актеров для загрузки-->
+
+    <Actors>
+		<Actor name="camera">
+				<TransformComponent>
+					<Position x="0" y="0"/>
+					<Rotation angle="0.0"/>
+					<Size w="360" h="640"/>
+				</TransformComponent>
+				
+				<CameraComponent/>
+		</Actor>
+    </Actors>
+
+
+    <!-- Данные скрипты исполняют перед (worldPreInit) и после (worldPostInit) загрузки мира -->
+    <Script preLoad="scripts/worldPreInit.lua" postLoad="scripts/worldPostInit.lua"/>
+
+</World>
