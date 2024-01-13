@@ -13,7 +13,7 @@ class PostProcessor {
 public:
    PostProcessor(std::shared_ptr<ShaderProgram> pShaderProgram, std::shared_ptr<Framebuffer> pFramebuffer);
 
-   void Use(std::shared_ptr<Framebuffer> pBufferToProcess);
+   void Use(std::shared_ptr<Texture2D> pTextureToProcess);
 
 private:
    const Mesh m_screenOutputMesh;

@@ -17,15 +17,11 @@ Scene::~Scene()
    EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Scene::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
 }
 
-std::shared_ptr<Framebuffer> shadowMapBuffer;
-
 void Scene::Init()
 {
    constexpr int CONSTANTS_BUFFER_SCENE_GLOBALS_BINDING_POINT = 0;
 
    m_pConstantsBuffer->Init(sizeof(GlobalRenderBufferData), CONSTANTS_BUFFER_SCENE_GLOBALS_BINDING_POINT);
-
-   shadowMapBuffer = ConstructFramebuffer(m_pRenderer->GetScreenWidth(), m_pRenderer->GetScreenHeight());
 
    DebugDraw::Init();
 }

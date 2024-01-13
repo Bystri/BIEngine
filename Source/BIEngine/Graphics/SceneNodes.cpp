@@ -1,9 +1,10 @@
 ﻿#include "SceneNodes.h"
 
 #include "Model.h"
-#include "../Graphics/Scene.h"
+#include "Scene.h"
 #include "../EngineCore/GameApp.h"
 #include "../Renderer/ShadersLoader.h"
+#include "../Renderer/Renderbuffer.h"
 
 namespace BIEngine {
 
@@ -198,11 +199,15 @@ public:
 
    struct RenderDirLightShadowInfo {
       std::shared_ptr<Framebuffer> pShadowMapBuffer;
+      std::shared_ptr<Renderbuffer> pColorRenderbuffer;
+      std::shared_ptr<Texture2D> pDepthBuffer;
       glm::mat4 LightMatr;
    };
 
    struct RenderPointLightShadowInfo {
       std::shared_ptr<Framebuffer> pShadowMapBuffer;
+      std::shared_ptr<CubemapTexture> pColorBuffer;
+      std::shared_ptr<CubemapTexture> pDepthBuffer;
       glm::vec3 LightPos;
    };
 
@@ -224,7 +229,23 @@ public:
       const int SHADOW_MAP_HEIGHT = 1024;
       for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS_NUM; ++i) {
          RenderDirLightShadowInfo dirLightShadowInfo;
-         dirLightShadowInfo.pShadowMapBuffer = ConstructFramebuffer(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT);
+         dirLightShadowInfo.pShadowMapBuffer = std::make_shared<Framebuffer>();
+
+         {
+            dirLightShadowInfo.pColorRenderbuffer = Renderbuffer::Create(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT, Renderbuffer::Format::RGB8);
+            FramebufferAttach(dirLightShadowInfo.pShadowMapBuffer, FramebufferAttachementType::COLOR, dirLightShadowInfo.pColorRenderbuffer);
+         }
+         {
+            Texture2D::CreationParams params = Texture2D::CreationParams();
+            params.WrapS = Texture2D::TextureWrap::CLAMP_TO_BORDER;
+            params.WrapT = Texture2D::TextureWrap::CLAMP_TO_BORDER;
+            params.FilterMin = Texture2D::TextureFunction::NEAREST;
+            params.FilterMax = Texture2D::TextureFunction::NEAREST;
+            params.DataType = Texture2D::Type::UNSIGNED_BYTE;
+            dirLightShadowInfo.pDepthBuffer = Texture2D::Create(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT, Texture::Format::DEPTH_COMPONENT, nullptr, params);
+            FramebufferAttach(dirLightShadowInfo.pShadowMapBuffer, FramebufferAttachementType::DEPTH, dirLightShadowInfo.pDepthBuffer);
+         }
+
          m_dirLightShadowInfos.push_back(dirLightShadowInfo);
       }
 
@@ -235,7 +256,7 @@ public:
          }
 
          RenderPointLightShadowInfo pointLightShadowInfo;
-         pointLightShadowInfo.pShadowMapBuffer = ConstructFramebuffer(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT);
+         pointLightShadowInfo.pShadowMapBuffer = std::make_shared<Framebuffer>();
 
          {
             CubemapTexture::CreationParams params = CubemapTexture::CreationParams();
@@ -245,8 +266,8 @@ public:
             params.FilterMin = CubemapTexture::TextureFunction::NEAREST;
             params.FilterMax = CubemapTexture::TextureFunction::NEAREST;
             params.DataType = CubemapTexture::Type::UNSIGNED_BYTE;
-            std::shared_ptr<CubemapTexture> pCubemapColorBuffer = CubemapTexture::Create(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT, Texture::Format::RGB, data, params);
-            pointLightShadowInfo.pShadowMapBuffer->SetColorBufferAttachment(pCubemapColorBuffer);
+            pointLightShadowInfo.pColorBuffer = CubemapTexture::Create(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT, Texture::Format::RGB, data, params);
+            FramebufferAttach(pointLightShadowInfo.pShadowMapBuffer, FramebufferAttachementType::COLOR, pointLightShadowInfo.pColorBuffer);
          }
 
          {
@@ -257,8 +278,8 @@ public:
             params.FilterMin = CubemapTexture::TextureFunction::NEAREST;
             params.FilterMax = CubemapTexture::TextureFunction::NEAREST;
             params.DataType = CubemapTexture::Type::FLOAT;
-            std::shared_ptr<CubemapTexture> pCubemapDepthBuffer = CubemapTexture::Create(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT, Texture::Format::DEPTH_COMPONENT, data, params);
-            pointLightShadowInfo.pShadowMapBuffer->SetDepthBufferAttachment(pCubemapDepthBuffer);
+            pointLightShadowInfo.pDepthBuffer = CubemapTexture::Create(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT, Texture::Format::DEPTH_COMPONENT, data, params);
+            FramebufferAttach(pointLightShadowInfo.pShadowMapBuffer, FramebufferAttachementType::DEPTH, pointLightShadowInfo.pDepthBuffer);
          }
 
          m_pointLightShadowInfos.push_back(pointLightShadowInfo);
@@ -445,7 +466,7 @@ void OpaqueRenderItemManager::ApplyOpaqueItemsData(Scene* pScene)
          renderCommand.GetShaderProgramState().SetMatrix4("dirLightShadowInfos[" + std::to_string(i) + "].dirLightSpaceMatrix", dirLightShadowInfos[i].LightMatr);
          const int nextFreeTextureSlot = renderCommand.GetShaderProgramState().GetTexturesNum();
          renderCommand.GetShaderProgramState().SetInteger("dirLightShadowInfos[" + std::to_string(i) + "].shadowMap", nextFreeTextureSlot);
-         renderCommand.GetShaderProgramState().AddTexture(dirLightShadowInfos[i].pShadowMapBuffer->GetDepthBufferAttachment());
+         renderCommand.GetShaderProgramState().AddTexture(dirLightShadowInfos[i].pDepthBuffer);
       }
 
       const auto& pointLightShadowInfos = g_pShadowManager->GetPointLightShadowInfos();
@@ -453,7 +474,7 @@ void OpaqueRenderItemManager::ApplyOpaqueItemsData(Scene* pScene)
          renderCommand.GetShaderProgramState().SetVector3f("pointLightShadowInfos[" + std::to_string(i) + "].lightPos", pointLightShadowInfos[i].LightPos);
          const int nextFreeTextureSlot = renderCommand.GetShaderProgramState().GetTexturesNum();
          renderCommand.GetShaderProgramState().SetInteger("pointLightShadowInfos[" + std::to_string(i) + "].shadowMap", nextFreeTextureSlot);
-         renderCommand.GetShaderProgramState().AddTexture(pointLightShadowInfos[i].pShadowMapBuffer->GetDepthBufferAttachment());
+         renderCommand.GetShaderProgramState().AddTexture(pointLightShadowInfos[i].pDepthBuffer);
       }
       pScene->GetRenderer()->DrawRenderCommand(renderCommand);
    }

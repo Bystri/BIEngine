@@ -37,6 +37,7 @@ private:
 };
 
 class PostProcessor;
+class Renderbuffer;
 
 // Отвечает за отрисвоку спрайтов
 class Renderer {
@@ -66,7 +67,12 @@ public:
    RenderDevice m_renderDevice;
 
    std::shared_ptr<Framebuffer> m_multisamplingFramebuffer;
+   std::shared_ptr<Texture2DMultisample> m_colorMultisampleBuffer;
+   std::shared_ptr<Renderbuffer> m_depthMultisampleRenderuffer;
+
    std::shared_ptr<Framebuffer> m_intermediateFramebuffer;
+   std::shared_ptr<Texture2D> m_colorIntermediateBuffer;
+   std::shared_ptr<Renderbuffer> m_depthIntermediateRenderuffer;
 
    std::shared_ptr<PostProcessor> m_pDefaultPostProcessor;
 };

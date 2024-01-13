@@ -249,6 +249,9 @@
     <ClCompile Include="..\..\Renderer\MeshGeometryGenerator.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Renderer\Renderbuffer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -480,6 +483,9 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Renderer\MeshGeometryGenerator.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\Renderbuffer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>

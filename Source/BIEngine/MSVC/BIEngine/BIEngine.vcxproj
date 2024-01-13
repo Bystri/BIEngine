@@ -175,6 +175,7 @@
     <ClCompile Include="..\..\Renderer\Mesh.cpp" />
     <ClCompile Include="..\..\Renderer\MeshGeometryGenerator.cpp" />
     <ClCompile Include="..\..\Renderer\PostProcessor.cpp" />
+    <ClCompile Include="..\..\Renderer\Renderbuffer.cpp" />
     <ClCompile Include="..\..\Renderer\RenderDevice.cpp" />
     <ClCompile Include="..\..\Renderer\Renderer.cpp" />
     <ClCompile Include="..\..\Renderer\RenderState.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="..\..\Renderer\Mesh.h" />
     <ClInclude Include="..\..\Renderer\MeshGeometryGenerator.h" />
     <ClInclude Include="..\..\Renderer\PostProcessor.h" />
+    <ClInclude Include="..\..\Renderer\Renderbuffer.h" />
     <ClInclude Include="..\..\Renderer\RenderDevice.h" />
     <ClInclude Include="..\..\Renderer\Renderer.h" />
     <ClInclude Include="..\..\Renderer\RenderState.h" />
