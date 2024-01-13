@@ -108,8 +108,10 @@ struct SpotLightGlData {
 };
 
 constexpr int MAX_DIRECTIONAL_LIGHTS_NUM = 1;
-constexpr int MAX_POINT_LIGHTS_NUM = 16;
-constexpr int MAX_SPOT_LIGHTS_NUM = 12;
+constexpr int MAX_POINT_LIGHTS_NUM = 1;
+constexpr int MAX_SPOT_LIGHTS_NUM = 1;
+constexpr int SHADOW_MAP_WIDTH = 1024;
+constexpr int SHADOW_MAP_HEIGHT = 1024;
 
 struct LightUniformBufferData {
    int32_t DirectionalLightNum;
@@ -225,8 +227,6 @@ public:
       auto pointShadowShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPointShadowShaderProgramPath)->GetExtra());
       m_pPointLightShadowShader = pointShadowShaderProgramData->GetShaderProgram();
 
-      const int SHADOW_MAP_WIDTH = 1024;
-      const int SHADOW_MAP_HEIGHT = 1024;
       for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS_NUM; ++i) {
          RenderDirLightShadowInfo dirLightShadowInfo;
          dirLightShadowInfo.pShadowMapBuffer = std::make_shared<Framebuffer>();
@@ -356,7 +356,9 @@ void ShadowManager::ApplyShadowData(Scene* pScene)
 
    for (int i = 0; i < m_dirLights.size(); ++i) {
       RenderDirLightShadowInfo& dirLightShadowInfo = m_dirLightShadowInfos[i];
+
       dirLightShadowInfo.pShadowMapBuffer->Bind();
+      glViewport(0, 0, m_dirLightShadowInfos[i].pDepthBuffer->GetWidth(), m_dirLightShadowInfos[i].pDepthBuffer->GetHeight());
 
       static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
       pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
@@ -374,8 +376,6 @@ void ShadowManager::ApplyShadowData(Scene* pScene)
 
    m_pPointLightShadowShader->Use();
 
-   constexpr int SHADOW_MAP_WIDTH = 1024;
-   constexpr int SHADOW_MAP_HEIGHT = 1024;
    constexpr float aspect = (float)SHADOW_MAP_WIDTH / (float)SHADOW_MAP_HEIGHT;
    constexpr float near = 1.0f;
    constexpr float far = 25.0f;
@@ -395,7 +395,7 @@ void ShadowManager::ApplyShadowData(Scene* pScene)
       RenderPointLightShadowInfo& pointLightShadowInfo = m_pointLightShadowInfos[i];
       pointLightShadowInfo.LightPos = pointLight.position;
       pointLightShadowInfo.pShadowMapBuffer->Bind();
-
+      glViewport(0, 0, pointLightShadowInfo.pDepthBuffer->GetWidth(), pointLightShadowInfo.pDepthBuffer->GetHeight());
       static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
       pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
 
@@ -405,7 +405,7 @@ void ShadowManager::ApplyShadowData(Scene* pScene)
       m_pPointLightShadowShader->SetVector3f("lightPos", pointLight.position);
 
       for (const auto& ritem : m_opaqueItems) {
-         RenderCommand renderCommand(ritem.pMesh, m_pDirLightShadowShader);
+         RenderCommand renderCommand(ritem.pMesh, m_pPointLightShadowShader);
          renderCommand.Transform = ritem.ModelTransform;
          pScene->GetRenderer()->DrawRenderCommand(renderCommand);
       }
@@ -620,6 +620,7 @@ bool RootNode::RenderChildren(Scene* pScene)
    g_pShadowManager->ApplyShadowData(pScene);
 
    pScene->GetRenderer()->BeginFrame();
+   glViewport(0, 0, pScene->GetRenderer()->GetScreenWidth(), pScene->GetRenderer()->GetScreenHeight());
    static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
    pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
 

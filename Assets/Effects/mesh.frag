@@ -14,7 +14,7 @@ out vec4 FragColor;
 void main()
 {
 	vec3 norm = texture(material.normal, fs_in.texCoords).rgb;
-	norm = norm * 2.0 - 1.0;
+	norm = normalize(norm * 2.0 - 1.0);
 	norm = fs_in.normalTransform * norm;
 	norm = normalize(norm);
 	

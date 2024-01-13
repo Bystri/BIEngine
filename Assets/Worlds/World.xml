@@ -4,11 +4,11 @@
             <TransformComponent>
                 <Position x="-2" y="25" z="-1"/>
                 <Size w="1.000000" h="1.000000" d="1.0"/>
-				<Rotation x="2.000000" y="-25.000000" z="1.000000"/>
+				<Rotation x="-0.0797" y="-0.996" z="-0.0398"/>
             </TransformComponent>
 			<DirectionalLightComponent>
-				<Ambient r="0.00" g="0.00" b="0.00"/>
-				<Diffuse r="0.10" g="0.10" b="0.00"/>
+				<Ambient r="0.05" g="0.05" b="0.05"/>
+				<Diffuse r="0.3" g="0.3" b="0.00"/>
 				<Specular r="0.5" g="0.5" b="0.5"/>
 			</DirectionalLightComponent>
         </Actor>
@@ -207,18 +207,6 @@
 			<PointLightComponent>
 				<Ambient r="0.05" g="0.05" b="0.05"/>
 				<Diffuse r="0.1" g="1.0" b="0.1"/>
-				<Specular r="1.0" g="1.0" b="1.0"/>
-			</PointLightComponent>
-        </Actor>
-		<Actor name="pointLight2">
-            <TransformComponent>
-                <Position x="8" y="10" z="-3"/>
-                <Size w="1.000000" h="1.000000" d="1.0"/>
-				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
-            </TransformComponent>
-			<PointLightComponent>
-				<Ambient r="0.05" g="0.05" b="0.05"/>
-				<Diffuse r="0.1" g="0.0" b="1.1"/>
 				<Specular r="1.0" g="1.0" b="1.0"/>
 			</PointLightComponent>
         </Actor>

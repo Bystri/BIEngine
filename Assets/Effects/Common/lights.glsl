@@ -41,8 +41,8 @@ struct Material {
 }; 
 
 #define MAX_DIRECTIONAL_LIGHTS_NUM 1
-#define MAX_POINT_LIGHTS_NUM 16
-#define MAX_SPOT_LIGHTS_NUM 12
+#define MAX_POINT_LIGHTS_NUM 1
+#define MAX_SPOT_LIGHTS_NUM 1
 
 layout (std140, binding = 1) uniform Light
 {
@@ -80,8 +80,8 @@ float CalculateDirShadow(int index, vec3 normal, vec3 lightDir, vec4 fragPosLigh
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
     // check whether current frag pos is in shadow
-	float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);  
-    
+	float bias = max(0.015 * (1.0 - dot(normal, lightDir)), 0.0015);  
+
 	float shadow = 0.0;
 	vec2 texelSize = 1.0 / textureSize(dirLightShadowInfos[index].shadowMap, 0);
 	for(int x = -1; x <= 1; ++x)
@@ -112,7 +112,7 @@ float CalculatePointShadow(int index, vec3 fragPos)
     // now get current linear depth as the length between the fragment and light position
     float currentDepth = length(fragToLight);
     // now test for shadows
-	
+
 	vec3 sampleOffsetDirections[20] = vec3[]
 	(
 	   vec3( 1,  1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1,  1,  1), 
