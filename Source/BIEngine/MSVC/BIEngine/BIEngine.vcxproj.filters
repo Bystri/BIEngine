@@ -55,6 +55,9 @@
     <Filter Include="Renderer">
       <UniqueIdentifier>{7d2b02d0-d82c-41e6-8559-6eacebae44fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{6ba80c61-7982-4d51-ab8d-20599fc658df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCore\GameApp.cpp">
@@ -487,6 +490,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Renderer\Renderbuffer.h">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Math\Vector.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
