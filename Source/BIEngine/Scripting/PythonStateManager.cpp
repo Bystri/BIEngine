@@ -65,7 +65,7 @@ bool PythonStateManager::Init()
 
    // TODO: HACK FOR LOADING SCRIPTS. Replace to resource manager
    py::list sysPaths = py::module::import("sys").attr("path");
-   sysPaths.append("C:/BystrovI/Projects/BIEngine/Assets/Scripts");
+   sysPaths.append("../Assets/Scripts");
    py::module::import("sys").attr("path") = sysPaths;
 
    return true;

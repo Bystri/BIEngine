@@ -46,7 +46,7 @@ public:
 protected:
    virtual void OnInit() { m_state = State::RUNNING; }
 
-   virtual void OnUpdate(const GameTimer& gt) = 0;
+   virtual void OnUpdate(float dt) = 0;
 
    virtual void OnSuccess() {}
 

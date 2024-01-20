@@ -56,7 +56,7 @@ unsigned int ProcessManager::UpdateProcesses(const GameTimer& gt)
       }
 
       if (pCurrProcess->GetState() == Process::State::RUNNING) {
-         pCurrProcess->OnUpdate(gt);
+         pCurrProcess->OnUpdate(gt.DeltaTime());
       }
 
       if (pCurrProcess->IsDead()) {
@@ -89,10 +89,9 @@ unsigned int ProcessManager::UpdateProcesses(const GameTimer& gt)
          }
 
          it = m_processList.erase(it);
-         --it;
+      } else {
+         ++it;
       }
-
-      ++it;
    }
 
    return ((successCount << 16) | failCount);

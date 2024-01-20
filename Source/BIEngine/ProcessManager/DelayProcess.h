@@ -6,14 +6,14 @@ namespace BIEngine {
 
 class DelayProcess : public Process {
 public:
-   explicit DelayProcess(double timeToDelay);
+   explicit DelayProcess(float timeToDelay);
 
 protected:
-   virtual void OnUpdate(const GameTimer& gt) override;
+   virtual void OnUpdate(float dt) override;
 
 protected:
-   double m_timeToDelay;
-   double m_timeDelayedSoFar;
+   float m_timeToDelay;
+   float m_timeDelayedSoFar;
 };
 
 } // namespace BIEngine

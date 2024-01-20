@@ -4,14 +4,14 @@
 
 namespace BIEngine {
 
-DelayProcess::DelayProcess(double timeToDelay)
+DelayProcess::DelayProcess(float timeToDelay)
    : m_timeToDelay(timeToDelay), m_timeDelayedSoFar(0)
 {
 }
 
-void DelayProcess::OnUpdate(const GameTimer& gt)
+void DelayProcess::OnUpdate(float dt)
 {
-   m_timeDelayedSoFar += gt.DeltaTime();
+   m_timeDelayedSoFar += dt;
    if (m_timeDelayedSoFar >= m_timeToDelay) {
       Succeed();
    }

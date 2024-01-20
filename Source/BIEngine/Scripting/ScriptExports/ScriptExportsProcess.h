@@ -3,20 +3,29 @@
 #include <memory>
 
 #include "../../ProcessManager/ProcessManager.h"
+#include "../../Utilities/Logger.h"
 
 namespace BIEngine {
 
 class PyProcess : public Process {
 public:
-   virtual void OnUpdate(const GameTimer& gt) override
+   virtual void OnUpdate(float dt) override
    {
-      /* PYBIND11_OVERRIDE_PURE will acquire the GIL before accessing Python state */
-      PYBIND11_OVERRIDE_PURE(
-         void,          /* Return type */
-         PyProcess,     /* Parent class */
-         OnUpdate,      /* Name of function */
-         gt.DeltaTime() /* Argument(s) */
-      );
+      try {
+         /* PYBIND11_OVERRIDE_PURE will acquire the GIL before accessing Python state */
+         PYBIND11_OVERRIDE_PURE(
+            void,      /* Return type */
+            PyProcess, /* Parent class */
+            OnUpdate,  /* Name of function */
+            dt         /* Argument(s) */
+         );
+      } catch (std::runtime_error er) {
+         Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error: ") + er.what());
+         Fail();
+      } catch (pybind11::error_already_set er) {
+         Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error: ") + er.what());
+         Fail();
+      }
    }
 };
 
