@@ -27,7 +27,7 @@ void main()
 	}
 	
 	for(int i = 0; i < pointLightsNum; i++) {
-		FragColor += CalculatePointLight(i, pointLights[i], norm, fs_in.fragPos, viewDir, fs_in.texCoords);
+		FragColor += CalculatePointLight(i, norm, fs_in.fragPos, viewDir, fs_in.texCoords);
 	}
 	
 	for(int i = 0; i < spotLightsNum; i++) {

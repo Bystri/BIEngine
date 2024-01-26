@@ -157,26 +157,20 @@ public:
 
    virtual ~DirectionalLightNode() {}
 
-   void SetAmbient(const glm::vec3& ambient) { m_ambient = ambient; }
+   void SetIrradiance(float irradiance) { m_irradiance = irradiance; }
 
-   const glm::vec3& GetAmbient() const { return m_ambient; }
+   float GetIrradiance() const { return m_irradiance; }
 
-   void SetDiffuse(const glm::vec3& diffuse) { m_diffuse = diffuse; }
+   void SetColor(const glm::vec3& color) { m_color = color; }
 
-   const glm::vec3& GetDiffuse() const { return m_diffuse; }
-
-   void SetSpecular(const glm::vec3& specular) { m_specular = specular; }
-
-   const glm::vec3& GetSpecular() const { return m_specular; }
+   const glm::vec3& GetColor() const { return m_color; }
 
    virtual bool OnRender(Scene* pScene);
 
 private:
    glm::vec3 direction = glm::vec3(0.0, -1.0f, 0.0f);
-
-   glm::vec3 m_ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-   glm::vec3 m_diffuse = glm::vec3(0.4f, 0.4f, 0.4f);
-   glm::vec3 m_specular = glm::vec3(0.5f, 0.5f, 0.5f);
+   float m_irradiance = 1.0f;
+   glm::vec3 m_color = glm::vec3(0.75f, 0.75f, 0.05f);
 };
 
 class PointLightNode : public SceneNode {
@@ -188,41 +182,19 @@ public:
 
    virtual ~PointLightNode() {}
 
-   void SetAttenuationParams(float constant, float linear, float quadratic)
-   {
-      m_attenuationConstant = constant;
-      m_attenuationLinear = linear;
-      m_attenuationQuadratic = quadratic;
-   }
+   void SetIntensity(float intensity) { m_intensity = intensity; }
 
-   float GetAttenuationConstant() const { return m_attenuationConstant; }
+   float GetIntensity() const { return m_intensity; }
 
-   float GetAttenuationLinear() const { return m_attenuationLinear; }
+   void SetColor(const glm::vec3& color) { m_color = color; }
 
-   float GetAttenuationQuadratic() const { return m_attenuationQuadratic; }
-
-   void SetAmbient(const glm::vec3& ambient) { m_ambient = ambient; }
-
-   const glm::vec3& GetAmbient() const { return m_ambient; }
-
-   void SetDiffuse(const glm::vec3& diffuse) { m_diffuse = diffuse; }
-
-   const glm::vec3& GetDiffuse() const { return m_diffuse; }
-
-   void SetSpecular(const glm::vec3& specular) { m_specular = specular; }
-
-   const glm::vec3& GetSpecular() const { return m_specular; }
+   const glm::vec3& GetColor() const { return m_color; }
 
    virtual bool OnRender(Scene* pScene);
 
 private:
-   float m_attenuationConstant = 1.0f;
-   float m_attenuationLinear = 0.09f;
-   float m_attenuationQuadratic = 0.032f;
-
-   glm::vec3 m_ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-   glm::vec3 m_diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
-   glm::vec3 m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
+   float m_intensity = 1.0f;
+   glm::vec3 m_color = glm::vec3(0.75f, 0.75f, 0.05f);
 };
 
 class SpotLightNode : public SceneNode {

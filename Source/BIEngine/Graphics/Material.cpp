@@ -9,21 +9,12 @@ Material::Material(std::shared_ptr<ShaderProgram> pShader)
 {
 }
 
-void Material::SetColor(const Color& color)
-{
-   m_color = color;
-}
-
-bool Material::HasAlpha() const
-{
-   return std::abs(m_color.a - ALPHA_OPAQUE) > std::numeric_limits<float>::epsilon();
-}
-
 ShaderProgramState Material::ConstructShaderProgramState() const
 {
    ShaderProgramState shaderProgramState(m_pShaderProgram);
-   shaderProgramState.SetVector3f("color", m_color);
-   shaderProgramState.AddTexture(m_diffuseMap);
+   shaderProgramState.SetVector3f("material.color", m_color);
+   shaderProgramState.SetInteger("material.diffuse", 0);
+   shaderProgramState.AddTexture(0, m_diffuseMap);
 
    return shaderProgramState;
 }

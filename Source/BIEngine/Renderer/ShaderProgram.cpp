@@ -40,6 +40,14 @@ ShaderProgram& ShaderProgram::operator=(ShaderProgram&& orig)
 // Делает шейдер активным
 ShaderProgram& ShaderProgram::Use()
 {
+   static int currentId = -1;
+
+   if (currentId == m_id) {
+      return *this;
+   }
+
+   currentId = m_id;
+
    glUseProgram(m_id);
    return *this;
 }

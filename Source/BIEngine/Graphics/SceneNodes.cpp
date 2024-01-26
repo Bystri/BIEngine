@@ -1,5 +1,7 @@
 ﻿#include "SceneNodes.h"
 
+#include <algorithm>
+
 #include "Model.h"
 #include "Scene.h"
 #include "../EngineCore/GameApp.h"
@@ -74,23 +76,15 @@ void SceneNode::RemoveChild(ActorId id)
 
 struct DirectionalLightGlData {
    glm::vec3 direction = glm::vec3(0.0, -1.0f, 0.0f);
-   uint32_t pan1;
-   glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f);
+   float irradiance = 1.0f;
+   glm::vec3 color = glm::vec3(0.75f, 0.75f, 0.05f);
    uint32_t pan2;
-   glm::vec3 diffuse = glm::vec3(0.4f, 0.4f, 0.4f);
-   uint32_t pan3;
-   glm::vec3 specular = glm::vec3(0.5f, 0.5f, 0.5f);
-   uint32_t pan4;
 };
 
 struct PointLightGlData {
    glm::vec3 position = glm::vec3(0.0f);
-   float constant = 1.0f;
-   glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-   float linear = 0.09f;
-   glm::vec3 diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
-   float quadratic = 0.032f;
-   glm::vec3 specular = glm::vec3(1.0f, 1.0f, 1.0f);
+   float intensity = 1.0f;
+   glm::vec3 color = glm::vec3(0.75f, 0.75f, 0.05f);
    uint32_t pan7;
 };
 
@@ -452,8 +446,36 @@ void OpaqueRenderItemManager::InsertOpaqueRenderItem(const OpaqueRenderItem& opa
 
 void OpaqueRenderItemManager::ApplyOpaqueItemsData(Scene* pScene)
 {
+   std::sort(m_opaqueItems.begin(), m_opaqueItems.end(), [](const OpaqueRenderItem& l, const OpaqueRenderItem& r) { return l.pMaterial->GetShaderProgramPtr()->GetId() < r.pMaterial->GetShaderProgramPtr()->GetId(); });
+
+   int lastShaderId = -1;
+
    for (const auto& ritem : m_opaqueItems) {
-      RenderCommand renderCommand(ritem.pMesh, ritem.pMaterial->GetShaderProgramPtr());
+
+      auto currentShader = ritem.pMaterial->GetShaderProgramPtr();
+
+      if (lastShaderId != currentShader->GetId()) {
+
+         currentShader->Use();
+
+         const auto& dirLightShadowInfos = g_pShadowManager->GetDirLightShadowInfos();
+         for (int i = 0; i < dirLightShadowInfos.size(); ++i) {
+            currentShader->SetMatrix4("dirLightShadowInfos[" + std::to_string(i) + "].dirLightSpaceMatrix", dirLightShadowInfos[i].LightMatr);
+            currentShader->SetInteger("dirLightShadowInfos[" + std::to_string(i) + "].shadowMap", 10 + i);
+            dirLightShadowInfos[i].pDepthBuffer->Bind(10 + i);
+         }
+
+         const auto& pointLightShadowInfos = g_pShadowManager->GetPointLightShadowInfos();
+         for (int i = 0; i < pointLightShadowInfos.size(); ++i) {
+            currentShader->SetVector3f("pointLightShadowInfos[" + std::to_string(i) + "].lightPos", pointLightShadowInfos[i].LightPos);
+            currentShader->SetInteger("pointLightShadowInfos[" + std::to_string(i) + "].shadowMap", 10 + i + dirLightShadowInfos.size());
+            pointLightShadowInfos[i].pDepthBuffer->Bind(10 + i + dirLightShadowInfos.size());
+         }
+
+         lastShaderId = currentShader->GetId();
+      }
+
+      RenderCommand renderCommand(ritem.pMesh, currentShader);
 
       renderCommand.RenderState = ritem.pMaterial->GetRenderState();
       renderCommand.RenderState.Cull = !ritem.pMaterial->IsDoubleSided();
@@ -461,21 +483,6 @@ void OpaqueRenderItemManager::ApplyOpaqueItemsData(Scene* pScene)
 
       renderCommand.GetShaderProgramState() = ritem.pMaterial->ConstructShaderProgramState();
 
-      const auto& dirLightShadowInfos = g_pShadowManager->GetDirLightShadowInfos();
-      for (int i = 0; i < dirLightShadowInfos.size(); ++i) {
-         renderCommand.GetShaderProgramState().SetMatrix4("dirLightShadowInfos[" + std::to_string(i) + "].dirLightSpaceMatrix", dirLightShadowInfos[i].LightMatr);
-         const int nextFreeTextureSlot = renderCommand.GetShaderProgramState().GetTexturesNum();
-         renderCommand.GetShaderProgramState().SetInteger("dirLightShadowInfos[" + std::to_string(i) + "].shadowMap", nextFreeTextureSlot);
-         renderCommand.GetShaderProgramState().AddTexture(dirLightShadowInfos[i].pDepthBuffer);
-      }
-
-      const auto& pointLightShadowInfos = g_pShadowManager->GetPointLightShadowInfos();
-      for (int i = 0; i < pointLightShadowInfos.size(); ++i) {
-         renderCommand.GetShaderProgramState().SetVector3f("pointLightShadowInfos[" + std::to_string(i) + "].lightPos", pointLightShadowInfos[i].LightPos);
-         const int nextFreeTextureSlot = renderCommand.GetShaderProgramState().GetTexturesNum();
-         renderCommand.GetShaderProgramState().SetInteger("pointLightShadowInfos[" + std::to_string(i) + "].shadowMap", nextFreeTextureSlot);
-         renderCommand.GetShaderProgramState().AddTexture(pointLightShadowInfos[i].pDepthBuffer);
-      }
       pScene->GetRenderer()->DrawRenderCommand(renderCommand);
    }
 }
@@ -491,9 +498,8 @@ bool DirectionalLightNode::OnRender(Scene* pScene)
 {
    DirectionalLightGlData dirLight;
    dirLight.direction = GetRotation();
-   dirLight.ambient = GetAmbient();
-   dirLight.diffuse = GetDiffuse();
-   dirLight.specular = GetSpecular();
+   dirLight.color = GetColor();
+   dirLight.irradiance = GetIrradiance();
 
    g_pLightManager->InsertDirectionalLightInfo(dirLight);
    g_pShadowManager->InsertDirectionalLightInfo(dirLight);
@@ -505,13 +511,8 @@ bool PointLightNode::OnRender(Scene* pScene)
    PointLightGlData pointLight;
    pointLight.position = GetPosition();
 
-   pointLight.constant = m_attenuationConstant;
-   pointLight.linear = m_attenuationLinear;
-   pointLight.quadratic = m_attenuationQuadratic;
-
-   pointLight.ambient = GetAmbient();
-   pointLight.diffuse = GetDiffuse();
-   pointLight.specular = GetSpecular();
+   pointLight.intensity = m_intensity;
+   pointLight.color = m_color;
 
    g_pLightManager->InsertPointLightInfo(pointLight);
    g_pShadowManager->InsertPointLightInfo(pointLight);

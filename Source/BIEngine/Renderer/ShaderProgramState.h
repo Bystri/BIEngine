@@ -23,7 +23,7 @@ public:
    void SetVector3f(const std::string& name, const glm::vec3& vec);
    void SetMatrix4(const std::string& name, const glm::mat4& mat);
 
-   void AddTexture(std::shared_ptr<Texture> pTexture);
+   void AddTexture(int slotId, std::shared_ptr<Texture> pTexture);
 
    std::size_t GetTexturesNum() const { return m_textures.size(); }
 
@@ -36,7 +36,7 @@ private:
    std::unordered_map<std::string, glm::vec3> m_uniformVectors;
    std::unordered_map<std::string, glm::mat4> m_uniformMatricies;
 
-   std::vector<std::shared_ptr<Texture>> m_textures;
+   std::vector<std::pair<int, std::shared_ptr<Texture>>> m_textures;
 };
 
 } // namespace BIEngine

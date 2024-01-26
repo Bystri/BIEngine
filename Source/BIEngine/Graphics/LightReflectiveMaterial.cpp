@@ -11,11 +11,10 @@ ShaderProgramState LightReflectiveMaterial::ConstructShaderProgramState() const
 {
    ShaderProgramState shaderProgramState = Material::ConstructShaderProgramState();
    shaderProgramState.SetFloat("material.shininess", m_shininess);
-   shaderProgramState.SetInteger("material.diffuse", 0);
    shaderProgramState.SetInteger("material.specular", 1);
    shaderProgramState.SetInteger("material.normal", 2);
-   shaderProgramState.AddTexture(m_specularMap);
-   shaderProgramState.AddTexture(m_normalMap);
+   shaderProgramState.AddTexture(1, m_specularMap);
+   shaderProgramState.AddTexture(2, m_normalMap);
 
    return shaderProgramState;
 }

@@ -7,9 +7,8 @@
 				<Rotation x="-0.0797" y="-0.996" z="-0.0398"/>
             </TransformComponent>
 			<DirectionalLightComponent>
-				<Ambient r="0.05" g="0.05" b="0.05"/>
-				<Diffuse r="0.3" g="0.3" b="0.00"/>
-				<Specular r="0.5" g="0.5" b="0.5"/>
+				<Color r="0.15" g="0.05" b="0.3"/>
+				<Irradiance i="1.0"/>
 			</DirectionalLightComponent>
         </Actor>
 		<Actor name="SpotLight">
@@ -193,8 +192,8 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
-				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<ShaderProgram shaderProgramPath="Effects/test_geom_mesh.sp"/>
+				<Material shininess="64.0" isDoubleSided="true" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
         </Actor>
@@ -205,9 +204,8 @@
 				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
             </TransformComponent>
 			<PointLightComponent>
-				<Ambient r="0.05" g="0.05" b="0.05"/>
-				<Diffuse r="0.1" g="1.0" b="0.1"/>
-				<Specular r="1.0" g="1.0" b="1.0"/>
+				<Color r="0.75" g="0.75" b="0.05"/>
+				<Intensity i="100.0"/>
 			</PointLightComponent>
         </Actor>
 		<Actor name="sensor2">

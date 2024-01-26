@@ -14,7 +14,7 @@ class Material {
 public:
    explicit Material(std::shared_ptr<ShaderProgram> pShader);
 
-   void SetColor(const Color& color);
+   void SetColor(const Color& color) { m_color = color; }
 
    const Color& GetColor() { return m_color; }
 
@@ -26,7 +26,7 @@ public:
 
    std::shared_ptr<Texture2D> GetDiffuseMap() const { return m_diffuseMap; }
 
-   bool HasAlpha() const;
+   bool HasAlpha() const { return std::abs(m_color.a - ALPHA_OPAQUE) > std::numeric_limits<float>::epsilon(); }
 
    RenderState& GetRenderState() { return m_renderState; }
 

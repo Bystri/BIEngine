@@ -32,8 +32,8 @@ void ShaderProgramState::Use()
    }
 
    for (int i = 0; i < m_textures.size(); ++i) {
-      if (m_textures[i]) {
-         m_textures[i]->Bind(i);
+      if (m_textures[i].second) {
+         m_textures[i].second->Bind(m_textures[i].first);
       }
    }
 }
@@ -68,9 +68,9 @@ void ShaderProgramState::SetMatrix4(const std::string& name, const glm::mat4& ma
    m_uniformMatricies[name] = mat;
 }
 
-void ShaderProgramState::AddTexture(std::shared_ptr<Texture> pTexture)
+void ShaderProgramState::AddTexture(int slotId, std::shared_ptr<Texture> pTexture)
 {
-   m_textures.push_back(pTexture);
+   m_textures.push_back({slotId, pTexture});
 }
 
 } // namespace BIEngine

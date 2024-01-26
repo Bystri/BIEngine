@@ -27,41 +27,23 @@ bool DirectionalLightComponent::Init(tinyxml2::XMLElement* pData)
       m_pDirectionalLightNode = std::make_shared<DirectionalLightNode>(m_pOwner->GetId());
    }
 
-   tinyxml2::XMLElement* pAmbientElement = pData->FirstChildElement("Ambient");
-   if (pAmbientElement) {
+   tinyxml2::XMLElement* pColorElement = pData->FirstChildElement("Color");
+   if (pColorElement) {
       float r = 0;
       float g = 0;
       float b = 0;
-      pAmbientElement->QueryFloatAttribute("r", &r);
-      pAmbientElement->QueryFloatAttribute("g", &g);
-      pAmbientElement->QueryFloatAttribute("b", &b);
-      m_pDirectionalLightNode->SetAmbient(glm::vec3(r, g, b));
+      pColorElement->QueryFloatAttribute("r", &r);
+      pColorElement->QueryFloatAttribute("g", &g);
+      pColorElement->QueryFloatAttribute("b", &b);
+      m_pDirectionalLightNode->SetColor(glm::vec3(r, g, b));
    }
 
-
-   tinyxml2::XMLElement* pDiffuseElement = pData->FirstChildElement("Diffuse");
-   if (pDiffuseElement) {
-      float r = 0;
-      float g = 0;
-      float b = 0;
-      pDiffuseElement->QueryFloatAttribute("r", &r);
-      pDiffuseElement->QueryFloatAttribute("g", &g);
-      pDiffuseElement->QueryFloatAttribute("b", &b);
-      m_pDirectionalLightNode->SetDiffuse(glm::vec3(r, g, b));
+   tinyxml2::XMLElement* pIrradianceElement = pData->FirstChildElement("Irradiance");
+   if (pIrradianceElement) {
+      float i = 0;
+      pIrradianceElement->QueryFloatAttribute("i", &i);
+      m_pDirectionalLightNode->SetIrradiance(i);
    }
-
-
-   tinyxml2::XMLElement* pSpecularElement = pData->FirstChildElement("Specular");
-   if (pSpecularElement) {
-      float r = 0;
-      float g = 0;
-      float b = 0;
-      pSpecularElement->QueryFloatAttribute("r", &r);
-      pSpecularElement->QueryFloatAttribute("g", &g);
-      pSpecularElement->QueryFloatAttribute("b", &b);
-      m_pDirectionalLightNode->SetSpecular(glm::vec3(r, g, b));
-   }
-
 
    return true;
 }
@@ -70,23 +52,16 @@ tinyxml2::XMLElement* DirectionalLightComponent::GenerateXml(tinyxml2::XMLDocume
 {
    tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
 
-   tinyxml2::XMLElement* pAmbientElement = pDoc->NewElement("Ambient");
-   pAmbientElement->SetAttribute("r", m_pDirectionalLightNode->GetAmbient().r);
-   pAmbientElement->SetAttribute("g", m_pDirectionalLightNode->GetAmbient().g);
-   pAmbientElement->SetAttribute("b", m_pDirectionalLightNode->GetAmbient().b);
-   pBaseElement->LinkEndChild(pAmbientElement);
+   tinyxml2::XMLElement* pColorElement = pDoc->NewElement("Ambient");
+   const glm::vec3& color = m_pDirectionalLightNode->GetColor();
+   pColorElement->SetAttribute("r", color.r);
+   pColorElement->SetAttribute("g", color.g);
+   pColorElement->SetAttribute("b", color.b);
+   pBaseElement->LinkEndChild(pColorElement);
 
-   tinyxml2::XMLElement* pDiffuseElement = pDoc->NewElement("Diffuse");
-   pDiffuseElement->SetAttribute("r", m_pDirectionalLightNode->GetDiffuse().r);
-   pDiffuseElement->SetAttribute("g", m_pDirectionalLightNode->GetDiffuse().g);
-   pDiffuseElement->SetAttribute("b", m_pDirectionalLightNode->GetDiffuse().b);
-   pBaseElement->LinkEndChild(pDiffuseElement);
-
-   tinyxml2::XMLElement* pSpecularElement = pDoc->NewElement("Specular");
-   pSpecularElement->SetAttribute("r", m_pDirectionalLightNode->GetSpecular().r);
-   pSpecularElement->SetAttribute("g", m_pDirectionalLightNode->GetSpecular().g);
-   pSpecularElement->SetAttribute("b", m_pDirectionalLightNode->GetSpecular().b);
-   pBaseElement->LinkEndChild(pAmbientElement);
+   tinyxml2::XMLElement* pIrradianceElement = pDoc->NewElement("Irradiance");
+   pIrradianceElement->SetAttribute("i", m_pDirectionalLightNode->GetIrradiance());
+   pBaseElement->LinkEndChild(pIrradianceElement);
 
    return pBaseElement;
 }
@@ -120,50 +95,23 @@ bool PointLightComponent::Init(tinyxml2::XMLElement* pData)
       m_pPointLightNode = std::make_shared<PointLightNode>(m_pOwner->GetId());
    }
 
-   tinyxml2::XMLElement* pAmbientElement = pData->FirstChildElement("Ambient");
-   if (pAmbientElement) {
+   tinyxml2::XMLElement* pColorElement = pData->FirstChildElement("Color");
+   if (pColorElement) {
       float r = 0;
       float g = 0;
       float b = 0;
-      pAmbientElement->QueryFloatAttribute("r", &r);
-      pAmbientElement->QueryFloatAttribute("g", &g);
-      pAmbientElement->QueryFloatAttribute("b", &b);
-      m_pPointLightNode->SetAmbient(glm::vec3(r, g, b));
+      pColorElement->QueryFloatAttribute("r", &r);
+      pColorElement->QueryFloatAttribute("g", &g);
+      pColorElement->QueryFloatAttribute("b", &b);
+      m_pPointLightNode->SetColor(glm::vec3(r, g, b));
    }
 
 
-   tinyxml2::XMLElement* pDiffuseElement = pData->FirstChildElement("Diffuse");
-   if (pDiffuseElement) {
-      float r = 0;
-      float g = 0;
-      float b = 0;
-      pDiffuseElement->QueryFloatAttribute("r", &r);
-      pDiffuseElement->QueryFloatAttribute("g", &g);
-      pDiffuseElement->QueryFloatAttribute("b", &b);
-      m_pPointLightNode->SetDiffuse(glm::vec3(r, g, b));
-   }
-
-
-   tinyxml2::XMLElement* pSpecularElement = pData->FirstChildElement("Specular");
-   if (pSpecularElement) {
-      float r = 0;
-      float g = 0;
-      float b = 0;
-      pSpecularElement->QueryFloatAttribute("r", &r);
-      pSpecularElement->QueryFloatAttribute("g", &g);
-      pSpecularElement->QueryFloatAttribute("b", &b);
-      m_pPointLightNode->SetSpecular(glm::vec3(r, g, b));
-   }
-
-   tinyxml2::XMLElement* pAttenuationElement = pData->FirstChildElement("Attenuation");
-   if (pAttenuationElement) {
-      float constant = 0;
-      float linear = 0;
-      float quadratic = 0;
-      pAttenuationElement->QueryFloatAttribute("constant", &constant);
-      pAttenuationElement->QueryFloatAttribute("linear", &linear);
-      pAttenuationElement->QueryFloatAttribute("quadratic", &quadratic);
-      m_pPointLightNode->SetAttenuationParams(constant, linear, quadratic);
+   tinyxml2::XMLElement* pIntensityEelemnt = pData->FirstChildElement("Intensity");
+   if (pIntensityEelemnt) {
+      float intensity = 0;
+      pIntensityEelemnt->QueryFloatAttribute("i", &intensity);
+      m_pPointLightNode->SetIntensity(intensity);
    }
 
    return true;
@@ -173,29 +121,16 @@ tinyxml2::XMLElement* PointLightComponent::GenerateXml(tinyxml2::XMLDocument* pD
 {
    tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
 
-   tinyxml2::XMLElement* pAmbientElement = pDoc->NewElement("Ambient");
-   pAmbientElement->SetAttribute("r", m_pPointLightNode->GetAmbient().r);
-   pAmbientElement->SetAttribute("g", m_pPointLightNode->GetAmbient().g);
-   pAmbientElement->SetAttribute("b", m_pPointLightNode->GetAmbient().b);
-   pBaseElement->LinkEndChild(pAmbientElement);
+   tinyxml2::XMLElement* pColorElement = pDoc->NewElement("Color");
+   const glm::vec3& color = m_pPointLightNode->GetColor();
+   pColorElement->SetAttribute("r", color.r);
+   pColorElement->SetAttribute("g", color.g);
+   pColorElement->SetAttribute("b", color.b);
+   pBaseElement->LinkEndChild(pColorElement);
 
-   tinyxml2::XMLElement* pDiffuseElement = pDoc->NewElement("Diffuse");
-   pDiffuseElement->SetAttribute("r", m_pPointLightNode->GetDiffuse().r);
-   pDiffuseElement->SetAttribute("g", m_pPointLightNode->GetDiffuse().g);
-   pDiffuseElement->SetAttribute("b", m_pPointLightNode->GetDiffuse().b);
-   pBaseElement->LinkEndChild(pDiffuseElement);
-
-   tinyxml2::XMLElement* pSpecularElement = pDoc->NewElement("Specular");
-   pSpecularElement->SetAttribute("r", m_pPointLightNode->GetSpecular().r);
-   pSpecularElement->SetAttribute("g", m_pPointLightNode->GetSpecular().g);
-   pSpecularElement->SetAttribute("b", m_pPointLightNode->GetSpecular().b);
-   pBaseElement->LinkEndChild(pAmbientElement);
-
-   tinyxml2::XMLElement* pAttenuationElement = pDoc->NewElement("Attenuation");
-   pAttenuationElement->SetAttribute("constant", m_pPointLightNode->GetAttenuationConstant());
-   pAttenuationElement->SetAttribute("linear", m_pPointLightNode->GetAttenuationLinear());
-   pAttenuationElement->SetAttribute("quadratic", m_pPointLightNode->GetAttenuationQuadratic());
-   pBaseElement->LinkEndChild(pAttenuationElement);
+   tinyxml2::XMLElement* pIntensityElement = pDoc->NewElement("Intensity");
+   pIntensityElement->SetAttribute("i", m_pPointLightNode->GetIntensity());
+   pBaseElement->LinkEndChild(pIntensityElement);
 
    return pBaseElement;
 }
