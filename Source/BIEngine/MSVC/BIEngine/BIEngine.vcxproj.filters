@@ -58,6 +58,12 @@
     <Filter Include="Math">
       <UniqueIdentifier>{6ba80c61-7982-4d51-ab8d-20599fc658df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rdParty\imgui">
+      <UniqueIdentifier>{eb7d285a-6dc0-4f6d-9947-3b48e0e4a774}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\imgui\backend">
+      <UniqueIdentifier>{b331d76d-6e3c-4f5c-b4a3-fdde51713faf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCore\GameApp.cpp">
@@ -254,6 +260,27 @@
     </ClCompile>
     <ClCompile Include="..\..\Renderer\Renderbuffer.cpp">
       <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\imgui\imgui.cpp">
+      <Filter>3rdParty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\imgui\imgui_demo.cpp">
+      <Filter>3rdParty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\imgui\imgui_draw.cpp">
+      <Filter>3rdParty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\imgui\imgui_tables.cpp">
+      <Filter>3rdParty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\imgui\imgui_widgets.cpp">
+      <Filter>3rdParty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\imgui\backends\imgui_impl_opengl3.cpp">
+      <Filter>3rdParty\imgui\backend</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdParty\imgui\backends\imgui_impl_glfw.cpp">
+      <Filter>3rdParty\imgui\backend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -493,6 +520,33 @@
     </ClInclude>
     <ClInclude Include="..\..\Math\Vector.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\imgui\imconfig.h">
+      <Filter>3rdParty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\imgui\imgui.h">
+      <Filter>3rdParty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\imgui\imgui_internal.h">
+      <Filter>3rdParty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\imgui\imstb_rectpack.h">
+      <Filter>3rdParty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\imgui\imstb_textedit.h">
+      <Filter>3rdParty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\imgui\imstb_truetype.h">
+      <Filter>3rdParty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\imgui\backends\imgui_impl_opengl3.h">
+      <Filter>3rdParty\imgui\backend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\imgui\backends\imgui_impl_opengl3_loader.h">
+      <Filter>3rdParty\imgui\backend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdParty\imgui\backends\imgui_impl_glfw.h">
+      <Filter>3rdParty\imgui\backend</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

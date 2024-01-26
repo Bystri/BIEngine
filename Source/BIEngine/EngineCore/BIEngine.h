@@ -6,6 +6,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <imgui.h>
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
+
 #include "GameApp.h"
 #include "../Utilities/GameTimer.h"
 #include "../Utilities/Logger.h"
@@ -16,6 +20,9 @@ namespace BIEngine {
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void MouseCallback(GLFWwindow* window, double xpos, double ypos);
+
+void InitImgui(GLFWwindow* window);
+void TerminateImgui();
 
 // Главная функция, с которой начинается работа всего приложения.
 // Перед ее вызовом должен быть инициализирован класс pGameApp
@@ -49,6 +56,8 @@ int Run(int argc, char* argv[])
 
    glViewport(0, 0, g_pApp->m_options.screenWidth, g_pApp->m_options.screenHeight);
 
+   InitImgui(window);
+
    // Инициализация игры
    if (!g_pApp->Init()) {
       // Мы не пишем ничего в лог, так как предпологается, что инициализация оставит более подробное сообщение об ошибке
@@ -63,6 +72,10 @@ int Run(int argc, char* argv[])
 
       glfwPollEvents();
 
+      ImGui_ImplOpenGL3_NewFrame();
+      ImGui_ImplGlfw_NewFrame();
+      ImGui::NewFrame();
+
       g_pApp->ProcessInput(gt);
       // Обновление логики
       g_pApp->OnUpdate(gt);
@@ -70,10 +83,15 @@ int Run(int argc, char* argv[])
       // Отрисовка
       g_pApp->OnRender(gt);
 
+      ImGui::Render();
+      ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
       glfwSwapBuffers(window);
    }
 
    g_pApp->Close();
+
+   TerminateImgui();
 
    glfwTerminate();
    return 0;
@@ -98,6 +116,26 @@ void MouseCallback(GLFWwindow* window, double xpos, double ypos)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
    glViewport(0, 0, width, height);
+}
+
+void InitImgui(GLFWwindow* window)
+{
+   IMGUI_CHECKVERSION();
+   ImGui::CreateContext();
+   ImGuiIO& io = ImGui::GetIO();
+   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+
+   // Setup Platform/Renderer backends
+   ImGui_ImplGlfw_InitForOpenGL(window, true); // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+   ImGui_ImplOpenGL3_Init();
+}
+
+void TerminateImgui()
+{
+   ImGui_ImplOpenGL3_Shutdown();
+   ImGui_ImplGlfw_Shutdown();
+   ImGui::DestroyContext();
 }
 
 } // namespace BIEngine

@@ -44,13 +44,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\..\Lib\$(ProjectName)$(Platform)$(Configuration)\</OutDir>
     <IntDir>..\..\..\Temp\$(ProjectName)$(Platform)$(Configuration)\</IntDir>
-    <IncludePath>..\..\3rdParty\bullet3\src;..\..\3rdParty\pybind11-2.10.3\include;..\..\3rdParty\Python310\include;..\..\3rdParty\luaplus51-all\Src;..\..\3rdParty\glm;..\..\3rdParty\tinyxml2;..\..\3rdParty\zlib;..\..\3rdParty\glfw\include;..\..\3rdParty\glad\include;..\..\3rdParty\Chipmunk-7.0.3\include;..\..\3rdParty\irrKlang\include;..\..\3rdParty\libogg-1.3.0\include;..\..\3rdParty\libvorbis-1.3.2\include;..\..\3rdParty\freetype-2.10.0\include;..\..\3rdParty\assimp-5.3.1\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\3rdParty\bullet3\src;..\..\3rdParty\pybind11-2.10.3\include;..\..\3rdParty\Python310\include;..\..\3rdParty\luaplus51-all\Src;..\..\3rdParty\glm;..\..\3rdParty\tinyxml2;..\..\3rdParty\zlib;..\..\3rdParty\glfw\include;..\..\3rdParty\glad\include;..\..\3rdParty\Chipmunk-7.0.3\include;..\..\3rdParty\irrKlang\include;..\..\3rdParty\libogg-1.3.0\include;..\..\3rdParty\libvorbis-1.3.2\include;..\..\3rdParty\freetype-2.10.0\include;..\..\3rdParty\assimp-5.3.1\include;..\..\3rdParty\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\3rdParty\bullet3\build3\vs2010\x64\Debug;..\..\3rdParty\Python310\libs;..\..\3rdParty\glfw\x64\Debug;..\..\3rdParty\zlib\contrib\vstudio\vc14\x64\ZlibStatDebug;..\..\3rdParty\Chipmunk-7.0.3\src\Debug;..\..\3rdParty\luaplus51-all\build2017\x64\Debug;..\..\3rdParty\irrKlang\lib\Winx64-visualStudio;..\..\3rdParty\libogg-1.3.0\win32\VS2017\x64\Debug;..\..\3rdParty\libvorbis-1.3.2\win32\VS2017\x64\Debug;..\..\3rdParty\freetype-2.10.0\objs\x64\Debug;..\..\3rdParty\assimp-5.3.1\build\lib\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\..\Lib\$(ProjectName)$(Platform)$(Configuration)\</OutDir>
     <IntDir>..\..\..\Temp\$(ProjectName)$(Platform)$(Configuration)\</IntDir>
-    <IncludePath>..\..\3rdParty\bullet3\src;..\..\3rdParty\pybind11-2.10.3\include;..\..\3rdParty\Python310\include;..\..\3rdParty\luaplus51-all\Src;..\..\3rdParty\glm;..\..\3rdParty\tinyxml2;..\..\3rdParty\zlib;..\..\3rdParty\glfw\include;..\..\3rdParty\glad\include;..\..\3rdParty\Chipmunk-7.0.3\include;..\..\3rdParty\irrKlang\include;..\..\3rdParty\libogg-1.3.0\include;..\..\3rdParty\libvorbis-1.3.2\include;..\..\3rdParty\freetype-2.10.0\include;..\..\3rdParty\assimp-5.3.1\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\3rdParty\bullet3\src;..\..\3rdParty\pybind11-2.10.3\include;..\..\3rdParty\Python310\include;..\..\3rdParty\luaplus51-all\Src;..\..\3rdParty\glm;..\..\3rdParty\tinyxml2;..\..\3rdParty\zlib;..\..\3rdParty\glfw\include;..\..\3rdParty\glad\include;..\..\3rdParty\Chipmunk-7.0.3\include;..\..\3rdParty\irrKlang\include;..\..\3rdParty\libogg-1.3.0\include;..\..\3rdParty\libvorbis-1.3.2\include;..\..\3rdParty\freetype-2.10.0\include;..\..\3rdParty\assimp-5.3.1\include;..\..\3rdParty\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\3rdParty\bullet3\build3\vs2010\x64\Release;..\..\3rdParty\Python310\libs;..\..\3rdParty\glfw\x64\Release;..\..\3rdParty\zlib\contrib\vstudio\vc14\x64\ZlibStatRelease;..\..\3rdParty\Chipmunk-7.0.3\src\Release;..\..\3rdParty\luaplus51-all\build2017\x64\Release;..\..\3rdParty\irrKlang\lib\Winx64-visualStudio;..\..\3rdParty\libogg-1.3.0\win32\VS2017\x64\Release;..\..\3rdParty\libvorbis-1.3.2\win32\VS2017\x64\Release;..\..\3rdParty\freetype-2.10.0\objs\x64\Release;..\..\3rdParty\assimp-5.3.1\build\lib\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -85,6 +85,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\3rdParty\glad\src\glad.c" />
+    <ClCompile Include="..\..\3rdParty\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\..\3rdParty\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\..\3rdParty\imgui\imgui.cpp" />
+    <ClCompile Include="..\..\3rdParty\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\..\3rdParty\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\..\3rdParty\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\..\3rdParty\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\..\3rdParty\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="..\..\Actors\Actor.cpp" />
     <ClCompile Include="..\..\Actors\ActorFactory.cpp" />
@@ -154,6 +161,15 @@
     <ClInclude Include="..\..\3rdParty\FastDelegate\FastDelegate.h" />
     <ClInclude Include="..\..\3rdParty\FastDelegate\FastDelegateBind.h" />
     <ClInclude Include="..\..\3rdParty\glad\include\glad\glad.h" />
+    <ClInclude Include="..\..\3rdParty\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="..\..\3rdParty\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\..\3rdParty\imgui\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\..\3rdParty\imgui\imconfig.h" />
+    <ClInclude Include="..\..\3rdParty\imgui\imgui.h" />
+    <ClInclude Include="..\..\3rdParty\imgui\imgui_internal.h" />
+    <ClInclude Include="..\..\3rdParty\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\..\3rdParty\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\..\3rdParty\imgui\imstb_truetype.h" />
     <ClInclude Include="..\..\3rdParty\stb\stb_image.h" />
     <ClInclude Include="..\..\3rdParty\tinyxml2\tinyxml2.h" />
     <ClInclude Include="..\..\Actors\Actor.h" />
