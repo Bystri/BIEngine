@@ -5,6 +5,7 @@
 
 namespace BIEngine {
 
+const EventType EvtData_Actor_Created::sk_EventType(0x23d7aeaa);
 const EventType EvtData_Destroy_Actor::sk_EventType(0x1365eb00);
 const EventType EvtData_Move_Actor::sk_EventType(0xf0b040b);
 const EventType EvtData_New_Render_Component::sk_EventType(0x64016600);

@@ -11,6 +11,46 @@
 namespace BIEngine {
 
 // Данное событие отправляется, когда актер уничтожен
+class EvtData_Actor_Created : public BaseEventData {
+   ActorId m_id;
+
+public:
+   static const EventType sk_EventType;
+
+   explicit EvtData_Actor_Created(ActorId id = Actor::INVALID_ACTOR_ID)
+      : m_id(id)
+   {
+   }
+
+   virtual const EventType& GetEventType(void) const
+   {
+      return sk_EventType;
+   }
+
+   virtual IEventDataPtr Copy(void) const
+   {
+      return std::make_shared<EvtData_Actor_Created>(m_id);
+   }
+
+   virtual void Serialize(std::ostrstream& out) const
+   {
+      out << m_id;
+   }
+
+   virtual void Deserialize(std::istrstream& in)
+   {
+      in >> m_id;
+   }
+
+   virtual const char* GetName(void) const
+   {
+      return "EvtData_Actor_Created";
+   }
+
+   ActorId GetId(void) const { return m_id; }
+};
+
+// Данное событие отправляется, когда актер уничтожен
 class EvtData_Destroy_Actor : public BaseEventData {
    ActorId m_id;
 

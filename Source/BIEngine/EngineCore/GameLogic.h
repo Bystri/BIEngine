@@ -27,10 +27,6 @@ public:
 
    bool LoadLevel(const std::string& path);
 
-   // Должен быть переопределен дочерним классом, если нужно сделать что-то особое во время загрузки мира.
-   // Такая необохдимость в отдельной функции возникает из-за выполнение скриптов перед и после загрузки мира.
-   virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) { return true; }
-
    std::shared_ptr<Actor> CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition = nullptr, const glm::vec3* const pRotation = nullptr);
    // Принимает на вход XML-структуру актера, компоненты в котором будут заменены или добавлены.
    void ModifyActor(ActorId actorId, tinyxml2::XMLElement* pOverrides);
@@ -51,6 +47,11 @@ public:
    // Обработчики событий устройств ввода
    void OnPointerMove(float xpos, float ypos);
    void SetKey(int key, int scancode, bool state);
+
+protected:
+   // Должен быть переопределен дочерним классом, если нужно сделать что-то особое во время загрузки мира.
+   // Такая необохдимость в отдельной функции возникает из-за выполнение скриптов перед и после загрузки мира.
+   virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) { return true; }
 
 protected:
    GameViewList m_gameViews;

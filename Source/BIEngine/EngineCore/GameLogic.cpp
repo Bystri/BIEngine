@@ -168,6 +168,10 @@ std::shared_ptr<Actor> GameLogic::CreateActor(tinyxml2::XMLElement* pRoot, const
    std::shared_ptr<Actor> pActor = m_pActorFactory->CreateActor(pRoot, pPosition, pRotation);
    if (pActor) {
       m_actors.insert(std::make_pair(pActor->GetId(), pActor));
+
+      std::shared_ptr<EvtData_Actor_Created> pEvent = std::make_shared<EvtData_Actor_Created>(pActor->GetId());
+      EventManager::Get()->TriggerEvent(pEvent);
+
       return pActor;
    } else {
       Logger::WriteLog(Logger::LogType::ERROR, "Couldn't create actor");

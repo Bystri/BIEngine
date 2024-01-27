@@ -64,6 +64,9 @@
     <Filter Include="3rdParty\imgui\backend">
       <UniqueIdentifier>{b331d76d-6e3c-4f5c-b4a3-fdde51713faf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Navigation">
+      <UniqueIdentifier>{02f7d1f7-7045-429d-b12b-d161abf09a3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCore\GameApp.cpp">
@@ -281,6 +284,9 @@
     </ClCompile>
     <ClCompile Include="..\..\3rdParty\imgui\backends\imgui_impl_glfw.cpp">
       <Filter>3rdParty\imgui\backend</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Navigation\NavMeshManager.cpp">
+      <Filter>Navigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -547,6 +553,9 @@
     </ClInclude>
     <ClInclude Include="..\..\3rdParty\imgui\backends\imgui_impl_glfw.h">
       <Filter>3rdParty\imgui\backend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Navigation\NavMeshManager.h">
+      <Filter>Navigation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
