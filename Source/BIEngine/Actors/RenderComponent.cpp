@@ -254,9 +254,8 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
       std::shared_ptr<Texture2D> pNormalMapTexture = Texture2D::Create(normalMapImgData->GetWidth(), normalMapImgData->GetHeight(), normalTexureFormat, normalMapImgData->GetData());
       m_pLightReflectionMaterial->SetNormalMap(pNormalMapTexture);
 
-      std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 6u));
+      std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 0u));
       std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, m_pLightReflectionMaterial);
-
 
       std::shared_ptr<Model> pModel = std::make_shared<Model>();
       pModel->AddModelMesh(pModelMesh);

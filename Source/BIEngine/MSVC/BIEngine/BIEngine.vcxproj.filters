@@ -288,6 +288,15 @@
     <ClCompile Include="..\..\Navigation\NavMeshManager.cpp">
       <Filter>Navigation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Navigation\NavInputMeshesManager.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Navigation\NavChunkyTriMesh.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Navigation\NavMeshInputGeom.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -555,6 +564,15 @@
       <Filter>3rdParty\imgui\backend</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Navigation\NavMeshManager.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Navigation\NavInputMeshesManager.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Navigation\NavChunkyTriMesh.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Navigation\NavMeshInputGeom.h">
       <Filter>Navigation</Filter>
     </ClInclude>
   </ItemGroup>

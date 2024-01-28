@@ -15,6 +15,11 @@ public:
    };
 
    static void WriteLog(LogType type, const std::string& msg);
+   static void WriteLog(LogType type, const char* format, ...);
+
+   static void WriteMsgLog(const char* format, ...);
+   static void WriteErrorLog(const char* format, ...);
+
    static void Flush();
 };
 

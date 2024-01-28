@@ -5,6 +5,7 @@
 #include "../Graphics/SpriteNode.h"
 #include "../Graphics/LightReflectiveMaterial.h"
 #include "../Renderer/Color.h"
+#include "../Graphics/Model.h"
 
 namespace BIEngine {
 // Данный компонент отвечает за регестрацию на сцене объекта отрисовки. Делается это с помощью отрпавки сообщения, которое прослушивает сама сцена
@@ -74,6 +75,8 @@ protected:
    std::shared_ptr<LightReflectiveMaterial> m_pLightReflectionMaterial;
 };
 
+class ModelMesh;
+
 class BoxRenderComponent : public MeshBaseRenderComponent {
 public:
    BoxRenderComponent()
@@ -86,6 +89,9 @@ public:
    virtual bool Init(tinyxml2::XMLElement* pData);
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
+
+   const std::vector<std::shared_ptr<ModelMesh>>& HackGetMeshes() const { return m_pModelNode->GetModel()->GetMeshes(); }
+
 
 protected:
    virtual std::shared_ptr<SceneNode> CreateSceneNode();
@@ -114,7 +120,7 @@ public:
 
    static ComponentId g_CompId;
 
-   virtual ComponentId GetComponentId() const { return BoxRenderComponent::g_CompId; }
+   virtual ComponentId GetComponentId() const { return ModelRenderComponent::g_CompId; }
 
    virtual bool Init(tinyxml2::XMLElement* pData);
 

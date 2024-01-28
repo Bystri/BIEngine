@@ -8,7 +8,7 @@
 namespace BIEngine {
 
 class Actgor;
-class NavInputMeshesManager;
+class NavMeshInputGeometry;
 
 class NavMeshManager {
 public:
@@ -24,7 +24,7 @@ private:
    void TryAddActor(std::shared_ptr<Actor> pActor);
    void TryRemoveActor(ActorId id);
 
-   std::shared_ptr<NavInputMeshesManager> prepareNavGeom();
+   std::shared_ptr<NavMeshInputGeometry> prepareNavGeom();
 
 private:
    std::vector<std::shared_ptr<Actor>> m_actors;
