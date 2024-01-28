@@ -3,14 +3,18 @@
 #include "../3rdParty/FastDelegate/FastDelegate.h"
 
 #include "NavMeshInputGeom.h"
+#include "NavSoloMeshGenerator.h"
 #include "../Actors/RenderComponent.h"
 #include "../Graphics/Model.h"
 #include "../EngineCore/GameApp.h"
+#include "../Utilities/DebugDraw.h"
 
 namespace BIEngine {
 
 NavMeshManager::NavMeshManager()
 {
+   m_pNavMeshGenerator = std::make_shared<NavSoloMeshGenerator>();
+
    EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &NavMeshManager::HandleActorAdded), EvtData_Actor_Created::sk_EventType);
    EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &NavMeshManager::HandleActorDestroyed), EvtData_Destroy_Actor::sk_EventType);
 }
@@ -42,6 +46,57 @@ void NavMeshManager::BuildNavmesh()
 {
    std::shared_ptr<NavMeshInputGeometry> pGeom = prepareNavGeom();
    SaveGeom("geom.obj", pGeom);
+   m_pNavMeshGenerator->SetInputGeom(pGeom);
+   m_pNavMeshGenerator->BuildNavmesh();
+}
+
+void NavMeshManager::RenderMesh()
+{
+   // Internal edges.
+   const glm::vec3 coli = glm::vec3(0.0f, 0.0f, 1.0f);
+   for (int i = 0; i < m_pNavMeshGenerator->GetDetailedMesh()->nmeshes; ++i) {
+      const unsigned int* m = &m_pNavMeshGenerator->GetDetailedMesh()->meshes[i * 4];
+      const unsigned int bverts = m[0];
+      const unsigned int btris = m[2];
+      const int ntris = (int)m[3];
+      const float* verts = &m_pNavMeshGenerator->GetDetailedMesh()->verts[bverts * 3];
+      const unsigned char* tris = &m_pNavMeshGenerator->GetDetailedMesh()->tris[btris * 4];
+
+      for (int j = 0; j < ntris; ++j) {
+         const unsigned char* t = &tris[j * 4];
+         for (int k = 0, kp = 2; k < 3; kp = k++) {
+            unsigned char ef = (t[3] >> (kp * 2)) & 0x3;
+            if (ef == 0) {
+               // Internal edge
+               if (t[kp] < t[k]) {
+                  DebugDraw::Line(glm::vec3(verts[t[kp] * 3], verts[t[kp] * 3 + 1], verts[t[kp] * 3 + 2]), glm::vec3(verts[t[k] * 3], verts[t[k] * 3 + 1], verts[t[k] * 3 + 2]), coli);
+               }
+            }
+         }
+      }
+   }
+
+   // External edges.
+   const glm::vec3 cole = glm::vec3(1.0f, 0.0f, 0.0f);
+   for (int i = 0; i < m_pNavMeshGenerator->GetDetailedMesh()->nmeshes; ++i) {
+      const unsigned int* m = &m_pNavMeshGenerator->GetDetailedMesh()->meshes[i * 4];
+      const unsigned int bverts = m[0];
+      const unsigned int btris = m[2];
+      const int ntris = (int)m[3];
+      const float* verts = &m_pNavMeshGenerator->GetDetailedMesh()->verts[bverts * 3];
+      const unsigned char* tris = &m_pNavMeshGenerator->GetDetailedMesh()->tris[btris * 4];
+
+      for (int j = 0; j < ntris; ++j) {
+         const unsigned char* t = &tris[j * 4];
+         for (int k = 0, kp = 2; k < 3; kp = k++) {
+            unsigned char ef = (t[3] >> (kp * 2)) & 0x3;
+            if (ef != 0) {
+               // Ext edge
+               DebugDraw::Line(glm::vec3(verts[t[kp] * 3], verts[t[kp] * 3 + 1], verts[t[kp] * 3 + 2]), glm::vec3(verts[t[k] * 3], verts[t[k] * 3 + 1], verts[t[k] * 3 + 2]), cole);
+            }
+         }
+      }
+   }
 }
 
 void NavMeshManager::HandleActorAdded(IEventDataPtr pEventData)

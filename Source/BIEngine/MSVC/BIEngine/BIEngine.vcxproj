@@ -123,8 +123,10 @@
     <ClCompile Include="..\..\Graphics\SpriteNode.cpp" />
     <ClCompile Include="..\..\Navigation\NavChunkyTriMesh.cpp" />
     <ClCompile Include="..\..\Navigation\NavInputMeshesManager.cpp" />
+    <ClCompile Include="..\..\Navigation\NavMeshGenerator.cpp" />
     <ClCompile Include="..\..\Navigation\NavMeshInputGeom.cpp" />
     <ClCompile Include="..\..\Navigation\NavMeshManager.cpp" />
+    <ClCompile Include="..\..\Navigation\NavSoloMeshGenerator.cpp" />
     <ClCompile Include="..\..\Physics\Physics2D.cpp" />
     <ClCompile Include="..\..\Physics\Physics3D.cpp" />
     <ClCompile Include="..\..\Physics\Physics2DEventListener.cpp" />
@@ -209,8 +211,10 @@
     <ClInclude Include="..\..\Math\Vector.h" />
     <ClInclude Include="..\..\Navigation\NavChunkyTriMesh.h" />
     <ClInclude Include="..\..\Navigation\NavInputMeshesManager.h" />
+    <ClInclude Include="..\..\Navigation\NavMeshGenerator.h" />
     <ClInclude Include="..\..\Navigation\NavMeshInputGeom.h" />
     <ClInclude Include="..\..\Navigation\NavMeshManager.h" />
+    <ClInclude Include="..\..\Navigation\NavSoloMeshGenerator.h" />
     <ClInclude Include="..\..\Physics\Physics2D.h" />
     <ClInclude Include="..\..\Physics\Physics3D.h" />
     <ClInclude Include="..\..\Physics\Physics2DEventListener.h" />

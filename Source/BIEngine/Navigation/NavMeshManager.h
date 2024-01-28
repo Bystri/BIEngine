@@ -9,6 +9,7 @@ namespace BIEngine {
 
 class Actgor;
 class NavMeshInputGeometry;
+class NavMeshGenerator;
 
 class NavMeshManager {
 public:
@@ -16,6 +17,7 @@ public:
    ~NavMeshManager();
 
    void BuildNavmesh();
+   void RenderMesh();
 
 private:
    void HandleActorAdded(IEventDataPtr pEventData);
@@ -28,6 +30,7 @@ private:
 
 private:
    std::vector<std::shared_ptr<Actor>> m_actors;
+   std::shared_ptr<NavMeshGenerator> m_pNavMeshGenerator;
 };
 
 } // namespace BIEngine

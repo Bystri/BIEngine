@@ -70,6 +70,7 @@ bool BIGameLogic::LoadLevelDelegate(tinyxml2::XMLElement* pRoot)
 void BIGameLogic::OnUpdate(BIEngine::GameTimer& gt)
 {
    GameLogic::OnUpdate(gt);
+   m_pNavMeshManager->RenderMesh();
 }
 
 bool BIGameHumanView::Init()
