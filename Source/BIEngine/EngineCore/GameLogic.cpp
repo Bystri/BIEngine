@@ -112,8 +112,6 @@ void GameLogic::RemoveGameView(std::shared_ptr<IGameView> pView)
 
 void GameLogic::OnUpdate(GameTimer& gt)
 {
-   ProcessManager::Get()->UpdateProcesses(gt);
-
    EventManager::Get()->TickUpdate();
 
    m_pPhysics2D->OnUpdate(gt);
@@ -121,6 +119,8 @@ void GameLogic::OnUpdate(GameTimer& gt)
 
    m_pPhysics3D->OnUpdate(gt);
    m_pPhysics3D->SyncVisibleScene(m_actors);
+
+   ProcessManager::Get()->UpdateProcesses(gt);
 
    for (const auto view : m_gameViews) {
       view->OnUpdate(gt);

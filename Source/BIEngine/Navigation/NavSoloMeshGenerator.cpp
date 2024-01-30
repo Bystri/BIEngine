@@ -1,5 +1,6 @@
 #include "NavSoloMeshGenerator.h"
 
+#include <DetourNavMeshBuilder.h>
 #include <DetourNavMesh.h>
 
 #include "NavMeshInputGeom.h"
@@ -13,7 +14,8 @@ NavSoloMeshGenerator::NavSoloMeshGenerator()
      m_pSolid(nullptr),
      m_pChf(nullptr),
      m_pCset(nullptr),
-     m_pPolyMesh(nullptr)
+     m_pPolyMesh(nullptr),
+     m_pDmesh(nullptr)
 {
 }
 
@@ -107,6 +109,10 @@ bool NavSoloMeshGenerator::BuildNavmesh()
    }
 
    if (!createDetailMesh()) {
+      return false;
+   }
+
+   if (!createDetourData()) {
       return false;
    }
 
@@ -330,6 +336,69 @@ bool NavSoloMeshGenerator::createDetailMesh()
    m_pCset = nullptr;
 
    return true;
+}
+
+bool NavSoloMeshGenerator::createDetourData()
+{
+   if (m_cfg.maxVertsPerPoly <= DT_VERTS_PER_POLYGON) {
+      unsigned char* navData = 0;
+      int navDataSize = 0;
+
+      dtNavMeshCreateParams params;
+      memset(&params, 0, sizeof(params));
+      params.verts = m_pPolyMesh->verts;
+      params.vertCount = m_pPolyMesh->nverts;
+      params.polys = m_pPolyMesh->polys;
+      params.polyAreas = m_pPolyMesh->areas;
+      params.polyFlags = m_pPolyMesh->flags;
+      params.polyCount = m_pPolyMesh->npolys;
+      params.nvp = m_pPolyMesh->nvp;
+      params.detailMeshes = m_pDmesh->meshes;
+      params.detailVerts = m_pDmesh->verts;
+      params.detailVertsCount = m_pDmesh->nverts;
+      params.detailTris = m_pDmesh->tris;
+      params.detailTriCount = m_pDmesh->ntris;
+
+      params.offMeshConCount = 0;
+
+      params.walkableHeight = m_agentHeight;
+      params.walkableRadius = m_agentRadius;
+      params.walkableClimb = m_agentMaxClimb;
+      rcVcopy(params.bmin, m_pPolyMesh->bmin);
+      rcVcopy(params.bmax, m_pPolyMesh->bmax);
+      params.cs = m_cfg.cs;
+      params.ch = m_cfg.ch;
+      params.buildBvTree = true;
+
+      if (!dtCreateNavMeshData(&params, &navData, &navDataSize)) {
+         Logger::WriteErrorLog("Could not build Detour navmesh.");
+         return false;
+      }
+
+      m_pNavMesh = dtAllocNavMesh();
+      if (!m_pNavMesh) {
+         dtFree(navData);
+         Logger::WriteErrorLog("Could not create Detour navmesh");
+         return false;
+      }
+
+      dtStatus status;
+
+      status = m_pNavMesh->init(navData, navDataSize, DT_TILE_FREE_DATA);
+      if (dtStatusFailed(status)) {
+         dtFree(navData);
+         Logger::WriteErrorLog("Could not init Detour navmesh");
+         return false;
+      }
+
+      status = m_pNavQuery->init(m_pNavMesh, 2048);
+      if (dtStatusFailed(status)) {
+         Logger::WriteErrorLog("Could not init Detour navmesh query");
+         return false;
+      }
+
+      return true;
+   }
 }
 
 } // namespace BIEngine

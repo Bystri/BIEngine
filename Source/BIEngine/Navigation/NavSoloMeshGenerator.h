@@ -23,6 +23,7 @@ private:
    bool traceAndSimplifyRegionContours();
    bool buildPolygonMeshFromContours();
    bool createDetailMesh();
+   bool createDetourData();
 
 private:
    unsigned char* m_pTriareas;
@@ -30,6 +31,7 @@ private:
    rcCompactHeightfield* m_pChf;
    rcContourSet* m_pCset;
    rcPolyMesh* m_pPolyMesh;
+   rcPolyMeshDetail* m_pDmesh;
    rcConfig m_cfg;
 };
 

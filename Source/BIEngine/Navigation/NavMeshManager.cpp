@@ -36,7 +36,7 @@ static bool SaveGeom(const std::string& filepath, std::shared_ptr<NavMeshInputGe
 
    const int* inds = pGeom->GetMesh()->GetTris();
    for (int i = 0; i < pGeom->GetMesh()->GetTriCount(); ++i) {
-      fprintf(fp, "f %d %d %d\n", inds[i * 3], inds[i * 3 + 1], inds[i * 3 + 2]);
+      fprintf(fp, "f %d %d %d\n", inds[i * 3] + 1, inds[i * 3 + 1] + 1, inds[i * 3 + 2] + 1);
    }
 
    fclose(fp);
@@ -50,53 +50,57 @@ void NavMeshManager::BuildNavmesh()
    m_pNavMeshGenerator->BuildNavmesh();
 }
 
+static void duDebugDrawNavMeshPoly(const dtNavMesh& mesh, dtPolyRef ref, const glm::vec3& color)
+{
+   const dtMeshTile* tile = 0;
+   const dtPoly* poly = 0;
+   if (dtStatusFailed(mesh.getTileAndPolyByRef(ref, &tile, &poly)))
+      return;
+
+   const unsigned int ip = (unsigned int)(poly - tile->polys);
+
+   const dtPolyDetail* pd = &tile->detailMeshes[ip];
+
+   std::vector<glm::vec3> polyVerts;
+
+   constexpr float Y_LIFT = 0.5;
+
+   for (int i = 0; i < pd->triCount; ++i) {
+      const unsigned char* t = &tile->detailTris[(pd->triBase + i) * 4];
+      for (int j = 0; j < 3; ++j) {
+         if (t[j] < poly->vertCount)
+            polyVerts.push_back(glm::vec3(tile->verts[poly->verts[t[j]] * 3], tile->verts[poly->verts[t[j]] * 3 + 1] + Y_LIFT, tile->verts[poly->verts[t[j]] * 3 + 2]));
+         else
+            polyVerts.push_back(glm::vec3(tile->detailVerts[(pd->vertBase + t[j] - poly->vertCount) * 3], tile->detailVerts[(pd->vertBase + t[j] - poly->vertCount) * 3 + 1] + Y_LIFT, tile->detailVerts[(pd->vertBase + t[j] - poly->vertCount) * 3 + 2]));
+      }
+   }
+
+   DebugDraw::Poly(polyVerts, color);
+
+   for (int i = 0, j = polyVerts.size() - 1; i < polyVerts.size(); j = i++) {
+      DebugDraw::Line(polyVerts[i], polyVerts[j], glm::vec3(0.0f, 0.0f, 1.0f));
+   }
+}
+
+static void RenderNavMesh(const dtNavMesh& mesh)
+{
+   for (int i = 0; i < mesh.getMaxTiles(); ++i) {
+      const dtMeshTile* const tile = mesh.getTile(i);
+      if (!tile->header) {
+         continue;
+      }
+      dtPolyRef base = mesh.getPolyRefBase(tile);
+
+      for (int j = 0; j < tile->header->polyCount; ++j) {
+         const dtPoly* p = &tile->polys[j];
+         duDebugDrawNavMeshPoly(mesh, base | (dtPolyRef)j, glm::vec3(0.0f, 1.0f, 0.0f));
+      }
+   }
+}
+
 void NavMeshManager::RenderMesh()
 {
-   // Internal edges.
-   const glm::vec3 coli = glm::vec3(0.0f, 0.0f, 1.0f);
-   for (int i = 0; i < m_pNavMeshGenerator->GetDetailedMesh()->nmeshes; ++i) {
-      const unsigned int* m = &m_pNavMeshGenerator->GetDetailedMesh()->meshes[i * 4];
-      const unsigned int bverts = m[0];
-      const unsigned int btris = m[2];
-      const int ntris = (int)m[3];
-      const float* verts = &m_pNavMeshGenerator->GetDetailedMesh()->verts[bverts * 3];
-      const unsigned char* tris = &m_pNavMeshGenerator->GetDetailedMesh()->tris[btris * 4];
-
-      for (int j = 0; j < ntris; ++j) {
-         const unsigned char* t = &tris[j * 4];
-         for (int k = 0, kp = 2; k < 3; kp = k++) {
-            unsigned char ef = (t[3] >> (kp * 2)) & 0x3;
-            if (ef == 0) {
-               // Internal edge
-               if (t[kp] < t[k]) {
-                  DebugDraw::Line(glm::vec3(verts[t[kp] * 3], verts[t[kp] * 3 + 1], verts[t[kp] * 3 + 2]), glm::vec3(verts[t[k] * 3], verts[t[k] * 3 + 1], verts[t[k] * 3 + 2]), coli);
-               }
-            }
-         }
-      }
-   }
-
-   // External edges.
-   const glm::vec3 cole = glm::vec3(1.0f, 0.0f, 0.0f);
-   for (int i = 0; i < m_pNavMeshGenerator->GetDetailedMesh()->nmeshes; ++i) {
-      const unsigned int* m = &m_pNavMeshGenerator->GetDetailedMesh()->meshes[i * 4];
-      const unsigned int bverts = m[0];
-      const unsigned int btris = m[2];
-      const int ntris = (int)m[3];
-      const float* verts = &m_pNavMeshGenerator->GetDetailedMesh()->verts[bverts * 3];
-      const unsigned char* tris = &m_pNavMeshGenerator->GetDetailedMesh()->tris[btris * 4];
-
-      for (int j = 0; j < ntris; ++j) {
-         const unsigned char* t = &tris[j * 4];
-         for (int k = 0, kp = 2; k < 3; kp = k++) {
-            unsigned char ef = (t[3] >> (kp * 2)) & 0x3;
-            if (ef != 0) {
-               // Ext edge
-               DebugDraw::Line(glm::vec3(verts[t[kp] * 3], verts[t[kp] * 3 + 1], verts[t[kp] * 3 + 2]), glm::vec3(verts[t[k] * 3], verts[t[k] * 3 + 1], verts[t[k] * 3 + 2]), cole);
-            }
-         }
-      }
-   }
+   RenderNavMesh(*m_pNavMeshGenerator->GetNavMesh());
 }
 
 void NavMeshManager::HandleActorAdded(IEventDataPtr pEventData)

@@ -50,7 +50,7 @@ void NavInputMeshesManager::AddMesh(const glm::mat4& transform, std::shared_ptr<
    const std::vector<unsigned int>& inds = mesh->GetIndices();
 
    for (int i = 0; i < inds.size(); i += 3) {
-      addTriangle(initialVertsSize + inds[i] + 1, initialVertsSize + inds[i + 1] + 1, initialVertsSize + inds[i + 2] + 1);
+      addTriangle(initialVertsSize + inds[i], initialVertsSize + inds[i + 1], initialVertsSize + inds[i + 2]);
    }
 }
 

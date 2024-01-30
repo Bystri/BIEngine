@@ -2,8 +2,9 @@
 
 #include <memory>
 
+#include <DetourNavMeshQuery.h>
+
 class dtNavMesh;
-class dtNavMeshQuery;
 class dtCrowd;
 class rcContext;
 class rcPolyMeshDetail;
@@ -30,17 +31,17 @@ public:
 
    virtual bool BuildNavmesh() = 0;
 
+   dtNavMesh* GetNavMesh() { return m_pNavMesh; }
+
+   dtNavMeshQuery* GetNavMeshQuery() { return m_pNavQuery; }
+
    void SetInputGeom(std::shared_ptr<NavMeshInputGeometry> pInputGeom);
    void ResetCommonSettings();
-
-   const rcPolyMeshDetail* GetDetailedMesh() const { return m_pDmesh; }
 
 protected:
    std::shared_ptr<NavMeshInputGeometry> m_pGeom;
    dtNavMesh* m_pNavMesh;
    dtNavMeshQuery* m_pNavQuery;
-   dtCrowd* m_pCrowd;
-   rcPolyMeshDetail* m_pDmesh;
 
    unsigned char m_navMeshDrawFlags;
 

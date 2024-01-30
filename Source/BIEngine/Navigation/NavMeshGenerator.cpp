@@ -1,8 +1,6 @@
 #include "NavMeshGenerator.h"
 
 #include <Recast.h>
-#include <DetourNavMeshQuery.h>
-#include <DetourCrowd.h>
 
 #include "NavMeshInputGeom.h"
 
@@ -12,16 +10,13 @@ NavMeshGenerator::NavMeshGenerator()
    : m_pGeom(nullptr),
      m_pNavMesh(nullptr),
      m_pNavQuery(nullptr),
-     m_pCrowd(nullptr),
      m_filterLowHangingObstacles(true),
      m_filterLedgeSpans(true),
      m_filterWalkableLowHeightSpans(true),
-     m_pCtx(new rcContext()),
-     m_pDmesh(nullptr)
+     m_pCtx(new rcContext())
 {
    ResetCommonSettings();
    m_pNavQuery = dtAllocNavMeshQuery();
-   m_pCrowd = dtAllocCrowd();
 }
 
 NavMeshGenerator::~NavMeshGenerator()
