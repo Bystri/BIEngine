@@ -4,6 +4,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Color.h"
+
 namespace BIEngine {
 
 class RenderDevice {
@@ -95,7 +97,7 @@ public:
 
    void Init();
 
-   void Clear(ClearFlag flags, const glm::vec4& color);
+   void Clear(ClearFlag flags, const ColorRgba& color);
 
    void SetDepthTest(bool enable);
    void SetDepthWrite(bool enable);

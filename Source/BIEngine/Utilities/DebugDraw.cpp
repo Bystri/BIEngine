@@ -23,10 +23,10 @@ void DebugDraw::Init()
                                     "}\0";
    const char* fragmentShaderSource = "#version 420 core\n"
                                       "out vec4 FragColor;\n"
-                                      "uniform vec3 color;\n"
+                                      "uniform vec4 color;\n"
                                       "void main()\n"
                                       "{\n"
-                                      "   FragColor = vec4(color, 1.0f);\n"
+                                      "   FragColor = color;\n"
                                       "}\n\0";
 
    int vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -50,7 +50,7 @@ class DbgLine {
    glm::vec3 startPoint;
    glm::vec3 endPoint;
    glm::mat4 MVP;
-   glm::vec3 lineColor;
+   ColorRgba lineColor;
 
 public:
    DbgLine(const glm::vec3& start, const glm::vec3& end)
@@ -58,7 +58,7 @@ public:
 
       startPoint = start;
       endPoint = end;
-      lineColor = glm::vec3(1, 1, 1);
+      lineColor = COLOR_WHITE;
       MVP = glm::mat4(1.0f);
 
       vertices = {
@@ -90,7 +90,7 @@ public:
       glDeleteBuffers(1, &VBO);
    }
 
-   int SetColor(const glm::vec3& color)
+   int SetColor(const ColorRgba& color)
    {
       lineColor = color;
       return 1;
@@ -99,7 +99,7 @@ public:
    int Draw()
    {
       g_pDebugShader->Use();
-      g_pDebugShader->SetVector3f("color", lineColor, false);
+      g_pDebugShader->SetColorRgba("color", lineColor, false);
 
       glBindVertexArray(VAO);
       glDrawArrays(GL_LINES, 0, 2);
@@ -111,7 +111,7 @@ class DbgPoly {
    unsigned int VBO, VAO;
    std::vector<glm::vec3> m_vertices;
    glm::mat4 m_MVP;
-   glm::vec3 m_color;
+   ColorRgba m_color;
 
 public:
    DbgPoly(const std::vector<glm::vec3>& verts)
@@ -124,7 +124,7 @@ public:
          m_vertices.push_back(verts[i + 1]);
       }
 
-      m_color = glm::vec3(1, 1, 1);
+      m_color = COLOR_WHITE;
       m_MVP = glm::mat4(1.0f);
 
       glGenVertexArrays(1, &VAO);
@@ -147,7 +147,7 @@ public:
       glDeleteBuffers(1, &VBO);
    }
 
-   int SetColor(const glm::vec3& color)
+   int SetColor(const ColorRgba& color)
    {
       m_color = color;
       return 1;
@@ -156,7 +156,7 @@ public:
    int Draw()
    {
       g_pDebugShader->Use();
-      g_pDebugShader->SetVector3f("color", m_color, false);
+      g_pDebugShader->SetColorRgba("color", m_color, false);
 
       glBindVertexArray(VAO);
       glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
@@ -172,7 +172,7 @@ struct LineInfo {
 
    glm::vec3 fromPoint;
    glm::vec3 toPoint;
-   glm::vec3 color;
+   ColorRgba color;
 };
 
 std::queue<LineInfo> m_drawReqQueue;
@@ -184,12 +184,12 @@ struct PolyInfo {
    }
 
    std::vector<glm::vec3> verts;
-   glm::vec3 color;
+   ColorRgba color;
 };
 
 std::queue<PolyInfo> m_drawPolyQueue;
 
-void DebugDraw::Line(const glm::vec3& fromPoint, const glm::vec3& toPoint, const glm::vec3& color)
+void DebugDraw::Line(const glm::vec3& fromPoint, const glm::vec3& toPoint, const ColorRgba& color)
 {
    LineInfo info;
    info.fromPoint = fromPoint;
@@ -199,7 +199,7 @@ void DebugDraw::Line(const glm::vec3& fromPoint, const glm::vec3& toPoint, const
    m_drawReqQueue.push(info);
 }
 
-void DebugDraw::Poly(const std::vector<glm::vec3>& verts, const glm::vec3& color)
+void DebugDraw::Poly(const std::vector<glm::vec3>& verts, const ColorRgba& color)
 {
    PolyInfo poly;
    poly.verts = verts;
@@ -210,6 +210,9 @@ void DebugDraw::Poly(const std::vector<glm::vec3>& verts, const glm::vec3& color
 
 void DebugDraw::Draw()
 {
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
    while (!m_drawPolyQueue.empty()) {
       PolyInfo info = m_drawPolyQueue.front();
       m_drawPolyQueue.pop();
@@ -229,6 +232,8 @@ void DebugDraw::Draw()
       line.SetColor(info.color);
       line.Draw();
    }
+
+   glDisable(GL_BLEND);
 }
 
 } // namespace BIEngine

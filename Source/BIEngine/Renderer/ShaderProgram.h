@@ -6,6 +6,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Color.h"
+
 namespace BIEngine {
 
 class ShaderProgram {
@@ -41,6 +43,8 @@ public:
    void SetVector4f(const std::string& name, float x, float y, float z, float w, bool useShader = false);
    void SetVector4f(const std::string& name, const glm::vec4& value, bool useShader = false);
    void SetMatrix4(const std::string& name, const glm::mat4& matrix, bool useShader = false);
+   void SetColorRgb(const std::string& name, const ColorRgb& color, bool useShader = false);
+   void SetColorRgba(const std::string& name, const ColorRgba& color, bool useShader = false);
 
 private:
    void CheckCompileErrors(unsigned int object, std::string type);

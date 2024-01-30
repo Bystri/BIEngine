@@ -56,7 +56,7 @@ bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
    m_shaderProgrampath = shaderProgramPath;
    std::shared_ptr<ShaderProgramData> pShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(m_shaderProgrampath)->GetExtra());
    m_pLightReflectionMaterial = std::make_shared<LightReflectiveMaterial>(pShaderProgramData->GetShaderProgram());
-   m_pLightReflectionMaterial->SetColor(WHITE);
+   m_pLightReflectionMaterial->SetColor(COLOR_WHITE);
 
    tinyxml2::XMLElement* pColorElement = pData->FirstChildElement("Color");
    if (pColorElement) {
@@ -66,7 +66,8 @@ bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
       pColorElement->QueryFloatAttribute("r", &r);
       pColorElement->QueryFloatAttribute("g", &g);
       pColorElement->QueryFloatAttribute("b", &b);
-      m_pLightReflectionMaterial->SetColor(Color(r, g, b, 1.0f));
+      const ColorRgb matColor = ColorRgb(r, g, b);
+      m_pLightReflectionMaterial->SetColor(matColor);
    }
 
    return true;
@@ -103,7 +104,7 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
       m_pSpriteNode = std::make_shared<SpriteNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
    }
 
-   Color spriteColor = WHITE;
+   ColorRgba spriteColor = COLOR_WHITE;
 
    tinyxml2::XMLElement* pColorElement = pData->FirstChildElement("Color");
    if (pColorElement) {
@@ -113,7 +114,7 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
       pColorElement->QueryFloatAttribute("r", &r);
       pColorElement->QueryFloatAttribute("g", &g);
       pColorElement->QueryFloatAttribute("b", &b);
-      spriteColor = Color(r, g, b, 1.0f);
+      spriteColor = ColorRgba(r, g, b, 1.0f);
    }
 
    tinyxml2::XMLElement* pSpriteElement = pData->FirstChildElement("Sprite");
@@ -144,7 +145,7 @@ tinyxml2::XMLElement* SpriteRenderComponent::GenerateXml(tinyxml2::XMLDocument* 
 {
    tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
 
-   const Color& spriteColor = m_pSpriteNode->GetSprite()->GetColor();
+   const ColorRgba& spriteColor = m_pSpriteNode->GetSprite()->GetColor();
 
    tinyxml2::XMLElement* pColor = pDoc->NewElement("Color");
    pColor->SetAttribute("r", std::to_string(spriteColor.r).c_str());

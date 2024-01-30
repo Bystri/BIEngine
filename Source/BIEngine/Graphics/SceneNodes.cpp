@@ -7,6 +7,7 @@
 #include "../EngineCore/GameApp.h"
 #include "../Renderer/ShadersLoader.h"
 #include "../Renderer/Renderbuffer.h"
+#include "../Renderer/Color.h"
 
 namespace BIEngine {
 
@@ -77,14 +78,14 @@ void SceneNode::RemoveChild(ActorId id)
 struct DirectionalLightGlData {
    glm::vec3 direction = glm::vec3(0.0, -1.0f, 0.0f);
    float irradiance = 1.0f;
-   glm::vec3 color = glm::vec3(0.75f, 0.75f, 0.05f);
+   ColorRgb color = ColorRgb(0.75f, 0.75f, 0.05f);
    uint32_t pan2;
 };
 
 struct PointLightGlData {
    glm::vec3 position = glm::vec3(0.0f);
    float intensity = 1.0f;
-   glm::vec3 color = glm::vec3(0.75f, 0.75f, 0.05f);
+   ColorRgb color = ColorRgb(0.75f, 0.75f, 0.05f);
    uint32_t pan7;
 };
 
@@ -93,11 +94,11 @@ struct SpotLightGlData {
    float constant = 1.0f;
    glm::vec3 direction = glm::vec3(0.0f, 0.0f, -1.0f);
    float linear = 0.09f;
-   glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f);
+   ColorRgb ambient = ColorRgb(0.05f, 0.05f, 0.05f);
    float quadratic = 0.032f;
-   glm::vec3 diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
+   ColorRgb diffuse = ColorRgb(1.0f, 1.0f, 1.0f);
    float cutOff = glm::cos(glm::radians(12.5f));
-   glm::vec3 specular = glm::vec3(1.0f, 1.0f, 1.0f);
+   ColorRgb specular = ColorRgb(1.0f, 1.0f, 1.0f);
    float outerCutOff = glm::cos(glm::radians(25.0f));
 };
 
@@ -354,7 +355,7 @@ void ShadowManager::ApplyShadowData(Scene* pScene)
       dirLightShadowInfo.pShadowMapBuffer->Bind();
       glViewport(0, 0, m_dirLightShadowInfos[i].pDepthBuffer->GetWidth(), m_dirLightShadowInfos[i].pDepthBuffer->GetHeight());
 
-      static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
+      static const ColorRgba CLEAR_COLOR = ColorRgba(0.0f, 0.5f, 0.5f, 1.0f);
       pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
 
       const glm::mat4 viewMatr = glm::lookAt(glm::normalize(-m_dirLights[i].direction) * 20.0f, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -390,7 +391,7 @@ void ShadowManager::ApplyShadowData(Scene* pScene)
       pointLightShadowInfo.LightPos = pointLight.position;
       pointLightShadowInfo.pShadowMapBuffer->Bind();
       glViewport(0, 0, pointLightShadowInfo.pDepthBuffer->GetWidth(), pointLightShadowInfo.pDepthBuffer->GetHeight());
-      static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
+      static const ColorRgba CLEAR_COLOR = ColorRgba(0.0f, 0.5f, 0.5f, 1.0f);
       pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
 
       for (unsigned int i = 0; i < 6; ++i) {
@@ -622,7 +623,7 @@ bool RootNode::RenderChildren(Scene* pScene)
 
    pScene->GetRenderer()->BeginFrame();
    glViewport(0, 0, pScene->GetRenderer()->GetScreenWidth(), pScene->GetRenderer()->GetScreenHeight());
-   static constexpr Color CLEAR_COLOR = Color(0.0f, 0.5f, 0.5f, 1.0f);
+   static const ColorRgba CLEAR_COLOR = ColorRgba(0.0f, 0.5f, 0.5f, 1.0f);
    pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
 
    g_pOpaqueRenderItemManager->ApplyOpaqueItemsData(pScene);

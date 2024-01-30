@@ -57,7 +57,7 @@ void RenderDevice::Init()
    glPolygonMode(GL_FRONT_AND_BACK, GL_FRONT_LEFT + static_cast<char>(m_polygonMode));
 }
 
-void RenderDevice::Clear(ClearFlag flags, const glm::vec4& ClearColor)
+void RenderDevice::Clear(ClearFlag flags, const ColorRgba& ClearColor)
 {
    unsigned int clearBits = 0u;
 

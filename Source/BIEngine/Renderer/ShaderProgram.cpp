@@ -171,6 +171,24 @@ void ShaderProgram::SetMatrix4(const std::string& name, const glm::mat4& matrix,
    glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, false, glm::value_ptr(matrix));
 }
 
+void ShaderProgram::SetColorRgb(const std::string& name, const ColorRgb& color, bool useShader)
+{
+   if (useShader) {
+      this->Use();
+   }
+
+   glUniform3f(glGetUniformLocation(m_id, name.c_str()), color.r, color.g, color.b);
+}
+
+void ShaderProgram::SetColorRgba(const std::string& name, const ColorRgba& color, bool useShader)
+{
+   if (useShader) {
+      this->Use();
+   }
+
+   glUniform4f(glGetUniformLocation(m_id, name.c_str()), color.r, color.g, color.b, color.a);
+}
+
 // Проверяет и, в случае обнаружуения, выводит сообщения об ошибках во время компиляции шейдера
 void ShaderProgram::CheckCompileErrors(unsigned int object, std::string type)
 {

@@ -150,7 +150,7 @@ void BulletDebugDrawer::drawLine(const btVector3& from, const btVector3& to, con
       return;
    }
 
-   glm::vec3 vec3From, vec3To, color;
+   glm::vec3 vec3From, vec3To;
    vec3From.x = from.x();
    vec3From.y = from.y();
    vec3From.z = from.z();
@@ -159,9 +159,11 @@ void BulletDebugDrawer::drawLine(const btVector3& from, const btVector3& to, con
    vec3To.y = to.y();
    vec3To.z = to.z();
 
-   color.x = lineColor.x();
-   color.y = lineColor.y();
-   color.z = lineColor.z();
+   ColorRgba color;
+
+   color.r = lineColor.x();
+   color.g = lineColor.y();
+   color.b = lineColor.z();
 
    DebugDraw::Line(vec3From, vec3To, color);
 }

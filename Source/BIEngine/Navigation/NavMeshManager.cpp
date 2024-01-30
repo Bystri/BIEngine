@@ -50,7 +50,7 @@ void NavMeshManager::BuildNavmesh()
    m_pNavMeshGenerator->BuildNavmesh();
 }
 
-static void duDebugDrawNavMeshPoly(const dtNavMesh& mesh, dtPolyRef ref, const glm::vec3& color)
+static void duDebugDrawNavMeshPoly(const dtNavMesh& mesh, dtPolyRef ref, const ColorRgba& color)
 {
    const dtMeshTile* tile = 0;
    const dtPoly* poly = 0;
@@ -78,7 +78,7 @@ static void duDebugDrawNavMeshPoly(const dtNavMesh& mesh, dtPolyRef ref, const g
    DebugDraw::Poly(polyVerts, color);
 
    for (int i = 0, j = polyVerts.size() - 1; i < polyVerts.size(); j = i++) {
-      DebugDraw::Line(polyVerts[i], polyVerts[j], glm::vec3(0.0f, 0.0f, 1.0f));
+      DebugDraw::Line(polyVerts[i], polyVerts[j], COLOR_BLUE);
    }
 }
 
@@ -93,7 +93,7 @@ static void RenderNavMesh(const dtNavMesh& mesh)
 
       for (int j = 0; j < tile->header->polyCount; ++j) {
          const dtPoly* p = &tile->polys[j];
-         duDebugDrawNavMeshPoly(mesh, base | (dtPolyRef)j, glm::vec3(0.0f, 1.0f, 0.0f));
+         duDebugDrawNavMeshPoly(mesh, base | (dtPolyRef)j, ColorRgba(0.0f, 1.0f, 0.0f, 0.15f));
       }
    }
 }

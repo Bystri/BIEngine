@@ -14,9 +14,9 @@ class Material {
 public:
    explicit Material(std::shared_ptr<ShaderProgram> pShader);
 
-   void SetColor(const Color& color) { m_color = color; }
+   void SetColor(const ColorRgba& color) { m_color = color; }
 
-   const Color& GetColor() { return m_color; }
+   const ColorRgba& GetColor() { return m_color; }
 
    void SetDoubleSided(bool enable) { m_isDoubleSided = enable; }
 
@@ -36,7 +36,7 @@ public:
 
 
 private:
-   Color m_color;
+   ColorRgba m_color;
 
    bool m_isDoubleSided;
 

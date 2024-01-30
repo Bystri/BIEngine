@@ -161,16 +161,16 @@ public:
 
    float GetIrradiance() const { return m_irradiance; }
 
-   void SetColor(const glm::vec3& color) { m_color = color; }
+   void SetColor(const ColorRgb& color) { m_color = color; }
 
-   const glm::vec3& GetColor() const { return m_color; }
+   const ColorRgb& GetColor() const { return m_color; }
 
    virtual bool OnRender(Scene* pScene);
 
 private:
    glm::vec3 direction = glm::vec3(0.0, -1.0f, 0.0f);
    float m_irradiance = 1.0f;
-   glm::vec3 m_color = glm::vec3(0.75f, 0.75f, 0.05f);
+   ColorRgb m_color = ColorRgb(0.75f, 0.75f, 0.05f);
 };
 
 class PointLightNode : public SceneNode {
@@ -186,15 +186,15 @@ public:
 
    float GetIntensity() const { return m_intensity; }
 
-   void SetColor(const glm::vec3& color) { m_color = color; }
+   void SetColor(const ColorRgb& color) { m_color = color; }
 
-   const glm::vec3& GetColor() const { return m_color; }
+   const ColorRgb& GetColor() const { return m_color; }
 
    virtual bool OnRender(Scene* pScene);
 
 private:
    float m_intensity = 1.0f;
-   glm::vec3 m_color = glm::vec3(0.75f, 0.75f, 0.05f);
+   ColorRgb m_color = ColorRgb(0.75f, 0.75f, 0.05f);
 };
 
 class SpotLightNode : public SceneNode {
@@ -227,17 +227,17 @@ public:
 
    float GetOuterCutOff() const { return m_outerCutOff; }
 
-   void SetAmbient(const glm::vec3& ambient) { m_ambient = ambient; }
+   void SetAmbient(const ColorRgb& ambient) { m_ambient = ambient; }
 
-   const glm::vec3& GetAmbient() const { return m_ambient; }
+   const ColorRgb& GetAmbient() const { return m_ambient; }
 
-   void SetDiffuse(const glm::vec3& diffuse) { m_diffuse = diffuse; }
+   void SetDiffuse(const ColorRgb& diffuse) { m_diffuse = diffuse; }
 
-   const glm::vec3& GetDiffuse() const { return m_diffuse; }
+   const ColorRgb& GetDiffuse() const { return m_diffuse; }
 
-   void SetSpecular(const glm::vec3& specular) { m_specular = specular; }
+   void SetSpecular(const ColorRgb& specular) { m_specular = specular; }
 
-   const glm::vec3& GetSpecular() const { return m_specular; }
+   const ColorRgb& GetSpecular() const { return m_specular; }
 
    virtual bool OnRender(Scene* pScene);
 
@@ -246,9 +246,9 @@ private:
    float m_attenuationLinear = 0.09f;
    float m_attenuationQuadratic = 0.032f;
 
-   glm::vec3 m_ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-   glm::vec3 m_diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
-   glm::vec3 m_specular = glm::vec3(1.0f, 1.0f, 1.0f);
+   ColorRgb m_ambient = ColorRgb(0.05f, 0.05f, 0.05f);
+   ColorRgb m_diffuse = ColorRgb(0.5f, 0.5f, 0.5f);
+   ColorRgb m_specular = ColorRgb(1.0f, 1.0f, 1.0f);
 
    float m_cutOff = glm::cos(glm::radians(12.5f));
    float m_outerCutOff = glm::cos(glm::radians(25.0f));

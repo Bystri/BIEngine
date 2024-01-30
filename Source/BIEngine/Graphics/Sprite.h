@@ -18,9 +18,9 @@ public:
 
    void SetSprite(std::shared_ptr<Texture2D> texture) { m_pMaterial->SetDiffuseMap(texture); }
 
-   void SetColor(const Color& color) { m_pMaterial->SetColor(color); }
+   void SetColor(const ColorRgba& color) { m_pMaterial->SetColor(color); }
 
-   const Color& GetColor() const { return m_pMaterial->GetColor(); }
+   const ColorRgba& GetColor() const { return m_pMaterial->GetColor(); }
 
    std::shared_ptr<ShaderProgram> GetShaderProgramPtr() { return m_pMaterial->GetShaderProgramPtr(); }
 

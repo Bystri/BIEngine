@@ -35,7 +35,7 @@ bool DirectionalLightComponent::Init(tinyxml2::XMLElement* pData)
       pColorElement->QueryFloatAttribute("r", &r);
       pColorElement->QueryFloatAttribute("g", &g);
       pColorElement->QueryFloatAttribute("b", &b);
-      m_pDirectionalLightNode->SetColor(glm::vec3(r, g, b));
+      m_pDirectionalLightNode->SetColor(ColorRgb(r, g, b));
    }
 
    tinyxml2::XMLElement* pIrradianceElement = pData->FirstChildElement("Irradiance");
@@ -53,7 +53,7 @@ tinyxml2::XMLElement* DirectionalLightComponent::GenerateXml(tinyxml2::XMLDocume
    tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
 
    tinyxml2::XMLElement* pColorElement = pDoc->NewElement("Ambient");
-   const glm::vec3& color = m_pDirectionalLightNode->GetColor();
+   const ColorRgb& color = m_pDirectionalLightNode->GetColor();
    pColorElement->SetAttribute("r", color.r);
    pColorElement->SetAttribute("g", color.g);
    pColorElement->SetAttribute("b", color.b);
@@ -103,7 +103,7 @@ bool PointLightComponent::Init(tinyxml2::XMLElement* pData)
       pColorElement->QueryFloatAttribute("r", &r);
       pColorElement->QueryFloatAttribute("g", &g);
       pColorElement->QueryFloatAttribute("b", &b);
-      m_pPointLightNode->SetColor(glm::vec3(r, g, b));
+      m_pPointLightNode->SetColor(ColorRgb(r, g, b));
    }
 
 
@@ -122,7 +122,7 @@ tinyxml2::XMLElement* PointLightComponent::GenerateXml(tinyxml2::XMLDocument* pD
    tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
 
    tinyxml2::XMLElement* pColorElement = pDoc->NewElement("Color");
-   const glm::vec3& color = m_pPointLightNode->GetColor();
+   const ColorRgb& color = m_pPointLightNode->GetColor();
    pColorElement->SetAttribute("r", color.r);
    pColorElement->SetAttribute("g", color.g);
    pColorElement->SetAttribute("b", color.b);
@@ -172,7 +172,7 @@ bool SpotLightComponent::Init(tinyxml2::XMLElement* pData)
       pAmbientElement->QueryFloatAttribute("r", &r);
       pAmbientElement->QueryFloatAttribute("g", &g);
       pAmbientElement->QueryFloatAttribute("b", &b);
-      m_pSpotLightNode->SetAmbient(glm::vec3(r, g, b));
+      m_pSpotLightNode->SetAmbient(ColorRgb(r, g, b));
    }
 
 
@@ -184,7 +184,7 @@ bool SpotLightComponent::Init(tinyxml2::XMLElement* pData)
       pDiffuseElement->QueryFloatAttribute("r", &r);
       pDiffuseElement->QueryFloatAttribute("g", &g);
       pDiffuseElement->QueryFloatAttribute("b", &b);
-      m_pSpotLightNode->SetDiffuse(glm::vec3(r, g, b));
+      m_pSpotLightNode->SetDiffuse(ColorRgb(r, g, b));
    }
 
 
@@ -196,7 +196,7 @@ bool SpotLightComponent::Init(tinyxml2::XMLElement* pData)
       pSpecularElement->QueryFloatAttribute("r", &r);
       pSpecularElement->QueryFloatAttribute("g", &g);
       pSpecularElement->QueryFloatAttribute("b", &b);
-      m_pSpotLightNode->SetSpecular(glm::vec3(r, g, b));
+      m_pSpotLightNode->SetSpecular(ColorRgb(r, g, b));
    }
 
    tinyxml2::XMLElement* pAttenuationElement = pData->FirstChildElement("Attenuation");

@@ -31,6 +31,14 @@ void ShaderProgramState::Use()
       m_pShaderProgram->SetMatrix4(uniform.first, uniform.second);
    }
 
+   for (const auto& uniform : m_uniformColorsRgb) {
+      m_pShaderProgram->SetColorRgb(uniform.first, uniform.second);
+   }
+
+   for (const auto& uniform : m_uniformColorsRgba) {
+      m_pShaderProgram->SetColorRgba(uniform.first, uniform.second);
+   }
+
    for (int i = 0; i < m_textures.size(); ++i) {
       if (m_textures[i].second) {
          m_textures[i].second->Bind(m_textures[i].first);
@@ -66,6 +74,16 @@ void ShaderProgramState::SetVector3f(const std::string& name, const glm::vec3& v
 void ShaderProgramState::SetMatrix4(const std::string& name, const glm::mat4& mat)
 {
    m_uniformMatricies[name] = mat;
+}
+
+void ShaderProgramState::SetColorRgb(const std::string& name, const ColorRgb& color)
+{
+   m_uniformColorsRgb[name] = color;
+}
+
+void ShaderProgramState::SetColorRgba(const std::string& name, const ColorRgba& color)
+{
+   m_uniformColorsRgba[name] = color;
 }
 
 void ShaderProgramState::AddTexture(int slotId, std::shared_ptr<Texture> pTexture)

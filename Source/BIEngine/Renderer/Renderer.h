@@ -58,7 +58,7 @@ public:
    void BeginFrame();
    void EndFrame();
 
-   void Clear(RenderDevice::ClearFlag flags, const Color& color);
+   void Clear(RenderDevice::ClearFlag flags, const ColorRgba& color);
    void DrawRenderCommand(RenderCommand& renderCommand);
 
 public:

@@ -30,7 +30,7 @@ struct Material {
 	sampler2D diffuse;
     sampler2D specular;
 	sampler2D normal;
-	vec3 color;
+	vec4 color;
     float shininess;
 }; 
 
@@ -138,8 +138,10 @@ vec4 CalculateDirectionalLight(int index, vec3 normal, vec3 fragPos, vec3 viewDi
 	vec3 lightDir = normalize(-light.direction);
 	vec3 E = light.color * light.irradiance * max(dot(normal, lightDir), 0.0);
 	
+	vec3 matColor = material.color.rgb;
+	
     // diffuse 
-    vec3 diffuseComponent = material.color * texture(material.diffuse, texCoord).rgb; 
+    vec3 diffuseComponent = matColor * texture(material.diffuse, texCoord).rgb; 
     
     // specular
     vec3 halfwayDir = normalize(lightDir + viewDir);  
@@ -162,8 +164,10 @@ vec4 CalculatePointLight(int index, vec3 normal, vec3 fragPos, vec3 viewDir, vec
 	float geometryFactor = max(dot(normal, lightDir), 0.0) / dot(distVec, distVec);
 	vec3 E = light.color * light.intensity * geometryFactor;
 	
+	vec3 matColor = material.color.rgb;
+	
 	// diffuse
-    vec3 diffuseComponent = material.color * texture(material.diffuse, texCoord).rgb;
+    vec3 diffuseComponent = matColor * texture(material.diffuse, texCoord).rgb;
     
     // specular
     vec3 halfwayDir = normalize(lightDir + viewDir);  
@@ -186,8 +190,10 @@ vec4 CalculateSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir
 	float distance = length(light.position-fragPos);
 	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
+    vec3 matColor = material.color.rgb;
+
 	// ambient
-	vec3 ambient = light.ambient * material.color * texture(material.diffuse, texCoord).rgb;
+	vec3 ambient = light.ambient * matColor * texture(material.diffuse, texCoord).rgb;
 
 	// diffuse 
 	float diff = max(dot(normal, lightDir), 0.0);

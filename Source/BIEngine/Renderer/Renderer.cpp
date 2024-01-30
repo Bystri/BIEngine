@@ -47,7 +47,7 @@ bool Renderer::Init(int screenWidth, int screenHeight, int MsaaSamples)
    return true;
 }
 
-void Renderer::Clear(RenderDevice::ClearFlag flags, const Color& color)
+void Renderer::Clear(RenderDevice::ClearFlag flags, const ColorRgba& color)
 {
    m_renderDevice.Clear(flags, color);
 }
