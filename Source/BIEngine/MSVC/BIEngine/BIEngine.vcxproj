@@ -208,6 +208,7 @@
     <ClInclude Include="..\..\Graphics\Skybox.h" />
     <ClInclude Include="..\..\Graphics\Sprite.h" />
     <ClInclude Include="..\..\Graphics\SpriteNode.h" />
+    <ClInclude Include="..\..\Math\Matrix.h" />
     <ClInclude Include="..\..\Math\Vector.h" />
     <ClInclude Include="..\..\Navigation\NavChunkyTriMesh.h" />
     <ClInclude Include="..\..\Navigation\NavInputMeshesManager.h" />

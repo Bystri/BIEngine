@@ -61,6 +61,18 @@ TEST(Vector, Length) {
 	EXPECT_FLOAT_EQ(length, 5.0f);
 }
 
+TEST(Vector, Normalize) {
+	BIEngine::Vector3 vec1(4.0f, 3.0f, 5.0f);
+
+	const BIEngine::Vector3 norm = Normalized(vec1);
+
+	EXPECT_FLOAT_EQ(Length2(norm), 1.0f);
+
+	Normalize(vec1);
+
+	EXPECT_FLOAT_EQ(Length2(vec1), 1.0f);
+}
+
 TEST(Vector, DotProduct) {
 	BIEngine::Vector2 vec1(1.0f, 4.0f);
 	BIEngine::Vector2 vec2(3.0f, 2.0f);

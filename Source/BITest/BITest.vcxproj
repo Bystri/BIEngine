@@ -67,6 +67,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Math\Matrix_UnitTest.cpp" />
     <ClCompile Include="Math\Vector_UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>

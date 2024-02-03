@@ -587,6 +587,9 @@
     <ClInclude Include="..\..\Navigation\NavSoloMeshGenerator.h">
       <Filter>Navigation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Math\Matrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.clang-format" />

@@ -30,6 +30,10 @@ struct Vector {
       }
    }
 
+   T& operator[](const std::size_t idx) { return data[idx]; }
+
+   T operator[](const std::size_t idx) const { return data[idx]; }
+
    std::array<T, n> data;
 };
 
@@ -64,6 +68,10 @@ struct Vector<T, 2> {
       data[0] = x;
       data[1] = y;
    }
+
+   T& operator[](const std::size_t idx) { return data[idx]; }
+
+   T operator[](const std::size_t idx) const { return data[idx]; }
 
    union {
       std::array<T, 2> data;
@@ -108,6 +116,10 @@ struct Vector<T, 3> {
       data[1] = y;
       data[2] = z;
    }
+
+   T& operator[](const std::size_t idx) { return data[idx]; }
+
+   T operator[](const std::size_t idx) const { return data[idx]; }
 
    union {
       std::array<T, 3> data;
@@ -154,6 +166,10 @@ struct Vector<T, 4> {
       data[2] = y;
       data[3] = y;
    }
+
+   T& operator[](const std::size_t idx) { return data[idx]; }
+
+   T operator[](const std::size_t idx) const { return data[idx]; }
 
    union {
       std::array<T, 4> data;
@@ -248,6 +264,25 @@ template <typename T, std::size_t n>
 inline T Length(const Vector<T, n>& vector)
 {
    return std::sqrt(Length2(vector));
+}
+
+template <typename T, std::size_t n>
+inline void Normalize(Vector<T, n>& vector)
+{
+   const T l = Length(vector);
+
+   for (int i = 0; i < n; ++i) {
+      vector[i] /= l;
+   }
+}
+
+template <typename T, std::size_t n>
+inline Vector<T, n> Normalized(const Vector<T, n>& vector)
+{
+   Vector<T, n> norm = vector;
+   Normalize(norm);
+
+   return norm;
 }
 
 template <typename T, std::size_t n>

@@ -4,10 +4,16 @@
     <ClCompile Include="Math\Vector_UnitTest.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="Math\Matrix_UnitTest.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
       <UniqueIdentifier>{e200c405-79ab-40ae-ac61-09ea523b716f}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
