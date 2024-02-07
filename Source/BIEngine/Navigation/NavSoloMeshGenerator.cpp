@@ -344,6 +344,13 @@ bool NavSoloMeshGenerator::createDetourData()
       unsigned char* navData = 0;
       int navDataSize = 0;
 
+      for (int i = 0; i < m_pPolyMesh->npolys; ++i) {
+         if (m_pPolyMesh->areas[i] == RC_WALKABLE_AREA) {
+            m_pPolyMesh->areas[i] = 0;
+            m_pPolyMesh->flags[i] = 1;
+         }
+      }
+
       dtNavMeshCreateParams params;
       memset(&params, 0, sizeof(params));
       params.verts = m_pPolyMesh->verts;
@@ -388,12 +395,6 @@ bool NavSoloMeshGenerator::createDetourData()
       if (dtStatusFailed(status)) {
          dtFree(navData);
          Logger::WriteErrorLog("Could not init Detour navmesh");
-         return false;
-      }
-
-      status = m_pNavQuery->init(m_pNavMesh, 2048);
-      if (dtStatusFailed(status)) {
-         Logger::WriteErrorLog("Could not init Detour navmesh query");
          return false;
       }
 

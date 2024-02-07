@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "../BIEngine/EngineCore/BIEngine.h"
-#include "../BIEngine/Navigation/NavMeshManager.h"
 #include "BIGameController.h"
 #include "BIFlyCameraSystem.h"
 
@@ -25,9 +24,6 @@ public:
    virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) override;
 
    virtual void OnUpdate(BIEngine::GameTimer& gt) override;
-
-private:
-   std::unique_ptr<BIEngine::NavMeshManager> m_pNavMeshManager;
 };
 
 class BIGameHumanView : public BIEngine::HumanView {

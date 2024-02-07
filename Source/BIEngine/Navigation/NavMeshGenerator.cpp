@@ -9,14 +9,12 @@ namespace BIEngine {
 NavMeshGenerator::NavMeshGenerator()
    : m_pGeom(nullptr),
      m_pNavMesh(nullptr),
-     m_pNavQuery(nullptr),
      m_filterLowHangingObstacles(true),
      m_filterLedgeSpans(true),
      m_filterWalkableLowHeightSpans(true),
      m_pCtx(new rcContext())
 {
    ResetCommonSettings();
-   m_pNavQuery = dtAllocNavMeshQuery();
 }
 
 NavMeshGenerator::~NavMeshGenerator()

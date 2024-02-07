@@ -12,8 +12,11 @@
 namespace BIEngine {
 
 NavMeshManager::NavMeshManager()
+   : m_pNavMesh(nullptr), m_pNavQuery(nullptr)
 {
    m_pNavMeshGenerator = std::make_shared<NavSoloMeshGenerator>();
+
+   m_pNavQuery = dtAllocNavMeshQuery();
 
    EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &NavMeshManager::HandleActorAdded), EvtData_Actor_Created::sk_EventType);
    EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &NavMeshManager::HandleActorDestroyed), EvtData_Destroy_Actor::sk_EventType);
@@ -42,12 +45,148 @@ static bool SaveGeom(const std::string& filepath, std::shared_ptr<NavMeshInputGe
    fclose(fp);
 }
 
-void NavMeshManager::BuildNavmesh()
+struct NavMeshSetHeader {
+   int magic;
+   int version;
+   int numTiles;
+   dtNavMeshParams params;
+};
+
+struct NavMeshTileHeader {
+   dtTileRef tileRef;
+   int dataSize;
+};
+
+static const int NAVMESHSET_MAGIC = 'M' << 24 | 'S' << 16 | 'E' << 8 | 'T'; //'MSET';
+static const int NAVMESHSET_VERSION = 1;
+
+void NavMeshManager::SaveNavMesh(const std::string& path)
+{
+   if (!m_pNavMesh) {
+      return;
+   }
+
+   FILE* fp = fopen(path.c_str(), "wb");
+   if (!fp) {
+      return;
+   }
+
+   const dtNavMesh* pConstMesh = m_pNavMesh;
+
+   // Store header.
+   NavMeshSetHeader header;
+   header.magic = NAVMESHSET_MAGIC;
+   header.version = NAVMESHSET_VERSION;
+   header.numTiles = 0;
+   for (int i = 0; i < pConstMesh->getMaxTiles(); ++i) {
+      const dtMeshTile* tile = pConstMesh->getTile(i);
+      if (!tile || !tile->header || !tile->dataSize) {
+         continue;
+      }
+      header.numTiles++;
+   }
+   memcpy(&header.params, pConstMesh->getParams(), sizeof(dtNavMeshParams));
+   fwrite(&header, sizeof(NavMeshSetHeader), 1, fp);
+
+   // Store tiles.
+   for (int i = 0; i < pConstMesh->getMaxTiles(); ++i) {
+      const dtMeshTile* tile = pConstMesh->getTile(i);
+      if (!tile || !tile->header || !tile->dataSize) {
+         continue;
+      }
+
+      NavMeshTileHeader tileHeader;
+      tileHeader.tileRef = pConstMesh->getTileRef(tile);
+      tileHeader.dataSize = tile->dataSize;
+      fwrite(&tileHeader, sizeof(tileHeader), 1, fp);
+
+      fwrite(tile->data, tile->dataSize, 1, fp);
+   }
+
+   fclose(fp);
+}
+
+void NavMeshManager::LoadNavMesh(const std::string& path)
+{
+
+   FILE* fp = fopen(path.c_str(), "rb");
+   if (!fp) {
+      return;
+   }
+
+   // Read header.
+   NavMeshSetHeader header;
+   size_t readLen = fread(&header, sizeof(NavMeshSetHeader), 1, fp);
+   if (readLen != 1) {
+      fclose(fp);
+      return;
+   }
+   if (header.magic != NAVMESHSET_MAGIC) {
+      fclose(fp);
+      return;
+   }
+   if (header.version != NAVMESHSET_VERSION) {
+      fclose(fp);
+      return;
+   }
+
+   dtNavMesh* mesh = dtAllocNavMesh();
+   if (!mesh) {
+      fclose(fp);
+      return;
+   }
+   dtStatus status = mesh->init(&header.params);
+   if (dtStatusFailed(status)) {
+      fclose(fp);
+      return;
+   }
+
+   // Read tiles.
+   for (int i = 0; i < header.numTiles; ++i) {
+      NavMeshTileHeader tileHeader;
+      readLen = fread(&tileHeader, sizeof(tileHeader), 1, fp);
+      if (readLen != 1) {
+         fclose(fp);
+         return;
+      }
+
+      if (!tileHeader.tileRef || !tileHeader.dataSize)
+         break;
+
+      unsigned char* data = (unsigned char*)dtAlloc(tileHeader.dataSize, DT_ALLOC_PERM);
+      if (!data)
+         break;
+      memset(data, 0, tileHeader.dataSize);
+      readLen = fread(data, tileHeader.dataSize, 1, fp);
+      if (readLen != 1) {
+         dtFree(data);
+         fclose(fp);
+         return;
+      }
+
+      mesh->addTile(data, tileHeader.dataSize, DT_TILE_FREE_DATA, tileHeader.tileRef, 0);
+   }
+
+   fclose(fp);
+
+   m_pNavMesh = mesh;
+   m_pNavQuery->init(m_pNavMesh, 2048);
+}
+
+bool NavMeshManager::BuildNavmesh()
 {
    std::shared_ptr<NavMeshInputGeometry> pGeom = prepareNavGeom();
    SaveGeom("geom.obj", pGeom);
    m_pNavMeshGenerator->SetInputGeom(pGeom);
-   m_pNavMeshGenerator->BuildNavmesh();
+   if (m_pNavMeshGenerator->BuildNavmesh()) {
+      m_pNavMesh = m_pNavMeshGenerator->GetNavMesh();
+      m_pNavQuery->init(m_pNavMesh, 2048);
+      SaveNavMesh("E:/BystrovI/Projects/BIEngine/Assets/Worlds/World/World.nav");
+
+      return true;
+   }
+
+   return true;
 }
 
 static void duDebugDrawNavMeshPoly(const dtNavMesh& mesh, dtPolyRef ref, const ColorRgba& color)
@@ -100,7 +239,17 @@ static void RenderNavMesh(const dtNavMesh& mesh)
 
 void NavMeshManager::RenderMesh()
 {
-   RenderNavMesh(*m_pNavMeshGenerator->GetNavMesh());
+   RenderNavMesh(*m_pNavMesh);
+}
+
+dtNavMesh* NavMeshManager::GetNavMesh()
+{
+   return m_pNavMesh;
+}
+
+dtNavMeshQuery* NavMeshManager::GetNavMeshQuery()
+{
+   return m_pNavQuery;
 }
 
 void NavMeshManager::HandleActorAdded(IEventDataPtr pEventData)

@@ -303,6 +303,15 @@
     <ClCompile Include="..\..\Navigation\NavSoloMeshGenerator.cpp">
       <Filter>Navigation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Navigation\NavCrowd.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Navigation\NavWorld.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\NavAgentComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -589,6 +598,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Math\Matrix.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Navigation\NavCrowd.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Navigation\NavWorld.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\NavAgentComponent.h">
+      <Filter>Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

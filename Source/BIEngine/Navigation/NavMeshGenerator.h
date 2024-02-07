@@ -33,15 +33,12 @@ public:
 
    dtNavMesh* GetNavMesh() { return m_pNavMesh; }
 
-   dtNavMeshQuery* GetNavMeshQuery() { return m_pNavQuery; }
-
    void SetInputGeom(std::shared_ptr<NavMeshInputGeometry> pInputGeom);
    void ResetCommonSettings();
 
 protected:
    std::shared_ptr<NavMeshInputGeometry> m_pGeom;
    dtNavMesh* m_pNavMesh;
-   dtNavMeshQuery* m_pNavQuery;
 
    unsigned char m_navMeshDrawFlags;
 

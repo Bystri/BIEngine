@@ -3,6 +3,8 @@
 #include <vector>
 #include <memory>
 
+#include <DetourNavMeshQuery.h>
+
 #include "../EventManager/Events.h"
 
 namespace BIEngine {
@@ -16,8 +18,13 @@ public:
    NavMeshManager();
    ~NavMeshManager();
 
-   void BuildNavmesh();
+   void SaveNavMesh(const std::string& path);
+   void LoadNavMesh(const std::string& path);
+   bool BuildNavmesh();
    void RenderMesh();
+
+   dtNavMesh* GetNavMesh();
+   dtNavMeshQuery* GetNavMeshQuery();
 
 private:
    void HandleActorAdded(IEventDataPtr pEventData);
@@ -31,6 +38,8 @@ private:
 private:
    std::vector<std::shared_ptr<Actor>> m_actors;
    std::shared_ptr<NavMeshGenerator> m_pNavMeshGenerator;
+   dtNavMesh* m_pNavMesh;
+   dtNavMeshQuery* m_pNavQuery;
 };
 
 } // namespace BIEngine

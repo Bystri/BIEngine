@@ -74,7 +74,11 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
 
 void ScriptComponent::PostInit()
 {
-   m_pyObject.attr("PostInit")();
+   try {
+      m_pyObject.attr("PostInit")();
+   } catch (pybind11::error_already_set er) {
+      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while PostInit: ") + er.what());
+   }
 }
 
 tinyxml2::XMLElement* ScriptComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)

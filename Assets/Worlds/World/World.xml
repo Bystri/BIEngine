@@ -257,6 +257,8 @@
 				<PhysicsMaterial>Normal</PhysicsMaterial>
 				<Scale w="1.0" h="1.0" d="1.0"/>
 			</Physics3DComponent>
+			<NavAgentComponent>
+			</NavAgentComponent>
 			<ScriptComponent>
 				<ScriptObject modulePath="CharacterMovement" className="CharacterMovement"/>
 			</ScriptComponent>

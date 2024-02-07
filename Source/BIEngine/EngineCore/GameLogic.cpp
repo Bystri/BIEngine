@@ -34,7 +34,9 @@ bool GameLogic::Init()
 
 bool GameLogic::LoadLevel(const std::string& path)
 {
-   auto resourceHandle = ResCache::Get()->GetHandle(path);
+   const std::string xmlWorldPath = path + "/World.xml";
+
+   auto resourceHandle = ResCache::Get()->GetHandle(xmlWorldPath);
 
    if (!resourceHandle)
       return false;
@@ -44,7 +46,7 @@ bool GameLogic::LoadLevel(const std::string& path)
 
    tinyxml2::XMLElement* pRoot = levelXmlData->GetRootElement();
    if (!pRoot) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Failed to find level resource file: " + path);
+      Logger::WriteLog(Logger::LogType::ERROR, "Failed to find level resource file: " + xmlWorldPath);
       return false;
    }
 

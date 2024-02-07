@@ -16,7 +16,7 @@ struct Options {
    bool useDevelopmentAssets = false;
 
    // Имя мира, который загрузится первым
-   std::string mainWorldResName = "Worlds/World.xml";
+   std::string mainWorldResNamePath = "Worlds/World";
 
    unsigned int screenWidth = 1024;
    unsigned int screenHeight = 768;

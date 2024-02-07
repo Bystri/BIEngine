@@ -96,6 +96,7 @@
     <ClCompile Include="..\..\Actors\Actor.cpp" />
     <ClCompile Include="..\..\Actors\ActorFactory.cpp" />
     <ClCompile Include="..\..\Actors\LightComponent.cpp" />
+    <ClCompile Include="..\..\Actors\NavAgentComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics3DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DTriggerComponent.cpp" />
@@ -122,11 +123,13 @@
     <ClCompile Include="..\..\Graphics\Sprite.cpp" />
     <ClCompile Include="..\..\Graphics\SpriteNode.cpp" />
     <ClCompile Include="..\..\Navigation\NavChunkyTriMesh.cpp" />
+    <ClCompile Include="..\..\Navigation\NavCrowd.cpp" />
     <ClCompile Include="..\..\Navigation\NavInputMeshesManager.cpp" />
     <ClCompile Include="..\..\Navigation\NavMeshGenerator.cpp" />
     <ClCompile Include="..\..\Navigation\NavMeshInputGeom.cpp" />
     <ClCompile Include="..\..\Navigation\NavMeshManager.cpp" />
     <ClCompile Include="..\..\Navigation\NavSoloMeshGenerator.cpp" />
+    <ClCompile Include="..\..\Navigation\NavWorld.cpp" />
     <ClCompile Include="..\..\Physics\Physics2D.cpp" />
     <ClCompile Include="..\..\Physics\Physics3D.cpp" />
     <ClCompile Include="..\..\Physics\Physics2DEventListener.cpp" />
@@ -182,6 +185,7 @@
     <ClInclude Include="..\..\Actors\ActorComponent.h" />
     <ClInclude Include="..\..\Actors\ActorFactory.h" />
     <ClInclude Include="..\..\Actors\LightComponent.h" />
+    <ClInclude Include="..\..\Actors\NavAgentComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics3DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DTriggerComponent.h" />
@@ -211,11 +215,13 @@
     <ClInclude Include="..\..\Math\Matrix.h" />
     <ClInclude Include="..\..\Math\Vector.h" />
     <ClInclude Include="..\..\Navigation\NavChunkyTriMesh.h" />
+    <ClInclude Include="..\..\Navigation\NavCrowd.h" />
     <ClInclude Include="..\..\Navigation\NavInputMeshesManager.h" />
     <ClInclude Include="..\..\Navigation\NavMeshGenerator.h" />
     <ClInclude Include="..\..\Navigation\NavMeshInputGeom.h" />
     <ClInclude Include="..\..\Navigation\NavMeshManager.h" />
     <ClInclude Include="..\..\Navigation\NavSoloMeshGenerator.h" />
+    <ClInclude Include="..\..\Navigation\NavWorld.h" />
     <ClInclude Include="..\..\Physics\Physics2D.h" />
     <ClInclude Include="..\..\Physics\Physics3D.h" />
     <ClInclude Include="..\..\Physics\Physics2DEventListener.h" />

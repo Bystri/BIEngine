@@ -39,6 +39,8 @@ BIGameLogic::BIGameLogic()
 {
    m_pPhysics2D.reset(BIEngine::CreateGamePhysics2D());
    m_pPhysics3D.reset(BIEngine::CreateGamePhysics3D());
+
+   m_pNavWorld = std::make_unique<BIEngine::NavWorld>();
 }
 
 bool BIGameLogic::Init()
@@ -48,29 +50,28 @@ bool BIGameLogic::Init()
 
    m_pPhysics2D->Initialize();
    m_pPhysics3D->Initialize();
-
-   m_pNavMeshManager = std::make_unique<BIEngine::NavMeshManager>();
+   m_pNavWorld->Initialize();
 
    std::shared_ptr<BIGameHumanView> pHumanView = std::make_shared<BIGameHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
    AddGameView(pHumanView);
 
    // Загружаем стартовый мир
-   LoadLevel(BIEngine::g_pApp->m_options.mainWorldResName);
+   LoadLevel(BIEngine::g_pApp->m_options.mainWorldResNamePath);
 
    return true;
 }
 
 bool BIGameLogic::LoadLevelDelegate(tinyxml2::XMLElement* pRoot)
 {
-   m_pNavMeshManager->BuildNavmesh();
-
    return true;
 }
 
 void BIGameLogic::OnUpdate(BIEngine::GameTimer& gt)
 {
    GameLogic::OnUpdate(gt);
-   m_pNavMeshManager->RenderMesh();
+   m_pNavWorld->GetNavCrowd()->UpdateCrowdInfo(m_actors);
+   m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
+   m_pNavWorld->GetNavMeshManager()->RenderMesh();
 }
 
 bool BIGameHumanView::Init()
