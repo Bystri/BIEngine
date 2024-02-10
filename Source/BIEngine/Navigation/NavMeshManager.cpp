@@ -2,6 +2,8 @@
 
 #include "../3rdParty/FastDelegate/FastDelegate.h"
 
+#include <imgui.h>
+
 #include "NavMeshInputGeom.h"
 #include "NavSoloMeshGenerator.h"
 #include "../Actors/RenderComponent.h"
@@ -12,7 +14,7 @@
 namespace BIEngine {
 
 NavMeshManager::NavMeshManager()
-   : m_pNavMesh(nullptr), m_pNavQuery(nullptr)
+   : m_pNavMesh(nullptr), m_pNavQuery(nullptr), m_bRenderNavmesh(false)
 {
    m_pNavMeshGenerator = std::make_shared<NavSoloMeshGenerator>();
 
@@ -175,18 +177,8 @@ void NavMeshManager::LoadNavMesh(const std::string& path)
 
 bool NavMeshManager::BuildNavmesh()
 {
-   std::shared_ptr<NavMeshInputGeometry> pGeom = prepareNavGeom();
-   SaveGeom("geom.obj", pGeom);
-   m_pNavMeshGenerator->SetInputGeom(pGeom);
-   if (m_pNavMeshGenerator->BuildNavmesh()) {
-      m_pNavMesh = m_pNavMeshGenerator->GetNavMesh();
-      m_pNavQuery->init(m_pNavMesh, 2048);
-      SaveNavMesh("E:/BystrovI/Projects/BIEngine/Assets/Worlds/World/World.nav");
-
-      return true;
-   }
-
-   return true;
+   NavMeshBuildSettings settings;
+   return generateNavmesh(settings);
 }
 
 static void duDebugDrawNavMeshPoly(const dtNavMesh& mesh, dtPolyRef ref, const ColorRgba& color)
@@ -237,9 +229,83 @@ static void RenderNavMesh(const dtNavMesh& mesh)
    }
 }
 
+void NavMeshManager::renderNavMeshWindow()
+{
+   ImGui::SetNextWindowSize(ImVec2(550, 650), ImGuiCond_Always);
+
+   if (!ImGui::Begin("Navmesh settings")) {
+      ImGui::End();
+      return;
+   }
+
+   ImGui::Text("Debug");
+   ImGui::Checkbox("Render Navmesh", &m_bRenderNavmesh);
+
+   NavMeshBuildSettings buildSettings;
+
+   ImGui::Separator();
+   ImGui::SliderFloat("Cell Size", &buildSettings.CellSize, 0.1f, 1.0f);
+   ImGui::SliderFloat("Cell Height", &buildSettings.CellHeight, 0.1f, 1.0f);
+
+   ImGui::Separator();
+   ImGui::Text("Agent");
+   ImGui::SliderFloat("Radius", &buildSettings.AgentRadius, 0.0f, 5.0f);
+   ImGui::SliderFloat("Max Climb", &buildSettings.AgentMaxClimb, 0.1f, 5.0f);
+   ImGui::SliderFloat("Max Slope", &buildSettings.AgentMaxSlope, 0.0f, 90.0f);
+
+   ImGui::Separator();
+   ImGui::Text("Region");
+   ImGui::SliderFloat("Min Region Size", &buildSettings.RegionMinSize, 0.0f, 150.0f);
+   ImGui::SliderFloat("Merged Region Size", &buildSettings.RegionMergeSize, 0.0f, 150.0f);
+
+   ImGui::Separator();
+   ImGui::Text("Partitioning");
+   int partitionRadioOption = static_cast<int>(buildSettings.PartitionType);
+   ImGui::RadioButton("Watershed", &partitionRadioOption, 0);
+   ImGui::RadioButton("Monotone", &partitionRadioOption, 1);
+   ImGui::RadioButton("Layers", &partitionRadioOption, 2);
+   buildSettings.PartitionType = static_cast<NavMeshBuildSettings::SamplePartitionType>(partitionRadioOption);
+
+   ImGui::Separator();
+   ImGui::Text("Filtering");
+   if (ImGui::Checkbox("Low Hanging Obstacles", &buildSettings.FilterLowHangingObstacles))
+      buildSettings.FilterLowHangingObstacles = !buildSettings.FilterLowHangingObstacles;
+   if (ImGui::Checkbox("Ledge Spans", &buildSettings.FilterLedgeSpans))
+      buildSettings.FilterLedgeSpans = !buildSettings.FilterLedgeSpans;
+   if (ImGui::Checkbox("Walkable Low Height Spans", &buildSettings.FilterWalkableLowHeightSpans))
+      buildSettings.FilterWalkableLowHeightSpans = !buildSettings.FilterWalkableLowHeightSpans;
+
+   ImGui::Separator();
+   ImGui::Text("Polygonization");
+   ImGui::SliderFloat("Max Edge Length", &buildSettings.EdgeMaxLen, 0.0f, 50.0f);
+   ImGui::SliderFloat("Max Edge Error", &buildSettings.EdgeMaxError, 0.1f, 3.0f);
+   ImGui::SliderFloat("Verts Per Poly", &buildSettings.VertsPerPoly, 3.0f, 12.0f);
+
+   ImGui::Separator();
+   ImGui::Text("Detail Mesh");
+   ImGui::SliderFloat("Sample Distance", &buildSettings.DetailSampleDist, 0.0f, 16.0f);
+   ImGui::SliderFloat("Max Sample Error", &buildSettings.DetailSampleMaxError, 0.0f, 16.0f);
+
+   ImGui::Separator();
+   if (ImGui::Button("Generate")) {
+      generateNavmesh(buildSettings);
+   }
+
+   ImGui::SameLine();
+   if (ImGui::Button("Save")) {
+      SaveNavMesh("E:/BystrovI/Projects/BIEngine/Assets/Worlds/World/World.nav");
+   }
+
+   ImGui::End();
+}
+
 void NavMeshManager::RenderMesh()
 {
-   RenderNavMesh(*m_pNavMesh);
+   renderNavMeshWindow();
+
+   if (m_bRenderNavmesh) {
+      RenderNavMesh(*m_pNavMesh);
+   }
 }
 
 dtNavMesh* NavMeshManager::GetNavMesh()
@@ -250,6 +316,22 @@ dtNavMesh* NavMeshManager::GetNavMesh()
 dtNavMeshQuery* NavMeshManager::GetNavMeshQuery()
 {
    return m_pNavQuery;
+}
+
+bool NavMeshManager::generateNavmesh(const NavMeshBuildSettings& settings)
+{
+   std::shared_ptr<NavMeshInputGeometry> pGeom = prepareNavGeom();
+   SaveGeom("geom.obj", pGeom);
+   m_pNavMeshGenerator->SetInputGeom(pGeom);
+
+   if (m_pNavMeshGenerator->BuildNavmesh(settings)) {
+      m_pNavMesh = m_pNavMeshGenerator->GetNavMesh();
+      m_pNavQuery->init(m_pNavMesh, 2048);
+
+      return true;
+   }
+
+   return true;
 }
 
 void NavMeshManager::HandleActorAdded(IEventDataPtr pEventData)

@@ -258,6 +258,11 @@
 				<Scale w="1.0" h="1.0" d="1.0"/>
 			</Physics3DComponent>
 			<NavAgentComponent>
+				<Common radius="0.5" height="1" maxSpeed="3.5" maxAcceleration="8.0"/>
+				<Steering anticipateTurns="true"/>
+				<Separation enable="true" separationWeight="5.0"/>
+				<ObstacleAvoidance enable = "true" collisionQueryRange="5.0"/>
+				<PathOptimizations optimizeVis = "true" pathOptimizationRange="15.0" optimizeTopo="true"/>
 			</NavAgentComponent>
 			<ScriptComponent>
 				<ScriptObject modulePath="CharacterMovement" className="CharacterMovement"/>

@@ -11,19 +11,19 @@ public:
    NavSoloMeshGenerator();
    virtual ~NavSoloMeshGenerator();
 
-   virtual bool BuildNavmesh() override;
+   virtual bool BuildNavmesh(const NavMeshBuildSettings& settings) override;
 
 private:
    void cleanup();
 
-   void initializeBuildConfig(const float* bmin, const float* bmax, const int nverts, const int ntris);
+   void initializeBuildConfig(const NavMeshBuildSettings& settings, const float* bmin, const float* bmax, const int nverts, const int ntris);
    bool rasterizeInputPolygons(const float* verts, const int nverts, const int* tris, const int ntris);
    void filterWalkablesSurfaces();
-   bool partitionSurfaceToSimpleRegions();
+   bool partitionSurfaceToSimpleRegions(const NavMeshBuildSettings& settings);
    bool traceAndSimplifyRegionContours();
    bool buildPolygonMeshFromContours();
    bool createDetailMesh();
-   bool createDetourData();
+   bool createDetourData(const NavMeshBuildSettings& settings);
 
 private:
    unsigned char* m_pTriareas;

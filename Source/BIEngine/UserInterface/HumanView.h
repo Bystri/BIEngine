@@ -28,6 +28,7 @@ public:
    virtual GameViewId GetId() const override { return m_viewId; }
 
    virtual void OnPointerMove(float xpos, float ypos) override;
+   virtual void SetPointerButton(int button, bool state) override;
    virtual void SetKey(int key, int scancode, bool state) override;
 
 protected:

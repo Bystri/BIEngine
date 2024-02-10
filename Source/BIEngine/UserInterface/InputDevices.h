@@ -18,8 +18,8 @@ public:
    };
 
    virtual bool OnPointerMove(const Point& pos, int radius) = 0;
-   virtual bool OnPointerButtonDown(const Point& pos, int radius, const std::string& buttonName) = 0;
-   virtual bool OnPointerButtonUp(const Point& pos, int radius, const std::string& buttonName) = 0;
+   virtual bool OnPointerButtonDown(const Point& pos, int radius, int buttonCode) = 0;
+   virtual bool OnPointerButtonUp(const Point& pos, int radius, int buttonCode) = 0;
 };
 
 class IJoystickHandler {

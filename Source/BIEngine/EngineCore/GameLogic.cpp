@@ -156,6 +156,13 @@ void GameLogic::OnPointerMove(float xpos, float ypos)
    }
 }
 
+void GameLogic::SetPointerButton(int button, bool state)
+{
+   for (const auto view : m_gameViews) {
+      view->SetPointerButton(button, state);
+   }
+}
+
 void GameLogic::SetKey(int key, int scancode, bool state)
 {
    for (const auto view : m_gameViews) {

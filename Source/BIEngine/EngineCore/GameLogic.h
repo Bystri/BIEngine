@@ -49,6 +49,7 @@ public:
 
    // Обработчики событий устройств ввода
    void OnPointerMove(float xpos, float ypos);
+   void SetPointerButton(int button, bool state);
    void SetKey(int key, int scancode, bool state);
 
 protected:

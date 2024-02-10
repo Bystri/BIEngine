@@ -9,6 +9,37 @@ bool BIGameController::OnPointerMove(const Point& mousePos, const int radius)
    return true;
 }
 
+static void gameControllerSetMouseButtonStatus(unsigned char& statuses, BIGameController::MouseButton mouseButton)
+{
+   const int statusIdx = static_cast<int>(mouseButton);
+   statuses |= (1u << statusIdx);
+}
+
+static void gameControllerClearMouseButtonStatus(unsigned char& statuses, BIGameController::MouseButton mouseButton)
+{
+   const int statusIdx = static_cast<int>(mouseButton);
+   statuses &= ~(1u << statusIdx);
+}
+
+bool BIGameController::OnPointerButtonDown(const Point& mousePos, const int radius, int buttonCode)
+{
+   gameControllerSetMouseButtonStatus(m_mouseButtonsStatus, static_cast<BIGameController::MouseButton>(buttonCode));
+
+   return true;
+}
+
+bool BIGameController::OnPointerButtonUp(const Point& mousePos, const int radius, int buttonCode)
+{
+   gameControllerClearMouseButtonStatus(m_mouseButtonsStatus, static_cast<BIGameController::MouseButton>(buttonCode));
+
+   return true;
+}
+
+bool BIGameController::IsMouseButtonPressed(int buttonCode)
+{
+   return (m_mouseButtonsStatus & (1u << buttonCode));
+}
+
 bool BIGameController::IsKeyPressed(int key) const
 {
    assert(key >= 0 && key < MAX_NUMBER_OF_KEYS);

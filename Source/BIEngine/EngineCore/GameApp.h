@@ -44,7 +44,8 @@ public:
 
    // Обработчик событий устройств ввода
    void OnPointerMove(float xpos, float ypos);
-   void InputProc(int key, int scancode, bool pressed);
+   void SetPointerButton(int button, bool state);
+   void SetKey(int key, int scancode, bool pressed);
 
 public:
    const std::shared_ptr<GameLogic> m_pGameLogic;

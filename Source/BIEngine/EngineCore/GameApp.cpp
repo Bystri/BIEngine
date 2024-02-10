@@ -111,7 +111,12 @@ void GameApp::OnPointerMove(float xpos, float ypos)
    m_pGameLogic->OnPointerMove(xpos, ypos);
 }
 
-void GameApp::InputProc(int key, int scancode, bool pressed)
+void GameApp::SetPointerButton(int button, bool state)
+{
+   m_pGameLogic->SetPointerButton(button, state);
+}
+
+void GameApp::SetKey(int key, int scancode, bool pressed)
 {
    if (key >= 0 && key < 1024) {
       m_pGameLogic->SetKey(key, scancode, pressed);

@@ -32,6 +32,10 @@ void BIFlyCameraSystem::OnUpdate(const BIEngine::GameTimer& gt)
    m_lastPointerX = m_pInputController->GetCurrentPointerPos().x;
    m_lastPointerY = m_pInputController->GetCurrentPointerPos().y;
 
+   if (!m_pInputController->IsMouseButtonPressed(static_cast<int>(BIGameController::MouseButton::RIGHT))) {
+      return;
+   }
+
    m_pCamera->TurnRelAroundY(yoffset * m_rotationSpeed);
    m_pCamera->TurnRelAroundZ(xoffset * m_rotationSpeed);
 

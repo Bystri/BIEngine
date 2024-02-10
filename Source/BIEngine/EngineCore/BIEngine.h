@@ -20,6 +20,7 @@ namespace BIEngine {
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void MouseCallback(GLFWwindow* window, double xpos, double ypos);
+void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
 void InitImgui(GLFWwindow* window);
 void TerminateImgui();
@@ -52,6 +53,7 @@ int Run(int argc, char* argv[])
 
    glfwSetKeyCallback(window, KeyCallback);
    glfwSetCursorPosCallback(window, MouseCallback);
+   glfwSetMouseButtonCallback(window, MouseButtonCallback);
    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
    glViewport(0, 0, g_pApp->m_options.screenWidth, g_pApp->m_options.screenHeight);
@@ -104,12 +106,17 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
       glfwSetWindowShouldClose(window, true);
    }
 
-   g_pApp->InputProc(key, scancode, action);
+   g_pApp->SetKey(key, scancode, action);
 }
 
 void MouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
    g_pApp->OnPointerMove(static_cast<float>(xpos), static_cast<float>(ypos));
+}
+
+void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+   g_pApp->SetPointerButton(button, action);
 }
 
 // Адпатируем Viewport под новые размеры экрана

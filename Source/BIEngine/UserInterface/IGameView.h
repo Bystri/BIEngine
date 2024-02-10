@@ -32,6 +32,7 @@ public:
    virtual GameViewId GetId() const = 0;
 
    virtual void OnPointerMove(float xpos, float ypos) = 0;
+   virtual void SetPointerButton(int button, bool state) = 0;
    virtual void SetKey(int key, int scancode, bool state) = 0;
 };
 

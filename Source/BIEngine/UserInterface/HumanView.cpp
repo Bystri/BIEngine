@@ -154,6 +154,17 @@ void HumanView::OnPointerMove(float xpos, float ypos)
    }
 }
 
+void HumanView::SetPointerButton(int button, bool state)
+{
+   if (m_pPointerHandler) {
+      if (state) {
+         m_pPointerHandler->OnPointerButtonDown(IPointerHandler::Point(), 0.0f, button);
+      } else {
+         m_pPointerHandler->OnPointerButtonUp(IPointerHandler::Point(), 0.0f, button);
+      }
+   }
+}
+
 void HumanView::SetKey(int key, int scancode, bool state)
 {
    if (m_pKeyboardHandler) {

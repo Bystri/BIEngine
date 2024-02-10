@@ -62,7 +62,7 @@ void NavSoloMeshGenerator::cleanup()
    }
 }
 
-bool NavSoloMeshGenerator::BuildNavmesh()
+bool NavSoloMeshGenerator::BuildNavmesh(const NavMeshBuildSettings& settings)
 {
    if (!m_pGeom || !m_pGeom->GetMesh()) {
       Logger::WriteErrorLog("buildNavigation: Input mesh is not specified.");
@@ -71,15 +71,15 @@ bool NavSoloMeshGenerator::BuildNavmesh()
 
    cleanup();
 
-   const float* bmin = m_pGeom->GetNavMeshBoundsMin();
-   const float* bmax = m_pGeom->GetNavMeshBoundsMax();
+   const float* bmin = m_pGeom->GetMeshBoundsMin();
+   const float* bmax = m_pGeom->GetMeshBoundsMax();
    const float* verts = m_pGeom->GetMesh()->GetVerts();
    const int nverts = m_pGeom->GetMesh()->GetVertCount();
    const int* tris = m_pGeom->GetMesh()->GetTris();
    const int ntris = m_pGeom->GetMesh()->GetTriCount();
 
 
-   initializeBuildConfig(bmin, bmax, nverts, ntris);
+   initializeBuildConfig(settings, bmin, bmax, nverts, ntris);
 
    // Reset build times gathering.
    m_pCtx->resetTimers();
@@ -96,7 +96,7 @@ bool NavSoloMeshGenerator::BuildNavmesh()
    }
 
    filterWalkablesSurfaces();
-   if (!partitionSurfaceToSimpleRegions()) {
+   if (!partitionSurfaceToSimpleRegions(settings)) {
       return false;
    }
 
@@ -112,7 +112,7 @@ bool NavSoloMeshGenerator::BuildNavmesh()
       return false;
    }
 
-   if (!createDetourData()) {
+   if (!createDetourData(settings)) {
       return false;
    }
 
@@ -124,23 +124,23 @@ bool NavSoloMeshGenerator::BuildNavmesh()
    return true;
 }
 
-void NavSoloMeshGenerator::initializeBuildConfig(const float* bmin, const float* bmax, const int nverts, const int ntris)
+void NavSoloMeshGenerator::initializeBuildConfig(const NavMeshBuildSettings& settings, const float* bmin, const float* bmax, const int nverts, const int ntris)
 {
    // Init build configuration from GUI
    memset(&m_cfg, 0, sizeof(m_cfg));
-   m_cfg.cs = m_cellSize;
-   m_cfg.ch = m_cellHeight;
-   m_cfg.walkableSlopeAngle = m_agentMaxSlope;
-   m_cfg.walkableHeight = (int)ceilf(m_agentHeight / m_cfg.ch);
-   m_cfg.walkableClimb = (int)floorf(m_agentMaxClimb / m_cfg.ch);
-   m_cfg.walkableRadius = (int)ceilf(m_agentRadius / m_cfg.cs);
-   m_cfg.maxEdgeLen = (int)(m_edgeMaxLen / m_cellSize);
-   m_cfg.maxSimplificationError = m_edgeMaxError;
-   m_cfg.minRegionArea = (int)rcSqr(m_regionMinSize);     // Note: area = size*size
-   m_cfg.mergeRegionArea = (int)rcSqr(m_regionMergeSize); // Note: area = size*size
-   m_cfg.maxVertsPerPoly = (int)m_vertsPerPoly;
-   m_cfg.detailSampleDist = m_detailSampleDist < 0.9f ? 0 : m_cellSize * m_detailSampleDist;
-   m_cfg.detailSampleMaxError = m_cellHeight * m_detailSampleMaxError;
+   m_cfg.cs = settings.CellSize;
+   m_cfg.ch = settings.CellHeight;
+   m_cfg.walkableSlopeAngle = settings.AgentMaxSlope;
+   m_cfg.walkableHeight = (int)ceilf(settings.AgentHeight / m_cfg.ch);
+   m_cfg.walkableClimb = (int)floorf(settings.AgentMaxClimb / m_cfg.ch);
+   m_cfg.walkableRadius = (int)ceilf(settings.AgentRadius / m_cfg.cs);
+   m_cfg.maxEdgeLen = (int)(settings.EdgeMaxLen / settings.CellSize);
+   m_cfg.maxSimplificationError = settings.EdgeMaxError;
+   m_cfg.minRegionArea = (int)rcSqr(settings.RegionMinSize);     // Note: area = size*size
+   m_cfg.mergeRegionArea = (int)rcSqr(settings.RegionMergeSize); // Note: area = size*size
+   m_cfg.maxVertsPerPoly = (int)settings.VertsPerPoly;
+   m_cfg.detailSampleDist = settings.DetailSampleDist < 0.9f ? 0 : settings.CellSize * settings.DetailSampleDist;
+   m_cfg.detailSampleMaxError = settings.CellHeight * settings.DetailSampleMaxError;
 
    // Set the area where the navigation will be build.
    // Here the bounds of the input mesh are used, but the
@@ -204,7 +204,7 @@ void NavSoloMeshGenerator::filterWalkablesSurfaces()
    }
 }
 
-bool NavSoloMeshGenerator::partitionSurfaceToSimpleRegions()
+bool NavSoloMeshGenerator::partitionSurfaceToSimpleRegions(const NavMeshBuildSettings& settings)
 {
    // Compact the heightfield so that it is faster to handle from now on.
    // This will result more cache coherent data as well as the neighbours
@@ -254,7 +254,7 @@ bool NavSoloMeshGenerator::partitionSurfaceToSimpleRegions()
    //     if you have large open areas with small obstacles (not a problem if you use tiles)
    //   * good choice to use for tiled navmesh with medium and small sized tiles
 
-   if (m_partitionType == SamplePartitionType::WATERSHED) {
+   if (settings.PartitionType == NavMeshBuildSettings::SamplePartitionType::WATERSHED) {
       // Prepare for region partitioning, by calculating distance field along the walkable surface.
       if (!rcBuildDistanceField(m_pCtx, *m_pChf)) {
          Logger::WriteErrorLog("buildNavigation: Could not build distance field.");
@@ -266,7 +266,7 @@ bool NavSoloMeshGenerator::partitionSurfaceToSimpleRegions()
          Logger::WriteErrorLog("buildNavigation: Could not build watershed regions.");
          return false;
       }
-   } else if (m_partitionType == SamplePartitionType::MONOTONE) {
+   } else if (settings.PartitionType == NavMeshBuildSettings::SamplePartitionType::MONOTONE) {
       // Partition the walkable surface into simple regions without holes.
       // Monotone partitioning does not need distancefield.
       if (!rcBuildRegionsMonotone(m_pCtx, *m_pChf, 0, m_cfg.minRegionArea, m_cfg.mergeRegionArea)) {
@@ -338,7 +338,7 @@ bool NavSoloMeshGenerator::createDetailMesh()
    return true;
 }
 
-bool NavSoloMeshGenerator::createDetourData()
+bool NavSoloMeshGenerator::createDetourData(const NavMeshBuildSettings& settings)
 {
    if (m_cfg.maxVertsPerPoly <= DT_VERTS_PER_POLYGON) {
       unsigned char* navData = 0;
@@ -368,9 +368,9 @@ bool NavSoloMeshGenerator::createDetourData()
 
       params.offMeshConCount = 0;
 
-      params.walkableHeight = m_agentHeight;
-      params.walkableRadius = m_agentRadius;
-      params.walkableClimb = m_agentMaxClimb;
+      params.walkableHeight = settings.AgentHeight;
+      params.walkableRadius = settings.AgentRadius;
+      params.walkableClimb = settings.AgentMaxClimb;
       rcVcopy(params.bmin, m_pPolyMesh->bmin);
       rcVcopy(params.bmax, m_pPolyMesh->bmax);
       params.cs = m_cfg.cs;
