@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <cassert>
 #include <array>
 #include <initializer_list>
 
@@ -33,6 +34,44 @@ struct Vector {
    T& operator[](const std::size_t idx) { return data[idx]; }
 
    T operator[](const std::size_t idx) const { return data[idx]; }
+
+   inline Vector<T, n>& operator+=(const Vector<T, n>& rhs)
+   {
+      for (int i = 0; i < n; ++i) {
+         data[i] += rhs.data[i];
+      }
+
+      return *this;
+   }
+
+   inline Vector<T, n>& operator-=(const Vector<T, n>& rhs)
+   {
+      for (int i = 0; i < n; ++i) {
+         data[i] -= -rhs.data[i];
+      }
+
+      return *this;
+   }
+
+   template <typename U>
+   inline Vector<T, n>& operator*=(const U& scalar)
+   {
+      for (int i = 0; i < n; ++i) {
+         data[i] *= scalar;
+      }
+
+      return *this;
+   }
+
+   template <typename U>
+   inline Vector<T, n>& operator/=(const U& scalar)
+   {
+      for (int i = 0; i < n; ++i) {
+         data[i] /= scalar;
+      }
+
+      return *this;
+   }
 
    std::array<T, n> data;
 };
@@ -73,6 +112,44 @@ struct Vector<T, 2> {
 
    T operator[](const std::size_t idx) const { return data[idx]; }
 
+   inline Vector<T, 2>& operator+=(const Vector<T, 2>& rhs)
+   {
+      for (int i = 0; i < 2; ++i) {
+         data[i] += rhs.data[i];
+      }
+
+      return *this;
+   }
+
+   inline Vector<T, 2>& operator-=(const Vector<T, 2>& rhs)
+   {
+      for (int i = 0; i < 2; ++i) {
+         data[i] -= -rhs.data[i];
+      }
+
+      return *this;
+   }
+
+   template <typename U>
+   inline Vector<T, 2>& operator*=(const U& scalar)
+   {
+      for (int i = 0; i < 2; ++i) {
+         data[i] *= scalar;
+      }
+
+      return *this;
+   }
+
+   template <typename U>
+   inline Vector<T, 2>& operator/=(const U& scalar)
+   {
+      for (int i = 0; i < 2; ++i) {
+         data[i] /= scalar;
+      }
+
+      return *this;
+   }
+
    union {
       std::array<T, 2> data;
 
@@ -95,6 +172,14 @@ struct Vector<T, 3> {
    explicit Vector(const T& value)
       : data(value)
    {
+   }
+
+   Vector(const Vector<T, 2>& vec, const T& z)
+      : data()
+   {
+      data[0] = vec[0];
+      data[1] = vec[1];
+      data[2] = z;
    }
 
    Vector(const std::initializer_list<T> args)
@@ -121,6 +206,44 @@ struct Vector<T, 3> {
 
    T operator[](const std::size_t idx) const { return data[idx]; }
 
+   inline Vector<T, 3>& operator+=(const Vector<T, 3>& rhs)
+   {
+      for (int i = 0; i < 3; ++i) {
+         data[i] += rhs.data[i];
+      }
+
+      return *this;
+   }
+
+   inline Vector<T, 3>& operator-=(const Vector<T, 3>& rhs)
+   {
+      for (int i = 0; i < 3; ++i) {
+         data[i] -= -rhs.data[i];
+      }
+
+      return *this;
+   }
+
+   template <typename U>
+   inline Vector<T, 3>& operator*=(const U& scalar)
+   {
+      for (int i = 0; i < 3; ++i) {
+         data[i] *= scalar;
+      }
+
+      return *this;
+   }
+
+   template <typename U>
+   inline Vector<T, 3>& operator/=(const U& scalar)
+   {
+      for (int i = 0; i < 3; ++i) {
+         data[i] /= scalar;
+      }
+
+      return *this;
+   }
+
    union {
       std::array<T, 3> data;
 
@@ -144,6 +267,15 @@ struct Vector<T, 4> {
    explicit Vector(const T& value)
       : data(value)
    {
+   }
+
+   Vector(const Vector<T, 3>& vec, const T& w)
+      : data()
+   {
+      data[0] = vec[0];
+      data[1] = vec[1];
+      data[2] = vec[2];
+      data[3] = w;
    }
 
    Vector(const std::initializer_list<T> args)
@@ -170,6 +302,44 @@ struct Vector<T, 4> {
    T& operator[](const std::size_t idx) { return data[idx]; }
 
    T operator[](const std::size_t idx) const { return data[idx]; }
+
+   inline Vector<T, 4>& operator+=(const Vector<T, 4>& rhs)
+   {
+      for (int i = 0; i < 4; ++i) {
+         data[i] += rhs.data[i];
+      }
+
+      return *this;
+   }
+
+   inline Vector<T, 4>& operator-=(const Vector<T, 4>& rhs)
+   {
+      for (int i = 0; i < 4; ++i) {
+         data[i] -= -rhs.data[i];
+      }
+
+      return *this;
+   }
+
+   template <typename U>
+   inline Vector<T, 4>& operator*=(const U& scalar)
+   {
+      for (int i = 0; i < 4; ++i) {
+         data[i] *= scalar;
+      }
+
+      return *this;
+   }
+
+   template <typename U>
+   inline Vector<T, 4>& operator/=(const U& scalar)
+   {
+      for (int i = 0; i < 4; ++i) {
+         data[i] /= scalar;
+      }
+
+      return *this;
+   }
 
    union {
       std::array<T, 4> data;
@@ -224,8 +394,8 @@ inline const Vector<T, n> operator-(const Vector<T, n>& lhs, const Vector<T, n>&
    return res;
 }
 
-template <typename T, std::size_t n>
-inline const Vector<T, n> operator*(const Vector<T, n>& lhs, const T& scalar)
+template <typename T, typename U, std::size_t n>
+inline const Vector<T, n> operator*(const Vector<T, n>& lhs, const U& scalar)
 {
    Vector<T, n> res = lhs;
 
@@ -236,8 +406,14 @@ inline const Vector<T, n> operator*(const Vector<T, n>& lhs, const T& scalar)
    return res;
 }
 
-template <typename T, std::size_t n>
-inline const Vector<T, n> operator/(const Vector<T, n>& lhs, const T& scalar)
+template <typename T, typename U, std::size_t n>
+inline const Vector<T, n> operator*(const U& scalar, const Vector<T, n>& rhs)
+{
+   return rhs * scalar;
+}
+
+template <typename T, typename U, std::size_t n>
+inline const Vector<T, n> operator/(const Vector<T, n>& lhs, const U& scalar)
 {
    Vector<T, n> res = lhs;
 
@@ -300,9 +476,9 @@ inline T Dot(const Vector<T, n>& lhs, const Vector<T, n>& rhs)
 template <typename T>
 inline Vector<T, 3> Cross(const Vector<T, 3>& lhs, const Vector<T, 3>& rhs)
 {
-   Vector<T, 3> scalar = {lhs.y * rhs.z - lhs.z * rhs.y, lhs.z * rhs.x - lhs.x * rhs.z, lhs.x * rhs.y - lhs.y * rhs.x};
+   Vector<T, 3> retVec = {lhs.y * rhs.z - lhs.z * rhs.y, lhs.z * rhs.x - lhs.x * rhs.z, lhs.x * rhs.y - lhs.y * rhs.x};
 
-   return scalar;
+   return retVec;
 }
 
 } // namespace BIEngine

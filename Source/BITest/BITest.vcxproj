@@ -67,11 +67,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\BIEngine\Math\Transform.cpp" />
+    <ClCompile Include="..\BIEngine\Math\Trigonometry.cpp" />
     <ClCompile Include="Math\Matrix_UnitTest.cpp" />
+    <ClCompile Include="Math\Transform_UnitTest.cpp" />
+    <ClCompile Include="Math\Trigonometry_UnitTest.cpp" />
     <ClCompile Include="Math\Vector_UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\BIEngine\Math\Matrix.h" />
+    <ClInclude Include="..\BIEngine\Math\Transform.h" />
+    <ClInclude Include="..\BIEngine\Math\Trigonometry.h" />
+    <ClInclude Include="..\BIEngine\Math\Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

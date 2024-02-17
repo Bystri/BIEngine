@@ -33,6 +33,40 @@ public:
 
    Vector<T, n>& operator[](const std::size_t columIdx) { return columns[columIdx]; }
 
+   inline Matrix<T, n, m>& operator+=(const Matrix<T, n, m>& rhs)
+   {
+      for (int i = 0; i < m; ++i) {
+         for (int j = 0; j < n; ++j) {
+            data[i][j] += rhs[i][j];
+         }
+      }
+
+      return *this;
+   }
+
+   inline Matrix<T, n, m>& operator-=(const Matrix<T, n, m>& rhs)
+   {
+      for (int i = 0; i < m; ++i) {
+         for (int j = 0; j < n; ++j) {
+            data[i][j] -= rhs[i][j];
+         }
+      }
+
+      return *this;
+   }
+
+   template <typename U>
+   inline Matrix<T, n, m>& operator*=(const U& rhs)
+   {
+      for (int i = 0; i < n; ++i) {
+         for (int j = 0; j < m; ++j) {
+            data[i][j] *= rhs;
+         }
+      }
+
+      return *this;
+   }
+
 private:
    union {
       T data[m][n];
@@ -75,8 +109,8 @@ inline Matrix<T, n, m> operator-(const Matrix<T, n, m>& lhs, const Matrix<T, n, 
    return ret;
 }
 
-template <typename T, std::size_t n, std::size_t m>
-inline Matrix<T, n, m> operator*(const Matrix<T, n, m>& lhs, const T& rhs)
+template <typename T, typename U, std::size_t n, std::size_t m>
+inline Matrix<T, n, m> operator*(const Matrix<T, n, m>& lhs, const U& rhs)
 {
    Matrix<T, n, m> ret;
 
@@ -90,13 +124,13 @@ inline Matrix<T, n, m> operator*(const Matrix<T, n, m>& lhs, const T& rhs)
 }
 
 template <typename T, std::size_t n, std::size_t m>
-inline Vector<T, n> operator*(const Matrix<T, n, m>& lhs, const Vector<T, n>& rhs)
+inline Vector<T, n> operator*(const Matrix<T, n, m>& lhs, const Vector<T, m>& rhs)
 {
    Vector<T, n> ret;
 
-   for (int i = 0; i < n; ++i) {
-      for (int j = 0; j < m; ++j) {
-         ret[i] += lhs[i][j] * rhs[i];
+   for (int j = 0; j < m; ++j) {
+      for (int i = 0; i < n; ++i) {
+         ret[i] += lhs[j][i] * rhs[j];
       }
    }
 

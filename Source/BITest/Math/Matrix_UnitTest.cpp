@@ -57,14 +57,15 @@ TEST(Matrix, MultMatrixScalar) {
 }
 
 TEST(Matrix, MultMatrixVector) {
-	BIEngine::Matrix2 mat1({ {0.0f, -1.0f}, {1.0f, 0.0f} });
+	BIEngine::Matrix<float, 3, 2> mat1({ {0.0f, -1.0f, 2.0f}, {1.0f, 0.0f, 4.0f} });
 	BIEngine::Vector2 vec1({4.0f, 10.0f});
 
-	BIEngine::Vector2 vec2 = mat1 * vec1;
+	const BIEngine::Vector3 vec2 = mat1 * vec1;
 
 	//first column
-	EXPECT_FLOAT_EQ(vec2.x, -4.0f);
-	EXPECT_FLOAT_EQ(vec2.y, 10.0f);
+	EXPECT_FLOAT_EQ(vec2.x, 10.0f);
+	EXPECT_FLOAT_EQ(vec2.y, -4.0f);
+	EXPECT_FLOAT_EQ(vec2.z, 48.0f);
 }
 
 

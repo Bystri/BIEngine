@@ -7,13 +7,45 @@
     <ClCompile Include="Math\Matrix_UnitTest.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="Math\Transform_UnitTest.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\Math\Transform.cpp">
+      <Filter>EngineSources\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\Math\Trigonometry.cpp">
+      <Filter>EngineSources\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Trigonometry_UnitTest.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
       <UniqueIdentifier>{e200c405-79ab-40ae-ac61-09ea523b716f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EngineSources">
+      <UniqueIdentifier>{2697a62a-160c-477b-9991-7f4a719331e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineSources\Math">
+      <UniqueIdentifier>{e7148ba7-cee3-4142-8949-95cbd75896be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\BIEngine\Math\Matrix.h">
+      <Filter>EngineSources\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Math\Transform.h">
+      <Filter>EngineSources\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Math\Vector.h">
+      <Filter>EngineSources\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Math\Trigonometry.h">
+      <Filter>EngineSources\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
