@@ -69,6 +69,35 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
       }
    }
 
+   // читаем данные из <ExternalScriptObj>
+   tinyxml2::XMLElement* pExternalScriptObject = pData->FirstChildElement("ExternalScriptObj");
+   if (pExternalScriptObject) {
+      temp = pExternalScriptObject->Attribute("varName");
+      if (!temp || strlen(temp) == 0) {
+         Logger::WriteLog(Logger::LogType::ERROR, "No variable name in <ExternalScriptObj> tag");
+         return false;
+      }
+      const std::string externalScriptObjVarName = temp;
+
+
+      temp = pExternalScriptObject->Attribute("modulePath");
+      if (!temp || strlen(temp) == 0) {
+         Logger::WriteLog(Logger::LogType::ERROR, "No module path in <ExternalScriptObj> tag");
+         return false;
+      }
+      const std::string externalScriptObjPath = temp;
+
+      temp = pExternalScriptObject->Attribute("className");
+      if (!temp || strlen(temp) == 0) {
+         Logger::WriteLog(Logger::LogType::ERROR, "No class name in <ExternalScriptObj> tag");
+         return false;
+      }
+      const std::string externalScriptObjClass = temp;
+
+      py::object classInstance = py::module::import(externalScriptObjPath.c_str()).attr(externalScriptObjClass.c_str())();
+      m_pyObject.attr(externalScriptObjVarName.c_str()) = classInstance;
+   }
+
    return true;
 }
 

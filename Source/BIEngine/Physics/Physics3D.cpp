@@ -449,10 +449,6 @@ void Physics3D::AddShape(BodyType bodyType, const std::shared_ptr<Actor>& pGameA
 
    btRigidBody* const body = new btRigidBody(rbInfo);
 
-   if (bodyType == BodyType::STATIC) {
-      body->setCollisionFlags(body->getCollisionFlags() | btRigidBody::CF_NO_CONTACT_RESPONSE);
-   }
-
    m_pDynamicsWorld->addRigidBody(body);
 
    m_actorIdToRigidBody[actorID] = body;
@@ -574,7 +570,7 @@ void Physics3D::RemoveActor(ActorId id)
 void Physics3D::ApplyForce(const glm::vec3& forceVec, ActorId aid)
 {
    if (btRigidBody* const body = FindBulletRigidBody(aid)) {
-      body->setActivationState(DISABLE_DEACTIVATION);
+      body->setActivationState(ACTIVE_TAG);
       body->applyCentralImpulse(Vec3_to_btVector3(forceVec));
    }
 }
@@ -582,7 +578,7 @@ void Physics3D::ApplyForce(const glm::vec3& forceVec, ActorId aid)
 void Physics3D::ApplyTorque(const glm::vec3& torque, ActorId aid)
 {
    if (btRigidBody* const body = FindBulletRigidBody(aid)) {
-      body->setActivationState(DISABLE_DEACTIVATION);
+      body->setActivationState(ACTIVE_TAG);
       body->applyTorqueImpulse(Vec3_to_btVector3(torque));
    }
 }
@@ -590,7 +586,7 @@ void Physics3D::ApplyTorque(const glm::vec3& torque, ActorId aid)
 bool Physics3D::KinematicMove(ActorId aid, const glm::vec3& position, const glm::vec3& angles)
 {
    if (btRigidBody* const body = FindBulletRigidBody(aid)) {
-      body->setActivationState(DISABLE_DEACTIVATION);
+      body->setActivationState(ACTIVE_TAG);
 
       glm::mat4 trans = glm::mat4(1.0f);
       trans = glm::translate(trans, position);
@@ -700,6 +696,8 @@ void Physics3D::SetVelocity(ActorId actorId, const glm::vec3& vel)
    if (!pRigidBody) {
       return;
    }
+
+   pRigidBody->setActivationState(ACTIVE_TAG);
 
    btVector3 btVel = Vec3_to_btVector3(vel);
    pRigidBody->setLinearVelocity(btVel);

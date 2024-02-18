@@ -4,11 +4,14 @@
     <ClCompile Include="..\BIGame.cpp" />
     <ClCompile Include="..\BIGameController.cpp" />
     <ClCompile Include="..\BIFlyCameraSystem.cpp" />
+    <ClCompile Include="..\BIEventListener.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGame.h" />
     <ClInclude Include="..\BIGameController.h" />
     <ClInclude Include="..\BIFlyCameraSystem.h" />
+    <ClInclude Include="..\BIEventListener.h" />
+    <ClInclude Include="..\BIScriptExports.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.clang-format" />

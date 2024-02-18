@@ -7,7 +7,9 @@
 #include "NavMeshInputGeom.h"
 #include "NavSoloMeshGenerator.h"
 #include "../Actors/RenderComponent.h"
+#include "../Actors/Physics3DComponent.h"
 #include "../Graphics/Model.h"
+#include "../Renderer/MeshGeometryGenerator.h"
 #include "../EngineCore/GameApp.h"
 #include "../Utilities/DebugDraw.h"
 
@@ -177,8 +179,7 @@ void NavMeshManager::LoadNavMesh(const std::string& path)
 
 bool NavMeshManager::BuildNavmesh()
 {
-   NavMeshBuildSettings settings;
-   return generateNavmesh(settings);
+   return generateNavmesh(m_buildSettings);
 }
 
 static void duDebugDrawNavMeshPoly(const dtNavMesh& mesh, dtPolyRef ref, const ColorRgba& color)
@@ -241,54 +242,52 @@ void NavMeshManager::renderNavMeshWindow()
    ImGui::Text("Debug");
    ImGui::Checkbox("Render Navmesh", &m_bRenderNavmesh);
 
-   NavMeshBuildSettings buildSettings;
-
    ImGui::Separator();
-   ImGui::SliderFloat("Cell Size", &buildSettings.CellSize, 0.1f, 1.0f);
-   ImGui::SliderFloat("Cell Height", &buildSettings.CellHeight, 0.1f, 1.0f);
+   ImGui::SliderFloat("Cell Size", &m_buildSettings.CellSize, 0.1f, 1.0f);
+   ImGui::SliderFloat("Cell Height", &m_buildSettings.CellHeight, 0.1f, 1.0f);
 
    ImGui::Separator();
    ImGui::Text("Agent");
-   ImGui::SliderFloat("Radius", &buildSettings.AgentRadius, 0.0f, 5.0f);
-   ImGui::SliderFloat("Max Climb", &buildSettings.AgentMaxClimb, 0.1f, 5.0f);
-   ImGui::SliderFloat("Max Slope", &buildSettings.AgentMaxSlope, 0.0f, 90.0f);
+   ImGui::SliderFloat("Radius", &m_buildSettings.AgentRadius, 0.0f, 5.0f);
+   ImGui::SliderFloat("Max Climb", &m_buildSettings.AgentMaxClimb, 0.1f, 5.0f);
+   ImGui::SliderFloat("Max Slope", &m_buildSettings.AgentMaxSlope, 0.0f, 90.0f);
 
    ImGui::Separator();
    ImGui::Text("Region");
-   ImGui::SliderFloat("Min Region Size", &buildSettings.RegionMinSize, 0.0f, 150.0f);
-   ImGui::SliderFloat("Merged Region Size", &buildSettings.RegionMergeSize, 0.0f, 150.0f);
+   ImGui::SliderFloat("Min Region Size", &m_buildSettings.RegionMinSize, 0.0f, 150.0f);
+   ImGui::SliderFloat("Merged Region Size", &m_buildSettings.RegionMergeSize, 0.0f, 150.0f);
 
    ImGui::Separator();
    ImGui::Text("Partitioning");
-   int partitionRadioOption = static_cast<int>(buildSettings.PartitionType);
+   int partitionRadioOption = static_cast<int>(m_buildSettings.PartitionType);
    ImGui::RadioButton("Watershed", &partitionRadioOption, 0);
    ImGui::RadioButton("Monotone", &partitionRadioOption, 1);
    ImGui::RadioButton("Layers", &partitionRadioOption, 2);
-   buildSettings.PartitionType = static_cast<NavMeshBuildSettings::SamplePartitionType>(partitionRadioOption);
+   m_buildSettings.PartitionType = static_cast<NavMeshBuildSettings::SamplePartitionType>(partitionRadioOption);
 
    ImGui::Separator();
    ImGui::Text("Filtering");
-   if (ImGui::Checkbox("Low Hanging Obstacles", &buildSettings.FilterLowHangingObstacles))
-      buildSettings.FilterLowHangingObstacles = !buildSettings.FilterLowHangingObstacles;
-   if (ImGui::Checkbox("Ledge Spans", &buildSettings.FilterLedgeSpans))
-      buildSettings.FilterLedgeSpans = !buildSettings.FilterLedgeSpans;
-   if (ImGui::Checkbox("Walkable Low Height Spans", &buildSettings.FilterWalkableLowHeightSpans))
-      buildSettings.FilterWalkableLowHeightSpans = !buildSettings.FilterWalkableLowHeightSpans;
+   if (ImGui::Checkbox("Low Hanging Obstacles", &m_buildSettings.FilterLowHangingObstacles))
+      m_buildSettings.FilterLowHangingObstacles = !m_buildSettings.FilterLowHangingObstacles;
+   if (ImGui::Checkbox("Ledge Spans", &m_buildSettings.FilterLedgeSpans))
+      m_buildSettings.FilterLedgeSpans = !m_buildSettings.FilterLedgeSpans;
+   if (ImGui::Checkbox("Walkable Low Height Spans", &m_buildSettings.FilterWalkableLowHeightSpans))
+      m_buildSettings.FilterWalkableLowHeightSpans = !m_buildSettings.FilterWalkableLowHeightSpans;
 
    ImGui::Separator();
    ImGui::Text("Polygonization");
-   ImGui::SliderFloat("Max Edge Length", &buildSettings.EdgeMaxLen, 0.0f, 50.0f);
-   ImGui::SliderFloat("Max Edge Error", &buildSettings.EdgeMaxError, 0.1f, 3.0f);
-   ImGui::SliderFloat("Verts Per Poly", &buildSettings.VertsPerPoly, 3.0f, 12.0f);
+   ImGui::SliderFloat("Max Edge Length", &m_buildSettings.EdgeMaxLen, 0.0f, 50.0f);
+   ImGui::SliderFloat("Max Edge Error", &m_buildSettings.EdgeMaxError, 0.1f, 3.0f);
+   ImGui::SliderFloat("Verts Per Poly", &m_buildSettings.VertsPerPoly, 3.0f, 12.0f);
 
    ImGui::Separator();
    ImGui::Text("Detail Mesh");
-   ImGui::SliderFloat("Sample Distance", &buildSettings.DetailSampleDist, 0.0f, 16.0f);
-   ImGui::SliderFloat("Max Sample Error", &buildSettings.DetailSampleMaxError, 0.0f, 16.0f);
+   ImGui::SliderFloat("Sample Distance", &m_buildSettings.DetailSampleDist, 0.0f, 16.0f);
+   ImGui::SliderFloat("Max Sample Error", &m_buildSettings.DetailSampleMaxError, 0.0f, 16.0f);
 
    ImGui::Separator();
    if (ImGui::Button("Generate")) {
-      generateNavmesh(buildSettings);
+      generateNavmesh(m_buildSettings);
    }
 
    ImGui::SameLine();
@@ -372,6 +371,12 @@ void NavMeshManager::TryRemoveActor(ActorId id)
    }
 }
 
+static void navMeshInputGeomPrepareFakeMesh(std::shared_ptr<NavInputMeshesManager> mesh)
+{
+   std::shared_ptr<Mesh> pMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateGrid(2.0f, 2.0f, 2, 2));
+   mesh->AddMesh(glm::mat4(1.0f), pMesh);
+}
+
 std::shared_ptr<NavMeshInputGeometry> NavMeshManager::prepareNavGeom()
 {
    std::shared_ptr<NavMeshInputGeometry> pGeom = std::make_shared<NavMeshInputGeometry>();
@@ -381,8 +386,9 @@ std::shared_ptr<NavMeshInputGeometry> NavMeshManager::prepareNavGeom()
    for (int i = 0; i < m_actors.size(); ++i) {
       std::shared_ptr<TransformComponent> pTransformComponent = m_actors[i]->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
       std::shared_ptr<BoxRenderComponent> pBoxRenderComponent = m_actors[i]->GetComponent<BoxRenderComponent>(BoxRenderComponent::g_CompId).lock();
+      std::shared_ptr<Physics3DComponent> pPhysicsComponent = m_actors[i]->GetComponent<Physics3DComponent>(Physics3DComponent::g_CompId).lock();
 
-      if (pTransformComponent && pBoxRenderComponent) {
+      if (pTransformComponent && pBoxRenderComponent && pPhysicsComponent && pPhysicsComponent->GetBodyType() == IGamePhysics3D::BodyType::STATIC) {
          const std::vector<std::shared_ptr<ModelMesh>>& modelMeshes = pBoxRenderComponent->HackGetMeshes();
          const glm::mat4 transformMatrix = pTransformComponent->GetTransformMatrix();
 
@@ -390,6 +396,10 @@ std::shared_ptr<NavMeshInputGeometry> NavMeshManager::prepareNavGeom()
             pMeshesManager->AddMesh(transformMatrix, modelMeshes[j]->GetMesh());
          }
       }
+   }
+
+   if (pMeshesManager->GetVertCount() == 0) {
+      navMeshInputGeomPrepareFakeMesh(pMeshesManager);
    }
 
    if (!pGeom->SetPreparedMesh(pMeshesManager)) {

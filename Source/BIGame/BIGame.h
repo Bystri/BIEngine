@@ -3,6 +3,7 @@
 #include "../BIEngine/EngineCore/BIEngine.h"
 #include "BIGameController.h"
 #include "BIFlyCameraSystem.h"
+#include "BIScriptExports.h"
 
 class BIGameApp : public BIEngine::GameApp {
 public:

@@ -5,25 +5,23 @@ import BIEVector
 import math
 from typing import cast
 
+import MovementProducer
+
 class MoveProcess(BIEProcess.Process):
-    def __init__(self, movableActor : BIEActor.Actor):
+    def __init__(self, movableActor : BIEActor.Actor, movementProducer : MovementProducer.MovementProducer):
         BIEProcess.Process.__init__(self)
         
         self.physics3DComponent = cast(BIEActor.Physics3DComponent, movableActor.GetComponent("Physics3DComponent"))
+        self.speed = 5.0
         
-        self.angularSpeedAngle = 60
-        self.currentAngle = 0
-        self.speed = 5
+        movementProducer.Init(movableActor)
+        self.movementProducer = movementProducer
 
-        
     def OnUpdate(self, dt):
-        self.currentAngle = self.currentAngle + self.angularSpeedAngle * dt 
-
-        newX = self.speed * math.cos(math.radians(self.currentAngle))
-        newY = self.speed * math.sin(math.radians(self.currentAngle))
-        vecVel = BIEVector.Vec3(newX, newY, 0)
-
-        self.physics3DComponent.SetVelocity(vecVel);
+        inputVec = self.movementProducer.GetVelocity() * self.speed
+         
+        if inputVec.Length() > 0.001:
+            self.physics3DComponent.SetVelocity(inputVec)
 
 
 class CharacterMovement():
@@ -34,5 +32,5 @@ class CharacterMovement():
         pass
         
     def PostInit(self):
-        self.proc = MoveProcess(self.owner)
+        self.proc = MoveProcess(self.owner, self.movementProducer)
         BIEProcess.AttachProcess(self.proc)

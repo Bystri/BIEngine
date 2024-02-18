@@ -1,6 +1,7 @@
 #pragma once
 
 #include <pybind11/embed.h>
+#include <pybind11/functional.h>
 
 #include "../../EventManager/Events.h"
 #include "../../Physics/Physics2DEventListener.h"
@@ -12,7 +13,7 @@ namespace BIEngine {
 
 class ScriptEventListener {
 public:
-   using EventCallback = std::function<void(const std::shared_ptr<BaseEventData>&)>;
+   using EventCallback = std::function<void(const std::shared_ptr<BaseEventData>)>;
 
    ScriptEventListener(const EventType& eventType, const EventCallback& scriptCallbackFunction);
    ~ScriptEventListener();
@@ -43,7 +44,14 @@ void ScriptEventListener::ScriptEventDelegate(IEventDataPtr pEvent)
 {
    // Вызов Python-функции
    std::shared_ptr<BaseEventData> pScriptEvent = std::static_pointer_cast<BaseEventData>(pEvent);
-   m_scriptCallbackFunction(pScriptEvent);
+
+   try {
+      m_scriptCallbackFunction(pScriptEvent);
+   } catch (py::error_already_set& e) {
+      Logger::WriteLog(Logger::LogType::ERROR, e.what());
+   } catch (std::runtime_error& e) {
+      Logger::WriteLog(Logger::LogType::ERROR, e.what());
+   }
 }
 } // namespace BIEngine
 
@@ -58,14 +66,14 @@ PYBIND11_EMBEDDED_MODULE(BIEEvent, m)
    py::class_<BIEngine::EvtData_Request_Destroy_Actor, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Request_Destroy_Actor>>(m, "EvtData_Request_Destroy_Actor")
       .def("GetActorId", &BIEngine::EvtData_Request_Destroy_Actor::GetActorId);
 
-   py::class_<BIEngine::EvtData_Phys2DCollision, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Phys2DCollision>>(m, "EvtData_PhysCollision")
+   py::class_<BIEngine::EvtData_Phys2DCollision, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Phys2DCollision>>(m, "EvtData_Phys2DCollision")
       .def("GetActorA", &BIEngine::EvtData_Phys2DCollision::GetActorA)
       .def("GetActorB", &BIEngine::EvtData_Phys2DCollision::GetActorB)
       .def("GetSumNormalForce", &BIEngine::EvtData_Phys2DCollision::GetSumNormalForce)
       .def("GetSumFrictionForce", &BIEngine::EvtData_Phys2DCollision::GetSumFrictionForce)
       .def("GetCollisionPoints", &BIEngine::EvtData_Phys2DCollision::GetCollisionPoints);
 
-   py::class_<BIEngine::EvtData_Phys3DCollision, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Phys3DCollision>>(m, "EvtData_PhysCollision")
+   py::class_<BIEngine::EvtData_Phys3DCollision, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Phys3DCollision>>(m, "EvtData_Phys3DCollision")
       .def("GetActorA", &BIEngine::EvtData_Phys3DCollision::GetActorA)
       .def("GetActorB", &BIEngine::EvtData_Phys3DCollision::GetActorB)
       .def("GetSumNormalForce", &BIEngine::EvtData_Phys3DCollision::GetSumNormalForce)

@@ -20,6 +20,8 @@ public:
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
+   IGamePhysics3D::BodyType GetBodyType() const { return m_bodyType; };
+
    void ApplyForce(const glm::vec3& direction);
    void ApplyTorque(const glm::vec3& torque);
    bool KinematicMove(const glm::vec3& position, const glm::vec3& rotation);

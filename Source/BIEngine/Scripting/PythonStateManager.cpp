@@ -133,6 +133,9 @@ PYBIND11_EMBEDDED_MODULE(BIEVector, m)
       .def("Length", [](const glm::vec3& vec) {
          return glm::length(vec);
       })
+      .def("Normalize", [](const glm::vec3& vec) {
+         return glm::normalize(vec);
+      })
 
       // Перегрузка операторов
       .def(py::self + py::self)
@@ -141,6 +144,7 @@ PYBIND11_EMBEDDED_MODULE(BIEVector, m)
       .def(py::self -= py::self)
       .def(py::self *= float())
       .def(float() * py::self)
+      .def(py::self * float())
       .def(py::self /= float())
       .def(float() / py::self);
 }

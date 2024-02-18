@@ -30,7 +30,7 @@ public:
         m_aspectRatio(800.0f / 600.0f)
 
         ,
-        m_near(0.1f), m_far(100.0f)
+        m_near(0.1f), m_far(1000.0f)
    {
       updateCameraVectors();
    }

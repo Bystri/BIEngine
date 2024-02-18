@@ -6,13 +6,13 @@
 #include <DetourNavMeshQuery.h>
 
 #include "../EventManager/Events.h"
+#include "NavMeshGenerator.h"
 
 namespace BIEngine {
 
 class Actgor;
 class NavMeshInputGeometry;
 class NavMeshGenerator;
-class NavMeshBuildSettings;
 
 class NavMeshManager {
 public:
@@ -21,6 +21,9 @@ public:
 
    void SaveNavMesh(const std::string& path);
    void LoadNavMesh(const std::string& path);
+
+   void SetBuildSettings(const NavMeshBuildSettings& settings) { m_buildSettings = settings; }
+
    bool BuildNavmesh();
    void RenderMesh();
 
@@ -41,6 +44,8 @@ private:
    std::shared_ptr<NavMeshInputGeometry> prepareNavGeom();
 
 private:
+   NavMeshBuildSettings m_buildSettings;
+
    std::vector<std::shared_ptr<Actor>> m_actors;
    std::shared_ptr<NavMeshGenerator> m_pNavMeshGenerator;
    dtNavMesh* m_pNavMesh;

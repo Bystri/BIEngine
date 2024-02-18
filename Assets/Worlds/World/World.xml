@@ -26,7 +26,7 @@
 		<Actor name="ground">
             <TransformComponent>
                 <Position x="0" y="5" z="0"/>
-                <Size w="50.000000" h="1.000000" d="50.0"/>
+                <Size w="100.000000" h="1.000000" d="100.0"/>
 				<Rotation x="0.000000" y="0.000000" z="0.000000"/>
             </TransformComponent>
 			<BoxRenderComponent>
@@ -36,10 +36,10 @@
 			</BoxRenderComponent>
 			<Physics3DComponent>
 				<Shape>Box</Shape>
-				<BodyType>Kinematic</BodyType>
+				<BodyType>Static</BodyType>
 				<Density>air</Density>
 				<PhysicsMaterial>Normal</PhysicsMaterial>
-				<Scale w="50.0" h="1.0" d="50.0"/>
+				<Scale w="100.0" h="1.0" d="100.0"/>
 			</Physics3DComponent>
         </Actor>
 		<Actor name="wall1">
@@ -55,7 +55,7 @@
 			</BoxRenderComponent>
 			<Physics3DComponent>
 				<Shape>Box</Shape>
-				<BodyType>Kinematic</BodyType>
+				<BodyType>Static</BodyType>
 				<Density>air</Density>
 				<PhysicsMaterial>Normal</PhysicsMaterial>
 				<Scale w="1.0" h="20.0" d="20.0"/>
@@ -74,10 +74,29 @@
 			</BoxRenderComponent>
 			<Physics3DComponent>
 				<Shape>Box</Shape>
-				<BodyType>Kinematic</BodyType>
+				<BodyType>Static</BodyType>
 				<Density>air</Density>
 				<PhysicsMaterial>Normal</PhysicsMaterial>
 				<Scale w="20.0" h="20.0" d="1.0"/>
+			</Physics3DComponent>
+        </Actor>
+		<Actor name="Container">
+            <TransformComponent>
+                <Position x="25" y="0" z="-10.5"/>
+                <Size w="20.000000" h="20.000000" d="20.0"/>
+				<Rotation x="45.000000" y="0.000000" z="0.000000"/>
+            </TransformComponent>
+			<BoxRenderComponent>
+				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Color r="0.000000" g="1.00" b="0.000000"/>
+			</BoxRenderComponent>
+			<Physics3DComponent>
+				<Shape>Box</Shape>
+				<BodyType>Static</BodyType>
+				<Density>air</Density>
+				<PhysicsMaterial>Normal</PhysicsMaterial>
+				<Scale w="20.0" h="20.0" d="20.0"/>
 			</Physics3DComponent>
         </Actor>
 		<Actor name="sensor9">
@@ -253,7 +272,7 @@
 			<Physics3DComponent>
 				<Shape>Box</Shape>
 				<BodyType>Dynamic</BodyType>
-				<Density>air</Density>
+				<Density>lead</Density>
 				<PhysicsMaterial>Normal</PhysicsMaterial>
 				<Scale w="1.0" h="1.0" d="1.0"/>
 			</Physics3DComponent>
@@ -266,6 +285,30 @@
 			</NavAgentComponent>
 			<ScriptComponent>
 				<ScriptObject modulePath="CharacterMovement" className="CharacterMovement"/>
+				<ExternalScriptObj varName = "movementProducer" modulePath="AiMovementProducer" className="AiMovementProducer"/>
+			</ScriptComponent>
+        </Actor>
+		<Actor name="PlayerCharacter">
+            <TransformComponent>
+                <Position x="3" y="6" z="3"/>
+                <Size w="1.000000" h="1.000000" d="1.0"/>
+				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
+            </TransformComponent>
+			<BoxRenderComponent>
+				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Color r="0.000000" g="1.00" b="0.000000"/>
+			</BoxRenderComponent>
+			<Physics3DComponent>
+				<Shape>Box</Shape>
+				<BodyType>Dynamic</BodyType>
+				<Density>lead</Density>
+				<PhysicsMaterial>Normal</PhysicsMaterial>
+				<Scale w="1.0" h="1.0" d="1.0"/>
+			</Physics3DComponent>
+			<ScriptComponent>
+				<ScriptObject modulePath="CharacterMovement" className="CharacterMovement"/>
+				<ExternalScriptObj varName = "movementProducer" modulePath="InputMovementProducer" className="InputMovementProducer"/>
 			</ScriptComponent>
         </Actor>
     </Actors>
