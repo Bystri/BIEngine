@@ -30,6 +30,8 @@ public:
 
    bool LoadLevel(const std::string& path);
 
+   bool IsLevelLoaded() const { return m_bIsLevelLoaded; };
+
    std::shared_ptr<Actor> CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition = nullptr, const glm::vec3* const pRotation = nullptr);
    // Принимает на вход XML-структуру актера, компоненты в котором будут заменены или добавлены.
    void ModifyActor(ActorId actorId, tinyxml2::XMLElement* pOverrides);
@@ -58,6 +60,8 @@ protected:
    virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) { return true; }
 
 protected:
+   bool m_bIsLevelLoaded;
+
    GameViewList m_gameViews;
 
    ActorMap m_actors;

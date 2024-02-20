@@ -14,6 +14,7 @@
 #include "NavAgentComponent.h"
 #include "ScriptComponent.h"
 #include "../Utilities/Logger.h"
+#include "../EngineCore/GameApp.h"
 
 namespace BIEngine {
 
@@ -71,7 +72,9 @@ std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, co
       pTransformComponent->SetRotation(*pRotation);
 
    // Теперь можем инициализировать компоненты
-   pActor->PostInit();
+   if (g_pApp->m_pGameLogic->IsLevelLoaded()) {
+      pActor->Activate();
+   }
    return pActor;
 }
 
@@ -114,7 +117,7 @@ void ActorFactory::ModifyActor(std::shared_ptr<Actor> pActor, tinyxml2::XMLEleme
          pComponent = CreateComponent(pActor, pNode);
          if (pComponent) {
             pActor->AddComponent(pComponent);
-            pComponent->PostInit();
+            pComponent->Activate();
          }
       }
    }

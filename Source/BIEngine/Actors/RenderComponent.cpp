@@ -18,7 +18,7 @@ ComponentId ModelRenderComponent::g_CompId = "ModelRenderComponent";
  * BaseRenderComponent
  ************************************************************/
 
-void BaseRenderComponent::PostInit()
+void BaseRenderComponent::Activate()
 {
    std::shared_ptr<SceneNode> pSceneNode(GetSceneNode());
    std::shared_ptr<EvtData_New_Render_Component> pEvent = std::make_shared<EvtData_New_Render_Component>(m_pOwner->GetId(), pSceneNode);

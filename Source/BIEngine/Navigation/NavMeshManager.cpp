@@ -290,11 +290,6 @@ void NavMeshManager::renderNavMeshWindow()
       generateNavmesh(m_buildSettings);
    }
 
-   ImGui::SameLine();
-   if (ImGui::Button("Save")) {
-      SaveNavMesh("E:/BystrovI/Projects/BIEngine/Assets/Worlds/World/World.nav");
-   }
-
    ImGui::End();
 }
 

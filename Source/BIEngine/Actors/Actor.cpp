@@ -10,8 +10,8 @@
 namespace BIEngine {
 
 Actor::Actor(ActorId id)
+   : m_id(id), m_bIsActivated(false)
 {
-   m_id = id;
 }
 
 Actor::~Actor()
@@ -32,14 +32,33 @@ bool Actor::Init(tinyxml2::XMLElement* pData)
    return true;
 }
 
-void Actor::PostInit()
+void Actor::Activate()
 {
-   for (auto it = m_components.begin(); it != m_components.end(); ++it)
-      it->second->PostInit();
+   if (m_bIsActivated) {
+      return;
+   }
+
+   for (auto it = m_components.begin(); it != m_components.end(); ++it) {
+      it->second->Activate();
+   }
+}
+
+void Actor::Deactivate()
+{
+   if (!m_bIsActivated) {
+      return;
+   }
+
+   for (auto it = m_components.begin(); it != m_components.end(); ++it) {
+      it->second->Deactivate();
+   }
 }
 
 void Actor::Destroy()
 {
+   for (auto it = m_components.begin(); it != m_components.end(); ++it) {
+      it->second->Terminate();
+   }
    m_components.clear();
 }
 

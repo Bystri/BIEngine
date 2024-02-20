@@ -8,9 +8,7 @@
 namespace BIEngine {
 
 GameLogic::GameLogic()
-   : m_gameViews()
-
-     ,
+   : m_gameViews(), m_bIsLevelLoaded(false),
      m_actors(), m_pActorFactory(new ActorFactory)
 {
 }
@@ -78,9 +76,6 @@ bool GameLogic::LoadLevel(const std::string& path)
    if (pActorsNode) {
       for (tinyxml2::XMLElement* pNode = pActorsNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
          auto pActor = CreateActor(pNode);
-         if (pActor) {
-            // TODO: Сделать отправку сообщений о новом актере
-         }
       }
    }
 
@@ -91,6 +86,12 @@ bool GameLogic::LoadLevel(const std::string& path)
    if (postLoadScript) {
       // Загрузки ресурсов уже автоматически исполняет скрипт, поэтому нам ничего делать не нужно
       auto pResourceHandle = ResCache::Get()->GetHandle(postLoadScript);
+   }
+
+   m_bIsLevelLoaded = true;
+
+   for (auto& actor : m_actors) {
+      actor.second->Activate();
    }
 
    // TODO: Кидать событие загрузки уровня

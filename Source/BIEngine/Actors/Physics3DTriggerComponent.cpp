@@ -40,7 +40,7 @@ bool Physics3DTriggerComponent::Init(tinyxml2::XMLElement* pData)
    return true;
 }
 
-void Physics3DTriggerComponent::PostInit()
+void Physics3DTriggerComponent::Activate()
 {
    m_gamePhysics->CreateTrigger(m_pOwner, m_dimension);
 }

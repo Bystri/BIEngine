@@ -50,7 +50,6 @@ bool BIGameLogic::Init()
 
    m_pPhysics2D->Initialize();
    m_pPhysics3D->Initialize();
-   m_pNavWorld->Initialize();
 
    std::shared_ptr<BIGameHumanView> pHumanView = std::make_shared<BIGameHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
    AddGameView(pHumanView);
@@ -63,6 +62,7 @@ bool BIGameLogic::Init()
 
 bool BIGameLogic::LoadLevelDelegate(tinyxml2::XMLElement* pRoot)
 {
+   m_pNavWorld->Initialize();
    return true;
 }
 

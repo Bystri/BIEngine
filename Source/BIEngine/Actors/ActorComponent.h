@@ -30,7 +30,11 @@ public:
 
    // В момент вызова пост-инициализации все компоненты созданы,
    // поэтому если текущему компоненту для завершения инициализации требуются данные из другого компонента - он может смело к нему обращаться
-   virtual void PostInit() {}
+   virtual void Activate() {}
+
+   virtual void Deactivate() {}
+
+   virtual void Terminate(){};
 
    // Получить XML-элемент, по которому можно воссоздать новую копию текущего компонента
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) = 0;

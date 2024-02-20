@@ -16,7 +16,7 @@ public:
    virtual ~Physics3DTriggerComponent();
 
    virtual bool Init(tinyxml2::XMLElement* pData) override;
-   virtual void PostInit() override;
+   virtual void Activate() override;
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 

@@ -98,15 +98,47 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
       m_pyObject.attr(externalScriptObjVarName.c_str()) = classInstance;
    }
 
+   try {
+      if (py::hasattr(m_pyObject, "OnInit")) {
+         m_pyObject.attr("OnInit")();
+      }
+   } catch (pybind11::error_already_set er) {
+      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnInit: ") + er.what());
+   }
+
    return true;
 }
 
-void ScriptComponent::PostInit()
+void ScriptComponent::Activate()
 {
    try {
-      m_pyObject.attr("PostInit")();
+      if (py::hasattr(m_pyObject, "OnActivate")) {
+         m_pyObject.attr("OnActivate")();
+      }
    } catch (pybind11::error_already_set er) {
-      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while PostInit: ") + er.what());
+      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnActivate: ") + er.what());
+   }
+}
+
+void ScriptComponent::Deactivate()
+{
+   try {
+      if (py::hasattr(m_pyObject, "OnDeactivate")) {
+         m_pyObject.attr("OnDeactivate")();
+      }
+   } catch (pybind11::error_already_set er) {
+      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnDeactivate: ") + er.what());
+   }
+}
+
+void ScriptComponent::Terminate()
+{
+   try {
+      if (py::hasattr(m_pyObject, "OnTerminate")) {
+         m_pyObject.attr("OnTerminate")();
+      }
+   } catch (pybind11::error_already_set er) {
+      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnTerminate: ") + er.what());
    }
 }
 

@@ -16,6 +16,9 @@ class MoveProcess(BIEProcess.Process):
         
         movementProducer.Init(movableActor)
         self.movementProducer = movementProducer
+        
+    def __del__(self):
+        movementProducer.Terminate()
 
     def OnUpdate(self, dt):
         inputVec = self.movementProducer.GetVelocity() * self.speed
@@ -26,11 +29,20 @@ class MoveProcess(BIEProcess.Process):
 
 class CharacterMovement():
     def __init__(self):
-        pass
+        pass 
         
     def Clear(self):
         pass
         
-    def PostInit(self):
-        self.proc = MoveProcess(self.owner, self.movementProducer)
+    def OnInit(self):
+        self.proc = MoveProcess(self.owner, self.movementProducer)    
         BIEProcess.AttachProcess(self.proc)
+        
+    def OnActivate(self):
+        self.proc.UnPause()
+        
+    def OnDeactivate(self):
+        self.proc.Pause()
+        
+    def OnTerminate(self):
+        self.proc.Success()

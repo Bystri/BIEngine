@@ -10,7 +10,7 @@ NavWorld::NavWorld()
 
 bool NavWorld::Initialize()
 {
-   m_pNavMeshManager->LoadNavMesh("E:/BystrovI/Projects/BIEngine/Assets/Worlds/World/World.nav");
+   m_pNavMeshManager->BuildNavmesh();
 
    if (!m_pNavCrowd->Initialize(m_pNavMeshManager)) {
       return false;

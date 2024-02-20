@@ -34,6 +34,9 @@ public:
    Actor(Actor&& orig) = default;
    Actor& operator=(Actor&& orig) = default;
 
+   void Activate();
+   void Deactivate();
+
    // Удаление всех умных указателей на компоненты текущего актера.
    void Destroy();
 
@@ -71,8 +74,6 @@ private:
    // Инициализация информации об актера на основе настроек в XML файле
    // Не отвечает за создание или инициализацию компонентов
    bool Init(tinyxml2::XMLElement* pData);
-   // Вызывается после инициализации актера и его компонентов. Вызывает PostInit() для каждого компонента актера
-   void PostInit();
 
    // Данный метод может вызываться только фабрикой
    void AddComponent(std::shared_ptr<ActorComponent> pComponent);
@@ -80,6 +81,7 @@ private:
 private:
    // Идентификатор актера, по которому к нему идет обращение из других систем
    ActorId m_id;
+   bool m_bIsActivated;
    // Поле несет чисто косметический характер. Используется в редакторе.
    std::string m_name;
    ActorComponents m_components;

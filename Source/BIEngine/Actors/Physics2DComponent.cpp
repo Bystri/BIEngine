@@ -70,7 +70,7 @@ bool Physics2DComponent::Init(tinyxml2::XMLElement* pData)
    return true;
 }
 
-void Physics2DComponent::PostInit()
+void Physics2DComponent::Activate()
 {
    if (m_pOwner) {
       switch (m_shape) {

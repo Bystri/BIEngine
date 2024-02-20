@@ -25,7 +25,7 @@ public:
 
    tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override { return pDoc->NewElement(GetComponentId().c_str()); }
 
-   virtual void PostInit() override;
+   virtual void Activate() override;
 
 protected:
    // В данном методе дочерние классы создают особые узлы сцены под свой заданный тип компонента актера

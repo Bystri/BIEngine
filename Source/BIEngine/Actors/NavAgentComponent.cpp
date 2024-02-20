@@ -89,7 +89,7 @@ bool NavAgentComponent::Init(tinyxml2::XMLElement* pData)
    return true;
 }
 
-void NavAgentComponent::PostInit()
+void NavAgentComponent::Activate()
 {
    if (!g_pApp->m_pGameLogic->GetNavWorld()) {
       return;

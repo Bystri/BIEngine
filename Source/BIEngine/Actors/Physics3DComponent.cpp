@@ -72,7 +72,7 @@ bool Physics3DComponent::Init(tinyxml2::XMLElement* pData)
    return true;
 }
 
-void Physics3DComponent::PostInit()
+void Physics3DComponent::Activate()
 {
    if (m_pOwner) {
       switch (m_shape) {
