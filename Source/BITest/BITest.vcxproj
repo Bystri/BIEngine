@@ -67,8 +67,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\BIEngine\Math\Math.cpp" />
     <ClCompile Include="..\BIEngine\Math\Transform.cpp" />
     <ClCompile Include="..\BIEngine\Math\Trigonometry.cpp" />
+    <ClCompile Include="Math\Math_UnitTest.cpp" />
     <ClCompile Include="Math\Matrix_UnitTest.cpp" />
     <ClCompile Include="Math\Transform_UnitTest.cpp" />
     <ClCompile Include="Math\Trigonometry_UnitTest.cpp" />
@@ -78,6 +80,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\BIEngine\Math\Math.h" />
     <ClInclude Include="..\BIEngine\Math\Matrix.h" />
     <ClInclude Include="..\BIEngine\Math\Transform.h" />
     <ClInclude Include="..\BIEngine\Math\Trigonometry.h" />

@@ -26,6 +26,11 @@ float Sin(const float rad)
    return std::sin(rad);
 }
 
+float Tan(const float rad)
+{
+   return std::tan(rad);
+}
+
 double RadToDeg(const double rad)
 {
    static constexpr double factor = 180.0f / PI_DOUBLE;
@@ -46,6 +51,11 @@ double Cos(const double rad)
 double Sin(const double rad)
 {
    return std::sin(rad);
+}
+
+double Tan(const double rad)
+{
+   return std::tan(rad);
 }
 
 } // namespace BIEngine

@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 
+#include "../../BIEngine/Math/Math.h"
 #include "../../BIEngine/Math/Transform.h"
 #include "../../BIEngine/Math/Trigonometry.h"
 
@@ -377,4 +378,91 @@ TEST(Transform, InverseScaledTranslatedRotation) {
 	EXPECT_FLOAT_EQ(loc.x, 2.0f);
 	EXPECT_FLOAT_EQ(loc.y, 3.0f);
 	EXPECT_FLOAT_EQ(loc.z, 1.0f);
+}
+
+TEST(Transform, CameraTransform) {
+	const BIEngine::Vector3 eyePos = BIEngine::Vector3(2.0f, 1.0f, 0.0f);
+	const BIEngine::Vector3 gazeDir = BIEngine::Vector3(1.0f, -1.0f, 0.0f);
+	const BIEngine::Vector3 camUp = BIEngine::Vector3(1.0f, 1.0f, 0.0f);
+	BIEngine::Transform camTrans = BIEngine::CalcCameraTrans(eyePos, gazeDir, camUp);
+
+	BIEngine::Vector3 worldPoint = BIEngine::Vector3(3.0f, 0.0f, 0.0f);
+
+	camTrans.TransformLocation(worldPoint);
+
+	EXPECT_FLOAT_EQ(worldPoint.x, 0.0f);
+	EXPECT_FLOAT_EQ(worldPoint.y, 0.0f);
+	EXPECT_FLOAT_EQ(worldPoint.z, -1.41421342f);
+}
+
+TEST(Transform, OrthographicProjection) {
+	BIEngine::Vector3 lbn = BIEngine::Vector3(-2.0f, -3.0f, -4.0f);
+	BIEngine::Vector3 rtf = BIEngine::Vector3(4.0f, 0.0f, -8.0f);
+
+	BIEngine::Vector3 midPoint = rtf + (lbn - rtf) * 0.5f;
+
+	BIEngine::Transform orthoProj = BIEngine::CalcOrthoProj(lbn.x, rtf.x, lbn.y, rtf.y, lbn.z, rtf.z);
+
+	orthoProj.TransformLocation(lbn);
+
+	EXPECT_FLOAT_EQ(lbn.x, -1.0f);
+	EXPECT_FLOAT_EQ(lbn.y, -1.0f);
+	EXPECT_FLOAT_EQ(lbn.z, 1.0f);
+
+	orthoProj.TransformLocation(rtf);
+
+	EXPECT_FLOAT_EQ(rtf.x, 1.0f);
+	EXPECT_FLOAT_EQ(rtf.y, 1.0f);
+	EXPECT_FLOAT_EQ(rtf.z, -1.0f);
+
+	orthoProj.TransformLocation(midPoint);
+
+	EXPECT_FLOAT_EQ(midPoint.x, 0.0f);
+	EXPECT_FLOAT_EQ(midPoint.y, 0.0f);
+	EXPECT_FLOAT_EQ(midPoint.z, 0.0f);
+}
+
+TEST(Transform, PerspectiveProjection) {
+	const float fovRad = BIEngine::DegToRad(45.0f);
+	const float aspectRatio = 1024.0f / 768.0f;
+	const float near = -4.0f;
+	const float far = -8.0f;
+
+	const float t = BIEngine::Abs(near) * BIEngine::Tan(fovRad / 2.0f);
+	const float r = t * aspectRatio;
+
+	const float t2 = BIEngine::Abs(far) * BIEngine::Tan(fovRad / 2.0f);
+	const float r2 = t2 * aspectRatio;
+
+	BIEngine::Transform perspectiveProj = BIEngine::CalcPerspectiveProj(fovRad, aspectRatio, near, far);
+
+	BIEngine::Vector3 lbn = BIEngine::Vector3(-r, -t, near);
+	BIEngine::Vector3 rtn = BIEngine::Vector3(r, t, near);
+
+	BIEngine::Vector3 lbn2 = BIEngine::Vector3(-r2, -t2, far);
+	BIEngine::Vector3 rtn2 = BIEngine::Vector3(r2, t2, far);
+
+	perspectiveProj.TransformLocation(lbn);
+
+	EXPECT_FLOAT_EQ(lbn.x, -1.0f);
+	EXPECT_FLOAT_EQ(lbn.y, -1.0f);
+	EXPECT_FLOAT_EQ(lbn.z, 1.0f);
+
+	perspectiveProj.TransformLocation(rtn);
+
+	EXPECT_FLOAT_EQ(rtn.x, 1.0f);
+	EXPECT_FLOAT_EQ(rtn.y, 1.0f);
+	EXPECT_FLOAT_EQ(rtn.z, 1.0f);
+
+	perspectiveProj.TransformLocation(lbn2);
+
+	EXPECT_FLOAT_EQ(lbn2.x, -1.0f);
+	EXPECT_FLOAT_EQ(lbn2.y, -1.0f);
+	EXPECT_FLOAT_EQ(lbn2.z, -1.0f);
+
+	perspectiveProj.TransformLocation(rtn2);
+
+	EXPECT_FLOAT_EQ(rtn2.x, 1.0f);
+	EXPECT_FLOAT_EQ(rtn2.y, 1.0f);
+	EXPECT_FLOAT_EQ(rtn2.z, -1.0f);
 }

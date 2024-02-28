@@ -1,6 +1,7 @@
 #include "Transform.h"
 
-#include <cmath>
+#include "Math.h"
+#include "Trigonometry.h"
 
 namespace BIEngine {
 
@@ -27,10 +28,10 @@ Transform& Transform::RotateX(const float rad)
    Transform rotateTrans;
    Matrix4& rotMat = rotateTrans.mat;
 
-   rotMat[1][1] = std::cos(rad);
-   rotMat[1][2] = std::sin(rad);
-   rotMat[2][1] = -std::sin(rad);
-   rotMat[2][2] = std::cos(rad);
+   rotMat[1][1] = Cos(rad);
+   rotMat[1][2] = Sin(rad);
+   rotMat[2][1] = -Sin(rad);
+   rotMat[2][2] = Cos(rad);
 
    mat = rotMat * mat;
 
@@ -42,10 +43,10 @@ Transform& Transform::RotateY(const float rad)
    Transform rotateTrans;
    Matrix4& rotMat = rotateTrans.mat;
 
-   rotMat[0][0] = std::cos(rad);
-   rotMat[0][2] = -std::sin(rad);
-   rotMat[2][0] = std::sin(rad);
-   rotMat[2][2] = std::cos(rad);
+   rotMat[0][0] = Cos(rad);
+   rotMat[0][2] = -Sin(rad);
+   rotMat[2][0] = Sin(rad);
+   rotMat[2][2] = Cos(rad);
 
    mat = rotMat * mat;
 
@@ -57,10 +58,10 @@ Transform& Transform::RotateZ(const float rad)
    Transform rotateTrans;
    Matrix4& rotMat = rotateTrans.mat;
 
-   rotMat[0][0] = std::cos(rad);
-   rotMat[0][1] = std::sin(rad);
-   rotMat[1][0] = -std::sin(rad);
-   rotMat[1][1] = std::cos(rad);
+   rotMat[0][0] = Cos(rad);
+   rotMat[0][1] = Sin(rad);
+   rotMat[1][0] = -Sin(rad);
+   rotMat[1][1] = Cos(rad);
 
    mat = rotMat * mat;
 
@@ -72,9 +73,9 @@ Transform& Transform::RotateAroundAxis(const float rad, const Vector3& axis)
    const Vector3 w = Normalized(axis);
 
    Vector3 t = w;
-   const float ux = std::abs(t.x);
-   const float uy = std::abs(t.y);
-   const float uz = std::abs(t.z);
+   const float ux = Abs(t.x);
+   const float uy = Abs(t.y);
+   const float uz = Abs(t.z);
    if (ux <= uy && ux <= uz) {
       t.x = 1.0f;
    } else if (uy <= ux && uy <= uz) {
@@ -149,6 +150,9 @@ void Transform::TransformDirection(Vector3& dir) const
 void Transform::TransformLocation(Vector3& location) const
 {
    Vector4 res = mat * Vector4(location, 1.0f);
+
+   res /= res.w;
+
    location.x = res.x;
    location.y = res.y;
    location.z = res.z;
@@ -164,7 +168,7 @@ const Transform Transform::GetInvTransformation() const
    Transform invRotTransform = *this;
    invRotTransform.mat[3] = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
    invRotTransform.Scale(invScale);
-   Transpose(invRotTransform.mat);
+   invRotTransform.mat = Transposed(invRotTransform.mat);
 
    Transform ret;
    ret.Translate(invTranslation);
@@ -172,6 +176,61 @@ const Transform Transform::GetInvTransformation() const
    ret.Scale(invScale);
 
    return ret;
+}
+
+Transform CalcCameraTrans(const Vector3& eyePos, const Vector3& gazeDirection, const Vector3& viewUp)
+{
+   const Vector3 w = -Normalized(gazeDirection);
+   const Vector3 u = Normalized(Cross(viewUp, w));
+   const Vector3 v = Normalized(Cross(w, u));
+
+   Transform camTrans;
+   camTrans.Translate(-eyePos);
+
+   Transform canonicalToCam;
+   canonicalToCam.mat[0] = Vector4(u, 0.0f);
+   canonicalToCam.mat[1] = Vector4(v, 0.0f);
+   canonicalToCam.mat[2] = Vector4(w, 0.0f);
+   canonicalToCam.mat = Transposed(canonicalToCam.mat);
+
+   camTrans.ApplyTransform(canonicalToCam);
+
+   return camTrans;
+}
+
+Transform CalcOrthoProj(float xLeft, float xRight, float yBot, float yTop, float zNear, float zFar)
+{
+   Transform orth;
+
+   orth.mat[0][0] = 2.0f / (xRight - xLeft);
+   orth.mat[1][1] = 2.0f / (yTop - yBot);
+   orth.mat[2][2] = 2.0f / (zNear - zFar);
+
+   orth.mat[3][0] = (-xRight - xLeft) / (xRight - xLeft);
+   orth.mat[3][1] = (-yTop - yBot) / (yTop - yBot);
+   orth.mat[3][2] = (-zNear - zFar) / (zNear - zFar);
+
+   return orth;
+}
+
+Transform CalcPerspectiveProj(float fovRad, float aspectRatio, float zNear, float zFar)
+{
+   Transform perspective;
+   perspective.mat[0][0] = zNear;
+   perspective.mat[1][1] = zNear;
+   perspective.mat[2][2] = zNear + zFar;
+   perspective.mat[2][3] = 1.0f;
+   perspective.mat[3][2] = -zNear * zFar;
+   perspective.mat[3][3] = 0.0f;
+
+
+   const float t = Abs(zNear) * Tan(fovRad / 2.0f);
+   const float r = t * aspectRatio;
+   Transform ortho = CalcOrthoProj(-r, r, -t, t, zNear, zFar);
+
+   perspective.ApplyTransform(ortho);
+
+   return perspective;
 }
 
 } // namespace BIEngine

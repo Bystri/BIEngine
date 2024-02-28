@@ -10,11 +10,13 @@ float DegToRad(const float deg);
 
 float Cos(const float rad);
 float Sin(const float rad);
+float Tan(const float rad);
 
 double RadToDeg(const double rad);
 double DegToRad(const double deg);
 
 double Cos(const double rad);
 double Sin(const double rad);
+double Tan(const double rad);
 
 } // namespace BIEngine

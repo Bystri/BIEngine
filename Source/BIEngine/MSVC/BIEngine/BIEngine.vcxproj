@@ -122,6 +122,7 @@
     <ClCompile Include="..\..\Graphics\Skybox.cpp" />
     <ClCompile Include="..\..\Graphics\Sprite.cpp" />
     <ClCompile Include="..\..\Graphics\SpriteNode.cpp" />
+    <ClCompile Include="..\..\Math\Math.cpp" />
     <ClCompile Include="..\..\Math\Transform.cpp" />
     <ClCompile Include="..\..\Math\Trigonometry.cpp" />
     <ClCompile Include="..\..\Navigation\NavChunkyTriMesh.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="..\..\Graphics\Skybox.h" />
     <ClInclude Include="..\..\Graphics\Sprite.h" />
     <ClInclude Include="..\..\Graphics\SpriteNode.h" />
+    <ClInclude Include="..\..\Math\Math.h" />
     <ClInclude Include="..\..\Math\Matrix.h" />
     <ClInclude Include="..\..\Math\Transform.h" />
     <ClInclude Include="..\..\Math\Trigonometry.h" />

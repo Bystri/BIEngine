@@ -19,6 +19,12 @@
     <ClCompile Include="Math\Trigonometry_UnitTest.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="..\BIEngine\Math\Math.cpp">
+      <Filter>EngineSources\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Math_UnitTest.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -45,6 +51,9 @@
       <Filter>EngineSources\Math</Filter>
     </ClInclude>
     <ClInclude Include="..\BIEngine\Math\Trigonometry.h">
+      <Filter>EngineSources\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Math\Math.h">
       <Filter>EngineSources\Math</Filter>
     </ClInclude>
   </ItemGroup>

@@ -155,7 +155,7 @@ inline Matrix<T, n, m> operator*(const Matrix<T, n, p>& lhs, const Matrix<T, p, 
 }
 
 template <typename T, std::size_t n, std::size_t m>
-Matrix<T, m, n> Transpose(const Matrix<T, n, m>& mat)
+Matrix<T, m, n> Transposed(const Matrix<T, n, m>& mat)
 {
    Matrix<T, m, n> ret;
 

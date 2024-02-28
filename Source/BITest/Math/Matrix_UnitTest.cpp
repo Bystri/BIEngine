@@ -99,7 +99,7 @@ TEST(Matrix, MultMatrixMatrix) {
 TEST(Matrix, TransposeMatrix) {
 	BIEngine::Matrix<float, 3, 2> mat1({ {1.0f, 3.0f, 5.0f}, {2.0f, 4.0f, 6.0f} });
 
-	BIEngine::Matrix<float, 2, 3> res = Transpose(mat1);
+	BIEngine::Matrix<float, 2, 3> res = Transposed(mat1);
 
 	//first column
 	EXPECT_FLOAT_EQ(res[0].x, 1.0f);

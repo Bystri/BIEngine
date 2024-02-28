@@ -4,6 +4,8 @@
 #include <array>
 #include <initializer_list>
 
+#include "Math.h"
+
 namespace BIEngine {
 
 template <typename T, std::size_t n>
@@ -296,7 +298,7 @@ struct Vector<T, 4> {
       data[0] = x;
       data[1] = y;
       data[2] = y;
-      data[3] = y;
+      data[3] = w;
    }
 
    T& operator[](const std::size_t idx) { return data[idx]; }
@@ -439,7 +441,7 @@ inline T Length2(const Vector<T, n>& vector)
 template <typename T, std::size_t n>
 inline T Length(const Vector<T, n>& vector)
 {
-   return std::sqrt(Length2(vector));
+   return Sqrt(Length2(vector));
 }
 
 template <typename T, std::size_t n>

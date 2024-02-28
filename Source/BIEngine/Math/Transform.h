@@ -5,6 +5,10 @@
 namespace BIEngine {
 
 class Transform {
+   friend Transform CalcCameraTrans(const Vector3& eyePos, const Vector3& gazeDirection, const Vector3& viewUp);
+   friend Transform CalcOrthoProj(float xLeft, float xRight, float yBot, float yTop, float zNear, float zFar);
+   friend Transform CalcPerspectiveProj(float fov, float aspectRatio, float zNear, float zFar);
+
 public:
    Transform();
 
@@ -33,4 +37,7 @@ private:
    Matrix4 mat;
 };
 
+Transform CalcCameraTrans(const Vector3& eyePos, const Vector3& gazeDirection, const Vector3& viewUp);
+Transform CalcOrthoProj(float xLeft, float xRight, float yBot, float yTop, float zNear, float zFar);
+Transform CalcPerspectiveProj(float fov, float aspectRatio, float zNear, float zFar);
 } // namespace BIEngine
