@@ -1,20 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\BIGameController.cpp" />
-    <ClCompile Include="..\BIFlyCameraSystem.cpp" />
-    <ClCompile Include="..\BIEventListener.cpp" />
-    <ClCompile Include="..\BIGame.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\BIGame.h" />
-    <ClInclude Include="..\BIGameController.h" />
-    <ClInclude Include="..\BIFlyCameraSystem.h" />
-    <ClInclude Include="..\BIEventListener.h" />
-    <ClInclude Include="..\BIScriptExports.h" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\.clang-format" />
     <None Include="..\.clang-tidy" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\BIEditor.cpp" />
+    <ClCompile Include="..\BIEditorController.cpp" />
+    <ClCompile Include="..\BIFlyCameraSystem.cpp" />
+    <ClCompile Include="..\BIEventListener.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\BIEditor.h" />
+    <ClInclude Include="..\BIEditorController.h" />
+    <ClInclude Include="..\BIFlyCameraSystem.h" />
+    <ClInclude Include="..\BIEventListener.h" />
   </ItemGroup>
 </Project>

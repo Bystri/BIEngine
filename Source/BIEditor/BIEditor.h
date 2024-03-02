@@ -1,54 +1,54 @@
 #pragma once
 
-#include "../BIEngine/EngineCore/GameApp.h"
-#include "../BIEngine/EngineCore/GameLogic.h"
+#include "../BIEngine/EngineCore/BIEngine.h"
+
 #include "BIEditorController.h"
+#include "BIFlyCameraSystem.h"
 
-class BIEditorApp : public BIEngine::GameApp
-{
+class BIEditorApp : public BIEngine::GameApp {
 public:
-    explicit BIEditorApp(std::shared_ptr<BIEngine::GameLogic> pGameLogic);
-    virtual ~BIEditorApp();
+   explicit BIEditorApp(std::shared_ptr<BIEngine::GameLogic> pGameLogic);
+   virtual ~BIEditorApp();
 
-    virtual bool Init();
-    virtual void Close();
+   virtual bool Init();
+   virtual void Close();
 
-    virtual const char* GetGameTitle() override { return "PingPong"; }
+   virtual const char* GetGameTitle() override { return "BIEditor"; }
 };
 
-
-class BIEditorLogic : public BIEngine::GameLogic
-{
+class BIEditorLogic : public BIEngine::GameLogic {
 public:
-    BIEditorLogic();
+   BIEditorLogic();
 
-    virtual bool Init();
+   virtual bool Init();
 
-    virtual void OnUpdate(float dt) override;
+   virtual void OnUpdate(BIEngine::GameTimer& gt) override;
 
-    const ActorMap& GetActorMap() { return m_actors; }
+   const ActorMap& GetActorMap() { return m_actors; }
 };
 
-
-class BIEditorHumanView : public BIEngine::HumanView
-{
+class BIEditorHumanView : public BIEngine::HumanView {
 public:
-    BIEditorHumanView(unsigned int screenWidth, unsigned int screenHeight);
+   BIEditorHumanView(unsigned int screenWidth, unsigned int screenHeight);
 
-    virtual bool Init();
-    virtual void Shutdown();
+   virtual bool Init() override;
+   virtual void Shutdown() override;
 
-    void SetController(std::shared_ptr<BIEditorController> controller)
-    {
-        m_pKeyboardHandler = controller;
-        m_pPointerHandler = controller;
-    }
+   virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
+   virtual void OnRender(const BIEngine::GameTimer& gt) override;
 
-protected:
-    virtual void NewCameraComponentDelegate(BIEngine::IEventDataPtr pEventData);
+   void SetController(std::shared_ptr<BIEditorController> controller)
+   {
+      m_pKeyboardHandler = controller;
+      m_pPointerHandler = controller;
+   }
 
 private:
-    void RegisterAllDelegates();
-    void RemoveAllDelegates();
+   std::shared_ptr<BIEngine::Framebuffer> m_pGameRenderTarget;
+   std::shared_ptr<BIEngine::Texture2D> m_pGameRenderTargetColorBuffer;
+   std::shared_ptr<BIEngine::Renderbuffer> m_pGameRenderTargetDepthBuffer;
 
+   BIFlyCameraSystem* m_pFlyCameraSystem;
+
+   bool m_bIsWindowFocused;
 };

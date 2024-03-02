@@ -94,8 +94,13 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
       }
       const std::string externalScriptObjClass = temp;
 
-      py::object classInstance = py::module::import(externalScriptObjPath.c_str()).attr(externalScriptObjClass.c_str())();
-      m_pyObject.attr(externalScriptObjVarName.c_str()) = classInstance;
+      try {
+         py::object classInstance = py::module::import(externalScriptObjPath.c_str()).attr(externalScriptObjClass.c_str())();
+         m_pyObject.attr(externalScriptObjVarName.c_str()) = classInstance;
+      } catch (pybind11::error_already_set er) {
+         Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error: ") + er.what());
+         return false;
+      }
    }
 
    try {

@@ -40,9 +40,11 @@ bool Renderer::Init(int screenWidth, int screenHeight, int MsaaSamples)
 
    m_renderDevice.Init();
 
+   m_pRenderTarget = GetDefaultFramebuffer();
+
    const std::string commonPostProcessingShaderProgramPath = "effects/commonPostProcessing.sp";
    auto shaderPgrogramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPostProcessingShaderProgramPath)->GetExtra());
-   m_pDefaultPostProcessor = std::make_shared<PostProcessor>(shaderPgrogramData->GetShaderProgram(), GetDefaultFramebuffer());
+   m_pDefaultPostProcessor = std::make_shared<PostProcessor>(shaderPgrogramData->GetShaderProgram());
 
    return true;
 }
@@ -64,7 +66,7 @@ void Renderer::EndFrame()
    m_renderDevice.SetDepthTest(false);
    m_renderDevice.SetCull(false);
 
-   m_pDefaultPostProcessor->Use(m_colorIntermediateBuffer);
+   m_pDefaultPostProcessor->Use(m_colorIntermediateBuffer, m_pRenderTarget);
 }
 
 void Renderer::DrawRenderCommand(RenderCommand& renderCommand)

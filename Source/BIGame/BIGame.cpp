@@ -5,8 +5,12 @@
 int main(int argc, char* argv[])
 {
    std::shared_ptr<BIGameLogic> pBIGameLogic = std::make_shared<BIGameLogic>();
+   BIGameApp BIGameApp(pBIGameLogic);
 
-   BIEngine::g_pApp = new BIGameApp(pBIGameLogic);
+   if (!BIEngine::g_pApp) {
+      return -1;
+   }
+
    BIEngine::g_pApp->m_options.useDevelopmentAssets = true;
    return BIEngine::Run(argc, argv);
 }
@@ -94,10 +98,14 @@ void BIGameHumanView::Shutdown()
       delete m_pFlyCameraSystem;
       m_pFlyCameraSystem = nullptr;
    }
+
+   HumanView::Shutdown();
 }
 
 void BIGameHumanView::OnUpdate(const BIEngine::GameTimer& gt)
 {
+   HumanView::OnUpdate(gt);
+
    if (m_pFlyCameraSystem) {
       m_pFlyCameraSystem->OnUpdate(gt);
    }

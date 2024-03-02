@@ -20,6 +20,7 @@ struct Options {
 
    unsigned int screenWidth = 1024;
    unsigned int screenHeight = 768;
+   bool maximazeWindow = false;
 };
 
 // Данный класс инициализирует все системы игрового движка и отвечает за взаимодейтсвие движка и ОС

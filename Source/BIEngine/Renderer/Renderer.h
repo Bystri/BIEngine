@@ -55,6 +55,8 @@ public:
 
    RenderDevice& GetRenderDevice() { return m_renderDevice; }
 
+   void SetRenderTarget(std::shared_ptr<Framebuffer> pRenderTarget) { m_pRenderTarget = pRenderTarget; }
+
    void BeginFrame();
    void EndFrame();
 
@@ -75,6 +77,7 @@ public:
    std::shared_ptr<Texture2D> m_colorIntermediateBuffer;
    std::shared_ptr<Renderbuffer> m_depthIntermediateRenderuffer;
 
+   std::shared_ptr<Framebuffer> m_pRenderTarget;
    std::shared_ptr<PostProcessor> m_pDefaultPostProcessor;
 };
 } // namespace BIEngine

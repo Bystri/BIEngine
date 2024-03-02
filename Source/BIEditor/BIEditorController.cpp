@@ -1,92 +1,87 @@
 #include "BIEditorController.h"
 
-#include <QKeyEvent>
+#include <cassert>
 
 #include "../BIEngine/EventManager/EventManager.h"
 
+#include "BIEventListener.h"
+
+bool BIEditorController::OnPointerMove(const Point& mousePos, const int radius)
+{
+   m_currentPointerPos = mousePos;
+
+   return true;
+}
+
+static void gameControllerSetMouseButtonStatus(unsigned char& statuses, BIEditorController::MouseButton mouseButton)
+{
+   const int statusIdx = static_cast<int>(mouseButton);
+   statuses |= (1u << statusIdx);
+}
+
+static void gameControllerClearMouseButtonStatus(unsigned char& statuses, BIEditorController::MouseButton mouseButton)
+{
+   const int statusIdx = static_cast<int>(mouseButton);
+   statuses &= ~(1u << statusIdx);
+}
+
+bool BIEditorController::OnPointerButtonDown(const Point& mousePos, const int radius, int buttonCode)
+{
+   gameControllerSetMouseButtonStatus(m_mouseButtonsStatus, static_cast<BIEditorController::MouseButton>(buttonCode));
+
+   return true;
+}
+
+bool BIEditorController::OnPointerButtonUp(const Point& mousePos, const int radius, int buttonCode)
+{
+   gameControllerClearMouseButtonStatus(m_mouseButtonsStatus, static_cast<BIEditorController::MouseButton>(buttonCode));
+
+   return true;
+}
+
+bool BIEditorController::IsMouseButtonPressed(int buttonCode)
+{
+   return (m_mouseButtonsStatus & (1u << buttonCode));
+}
+
+bool BIEditorController::IsKeyPressed(int key) const
+{
+   assert(key >= 0 && key < MAX_NUMBER_OF_KEYS);
+   if (key < 0 || key >= MAX_NUMBER_OF_KEYS) {
+      return false;
+   }
+
+   return m_isKeyPressed[key];
+}
+
 bool BIEditorController::OnKeyDown(int key, int scancode)
 {
-    const float CAMERA_SPEED = 1.0f;
+   assert(key >= 0 && key < MAX_NUMBER_OF_KEYS);
+   if (key < 0 || key >= MAX_NUMBER_OF_KEYS) {
+      return false;
+   }
 
-    //РћР±РЅРѕРІР»СЏРµРј С‚Р°Р±Р»РёС†Сѓ РєР»Р°РІРёС€
-    m_isKeyPressed[key] = true;
+   // Обновляем таблицу клавиш
+   m_isKeyPressed[key] = true;
 
-    if (key == Qt::Key_A || key == Qt::Key_D)
-    {
-        std::shared_ptr<BIEngine::TransformComponent> pTransformComponent = m_cameraActor->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).lock();
-        if (pTransformComponent)
-        {
-            glm::vec2 curPos = pTransformComponent->GetPosition();
-            curPos.x += CAMERA_SPEED;
-            pTransformComponent->SetPosition(curPos);
-        }
-    }
+   std::shared_ptr<EvtData_OnKeyDown> pEvent = std::make_shared<EvtData_OnKeyDown>(static_cast<EvtData_OnKeyEvent::Key>(key));
+   BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
-    if (key == Qt::Key_S || key == Qt::Key_W)
-    {
-        std::shared_ptr<BIEngine::TransformComponent> pTransformComponent = m_cameraActor->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).lock();
-        if (pTransformComponent)
-        {
-            glm::vec2 curPos = pTransformComponent->GetPosition();
-            curPos.y += CAMERA_SPEED;
-            pTransformComponent->SetPosition(curPos);
-        }
-    }
-
-    return true;
+   return true;
 }
 
 bool BIEditorController::OnKeyUp(int key, int scancode)
 {
-    //РћР±РЅРѕРІР»СЏРµРј С‚Р°Р±Р»РёС†Сѓ РєР»Р°РІРёС€
-    m_isKeyPressed[key] = false;
+   assert(key >= 0 && key < MAX_NUMBER_OF_KEYS);
+   if (key < 0 || key >= MAX_NUMBER_OF_KEYS) {
+      return false;
+   }
 
-    const float CAMERA_SPEED = 50.0f;
+   // Обновляем таблицу клавиш
+   m_isKeyPressed[key] = false;
 
-    if (key == Qt::Key_A)
-    {
-        std::shared_ptr<BIEngine::TransformComponent> pTransformComponent = m_cameraActor->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).lock();
-        if (pTransformComponent)
-        {
-            glm::vec2 curPos = pTransformComponent->GetPosition();
-            curPos.x += CAMERA_SPEED;
-            pTransformComponent->SetPosition(curPos);
-        }
-    }
+   std::shared_ptr<EvtData_OnKeyUp> pEvent = std::make_shared<EvtData_OnKeyUp>(static_cast<EvtData_OnKeyEvent::Key>(key));
+   BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
-    if (key == Qt::Key_D)
-    {
-        std::shared_ptr<BIEngine::TransformComponent> pTransformComponent = m_cameraActor->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).lock();
-        if (pTransformComponent)
-        {
-            glm::vec2 curPos = pTransformComponent->GetPosition();
-            curPos.x -= CAMERA_SPEED;
-            pTransformComponent->SetPosition(curPos);
-        }
-    }
-
-    if (key == Qt::Key_S)
-    {
-        std::shared_ptr<BIEngine::TransformComponent> pTransformComponent = m_cameraActor->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).lock();
-        if (pTransformComponent)
-        {
-            glm::vec2 curPos = pTransformComponent->GetPosition();
-            curPos.y += CAMERA_SPEED;
-            pTransformComponent->SetPosition(curPos);
-        }
-    }
-
-    if (key == Qt::Key_W)
-    {
-        std::shared_ptr<BIEngine::TransformComponent> pTransformComponent = m_cameraActor->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).lock();
-        if (pTransformComponent)
-        {
-            glm::vec2 curPos = pTransformComponent->GetPosition();
-            curPos.y -= CAMERA_SPEED;
-            pTransformComponent->SetPosition(curPos);
-        }
-    }
-
-
-    return true;
+   return true;
 }

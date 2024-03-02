@@ -1,11 +1,11 @@
 ﻿#pragma once
 
-#include "../3rdParty/FastDelegate/FastDelegate.h"
-
 #include <strstream>
 #include <list>
 #include <map>
 #include <memory>
+
+#include "../3rdParty/FastDelegate/FastDelegate.h"
 
 namespace BIEngine {
 

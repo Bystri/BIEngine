@@ -1,29 +1,43 @@
-#ifndef BIEDITORCONTROLLER_H
-#define BIEDITORCONTROLLER_H
+#pragma once
 
 #include "../BIEngine/UserInterface/InputDevices.h"
-#include "../BIEngine/Graphics/SceneNodes.h"
-#include "../BIEngine/Actors/Actor.h"
 
-class BIEditorController : public BIEngine::IPointerHandler, public BIEngine::IKeyboardHandler
-{
+const int MAX_NUMBER_OF_KEYS = 1024;
+
+class BIEditorController : public BIEngine::IPointerHandler, public BIEngine::IKeyboardHandler {
 public:
-    BIEditorController(std::shared_ptr<BIEngine::Actor> cameraActor) : m_isKeyPressed(),
-        m_cameraActor(cameraActor) {}
+   enum class MouseButton {
+      LEFT,
+      RIGHT,
+      MIDDLE
+   };
+
+   BIEditorController()
+      : m_currentPointerPos{0.0, 0.0}, m_isKeyPressed()
+   {
+   }
 
 public:
-    virtual bool OnPointerMove(const Point& mousePos, const int radius) { return true; }
-    virtual bool OnPointerButtonDown(const Point& mousePos, const int radius, const std::string& buttonName) { return true; }
-    virtual bool OnPointerButtonUp(const Point& mousePos, const int radius, const std::string& buttonName) { return true; }
+   IPointerHandler::Point GetCurrentPointerPos() const { return m_currentPointerPos; }
 
-    bool OnKeyDown(int key, int scancode);
-    bool OnKeyUp(int key, int scancode);
+   virtual bool OnPointerMove(const Point& mousePos, const int radius) override;
+
+   virtual bool OnPointerButtonDown(const Point& mousePos, const int radius, int buttonCode) override;
+
+   virtual bool OnPointerButtonUp(const Point& mousePos, const int radius, int buttonCode) override;
+
+   bool IsKeyPressed(int key) const;
+
+   bool IsMouseButtonPressed(int buttonCode);
+
+   virtual bool OnKeyDown(int key, int scancode) override;
+   virtual bool OnKeyUp(int key, int scancode) override;
 
 protected:
-    //РЎРѕСЃС‚РѕСЏРЅРёРµ РєР»Р°РІРёС€ РєР»Р°РІРёР°С‚СѓСЂС‹
-    bool m_isKeyPressed[1024];
+   IPointerHandler::Point m_currentPointerPos;
 
-    std::shared_ptr<BIEngine::Actor> m_cameraActor;
+   // Состояние клавиш клавиатуры
+   bool m_isKeyPressed[MAX_NUMBER_OF_KEYS];
+
+   unsigned char m_mouseButtonsStatus;
 };
-
-#endif // BIEDITORCONTROLLER_H

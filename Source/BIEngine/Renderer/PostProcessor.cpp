@@ -8,14 +8,14 @@
 
 namespace BIEngine {
 
-PostProcessor::PostProcessor(std::shared_ptr<ShaderProgram> pShaderProgram, std::shared_ptr<Framebuffer> pFramebuffer)
-   : m_screenOutputMesh(MeshGeometryGenerator::CreateGrid(2.0f, 2.0f, 2, 2)), m_pShaderProgram(pShaderProgram), m_pFramebuffer(pFramebuffer)
+PostProcessor::PostProcessor(std::shared_ptr<ShaderProgram> pShaderProgram)
+   : m_screenOutputMesh(MeshGeometryGenerator::CreateGrid(2.0f, 2.0f, 2, 2)), m_pShaderProgram(pShaderProgram)
 {
 }
 
-void PostProcessor::Use(std::shared_ptr<Texture2D> pTextureToProcess)
+void PostProcessor::Use(std::shared_ptr<Texture2D> pTextureToProcess, std::shared_ptr<Framebuffer> pRenderTarget)
 {
-   m_pFramebuffer->Bind();
+   pRenderTarget->Bind();
    m_pShaderProgram->Use();
    pTextureToProcess->Bind(0);
    glBindVertexArray(m_screenOutputMesh.GetVao());

@@ -46,6 +46,10 @@ int Run(int argc, char* argv[])
    GLFWwindow* window = glfwCreateWindow(g_pApp->m_options.screenWidth, g_pApp->m_options.screenHeight, g_pApp->GetGameTitle(), nullptr, nullptr);
    glfwMakeContextCurrent(window);
 
+   if (g_pApp->m_options.maximazeWindow) {
+      glfwMaximizeWindow(window);
+   }
+
    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
       Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize GLAD");
       return -1;
