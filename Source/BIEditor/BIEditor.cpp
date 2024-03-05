@@ -4,6 +4,8 @@
 #include "../BIEngine/Renderer/PostProcessor.h"
 #include "../BIEngine/Renderer/Renderbuffer.h"
 
+#include "Widgets/ActorEditorWidget.h"
+
 int main(int argc, char* argv[])
 {
    std::shared_ptr<BIEditorLogic> pBIGameLogic = std::make_shared<BIEditorLogic>();
@@ -75,6 +77,7 @@ void BIEditorLogic::OnUpdate(BIEngine::GameTimer& gt)
 
 BIEditorHumanView::BIEditorHumanView(unsigned int screenWidth, unsigned int screenHeight)
    : BIEngine::HumanView(screenWidth, screenHeight),
+     m_pActorEditorWidget(nullptr),
      m_bIsWindowFocused(false)
 {
 }
@@ -100,10 +103,18 @@ bool BIEditorHumanView::Init()
    }
 
    m_pRenderer->SetRenderTarget(m_pGameRenderTarget);
+
+   // Edtiro GUI
+   m_pActorEditorWidget = new ActorEditorWidget();
 }
 
 void BIEditorHumanView::Shutdown()
 {
+   if (m_pActorEditorWidget) {
+      delete m_pActorEditorWidget;
+      m_pActorEditorWidget = nullptr;
+   }
+
    if (m_pFlyCameraSystem) {
       delete m_pFlyCameraSystem;
       m_pFlyCameraSystem = nullptr;
@@ -123,6 +134,8 @@ void BIEditorHumanView::OnUpdate(const BIEngine::GameTimer& gt)
 
 void BIEditorHumanView::OnRender(const BIEngine::GameTimer& gt)
 {
+   showSceneTree();
+
    BIEngine::HumanView::OnRender(gt);
 
    ImGui::Begin("Scene");
@@ -147,4 +160,35 @@ void BIEditorHumanView::OnRender(const BIEngine::GameTimer& gt)
    BIEngine::GetDefaultFramebuffer()->Bind();
    static const BIEngine::ColorRgba CLEAR_COLOR = BIEngine::ColorRgba(0.0f, 0.5f, 0.5f, 1.0f);
    m_pRenderer->Clear(BIEngine::RenderDevice::ClearFlag::COLOR | BIEngine::RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
+}
+
+void BIEditorHumanView::showSceneTree()
+{
+   if (ImGui::Begin("World")) {
+      static int nodeClicked = 0;
+
+      int numActors = BIEngine::g_pApp->m_pGameLogic->GetNumActors();
+      for (int i = 0; i < numActors; ++i) {
+         std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(i);
+
+         ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+         const bool isSelected = nodeClicked == i;
+         if (isSelected) {
+            nodeFlags |= ImGuiTreeNodeFlags_Selected;
+         }
+
+         if (ImGui::TreeNodeEx((void*)(intptr_t)i, nodeFlags, pActor->GetName().c_str())) {
+            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+               nodeClicked = i;
+            }
+         }
+
+         if (nodeClicked == i) {
+            m_pActorEditorWidget->SetCurrentEditableActorId(pActor->GetId());
+            m_pActorEditorWidget->Show();
+         }
+      }
+
+      ImGui::End();
+   }
 }

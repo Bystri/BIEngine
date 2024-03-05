@@ -19,12 +19,16 @@
     <ClCompile Include="..\BIEditorController.cpp" />
     <ClCompile Include="..\BIEventListener.cpp" />
     <ClCompile Include="..\BIFlyCameraSystem.cpp" />
+    <ClCompile Include="..\Widgets\ActorEditorWidget.cpp" />
+    <ClCompile Include="..\Widgets\NumEditWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIEditor.h" />
     <ClInclude Include="..\BIEditorController.h" />
     <ClInclude Include="..\BIEventListener.h" />
     <ClInclude Include="..\BIFlyCameraSystem.h" />
+    <ClInclude Include="..\Widgets\ActorEditorWidget.h" />
+    <ClInclude Include="..\Widgets\NumEditWidget.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

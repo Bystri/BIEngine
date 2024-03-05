@@ -1,9 +1,9 @@
 <Components>
 
 	<Component name="TransformComponent">
-		<Element name="Position" type="Vec2" fieldNames="x,y" />
-		<Element name="Rotation" type="float" />
-		<Element name="Size" type="Vec2" fieldNames="w,h" />
+		<Element name="Position" type="Vec3" fieldNames="x,y,z" />
+		<Element name="Rotation" type="Vec3" fieldNames="x,y,z" />
+		<Element name="Size" type="Vec3" fieldNames="w,h,d" />
 	</Component>
 	
 	<Component name="PhysicsTriggerComponent">

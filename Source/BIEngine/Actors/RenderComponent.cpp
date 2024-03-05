@@ -87,7 +87,7 @@ tinyxml2::XMLElement* MeshBaseRenderComponent::GenerateXml(tinyxml2::XMLDocument
    pColor->SetAttribute("b", std::to_string(m_pLightReflectionMaterial->GetColor().b).c_str());
    pBaseElement->LinkEndChild(pColor);
 
-   return pColor;
+   return pBaseElement;
 }
 
 /***********************************************************

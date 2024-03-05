@@ -65,9 +65,9 @@ tinyxml2::XMLElement* TransformComponent::GenerateXml(tinyxml2::XMLDocument* pDo
    pBaseElement->LinkEndChild(pSize);
 
    tinyxml2::XMLElement* pRotation = pDoc->NewElement("Rotation");
-   pRotation->SetAttribute("x", std::to_string(m_position.x).c_str());
-   pRotation->SetAttribute("y", std::to_string(m_position.y).c_str());
-   pRotation->SetAttribute("z", std::to_string(m_position.z).c_str());
+   pRotation->SetAttribute("x", std::to_string(m_rotation.x).c_str());
+   pRotation->SetAttribute("y", std::to_string(m_rotation.y).c_str());
+   pRotation->SetAttribute("z", std::to_string(m_rotation.z).c_str());
    pBaseElement->LinkEndChild(pRotation);
 
    return pBaseElement;

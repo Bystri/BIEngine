@@ -9,11 +9,28 @@
     <ClCompile Include="..\BIEditorController.cpp" />
     <ClCompile Include="..\BIFlyCameraSystem.cpp" />
     <ClCompile Include="..\BIEventListener.cpp" />
+    <ClCompile Include="..\Widgets\ActorEditorWidget.cpp">
+      <Filter>Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Widgets\NumEditWidget.cpp">
+      <Filter>Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIEditor.h" />
     <ClInclude Include="..\BIEditorController.h" />
     <ClInclude Include="..\BIFlyCameraSystem.h" />
     <ClInclude Include="..\BIEventListener.h" />
+    <ClInclude Include="..\Widgets\ActorEditorWidget.h">
+      <Filter>Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Widgets\NumEditWidget.h">
+      <Filter>Widgets</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Widgets">
+      <UniqueIdentifier>{3e9730e1-4fc4-46a9-bf5a-0152510e54eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

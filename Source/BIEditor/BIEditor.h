@@ -27,6 +27,8 @@ public:
    const ActorMap& GetActorMap() { return m_actors; }
 };
 
+class ActorEditorWidget;
+
 class BIEditorHumanView : public BIEngine::HumanView {
 public:
    BIEditorHumanView(unsigned int screenWidth, unsigned int screenHeight);
@@ -44,11 +46,16 @@ public:
    }
 
 private:
+   void showSceneTree();
+
+private:
    std::shared_ptr<BIEngine::Framebuffer> m_pGameRenderTarget;
    std::shared_ptr<BIEngine::Texture2D> m_pGameRenderTargetColorBuffer;
    std::shared_ptr<BIEngine::Renderbuffer> m_pGameRenderTargetDepthBuffer;
 
    BIFlyCameraSystem* m_pFlyCameraSystem;
+
+   ActorEditorWidget* m_pActorEditorWidget;
 
    bool m_bIsWindowFocused;
 };
