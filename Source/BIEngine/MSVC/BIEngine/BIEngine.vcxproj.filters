@@ -321,6 +321,27 @@
     <ClCompile Include="..\..\Math\Math.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Graphics\RenderItemsStorage.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\ShadowGraphicsTechnique.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\OpaqueGraphicsTechnique.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\LightGraphicsTechnique.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\GraphicsRenderPass.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\WorldRenderPass.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\SkyboxGraphicsTechnique.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -625,6 +646,30 @@
     </ClInclude>
     <ClInclude Include="..\..\Math\Math.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\RenderItemsStorage.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\GraphicsTechnique.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\ShadowGraphicsTechnique.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\OpaqueGraphicsTechnique.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\LightGraphicsTechnique.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\GraphicsRenderPass.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\WorldRenderPass.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\SkyboxGraphicsTechnique.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

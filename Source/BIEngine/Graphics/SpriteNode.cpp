@@ -4,7 +4,7 @@ namespace BIEngine {
 
 bool SpriteNode::OnRender(Scene* pScene)
 {
-   RenderCommand renderCommand(m_pSprite->GetMesh(), m_pSprite->GetShaderProgramPtr());
+   RenderCommand renderCommand(m_pSprite->GetMesh().get(), m_pSprite->GetShaderProgramPtr());
 
    renderCommand.RenderState = m_pSprite->GetRanderState();
    renderCommand.RenderState.Cull = true;

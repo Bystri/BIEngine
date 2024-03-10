@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 
+#include "Renderer.h"
 #include "ShaderProgram.h"
 #include "Framebuffer.h"
 #include "MeshGeometryGenerator.h"
@@ -13,13 +14,15 @@ PostProcessor::PostProcessor(std::shared_ptr<ShaderProgram> pShaderProgram)
 {
 }
 
-void PostProcessor::Use(std::shared_ptr<Texture2D> pTextureToProcess, std::shared_ptr<Framebuffer> pRenderTarget)
+void PostProcessor::Use(Renderer* const pRenderer, std::shared_ptr<Texture2D> pTextureToProcess)
 {
-   pRenderTarget->Bind();
-   m_pShaderProgram->Use();
-   pTextureToProcess->Bind(0);
-   glBindVertexArray(m_screenOutputMesh.GetVao());
-   glDrawElements(GL_TRIANGLES, m_screenOutputMesh.GetIndices().size(), GL_UNSIGNED_INT, 0);
+   RenderCommand renderCommand(&m_screenOutputMesh, m_pShaderProgram);
+
+   renderCommand.RenderState.Cull = false;
+   renderCommand.RenderState.DepthTest = false;
+   renderCommand.GetShaderProgramState().AddTexture(0, pTextureToProcess);
+
+   pRenderer->DrawRenderCommand(renderCommand);
 }
 
 } // namespace BIEngine

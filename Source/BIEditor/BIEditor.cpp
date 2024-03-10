@@ -1,8 +1,14 @@
 #include "BIEditor.h"
 
+#include "../BIEngine/Graphics/WorldRenderPass.h"
+#include "../BIEngine/Graphics/ShadowGraphicsTechnique.h"
+#include "../BIEngine/Graphics/LightGraphicsTechnique.h"
+#include "../BIEngine/Graphics/OpaqueGraphicsTechnique.h"
+#include "../BIEngine/Graphics/SkyboxGraphicsTechnique.h"
 #include "../BIEngine/Renderer/ShadersLoader.h"
 #include "../BIEngine/Renderer/PostProcessor.h"
 #include "../BIEngine/Renderer/Renderbuffer.h"
+#include "../BIEngine/Renderer/ImageLoader.h"
 
 #include "Widgets/ActorEditorWidget.h"
 
@@ -61,7 +67,6 @@ bool BIEditorLogic::Init()
    m_pPhysics3D->Initialize();
 
    std::shared_ptr<BIEditorHumanView> humanView = std::make_shared<BIEditorHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
-   humanView->Init();
    AddGameView(humanView);
 
    // Загружаем стартовый мир
@@ -82,16 +87,90 @@ BIEditorHumanView::BIEditorHumanView(unsigned int screenWidth, unsigned int scre
 {
 }
 
+static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
+{
+   auto xmlExtraData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/scene.xml")->GetExtra());
+
+   if (!xmlExtraData) {
+      return nullptr;
+   }
+
+   tinyxml2::XMLElement* pSkyboxSettingsNode = xmlExtraData->GetRootElement()->FirstChildElement("Skybox");
+   assert(pSkyboxSettingsNode);
+
+   if (!pSkyboxSettingsNode) {
+      return nullptr;
+   }
+
+   const char* vertexShaderPath;
+   const char* fragmentShaderPath;
+   pSkyboxSettingsNode->QueryStringAttribute("vertexShaderPath", &vertexShaderPath);
+   pSkyboxSettingsNode->QueryStringAttribute("fragmentShaderPath", &fragmentShaderPath);
+
+   if (strlen(vertexShaderPath) == 0 || strlen(fragmentShaderPath) == 0) {
+      return nullptr;
+   }
+
+   std::shared_ptr<BIEngine::ShaderData> pVertShaderData = std::static_pointer_cast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(vertexShaderPath)->GetExtra());
+   std::shared_ptr<BIEngine::ShaderData> pFragShaderxData = std::static_pointer_cast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(fragmentShaderPath)->GetExtra());
+   std::shared_ptr<BIEngine::ShaderProgram> pShaderProgram = std::make_shared<BIEngine::ShaderProgram>();
+   pShaderProgram->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
+
+
+   std::vector<std::string> faces{
+      "cubemapTextureRightPath",
+      "cubemapTextureLeftPath",
+      "cubemapTextureTopPath",
+      "cubemapTextureBottomPath",
+      "cubemapTextureFrontPath",
+      "cubemapTextureBackPath"};
+
+   std::array<unsigned char*, 6> cubemapTextureImages;
+   int width = -1;
+   int height = -1;
+
+   for (int i = 0; i < faces.size(); ++i) {
+      const char* cubemapTexturePath;
+      pSkyboxSettingsNode->QueryStringAttribute(faces[i].c_str(), &cubemapTexturePath);
+
+      if (strlen(cubemapTexturePath) == 0) {
+         return nullptr;
+      }
+
+      auto cubemapTextureResExtraData = std::static_pointer_cast<BIEngine::ImageExtraData>(BIEngine::ResCache::Get()->GetHandle(cubemapTexturePath)->GetExtra());
+
+      if (!cubemapTextureResExtraData) {
+         return nullptr;
+      }
+
+      cubemapTextureImages[i] = cubemapTextureResExtraData->GetData();
+      width = cubemapTextureResExtraData->GetWidth();
+      height = cubemapTextureResExtraData->GetHeight();
+   }
+
+   std::shared_ptr<BIEngine::CubemapTexture> pTexture = BIEngine::CubemapTexture::Create(width, height, BIEngine::CubemapTexture::Format::RGB, cubemapTextureImages);
+
+   return std::make_shared<BIEngine::Skybox>(pTexture, pShaderProgram);
+}
+
 bool BIEditorHumanView::Init()
 {
    if (!BIEngine::HumanView::Init()) {
       return false;
    }
 
-   std::shared_ptr<BIEditorController> pGameController = std::make_shared<BIEditorController>();
-   SetController(pGameController);
+   constexpr std::size_t MAX_DIRECTIONAL_LIGHTS_NUM = 1;
+   constexpr std::size_t MAX_POINT_LIGHTS_NUM = 1;
+   constexpr std::size_t MAX_SPOT_LIGHTS_NUM = 1;
 
-   m_pFlyCameraSystem = new BIFlyCameraSystem(m_pScene->GetCamera(), pGameController);
+   std::shared_ptr<BIEngine::GraphicsRenderPass> pPreWorldRenderPass = std::make_shared<BIEngine::GraphicsRenderPass>();
+
+   std::shared_ptr<BIEngine::ShadowGraphicsTechnique> pShadowGraphicsTechnique = std::make_shared<BIEngine::ShadowGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM, MAX_POINT_LIGHTS_NUM);
+   pPreWorldRenderPass->AddTechnique(pShadowGraphicsTechnique);
+
+   pPreWorldRenderPass->Init();
+
+   m_pScene->AddRenderPass(pPreWorldRenderPass);
 
    m_pGameRenderTarget = std::make_shared<BIEngine::Framebuffer>();
    m_pGameRenderTargetColorBuffer = BIEngine::Texture2D::Create(m_screenWidth, m_screenHeight, BIEngine::Texture::Format::RGB, nullptr);
@@ -102,7 +181,27 @@ bool BIEditorHumanView::Init()
       return false;
    }
 
-   m_pRenderer->SetRenderTarget(m_pGameRenderTarget);
+   constexpr int MsaaSamples = 4;
+   std::shared_ptr<BIEngine::WorldRenderPass> pWorldRenderPass = std::make_shared<BIEngine::WorldRenderPass>(m_screenWidth, m_screenHeight, MsaaSamples);
+   pWorldRenderPass->SetRenderTarget(m_pGameRenderTarget);
+
+   std::shared_ptr<BIEngine::LightGraphicsTechnique> pLightGraphicsTechnique = std::make_shared<BIEngine::LightGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM, MAX_POINT_LIGHTS_NUM, MAX_SPOT_LIGHTS_NUM);
+   pWorldRenderPass->AddTechnique(pLightGraphicsTechnique);
+
+   std::shared_ptr<BIEngine::OpaqueGraphicsTechnique> pOpaqueGraphicsTechnique = std::make_shared<BIEngine::OpaqueGraphicsTechnique>();
+   pWorldRenderPass->AddTechnique(pOpaqueGraphicsTechnique);
+
+   std::shared_ptr<BIEngine::SkyboxGraphicsTechnique> pSkyboxGraphicsTechnique = std::make_shared<BIEngine::SkyboxGraphicsTechnique>(humanViewCreateSkybox());
+   pWorldRenderPass->AddTechnique(pSkyboxGraphicsTechnique);
+
+   pWorldRenderPass->Init();
+
+   m_pScene->AddRenderPass(pWorldRenderPass);
+
+   std::shared_ptr<BIEditorController> pGameController = std::make_shared<BIEditorController>();
+   SetController(pGameController);
+
+   m_pFlyCameraSystem = new BIFlyCameraSystem(m_pScene->GetCamera(), pGameController);
 
    // Edtiro GUI
    m_pActorEditorWidget = new ActorEditorWidget();

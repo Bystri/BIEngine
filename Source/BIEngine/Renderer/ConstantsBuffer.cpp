@@ -29,7 +29,7 @@ void ConstantsBuffer::SetBufferData(const void* ptrData, unsigned int offset, un
    }
 
    glBindBuffer(GL_UNIFORM_BUFFER, m_uniformBufferBlock);
-   glBufferSubData(GL_UNIFORM_BUFFER, offset, m_bufferSize, ptrData);
+   glBufferSubData(GL_UNIFORM_BUFFER, offset, dataSize, ptrData);
    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 } // namespace BIEngine

@@ -12,12 +12,12 @@
 namespace BIEngine {
 
 struct RenderCommand {
-   RenderCommand(std::shared_ptr<Mesh> pMesh, std::shared_ptr<ShaderProgram> pShader)
+   RenderCommand(const Mesh* pMesh, std::shared_ptr<ShaderProgram> pShader)
       : pMesh(pMesh), m_pShaderProgramState(pShader), m_shaderProgramState(pShader)
    {
    }
 
-   std::shared_ptr<Mesh> GetMeshPtr() const
+   const Mesh* GetMeshPtr() const
    {
       return pMesh;
    }
@@ -32,7 +32,7 @@ struct RenderCommand {
    RenderState RenderState{};
 
 private:
-   const std::shared_ptr<Mesh> pMesh;
+   const Mesh* const pMesh;
    std::shared_ptr<ShaderProgram> m_pShaderProgramState;
    ShaderProgramState m_shaderProgramState;
 };
@@ -51,14 +51,15 @@ public:
 
    int GetScreenHeight() const { return m_screenHeight; }
 
-   bool Init(int screenWidth, int screenHeight, int MsaaSamples = 4);
+   bool Init(int screenWidth, int screenHeight);
 
    RenderDevice& GetRenderDevice() { return m_renderDevice; }
 
-   void SetRenderTarget(std::shared_ptr<Framebuffer> pRenderTarget) { m_pRenderTarget = pRenderTarget; }
-
-   void BeginFrame();
-   void EndFrame();
+   void SetRenderTarget(std::shared_ptr<Framebuffer> pRenderTarget)
+   {
+      m_pRenderTarget = pRenderTarget;
+      m_pRenderTarget->Bind();
+   }
 
    void Clear(RenderDevice::ClearFlag flags, const ColorRgba& color);
    void DrawRenderCommand(RenderCommand& renderCommand);
@@ -69,15 +70,6 @@ public:
 
    RenderDevice m_renderDevice;
 
-   std::shared_ptr<Framebuffer> m_multisamplingFramebuffer;
-   std::shared_ptr<Texture2DMultisample> m_colorMultisampleBuffer;
-   std::shared_ptr<Renderbuffer> m_depthMultisampleRenderuffer;
-
-   std::shared_ptr<Framebuffer> m_intermediateFramebuffer;
-   std::shared_ptr<Texture2D> m_colorIntermediateBuffer;
-   std::shared_ptr<Renderbuffer> m_depthIntermediateRenderuffer;
-
    std::shared_ptr<Framebuffer> m_pRenderTarget;
-   std::shared_ptr<PostProcessor> m_pDefaultPostProcessor;
 };
 } // namespace BIEngine

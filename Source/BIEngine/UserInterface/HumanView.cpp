@@ -3,7 +3,6 @@
 #include "../Renderer/ShadersLoader.h"
 #include "../Renderer/ShaderProgram.h"
 #include "../Renderer/ImageLoader.h"
-#include "../Graphics/SpriteNode.h"
 #include "../EngineCore/GameApp.h"
 #include "../Audio/irrKlangAudio.h"
 
@@ -20,72 +19,6 @@ HumanView::HumanView(unsigned int screenWidth, unsigned int screenHeight)
 
 HumanView::~HumanView()
 {
-}
-
-static std::shared_ptr<Skybox> humanViewCreateSkybox()
-{
-   auto xmlExtraData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/scene.xml")->GetExtra());
-
-   if (!xmlExtraData) {
-      return nullptr;
-   }
-
-   tinyxml2::XMLElement* pSkyboxSettingsNode = xmlExtraData->GetRootElement()->FirstChildElement("Skybox");
-   assert(pSkyboxSettingsNode);
-
-   if (!pSkyboxSettingsNode) {
-      return nullptr;
-   }
-
-   const char* vertexShaderPath;
-   const char* fragmentShaderPath;
-   pSkyboxSettingsNode->QueryStringAttribute("vertexShaderPath", &vertexShaderPath);
-   pSkyboxSettingsNode->QueryStringAttribute("fragmentShaderPath", &fragmentShaderPath);
-
-   if (strlen(vertexShaderPath) == 0 || strlen(fragmentShaderPath) == 0) {
-      return nullptr;
-   }
-
-   std::shared_ptr<ShaderData> pVertShaderData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(vertexShaderPath)->GetExtra());
-   std::shared_ptr<ShaderData> pFragShaderxData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(fragmentShaderPath)->GetExtra());
-   std::shared_ptr<ShaderProgram> pShaderProgram = std::make_shared<ShaderProgram>();
-   pShaderProgram->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
-
-
-   std::vector<std::string> faces{
-      "cubemapTextureRightPath",
-      "cubemapTextureLeftPath",
-      "cubemapTextureTopPath",
-      "cubemapTextureBottomPath",
-      "cubemapTextureFrontPath",
-      "cubemapTextureBackPath"};
-
-   std::array<unsigned char*, 6> cubemapTextureImages;
-   int width = -1;
-   int height = -1;
-
-   for (int i = 0; i < faces.size(); ++i) {
-      const char* cubemapTexturePath;
-      pSkyboxSettingsNode->QueryStringAttribute(faces[i].c_str(), &cubemapTexturePath);
-
-      if (strlen(cubemapTexturePath) == 0) {
-         return nullptr;
-      }
-
-      auto cubemapTextureResExtraData = std::static_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(cubemapTexturePath)->GetExtra());
-
-      if (!cubemapTextureResExtraData) {
-         return nullptr;
-      }
-
-      cubemapTextureImages[i] = cubemapTextureResExtraData->GetData();
-      width = cubemapTextureResExtraData->GetWidth();
-      height = cubemapTextureResExtraData->GetHeight();
-   }
-
-   std::shared_ptr<CubemapTexture> pTexture = CubemapTexture::Create(width, height, CubemapTexture::Format::RGB, cubemapTextureImages);
-
-   return std::make_shared<Skybox>(pTexture, pShaderProgram);
 }
 
 bool HumanView::Init()
@@ -116,7 +49,6 @@ bool HumanView::Init()
    m_pScene->Init();
 
    m_pScene->SetCamera(std::make_shared<Camera>());
-   m_pScene->SetSkybox(humanViewCreateSkybox());
 
    return true;
 }

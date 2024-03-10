@@ -1,11 +1,13 @@
 ﻿#include "Scene.h"
 
-#include "../Utilities/DebugDraw.h"
+#include "GraphicsRenderPass.h"
+#include "RenderItemsStorage.h"
 
 namespace BIEngine {
 
 Scene::Scene(std::shared_ptr<Renderer> pRenderer)
-   : m_pRenderer(pRenderer), m_pRoot(std::make_shared<RootNode>()), m_pConstantsBuffer(std::make_shared<ConstantsBuffer>()), m_pCamera(nullptr), m_pSkybox(nullptr)
+   : m_pRenderer(pRenderer), m_pRoot(std::make_shared<RootNode>()), m_pConstantsBuffer(std::make_shared<ConstantsBuffer>()), m_pCamera(nullptr),
+     m_graphicsRenderPasses(), m_pRenderItemsStorage(new RenderItemsStorage)
 {
    EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::NewRenderComponentDelegate), EvtData_New_Render_Component::sk_EventType);
    EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Scene::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
@@ -15,6 +17,11 @@ Scene::~Scene()
 {
    EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Scene::NewRenderComponentDelegate), EvtData_New_Render_Component::sk_EventType);
    EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Scene::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
+
+   if (m_pRenderItemsStorage) {
+      delete m_pRenderItemsStorage;
+      m_pRenderItemsStorage = nullptr;
+   }
 }
 
 void Scene::Init()
@@ -22,8 +29,6 @@ void Scene::Init()
    constexpr int CONSTANTS_BUFFER_SCENE_GLOBALS_BINDING_POINT = 0;
 
    m_pConstantsBuffer->Init(sizeof(GlobalRenderBufferData), CONSTANTS_BUFFER_SCENE_GLOBALS_BINDING_POINT);
-
-   DebugDraw::Init();
 }
 
 int Scene::OnRender(const GameTimer& gt)
@@ -36,18 +41,16 @@ int Scene::OnRender(const GameTimer& gt)
       m_pConstantsBuffer->SetBufferData(&m_globalRenderBufferData, 0, sizeof(m_globalRenderBufferData));
 
       if (m_pRoot->PreRender(this)) {
+         m_pRenderItemsStorage->Clear();
+
          m_pRoot->OnRender(this);
          m_pRoot->RenderChildren(this);
+
+         for (int i = 0; i < m_graphicsRenderPasses.size(); ++i) {
+            m_graphicsRenderPasses[i]->OnRender(this, m_pRenderItemsStorage);
+         }
       }
       m_pRoot->PostRender(this);
-
-      DebugDraw::Draw();
-
-      if (m_pSkybox) {
-         m_pSkybox->OnRender(this);
-      }
-
-      m_pRenderer->EndFrame();
    }
 
    return 0;

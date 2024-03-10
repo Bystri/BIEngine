@@ -15,6 +15,9 @@ namespace BIEngine {
 
 typedef std::map<ActorId, std::shared_ptr<ISceneNode>> SceneActorMap;
 
+class GraphicsRenderPass;
+class RenderItemsStorage;
+
 // Владеет всеми графическими элементами, необходимым для отрисовки
 class Scene {
 public:
@@ -43,7 +46,9 @@ public:
 
    const std::shared_ptr<Camera> GetCamera() const { return m_pCamera; }
 
-   void SetSkybox(std::shared_ptr<Skybox> pSkybox) { m_pSkybox = pSkybox; }
+   RenderItemsStorage* GetRenderItemsStorage() const { return m_pRenderItemsStorage; }
+
+   void AddRenderPass(std::shared_ptr<GraphicsRenderPass> pRenderPass) { m_graphicsRenderPasses.push_back(pRenderPass); }
 
    void AddChild(ActorId id, std::shared_ptr<ISceneNode> pChild);
    void RemoveChild(ActorId id);
@@ -71,10 +76,13 @@ protected:
    std::shared_ptr<SceneNode> m_pRoot;
 
    std::shared_ptr<Camera> m_pCamera;
-   std::shared_ptr<Skybox> m_pSkybox;
+
    // Рисовальщик
    std::shared_ptr<Renderer> m_pRenderer;
    std::shared_ptr<ConstantsBuffer> m_pConstantsBuffer;
+
+   std::vector<std::shared_ptr<GraphicsRenderPass>> m_graphicsRenderPasses;
+   RenderItemsStorage* m_pRenderItemsStorage;
 
    SceneActorMap m_actorMap;
 };

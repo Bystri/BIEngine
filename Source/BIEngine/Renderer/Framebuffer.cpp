@@ -20,6 +20,14 @@ Framebuffer::~Framebuffer()
 
 void Framebuffer::Bind() const
 {
+   static int lastFramebufferId = -1;
+
+   if (m_framebufferId == lastFramebufferId) {
+      return;
+   }
+
+   lastFramebufferId = m_framebufferId;
+
    glBindFramebuffer(GL_FRAMEBUFFER, m_framebufferId);
 }
 
