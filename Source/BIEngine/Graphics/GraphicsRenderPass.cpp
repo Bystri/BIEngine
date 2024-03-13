@@ -5,7 +5,9 @@ namespace BIEngine {
 bool GraphicsRenderPass::Init()
 {
    for (int i = 0; i < m_graphicsTechniques.size(); ++i) {
-      m_graphicsTechniques[i]->Init();
+      if (!m_graphicsTechniques[i]->Init()) {
+         return false;
+      }
    }
 
    return InitInternal();

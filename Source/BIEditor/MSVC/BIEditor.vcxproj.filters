@@ -15,6 +15,9 @@
     <ClCompile Include="..\Widgets\NumEditWidget.cpp">
       <Filter>Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="..\Graphics\ActorPickingTechnique.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIEditor.h" />
@@ -27,10 +30,16 @@
     <ClInclude Include="..\Widgets\NumEditWidget.h">
       <Filter>Widgets</Filter>
     </ClInclude>
+    <ClInclude Include="..\Graphics\ActorPickingTechnique.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Widgets">
       <UniqueIdentifier>{3e9730e1-4fc4-46a9-bf5a-0152510e54eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{eaa1e748-2bcc-4460-8382-2992f251a54f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

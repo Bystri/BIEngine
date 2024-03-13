@@ -20,7 +20,7 @@ LightGraphicsTechnique::~LightGraphicsTechnique()
    }
 }
 
-void LightGraphicsTechnique::Init()
+bool LightGraphicsTechnique::Init()
 {
    m_lightsBufferData.pDirLights = new LightUniformBufferData::DirectionalLightGlData[m_maxDirLightsNum];
    m_lightsBufferData.pPointLights = new LightUniformBufferData::PointLightGlData[m_maxPointLightsNum];
@@ -35,6 +35,8 @@ void LightGraphicsTechnique::Init()
    constexpr int CONSTANTS_BUFFER_LIGHTS_BINDING_POINT = 1;
 
    m_pLightConstantsBuffer->Init(neededSize, CONSTANTS_BUFFER_LIGHTS_BINDING_POINT);
+
+   return true;
 }
 
 void LightGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* const pStorage)

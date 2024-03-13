@@ -130,8 +130,9 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
          return false;
       }
 
+      Texture2D::SizedFormat sizedFormat = imgData->GetChannelsNum() > 3 ? Texture2D::SizedFormat::RGBA : Texture2D::SizedFormat::RGB;
       Texture2D::Format textureFormat = imgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
-      std::shared_ptr<Texture2D> pTexture = Texture2D::Create(imgData->GetWidth(), imgData->GetHeight(), textureFormat, imgData->GetData());
+      std::shared_ptr<Texture2D> pTexture = Texture2D::Create(imgData->GetWidth(), imgData->GetHeight(), sizedFormat, textureFormat, imgData->GetData());
 
       std::shared_ptr<Sprite> pSprite = std::make_shared<Sprite>(pTexture);
       pSprite->SetColor(spriteColor);
@@ -221,8 +222,9 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
          return false;
       }
 
+      Texture2D::SizedFormat diffuseSizedFormat = diffuseMapImgData->GetChannelsNum() > 3 ? Texture2D::SizedFormat::RGBA : Texture2D::SizedFormat::RGB;
       Texture2D::Format diffuseTexureFormat = diffuseMapImgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
-      std::shared_ptr<Texture2D> pDiffuseMapTexture = Texture2D::Create(diffuseMapImgData->GetWidth(), diffuseMapImgData->GetHeight(), diffuseTexureFormat, diffuseMapImgData->GetData());
+      std::shared_ptr<Texture2D> pDiffuseMapTexture = Texture2D::Create(diffuseMapImgData->GetWidth(), diffuseMapImgData->GetHeight(), diffuseSizedFormat, diffuseTexureFormat, diffuseMapImgData->GetData());
       m_pLightReflectionMaterial->SetDiffuseMap(pDiffuseMapTexture);
 
       const char* specularMapPath;
@@ -236,8 +238,9 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
          return false;
       }
 
+      Texture2D::SizedFormat specularSizedFormat = specularMapImgData->GetChannelsNum() > 3 ? Texture2D::SizedFormat::RGBA : Texture2D::SizedFormat::RGB;
       Texture2D::Format specularTexureFormat = specularMapImgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
-      std::shared_ptr<Texture2D> pSpecularMapTexture = Texture2D::Create(specularMapImgData->GetWidth(), specularMapImgData->GetHeight(), specularTexureFormat, specularMapImgData->GetData());
+      std::shared_ptr<Texture2D> pSpecularMapTexture = Texture2D::Create(specularMapImgData->GetWidth(), specularMapImgData->GetHeight(), specularSizedFormat, specularTexureFormat, specularMapImgData->GetData());
       m_pLightReflectionMaterial->SetSpecularMap(pSpecularMapTexture);
 
       const char* normalMapPath;
@@ -251,8 +254,9 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
          return false;
       }
 
+      Texture2D::SizedFormat normalSizedFormat = normalMapImgData->GetChannelsNum() > 3 ? Texture2D::SizedFormat::RGBA : Texture2D::SizedFormat::RGB;
       Texture2D::Format normalTexureFormat = normalMapImgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
-      std::shared_ptr<Texture2D> pNormalMapTexture = Texture2D::Create(normalMapImgData->GetWidth(), normalMapImgData->GetHeight(), normalTexureFormat, normalMapImgData->GetData());
+      std::shared_ptr<Texture2D> pNormalMapTexture = Texture2D::Create(normalMapImgData->GetWidth(), normalMapImgData->GetHeight(), normalSizedFormat, normalTexureFormat, normalMapImgData->GetData());
       m_pLightReflectionMaterial->SetNormalMap(pNormalMapTexture);
 
       std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 0u));

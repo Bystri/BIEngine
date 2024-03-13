@@ -7,7 +7,7 @@ namespace BIEngine {
 
 class IGraphicsTechnique {
 public:
-   virtual void Init() {}
+   virtual bool Init() { return true; }
 
    virtual void OnRender(Scene* const pScene, RenderItemsStorage* const pStorage) = 0;
 };

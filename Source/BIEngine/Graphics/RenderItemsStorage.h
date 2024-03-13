@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "Model.h"
+#include "../Actors/Actor.h"
 #include "../Renderer/Color.h"
 
 namespace BIEngine {
@@ -13,6 +14,7 @@ namespace BIEngine {
 class RenderItemsStorage {
 public:
    struct OpaqueRenderItem {
+      ActorId actorId;
       std::shared_ptr<Mesh> pMesh;
       std::shared_ptr<Material> pMaterial;
       glm::mat4 ModelTransform;

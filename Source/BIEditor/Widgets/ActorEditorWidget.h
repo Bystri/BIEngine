@@ -15,6 +15,8 @@ class ActorEditorWidget {
 public:
    ActorEditorWidget();
 
+   BIEngine::ActorId GetCurrentSelectedActorId() const { return m_currentActorId; }
+
    void SetCurrentEditableActorId(BIEngine::ActorId actorId);
    void Show();
 

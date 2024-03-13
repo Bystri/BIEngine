@@ -28,6 +28,7 @@ public:
 };
 
 class ActorEditorWidget;
+class ActorPickerInfoStorage;
 
 class BIEditorHumanView : public BIEngine::HumanView {
 public:
@@ -56,6 +57,8 @@ private:
    BIFlyCameraSystem* m_pFlyCameraSystem;
 
    ActorEditorWidget* m_pActorEditorWidget;
+
+   std::weak_ptr<ActorPickerInfoStorage> m_pActorPickerInfoStorage;
 
    bool m_bIsWindowFocused;
 };

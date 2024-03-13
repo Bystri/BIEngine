@@ -29,7 +29,7 @@ static std::shared_ptr<Texture2D> modelLoadMaterialTexture(const aiMaterial* con
    }
 
    // TODO: We create new texture for each cached image. Make new texture loader
-   std::shared_ptr<Texture2D> pLoadedTexture = Texture2D::Create(textureImageData->GetWidth(), textureImageData->GetHeight(), Texture2D::Format::RGBA, textureImageData->GetData());
+   std::shared_ptr<Texture2D> pLoadedTexture = Texture2D::Create(textureImageData->GetWidth(), textureImageData->GetHeight(), Texture2D::SizedFormat::RGBA, Texture2D::Format::RGBA, textureImageData->GetData());
    return pLoadedTexture;
 }
 

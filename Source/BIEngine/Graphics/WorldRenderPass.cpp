@@ -11,7 +11,7 @@ bool WorldRenderPass::InitInternal()
    GraphicsRenderPass::InitInternal();
 
    m_intermediateFramebuffer = std::make_shared<Framebuffer>();
-   m_colorIntermediateBuffer = Texture2D::Create(m_screenWidth, m_screenHeight, Texture::Format::RGB, nullptr);
+   m_colorIntermediateBuffer = Texture2D::Create(m_screenWidth, m_screenHeight, Texture::SizedFormat::RGB, Texture::Format::RGB, nullptr);
    m_depthIntermediateRenderuffer = Renderbuffer::Create(m_screenWidth, m_screenHeight, Renderbuffer::Format::DEPTH24);
    FramebufferAttach(m_intermediateFramebuffer, FramebufferAttachementType::COLOR, m_colorIntermediateBuffer);
    FramebufferAttach(m_intermediateFramebuffer, FramebufferAttachementType::DEPTH, m_depthIntermediateRenderuffer);

@@ -126,6 +126,7 @@ bool ModelNode::OnRender(Scene* pScene)
 
    for (const auto& pModelMesh : modelMeshes) {
       RenderItemsStorage::OpaqueRenderItem opaqueRitem;
+      opaqueRitem.actorId = m_props.GetActorId();
       opaqueRitem.pMesh = pModelMesh->GetMesh();
       opaqueRitem.pMaterial = pModelMesh->GetMaterial();
       opaqueRitem.ModelTransform = GetLocalModelMatrix();

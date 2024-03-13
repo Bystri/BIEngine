@@ -5,7 +5,7 @@
 
 namespace BIEngine {
 
-void ShadowGraphicsTechnique::Init()
+bool ShadowGraphicsTechnique::Init()
 {
    const std::string commonDirShadowShaderProgramPath = "effects/dirShadow.sp";
    auto dirShadowShaderProgram = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonDirShadowShaderProgramPath)->GetExtra());
@@ -30,7 +30,7 @@ void ShadowGraphicsTechnique::Init()
          params.FilterMin = Texture2D::TextureFunction::NEAREST;
          params.FilterMax = Texture2D::TextureFunction::NEAREST;
          params.DataType = Texture2D::Type::UNSIGNED_BYTE;
-         dirLightShadowInfo.pDepthBuffer = Texture2D::Create(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT, Texture::Format::DEPTH_COMPONENT, nullptr, params);
+         dirLightShadowInfo.pDepthBuffer = Texture2D::Create(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT, Texture::SizedFormat::DEPTH_COMPONENT, Texture::Format::DEPTH_COMPONENT, nullptr, params);
          FramebufferAttach(dirLightShadowInfo.pShadowMapBuffer, FramebufferAttachementType::DEPTH, dirLightShadowInfo.pDepthBuffer);
       }
 
@@ -72,6 +72,8 @@ void ShadowGraphicsTechnique::Init()
 
       m_pointLightShadowInfos.push_back(pointLightShadowInfo);
    }
+
+   return true;
 }
 
 void ShadowGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* const pStorage)

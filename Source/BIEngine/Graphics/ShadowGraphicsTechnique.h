@@ -15,7 +15,7 @@ public:
    {
    }
 
-   void Init() override;
+   bool Init() override;
 
    void OnRender(Scene* const pScene, RenderItemsStorage* const pStorage) override;
 

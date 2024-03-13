@@ -1,5 +1,6 @@
 #include "Texture.h"
 
+#include <cassert>
 #include <iostream>
 
 #include <glad/glad.h>
@@ -9,6 +10,79 @@ namespace BIEngine {
 /***************/
 // Texture
 /**************/
+
+static unsigned int ConverSizedFormatToGl(Texture2D::SizedFormat format)
+{
+   if (format < Texture2D::SizedFormat::R_16_F) {
+      return GL_STENCIL_INDEX + static_cast<unsigned int>(format);
+   }
+
+   switch (format) {
+      case Texture2D::SizedFormat::R_16_F:
+         return GL_R16F;
+      case Texture2D::SizedFormat::R_32_F:
+         return GL_R32F;
+      case Texture2D::SizedFormat::RG_16_F:
+         return GL_RG16F;
+      case Texture2D::SizedFormat::RG_32_F:
+         return GL_RG32F;
+      case Texture2D::SizedFormat::RGB_32_F:
+         return GL_RGB32F;
+      case Texture2D::SizedFormat::RGBA_32_F:
+         return GL_RGBA32F;
+      case Texture2D::SizedFormat::R_8_I:
+         return GL_R8I;
+      case Texture2D::SizedFormat::R_16_I:
+         return GL_R16I;
+      case Texture2D::SizedFormat::R_32_I:
+         return GL_R32I;
+      case Texture2D::SizedFormat::RG_8_I:
+         return GL_RG8I;
+      case Texture2D::SizedFormat::RG_16_I:
+         return GL_RG16I;
+      case Texture2D::SizedFormat::RG_32_I:
+         return GL_RG32I;
+      case Texture2D::SizedFormat::RGB_8_I:
+         return GL_RGB8I;
+      case Texture2D::SizedFormat::RGB_16_I:
+         return GL_RGB16I;
+      case Texture2D::SizedFormat::RGB_32_I:
+         return GL_RGB32I;
+      case Texture2D::SizedFormat::RGBA_8_I:
+         return GL_RGBA8I;
+      case Texture2D::SizedFormat::RGBA_16_I:
+         return GL_RGBA16I;
+      case Texture2D::SizedFormat::RGBA_32_I:
+         return GL_RGBA32I;
+      case Texture2D::SizedFormat::R_8_UI:
+         return GL_R8UI;
+      case Texture2D::SizedFormat::R_16_UI:
+         return GL_R16UI;
+      case Texture2D::SizedFormat::R_32_UI:
+         return GL_R32UI;
+      case Texture2D::SizedFormat::RG_8_UI:
+         return GL_RG8UI;
+      case Texture2D::SizedFormat::RG_16_UI:
+         return GL_RG16UI;
+      case Texture2D::SizedFormat::RG_32_UI:
+         return GL_RG32UI;
+      case Texture2D::SizedFormat::RGB_8_UI:
+         return GL_RGB8UI;
+      case Texture2D::SizedFormat::RGB_16_UI:
+         return GL_RGB16UI;
+      case Texture2D::SizedFormat::RGB_32_UI:
+         return GL_RGB32UI;
+      case Texture2D::SizedFormat::RGBA_8_UI:
+         return GL_RGBA8UI;
+      case Texture2D::SizedFormat::RGBA_16_UI:
+         return GL_RGBA16UI;
+      case Texture2D::SizedFormat::RGBA_32_UI:
+         return GL_RGBA32UI;
+   }
+
+   assert(false && "Texture2D SizedFormat foesn't specified in ConverSizedFormatToGl");
+   return 0;
+}
 
 Texture::Texture()
    : m_width(0), m_height(0), m_internalFormat(Format::RGB)
@@ -44,7 +118,7 @@ static unsigned int ConvertWrapToGl(Texture2D::TextureWrap wrap)
    }
 }
 
-std::shared_ptr<Texture2D> Texture2D::Create(unsigned int width, unsigned int height, Texture::Format internalFormat, unsigned char* data, CreationParams params)
+std::shared_ptr<Texture2D> Texture2D::Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, unsigned char* data, CreationParams params)
 {
    struct make_shared_enabler : public Texture2D {};
 
@@ -56,7 +130,7 @@ std::shared_ptr<Texture2D> Texture2D::Create(unsigned int width, unsigned int he
 
    // Создание текстуры
    glBindTexture(GL_TEXTURE_2D, texture->m_id);
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_STENCIL_INDEX + static_cast<int>(internalFormat), width, height, 0, GL_STENCIL_INDEX + static_cast<int>(internalFormat), GL_BYTE + static_cast<int>(params.DataType), data);
+   glTexImage2D(GL_TEXTURE_2D, 0, ConverSizedFormatToGl(sizedFormat), width, height, 0, GL_STENCIL_INDEX + static_cast<int>(internalFormat), GL_BYTE + static_cast<int>(params.DataType), data);
 
    // Задаем параметры текстуры
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ConvertWrapToGl(params.WrapS));

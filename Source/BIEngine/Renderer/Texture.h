@@ -7,6 +7,47 @@ namespace BIEngine {
 
 class Texture {
 public:
+   enum class SizedFormat {
+      STENCIL_INDEX,
+      DEPTH_COMPONENT,
+      RED,
+      GREEN,
+      BLUE,
+      ALPHA,
+      RGB,
+      RGBA,
+      R_16_F,
+      R_32_F,
+      RG_16_F,
+      RG_32_F,
+      RGB_32_F,
+      RGBA_32_F,
+      R_8_I,
+      R_16_I,
+      R_32_I,
+      RG_8_I,
+      RG_16_I,
+      RG_32_I,
+      RGB_8_I,
+      RGB_16_I,
+      RGB_32_I,
+      RGBA_8_I,
+      RGBA_16_I,
+      RGBA_32_I,
+      R_8_UI,
+      R_16_UI,
+      R_32_UI,
+      RG_8_UI,
+      RG_16_UI,
+      RG_32_UI,
+      RGB_8_UI,
+      RGB_16_UI,
+      RGB_32_UI,
+      RGBA_8_UI,
+      RGBA_16_UI,
+      RGBA_32_UI
+   };
+
    enum class Format {
       STENCIL_INDEX,
       DEPTH_COMPONENT,
@@ -39,6 +80,7 @@ protected:
    unsigned int m_width, m_height;
 
    // Формат текстуры
+   SizedFormat m_sizedFormat;
    Format m_internalFormat;
 };
 
@@ -73,7 +115,7 @@ public:
       TextureFunction FilterMax = TextureFunction::LINEAR;
    };
 
-   static std::shared_ptr<Texture2D> Create(unsigned int width, unsigned int height, Texture::Format internalFormat, unsigned char* data, CreationParams params = CreationParams());
+   static std::shared_ptr<Texture2D> Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, unsigned char* data, CreationParams params = CreationParams());
 
    // Сделаеть текстуру активной
    virtual void Bind(int textureIdx) const override;

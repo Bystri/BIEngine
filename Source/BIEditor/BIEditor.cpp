@@ -10,6 +10,7 @@
 #include "../BIEngine/Renderer/Renderbuffer.h"
 #include "../BIEngine/Renderer/ImageLoader.h"
 
+#include "Graphics/ActorPickingTechnique.h"
 #include "Widgets/ActorEditorWidget.h"
 
 int main(int argc, char* argv[])
@@ -165,15 +166,20 @@ bool BIEditorHumanView::Init()
 
    std::shared_ptr<BIEngine::GraphicsRenderPass> pPreWorldRenderPass = std::make_shared<BIEngine::GraphicsRenderPass>();
 
+   std::shared_ptr<ActorPickingTechnique> pActorPickingTechnique = std::make_shared<ActorPickingTechnique>(m_screenWidth, m_screenHeight);
+   pPreWorldRenderPass->AddTechnique(pActorPickingTechnique);
+
    std::shared_ptr<BIEngine::ShadowGraphicsTechnique> pShadowGraphicsTechnique = std::make_shared<BIEngine::ShadowGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM, MAX_POINT_LIGHTS_NUM);
    pPreWorldRenderPass->AddTechnique(pShadowGraphicsTechnique);
 
    pPreWorldRenderPass->Init();
 
+   m_pActorPickerInfoStorage = pActorPickingTechnique->GetPickingInfoStorage();
+
    m_pScene->AddRenderPass(pPreWorldRenderPass);
 
    m_pGameRenderTarget = std::make_shared<BIEngine::Framebuffer>();
-   m_pGameRenderTargetColorBuffer = BIEngine::Texture2D::Create(m_screenWidth, m_screenHeight, BIEngine::Texture::Format::RGB, nullptr);
+   m_pGameRenderTargetColorBuffer = BIEngine::Texture2D::Create(m_screenWidth, m_screenHeight, BIEngine::Texture::SizedFormat::RGB, BIEngine::Texture::Format::RGB, nullptr);
    m_pGameRenderTargetDepthBuffer = BIEngine::Renderbuffer::Create(m_screenWidth, m_screenHeight, BIEngine::Renderbuffer::Format::DEPTH24);
    FramebufferAttach(m_pGameRenderTarget, BIEngine::FramebufferAttachementType::COLOR, m_pGameRenderTargetColorBuffer);
    FramebufferAttach(m_pGameRenderTarget, BIEngine::FramebufferAttachementType::DEPTH, m_pGameRenderTargetDepthBuffer);
@@ -237,12 +243,11 @@ void BIEditorHumanView::OnRender(const BIEngine::GameTimer& gt)
 
    BIEngine::HumanView::OnRender(gt);
 
+
+   ImGui::SetNextWindowContentSize(ImVec2(m_screenWidth, m_screenHeight));
    ImGui::Begin("Scene");
    {
       ImGui::BeginChild("GameRender");
-
-      float width = ImGui::GetContentRegionAvail().x;
-      float height = ImGui::GetContentRegionAvail().y;
 
       ImGui::Image(
          (ImTextureID)m_pGameRenderTargetColorBuffer->GetId(),
@@ -251,6 +256,23 @@ void BIEditorHumanView::OnRender(const BIEngine::GameTimer& gt)
          ImVec2(1, 0));
 
       m_bIsWindowFocused = ImGui::IsWindowFocused();
+
+      if (m_bIsWindowFocused) {
+         ImVec2 screenPos = ImGui::GetCursorScreenPos();
+         ImVec2 mousePos = ImGui::GetMousePos();
+
+         mousePos.x -= screenPos.x;
+         mousePos.y = screenPos.y - mousePos.y;
+
+         BIEngine::ActorId selectedId = BIEngine::Actor::INVALID_ACTOR_ID;
+         if (std::shared_ptr<ActorPickerInfoStorage> spt = m_pActorPickerInfoStorage.lock()) {
+            selectedId = spt->GetActorId(mousePos.x, mousePos.y);
+         }
+
+         if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && selectedId != BIEngine::Actor::INVALID_ACTOR_ID) {
+            m_pActorEditorWidget->SetCurrentEditableActorId(selectedId);
+         }
+      }
 
       ImGui::EndChild();
    }
@@ -264,26 +286,23 @@ void BIEditorHumanView::OnRender(const BIEngine::GameTimer& gt)
 void BIEditorHumanView::showSceneTree()
 {
    if (ImGui::Begin("World")) {
-      static int nodeClicked = 0;
-
       int numActors = BIEngine::g_pApp->m_pGameLogic->GetNumActors();
       for (int i = 0; i < numActors; ++i) {
          std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(i);
 
          ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-         const bool isSelected = nodeClicked == i;
+         const bool isSelected = pActor->GetId() == m_pActorEditorWidget->GetCurrentSelectedActorId();
          if (isSelected) {
             nodeFlags |= ImGuiTreeNodeFlags_Selected;
          }
 
          if (ImGui::TreeNodeEx((void*)(intptr_t)i, nodeFlags, pActor->GetName().c_str())) {
             if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
-               nodeClicked = i;
+               m_pActorEditorWidget->SetCurrentEditableActorId(pActor->GetId());
             }
          }
 
-         if (nodeClicked == i) {
-            m_pActorEditorWidget->SetCurrentEditableActorId(pActor->GetId());
+         if (pActor->GetId() == m_pActorEditorWidget->GetCurrentSelectedActorId()) {
             m_pActorEditorWidget->Show();
          }
       }
