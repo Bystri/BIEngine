@@ -52,6 +52,10 @@ static unsigned int FramebufferAttachementTypeToOpengl(FramebufferAttachementTyp
          return GL_COLOR_ATTACHMENT0;
       case FramebufferAttachementType::DEPTH:
          return GL_DEPTH_ATTACHMENT;
+      case FramebufferAttachementType::STENCIL:
+         return GL_STENCIL_ATTACHMENT;
+      case FramebufferAttachementType::DEPTH_STENCIL:
+         return GL_DEPTH_STENCIL_ATTACHMENT;
       default:
          return 0;
    }

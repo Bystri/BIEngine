@@ -29,7 +29,9 @@ std::shared_ptr<Framebuffer> GetDefaultFramebuffer();
 
 enum class FramebufferAttachementType {
    COLOR,
-   DEPTH
+   DEPTH,
+   STENCIL,
+   DEPTH_STENCIL
 };
 
 void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<Texture2D> attachement);

@@ -10,8 +10,8 @@ public:
    WorldRenderPass(int screenWidth, int screenHeight, int msaaSamples)
       : GraphicsRenderPass(),
         m_screenWidth(screenWidth), m_screenHeight(screenHeight), m_msaaSamples(msaaSamples),
-        m_multisamplingFramebuffer(nullptr), m_colorMultisampleBuffer(nullptr), m_depthMultisampleRenderuffer(nullptr),
-        m_intermediateFramebuffer(nullptr), m_colorIntermediateBuffer(nullptr), m_depthIntermediateRenderuffer(nullptr),
+        m_multisamplingFramebuffer(nullptr), m_colorMultisampleBuffer(nullptr), m_depthStencilMultisampleRenderuffer(nullptr),
+        m_intermediateFramebuffer(nullptr), m_colorIntermediateBuffer(nullptr), m_depthStencilIntermediateRenderuffer(nullptr),
         m_pDefaultPostProcessor(nullptr), m_pRenderTarget(GetDefaultFramebuffer())
    {
    }
@@ -32,11 +32,11 @@ private:
 
    std::shared_ptr<Framebuffer> m_multisamplingFramebuffer;
    std::shared_ptr<Texture2DMultisample> m_colorMultisampleBuffer;
-   std::shared_ptr<Renderbuffer> m_depthMultisampleRenderuffer;
+   std::shared_ptr<Renderbuffer> m_depthStencilMultisampleRenderuffer;
 
    std::shared_ptr<Framebuffer> m_intermediateFramebuffer;
    std::shared_ptr<Texture2D> m_colorIntermediateBuffer;
-   std::shared_ptr<Renderbuffer> m_depthIntermediateRenderuffer;
+   std::shared_ptr<Renderbuffer> m_depthStencilIntermediateRenderuffer;
 
    std::shared_ptr<PostProcessor> m_pDefaultPostProcessor;
    std::shared_ptr<Framebuffer> m_pRenderTarget;

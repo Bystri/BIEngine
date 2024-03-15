@@ -18,6 +18,9 @@
     <ClCompile Include="..\Graphics\ActorPickingTechnique.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\Graphics\SelectedActorOutliner.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIEditor.h" />
@@ -31,6 +34,9 @@
       <Filter>Widgets</Filter>
     </ClInclude>
     <ClInclude Include="..\Graphics\ActorPickingTechnique.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\SelectedActorOutliner.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

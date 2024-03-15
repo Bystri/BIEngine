@@ -18,6 +18,17 @@ public:
       ALL = COLOR | DEPTH | STENCIL
    };
 
+   enum class StencilAction : char {
+      KEEP,
+      ZERO,
+      REPLACE,
+      INCR,
+      INCR_WRAP,
+      DECR,
+      DECR_WRAP,
+      INVERT
+   };
+
 
    enum class Func : char {
       NEVER,
@@ -82,15 +93,11 @@ public:
 
 public:
    RenderDevice()
-      : m_depthTest(true), m_depthWrite(true), m_depthFunc(Func::LESS)
-
-        ,
-        m_blend(false), m_blendSrc(BlendFunc::SRC_ALPHA), m_blendDst(BlendFunc::ONE_MINUS_SRC_ALPHA), m_blendEquation(BlendEquation::ADD)
-
-        ,
-        m_cullFace(true), m_frontFace(Face::BACK), m_windingOrder(WindingOrder::CCW)
-
-        ,
+      : m_depthTest(true), m_depthWrite(true), m_depthFunc(Func::LESS),
+        m_stencilWrite(false), m_stencilOpFail(StencilAction::KEEP), m_stencilDpFail(StencilAction::KEEP), m_stencilDpPass(StencilAction::KEEP),
+        m_stencilAction(Func::ALWAYS), m_stencilFuncRefValue(1), m_stencilFuncMask(0xFF),
+        m_blend(false), m_blendSrc(BlendFunc::SRC_ALPHA), m_blendDst(BlendFunc::ONE_MINUS_SRC_ALPHA), m_blendEquation(BlendEquation::ADD),
+        m_cullFace(true), m_frontFace(Face::BACK), m_windingOrder(WindingOrder::CCW),
         m_polygonMode(PolygonMode::FILL)
    {
    }
@@ -102,6 +109,10 @@ public:
    void SetDepthTest(bool enable);
    void SetDepthWrite(bool enable);
    void SetDepthFunc(Func func);
+   void SetStencilTest(bool enable);
+   void SetStencilWrite(bool enable);
+   void SetStencilOp(StencilAction fail, StencilAction dpFail, StencilAction dpPass);
+   void SetStencilFunc(Func func, int ref, unsigned int mask);
    void SetBlend(bool enable);
    void SetBlendFunc(BlendFunc src, BlendFunc dst);
    void SetBlendEquation(BlendEquation func);
@@ -114,6 +125,15 @@ private:
    bool m_depthTest;
    bool m_depthWrite;
    Func m_depthFunc;
+
+   bool m_stencilTest;
+   bool m_stencilWrite;
+   StencilAction m_stencilOpFail;
+   StencilAction m_stencilDpFail;
+   StencilAction m_stencilDpPass;
+   Func m_stencilAction;
+   int m_stencilFuncRefValue;
+   unsigned int m_stencilFuncMask;
 
    bool m_blend;
    BlendFunc m_blendSrc;

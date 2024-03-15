@@ -20,6 +20,7 @@
     <ClCompile Include="..\BIEventListener.cpp" />
     <ClCompile Include="..\BIFlyCameraSystem.cpp" />
     <ClCompile Include="..\Graphics\ActorPickingTechnique.cpp" />
+    <ClCompile Include="..\Graphics\SelectedActorOutliner.cpp" />
     <ClCompile Include="..\Widgets\ActorEditorWidget.cpp" />
     <ClCompile Include="..\Widgets\NumEditWidget.cpp" />
   </ItemGroup>
@@ -29,6 +30,7 @@
     <ClInclude Include="..\BIEventListener.h" />
     <ClInclude Include="..\BIFlyCameraSystem.h" />
     <ClInclude Include="..\Graphics\ActorPickingTechnique.h" />
+    <ClInclude Include="..\Graphics\SelectedActorOutliner.h" />
     <ClInclude Include="..\Widgets\ActorEditorWidget.h" />
     <ClInclude Include="..\Widgets\NumEditWidget.h" />
   </ItemGroup>

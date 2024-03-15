@@ -13,7 +13,7 @@ namespace BIEngine {
 
 struct RenderCommand {
    RenderCommand(const Mesh* pMesh, std::shared_ptr<ShaderProgram> pShader)
-      : pMesh(pMesh), m_pShaderProgramState(pShader), m_shaderProgramState(pShader)
+      : pMesh(pMesh), m_pShaderProgram(pShader), m_shaderProgramState(pShader)
    {
    }
 
@@ -33,7 +33,7 @@ struct RenderCommand {
 
 private:
    const Mesh* const pMesh;
-   std::shared_ptr<ShaderProgram> m_pShaderProgramState;
+   std::shared_ptr<ShaderProgram> m_pShaderProgram;
    ShaderProgramState m_shaderProgramState;
 };
 

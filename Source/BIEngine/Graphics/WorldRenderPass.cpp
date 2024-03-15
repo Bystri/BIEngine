@@ -12,18 +12,18 @@ bool WorldRenderPass::InitInternal()
 
    m_intermediateFramebuffer = std::make_shared<Framebuffer>();
    m_colorIntermediateBuffer = Texture2D::Create(m_screenWidth, m_screenHeight, Texture::SizedFormat::RGB, Texture::Format::RGB, nullptr);
-   m_depthIntermediateRenderuffer = Renderbuffer::Create(m_screenWidth, m_screenHeight, Renderbuffer::Format::DEPTH24);
+   m_depthStencilIntermediateRenderuffer = Renderbuffer::Create(m_screenWidth, m_screenHeight, Renderbuffer::Format::DEPTH24_STENCIL8);
    FramebufferAttach(m_intermediateFramebuffer, FramebufferAttachementType::COLOR, m_colorIntermediateBuffer);
-   FramebufferAttach(m_intermediateFramebuffer, FramebufferAttachementType::DEPTH, m_depthIntermediateRenderuffer);
+   FramebufferAttach(m_intermediateFramebuffer, FramebufferAttachementType::DEPTH_STENCIL, m_depthStencilIntermediateRenderuffer);
    if (!m_intermediateFramebuffer->Check()) {
       return false;
    }
 
    m_multisamplingFramebuffer = std::make_shared<Framebuffer>();
    m_colorMultisampleBuffer = Texture2DMultisample::Create(m_screenWidth, m_screenHeight, Texture::Format::RGB, m_msaaSamples);
-   m_depthMultisampleRenderuffer = Renderbuffer::Create(m_screenWidth, m_screenHeight, Renderbuffer::Format::DEPTH24, m_msaaSamples);
+   m_depthStencilMultisampleRenderuffer = Renderbuffer::Create(m_screenWidth, m_screenHeight, Renderbuffer::Format::DEPTH24_STENCIL8, m_msaaSamples);
    FramebufferAttach(m_multisamplingFramebuffer, FramebufferAttachementType::COLOR, m_colorMultisampleBuffer);
-   FramebufferAttach(m_multisamplingFramebuffer, FramebufferAttachementType::DEPTH, m_depthMultisampleRenderuffer);
+   FramebufferAttach(m_multisamplingFramebuffer, FramebufferAttachementType::DEPTH_STENCIL, m_depthStencilMultisampleRenderuffer);
    if (!m_multisamplingFramebuffer->Check()) {
       return false;
    }
@@ -45,7 +45,7 @@ void WorldRenderPass::PreRender(Scene* const pScene)
 
    glViewport(0, 0, pScene->GetRenderer()->GetScreenWidth(), pScene->GetRenderer()->GetScreenHeight());
    static const ColorRgba CLEAR_COLOR = ColorRgba(0.0f, 0.5f, 0.5f, 1.0f);
-   pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
+   pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH | RenderDevice::ClearFlag::STENCIL, CLEAR_COLOR);
 }
 
 void WorldRenderPass::PostRender(Scene* const pScene)

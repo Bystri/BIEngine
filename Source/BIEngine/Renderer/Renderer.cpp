@@ -35,6 +35,9 @@ void Renderer::DrawRenderCommand(RenderCommand& renderCommand)
    m_renderDevice.SetDepthTest(renderState.DepthTest);
    m_renderDevice.SetDepthWrite(renderState.DepthWrite);
    m_renderDevice.SetDepthFunc(renderState.DepthCompare);
+   m_renderDevice.SetStencilTest(renderState.StencilTest);
+   m_renderDevice.SetStencilWrite(renderState.StencilWrite);
+   m_renderDevice.SetStencilFunc(renderState.StencilAction, renderState.StencilFuncRefValue, renderState.StencilFuncMask);
    m_renderDevice.SetBlend(renderState.Blend);
    m_renderDevice.SetBlendFunc(renderState.BlendSrc, renderState.BlendDst);
    m_renderDevice.SetBlendEquation(renderState.BlendEquation);

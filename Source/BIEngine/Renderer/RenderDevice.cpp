@@ -13,6 +13,31 @@ static GLenum renderEnumBlendFuncToGlEnum(RenderDevice::BlendFunc src)
    return GL_SRC_COLOR + static_cast<char>(src);
 }
 
+static GLenum renderEnumStencilFuncToGlEnum(RenderDevice::StencilAction action)
+{
+   switch (action) {
+      case RenderDevice::StencilAction::KEEP:
+         return GL_KEEP;
+      case RenderDevice::StencilAction::ZERO:
+         return GL_ZERO;
+      case RenderDevice::StencilAction::REPLACE:
+         return GL_REPLACE;
+      case RenderDevice::StencilAction::INCR:
+         return GL_INCR;
+      case RenderDevice::StencilAction::INCR_WRAP:
+         return GL_INCR_WRAP;
+      case RenderDevice::StencilAction::DECR:
+         return GL_DECR;
+      case RenderDevice::StencilAction::DECR_WRAP:
+         return GL_DECR_WRAP;
+      case RenderDevice::StencilAction::INVERT:
+         return GL_INVERT;
+   }
+
+   assert(false && "RenderDevice::StencilAction is not specified in renderEnumStencilFuncToGlEnum");
+   return 0;
+}
+
 void RenderDevice::Init()
 {
    if (m_depthTest) {
@@ -27,6 +52,14 @@ void RenderDevice::Init()
 
    glDepthFunc(GL_NEVER + static_cast<char>(m_depthFunc));
 
+   if (m_stencilTest) {
+      glEnable(GL_STENCIL_TEST);
+   } else {
+      glDisable(GL_STENCIL_TEST);
+   }
+
+   glStencilFunc(GL_NEVER + static_cast<char>(m_stencilAction), m_stencilFuncRefValue, m_stencilFuncMask);
+   glStencilOp(renderEnumStencilFuncToGlEnum(m_stencilOpFail), renderEnumStencilFuncToGlEnum(m_stencilDpFail), renderEnumStencilFuncToGlEnum(m_stencilDpPass));
 
    if (m_blend) {
       glEnable(GL_BLEND);
@@ -73,6 +106,8 @@ void RenderDevice::Clear(ClearFlag flags, const ColorRgba& ClearColor)
 
    if (static_cast<bool>(flags & RenderDevice::ClearFlag::STENCIL)) {
       clearBits |= GL_STENCIL_BUFFER_BIT;
+      SetStencilTest(true);
+      SetStencilWrite(true);
    }
 
    glClearColor(ClearColor.r, ClearColor.g, ClearColor.b, ClearColor.a);
@@ -112,6 +147,58 @@ void RenderDevice::SetDepthFunc(Func depthFunc)
 
    m_depthFunc = depthFunc;
    glDepthFunc(GL_NEVER + static_cast<char>(depthFunc));
+}
+
+void RenderDevice::SetStencilTest(bool enable)
+{
+   if (m_stencilTest == enable) {
+      return;
+   }
+
+   m_stencilTest = enable;
+
+   if (m_stencilTest) {
+      glEnable(GL_STENCIL_TEST);
+   } else {
+      glDisable(GL_STENCIL_TEST);
+   }
+}
+
+void RenderDevice::SetStencilWrite(bool enable)
+{
+   if (m_stencilWrite == enable) {
+      return;
+   }
+
+   m_stencilWrite = enable;
+
+   glStencilMask(m_stencilWrite ? 0xFF : 0x00);
+}
+
+void RenderDevice::SetStencilOp(StencilAction fail, StencilAction dpFail, StencilAction dpPass)
+{
+   if (m_stencilOpFail == fail && m_stencilDpFail == dpFail && m_stencilDpPass == dpPass) {
+      return;
+   }
+
+   m_stencilOpFail = fail;
+   m_stencilDpFail = dpFail;
+   m_stencilDpPass = dpPass;
+
+   glStencilOp(renderEnumStencilFuncToGlEnum(m_stencilOpFail), renderEnumStencilFuncToGlEnum(m_stencilDpFail), renderEnumStencilFuncToGlEnum(m_stencilDpPass));
+}
+
+void RenderDevice::SetStencilFunc(Func func, int ref, unsigned int mask)
+{
+   if (m_stencilAction == func && m_stencilFuncRefValue == ref && m_stencilFuncMask == mask) {
+      return;
+   }
+
+   m_stencilAction = func;
+   m_stencilFuncRefValue = ref;
+   m_stencilFuncMask = mask;
+
+   glStencilFunc(GL_NEVER + static_cast<char>(m_stencilAction), m_stencilFuncRefValue, m_stencilFuncMask);
 }
 
 void RenderDevice::SetBlend(bool enable)

@@ -11,6 +11,7 @@
 #include "../BIEngine/Renderer/ImageLoader.h"
 
 #include "Graphics/ActorPickingTechnique.h"
+#include "Graphics/SelectedActorOutliner.h"
 #include "Widgets/ActorEditorWidget.h"
 
 int main(int argc, char* argv[])
@@ -160,6 +161,11 @@ bool BIEditorHumanView::Init()
       return false;
    }
 
+   // Editor GUI
+   m_pActorEditorWidget = new ActorEditorWidget();
+
+
+   // Render pipline
    constexpr std::size_t MAX_DIRECTIONAL_LIGHTS_NUM = 1;
    constexpr std::size_t MAX_POINT_LIGHTS_NUM = 1;
    constexpr std::size_t MAX_SPOT_LIGHTS_NUM = 1;
@@ -200,6 +206,9 @@ bool BIEditorHumanView::Init()
    std::shared_ptr<BIEngine::SkyboxGraphicsTechnique> pSkyboxGraphicsTechnique = std::make_shared<BIEngine::SkyboxGraphicsTechnique>(humanViewCreateSkybox());
    pWorldRenderPass->AddTechnique(pSkyboxGraphicsTechnique);
 
+   std::shared_ptr<SelectedActorOutliner> pSelectedActorTechnique = std::make_shared<SelectedActorOutliner>(m_pActorEditorWidget);
+   pWorldRenderPass->AddTechnique(pSelectedActorTechnique);
+
    pWorldRenderPass->Init();
 
    m_pScene->AddRenderPass(pWorldRenderPass);
@@ -208,9 +217,6 @@ bool BIEditorHumanView::Init()
    SetController(pGameController);
 
    m_pFlyCameraSystem = new BIFlyCameraSystem(m_pScene->GetCamera(), pGameController);
-
-   // Edtiro GUI
-   m_pActorEditorWidget = new ActorEditorWidget();
 }
 
 void BIEditorHumanView::Shutdown()

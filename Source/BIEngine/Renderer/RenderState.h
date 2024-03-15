@@ -9,6 +9,12 @@ struct RenderState {
    bool DepthWrite = true;
    RenderDevice::Func DepthCompare = RenderDevice::Func::LESS;
 
+   bool StencilTest = false;
+   bool StencilWrite = false;
+   RenderDevice::Func StencilAction;
+   int StencilFuncRefValue;
+   unsigned int StencilFuncMask;
+
    bool Cull = true;
    RenderDevice::Face CullFace = RenderDevice::Face::BACK;
    RenderDevice::WindingOrder CullWindingOrder = RenderDevice::WindingOrder::CCW;
