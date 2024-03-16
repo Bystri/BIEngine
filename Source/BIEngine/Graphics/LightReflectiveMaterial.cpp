@@ -3,7 +3,7 @@
 namespace BIEngine {
 
 LightReflectiveMaterial::LightReflectiveMaterial(std::shared_ptr<ShaderProgram> pShader)
-   : Material(pShader), m_specularMap(nullptr), m_shininess(64.0f)
+   : Material(pShader), m_specularMap(nullptr), m_normalMap(nullptr), m_shininess(64.0f)
 {
 }
 

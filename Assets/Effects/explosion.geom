@@ -5,13 +5,13 @@ layout (triangle_strip, max_vertices = 3) out;
 in VertexData {
     vec2 texCoords;
 	vec3 fragPos;
-	mat3 normalTransform;
+	mat3 TBN;
 } gs_in[];
 
 out VertexData {
     vec2 texCoords;
 	vec3 fragPos;
-	mat3 normalTransform;
+	mat3 TBN;
 } gs_out;
 
 #include effects/common/scene_uniforms.glsl
@@ -27,7 +27,7 @@ void prepareData(int idx, vec3 norm) {
 	gs_out.fragPos = explode(vec4(gs_in[idx].fragPos, 1.0), norm).xyz;
 	gl_Position = projection * view * vec4(gs_out.fragPos, 1.0);
     gs_out.texCoords = gs_in[idx].texCoords;
-	gs_out.normalTransform = gs_in[idx].normalTransform;
+	gs_out.TBN = gs_in[idx].TBN;
 }
 
 

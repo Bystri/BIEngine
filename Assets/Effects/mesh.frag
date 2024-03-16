@@ -3,7 +3,7 @@
 in VertexData {
     vec2 texCoords;
 	vec3 fragPos;
-	mat3 normalTransform;
+	mat3 TBN;
 } fs_in;
 
 #include effects/common/lights.glsl
@@ -15,7 +15,7 @@ void main()
 {
 	vec3 norm = texture(material.normal, fs_in.texCoords).rgb;
 	norm = normalize(norm * 2.0 - 1.0);
-	norm = fs_in.normalTransform * norm;
+	norm = fs_in.TBN * norm;
 	norm = normalize(norm);
 	
 	vec3 viewDir = normalize(viewPos-fs_in.fragPos);

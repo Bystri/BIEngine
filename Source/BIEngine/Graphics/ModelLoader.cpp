@@ -42,6 +42,7 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
 
    pMaterial->SetDiffuseMap(modelLoadMaterialTexture(mat, aiTextureType_DIFFUSE));
    pMaterial->SetSpecularMap(modelLoadMaterialTexture(mat, aiTextureType_SPECULAR));
+   pMaterial->SetNormalMap(modelLoadMaterialTexture(mat, aiTextureType_HEIGHT));
 
    return pMaterial;
 }
@@ -63,6 +64,12 @@ static std::shared_ptr<ModelMesh> modelLoaderProcessMesh(aiMesh* mesh, const aiS
          vertex.Normal[0] = mesh->mNormals[i].x;
          vertex.Normal[1] = mesh->mNormals[i].y;
          vertex.Normal[2] = mesh->mNormals[i].z;
+      }
+
+      if (mesh->HasTangentsAndBitangents()) {
+         vertex.Tangent[0] = mesh->mTangents[i].x;
+         vertex.Tangent[1] = mesh->mTangents[i].y;
+         vertex.Tangent[2] = mesh->mTangents[i].z;
       }
 
       if (mesh->HasTextureCoords(i)) {
@@ -113,7 +120,7 @@ bool ObjModelResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize,
    std::shared_ptr<ModelData> pExtra = std::make_shared<ModelData>();
 
    Assimp::Importer importer;
-   const aiScene* scene = importer.ReadFileFromMemory(rawBuffer, rawSize, aiProcess_Triangulate | aiProcess_FlipUVs);
+   const aiScene* scene = importer.ReadFileFromMemory(rawBuffer, rawSize, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
       Logger::WriteLog(Logger::LogType::ERROR, "Assimp error: " + std::string(importer.GetErrorString()));
