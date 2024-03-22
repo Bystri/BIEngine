@@ -6,45 +6,24 @@
 #include <glad/glad.h>
 
 #include "LightReflectiveMaterial.h"
+#include "MaterialLoader.h"
 #include "../Utilities/Logger.h"
 #include "../Renderer/ShadersLoader.h"
-#include "../Renderer/ImageLoader.h"
 
 namespace BIEngine {
 
-static std::shared_ptr<Texture2D> modelLoadMaterialTexture(const aiMaterial* const mat, aiTextureType type)
-{
-   if (mat->GetTextureCount(type) == 0) {
-      return nullptr;
-   }
-
-   aiString path;
-   mat->GetTexture(type, 0, &path);
-
-   auto textureImageData = std::static_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(path.C_Str())->GetExtra());
-
-   if (textureImageData == nullptr) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading image for model; Image path: " + std::string(path.C_Str()));
-      return nullptr;
-   }
-
-   // TODO: We create new texture for each cached image. Make new texture loader
-   std::shared_ptr<Texture2D> pLoadedTexture = Texture2D::Create(textureImageData->GetWidth(), textureImageData->GetHeight(), Texture2D::SizedFormat::RGBA, Texture2D::Format::RGBA, textureImageData->GetData());
-   return pLoadedTexture;
-}
-
 static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMaterial* const mat)
 {
-   static const std::string STANDARD_MESH_SHADER_PROGRAM_PATH = "Effects/mesh.sp";
-   std::shared_ptr<ShaderProgramData> pShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(STANDARD_MESH_SHADER_PROGRAM_PATH)->GetExtra());
+   aiString name = mat->GetName();
 
-   std::shared_ptr<LightReflectiveMaterial> pMaterial = std::make_shared<LightReflectiveMaterial>(pShaderProgramData->GetShaderProgram());
+   auto materialData = std::dynamic_pointer_cast<MaterialData>(ResCache::Get()->GetHandle(name.C_Str())->GetExtra());
 
-   pMaterial->SetDiffuseMap(modelLoadMaterialTexture(mat, aiTextureType_DIFFUSE));
-   pMaterial->SetSpecularMap(modelLoadMaterialTexture(mat, aiTextureType_SPECULAR));
-   pMaterial->SetNormalMap(modelLoadMaterialTexture(mat, aiTextureType_HEIGHT));
+   if (materialData == nullptr) {
+      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading material for model; Material path: " + std::string(name.C_Str()));
+      return nullptr;
+   }
 
-   return pMaterial;
+   return materialData->GetMaterial();
 }
 
 static std::shared_ptr<ModelMesh> modelLoaderProcessMesh(aiMesh* mesh, const aiScene* scene)
@@ -72,9 +51,9 @@ static std::shared_ptr<ModelMesh> modelLoaderProcessMesh(aiMesh* mesh, const aiS
          vertex.Tangent[2] = mesh->mTangents[i].z;
       }
 
-      if (mesh->HasTextureCoords(i)) {
-         vertex.TexCoords[0] = mesh->mTextureCoords[i]->x;
-         vertex.TexCoords[1] = mesh->mTextureCoords[i]->y;
+      if (mesh->mTextureCoords[0]) {
+         vertex.TexCoords[0] = mesh->mTextureCoords[0][i].x;
+         vertex.TexCoords[1] = mesh->mTextureCoords[0][i].y;
       }
 
       vertices.push_back(vertex);
@@ -120,7 +99,7 @@ bool ObjModelResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize,
    std::shared_ptr<ModelData> pExtra = std::make_shared<ModelData>();
 
    Assimp::Importer importer;
-   const aiScene* scene = importer.ReadFileFromMemory(rawBuffer, rawSize, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+   const aiScene* scene = importer.ReadFileFromMemory(rawBuffer, rawSize, aiProcess_Triangulate | aiProcess_CalcTangentSpace);
 
    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
       Logger::WriteLog(Logger::LogType::ERROR, "Assimp error: " + std::string(importer.GetErrorString()));

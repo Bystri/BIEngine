@@ -9,7 +9,13 @@
 namespace BIEngine {
 
 struct Vertex {
-   Vertex() {}
+   Vertex()
+      : Position(0.0f),
+        Normal(0.0f),
+        Tangent(0.0f),
+        TexCoords(0.0f)
+   {
+   }
 
    Vertex(
       const glm::vec3& p,

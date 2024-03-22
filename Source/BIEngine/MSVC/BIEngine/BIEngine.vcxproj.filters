@@ -342,6 +342,12 @@
     <ClCompile Include="..\..\Graphics\SkyboxGraphicsTechnique.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Renderer\TextureLoader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\MaterialLoader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -669,6 +675,12 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Graphics\SkyboxGraphicsTechnique.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\TextureLoader.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\MaterialLoader.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

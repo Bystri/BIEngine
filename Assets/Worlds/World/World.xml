@@ -31,7 +31,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="0.000000" g="1.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -50,7 +50,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/brickwall.jpg" specularMapPath="textures/specular.png" normalMapPath="textures/brickwall_normal.jpg"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/brickwall_diffuse.bitf" specularMapPath="textures/specular_default.bitf" normalMapPath="textures/brickwall_normal.bitf"/>
 				<Color r="0.000000" g="1.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -69,7 +69,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="0.000000" g="1.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -88,7 +88,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="0.000000" g="1.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -107,7 +107,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -126,7 +126,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -145,7 +145,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -174,7 +174,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -193,7 +193,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -212,7 +212,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/test_geom_mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="true" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="true" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
         </Actor>
@@ -235,7 +235,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="true" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="true" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="1.000000" g="0.00" b="0.000000"/>
 			</BoxRenderComponent>
         </Actor>
@@ -247,7 +247,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="0.000000" g="0.00" b="1.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>
@@ -261,12 +261,14 @@
 		<Actor name="AiCharacter1">
             <TransformComponent>
                 <Position x="-10.0" y="6" z="0"/>
-                <Size w="0.010000" h="0.010000" d="0.01"/>
+                <Size w="1.0" h="1.0" d="1.0"/>
 				<Rotation x="0.000000" y="0.000000" z="0.000000"/>
             </TransformComponent>
-			<ModelRenderComponent>
-				<Model path="Models/spider/spider.obj"/>
-			</ModelRenderComponent>
+			<BoxRenderComponent>
+				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
+				<Color r="0.000000" g="1.00" b="0.000000"/>
+			</BoxRenderComponent>
 			<Physics3DComponent>
 				<Shape>Box</Shape>
 				<BodyType>Dynamic</BodyType>
@@ -294,7 +296,7 @@
             </TransformComponent>
 			<BoxRenderComponent>
 				<ShaderProgram shaderProgramPath="Effects/mesh.sp"/>
-				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container2.png" specularMapPath="textures/container2_specular.png" normalMapPath="textures/normal.png"/>
+				<Material shininess="64.0" isDoubleSided="false" diffuseMapPath="textures/container_diffuse.bitf" specularMapPath="textures/container_specular.bitf" normalMapPath="textures/normal_default.bitf"/>
 				<Color r="0.000000" g="1.00" b="0.000000"/>
 			</BoxRenderComponent>
 			<Physics3DComponent>

@@ -3,7 +3,9 @@
 #include "../ResourceCache/ResCache.h"
 #include "../Renderer/ShadersLoader.h"
 #include "../Renderer/ImageLoader.h"
+#include "../Renderer/TextureLoader.h"
 #include "../Graphics/ModelLoader.h"
+#include "../Graphics/MaterialLoader.h"
 #include "../ResourceCache/XmlLoader.h"
 #include "../UserInterface/HumanView.h"
 #include "../Scripting/PythonStateManager.h"
@@ -16,7 +18,7 @@ namespace BIEngine {
 GameApp* g_pApp = nullptr;
 
 // Константы для хранилища инициализации кэша ресурсов
-const unsigned int RESOURCE_CACHE_SIZE = 50 * 1024;      // Размер кэша ресурсов в Мб
+const unsigned int RESOURCE_CACHE_SIZE_MB = 2 * 1024;    // Размер кэша ресурсов в Мб
 const char* RESOURCE_CACHE_DIR_FILE_NAME = "../Assets";  // Имя папки-хранилища ресурсов для кэша. Мы делаем шаг назад, так как предпологается, что сырая папка ресурсов и папка редактора находтся в корне
 const char* RESOURCE_CACHE_ZIP_FILE_NAME = "Assets.zip"; // Имя архива-хранилища ресурсов для кэша
 
@@ -41,7 +43,7 @@ bool GameApp::Init()
    else
       pZipFile = std::make_shared<ResourceZipFile>(RESOURCE_CACHE_ZIP_FILE_NAME);
 
-   ResCache::Create(RESOURCE_CACHE_SIZE, pZipFile);
+   ResCache::Create(RESOURCE_CACHE_SIZE_MB, pZipFile);
 
    ResCache::Get()->RegisterLoader(std::make_shared<XmlResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<JpgResourceLoader>());
@@ -53,6 +55,8 @@ bool GameApp::Init()
    ResCache::Get()->RegisterLoader(std::make_shared<ShaderProgramResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<ObjModelResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<ScriptResourceLoader>());
+   ResCache::Get()->RegisterLoader(std::make_shared<TextureResourceLoader>());
+   ResCache::Get()->RegisterLoader(std::make_shared<MaterialResourceLoader>());
    // ResCache::Get()->RegisterLoader(CreateWavResourceLoader());
 
    // Создаем экземпляр одиночки нашей системы скриптов

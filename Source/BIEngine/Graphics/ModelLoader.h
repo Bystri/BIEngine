@@ -16,8 +16,6 @@ public:
 
    virtual ~ModelData() {}
 
-   // Удаляем их, так как шейдеры используются только для генерации шейдер-программы,
-   // и маловероятно событие, что нам нужно будет копирование, чтобы тратиться на реализацию поддержки контроля копирования
    ModelData(const ModelData& orig) = delete;
    ModelData& operator=(const ModelData& orig) = delete;
 

@@ -117,6 +117,7 @@
     <ClCompile Include="..\..\Graphics\LightGraphicsTechnique.cpp" />
     <ClCompile Include="..\..\Graphics\LightReflectiveMaterial.cpp" />
     <ClCompile Include="..\..\Graphics\Material.cpp" />
+    <ClCompile Include="..\..\Graphics\MaterialLoader.cpp" />
     <ClCompile Include="..\..\Graphics\Model.cpp" />
     <ClCompile Include="..\..\Graphics\ModelLoader.cpp" />
     <ClCompile Include="..\..\Graphics\OpaqueGraphicsTechnique.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="..\..\Renderer\ShadersLoader.cpp" />
     <ClCompile Include="..\..\Renderer\Texture.cpp" />
     <ClCompile Include="..\..\Renderer\ImageLoader.cpp" />
+    <ClCompile Include="..\..\Renderer\TextureLoader.cpp" />
     <ClCompile Include="..\..\ResourceCache\DirFile.cpp" />
     <ClCompile Include="..\..\ResourceCache\ResCache.cpp" />
     <ClCompile Include="..\..\ResourceCache\XmlLoader.cpp" />
@@ -217,6 +219,7 @@
     <ClInclude Include="..\..\Graphics\LightGraphicsTechnique.h" />
     <ClInclude Include="..\..\Graphics\LightReflectiveMaterial.h" />
     <ClInclude Include="..\..\Graphics\Material.h" />
+    <ClInclude Include="..\..\Graphics\MaterialLoader.h" />
     <ClInclude Include="..\..\Graphics\Model.h" />
     <ClInclude Include="..\..\Graphics\ModelLoader.h" />
     <ClInclude Include="..\..\Graphics\OpaqueGraphicsTechnique.h" />
@@ -266,6 +269,7 @@
     <ClInclude Include="..\..\Renderer\ShadersLoader.h" />
     <ClInclude Include="..\..\Renderer\Texture.h" />
     <ClInclude Include="..\..\Renderer\ImageLoader.h" />
+    <ClInclude Include="..\..\Renderer\TextureLoader.h" />
     <ClInclude Include="..\..\ResourceCache\DirFile.h" />
     <ClInclude Include="..\..\ResourceCache\ResCache.h" />
     <ClInclude Include="..\..\ResourceCache\XmlLoader.h" />

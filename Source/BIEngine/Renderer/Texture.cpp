@@ -126,6 +126,7 @@ std::shared_ptr<Texture2D> Texture2D::Create(unsigned int width, unsigned int he
 
    texture->m_width = width;
    texture->m_height = height;
+   texture->m_sizedFormat = sizedFormat;
    texture->m_internalFormat = internalFormat;
 
    // Создание текстуры

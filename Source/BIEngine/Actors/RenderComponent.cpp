@@ -7,7 +7,7 @@
 #include "../Renderer/MeshGeometryGenerator.h"
 #include "../Actors/TransformComponent.h"
 #include "../Utilities/Logger.h"
-#include "../Renderer/ImageLoader.h"
+#include "../Renderer/TextureLoader.h"
 
 namespace BIEngine {
 ComponentId SpriteRenderComponent::g_CompId = "SpriteRenderComponent";
@@ -122,19 +122,15 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
       const char* spritePath;
       pSpriteElement->QueryStringAttribute("path", &spritePath);
       m_spritePath = spritePath;
-      auto imgData = std::static_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(spritePath)->GetExtra());
+      auto spriteData = std::static_pointer_cast<TextureData>(ResCache::Get()->GetHandle(spritePath)->GetExtra());
 
-      if (imgData == nullptr) {
+      if (spriteData == nullptr) {
          Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + std::to_string(m_pOwner->GetId()));
          m_pSpriteNode.reset();
          return false;
       }
 
-      Texture2D::SizedFormat sizedFormat = imgData->GetChannelsNum() > 3 ? Texture2D::SizedFormat::RGBA : Texture2D::SizedFormat::RGB;
-      Texture2D::Format textureFormat = imgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
-      std::shared_ptr<Texture2D> pTexture = Texture2D::Create(imgData->GetWidth(), imgData->GetHeight(), sizedFormat, textureFormat, imgData->GetData());
-
-      std::shared_ptr<Sprite> pSprite = std::make_shared<Sprite>(pTexture);
+      std::shared_ptr<Sprite> pSprite = std::make_shared<Sprite>(spriteData->GetTexture());
       pSprite->SetColor(spriteColor);
       m_pSpriteNode->SetSprite(pSprite);
    }
@@ -214,50 +210,41 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
       const char* diffuseMapPath;
       pMaterialElement->QueryStringAttribute("diffuseMapPath", &diffuseMapPath);
       m_diffuseMapPath = diffuseMapPath;
-      auto diffuseMapImgData = std::static_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(m_diffuseMapPath)->GetExtra());
+      auto diffuseMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(m_diffuseMapPath)->GetExtra());
 
-      if (diffuseMapImgData == nullptr) {
+      if (diffuseMapData == nullptr) {
          Logger::WriteLog(Logger::LogType::ERROR, "Error while loading diffuse map texture for Actor with id: " + std::to_string(m_pOwner->GetId()));
          m_pModelNode.reset();
          return false;
       }
 
-      Texture2D::SizedFormat diffuseSizedFormat = diffuseMapImgData->GetChannelsNum() > 3 ? Texture2D::SizedFormat::RGBA : Texture2D::SizedFormat::RGB;
-      Texture2D::Format diffuseTexureFormat = diffuseMapImgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
-      std::shared_ptr<Texture2D> pDiffuseMapTexture = Texture2D::Create(diffuseMapImgData->GetWidth(), diffuseMapImgData->GetHeight(), diffuseSizedFormat, diffuseTexureFormat, diffuseMapImgData->GetData());
-      m_pLightReflectionMaterial->SetDiffuseMap(pDiffuseMapTexture);
+      m_pLightReflectionMaterial->SetDiffuseMap(diffuseMapData->GetTexture());
 
       const char* specularMapPath;
       pMaterialElement->QueryStringAttribute("specularMapPath", &specularMapPath);
       m_specularMapPath = specularMapPath;
-      auto specularMapImgData = std::static_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(m_specularMapPath)->GetExtra());
+      auto specularMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(m_specularMapPath)->GetExtra());
 
-      if (specularMapImgData == nullptr) {
+      if (specularMapData == nullptr) {
          Logger::WriteLog(Logger::LogType::ERROR, "Error while loading specular map texture for Actor with id: " + std::to_string(m_pOwner->GetId()));
          m_pModelNode.reset();
          return false;
       }
 
-      Texture2D::SizedFormat specularSizedFormat = specularMapImgData->GetChannelsNum() > 3 ? Texture2D::SizedFormat::RGBA : Texture2D::SizedFormat::RGB;
-      Texture2D::Format specularTexureFormat = specularMapImgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
-      std::shared_ptr<Texture2D> pSpecularMapTexture = Texture2D::Create(specularMapImgData->GetWidth(), specularMapImgData->GetHeight(), specularSizedFormat, specularTexureFormat, specularMapImgData->GetData());
-      m_pLightReflectionMaterial->SetSpecularMap(pSpecularMapTexture);
+      m_pLightReflectionMaterial->SetSpecularMap(specularMapData->GetTexture());
 
       const char* normalMapPath;
       pMaterialElement->QueryStringAttribute("normalMapPath", &normalMapPath);
       m_normalMapPath = normalMapPath;
-      auto normalMapImgData = std::static_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(m_normalMapPath)->GetExtra());
+      auto normalMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(m_normalMapPath)->GetExtra());
 
-      if (normalMapImgData == nullptr) {
+      if (normalMapData == nullptr) {
          Logger::WriteLog(Logger::LogType::ERROR, "Error while loading normal map texture for Actor with id: " + std::to_string(m_pOwner->GetId()));
          m_pModelNode.reset();
          return false;
       }
 
-      Texture2D::SizedFormat normalSizedFormat = normalMapImgData->GetChannelsNum() > 3 ? Texture2D::SizedFormat::RGBA : Texture2D::SizedFormat::RGB;
-      Texture2D::Format normalTexureFormat = normalMapImgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
-      std::shared_ptr<Texture2D> pNormalMapTexture = Texture2D::Create(normalMapImgData->GetWidth(), normalMapImgData->GetHeight(), normalSizedFormat, normalTexureFormat, normalMapImgData->GetData());
-      m_pLightReflectionMaterial->SetNormalMap(pNormalMapTexture);
+      m_pLightReflectionMaterial->SetNormalMap(normalMapData->GetTexture());
 
       std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 0u));
       std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, m_pLightReflectionMaterial);

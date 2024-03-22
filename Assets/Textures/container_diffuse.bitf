@@ -1,0 +1,4 @@
+<Texture>
+	<ImgData path="images/textures/container_diffuse.png"/>
+	<CreationParams wrapS="Repeat" wrapT="Repeat" filterMin="Linear" filterMax="Linear"/>
+</Texture>
