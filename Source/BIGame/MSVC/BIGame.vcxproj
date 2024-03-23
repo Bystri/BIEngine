@@ -12,13 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\BIEventListener.cpp" />
-    <ClCompile Include="..\BIFlyCameraSystem.cpp" />
     <ClCompile Include="..\BIGame.cpp" />
     <ClCompile Include="..\BIGameController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIEventListener.h" />
-    <ClInclude Include="..\BIFlyCameraSystem.h" />
     <ClInclude Include="..\BIGame.h" />
     <ClInclude Include="..\BIGameController.h" />
     <ClInclude Include="..\BIScriptExports.h" />

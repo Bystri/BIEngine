@@ -28,6 +28,8 @@ public:
 
    glm::vec3 GetRotation() const { return m_rotation; }
 
+   glm::vec3 GetDir() const;
+
    void SetRotation(const glm::vec3& rot);
 
    glm::vec3 GetSize() const { return m_size; }

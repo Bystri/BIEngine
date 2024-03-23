@@ -1,0 +1,7 @@
+<Material>
+	<ShaderProgram path="Effects/mesh.sp"/>
+	<DiffuseColor r="1.0" g="1.0" b="1.0"/>
+	<DiffuseMap path="models/tank/tank_diffuse.bitf"/>
+	<NormalMap path="models/tank/tank_normal.bitf"/>
+	<SpecularMap path="models/tank/tank_specular.bitf"/>
+</Material>

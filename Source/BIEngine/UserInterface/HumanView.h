@@ -20,6 +20,8 @@ public:
 
    std::shared_ptr<Renderer> GetRenderer() const { return m_pRenderer; }
 
+   const std::unique_ptr<Scene>& GetScene() const { return m_pScene; }
+
    virtual void OnUpdate(const GameTimer& gt) override;
    virtual void OnRender(const GameTimer& gt) override;
 
@@ -40,7 +42,7 @@ protected:
    // Графическая часть
    UserInterface m_userInterface;
    std::shared_ptr<Renderer> m_pRenderer;
-   Scene* m_pScene;
+   std::unique_ptr<Scene> m_pScene;
 
    // Переменные для контроля скорости обновления кадров
    float m_currTick; // Текущее время отображения

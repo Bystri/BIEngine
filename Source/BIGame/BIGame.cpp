@@ -189,26 +189,5 @@ bool BIGameHumanView::Init()
    std::shared_ptr<BIGameController> pGameController = std::make_shared<BIGameController>();
    SetController(pGameController);
 
-   m_pFlyCameraSystem = new BIFlyCameraSystem(m_pScene->GetCamera(), pGameController);
-
    return true;
-}
-
-void BIGameHumanView::Shutdown()
-{
-   if (m_pFlyCameraSystem) {
-      delete m_pFlyCameraSystem;
-      m_pFlyCameraSystem = nullptr;
-   }
-
-   HumanView::Shutdown();
-}
-
-void BIGameHumanView::OnUpdate(const BIEngine::GameTimer& gt)
-{
-   HumanView::OnUpdate(gt);
-
-   if (m_pFlyCameraSystem) {
-      m_pFlyCameraSystem->OnUpdate(gt);
-   }
 }

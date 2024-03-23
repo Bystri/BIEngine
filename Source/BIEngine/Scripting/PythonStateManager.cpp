@@ -147,4 +147,16 @@ PYBIND11_EMBEDDED_MODULE(BIEVector, m)
       .def(py::self * float())
       .def(py::self /= float())
       .def(float() / py::self);
+
+   m.def("Dot", [](const glm::vec2& lhs, const glm::vec2& rhs) {
+      return glm::dot(lhs, rhs);
+   });
+
+   m.def("Dot", [](const glm::vec3& lhs, const glm::vec3& rhs) {
+      return glm::dot(lhs, rhs);
+   });
+
+   m.def("Cross", [](const glm::vec3& lhs, const glm::vec3& rhs) {
+      return glm::cross(lhs, rhs);
+   });
 }

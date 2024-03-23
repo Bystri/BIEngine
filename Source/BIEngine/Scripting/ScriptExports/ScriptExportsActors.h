@@ -76,6 +76,7 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
       .def("SetPosition", &BIEngine::TransformComponent::SetPosition)
       .def("GetRotation", &BIEngine::TransformComponent::GetRotation)
       .def("SetRotation", &BIEngine::TransformComponent::SetRotation)
+      .def("GetDir", &BIEngine::TransformComponent::GetDir)
       .def("GetSize", &BIEngine::TransformComponent::GetSize)
       .def("SetSize", &BIEngine::TransformComponent::SetSize);
 

@@ -2,14 +2,12 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\BIGameController.cpp" />
-    <ClCompile Include="..\BIFlyCameraSystem.cpp" />
     <ClCompile Include="..\BIEventListener.cpp" />
     <ClCompile Include="..\BIGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGame.h" />
     <ClInclude Include="..\BIGameController.h" />
-    <ClInclude Include="..\BIFlyCameraSystem.h" />
     <ClInclude Include="..\BIEventListener.h" />
     <ClInclude Include="..\BIScriptExports.h" />
   </ItemGroup>

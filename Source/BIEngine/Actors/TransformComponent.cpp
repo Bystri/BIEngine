@@ -109,6 +109,22 @@ void TransformComponent::SetTransformMatrix(const glm::mat4& trans)
    m_transform = trans;
 }
 
+glm::vec3 TransformComponent::GetDir() const
+{
+   // Calculate forward vector
+   glm::vec4 dir = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+
+   const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+   const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+   const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+   const glm::mat4 roationMatrix = transformZ * transformY * transformX;
+
+   dir = roationMatrix * dir;
+
+   return glm::vec3(dir);
+}
+
 void TransformComponent::RecalculateTransformMatrix()
 {
    const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));

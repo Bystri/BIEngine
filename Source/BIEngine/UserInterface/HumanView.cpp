@@ -45,7 +45,7 @@ bool HumanView::Init()
       return false;
    }
    // Создания сцены на основе отображения
-   m_pScene = new Scene(m_pRenderer);
+   m_pScene = std::make_unique<Scene>(m_pRenderer);
    m_pScene->Init();
 
    m_pScene->SetCamera(std::make_shared<Camera>());
@@ -61,11 +61,6 @@ void HumanView::Shutdown()
       g_pAudio->Shutdown();
       delete g_pAudio;
       g_pAudio = nullptr;
-   }
-
-   if (m_pScene) {
-      delete m_pScene;
-      m_pScene = nullptr;
    }
 }
 

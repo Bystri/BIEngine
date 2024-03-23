@@ -48,6 +48,15 @@ void Camera::SetRotationZ(float rotation)
    updateCameraVectors();
 }
 
+void Camera::LookAt(const glm::vec3& eyePos, const glm::vec3& forward, const glm::vec3& up)
+{
+   m_position = eyePos;
+   m_forward = glm::normalize(forward);
+   m_up = up;
+
+   updateCameraVals();
+}
+
 void Camera::TurnRelAroundY(const float turnDelta)
 {
    m_rotationY += turnDelta;
@@ -74,6 +83,17 @@ void Camera::updateCameraVectors()
    // Calculate right and up vectors
    m_right = glm::normalize(glm::cross(m_forward, m_worldUp));
    m_up = glm::normalize(glm::cross(m_right, m_forward));
+}
+
+void Camera::updateCameraVals()
+{
+   const glm::vec3 yAxis = glm::vec3(0.0f, 1.0f, 0.0f);
+   const glm::vec3 zAxis = glm::vec3(0.0f, 0.0f, 1.0f);
+
+   m_rotationY = glm::degrees(asin(m_forward.y));
+   m_rotationZ = glm::degrees(asin(m_forward.z / (std::sqrt(1 - m_forward.y * m_forward.y))));
+
+   m_right = glm::normalize(glm::cross(m_forward, m_up));
 }
 
 void Camera::SetAspectRatio(const float aspectRatio)

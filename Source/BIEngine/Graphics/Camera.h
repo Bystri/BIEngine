@@ -55,6 +55,8 @@ public:
 
    float GetRotationZ() const { return m_rotationZ; }
 
+   void LookAt(const glm::vec3& eyePos, const glm::vec3& forward, const glm::vec3& up);
+
    void MoveTo(const glm::vec3& pos);
    void MoveRelForward(const float posDelta);
    void MoveRelSide(const float posDelta);
@@ -81,6 +83,7 @@ public:
 
 private:
    void updateCameraVectors();
+   void updateCameraVals();
 
 private:
    ProjectionType m_projType;

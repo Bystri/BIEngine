@@ -277,6 +277,7 @@
     <ClInclude Include="..\..\Scripting\PythonStateManager.h" />
     <ClInclude Include="..\..\Scripting\ScriptExports.h" />
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsActors.h" />
+    <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsCamera.h" />
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsDebug.h" />
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsEvents.h" />
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsPhysics3D.h" />
