@@ -41,7 +41,7 @@ public:
    void Destroy();
 
    // Генерация XML-файла, по которому можно будет создать копию актера с помощью объекта ActorFactory
-   tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const;
+   tinyxml2::XMLElement* ToXML(tinyxml2::XMLDocument* pDoc) const;
 
    // Идентификатор актера, по которому к нему идет обращение из других систем
    ActorId GetId() const { return m_id; }

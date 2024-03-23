@@ -29,39 +29,6 @@ public:
 typedef std::shared_ptr<IEventData> IEventDataPtr;
 typedef fastdelegate::FastDelegate1<IEventDataPtr> EventListenerDelegate;
 
-class EventFactory {
-   typedef IEventData* (*ObjectCreationFunction)();
-   std::map<EventType, ObjectCreationFunction> m_creationFunctions;
-
-public:
-   template <class SubClass>
-   bool Register(EventType id)
-   {
-      auto findIt = m_creationFunctions.find(id);
-      if (findIt == m_creationFunctions.end()) {
-         m_creationFunctions[id] = &GenericObjectCreationFunction<IEventData, SubClass>;
-         return true;
-      }
-
-      return false;
-   }
-
-   IEventData* Create(EventType id)
-   {
-      auto findIt = m_creationFunctions.find(id);
-      if (findIt != m_creationFunctions.end()) {
-         ObjectCreationFunction pFunc = findIt->second;
-         return pFunc();
-      }
-
-      return NULL;
-   }
-};
-
-extern EventFactory g_eventFactory;
-#define REGISTER_EVENT(eventClass) g_eventFactory.Register<eventClass>(eventClass::sk_EventType)
-#define CREATE_EVENT(eventType) g_eventFactory.Create(eventType)
-
 class BaseEventData : public IEventData {
 public:
    static const EventType sk_EventType;
@@ -98,7 +65,7 @@ class EventManager {
 public:
    static const long long INFINITE_TIME = 0xffffffff;
 
-   static EventManager* EventManager::Get();
+   static EventManager* Get();
 
    virtual bool AddListener(const EventListenerDelegate& eventDelegate, const EventType& type);
    virtual bool RemoveListener(const EventListenerDelegate& eventDelegate, const EventType& type);
