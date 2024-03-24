@@ -30,6 +30,7 @@ struct Material {
 	sampler2D diffuse;
     sampler2D specular;
 	sampler2D normal;
+	sampler2D displacement;
 	vec4 color;
     float shininess;
 }; 

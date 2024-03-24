@@ -25,6 +25,7 @@ bool ImageResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, s
 
    // Загружаем изображение
    int width, height, nrChannels;
+   stbi_set_flip_vertically_on_load(true);
    unsigned char* pData = stbi_load_from_memory((stbi_uc*)pRawBuffer, rawSize, &width, &height, &nrChannels, 0);
 
    // Генерируем текстуру

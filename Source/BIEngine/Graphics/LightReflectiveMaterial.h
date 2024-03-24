@@ -18,6 +18,10 @@ public:
 
    std::shared_ptr<Texture2D> LightReflectiveMaterial::GetNormalMap() const { return m_normalMap; }
 
+   void LightReflectiveMaterial::SetDisplacementMap(std::shared_ptr<Texture2D> displacementMap) { m_displacementMap = displacementMap; }
+
+   std::shared_ptr<Texture2D> LightReflectiveMaterial::GetDisplacementMap() const { return m_displacementMap; }
+
    void LightReflectiveMaterial::SetShininess(float shininess) { m_shininess = shininess; }
 
    float LightReflectiveMaterial::GetShininess() const { return m_shininess; }
@@ -27,6 +31,7 @@ public:
 private:
    std::shared_ptr<Texture2D> m_specularMap;
    std::shared_ptr<Texture2D> m_normalMap;
+   std::shared_ptr<Texture2D> m_displacementMap;
    float m_shininess;
 };
 

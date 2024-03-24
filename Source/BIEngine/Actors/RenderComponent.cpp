@@ -246,6 +246,19 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
 
       m_pLightReflectionMaterial->SetNormalMap(normalMapData->GetTexture());
 
+      const char* displacementMapPath;
+      pMaterialElement->QueryStringAttribute("displacementMapPath", &displacementMapPath);
+      m_displacementMapPath = displacementMapPath;
+      auto displacementMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(m_displacementMapPath)->GetExtra());
+
+      if (displacementMapData == nullptr) {
+         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading displacement map texture for Actor with id: " + std::to_string(m_pOwner->GetId()));
+         m_pModelNode.reset();
+         return false;
+      }
+
+      m_pLightReflectionMaterial->SetDisplacementMap(displacementMapData->GetTexture());
+
       std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 0u));
       std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, m_pLightReflectionMaterial);
 
@@ -273,6 +286,7 @@ tinyxml2::XMLElement* BoxRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDo
    pMaterialElement->SetAttribute("diffuseMapPath", m_diffuseMapPath.c_str());
    pMaterialElement->SetAttribute("specularMapPath", m_specularMapPath.c_str());
    pMaterialElement->SetAttribute("normalMapPath", m_normalMapPath.c_str());
+   pMaterialElement->SetAttribute("m_displacementMapPath", m_displacementMapPath.c_str());
    pBaseElement->LinkEndChild(pMaterialElement);
 
    return pBaseElement;

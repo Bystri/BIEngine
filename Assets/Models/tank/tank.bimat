@@ -4,4 +4,5 @@
 	<DiffuseMap path="models/tank/tank_diffuse.bitf"/>
 	<NormalMap path="models/tank/tank_normal.bitf"/>
 	<SpecularMap path="models/tank/tank_specular.bitf"/>
+	<DisplacementMap path="textures/displacement_default.bitf"/>
 </Material>

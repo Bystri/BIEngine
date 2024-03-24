@@ -115,6 +115,28 @@ bool MaterialResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize,
       pMaterial->SetNormalMap(normalMapData->GetTexture());
    }
 
+   tinyxml2::XMLElement* pDisplacementMapElement = pRoot->FirstChildElement("DisplacementMap");
+   if (pDisplacementMapElement) {
+      const char* path;
+      pDisplacementMapElement->QueryStringAttribute("path", &path);
+
+      auto displacementMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(path)->GetExtra());
+
+      if (displacementMapData == nullptr) {
+         return false;
+      }
+
+      pMaterial->SetNormalMap(displacementMapData->GetTexture());
+   } else {
+      auto displacementMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/displacement_default.bitf")->GetExtra());
+
+      if (displacementMapData == nullptr) {
+         return false;
+      }
+
+      pMaterial->SetNormalMap(displacementMapData->GetTexture());
+   }
+
    std::shared_ptr<MaterialData> pExtra = std::make_shared<MaterialData>();
    pExtra->m_pMaterial = pMaterial;
    pHandle->SetExtra(pExtra);

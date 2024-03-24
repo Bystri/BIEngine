@@ -102,6 +102,7 @@ protected:
    std::string m_diffuseMapPath;
    std::string m_specularMapPath;
    std::string m_normalMapPath;
+   std::string m_displacementMapPath;
 
    float m_width;
    float m_height;

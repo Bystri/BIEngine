@@ -99,7 +99,7 @@ bool ObjModelResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize,
    std::shared_ptr<ModelData> pExtra = std::make_shared<ModelData>();
 
    Assimp::Importer importer;
-   const aiScene* scene = importer.ReadFileFromMemory(rawBuffer, rawSize, aiProcess_Triangulate | aiProcess_CalcTangentSpace);
+   const aiScene* scene = importer.ReadFileFromMemory(rawBuffer, rawSize, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
 
    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
       Logger::WriteLog(Logger::LogType::ERROR, "Assimp error: " + std::string(importer.GetErrorString()));

@@ -4,4 +4,5 @@
 	<DiffuseMap path="models/backpack/backpack_diffuse.bitf"/>
 	<NormalMap path="models/backpack/backpack_normal.bitf"/>
 	<SpecularMap path="models/backpack/backpack_specular.bitf"/>
+	<DisplacementMap path="textures/displacement_default.bitf"/>
 </Material>
