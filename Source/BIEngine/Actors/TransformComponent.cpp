@@ -4,13 +4,15 @@
 
 #include <glm/gtx/matrix_decompose.hpp>
 
+#include "../EngineCore/Assert.h"
+
 namespace BIEngine {
 
 const ComponentId TransformComponent::g_CompId = "TransformComponent";
 
 bool TransformComponent::Init(tinyxml2::XMLElement* pData)
 {
-   assert(pData);
+   Assert(pData, "Bad arguments provided for initialization to Transorm Component");
 
    tinyxml2::XMLElement* pPositionElement = pData->FirstChildElement("Position");
    if (pPositionElement) {

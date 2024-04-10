@@ -1,6 +1,6 @@
-#pragma once
-
 #include "ActorPickingTechnique.h"
+
+#include "../../BIEngine/EngineCore/Assert.h"
 
 BIEngine::ActorId ActorPickerInfoStorage::GetActorId(const int x, const int y)
 {
@@ -42,7 +42,7 @@ bool ActorPickingTechnique::Init()
    FramebufferAttach(m_framebuffer, BIEngine::FramebufferAttachementType::DEPTH, m_depthBuffer);
 
    bool ret = m_framebuffer->Check();
-   assert(ret, "Piacking framebuffer is corrupted");
+   BIEngine::Assert(ret, "Piacking framebuffer is corrupted");
    if (!ret) {
       return false;
    }

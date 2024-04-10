@@ -53,8 +53,8 @@ public:
 
    virtual bool Initialize() override { return true; }
 
-   virtual void SetGravity(const glm::vec3& gravity) override{};
-   virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override{};
+   virtual void SetGravity(const glm::vec3& gravity) override {};
+   virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
 
    virtual void OnUpdate(const GameTimer& gt) override {}
 
@@ -100,7 +100,6 @@ public:
 IGamePhysics3D* CreateNullPhysics3D()
 {
    IGamePhysics3D* pGamePhysics3D = new NullPhysics3D();
-   assert(pGamePhysics3D);
    return pGamePhysics3D;
 }
 
@@ -351,10 +350,17 @@ void Physics3D::SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>
       const ActorId id = it->first;
 
       const ActorMotionState* const actorMotionState = static_cast<ActorMotionState*>(it->second->getMotionState());
-      assert(actorMotionState);
+      Assert(actorMotionState, "Rigid body doesn't nave motion state");
+
+      if (!actorMotionState) {
+         continue;
+      }
 
       auto actorIt = actorMap.find(id);
-      assert(actorIt != actorMap.end());
+      Assert(actorIt != actorMap.end(), "Actor with id %d registered in physics system but doesn't exist", id);
+      if (actorIt == actorMap.end()) {
+         continue;
+      }
 
       std::shared_ptr<Actor> pGameActor = actorIt->second;
       if (pGameActor && actorMotionState) {
@@ -408,10 +414,13 @@ void Physics3D::DrawRenderDiagnostics()
 
 void Physics3D::AddShape(BodyType bodyType, const std::shared_ptr<Actor>& pGameActor, btCollisionShape* pShape, float mass, const std::string& physicsMaterial)
 {
-   assert(pGameActor);
+   Assert(pGameActor != nullptr, "Provided bad arguments");
+   if (!pGameActor) {
+      return;
+   }
 
    ActorId actorID = pGameActor->GetId();
-   assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end() && "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
    MaterialData material(LookupMaterialData(physicsMaterial));
 
@@ -422,7 +431,7 @@ void Physics3D::AddShape(BodyType bodyType, const std::shared_ptr<Actor>& pGameA
 
    glm::mat4 transform = glm::mat4(1.0f);
    std::shared_ptr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   assert(pTransformComponent);
+   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
    if (pTransformComponent) {
       transform = glm::translate(transform, pTransformComponent->GetPosition());
       glm::vec3 rotationAngles = pTransformComponent->GetRotation();
@@ -538,7 +547,7 @@ void Physics3D::CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec3& 
    glm::mat4x4 triggerTrans = glm::mat4x4(1.0f);
 
    std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   assert(pTransformComponent);
+   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
    if (pTransformComponent) {
       glm::translate(triggerTrans, pTransformComponent->GetPosition());
    } else
@@ -631,7 +640,7 @@ IGamePhysics3D::RaycastInfo Physics3D::Raycast(const glm::vec3& from, const glm:
 void Physics3D::RotateY(ActorId const actorId, float const deltaAngleRadians)
 {
    btRigidBody* pRigidBody = FindBulletRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
 
    if (pRigidBody) {
       btTransform angleTransform;
@@ -645,7 +654,7 @@ void Physics3D::RotateY(ActorId const actorId, float const deltaAngleRadians)
 float Physics3D::GetOrientationY(ActorId actorId) const
 {
    btRigidBody* pRigidBody = FindBulletRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
 
    if (!pRigidBody) {
       return std::numeric_limits<float>::max();
@@ -680,7 +689,7 @@ void Physics3D::StopActor(ActorId actorId)
 glm::vec3 Physics3D::GetVelocity(ActorId actorId) const
 {
    btRigidBody* pRigidBody = FindBulletRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
    if (!pRigidBody) {
       return glm::vec3(0.0f);
    }
@@ -692,7 +701,7 @@ glm::vec3 Physics3D::GetVelocity(ActorId actorId) const
 void Physics3D::SetVelocity(ActorId actorId, const glm::vec3& vel)
 {
    btRigidBody* pRigidBody = FindBulletRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
    if (!pRigidBody) {
       return;
    }
@@ -706,7 +715,7 @@ void Physics3D::SetVelocity(ActorId actorId, const glm::vec3& vel)
 glm::vec3 Physics3D::GetAngularVelocity(ActorId actorId) const
 {
    btRigidBody* pRigidBody = FindBulletRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
 
    if (!pRigidBody)
       return glm::vec3(0.0f);
@@ -718,7 +727,7 @@ glm::vec3 Physics3D::GetAngularVelocity(ActorId actorId) const
 void Physics3D::SetAngularVelocity(ActorId actorId, const glm::vec3& vel)
 {
    btRigidBody* pRigidBody = FindBulletRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
 
    if (!pRigidBody)
       return;
@@ -730,7 +739,7 @@ void Physics3D::SetAngularVelocity(ActorId actorId, const glm::vec3& vel)
 void Physics3D::SetPosition(const ActorId id, const glm::vec3& position)
 {
    btRigidBody* pRigidBody = FindBulletRigidBody(id);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
 
    if (pRigidBody) {
       btVector3 btVec = Vec3_to_btVector3(position);
@@ -741,7 +750,7 @@ void Physics3D::SetPosition(const ActorId id, const glm::vec3& position)
 glm::vec3 Physics3D::GetPosition(const ActorId id) const
 {
    btRigidBody* pRigidBody = FindBulletRigidBody(id);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
 
    if (pRigidBody) {
       btVector3 pos = pRigidBody->getWorldTransform().getOrigin();
@@ -753,10 +762,14 @@ glm::vec3 Physics3D::GetPosition(const ActorId id) const
 
 void Physics3D::LoadXml(tinyxml2::XMLElement* pRoot)
 {
-   assert(pRoot);
+   Assert(pRoot, "Provided bad arguments");
 
    tinyxml2::XMLElement* pParentNode = pRoot->FirstChildElement("PhysicsMaterials");
-   assert(pParentNode);
+   Assert(pParentNode, "Physics3D settings must have PhysicsMaterials element!");
+   if (!pParentNode) {
+      return;
+   }
+
    for (tinyxml2::XMLElement* pNode = pParentNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
       double restitution = 0;
       double friction = 0;
@@ -766,7 +779,10 @@ void Physics3D::LoadXml(tinyxml2::XMLElement* pRoot)
    }
 
    pParentNode = pRoot->FirstChildElement("DensityTable");
-   assert(pParentNode);
+   Assert(pParentNode, "Physics3D settings must have DensityTable element!");
+   if (!pParentNode) {
+      return;
+   }
    for (tinyxml2::XMLElement* pNode = pParentNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
       m_densityTable.insert(std::make_pair(pNode->Value(), (float)atof(pNode->FirstChild()->Value())));
    }
@@ -921,10 +937,14 @@ void Physics3D::SendCollisionPairRemoveEvent(const btRigidBody* const body0, con
 
 void Physics3D::BulletInternalTickCallback(btDynamicsWorld* const world, const btScalar timeStep)
 {
-   assert(world);
+   Assert(world, "Provided bad arguments");
+   if (!world) {
+      return;
+   }
 
-   assert(world->getWorldUserInfo());
-   Physics3D* const bulletPhysics = static_cast<Physics3D*>(world->getWorldUserInfo());
+   void* const pWorldUserInfo = world->getWorldUserInfo();
+   Assert(pWorldUserInfo, "Physics world user info is lost");
+   Physics3D* const bulletPhysics = static_cast<Physics3D*>(pWorldUserInfo);
 
    CollisionPairs currentTickCollisionPairs;
 
@@ -934,7 +954,11 @@ void Physics3D::BulletInternalTickCallback(btDynamicsWorld* const world, const b
 
       // Получаем данные, относящиеся к столкновению между двумя столкновения (вот, что значит manifold)
       const btPersistentManifold* const manifold = dispatcher->getManifoldByIndexInternal(manifoldIdx);
-      assert(manifold);
+      Assert(manifold, "There is not data inside bullet for manifold with idx %d (Something really bad happened)", manifoldIdx);
+
+      if (!manifold) {
+         return;
+      }
 
       const btRigidBody* const body0 = static_cast<const btRigidBody*>(manifold->getBody0());
       const btRigidBody* const body1 = static_cast<const btRigidBody*>(manifold->getBody1());
@@ -980,7 +1004,6 @@ void Physics3D::DestroyActorDelegate(IEventDataPtr pEventData)
 IGamePhysics3D* CreateGamePhysics3D()
 {
    IGamePhysics3D* pGamePhysics3D = new Physics3D();
-   assert(pGamePhysics3D);
    return pGamePhysics3D;
 }
 

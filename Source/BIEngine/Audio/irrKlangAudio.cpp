@@ -142,7 +142,10 @@ void irrKlangAudioBuffer::SetVolume(int volume)
    if (!g_pAudio->Active() || !m_pSound)
       return;
 
-   assert(volume >= 0 && volume <= 100 && "Volume must be a number between 0 and 100");
+   Assert(volume >= 0 && volume <= 100, "Volume must be a number between 0 and 100");
+   if (volume < 0 || volume > 100) {
+      return;
+   }
 
    float coeff = (float)volume / 100.0f;
    m_pSound->setVolume(coeff);

@@ -348,6 +348,9 @@
     <ClCompile Include="..\..\Graphics\MaterialLoader.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\EngineCore\Assert.cpp">
+      <Filter>EngineCore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -685,6 +688,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsCamera.h">
       <Filter>Scripting\ScriptExports</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EngineCore\Assert.h">
+      <Filter>EngineCore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

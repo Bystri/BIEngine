@@ -1,10 +1,10 @@
 ﻿#pragma once
 
 #include <memory>
-#include <cassert>
 
 #include "../Utilities/Logger.h"
 #include "../Utilities/GameTimer.h"
+#include "../EngineCore/Assert.h"
 
 namespace BIEngine {
 
@@ -82,14 +82,14 @@ private:
 
 inline void Process::Succeed()
 {
-   assert(m_state == State::RUNNING || m_state == State::PAUSED);
+   Assert(m_state == State::RUNNING || m_state == State::PAUSED, "Process was not started");
 
    m_state = State::SUCCEEDED;
 }
 
 inline void Process::Fail()
 {
-   assert(m_state == State::RUNNING || m_state == State::PAUSED);
+   Assert(m_state == State::RUNNING || m_state == State::PAUSED, "Process was not started");
 
    m_state = State::FAILED;
 }

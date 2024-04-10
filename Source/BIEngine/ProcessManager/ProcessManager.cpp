@@ -1,7 +1,6 @@
 ﻿#include "ProcessManager.h"
 
 #include <iostream>
-#include <cassert>
 
 #include "../Utilities/Logger.h"
 
@@ -35,7 +34,6 @@ bool ProcessManager::Create()
 
 void ProcessManager::Destroy()
 {
-   assert(s_pSingleton);
    if (s_pSingleton) {
       delete s_pSingleton;
       s_pSingleton = nullptr;

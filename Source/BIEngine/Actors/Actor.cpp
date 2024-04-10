@@ -2,9 +2,9 @@
 
 #include <iostream>
 #include <string>
-#include <cassert>
 
 #include "../Utilities/Logger.h"
+#include "../EngineCore/Assert.h"
 #include "ActorFactory.h"
 
 namespace BIEngine {
@@ -65,7 +65,7 @@ void Actor::Destroy()
 void Actor::AddComponent(std::shared_ptr<ActorComponent> pComponent)
 {
    std::pair<ActorComponents::iterator, bool> success = m_components.insert(std::make_pair(pComponent->GetComponentId(), pComponent));
-   assert(success.second);
+   Assert(success.second, "Cant load component %s", pComponent->GetComponentId().c_str());
 }
 
 tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const

@@ -1,10 +1,10 @@
 ﻿#include "EventManager.h"
 
-#include <cassert>
 #include <chrono>
 #include <iostream>
 
 #include "../Utilities/Logger.h"
+#include "../EngineCore/Assert.h"
 
 namespace BIEngine {
 
@@ -14,10 +14,10 @@ static EventManager* g_pEventMgr = nullptr;
 
 EventManager* EventManager::Get()
 {
-   if (!g_pEventMgr)
+   if (!g_pEventMgr) {
       g_pEventMgr = new EventManager();
+   }
 
-   assert(g_pEventMgr);
    return g_pEventMgr;
 }
 
@@ -92,8 +92,10 @@ bool EventManager::TriggerEvent(const IEventDataPtr& pEvent) const
 
 bool EventManager::QueueEvent(const IEventDataPtr& pEvent)
 {
-   assert(m_activeQueue >= 0);
-   assert(m_activeQueue < EVENTMANAGER_NUM_QUEUES);
+   Assert(m_activeQueue >= 0 && m_activeQueue < EVENTMANAGER_NUM_QUEUES, "Incorrect index of current event queue. Got %d but [%d, %d] allowed", m_activeQueue, 0, EVENTMANAGER_NUM_QUEUES);
+   if (m_activeQueue < 0 || m_activeQueue >= EVENTMANAGER_NUM_QUEUES) {
+      return false;
+   }
 
    auto findIt = m_eventListeners.find(pEvent->GetEventType());
    if (findIt != m_eventListeners.end()) {
@@ -106,8 +108,10 @@ bool EventManager::QueueEvent(const IEventDataPtr& pEvent)
 
 bool EventManager::AbortEvent(const EventType& inType, bool allOfType)
 {
-   assert(m_activeQueue >= 0);
-   assert(m_activeQueue < EVENTMANAGER_NUM_QUEUES);
+   Assert(m_activeQueue >= 0 && m_activeQueue < EVENTMANAGER_NUM_QUEUES, "Incorrect index of current event queue. Got %d but [%d, %d] allowed", m_activeQueue, 0, EVENTMANAGER_NUM_QUEUES);
+   if (m_activeQueue < 0 || m_activeQueue >= EVENTMANAGER_NUM_QUEUES) {
+      return false;
+   }
 
    bool success = false;
    auto findItr = m_eventListeners.find(inType);

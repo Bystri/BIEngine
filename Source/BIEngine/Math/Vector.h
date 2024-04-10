@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include <cassert>
 #include <array>
 #include <initializer_list>
 
 #include "Math.h"
+#include "../EngineCore/Assert.h"
 
 namespace BIEngine {
 
@@ -23,7 +23,7 @@ struct Vector {
    Vector(const std::initializer_list<T> args)
       : data()
    {
-      assert(args.size() == n, "The number of values ​​in the initializer_list is not equal to the dimension of the vector");
+      Assert(args.size() == n, "The number of values ​​in the initializer_list is not equal to the dimension of the vector");
 
       auto iter = args.begin();
 
@@ -94,7 +94,7 @@ struct Vector<T, 2> {
    Vector(const std::initializer_list<T> args)
       : data()
    {
-      assert(args.size() == 2, "The number of values ​​in the initializer_list is not equal to the dimension of the vector");
+      Assert(args.size() == 2, "The number of values ​​in the initializer_list is not equal to the dimension of the vector");
 
       auto iter = args.begin();
 
@@ -187,7 +187,7 @@ struct Vector<T, 3> {
    Vector(const std::initializer_list<T> args)
       : data()
    {
-      assert(args.size() == 3, "The number of values ​​in the initializer_list is not equal to the dimension of the vector");
+      Assert(args.size() == 3, "The number of values ​​in the initializer_list is not equal to the dimension of the vector");
 
       auto iter = args.begin();
 
@@ -283,7 +283,7 @@ struct Vector<T, 4> {
    Vector(const std::initializer_list<T> args)
       : data()
    {
-      assert(args.size() == 4, "The number of values ​​in the initializer_list is not equal to the dimension of the vector");
+      Assert(args.size() == 4, "The number of values ​​in the initializer_list is not equal to the dimension of the vector");
 
       auto iter = args.begin();
 

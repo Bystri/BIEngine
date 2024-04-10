@@ -91,8 +91,6 @@ PYBIND11_EMBEDDED_MODULE(BIEEvent, m)
    });
 
    m.def("RemoveEventListener", [](unsigned long listenerId) {
-      assert(listenerId != 0);
-
       BIEngine::ScriptEventListener* pListener = reinterpret_cast<BIEngine::ScriptEventListener*>(listenerId);
       BIEngine::EventManager::Get()->RemoveListener(pListener->GetDelegate(), pListener->GetEventType());
    });

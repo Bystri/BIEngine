@@ -1,6 +1,6 @@
 ﻿#include "BIGameController.h"
 
-#include <assert.h>
+#include "../BIEngine/EngineCore/Assert.h"
 
 #include "BIEventListener.h"
 
@@ -44,7 +44,7 @@ bool BIGameController::IsMouseButtonPressed(int buttonCode)
 
 bool BIGameController::IsKeyPressed(int key) const
 {
-   assert(key >= 0 && key < MAX_NUMBER_OF_KEYS);
+   BIEngine::Assert(key >= 0 && key < MAX_NUMBER_OF_KEYS, "Get incorrect key code! Got %d but max code is %d", key, MAX_NUMBER_OF_KEYS);
    if (key < 0 || key >= MAX_NUMBER_OF_KEYS) {
       return false;
    }
@@ -54,7 +54,7 @@ bool BIGameController::IsKeyPressed(int key) const
 
 bool BIGameController::OnKeyDown(int key, int scancode)
 {
-   assert(key >= 0 && key < MAX_NUMBER_OF_KEYS);
+   BIEngine::Assert(key >= 0 && key < MAX_NUMBER_OF_KEYS, "Get incorrect key code! Got %d but max code is %d", key, MAX_NUMBER_OF_KEYS);
    if (key < 0 || key >= MAX_NUMBER_OF_KEYS) {
       return false;
    }
@@ -70,7 +70,7 @@ bool BIGameController::OnKeyDown(int key, int scancode)
 
 bool BIGameController::OnKeyUp(int key, int scancode)
 {
-   assert(key >= 0 && key < MAX_NUMBER_OF_KEYS);
+   BIEngine::Assert(key >= 0 && key < MAX_NUMBER_OF_KEYS, "Get incorrect key code! Got %d but max code is %d", key, MAX_NUMBER_OF_KEYS);
    if (key < 0 || key >= MAX_NUMBER_OF_KEYS) {
       return false;
    }

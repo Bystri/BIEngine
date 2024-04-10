@@ -2,6 +2,7 @@
 
 #include "ActorComponent.h"
 
+#include "../EngineCore/Assert.h"
 #include "../Graphics/SpriteNode.h"
 #include "../Graphics/LightReflectiveMaterial.h"
 #include "../Renderer/Color.h"
@@ -18,7 +19,7 @@ public:
 
    bool Init(tinyxml2::XMLElement* pData) override
    {
-      assert(pData);
+      Assert(pData, "Bad arguments provided for initialization to Render Component");
 
       return pData != nullptr;
    }

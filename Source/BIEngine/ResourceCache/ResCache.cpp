@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cctype>
 
+#include "../EngineCore/Assert.h"
 #include "../Utilities/String.h"
 #include "../Utilities/Logger.h"
 
@@ -28,7 +29,6 @@ bool ResCache::Create(const unsigned int sizeInMb, std::shared_ptr<IResourceFile
 
 void ResCache::Destroy()
 {
-   assert(s_pSingleton);
    if (s_pSingleton) {
       delete s_pSingleton;
       s_pSingleton = nullptr;
@@ -184,7 +184,6 @@ std::shared_ptr<ResHandle> ResCache::GetHandle(const std::string& resName)
    std::shared_ptr<ResHandle> pHandle(Find(resName));
    if (pHandle == nullptr) {
       pHandle = Load(resName);
-      assert(pHandle);
    } else {
       Update(pHandle);
    }
@@ -223,14 +222,14 @@ std::shared_ptr<ResHandle> ResCache::Load(const std::string& resName)
    }
 
    if (!pLoader) {
-      assert(pLoader && "Default resource loader not found!");
+      Assert(false, "Default resource loader not found!");
       return pHandle;
    }
 
    int rawSize = m_pFile->GetRawResourceSize(resName);
    if (rawSize < 0) {
-      assert(rawSize > 0 && "Resource size returned -1 - Resource not found");
-      return std::shared_ptr<ResHandle>();
+      Assert(false, "Resource size returned -1 - Resource not found");
+      return nullptr;
    }
 
    int allocSize = rawSize + ((pLoader->AddNullZero()) ? (1) : (0));
@@ -240,7 +239,7 @@ std::shared_ptr<ResHandle> ResCache::Load(const std::string& resName)
 
    if (pRawBuffer == nullptr || m_pFile->GetRawResource(resName, pRawBuffer) == 0) {
       // Место под ресурс не может быть выделено!
-      return std::shared_ptr<ResHandle>();
+      return nullptr;
    }
 
    char* pBuffer = nullptr;

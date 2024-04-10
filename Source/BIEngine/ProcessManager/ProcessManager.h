@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include <list>
-#include <cassert>
 
 #include "Process.h"
 
@@ -21,7 +20,7 @@ public:
 
    static ProcessManager* Get()
    {
-      assert(s_pSingleton);
+      Assert(s_pSingleton, "Call ProcessManager::Create before ProcessManager::Get");
       return s_pSingleton;
    }
 

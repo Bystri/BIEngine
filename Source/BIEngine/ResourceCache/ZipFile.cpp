@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <cctype>
-#include <cassert>
 #include <iterator>
 
 #include <zlib.h>
@@ -188,8 +187,6 @@ void ZipFile::End()
 
 std::string ZipFile::GetFilename(int i) const
 {
-   assert(i >= 0 && i < m_nEntries);
-
    std::string fileName(m_papDir[i]->GetName());
    fileName += '\0';
    return fileName;
@@ -197,16 +194,12 @@ std::string ZipFile::GetFilename(int i) const
 
 int ZipFile::GetFileLen(int i) const
 {
-   assert(i >= 0 && i < m_nEntries);
-
    return m_papDir[i]->ucSize;
 }
 
 // Uncompress a complete file to buffer
 bool ZipFile::ReadFile(int i, void* pBuf)
 {
-   assert(i >= 0 && i < m_nEntries);
-
    if (pBuf == nullptr)
       return false;
 

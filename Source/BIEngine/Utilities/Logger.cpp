@@ -1,8 +1,9 @@
 ﻿#include "Logger.h"
 
 #include <iostream>
-#include <cassert>
 #include <cstdarg>
+
+#include "../EngineCore/Assert.h"
 
 namespace BIEngine {
 
@@ -20,7 +21,7 @@ void Logger::WriteLog(LogType type, const std::string& msg)
          std::cerr << "[ERROR]: " << msg << std::endl;
          break;
       default:
-         assert(0 && "Unknown message type");
+         Assert(false, "Unknown message type for log writing");
          break;
    }
 }

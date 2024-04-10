@@ -1,11 +1,12 @@
 ﻿#pragma once
 
 #include <string>
-#include <cassert>
 
 #include <glm/glm.hpp>
 #include <pybind11/embed.h>
 #include <pybind11/operators.h>
+
+#include "../EngineCore/Assert.h"
 
 namespace py = pybind11;
 
@@ -20,7 +21,7 @@ public:
 
    static PythonStateManager* Get()
    {
-      assert(s_pSingleton);
+      Assert(s_pSingleton, "Call PythonStateManager::Create befor PythonStateManager::Get");
       return s_pSingleton;
    }
 

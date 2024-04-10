@@ -152,7 +152,7 @@ void RootNode::AddChild(std::shared_ptr<ISceneNode> pChild)
 {
    RenderLayer pass = pChild->Get()->GetRenderLayer();
    if (static_cast<unsigned>(pass) >= m_children.size() || !m_children[static_cast<std::size_t>(pass)]) {
-      assert(0 && "There is no such render pass");
+      Assert(false, "There is no such render pass");
       return;
    }
 

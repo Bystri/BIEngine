@@ -27,8 +27,8 @@ public:
 
    virtual bool Initialize() override { return true; }
 
-   virtual void SetGravity(const glm::vec2& gravity) override{};
-   virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override{};
+   virtual void SetGravity(const glm::vec2& gravity) override {};
+   virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
 
    virtual void OnUpdate(const GameTimer& gt) override {}
 
@@ -70,7 +70,6 @@ public:
 IGamePhysics2D* CreateNullPhysics2D()
 {
    IGamePhysics2D* pGamePhysics2D = new NullPhysics2D();
-   assert(pGamePhysics2D);
    return pGamePhysics2D;
 }
 
@@ -248,7 +247,7 @@ void Physics2D::AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> 
       return;
 
    ActorId actorID = pStrongActor->GetId();
-   assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end() && "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
    float specificGravity = LookupSpecificGravity(densityStr);
    MaterialData material(LookupMaterialData(physicsMaterial));
@@ -260,7 +259,7 @@ void Physics2D::AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> 
    glm::vec3 position;
    float rotation = 0.0f;
    std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   assert(pTransformComponent);
+   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
    if (pTransformComponent) {
       position = pTransformComponent->GetPosition();
       rotation = pTransformComponent->GetRotation().z;
@@ -303,7 +302,7 @@ void Physics2D::AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak
       return;
 
    ActorId actorID = pStrongActor->GetId();
-   assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end() && "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
    float specificGravity = LookupSpecificGravity(densityStr);
    MaterialData material(LookupMaterialData(physicsMaterial));
@@ -315,7 +314,7 @@ void Physics2D::AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak
    glm::vec3 position;
    float rotation = 0.0f;
    std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   assert(pTransformComponent);
+   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
    if (pTransformComponent) {
       position = pTransformComponent->GetPosition();
       rotation = pTransformComponent->GetRotation().z;
@@ -359,7 +358,7 @@ void Physics2D::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bo
       return;
 
    ActorId actorID = pStrongActor->GetId();
-   assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end() && "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
    cpVect* cpVerts = new cpVect[numPoints];
    for (int i = 0; i < numPoints; ++i) {
@@ -376,7 +375,7 @@ void Physics2D::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bo
    glm::vec3 position;
    float rotation = 0.0f;
    std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   assert(pTransformComponent);
+   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
    if (pTransformComponent) {
       position = pTransformComponent->GetPosition();
       rotation = pTransformComponent->GetRotation().z;
@@ -432,12 +431,12 @@ void Physics2D::CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& 
       return;
 
    ActorId actorID = pStrongActor->GetId();
-   assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end() && "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
    glm::vec3 position;
 
    std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   assert(pTransformComponent);
+   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
    if (pTransformComponent) {
       position = pTransformComponent->GetPosition();
    } else
@@ -484,7 +483,7 @@ bool Physics2D::KinematicMove(ActorId aid, const glm::vec2& position, float angl
 void Physics2D::Rotate(ActorId const actorId, float const deltaAngleRadians)
 {
    cpBody* pRigidBody = FindChipmunkRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
 
    cpBodySetAngle(pRigidBody, cpBodyGetAngle(pRigidBody) + deltaAngleRadians);
 }
@@ -492,7 +491,7 @@ void Physics2D::Rotate(ActorId const actorId, float const deltaAngleRadians)
 float Physics2D::GetOrientation(ActorId actorId) const
 {
    cpBody* pRigidBody = FindChipmunkRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
 
    if (pRigidBody) {
       return cpBodyGetAngle(pRigidBody);
@@ -509,7 +508,7 @@ void Physics2D::StopActor(ActorId actorId)
 glm::vec2 Physics2D::GetVelocity(ActorId actorId) const
 {
    cpBody* pRigidBody = FindChipmunkRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
    if (!pRigidBody)
       return glm::vec3();
 
@@ -520,7 +519,7 @@ glm::vec2 Physics2D::GetVelocity(ActorId actorId) const
 void Physics2D::SetVelocity(ActorId actorId, const glm::vec2& vel)
 {
    cpBody* pRigidBody = FindChipmunkRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
    if (!pRigidBody)
       return;
 
@@ -530,7 +529,7 @@ void Physics2D::SetVelocity(ActorId actorId, const glm::vec2& vel)
 float Physics2D::GetAngularVelocity(ActorId actorId) const
 {
    cpBody* pRigidBody = FindChipmunkRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
    if (!pRigidBody)
       return 0.0f;
    return cpBodyGetAngularVelocity(pRigidBody);
@@ -539,7 +538,7 @@ float Physics2D::GetAngularVelocity(ActorId actorId) const
 void Physics2D::SetAngularVelocity(ActorId actorId, float vel)
 {
    cpBody* pRigidBody = FindChipmunkRigidBody(actorId);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
    if (!pRigidBody)
       return;
 
@@ -549,7 +548,7 @@ void Physics2D::SetAngularVelocity(ActorId actorId, float vel)
 void Physics2D::SetPosition(const ActorId id, const glm::vec2& position)
 {
    cpBody* pRigidBody = FindChipmunkRigidBody(id);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
    if (!pRigidBody)
       return;
 
@@ -559,7 +558,7 @@ void Physics2D::SetPosition(const ActorId id, const glm::vec2& position)
 glm::vec2 Physics2D::GetPosition(const ActorId id) const
 {
    cpBody* pRigidBody = FindChipmunkRigidBody(id);
-   assert(pRigidBody);
+   Assert(pRigidBody, "There is not rigid body for this actor. Add it first");
    if (!pRigidBody)
       return glm::vec3();
    cpVect pos = cpBodyGetPosition(pRigidBody);
@@ -569,10 +568,13 @@ glm::vec2 Physics2D::GetPosition(const ActorId id) const
 
 void Physics2D::LoadXml(tinyxml2::XMLElement* pRoot)
 {
-   assert(pRoot);
+   Assert(pRoot, "Provided bad arguments");
 
    tinyxml2::XMLElement* pParentNode = pRoot->FirstChildElement("PhysicsMaterials");
-   assert(pParentNode);
+   Assert(pParentNode, "Physics2D settings must have PhysicsMaterials element!");
+   if (!pParentNode) {
+      return;
+   }
    for (tinyxml2::XMLElement* pNode = pParentNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
       double restitution = 0;
       double friction = 0;
@@ -582,7 +584,10 @@ void Physics2D::LoadXml(tinyxml2::XMLElement* pRoot)
    }
 
    pParentNode = pRoot->FirstChildElement("DensityTable");
-   assert(pParentNode);
+   Assert(pParentNode, "Physics2D settings must have DensityTable element!");
+   if (!pParentNode) {
+      return;
+   }
    for (tinyxml2::XMLElement* pNode = pParentNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
       m_densityTable.insert(std::make_pair(pNode->Value(), (float)atof(pNode->FirstChild()->Value())));
    }
@@ -711,8 +716,9 @@ void Physics2D::SendCollisionPairRemoveEvent(cpArbiter const* arb, cpShape const
 
 cpBool Physics2D::ChipmunkBeginCollisionCallback(cpArbiter* arb, cpSpace* space, void* data)
 {
-   assert(cpSpaceGetUserData(space));
-   Physics2D* const chipmunkPhysics = static_cast<Physics2D*>(cpSpaceGetUserData(space));
+   cpDataPointer pWorldUserInfo = cpSpaceGetUserData(space);
+   Assert(pWorldUserInfo, "Physics world user info is lost");
+   Physics2D* const chipmunkPhysics = static_cast<Physics2D*>(pWorldUserInfo);
 
    if (cpArbiterIsFirstContact(arb)) {
       cpShape *a, *b;
@@ -725,8 +731,9 @@ cpBool Physics2D::ChipmunkBeginCollisionCallback(cpArbiter* arb, cpSpace* space,
 
 void Physics2D::ChipmunkSeparateCollisionCallback(cpArbiter* arb, cpSpace* space, void* data)
 {
-   assert(cpSpaceGetUserData(space));
-   Physics2D* const chipmunkPhysics = static_cast<Physics2D*>(cpSpaceGetUserData(space));
+   cpDataPointer pWorldUserInfo = cpSpaceGetUserData(space);
+   Assert(pWorldUserInfo, "Physics world user info is lost");
+   Physics2D* const chipmunkPhysics = static_cast<Physics2D*>(pWorldUserInfo);
 
    cpShape *a, *b;
    cpArbiterGetShapes(arb, &a, &b);
@@ -742,7 +749,6 @@ void Physics2D::DestroyActorDelegate(IEventDataPtr pEventData)
 IGamePhysics2D* CreateGamePhysics2D()
 {
    IGamePhysics2D* pGamePhysics2D = new Physics2D();
-   assert(pGamePhysics2D);
    return pGamePhysics2D;
 }
 

@@ -9,6 +9,7 @@
 #include "../BIEngine/Renderer/PostProcessor.h"
 #include "../BIEngine/Renderer/Renderbuffer.h"
 #include "../BIEngine/Renderer/ImageLoader.h"
+#include "../BIEngine/EngineCore/Assert.h"
 
 #include "Graphics/ActorPickingTechnique.h"
 #include "Graphics/SelectedActorOutliner.h"
@@ -98,7 +99,7 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
    }
 
    tinyxml2::XMLElement* pSkyboxSettingsNode = xmlExtraData->GetRootElement()->FirstChildElement("Skybox");
-   assert(pSkyboxSettingsNode);
+   BIEngine::Assert(pSkyboxSettingsNode, "Skybox settings did not loaded");
 
    if (!pSkyboxSettingsNode) {
       return nullptr;

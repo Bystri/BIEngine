@@ -3,10 +3,10 @@
 #include <memory>
 #include <list>
 #include <vector>
-#include <cassert>
 
 #include "ZipFile.h"
 #include "DirFile.h"
+#include "../EngineCore/Assert.h"
 
 namespace BIEngine {
 
@@ -159,7 +159,7 @@ public:
    // Возвращает указетель на кэш ресурсов. Перед использованием необходимо выполнить инициализацию с помощью фукнции ResCache::Create
    static ResCache* Get()
    {
-      assert(s_pSingleton);
+      Assert(s_pSingleton, "Call ResCache::Create before ResCache::Get!");
       return s_pSingleton;
    }
 

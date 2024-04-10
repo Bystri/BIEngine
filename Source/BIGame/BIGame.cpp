@@ -94,7 +94,7 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
    }
 
    tinyxml2::XMLElement* pSkyboxSettingsNode = xmlExtraData->GetRootElement()->FirstChildElement("Skybox");
-   assert(pSkyboxSettingsNode);
+   BIEngine::Assert(pSkyboxSettingsNode, "Skybox settings did not loaded");
 
    if (!pSkyboxSettingsNode) {
       return nullptr;

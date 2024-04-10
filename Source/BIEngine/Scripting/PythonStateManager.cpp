@@ -12,7 +12,7 @@ PythonStateManager* PythonStateManager::s_pSingleton = nullptr;
 
 bool PythonStateManager::Create()
 {
-   assert(s_pSingleton == nullptr);
+   Assert(s_pSingleton == nullptr, "PythonStateManager already created. Use PythonStateManager::Destroy if you need reacreate it");
    if (s_pSingleton) {
       Logger::WriteLog(Logger::LogType::ERROR, "Overwriting PythonStateManager singleton");
       if (s_pSingleton) {
@@ -30,7 +30,6 @@ bool PythonStateManager::Create()
 
 void PythonStateManager::Destroy()
 {
-   assert(s_pSingleton);
    if (s_pSingleton) {
       delete s_pSingleton;
       s_pSingleton = nullptr;
@@ -93,7 +92,7 @@ void PythonStateManager::ExecuteString(const char* chunk)
 
 py::module_& PythonStateManager::GetMain()
 {
-   assert(m_main.is_none() == false);
+   Assert(m_main.is_none() == false, "Call PythonStateManager::Init before use it");
    return m_main;
 }
 

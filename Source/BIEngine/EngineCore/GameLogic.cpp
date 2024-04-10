@@ -1,7 +1,5 @@
 ﻿#include "GameLogic.h"
 
-#include <cassert>
-
 #include "../Utilities/Logger.h"
 #include "../ProcessManager/ProcessManager.h"
 
@@ -40,7 +38,11 @@ bool GameLogic::LoadLevel(const std::string& path)
       return false;
 
    auto levelXmlData = std::dynamic_pointer_cast<XmlExtraData>(resourceHandle->GetExtra());
-   assert(levelXmlData);
+   Assert(levelXmlData != nullptr, "level xml data did not loaded");
+
+   if (levelXmlData == nullptr) {
+      return false;
+   }
 
    tinyxml2::XMLElement* pRoot = levelXmlData->GetRootElement();
    if (!pRoot) {
@@ -173,8 +175,6 @@ void GameLogic::SetKey(int key, int scancode, bool state)
 
 std::shared_ptr<Actor> GameLogic::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation)
 {
-   assert(m_pActorFactory);
-
    std::shared_ptr<Actor> pActor = m_pActorFactory->CreateActor(pRoot, pPosition, pRotation);
    if (pActor) {
       m_actors.insert(std::make_pair(pActor->GetId(), pActor));

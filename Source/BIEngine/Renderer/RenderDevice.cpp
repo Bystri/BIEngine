@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 
+#include "../EngineCore/Assert.h"
+
 namespace BIEngine {
 
 static GLenum renderEnumBlendFuncToGlEnum(RenderDevice::BlendFunc src)
@@ -34,7 +36,7 @@ static GLenum renderEnumStencilFuncToGlEnum(RenderDevice::StencilAction action)
          return GL_INVERT;
    }
 
-   assert(false && "RenderDevice::StencilAction is not specified in renderEnumStencilFuncToGlEnum");
+   Assert(false, "RenderDevice::StencilAction is not specified in renderEnumStencilFuncToGlEnum");
    return 0;
 }
 

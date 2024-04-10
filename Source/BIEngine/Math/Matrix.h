@@ -17,11 +17,11 @@ public:
    Matrix(const std::initializer_list<std::initializer_list<T>> cols)
       : columns()
    {
-      assert(cols.size() == m, "The number of columns ​​in the initializer_list is not equal to the dimension of the matrix");
+      Asserrt(cols.size() == m, "The number of columns ​​in the initializer_list is not equal to the dimension of the matrix");
 
       auto iter = cols.begin();
       for (int i = 0; i < m; ++i) {
-         assert(iter->size() == n, "The number of elements ​​in the initializer_list's column is not equal to the dimension of the matrix");
+         Asserrt(iter->size() == n, "The number of elements ​​in the initializer_list's column is not equal to the dimension of the matrix");
 
          columns[i] = Vector<T, n>(*iter);
 
@@ -200,7 +200,7 @@ Matrix<T, 2, 2> Inverse(const Matrix<T, 2, 2>& mat)
 
    const float det = Determinant(mat);
    if (det == 0) {
-      assert(false, "The matrix is not invertible");
+      Asserrt(false, "The matrix is not invertible");
       return inverse;
    }
 
@@ -219,7 +219,7 @@ Matrix<T, 3, 3> Inverse(const Matrix<T, 3, 3>& mat)
 
    const float det = Determinant(mat);
    if (det == 0) {
-      assert(false, "The matrix is not invertible");
+      Asserrt(false, "The matrix is not invertible");
       return inverse;
    }
 
@@ -243,7 +243,7 @@ Matrix<T, 4, 4> Inverse(const Matrix<T, 4, 4>& mat)
 
    const float det = Determinant(mat);
    if (det == 0) {
-      assert(false, "The matrix is not invertible");
+      Asserrt(false, "The matrix is not invertible");
       return inverse;
    }
 

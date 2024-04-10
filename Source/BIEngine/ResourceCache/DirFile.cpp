@@ -1,7 +1,6 @@
 ﻿#include "DirFile.h"
 
 #include <algorithm>
-#include <cassert>
 #include <filesystem>
 #include <fstream>
 
@@ -43,20 +42,16 @@ void DirFile::End()
 
 std::string DirFile::GetFilename(int i) const
 {
-   assert(i >= 0 && i < m_fileDatas.size());
    return m_fileDatas[i].name;
 }
 
 int DirFile::GetFileLen(int i) const
 {
-   assert(i >= 0 && i < m_fileDatas.size());
    return m_fileDatas[i].size;
 }
 
 bool DirFile::ReadFile(int i, void* pBuf)
 {
-   assert(i >= 0 && i < m_fileDatas.size());
-
    if (pBuf == nullptr)
       return false;
 

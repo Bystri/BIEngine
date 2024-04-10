@@ -1,8 +1,7 @@
 #include "BIEditorController.h"
 
-#include <cassert>
-
 #include "../BIEngine/EventManager/EventManager.h"
+#include "../BIEngine/EngineCore/Assert.h"
 
 #include "BIEventListener.h"
 
@@ -46,7 +45,7 @@ bool BIEditorController::IsMouseButtonPressed(int buttonCode)
 
 bool BIEditorController::IsKeyPressed(int key) const
 {
-   assert(key >= 0 && key < MAX_NUMBER_OF_KEYS);
+   BIEngine::Assert(key >= 0 && key < MAX_NUMBER_OF_KEYS, "Get incorrect key code! Got %d but max code is %d", key, MAX_NUMBER_OF_KEYS);
    if (key < 0 || key >= MAX_NUMBER_OF_KEYS) {
       return false;
    }
@@ -56,7 +55,7 @@ bool BIEditorController::IsKeyPressed(int key) const
 
 bool BIEditorController::OnKeyDown(int key, int scancode)
 {
-   assert(key >= 0 && key < MAX_NUMBER_OF_KEYS);
+   BIEngine::Assert(key >= 0 && key < MAX_NUMBER_OF_KEYS, "Get incorrect key code! Got %d but max code is %d", key, MAX_NUMBER_OF_KEYS);
    if (key < 0 || key >= MAX_NUMBER_OF_KEYS) {
       return false;
    }
@@ -72,7 +71,7 @@ bool BIEditorController::OnKeyDown(int key, int scancode)
 
 bool BIEditorController::OnKeyUp(int key, int scancode)
 {
-   assert(key >= 0 && key < MAX_NUMBER_OF_KEYS);
+   BIEngine::Assert(key >= 0 && key < MAX_NUMBER_OF_KEYS, "Get incorrect key code! Got %d but max code is %d", key, MAX_NUMBER_OF_KEYS);
    if (key < 0 || key >= MAX_NUMBER_OF_KEYS) {
       return false;
    }

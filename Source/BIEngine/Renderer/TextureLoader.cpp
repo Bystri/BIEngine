@@ -16,7 +16,7 @@ Texture2D::TextureWrap textureLoaderGetTextureWrapFromParameter(const char* para
       return Texture2D::TextureWrap::CLAMP_TO_BORDER;
    }
 
-   assert(false && "There is a type in Wrap parameter of Texture");
+   Assert(false, "There is a type in Wrap parameter of Texture");
    return Texture2D::TextureWrap::REPEAT;
 }
 
@@ -28,7 +28,7 @@ Texture2D::TextureFunction textureLoaderGetTextureFunctionFromParameter(const ch
       return Texture2D::TextureFunction::NEAREST;
    }
 
-   assert(false && "There is a type in Function parameter of Texture");
+   Assert(false, "There is a type in Function parameter of Texture");
    return Texture2D::TextureFunction::NEAREST;
 }
 

@@ -64,7 +64,11 @@ void SoundProcess::SetVolume(int volume)
       return;
    }
 
-   assert(volume >= 0 && volume <= 100 && "Volume must be a number between 0 and 100");
+   Assert(volume >= 0 && volume <= 100, "Volume must be a number between 0 and 100");
+   if (volume < 0 || volume > 100) {
+      return;
+   }
+
    m_volume = volume;
    m_pAudioBuffer->SetVolume(volume);
 }
@@ -87,7 +91,7 @@ void SoundProcess::PauseSound()
 
 void SoundProcess::Play(const int volume, const bool looping)
 {
-   assert(volume >= 0 && volume <= 100 && "Volume must be a number between 0 and 100");
+   Assert(volume >= 0 && volume <= 100, "Volume must be a number between 0 and 100");
 
    if (!m_pAudioBuffer) {
       return;

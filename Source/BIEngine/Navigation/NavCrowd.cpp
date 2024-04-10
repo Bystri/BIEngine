@@ -2,6 +2,8 @@
 
 #include <DetourCrowd.h>
 
+#include "../EngineCore/Assert.h"
+
 namespace BIEngine {
 
 static const int MAX_AGENTS = 128;
@@ -66,7 +68,7 @@ bool NavCrowd::Initialize(std::shared_ptr<NavMeshManager> pNavMeshManager)
 NavAgentId NavCrowd::AddAgent(std::shared_ptr<Actor> pActor, const NavAgentParams& params)
 {
    std::shared_ptr<TransformComponent> pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   assert(pTransformComponent);
+   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
    if (!pTransformComponent) {
       return -1;
    }
@@ -161,7 +163,7 @@ void NavCrowd::UpdateCrowdInfo(const std::map<ActorId, std::shared_ptr<Actor>>& 
          }
 
          std::shared_ptr<TransformComponent> pTransformComponent = itr->second->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-         assert(pTransformComponent);
+         Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
          if (!pTransformComponent) {
             continue;
          }

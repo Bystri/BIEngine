@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 
+#include "../EngineCore/Assert.h"
+
 namespace BIEngine {
 
 ConstantsBuffer::ConstantsBuffer()
@@ -23,7 +25,7 @@ void ConstantsBuffer::Init(unsigned int bufferSize, unsigned int bindingPoint)
 
 void ConstantsBuffer::SetBufferData(const void* ptrData, unsigned int offset, unsigned int dataSize)
 {
-   assert(offset + dataSize <= m_bufferSize);
+   Assert(offset + dataSize <= m_bufferSize, "Trying to set more data than can fit inside render constants buffer");
    if (offset + dataSize > m_bufferSize) {
       return;
    }
