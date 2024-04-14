@@ -20,7 +20,9 @@ public:
       R_32_F,
       RG_16_F,
       RG_32_F,
+      RGB_16_F,
       RGB_32_F,
+      RGBA_16_F,
       RGBA_32_F,
       R_8_I,
       R_16_I,
@@ -129,7 +131,7 @@ private:
 
 class Texture2DMultisample : public Texture {
 public:
-   static std::shared_ptr<Texture2DMultisample> Create(unsigned int width, unsigned int height, Texture::Format internalFormat, int multisamplesCount);
+   static std::shared_ptr<Texture2DMultisample> Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, int multisamplesCount);
 
    // Сделаеть текстуру активной
    virtual void Bind(int textureIdx) const override;

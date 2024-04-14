@@ -159,7 +159,7 @@ bool BIGameHumanView::Init()
 
    constexpr std::size_t MAX_DIRECTIONAL_LIGHTS_NUM = 1;
    constexpr std::size_t MAX_POINT_LIGHTS_NUM = 1;
-   constexpr std::size_t MAX_SPOT_LIGHTS_NUM = 1;
+   constexpr std::size_t MAX_SPOT_LIGHTS_NUM = 2;
 
    std::shared_ptr<BIEngine::GraphicsRenderPass> pPreWorldRenderPass = std::make_shared<BIEngine::GraphicsRenderPass>();
 

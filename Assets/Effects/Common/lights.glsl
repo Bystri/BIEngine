@@ -37,7 +37,7 @@ struct Material {
 
 #define MAX_DIRECTIONAL_LIGHTS_NUM 1
 #define MAX_POINT_LIGHTS_NUM 1
-#define MAX_SPOT_LIGHTS_NUM 1
+#define MAX_SPOT_LIGHTS_NUM 2
 
 layout (std140, binding = 1) uniform Light
 {

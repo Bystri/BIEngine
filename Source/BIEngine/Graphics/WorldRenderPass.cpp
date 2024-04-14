@@ -11,7 +11,7 @@ bool WorldRenderPass::InitInternal()
    GraphicsRenderPass::InitInternal();
 
    m_intermediateFramebuffer = std::make_shared<Framebuffer>();
-   m_colorIntermediateBuffer = Texture2D::Create(m_screenWidth, m_screenHeight, Texture::SizedFormat::RGB, Texture::Format::RGB, nullptr);
+   m_colorIntermediateBuffer = Texture2D::Create(m_screenWidth, m_screenHeight, Texture::SizedFormat::RGB_16_F, Texture::Format::RGB, nullptr);
    m_depthStencilIntermediateRenderuffer = Renderbuffer::Create(m_screenWidth, m_screenHeight, Renderbuffer::Format::DEPTH24_STENCIL8);
    FramebufferAttach(m_intermediateFramebuffer, FramebufferAttachementType::COLOR, m_colorIntermediateBuffer);
    FramebufferAttach(m_intermediateFramebuffer, FramebufferAttachementType::DEPTH_STENCIL, m_depthStencilIntermediateRenderuffer);
@@ -20,7 +20,7 @@ bool WorldRenderPass::InitInternal()
    }
 
    m_multisamplingFramebuffer = std::make_shared<Framebuffer>();
-   m_colorMultisampleBuffer = Texture2DMultisample::Create(m_screenWidth, m_screenHeight, Texture::Format::RGB, m_msaaSamples);
+   m_colorMultisampleBuffer = Texture2DMultisample::Create(m_screenWidth, m_screenHeight, Texture::SizedFormat::RGB_16_F, m_msaaSamples);
    m_depthStencilMultisampleRenderuffer = Renderbuffer::Create(m_screenWidth, m_screenHeight, Renderbuffer::Format::DEPTH24_STENCIL8, m_msaaSamples);
    FramebufferAttach(m_multisamplingFramebuffer, FramebufferAttachementType::COLOR, m_colorMultisampleBuffer);
    FramebufferAttach(m_multisamplingFramebuffer, FramebufferAttachementType::DEPTH_STENCIL, m_depthStencilMultisampleRenderuffer);

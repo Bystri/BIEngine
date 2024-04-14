@@ -23,6 +23,16 @@
 				<Specular r="0.5" g="0.5" b="0.5"/>
 			</SpotLightComponent>
         </Actor>
+		<Actor name="backpack1">
+            <TransformComponent>
+                <Position x="-8" y="10" z="-8"/>
+                <Size w="1.000000" h="1.000000" d="1.0"/>
+				<Rotation x="0.000000" y="0.000000" z="0.000000"/>
+            </TransformComponent>
+			<ModelRenderComponent>
+				<Model path="Models/backpack/backpack.obj"/>
+			</ModelRenderComponent>
+        </Actor>
 		<Actor name="ground">
             <TransformComponent>
                 <Position x="0" y="5" z="0"/>
@@ -175,16 +185,6 @@
 				<Scale w="1.0" h="1.0" d="1.0"/>
 			</Physics3DComponent>
         </Actor>
-		<Actor name="sensor6">
-            <TransformComponent>
-                <Position x="-8" y="8" z="-8"/>
-                <Size w="1.000000" h="1.000000" d="1.0"/>
-				<Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
-			<ModelRenderComponent>
-				<Model path="Models/backpack/backpack.obj"/>
-			</ModelRenderComponent>
-        </Actor>
 		<Actor name="sensor5">
             <TransformComponent>
                 <Position x="0" y="6" z="-4"/>
@@ -243,8 +243,30 @@
             </TransformComponent>
 			<PointLightComponent>
 				<Color r="0.75" g="0.75" b="0.05"/>
-				<Intensity i="100.0"/>
+				<Intensity i="300.0"/>
 			</PointLightComponent>
+        </Actor>
+		<Actor name="SpotLight2">
+            <TransformComponent>
+                <Position x="8" y="15" z="5"/>
+                <Size w="1.000000" h="1.000000" d="1.0"/>
+				<Rotation x="0.000000" y="-1.000000" z="0.000000"/>
+            </TransformComponent>
+			<SpotLightComponent>
+				<Ambient r="0.05" g="0.05" b="0.05"/>
+				<Diffuse r="1.0" g="0.1" b="0.1"/>
+				<Specular r="0.5" g="0.5" b="0.5"/>
+			</SpotLightComponent>
+        </Actor>
+		<Actor name="backpack2">
+            <TransformComponent>
+                <Position x="8" y="8" z="5"/>
+                <Size w="1.000000" h="1.000000" d="1.0"/>
+				<Rotation x="0.000000" y="25.000000" z="0.000000"/>
+            </TransformComponent>
+			<ModelRenderComponent>
+				<Model path="Models/backpack/backpack.obj"/>
+			</ModelRenderComponent>
         </Actor>
 		<Actor name="sensor2">
             <TransformComponent>

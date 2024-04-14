@@ -27,10 +27,14 @@ static unsigned int ConverSizedFormatToGl(Texture2D::SizedFormat format)
          return GL_RG16F;
       case Texture2D::SizedFormat::RG_32_F:
          return GL_RG32F;
+      case Texture2D::SizedFormat::RGB_16_F:
+         return GL_RGB16F;
       case Texture2D::SizedFormat::RGB_32_F:
          return GL_RGB32F;
       case Texture2D::SizedFormat::RGBA_32_F:
          return GL_RGBA32F;
+      case Texture2D::SizedFormat::RGBA_16_F:
+         return GL_RGBA16F;
       case Texture2D::SizedFormat::R_8_I:
          return GL_R8I;
       case Texture2D::SizedFormat::R_16_I:
@@ -164,7 +168,7 @@ Texture2DMultisample::Texture2DMultisample()
 {
 }
 
-std::shared_ptr<Texture2DMultisample> Texture2DMultisample::Create(unsigned int width, unsigned int height, Texture::Format internalFormat, int multisamplesCount)
+std::shared_ptr<Texture2DMultisample> Texture2DMultisample::Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, int multisamplesCount)
 {
    struct make_shared_enabler : public Texture2DMultisample {};
 
@@ -172,12 +176,12 @@ std::shared_ptr<Texture2DMultisample> Texture2DMultisample::Create(unsigned int 
 
    texture->m_width = width;
    texture->m_height = height;
-   texture->m_internalFormat = internalFormat;
+   texture->m_sizedFormat = sizedFormat;
    texture->m_multisamplesCount = multisamplesCount;
 
    // Создание текстуры
    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture->m_id);
-   glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, multisamplesCount, GL_STENCIL_INDEX + static_cast<int>(internalFormat), width, height, GL_TRUE);
+   glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, multisamplesCount, ConverSizedFormatToGl(sizedFormat), width, height, GL_TRUE);
 
    // Отвязываем текстуру, чтобы она не учавствовала в дальнейшей работе
    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
