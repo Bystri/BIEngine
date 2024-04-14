@@ -6,7 +6,7 @@
 namespace BIEngine {
 
 class ModelData : public IResourceExtraData {
-   friend class ObjModelResourceLoader;
+   friend class ModelResourceLoader;
 
 public:
    ModelData()
@@ -27,7 +27,7 @@ protected:
    std::shared_ptr<Model> m_pModel;
 };
 
-class ObjModelResourceLoader : public IResourceLoader {
+class ModelResourceLoader : public IResourceLoader {
 public:
    virtual bool UseRawFile() { return false; }
 

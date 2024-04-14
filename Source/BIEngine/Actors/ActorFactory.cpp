@@ -7,6 +7,7 @@
 #include "TransformComponent.h"
 #include "LightComponent.h"
 #include "RenderComponent.h"
+#include "AnimationComponent.h"
 #include "Physics2DComponent.h"
 #include "Physics2DTriggerComponent.h"
 #include "Physics3DComponent.h"
@@ -30,12 +31,14 @@ ActorFactory::ActorFactory()
    m_actorComponentCreators[SpriteRenderComponent::g_CompId] = CreateSpriteRenderComponent;
    m_actorComponentCreators[BoxRenderComponent::g_CompId] = CreateBoxRenderComponent;
    m_actorComponentCreators[ModelRenderComponent::g_CompId] = CreateModelRenderComponent;
+   m_actorComponentCreators[SkeletalModelRenderComponent::g_CompId] = CreateSkeletalModelRenderComponent;
    m_actorComponentCreators[Physics2DComponent::g_CompId] = CreatePhysics2DComponent;
    m_actorComponentCreators[Physics2DTriggerComponent::g_CompId] = CreatePhysics2DTriggerComponent;
    m_actorComponentCreators[Physics3DComponent::g_CompId] = CreatePhysics3DComponent;
    m_actorComponentCreators[Physics3DTriggerComponent::g_CompId] = CreatePhysics3DTriggerComponent;
    m_actorComponentCreators[NavAgentComponent::g_CompId] = CreateNavAgentComponent;
    m_actorComponentCreators[ScriptComponent::g_CompId] = CreateScriptComponent;
+   m_actorComponentCreators[AnimationComponent::g_CompId] = CreateAnimatorComponent;
 }
 
 std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation)

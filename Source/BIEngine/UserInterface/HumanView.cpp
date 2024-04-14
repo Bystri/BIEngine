@@ -66,6 +66,7 @@ void HumanView::Shutdown()
 
 void HumanView::OnUpdate(const GameTimer& gt)
 {
+   m_pScene->OnUpdate(gt);
 }
 
 void HumanView::OnRender(const GameTimer& gt)

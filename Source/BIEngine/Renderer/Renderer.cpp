@@ -48,8 +48,8 @@ void Renderer::DrawRenderCommand(RenderCommand& renderCommand)
    renderCommand.GetShaderProgramState().SetMatrix4("model", renderCommand.Transform);
    renderCommand.GetShaderProgramState().Use();
 
-   glBindVertexArray(renderCommand.GetMeshPtr()->GetVao());
-   glDrawElements(GL_TRIANGLES, renderCommand.GetMeshPtr()->GetIndices().size(), GL_UNSIGNED_INT, 0);
+   glBindVertexArray(renderCommand.GetVAO());
+   glDrawElements(GL_TRIANGLES, renderCommand.GetIndicesNum(), GL_UNSIGNED_INT, 0);
    glBindVertexArray(0);
 }
 

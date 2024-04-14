@@ -4,6 +4,7 @@
 #include "../EventManager/Events.h"
 #include "../Renderer/ShadersLoader.h"
 #include "../Graphics/ModelLoader.h"
+#include "../Graphics/SkeletalModelLoader.h"
 #include "../Renderer/MeshGeometryGenerator.h"
 #include "../Actors/TransformComponent.h"
 #include "../Utilities/Logger.h"
@@ -13,6 +14,7 @@ namespace BIEngine {
 ComponentId SpriteRenderComponent::g_CompId = "SpriteRenderComponent";
 ComponentId BoxRenderComponent::g_CompId = "BoxRenderComponent";
 ComponentId ModelRenderComponent::g_CompId = "ModelRenderComponent";
+ComponentId SkeletalModelRenderComponent::g_CompId = "SkeletalModelRenderComponent";
 
 /***********************************************************
  * BaseRenderComponent
@@ -355,6 +357,69 @@ tinyxml2::XMLElement* ModelRenderComponent::GenerateXml(tinyxml2::XMLDocument* p
 }
 
 std::shared_ptr<SceneNode> ModelRenderComponent::CreateSceneNode()
+{
+   if (m_pModelNode == nullptr) {
+      return std::shared_ptr<SceneNode>();
+   }
+
+   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   if (pTransformComponent) {
+      m_pModelNode->SetTransform(pTransformComponent);
+   }
+
+   return m_pModelNode;
+}
+
+/******************************************/
+/***********SkeletalModelRenderComponent***********/
+/******************************************/
+
+bool SkeletalModelRenderComponent::Init(tinyxml2::XMLElement* pData)
+{
+   if (!BaseRenderComponent::Init(pData)) {
+      return false;
+   }
+
+   if (m_pModelNode == nullptr) {
+      m_pModelNode = std::make_shared<SkeletalModelNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
+   }
+
+   tinyxml2::XMLElement* pModel = pData->FirstChildElement("Model");
+   if (!pModel) {
+      Logger::WriteLog(Logger::LogType::ERROR, "Erro while loading actor" + std::to_string(m_pOwner->GetId()) + "; ModelRenderComponent must have path for model loading;");
+      m_pModelNode.reset();
+      return false;
+   }
+
+   const char* modelPath;
+   pModel->QueryStringAttribute("path", &modelPath);
+   m_modelPath = modelPath;
+
+   auto modelData = std::static_pointer_cast<SkeletalModelData>(ResCache::Get()->GetHandle(m_modelPath)->GetExtra());
+
+   if (modelData == nullptr) {
+      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading actor" + std::to_string(m_pOwner->GetId()) + "; Error while loading model in ModelRenderComponent;");
+      m_pModelNode.reset();
+      return false;
+   }
+
+   m_pModelNode->SetSkeletalModel(modelData->GetSkeletalModel());
+
+   return true;
+}
+
+tinyxml2::XMLElement* SkeletalModelRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
+{
+   tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
+
+   tinyxml2::XMLElement* pMaterialElement = pDoc->NewElement("Model");
+   pMaterialElement->SetAttribute("path", m_modelPath.c_str());
+   pBaseElement->LinkEndChild(pMaterialElement);
+
+   return pBaseElement;
+}
+
+std::shared_ptr<SceneNode> SkeletalModelRenderComponent::CreateSceneNode()
 {
    if (m_pModelNode == nullptr) {
       return std::shared_ptr<SceneNode>();

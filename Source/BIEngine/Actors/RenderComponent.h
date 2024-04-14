@@ -128,6 +128,8 @@ public:
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
+   std::shared_ptr<Model> GetModel() const { return m_pModelNode->GetModel(); }
+
 protected:
    virtual std::shared_ptr<SceneNode> CreateSceneNode();
 
@@ -140,5 +142,34 @@ protected:
 static ActorComponent* CreateModelRenderComponent()
 {
    return new ModelRenderComponent;
+}
+
+class SkeletalModelRenderComponent : public BaseRenderComponent {
+public:
+   SkeletalModelRenderComponent()
+      : BaseRenderComponent(), m_pModelNode(nullptr), m_modelPath() {}
+
+   static ComponentId g_CompId;
+
+   virtual ComponentId GetComponentId() const { return SkeletalModelRenderComponent::g_CompId; }
+
+   virtual bool Init(tinyxml2::XMLElement* pData);
+
+   virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
+
+   std::shared_ptr<SkeletalModel> GetModel() const { return m_pModelNode->GetModel(); }
+
+protected:
+   virtual std::shared_ptr<SceneNode> CreateSceneNode();
+
+protected:
+   std::shared_ptr<SkeletalModelNode> m_pModelNode; // Узел на сцене, который отвечает за отрисовку этого компонента
+
+   std::string m_modelPath;
+};
+
+static ActorComponent* CreateSkeletalModelRenderComponent()
+{
+   return new SkeletalModelRenderComponent;
 }
 } // namespace BIEngine

@@ -11,6 +11,7 @@
 #include "../../Actors/Physics3DComponent.h"
 #include "../../Actors/Physics3DTriggerComponent.h"
 #include "../../Actors/RenderComponent.h"
+#include "../../Actors/AnimationComponent.h"
 #include "../../Actors/ScriptComponent.h"
 
 namespace py = pybind11;
@@ -79,6 +80,10 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
       .def("GetDir", &BIEngine::TransformComponent::GetDir)
       .def("GetSize", &BIEngine::TransformComponent::GetSize)
       .def("SetSize", &BIEngine::TransformComponent::SetSize);
+
+   py::class_<BIEngine::AnimationComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::AnimationComponent>>(m, "AnimationComponent")
+      .def("PlayAnimation", &BIEngine::AnimationComponent::PlayAnimation)
+      .def("Stop", &BIEngine::AnimationComponent::Stop);
 
    m.def("CreateActor", [](const char* actorArchetypeXmlPath, const glm::vec3& pos, const glm::vec3& rot) {
       std::shared_ptr<BIEngine::XmlExtraData> pActorData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle(actorArchetypeXmlPath)->GetExtra());

@@ -31,7 +31,7 @@ private:
 
 class Model {
 public:
-   explicit Model()
+   Model()
       : m_meshes() {}
 
    std::size_t AddModelMesh(std::shared_ptr<ModelMesh> pMesh)

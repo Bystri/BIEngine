@@ -310,12 +310,16 @@
 		<Actor name="PlayerCharacter">
             <TransformComponent>
                 <Position x="3" y="6" z="3"/>
-                <Size w="0.25" h="0.25" d="0.25"/>
+                <Size w="1" h="1" d="1"/>
 				<Rotation x="0.000000" y="0.000000" z="0.000000"/>
             </TransformComponent>
-			<ModelRenderComponent>
-				<Model path="Models/tank/tank.obj"/>
-			</ModelRenderComponent>
+			<SkeletalModelRenderComponent>
+				<Model path="Models/godot_robot/3DGodotRobot.glb"/>
+			</SkeletalModelRenderComponent>
+			<AnimationComponent>
+				<Animation name="idle" path="Animations/Idle-loop.bi3dam"/>
+				<Animation name="run" path="Animations/Run-loop.bi3dam"/>
+			</AnimationComponent>
 			<Physics3DComponent>
 				<Shape>Box</Shape>
 				<BodyType>Dynamic</BodyType>
@@ -330,6 +334,9 @@
 			<ScriptComponent>
 				<ScriptObject modulePath="CameraFollowComponent" className="CameraFollowComponent"/>
 				<NumberData dist = "15" height="15"/>
+			</ScriptComponent>
+			<ScriptComponent>
+				<ScriptObject modulePath="AnimationControllerComponent" className="AnimationControllerComponent"/>
 			</ScriptComponent>
         </Actor>
     </Actors>

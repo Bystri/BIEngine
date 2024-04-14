@@ -275,16 +275,25 @@ protected:
    std::shared_ptr<Model> m_pModel;
 };
 
-class OpaqueItemsManagerNode : public SceneNode {
+class SkeletalModel;
+
+class SkeletalModelNode : public SceneNode {
 public:
-   OpaqueItemsManagerNode();
-   ~OpaqueItemsManagerNode();
+   SkeletalModelNode(const ActorId actorId, RenderLayer renderLayer)
+      : SceneNode(actorId, renderLayer), m_pModel(nullptr)
+   {
+   }
 
-   virtual bool RenderChildren(Scene* pScene) override;
+   virtual ~SkeletalModelNode() {}
 
-   virtual bool PreRender(Scene* pScene) override { return true; }
+   void SetSkeletalModel(std::shared_ptr<SkeletalModel> pModel) { m_pModel = pModel; }
 
-   virtual bool PostRender(Scene* pScene) override { return true; }
+   std::shared_ptr<SkeletalModel> GetModel() const { return m_pModel; }
+
+   virtual bool OnRender(Scene* pScene);
+
+protected:
+   std::shared_ptr<SkeletalModel> m_pModel;
 };
 
 } // namespace BIEngine

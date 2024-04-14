@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "Model.h"
+#include "SkeletalModel.h"
 #include "Scene.h"
 #include "RenderItemsStorage.h"
 #include "../EngineCore/GameApp.h"
@@ -131,6 +132,25 @@ bool ModelNode::OnRender(Scene* pScene)
       opaqueRitem.pMaterial = pModelMesh->GetMaterial();
       opaqueRitem.ModelTransform = GetLocalModelMatrix();
       pScene->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);
+   }
+
+   return true;
+}
+
+bool SkeletalModelNode::OnRender(Scene* pScene)
+{
+   const std::vector<std::shared_ptr<SkeletalModelMesh>>& modelMeshes = m_pModel->GetSkeletalMeshes();
+
+   for (const auto& pModelMesh : modelMeshes) {
+      RenderItemsStorage::OpaqueAnimatedRenderItem opaqueRitem;
+      opaqueRitem.actorId = m_props.GetActorId();
+      opaqueRitem.pMesh = pModelMesh->GetSkeletalMesh();
+      opaqueRitem.pMaterial = pModelMesh->GetMaterial();
+      opaqueRitem.ModelTransform = GetLocalModelMatrix();
+
+      opaqueRitem.boneMatrices = m_pModel->GetSkeleton()->GetFinalBoneMatrices();
+
+      pScene->GetRenderItemsStorage()->InsertOpaqueAnimatedRenderItem(opaqueRitem);
    }
 
    return true;

@@ -16,7 +16,7 @@ PostProcessor::PostProcessor(std::shared_ptr<ShaderProgram> pShaderProgram)
 
 void PostProcessor::Use(Renderer* const pRenderer, std::shared_ptr<Texture2D> pTextureToProcess)
 {
-   RenderCommand renderCommand(&m_screenOutputMesh, m_pShaderProgram);
+   RenderCommand renderCommand(m_screenOutputMesh.GetVao(), m_screenOutputMesh.GetIndices().size(), m_pShaderProgram);
 
    renderCommand.RenderState.Cull = false;
    renderCommand.RenderState.DepthTest = false;

@@ -7,6 +7,11 @@ void RenderItemsStorage::InsertOpaqueRenderItem(const OpaqueRenderItem& opaqueRi
    m_opaqueItems.push_back(opaqueRitem);
 }
 
+void RenderItemsStorage::InsertOpaqueAnimatedRenderItem(const OpaqueAnimatedRenderItem& opaqueRitem)
+{
+   m_opaqueAnimatedItems.push_back(opaqueRitem);
+}
+
 void RenderItemsStorage::InsertDirectionalLightInfo(const DirectionalLightItem& dirLight)
 {
    m_directionalLightItems.push_back(dirLight);
@@ -25,6 +30,7 @@ void RenderItemsStorage::InsertSpotLightInfo(const SpotLightItem& spotLight)
 void RenderItemsStorage::Clear()
 {
    m_opaqueItems.clear();
+   m_opaqueAnimatedItems.clear();
 
    m_directionalLightItems.clear();
    m_pointLightItems.clear();

@@ -62,7 +62,7 @@ void ActorPickingTechnique::OnRender(BIEngine::Scene* const pScene, BIEngine::Re
    pScene->GetRenderer()->Clear(BIEngine::RenderDevice::ClearFlag::COLOR | BIEngine::RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
 
    for (const auto& ritem : opaqueItems) {
-      BIEngine::RenderCommand renderCommand(ritem.pMesh.get(), m_pShaderProgram);
+      BIEngine::RenderCommand renderCommand(ritem.pMesh->GetVao(), ritem.pMesh->GetIndices().size(), m_pShaderProgram);
       renderCommand.Transform = ritem.ModelTransform;
       renderCommand.GetShaderProgramState().SetInteger("actorIndex", ritem.actorId);
 

@@ -1,0 +1,1405 @@
+<Animation>
+	<Params duration="791.667" tickPerSecond="1000"/>
+	<BoneChannels>
+		<BoneChannel boneName="HeadTop">
+			<Positions>
+				<Position x="-4.26191e-16" y="0.646177" z="-8.07794e-28" timestamp="166.667"/>
+				<Position x="-4.26194e-16" y="0.646177" z="0" timestamp="208.333"/>
+				<Position x="-8.74077e-16" y="0.646177" z="-1.87855e-09" timestamp="250"/>
+				<Position x="-1.46367e-14" y="0.646177" z="-4.47021e-08" timestamp="291.667"/>
+				<Position x="3.15472e-14" y="0.646177" z="1.34106e-07" timestamp="333.333"/>
+				<Position x="-7.53118e-15" y="0.646177" z="-5.96028e-08" timestamp="375"/>
+				<Position x="-4.25974e-16" y="0.646177" z="-2.98014e-08" timestamp="416.667"/>
+				<Position x="-3.14217e-16" y="0.646177" z="4.69639e-10" timestamp="458.333"/>
+				<Position x="2.79239e-15" y="0.646177" z="1.44311e-08" timestamp="500"/>
+				<Position x="1.36722e-14" y="0.646177" z="5.91332e-08" timestamp="541.667"/>
+				<Position x="6.67879e-15" y="0.646177" z="5.96028e-08" timestamp="583.333"/>
+				<Position x="-2.8847e-14" y="0.646177" z="-1.19206e-07" timestamp="625"/>
+				<Position x="-4.26154e-16" y="0.646177" z="-9.69352e-27" timestamp="666.667"/>
+				<Position x="-4.26242e-16" y="0.646177" z="1.13091e-26" timestamp="708.333"/>
+				<Position x="-1.46366e-14" y="0.646177" z="-5.96028e-08" timestamp="750"/>
+				<Position x="-8.74063e-16" y="0.646177" z="-1.87855e-09" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69642e-10" timestamp="166.667"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69643e-10" timestamp="208.333"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69643e-10" timestamp="250"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69642e-10" timestamp="291.667"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69643e-10" timestamp="333.333"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69644e-10" timestamp="375"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69645e-10" timestamp="416.667"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69642e-10" timestamp="458.333"/>
+				<Rotation w="0.999992" x="0.00393966" y="1.19208e-07" z="-4.69644e-10" timestamp="500"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69642e-10" timestamp="541.667"/>
+				<Rotation w="0.999992" x="0.00393966" y="1.19208e-07" z="-4.69644e-10" timestamp="583.333"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69643e-10" timestamp="625"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69642e-10" timestamp="666.667"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69642e-10" timestamp="708.333"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69642e-10" timestamp="750"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69643e-10" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="spine">
+			<Positions>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="166.667"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="208.333"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="250"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="291.667"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="333.333"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="375"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="416.667"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="458.333"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="500"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="541.667"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="583.333"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="625"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="666.667"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="708.333"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="750"/>
+				<Position x="-3.5256e-16" y="0.861288" z="0.0298551" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.999889" x="0.0149092" y="1.19196e-07" z="1.77731e-09" timestamp="166.667"/>
+				<Rotation w="0.996006" x="0.0892877" y="1.18733e-07" z="1.06439e-08" timestamp="208.333"/>
+				<Rotation w="0.986598" x="0.163171" y="1.17612e-07" z="1.94515e-08" timestamp="250"/>
+				<Rotation w="0.905961" x="0.423361" y="1.07999e-07" z="5.04686e-08" timestamp="291.667"/>
+				<Rotation w="0.715472" x="0.698641" y="8.52909e-08" z="8.32846e-08" timestamp="333.333"/>
+				<Rotation w="0.493504" x="0.869743" y="5.94938e-08" z="5.91876e-08" timestamp="375"/>
+				<Rotation w="0.268607" x="0.96325" y="3.30196e-08" z="4.78204e-08" timestamp="416.667"/>
+				<Rotation w="0.0286636" x="0.999589" y="3.41701e-09" z="1.1916e-07" timestamp="458.333"/>
+				<Rotation w="0.221673" x="-0.975121" y="2.64817e-08" z="-1.20017e-07" timestamp="500"/>
+				<Rotation w="0.449966" x="-0.893046" y="5.39022e-08" z="-1.24037e-07" timestamp="541.667"/>
+				<Rotation w="0.64312" x="-0.765765" y="7.73443e-08" z="-1.36789e-07" timestamp="583.333"/>
+				<Rotation w="0.808866" x="-0.587993" y="9.64243e-08" z="-7.00943e-08" timestamp="625"/>
+				<Rotation w="0.946467" x="-0.322801" y="1.12828e-07" z="-3.84809e-08" timestamp="666.667"/>
+				<Rotation w="0.999999" x="-0.00136292" y="1.19209e-07" z="-1.62553e-10" timestamp="708.333"/>
+				<Rotation w="0.96935" x="0.245684" y="1.15555e-07" z="2.92877e-08" timestamp="750"/>
+				<Rotation w="0.941812" x="0.33614" y="1.12273e-07" z="4.0071e-08" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="spine.001">
+			<Positions>
+				<Position x="-1.48262e-15" y="0.264173" z="-8.64793e-09" timestamp="166.667"/>
+				<Position x="3.96188e-15" y="0.264173" z="2.81208e-08" timestamp="208.333"/>
+				<Position x="-5.02301e-15" y="0.264173" z="2.11027e-08" timestamp="250"/>
+				<Position x="1.4583e-14" y="0.264173" z="-6.11311e-08" timestamp="291.667"/>
+				<Position x="3.96841e-16" y="0.264173" z="-1.62981e-09" timestamp="333.333"/>
+				<Position x="-2.30628e-16" y="0.264173" z="1.00198e-09" timestamp="375"/>
+				<Position x="-2.14719e-17" y="0.264173" z="1.24715e-10" timestamp="416.667"/>
+				<Position x="4.48394e-16" y="0.264173" z="1.87924e-09" timestamp="458.333"/>
+				<Position x="4.09164e-16" y="0.264173" z="2.81208e-08" timestamp="500"/>
+				<Position x="1.87684e-16" y="0.264173" z="-7.5255e-10" timestamp="541.667"/>
+				<Position x="-2.8234e-14" y="0.264173" z="-7.5255e-10" timestamp="583.333"/>
+				<Position x="4.21487e-16" y="0.264173" z="5.78714e-08" timestamp="625"/>
+				<Position x="-1.3814e-14" y="0.264173" z="-1.62981e-09" timestamp="666.667"/>
+				<Position x="2.93734e-16" y="0.264173" z="-8.64793e-09" timestamp="708.333"/>
+				<Position x="1.45954e-14" y="0.264173" z="-3.13804e-08" timestamp="750"/>
+				<Position x="-1.27641e-15" y="0.264173" z="5.3883e-09" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.999188" x="-0.0402812" y="-1.89586e-14" z="-9.60378e-09" timestamp="166.667"/>
+				<Rotation w="0.999188" x="-0.0402812" y="-2.0403e-14" z="-9.60378e-09" timestamp="208.333"/>
+				<Rotation w="0.999188" x="-0.0402812" y="-1.52363e-14" z="-9.60377e-09" timestamp="250"/>
+				<Rotation w="0.999188" x="-0.0402812" y="-4.0695e-15" z="-9.60377e-09" timestamp="291.667"/>
+				<Rotation w="0.999188" x="-0.0402812" y="-2.18475e-14" z="-9.60377e-09" timestamp="333.333"/>
+				<Rotation w="0.999188" x="-0.0402811" y="-2.16253e-14" z="-9.60377e-09" timestamp="375"/>
+				<Rotation w="0.999188" x="-0.0402812" y="-1.73474e-14" z="-9.60377e-09" timestamp="416.667"/>
+				<Rotation w="0.999188" x="-0.0402812" y="-1.09585e-14" z="-9.60378e-09" timestamp="458.333"/>
+				<Rotation w="0.999188" x="-0.0402811" y="-1.37363e-14" z="-9.60377e-09" timestamp="500"/>
+				<Rotation w="0.999188" x="-0.0402812" y="-1.47919e-14" z="-9.60377e-09" timestamp="541.667"/>
+				<Rotation w="0.999188" x="-0.0402811" y="-7.68065e-15" z="-9.60377e-09" timestamp="583.333"/>
+				<Rotation w="0.999188" x="-0.0402812" y="-1.46807e-14" z="-9.60378e-09" timestamp="625"/>
+				<Rotation w="0.999188" x="-0.0402812" y="-1.82363e-14" z="-9.60378e-09" timestamp="666.667"/>
+				<Rotation w="0.999188" x="-0.0402812" y="-2.04586e-14" z="-9.60378e-09" timestamp="708.333"/>
+				<Rotation w="0.999188" x="-0.0402811" y="-1.19029e-14" z="-9.60377e-09" timestamp="750"/>
+				<Rotation w="0.999188" x="-0.0402812" y="-7.45843e-15" z="-9.60378e-09" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="spine.002">
+			<Positions>
+				<Position x="-7.76072e-15" y="0.169598" z="-5.29924e-09" timestamp="166.667"/>
+				<Position x="-2.43165e-15" y="0.169598" z="-5.29924e-09" timestamp="208.333"/>
+				<Position x="-1.04583e-15" y="0.169598" z="-3.66119e-09" timestamp="250"/>
+				<Position x="-3.20353e-14" y="0.169598" z="6.67133e-08" timestamp="291.667"/>
+				<Position x="-3.20353e-14" y="0.169598" z="6.67133e-08" timestamp="333.333"/>
+				<Position x="5.34468e-14" y="0.169598" z="-5.34059e-08" timestamp="375"/>
+				<Position x="-1.79059e-14" y="0.169598" z="7.45058e-09" timestamp="416.667"/>
+				<Position x="-1.00406e-14" y="0.169598" z="4.26312e-09" timestamp="458.333"/>
+				<Position x="2.65039e-15" y="0.169598" z="1.0638e-08" timestamp="500"/>
+				<Position x="-6.12169e-14" y="0.169598" z="6.99008e-08" timestamp="541.667"/>
+				<Position x="-3.12512e-15" y="0.169598" z="5.05999e-09" timestamp="583.333"/>
+				<Position x="1.04343e-14" y="0.169598" z="-5.18122e-08" timestamp="625"/>
+				<Position x="1.05158e-14" y="0.169598" z="7.45058e-09" timestamp="666.667"/>
+				<Position x="1.75804e-14" y="0.169598" z="-2.21808e-08" timestamp="708.333"/>
+				<Position x="6.9223e-15" y="0.169598" z="-2.21808e-08" timestamp="750"/>
+				<Position x="6.49089e-15" y="0.169598" z="2.43321e-08" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-3.55782e-15" timestamp="166.667"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-2.22364e-15" timestamp="208.333"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-3.11309e-15" timestamp="250"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-5.78146e-15" timestamp="291.667"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-1.33418e-15" timestamp="333.333"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-1.77891e-15" timestamp="375"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-2.22364e-15" timestamp="416.667"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-3.11309e-15" timestamp="458.333"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-1.77891e-15" timestamp="500"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-2.22364e-15" timestamp="541.667"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-5.78146e-15" timestamp="583.333"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-3.11309e-15" timestamp="625"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-2.22364e-15" timestamp="666.667"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-1.33418e-15" timestamp="708.333"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-4.44727e-16" timestamp="750"/>
+				<Rotation w="0.998565" x="-0.0535535" y="-2.38076e-07" z="-4.44727e-16" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="spine.003">
+			<Positions>
+				<Position x="5.00365e-16" y="0.138171" z="-5.58794e-09" timestamp="166.667"/>
+				<Position x="5.00366e-16" y="0.138171" z="-5.58794e-09" timestamp="208.333"/>
+				<Position x="5.69745e-16" y="0.138171" z="-5.29694e-09" timestamp="250"/>
+				<Position x="7.6048e-15" y="0.138171" z="2.42102e-08" timestamp="291.667"/>
+				<Position x="7.37281e-16" y="0.138171" z="-4.59423e-09" timestamp="333.333"/>
+				<Position x="1.8262e-14" y="0.138171" z="5.40084e-08" timestamp="375"/>
+				<Position x="-3.00793e-15" y="0.138171" z="-5.40162e-09" timestamp="416.667"/>
+				<Position x="-2.9334e-15" y="0.138171" z="-1.99902e-08" timestamp="458.333"/>
+				<Position x="3.81907e-16" y="0.138172" z="-6.08479e-09" timestamp="500"/>
+				<Position x="-1.19322e-14" y="0.138171" z="-6.51843e-08" timestamp="541.667"/>
+				<Position x="6.18824e-16" y="0.138171" z="-5.09108e-09" timestamp="583.333"/>
+				<Position x="-1.37085e-14" y="0.138171" z="-6.51843e-08" timestamp="625"/>
+				<Position x="1.47092e-14" y="0.138171" z="5.40084e-08" timestamp="666.667"/>
+				<Position x="-6.60406e-15" y="0.138171" z="-3.53861e-08" timestamp="708.333"/>
+				<Position x="2.6503e-17" y="0.138172" z="-7.57535e-09" timestamp="750"/>
+				<Position x="7.6048e-15" y="0.138171" z="2.42102e-08" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.999965" x="-0.0083361" y="1.19205e-07" z="9.93739e-10" timestamp="166.667"/>
+				<Rotation w="0.999965" x="-0.0083361" y="1.19205e-07" z="9.93739e-10" timestamp="208.333"/>
+				<Rotation w="0.999965" x="-0.00833609" y="1.19205e-07" z="9.93739e-10" timestamp="250"/>
+				<Rotation w="0.999965" x="-0.0083361" y="1.19205e-07" z="9.93739e-10" timestamp="291.667"/>
+				<Rotation w="0.999965" x="-0.00833609" y="1.19205e-07" z="9.93738e-10" timestamp="333.333"/>
+				<Rotation w="0.999965" x="-0.00833609" y="1.19205e-07" z="9.93737e-10" timestamp="375"/>
+				<Rotation w="0.999965" x="-0.00833611" y="1.19205e-07" z="9.93742e-10" timestamp="416.667"/>
+				<Rotation w="0.999965" x="-0.00833609" y="1.19205e-07" z="9.93739e-10" timestamp="458.333"/>
+				<Rotation w="0.999965" x="-0.0083361" y="1.19205e-07" z="9.93739e-10" timestamp="500"/>
+				<Rotation w="0.999965" x="-0.00833609" y="1.19205e-07" z="9.93738e-10" timestamp="541.667"/>
+				<Rotation w="0.999965" x="-0.00833609" y="1.19205e-07" z="9.9374e-10" timestamp="583.333"/>
+				<Rotation w="0.999965" x="-0.0083361" y="1.19205e-07" z="9.93739e-10" timestamp="625"/>
+				<Rotation w="0.999965" x="-0.00833609" y="1.19205e-07" z="9.93738e-10" timestamp="666.667"/>
+				<Rotation w="0.999965" x="-0.0083361" y="1.19205e-07" z="9.93739e-10" timestamp="708.333"/>
+				<Rotation w="0.999965" x="-0.0083361" y="1.19205e-07" z="9.93739e-10" timestamp="750"/>
+				<Rotation w="0.999965" x="-0.0083361" y="1.19205e-07" z="9.93739e-10" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="spine.004">
+			<Positions>
+				<Position x="-3.65722e-16" y="0.151501" z="-0.011741" timestamp="166.667"/>
+				<Position x="-3.65722e-16" y="0.151501" z="-0.011741" timestamp="208.333"/>
+				<Position x="-7.47115e-15" y="0.151501" z="-0.011741" timestamp="250"/>
+				<Position x="2.09506e-14" y="0.151502" z="-0.0117411" timestamp="291.667"/>
+				<Position x="1.38451e-14" y="0.151502" z="-0.011741" timestamp="333.333"/>
+				<Position x="-3.65722e-16" y="0.151501" z="-0.011741" timestamp="375"/>
+				<Position x="-3.65722e-16" y="0.151501" z="-0.011741" timestamp="416.667"/>
+				<Position x="-3.65722e-16" y="0.151501" z="-0.011741" timestamp="458.333"/>
+				<Position x="-3.91844e-15" y="0.151501" z="-0.011741" timestamp="500"/>
+				<Position x="1.38451e-14" y="0.151501" z="-0.011741" timestamp="541.667"/>
+				<Position x="-1.45766e-14" y="0.151501" z="-0.011741" timestamp="583.333"/>
+				<Position x="-1.45766e-14" y="0.151502" z="-0.011741" timestamp="625"/>
+				<Position x="1.38451e-14" y="0.151501" z="-0.011741" timestamp="666.667"/>
+				<Position x="-3.65722e-16" y="0.151501" z="-0.011741" timestamp="708.333"/>
+				<Position x="2.09506e-14" y="0.151502" z="-0.011741" timestamp="750"/>
+				<Position x="-3.65722e-16" y="0.151502" z="-0.011741" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.983975" x="-0.178308" y="-1.17299e-07" z="2.1256e-08" timestamp="166.667"/>
+				<Rotation w="0.983975" x="-0.178308" y="-1.17299e-07" z="2.1256e-08" timestamp="208.333"/>
+				<Rotation w="0.983975" x="-0.178308" y="-1.17299e-07" z="2.1256e-08" timestamp="250"/>
+				<Rotation w="0.974928" x="-0.222522" y="-1.16164e-07" z="1.60418e-08" timestamp="291.667"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="333.333"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="375"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="416.667"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="458.333"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="500"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="541.667"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="583.333"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="625"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="666.667"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="708.333"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="750"/>
+				<Rotation w="0.963895" x="-0.266283" y="-1.14905e-07" z="3.17434e-08" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="Head">
+			<Positions>
+				<Position x="-1.4193e-14" y="0.138682" z="3.72529e-09" timestamp="166.667"/>
+				<Position x="1.59726e-17" y="0.138682" z="6.33219e-08" timestamp="208.333"/>
+				<Position x="1.7895e-17" y="0.138682" z="3.72529e-09" timestamp="250"/>
+				<Position x="-2.64568e-15" y="0.138682" z="-2.6073e-08" timestamp="291.667"/>
+				<Position x="7.12236e-15" y="0.138682" z="3.35236e-08" timestamp="333.333"/>
+				<Position x="1.42307e-14" y="0.138682" z="-5.58713e-08" timestamp="375"/>
+				<Position x="-1.4193e-14" y="0.138682" z="3.72529e-09" timestamp="416.667"/>
+				<Position x="7.62455e-17" y="0.138682" z="3.97003e-09" timestamp="458.333"/>
+				<Position x="-7.08801e-15" y="0.138682" z="1.86244e-08" timestamp="500"/>
+				<Position x="-1.4193e-14" y="0.138682" z="3.72529e-09" timestamp="541.667"/>
+				<Position x="-1.00728e-16" y="0.138681" z="6.28324e-08" timestamp="583.333"/>
+				<Position x="-2.85205e-14" y="0.138681" z="3.23581e-09" timestamp="625"/>
+				<Position x="1.7895e-17" y="0.138682" z="3.72529e-09" timestamp="666.667"/>
+				<Position x="4.80854e-16" y="0.138682" z="1.24876e-07" timestamp="708.333"/>
+				<Position x="1.98174e-17" y="0.138682" z="-5.58713e-08" timestamp="750"/>
+				<Position x="4.84699e-16" y="0.138682" z="5.68321e-09" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.999966" x="0.00821237" y="-4.50792e-14" z="-1.95798e-09" timestamp="166.667"/>
+				<Rotation w="0.999966" x="0.00821238" y="-3.70714e-14" z="-1.95798e-09" timestamp="208.333"/>
+				<Rotation w="0.999966" x="0.00821238" y="-3.55171e-14" z="-1.95798e-09" timestamp="250"/>
+				<Rotation w="0.999966" x="0.00821238" y="-4.72702e-14" z="-1.95799e-09" timestamp="291.667"/>
+				<Rotation w="0.999966" x="0.0082124" y="-4.95055e-14" z="-1.95799e-09" timestamp="333.333"/>
+				<Rotation w="0.999966" x="0.00821239" y="-5.30505e-14" z="-1.95799e-09" timestamp="375"/>
+				<Rotation w="0.999966" x="0.00821237" y="-5.30574e-14" z="-1.95798e-09" timestamp="416.667"/>
+				<Rotation w="0.999966" x="0.00821238" y="-3.88478e-14" z="-1.95798e-09" timestamp="458.333"/>
+				<Rotation w="0.999966" x="0.0082124" y="-4.82027e-14" z="-1.95798e-09" timestamp="500"/>
+				<Rotation w="0.999966" x="0.00821238" y="-4.47392e-14" z="-1.95798e-09" timestamp="541.667"/>
+				<Rotation w="0.999966" x="0.0082124" y="-4.9535e-14" z="-1.95798e-09" timestamp="583.333"/>
+				<Rotation w="0.999966" x="0.00821238" y="-5.30574e-14" z="-1.95798e-09" timestamp="625"/>
+				<Rotation w="0.999966" x="0.00821238" y="-4.59674e-14" z="-1.95798e-09" timestamp="666.667"/>
+				<Rotation w="0.999966" x="0.00821237" y="-4.23851e-14" z="-1.95798e-09" timestamp="708.333"/>
+				<Rotation w="0.999966" x="0.00821238" y="-4.46281e-14" z="-1.95798e-09" timestamp="750"/>
+				<Rotation w="0.999966" x="0.00821238" y="-4.56126e-14" z="-1.95798e-09" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="Eyes">
+			<Positions>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="166.667"/>
+				<Position x="7.44409e-08" y="0.540608" z="0.312228" timestamp="208.333"/>
+				<Position x="7.44409e-08" y="0.540608" z="0.312228" timestamp="250"/>
+				<Position x="7.44409e-08" y="0.540608" z="0.312228" timestamp="291.667"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="333.333"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="375"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="416.667"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="458.333"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="500"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="541.667"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="583.333"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="625"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="666.667"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="708.333"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="750"/>
+				<Position x="7.44409e-08" y="0.540609" z="0.312228" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="166.667"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69642e-10" timestamp="208.333"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69642e-10" timestamp="250"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="291.667"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69642e-10" timestamp="333.333"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69643e-10" timestamp="375"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69642e-10" timestamp="416.667"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69643e-10" timestamp="458.333"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69643e-10" timestamp="500"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="541.667"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69641e-10" timestamp="583.333"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69642e-10" timestamp="625"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="666.667"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="708.333"/>
+				<Rotation w="0.999992" x="0.00393963" y="1.19208e-07" z="-4.69641e-10" timestamp="750"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="Chin">
+			<Positions>
+				<Position x="9.97907e-08" y="0.0611576" z="0.418553" timestamp="166.667"/>
+				<Position x="9.97907e-08" y="0.0611572" z="0.418553" timestamp="208.333"/>
+				<Position x="9.97907e-08" y="0.0611573" z="0.418553" timestamp="250"/>
+				<Position x="9.97907e-08" y="0.0611572" z="0.418553" timestamp="291.667"/>
+				<Position x="9.97907e-08" y="0.0611575" z="0.418553" timestamp="333.333"/>
+				<Position x="9.97907e-08" y="0.0611575" z="0.418553" timestamp="375"/>
+				<Position x="9.97907e-08" y="0.0611574" z="0.418553" timestamp="416.667"/>
+				<Position x="9.97907e-08" y="0.0611574" z="0.418553" timestamp="458.333"/>
+				<Position x="9.97907e-08" y="0.0611574" z="0.418553" timestamp="500"/>
+				<Position x="9.97907e-08" y="0.0611574" z="0.418553" timestamp="541.667"/>
+				<Position x="9.97907e-08" y="0.0611573" z="0.418552" timestamp="583.333"/>
+				<Position x="9.97907e-08" y="0.0611574" z="0.418553" timestamp="625"/>
+				<Position x="9.97907e-08" y="0.0611574" z="0.418552" timestamp="666.667"/>
+				<Position x="9.97907e-08" y="0.0611572" z="0.418552" timestamp="708.333"/>
+				<Position x="9.97907e-08" y="0.0611573" z="0.418552" timestamp="750"/>
+				<Position x="9.97907e-08" y="0.0611572" z="0.418552" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="166.667"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="208.333"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69642e-10" timestamp="250"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="291.667"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69643e-10" timestamp="333.333"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="375"/>
+				<Rotation w="0.999992" x="0.00393963" y="1.19208e-07" z="-4.69636e-10" timestamp="416.667"/>
+				<Rotation w="0.999992" x="0.00393965" y="1.19208e-07" z="-4.69643e-10" timestamp="458.333"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69642e-10" timestamp="500"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="541.667"/>
+				<Rotation w="0.999992" x="0.00393966" y="1.19208e-07" z="-4.69643e-10" timestamp="583.333"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="625"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69642e-10" timestamp="666.667"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="708.333"/>
+				<Rotation w="0.999992" x="0.00393963" y="1.19208e-07" z="-4.69641e-10" timestamp="750"/>
+				<Rotation w="0.999992" x="0.00393964" y="1.19208e-07" z="-4.69641e-10" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="shoulder.L">
+			<Positions>
+				<Position x="0.267321" y="0.0764982" z="-0.028224" timestamp="166.667"/>
+				<Position x="0.267321" y="0.0764982" z="-0.028224" timestamp="208.333"/>
+				<Position x="0.267321" y="0.0764982" z="-0.028224" timestamp="250"/>
+				<Position x="0.267321" y="0.0764982" z="-0.0282239" timestamp="291.667"/>
+				<Position x="0.267321" y="0.0764982" z="-0.028224" timestamp="333.333"/>
+				<Position x="0.267321" y="0.0764981" z="-0.0282241" timestamp="375"/>
+				<Position x="0.267321" y="0.0764982" z="-0.028224" timestamp="416.667"/>
+				<Position x="0.267321" y="0.0764982" z="-0.028224" timestamp="458.333"/>
+				<Position x="0.267321" y="0.0764982" z="-0.028224" timestamp="500"/>
+				<Position x="0.267321" y="0.0764982" z="-0.0282239" timestamp="541.667"/>
+				<Position x="0.267321" y="0.0764983" z="-0.028224" timestamp="583.333"/>
+				<Position x="0.267321" y="0.0764982" z="-0.0282239" timestamp="625"/>
+				<Position x="0.267321" y="0.0764981" z="-0.028224" timestamp="666.667"/>
+				<Position x="0.267321" y="0.0764981" z="-0.028224" timestamp="708.333"/>
+				<Position x="0.267321" y="0.0764982" z="-0.028224" timestamp="750"/>
+				<Position x="0.267321" y="0.076498" z="-0.028224" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.512538" x="-0.505315" y="-0.477247" z="-0.50418" timestamp="166.667"/>
+				<Rotation w="0.634094" x="-0.336203" y="-0.315669" z="-0.620681" timestamp="208.333"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="250"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="291.667"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="333.333"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="375"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="416.667"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="458.333"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="500"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="541.667"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="583.333"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="625"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="666.667"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="708.333"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="750"/>
+				<Rotation w="0.705407" x="-0.142963" y="-0.124029" z="-0.683066" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="upper_arm.L">
+			<Positions>
+				<Position x="0.00943597" y="0.223043" z="-8.35404e-05" timestamp="166.667"/>
+				<Position x="0.00943587" y="0.223043" z="-8.35291e-05" timestamp="208.333"/>
+				<Position x="0.00943609" y="0.223043" z="-8.36433e-05" timestamp="250"/>
+				<Position x="0.0094361" y="0.223043" z="-8.35621e-05" timestamp="291.667"/>
+				<Position x="0.00943598" y="0.223043" z="-8.36016e-05" timestamp="333.333"/>
+				<Position x="0.00943593" y="0.223043" z="-8.35357e-05" timestamp="375"/>
+				<Position x="0.00943596" y="0.223043" z="-8.35391e-05" timestamp="416.667"/>
+				<Position x="0.00943595" y="0.223043" z="-8.35372e-05" timestamp="458.333"/>
+				<Position x="0.00943598" y="0.223043" z="-8.35111e-05" timestamp="500"/>
+				<Position x="0.00943594" y="0.223043" z="-8.35367e-05" timestamp="541.667"/>
+				<Position x="0.00943596" y="0.223043" z="-8.35394e-05" timestamp="583.333"/>
+				<Position x="0.00943599" y="0.223043" z="-8.3542e-05" timestamp="625"/>
+				<Position x="0.009436" y="0.223043" z="-8.34235e-05" timestamp="666.667"/>
+				<Position x="0.00943599" y="0.223043" z="-8.34825e-05" timestamp="708.333"/>
+				<Position x="0.00943598" y="0.223043" z="-8.35566e-05" timestamp="750"/>
+				<Position x="0.00943587" y="0.223043" z="-8.35593e-05" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.657938" x="0.338642" y="0.62778" z="0.24152" timestamp="166.667"/>
+				<Rotation w="0.625018" x="0.41003" y="0.583662" z="0.317122" timestamp="208.333"/>
+				<Rotation w="0.583447" x="0.475742" y="0.531465" z="0.388335" timestamp="250"/>
+				<Rotation w="0.583447" x="0.475742" y="0.531465" z="0.388335" timestamp="291.667"/>
+				<Rotation w="0.583447" x="0.475742" y="0.531465" z="0.388335" timestamp="333.333"/>
+				<Rotation w="0.62491" x="0.410228" y="0.583522" z="0.317335" timestamp="375"/>
+				<Rotation w="0.679755" x="0.270491" y="0.660015" z="0.170728" timestamp="416.667"/>
+				<Rotation w="0.695071" x="0.191335" y="0.687151" z="0.0899469" timestamp="458.333"/>
+				<Rotation w="0.695071" x="0.191335" y="0.687151" z="0.0899469" timestamp="500"/>
+				<Rotation w="0.695071" x="0.191335" y="0.687151" z="0.0899469" timestamp="541.667"/>
+				<Rotation w="0.695071" x="0.191335" y="0.687151" z="0.0899469" timestamp="583.333"/>
+				<Rotation w="0.695071" x="0.191335" y="0.687151" z="0.0899469" timestamp="625"/>
+				<Rotation w="0.687052" x="0.239052" y="0.672042" z="0.138469" timestamp="666.667"/>
+				<Rotation w="0.656438" x="0.342502" y="0.625682" z="0.245567" timestamp="708.333"/>
+				<Rotation w="0.609243" x="0.437301" y="0.563519" z="0.346463" timestamp="750"/>
+				<Rotation w="0.583447" x="0.475742" y="0.531465" z="0.388335" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="forearm.L">
+			<Positions>
+				<Position x="-9.56375e-08" y="0.280381" z="3.63048e-08" timestamp="166.667"/>
+				<Position x="-1.08343e-07" y="0.280382" z="-7.26662e-09" timestamp="208.333"/>
+				<Position x="-4.39921e-08" y="0.280382" z="-1.07455e-07" timestamp="250"/>
+				<Position x="-1.10716e-07" y="0.280382" z="1.2075e-07" timestamp="291.667"/>
+				<Position x="-4.09805e-08" y="0.280382" z="1.04717e-08" timestamp="333.333"/>
+				<Position x="-1.09405e-07" y="0.280382" z="5.90441e-08" timestamp="375"/>
+				<Position x="8.08386e-08" y="0.280382" z="3.57926e-08" timestamp="416.667"/>
+				<Position x="-4.50001e-08" y="0.280382" z="3.35378e-08" timestamp="458.333"/>
+				<Position x="2.08036e-08" y="0.280382" z="2.38203e-08" timestamp="500"/>
+				<Position x="-1.76403e-08" y="0.280382" z="-1.35525e-08" timestamp="541.667"/>
+				<Position x="-1.60211e-07" y="0.280382" z="2.07614e-08" timestamp="583.333"/>
+				<Position x="-9.62408e-08" y="0.280382" z="2.25669e-09" timestamp="625"/>
+				<Position x="-1.60814e-07" y="0.280382" z="-1.32868e-08" timestamp="666.667"/>
+				<Position x="-3.77186e-08" y="0.280382" z="1.30385e-08" timestamp="708.333"/>
+				<Position x="-8.28745e-08" y="0.280381" z="8.36607e-09" timestamp="750"/>
+				<Position x="-2.14141e-08" y="0.280382" z="-1.05118e-07" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271133" timestamp="166.667"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271133" timestamp="208.333"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.0913509" z="0.0271132" timestamp="250"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.0913509" z="0.0271132" timestamp="291.667"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271132" timestamp="333.333"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.0913509" z="0.0271132" timestamp="375"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271132" timestamp="416.667"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271132" timestamp="458.333"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271132" timestamp="500"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271132" timestamp="541.667"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271132" timestamp="583.333"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271132" timestamp="625"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271133" timestamp="666.667"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.0913509" z="0.0271132" timestamp="708.333"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271132" timestamp="750"/>
+				<Rotation w="0.995294" x="-0.0175777" y="-0.091351" z="0.0271132" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="hand.L">
+			<Positions>
+				<Position x="-1.89084e-07" y="0.225629" z="3.16475e-08" timestamp="166.667"/>
+				<Position x="-1.91564e-07" y="0.225629" z="-4.27498e-08" timestamp="208.333"/>
+				<Position x="-1.26902e-07" y="0.225629" z="9.51986e-09" timestamp="250"/>
+				<Position x="-1.64438e-07" y="0.225629" z="1.24934e-07" timestamp="291.667"/>
+				<Position x="-1.37774e-07" y="0.225629" z="-1.08642e-07" timestamp="333.333"/>
+				<Position x="-1.32732e-07" y="0.225629" z="1.16227e-08" timestamp="375"/>
+				<Position x="-7.69584e-08" y="0.225629" z="5.24822e-09" timestamp="416.667"/>
+				<Position x="-1.34095e-07" y="0.225629" z="1.72186e-08" timestamp="458.333"/>
+				<Position x="-1.90235e-07" y="0.225629" z="2.15546e-08" timestamp="500"/>
+				<Position x="1.82889e-08" y="0.225629" z="-5.36409e-09" timestamp="541.667"/>
+				<Position x="-1.39383e-07" y="0.225629" z="-1.74573e-08" timestamp="583.333"/>
+				<Position x="-2.49113e-07" y="0.225629" z="1.88402e-08" timestamp="625"/>
+				<Position x="-1.32359e-07" y="0.225629" z="6.92967e-08" timestamp="666.667"/>
+				<Position x="-3.12614e-07" y="0.225629" z="-9.81233e-08" timestamp="708.333"/>
+				<Position x="-1.15986e-07" y="0.225629" z="-1.10034e-07" timestamp="750"/>
+				<Position x="-1.15986e-07" y="0.225629" z="-1.10034e-07" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="166.667"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="208.333"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170216" z="-0.0176714" timestamp="250"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="291.667"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="333.333"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="375"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="416.667"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="458.333"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="500"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="541.667"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="583.333"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170216" z="-0.0176714" timestamp="625"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="666.667"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="708.333"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170216" z="-0.0176714" timestamp="750"/>
+				<Rotation w="0.99948" x="0.0209349" y="0.0170217" z="-0.0176714" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="shoulder.R">
+			<Positions>
+				<Position x="-0.267321" y="0.0764982" z="-0.028224" timestamp="166.667"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.028224" timestamp="208.333"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.028224" timestamp="250"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.0282239" timestamp="291.667"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.028224" timestamp="333.333"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.0282239" timestamp="375"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.028224" timestamp="416.667"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.028224" timestamp="458.333"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.028224" timestamp="500"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.028224" timestamp="541.667"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.028224" timestamp="583.333"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.0282239" timestamp="625"/>
+				<Position x="-0.267321" y="0.0764981" z="-0.028224" timestamp="666.667"/>
+				<Position x="-0.267321" y="0.0764981" z="-0.028224" timestamp="708.333"/>
+				<Position x="-0.267321" y="0.0764982" z="-0.028224" timestamp="750"/>
+				<Position x="-0.267321" y="0.076498" z="-0.028224" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.512538" x="-0.505315" y="0.477247" z="0.50418" timestamp="166.667"/>
+				<Rotation w="0.634094" x="-0.336203" y="0.315669" z="0.620681" timestamp="208.333"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="250"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="291.667"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="333.333"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="375"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="416.667"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="458.333"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="500"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="541.667"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="583.333"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="625"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="666.667"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="708.333"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="750"/>
+				<Rotation w="0.705407" x="-0.142963" y="0.124029" z="0.683066" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="upper_arm.R">
+			<Positions>
+				<Position x="-0.00943599" y="0.223043" z="-8.34223e-05" timestamp="166.667"/>
+				<Position x="-0.00943587" y="0.223043" z="-8.35291e-05" timestamp="208.333"/>
+				<Position x="-0.00943609" y="0.223043" z="-8.36433e-05" timestamp="250"/>
+				<Position x="-0.0094361" y="0.223043" z="-8.35621e-05" timestamp="291.667"/>
+				<Position x="-0.00943598" y="0.223043" z="-8.36016e-05" timestamp="333.333"/>
+				<Position x="-0.00943593" y="0.223043" z="-8.35354e-05" timestamp="375"/>
+				<Position x="-0.00943597" y="0.223043" z="-8.35402e-05" timestamp="416.667"/>
+				<Position x="-0.00943595" y="0.223043" z="-8.35372e-05" timestamp="458.333"/>
+				<Position x="-0.00943597" y="0.223043" z="-8.35256e-05" timestamp="500"/>
+				<Position x="-0.00943597" y="0.223043" z="-8.35402e-05" timestamp="541.667"/>
+				<Position x="-0.00943593" y="0.223043" z="-8.34764e-05" timestamp="583.333"/>
+				<Position x="-0.00943599" y="0.223043" z="-8.3542e-05" timestamp="625"/>
+				<Position x="-0.009436" y="0.223043" z="-8.34235e-05" timestamp="666.667"/>
+				<Position x="-0.00943599" y="0.223043" z="-8.34825e-05" timestamp="708.333"/>
+				<Position x="-0.00943598" y="0.223043" z="-8.35566e-05" timestamp="750"/>
+				<Position x="-0.00943587" y="0.223043" z="-8.35593e-05" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.646505" x="0.366318" y="-0.612043" z="-0.270639" timestamp="166.667"/>
+				<Rotation w="0.617785" x="0.422954" y="-0.574366" z="-0.330992" timestamp="208.333"/>
+				<Rotation w="0.583447" x="0.475742" y="-0.531465" z="-0.388335" timestamp="250"/>
+				<Rotation w="0.583447" x="0.475742" y="-0.531465" z="-0.388335" timestamp="291.667"/>
+				<Rotation w="0.583447" x="0.475742" y="-0.531465" z="-0.388335" timestamp="333.333"/>
+				<Rotation w="0.62491" x="0.410228" y="-0.583522" z="-0.317335" timestamp="375"/>
+				<Rotation w="0.679755" x="0.270491" y="-0.660015" z="-0.170728" timestamp="416.667"/>
+				<Rotation w="0.695071" x="0.191335" y="-0.687151" z="-0.0899469" timestamp="458.333"/>
+				<Rotation w="0.695071" x="0.191335" y="-0.687151" z="-0.0899469" timestamp="500"/>
+				<Rotation w="0.695071" x="0.191335" y="-0.687151" z="-0.0899469" timestamp="541.667"/>
+				<Rotation w="0.695071" x="0.191335" y="-0.687151" z="-0.089947" timestamp="583.333"/>
+				<Rotation w="0.695071" x="0.191335" y="-0.687151" z="-0.0899469" timestamp="625"/>
+				<Rotation w="0.687052" x="0.239052" y="-0.672042" z="-0.138469" timestamp="666.667"/>
+				<Rotation w="0.656438" x="0.342502" y="-0.625682" z="-0.245567" timestamp="708.333"/>
+				<Rotation w="0.609243" x="0.437301" y="-0.563519" z="-0.346463" timestamp="750"/>
+				<Rotation w="0.583447" x="0.475742" y="-0.531465" z="-0.388335" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="forearm.R">
+			<Positions>
+				<Position x="4.10457e-08" y="0.280382" z="-6.36639e-09" timestamp="166.667"/>
+				<Position x="-7.93259e-08" y="0.280382" z="3.46022e-08" timestamp="208.333"/>
+				<Position x="3.77186e-08" y="0.280382" z="1.30385e-08" timestamp="250"/>
+				<Position x="8.3123e-08" y="0.280382" z="3.76173e-09" timestamp="291.667"/>
+				<Position x="6.92488e-08" y="0.280382" z="5.86198e-09" timestamp="333.333"/>
+				<Position x="3.82859e-08" y="0.280382" z="1.25921e-08" timestamp="375"/>
+				<Position x="-1.38432e-08" y="0.280382" z="5.19164e-08" timestamp="416.667"/>
+				<Position x="6.52773e-08" y="0.280382" z="-1.50443e-09" timestamp="458.333"/>
+				<Position x="1.11813e-08" y="0.280382" z="3.30727e-08" timestamp="500"/>
+				<Position x="1.7037e-08" y="0.280381" z="2.04956e-08" timestamp="541.667"/>
+				<Position x="9.62408e-08" y="0.280382" z="2.25669e-09" timestamp="583.333"/>
+				<Position x="9.87258e-10" y="0.280382" z="1.40966e-07" timestamp="625"/>
+				<Position x="4.37696e-08" y="0.280382" z="8.27686e-09" timestamp="666.667"/>
+				<Position x="1.60814e-07" y="0.280382" z="-1.32868e-08" timestamp="708.333"/>
+				<Position x="1.06427e-07" y="0.280382" z="1.19717e-07" timestamp="750"/>
+				<Position x="4.44017e-08" y="0.280382" z="9.98382e-09" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="166.667"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="208.333"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="250"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="291.667"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="333.333"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="375"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271133" timestamp="416.667"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="458.333"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="500"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="541.667"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="583.333"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="625"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="666.667"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="708.333"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="750"/>
+				<Rotation w="0.995294" x="-0.0175777" y="0.091351" z="-0.0271132" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="hand.R">
+			<Positions>
+				<Position x="2.43654e-08" y="0.225629" z="-1.90789e-08" timestamp="166.667"/>
+				<Position x="1.08873e-07" y="0.225629" z="3.82584e-09" timestamp="208.333"/>
+				<Position x="1.37489e-07" y="0.225629" z="1.49549e-08" timestamp="250"/>
+				<Position x="1.2128e-07" y="0.225629" z="-1.07316e-07" timestamp="291.667"/>
+				<Position x="1.33269e-07" y="0.225629" z="1.10081e-08" timestamp="333.333"/>
+				<Position x="2.53409e-07" y="0.225629" z="1.39233e-08" timestamp="375"/>
+				<Position x="1.36491e-07" y="0.225629" z="7.32041e-09" timestamp="416.667"/>
+				<Position x="1.34343e-07" y="0.225629" z="9.77889e-09" timestamp="458.333"/>
+				<Position x="2.01972e-07" y="0.225629" z="1.68966e-08" timestamp="500"/>
+				<Position x="7.43144e-08" y="0.225629" z="2.25862e-08" timestamp="541.667"/>
+				<Position x="7.56784e-08" y="0.225629" z="-1.83324e-08" timestamp="583.333"/>
+				<Position x="2.00156e-07" y="0.225629" z="-5.25837e-08" timestamp="625"/>
+				<Position x="1.89908e-07" y="0.225629" z="1.30887e-07" timestamp="666.667"/>
+				<Position x="2.23643e-07" y="0.225629" z="1.28872e-08" timestamp="708.333"/>
+				<Position x="7.91063e-08" y="0.225629" z="2.78975e-09" timestamp="750"/>
+				<Position x="1.3277e-07" y="0.225629" z="7.1909e-09" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176713" timestamp="166.667"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170216" z="0.0176714" timestamp="208.333"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="250"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="291.667"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="333.333"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="375"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="416.667"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="458.333"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="500"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="541.667"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="583.333"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170216" z="0.0176714" timestamp="625"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="666.667"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="708.333"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="750"/>
+				<Rotation w="0.99948" x="0.0209349" y="-0.0170217" z="0.0176714" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="thigh.L">
+			<Positions>
+				<Position x="0.276084" y="0.0659952" z="-0.00346869" timestamp="166.667"/>
+				<Position x="0.276084" y="0.0659951" z="-0.00346868" timestamp="208.333"/>
+				<Position x="0.276084" y="0.0659953" z="-0.00346871" timestamp="250"/>
+				<Position x="0.276084" y="0.0659953" z="-0.00346868" timestamp="291.667"/>
+				<Position x="0.276084" y="0.0659952" z="-0.00346868" timestamp="333.333"/>
+				<Position x="0.276084" y="0.0659953" z="-0.00346868" timestamp="375"/>
+				<Position x="0.276084" y="0.0659952" z="-0.00346865" timestamp="416.667"/>
+				<Position x="0.276084" y="0.0659953" z="-0.00346869" timestamp="458.333"/>
+				<Position x="0.276084" y="0.0659953" z="-0.00346871" timestamp="500"/>
+				<Position x="0.276084" y="0.0659952" z="-0.00346874" timestamp="541.667"/>
+				<Position x="0.276084" y="0.0659952" z="-0.00346862" timestamp="583.333"/>
+				<Position x="0.276084" y="0.0659952" z="-0.00346862" timestamp="625"/>
+				<Position x="0.276084" y="0.0659953" z="-0.00346868" timestamp="666.667"/>
+				<Position x="0.276084" y="0.0659951" z="-0.00346869" timestamp="708.333"/>
+				<Position x="0.276084" y="0.0659953" z="-0.00346871" timestamp="750"/>
+				<Position x="0.276084" y="0.0659951" z="-0.00346867" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.0114522" x="0.983949" y="0.0182571" z="-0.177144" timestamp="166.667"/>
+				<Rotation w="0.0377633" x="-0.983291" y="-0.0270926" z="0.176009" timestamp="208.333"/>
+				<Rotation w="0.0868841" x="-0.980172" y="-0.0358603" z="0.174434" timestamp="250"/>
+				<Rotation w="0.0667531" x="-0.981749" y="-0.0322732" z="0.175133" timestamp="291.667"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286725" z="0.175758" timestamp="333.333"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286725" z="0.175758" timestamp="375"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286726" z="0.175758" timestamp="416.667"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286725" z="0.175758" timestamp="458.333"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286725" z="0.175758" timestamp="500"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286725" z="0.175758" timestamp="541.667"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286725" z="0.175758" timestamp="583.333"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286725" z="0.175758" timestamp="625"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286725" z="0.175758" timestamp="666.667"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286725" z="0.175758" timestamp="708.333"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286726" z="0.175758" timestamp="750"/>
+				<Rotation w="0.046594" x="-0.982912" y="-0.0286725" z="0.175758" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="166.667"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="208.333"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="250"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="291.667"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="333.333"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="375"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="416.667"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="458.333"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="500"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="541.667"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="583.333"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="625"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="666.667"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="708.333"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="750"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="shin.L">
+			<Positions>
+				<Position x="-1.77826e-09" y="0.374795" z="1.62381e-08" timestamp="166.667"/>
+				<Position x="-1.99215e-09" y="0.374795" z="-6.11087e-09" timestamp="208.333"/>
+				<Position x="-1.92085e-09" y="0.374795" z="1.33878e-09" timestamp="250"/>
+				<Position x="-5.71096e-09" y="0.374795" z="-5.89794e-08" timestamp="291.667"/>
+				<Position x="-4.10109e-09" y="0.374795" z="-5.86189e-08" timestamp="333.333"/>
+				<Position x="-1.35049e-09" y="0.374795" z="6.09359e-08" timestamp="375"/>
+				<Position x="4.80382e-09" y="0.374794" z="3.25793e-08" timestamp="416.667"/>
+				<Position x="-3.17496e-08" y="0.374795" z="-5.80579e-09" timestamp="458.333"/>
+				<Position x="-1.63567e-09" y="0.374795" z="3.11374e-08" timestamp="500"/>
+				<Position x="-4.28373e-08" y="0.374795" z="1.75826e-09" timestamp="541.667"/>
+				<Position x="4.80358e-09" y="0.374794" z="1.64684e-09" timestamp="583.333"/>
+				<Position x="-1.29523e-08" y="0.374795" z="-1.18002e-07" timestamp="625"/>
+				<Position x="-1.84094e-08" y="0.374795" z="1.13082e-09" timestamp="666.667"/>
+				<Position x="-1.9565e-09" y="0.374795" z="-2.38605e-09" timestamp="708.333"/>
+				<Position x="2.78366e-08" y="0.374795" z="1.0337e-09" timestamp="750"/>
+				<Position x="5.78792e-08" y="0.374795" z="3.05272e-08" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.999604" x="-0.00618425" y="0.00495339" z="0.0269892" timestamp="166.667"/>
+				<Rotation w="0.999604" x="-0.00618425" y="0.0049534" z="0.0269892" timestamp="208.333"/>
+				<Rotation w="0.999604" x="-0.00618424" y="0.00495339" z="0.0269892" timestamp="250"/>
+				<Rotation w="0.999604" x="-0.00618424" y="0.0049534" z="0.0269892" timestamp="291.667"/>
+				<Rotation w="0.999604" x="-0.00618425" y="0.0049534" z="0.0269892" timestamp="333.333"/>
+				<Rotation w="0.999604" x="-0.00618423" y="0.00495339" z="0.0269892" timestamp="375"/>
+				<Rotation w="0.999604" x="-0.00618427" y="0.0049534" z="0.0269892" timestamp="416.667"/>
+				<Rotation w="0.999604" x="-0.00618425" y="0.00495339" z="0.0269892" timestamp="458.333"/>
+				<Rotation w="0.999604" x="-0.00618426" y="0.0049534" z="0.0269892" timestamp="500"/>
+				<Rotation w="0.999604" x="-0.00618426" y="0.0049534" z="0.0269892" timestamp="541.667"/>
+				<Rotation w="0.999604" x="-0.00618425" y="0.00495339" z="0.0269892" timestamp="583.333"/>
+				<Rotation w="0.999604" x="-0.00618424" y="0.00495339" z="0.0269892" timestamp="625"/>
+				<Rotation w="0.999604" x="-0.00618424" y="0.0049534" z="0.0269892" timestamp="666.667"/>
+				<Rotation w="0.999604" x="-0.00618425" y="0.0049534" z="0.0269892" timestamp="708.333"/>
+				<Rotation w="0.999604" x="-0.00618426" y="0.00495338" z="0.0269892" timestamp="750"/>
+				<Rotation w="0.999604" x="-0.00618425" y="0.00495339" z="0.0269892" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="foot.L">
+			<Positions>
+				<Position x="-5.13235e-08" y="0.334457" z="-1.385e-09" timestamp="166.667"/>
+				<Position x="8.26346e-09" y="0.334457" z="4.46424e-10" timestamp="208.333"/>
+				<Position x="7.79908e-09" y="0.334457" z="1.16373e-08" timestamp="250"/>
+				<Position x="-2.16344e-08" y="0.334457" z="6.68744e-08" timestamp="291.667"/>
+				<Position x="-2.09586e-08" y="0.334457" z="3.1082e-08" timestamp="333.333"/>
+				<Position x="-2.08396e-08" y="0.334457" z="1.22438e-07" timestamp="375"/>
+				<Position x="-8.22938e-08" y="0.334457" z="-6.09105e-08" timestamp="416.667"/>
+				<Position x="-2.15368e-08" y="0.334457" z="4.29281e-10" timestamp="458.333"/>
+				<Position x="-3.56636e-08" y="0.334457" z="-1.01817e-07" timestamp="500"/>
+				<Position x="2.45152e-08" y="0.334457" z="-7.11297e-08" timestamp="541.667"/>
+				<Position x="8.29012e-09" y="0.334457" z="1.89596e-07" timestamp="583.333"/>
+				<Position x="-5.1891e-08" y="0.334457" z="8.07492e-09" timestamp="625"/>
+				<Position x="-2.13435e-08" y="0.334457" z="-2.51301e-08" timestamp="666.667"/>
+				<Position x="8.21512e-09" y="0.334457" z="6.83626e-09" timestamp="708.333"/>
+				<Position x="-2.10544e-08" y="0.334457" z="-9.80371e-09" timestamp="750"/>
+				<Position x="8.69711e-09" y="0.334457" z="2.3436e-08" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444816" z="-0.00583236" timestamp="166.667"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444806" z="-0.00583236" timestamp="208.333"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444801" z="-0.00583237" timestamp="250"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444807" z="-0.00583236" timestamp="291.667"/>
+				<Rotation w="0.999379" x="0.0347557" y="-0.000444826" z="-0.00583236" timestamp="333.333"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444803" z="-0.00583235" timestamp="375"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444806" z="-0.00583237" timestamp="416.667"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444809" z="-0.00583236" timestamp="458.333"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444806" z="-0.00583236" timestamp="500"/>
+				<Rotation w="0.999379" x="0.0347557" y="-0.000444822" z="-0.00583236" timestamp="541.667"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444807" z="-0.00583236" timestamp="583.333"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444802" z="-0.00583236" timestamp="625"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444812" z="-0.00583235" timestamp="666.667"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444806" z="-0.00583236" timestamp="708.333"/>
+				<Rotation w="0.999379" x="0.0347556" y="-0.000444806" z="-0.00583236" timestamp="750"/>
+				<Rotation w="0.999379" x="0.0347557" y="-0.000444802" z="-0.00583235" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="toe.L">
+			<Positions>
+				<Position x="4.99903e-08" y="0.251469" z="-1.71832e-09" timestamp="166.667"/>
+				<Position x="-9.6143e-09" y="0.251469" z="-5.2844e-09" timestamp="208.333"/>
+				<Position x="-3.94167e-08" y="0.251469" z="2.15336e-08" timestamp="250"/>
+				<Position x="2.01882e-08" y="0.251469" z="-6.53391e-08" timestamp="291.667"/>
+				<Position x="7.97927e-08" y="0.251469" z="-2.73925e-08" timestamp="333.333"/>
+				<Position x="7.97927e-08" y="0.251469" z="-4.57091e-09" timestamp="375"/>
+				<Position x="-3.94168e-08" y="0.251469" z="4.84817e-09" timestamp="416.667"/>
+				<Position x="7.97925e-08" y="0.251469" z="8.67153e-08" timestamp="458.333"/>
+				<Position x="7.97926e-08" y="0.251469" z="4.7955e-08" timestamp="500"/>
+				<Position x="7.79301e-08" y="0.251469" z="-3.21022e-08" timestamp="541.667"/>
+				<Position x="2.67073e-08" y="0.251469" z="-4.5711e-09" timestamp="583.333"/>
+				<Position x="3.2528e-08" y="0.251469" z="1.82505e-08" timestamp="625"/>
+				<Position x="3.50892e-08" y="0.251469" z="-1.59818e-08" timestamp="666.667"/>
+				<Position x="2.0188e-08" y="0.251469" z="2.01735e-09" timestamp="708.333"/>
+				<Position x="2.01879e-08" y="0.251469" z="2.43865e-08" timestamp="750"/>
+				<Position x="-3.94166e-08" y="0.251469" z="-7.42403e-09" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="1.82218e-06" x="-6.40024e-08" y="0.980764" z="-0.195196" timestamp="166.667"/>
+				<Rotation w="1.81829e-06" x="-6.23832e-08" y="0.980764" z="-0.195196" timestamp="208.333"/>
+				<Rotation w="1.81884e-06" x="-6.43918e-08" y="0.980764" z="-0.195196" timestamp="250"/>
+				<Rotation w="1.8329e-06" x="-5.57942e-08" y="0.980764" z="-0.195196" timestamp="291.667"/>
+				<Rotation w="1.82779e-06" x="-6.23742e-08" y="0.980764" z="-0.195196" timestamp="333.333"/>
+				<Rotation w="1.83582e-06" x="-6.01749e-08" y="0.980764" z="-0.195196" timestamp="375"/>
+				<Rotation w="1.8267e-06" x="-6.78547e-08" y="0.980764" z="-0.195196" timestamp="416.667"/>
+				<Rotation w="1.83347e-06" x="-6.18438e-08" y="0.980764" z="-0.195196" timestamp="458.333"/>
+				<Rotation w="1.81884e-06" x="-6.43918e-08" y="0.980764" z="-0.195196" timestamp="500"/>
+				<Rotation w="1.8329e-06" x="-5.57942e-08" y="0.980764" z="-0.195196" timestamp="541.667"/>
+				<Rotation w="1.82779e-06" x="-6.23743e-08" y="0.980764" z="-0.195196" timestamp="583.333"/>
+				<Rotation w="1.82779e-06" x="-6.23742e-08" y="0.980764" z="-0.195196" timestamp="625"/>
+				<Rotation w="1.82852e-06" x="-5.87206e-08" y="0.980764" z="-0.195196" timestamp="666.667"/>
+				<Rotation w="1.82411e-06" x="-5.87932e-08" y="0.980764" z="-0.195196" timestamp="708.333"/>
+				<Rotation w="1.81737e-06" x="-5.27037e-08" y="0.980764" z="-0.195196" timestamp="750"/>
+				<Rotation w="1.81793e-06" x="-6.421e-08" y="0.980764" z="-0.195196" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="thigh.R">
+			<Positions>
+				<Position x="-0.276084" y="0.0659953" z="-0.00346882" timestamp="166.667"/>
+				<Position x="-0.276084" y="0.0659951" z="-0.00346882" timestamp="208.333"/>
+				<Position x="-0.276084" y="0.0659953" z="-0.00346881" timestamp="250"/>
+				<Position x="-0.276084" y="0.0659953" z="-0.00346882" timestamp="291.667"/>
+				<Position x="-0.276084" y="0.0659952" z="-0.00346887" timestamp="333.333"/>
+				<Position x="-0.276084" y="0.0659952" z="-0.00346875" timestamp="375"/>
+				<Position x="-0.276084" y="0.0659952" z="-0.00346881" timestamp="416.667"/>
+				<Position x="-0.276084" y="0.0659952" z="-0.00346882" timestamp="458.333"/>
+				<Position x="-0.276084" y="0.0659952" z="-0.00346881" timestamp="500"/>
+				<Position x="-0.276084" y="0.0659951" z="-0.00346881" timestamp="541.667"/>
+				<Position x="-0.276084" y="0.0659952" z="-0.00346881" timestamp="583.333"/>
+				<Position x="-0.276084" y="0.0659952" z="-0.00346887" timestamp="625"/>
+				<Position x="-0.276084" y="0.0659953" z="-0.00346881" timestamp="666.667"/>
+				<Position x="-0.276084" y="0.0659954" z="-0.00346883" timestamp="708.333"/>
+				<Position x="-0.276084" y="0.0659952" z="-0.00346887" timestamp="750"/>
+				<Position x="-0.276084" y="0.0659951" z="-0.00346881" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.0131014" x="0.994035" y="-0.0194865" z="0.106504" timestamp="166.667"/>
+				<Rotation w="0.0946127" x="0.989609" y="-0.0106807" z="0.107744" timestamp="208.333"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="250"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="291.667"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="333.333"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="375"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="416.667"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="458.333"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="500"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="541.667"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="583.333"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="625"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="666.667"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="708.333"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="750"/>
+				<Rotation w="0.175486" x="0.97851" y="-0.00180295" z="0.108257" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="166.667"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="208.333"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="250"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="291.667"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="333.333"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="375"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="416.667"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="458.333"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="500"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="541.667"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="583.333"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="625"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="666.667"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="708.333"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="750"/>
+				<Scale x="1.00011" y="1" z="1.00006" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="shin.R">
+			<Positions>
+				<Position x="-3.7761e-08" y="0.374794" z="-2.69159e-09" timestamp="166.667"/>
+				<Position x="-4.09094e-08" y="0.374794" z="-9.42024e-09" timestamp="208.333"/>
+				<Position x="-3.79036e-08" y="0.374794" z="1.22077e-08" timestamp="250"/>
+				<Position x="-8.00355e-09" y="0.374794" z="-2.38651e-09" timestamp="291.667"/>
+				<Position x="-3.65869e-08" y="0.374794" z="-6.24239e-08" timestamp="333.333"/>
+				<Position x="-9.61343e-09" y="0.374794" z="-2.02602e-09" timestamp="375"/>
+				<Position x="2.5544e-08" y="0.374795" z="-6.23996e-08" timestamp="416.667"/>
+				<Position x="2.14687e-08" y="0.374794" z="2.77171e-08" timestamp="458.333"/>
+				<Position x="-3.78323e-08" y="0.374794" z="4.75806e-09" timestamp="500"/>
+				<Position x="-3.57613e-08" y="0.374794" z="3.44928e-10" timestamp="541.667"/>
+				<Position x="-2.98921e-08" y="0.374794" z="5.85001e-08" timestamp="583.333"/>
+				<Position x="1.61604e-09" y="0.374795" z="-6.22679e-08" timestamp="625"/>
+				<Position x="-2.38551e-08" y="0.374794" z="5.71482e-08" timestamp="666.667"/>
+				<Position x="2.49736e-08" y="0.374795" z="-2.80243e-09" timestamp="708.333"/>
+				<Position x="-8.03029e-09" y="0.374794" z="4.07103e-10" timestamp="750"/>
+				<Position x="-7.86096e-09" y="0.374794" z="-1.72858e-08" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.999604" x="-0.00618428" y="-0.00495338" z="-0.0269892" timestamp="166.667"/>
+				<Rotation w="0.994029" x="0.108873" y="-0.00685659" z="-0.0025801" timestamp="208.333"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.00866469" z="0.0218648" timestamp="250"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.0086647" z="0.0218649" timestamp="291.667"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.0086647" z="0.0218649" timestamp="333.333"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.0086647" z="0.0218649" timestamp="375"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.0086647" z="0.0218649" timestamp="416.667"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.0086647" z="0.0218648" timestamp="458.333"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.0086647" z="0.0218648" timestamp="500"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.0086647" z="0.0218649" timestamp="541.667"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.0086647" z="0.0218648" timestamp="583.333"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.00866469" z="0.0218648" timestamp="625"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.0086647" z="0.0218648" timestamp="666.667"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.0086647" z="0.0218648" timestamp="708.333"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.00866469" z="0.0218649" timestamp="750"/>
+				<Rotation w="0.974667" x="0.222421" y="-0.0086647" z="0.0218649" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="foot.R">
+			<Positions>
+				<Position x="2.50312e-08" y="0.334457" z="-8.73164e-10" timestamp="166.667"/>
+				<Position x="5.45903e-08" y="0.334457" z="-6.0068e-09" timestamp="208.333"/>
+				<Position x="2.48139e-08" y="0.334457" z="-1.62111e-08" timestamp="250"/>
+				<Position x="-4.5753e-09" y="0.334457" z="5.1536e-08" timestamp="291.667"/>
+				<Position x="8.44389e-08" y="0.334457" z="3.65892e-10" timestamp="333.333"/>
+				<Position x="2.60914e-08" y="0.334457" z="-4.81256e-08" timestamp="375"/>
+				<Position x="2.59947e-08" y="0.334457" z="-6.09053e-08" timestamp="416.667"/>
+				<Position x="2.5225e-08" y="0.334457" z="5.15189e-08" timestamp="458.333"/>
+				<Position x="-6.31358e-09" y="0.334457" z="-7.11674e-08" timestamp="500"/>
+				<Position x="-3.50514e-08" y="0.334457" z="1.57608e-08" timestamp="541.667"/>
+				<Position x="1.90073e-08" y="0.334457" z="2.01048e-07" timestamp="583.333"/>
+				<Position x="1.02273e-08" y="0.334457" z="-1.49176e-08" timestamp="625"/>
+				<Position x="2.48383e-08" y="0.334457" z="4.00178e-10" timestamp="666.667"/>
+				<Position x="2.48005e-08" y="0.334457" z="-4.59188e-09" timestamp="708.333"/>
+				<Position x="5.46386e-08" y="0.334457" z="3.83035e-10" timestamp="750"/>
+				<Position x="-3.4522e-08" y="0.334457" z="-4.81144e-08" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="0.999379" x="0.0347557" y="0.000445054" z="0.00583226" timestamp="166.667"/>
+				<Rotation w="0.999379" x="0.0347557" y="0.000445035" z="0.00583226" timestamp="208.333"/>
+				<Rotation w="0.999379" x="0.0347556" y="0.00044505" z="0.00583226" timestamp="250"/>
+				<Rotation w="0.999379" x="0.0347557" y="0.000445044" z="0.00583227" timestamp="291.667"/>
+				<Rotation w="0.999379" x="0.0347557" y="0.000445048" z="0.00583226" timestamp="333.333"/>
+				<Rotation w="0.999379" x="0.0347556" y="0.000445056" z="0.00583226" timestamp="375"/>
+				<Rotation w="0.999379" x="0.0347556" y="0.000445046" z="0.00583226" timestamp="416.667"/>
+				<Rotation w="0.999379" x="0.0347557" y="0.00044505" z="0.00583226" timestamp="458.333"/>
+				<Rotation w="0.999379" x="0.0347556" y="0.000445047" z="0.00583226" timestamp="500"/>
+				<Rotation w="0.999379" x="0.0347557" y="0.000445052" z="0.00583225" timestamp="541.667"/>
+				<Rotation w="0.999379" x="0.0347557" y="0.000445044" z="0.00583226" timestamp="583.333"/>
+				<Rotation w="0.999379" x="0.0347556" y="0.000445058" z="0.00583225" timestamp="625"/>
+				<Rotation w="0.999379" x="0.0347556" y="0.000445049" z="0.00583226" timestamp="666.667"/>
+				<Rotation w="0.999379" x="0.0347556" y="0.000445052" z="0.00583226" timestamp="708.333"/>
+				<Rotation w="0.999379" x="0.0347557" y="0.000445049" z="0.00583226" timestamp="750"/>
+				<Rotation w="0.999379" x="0.0347556" y="0.000445046" z="0.00583226" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+		<BoneChannel boneName="toe.R">
+			<Positions>
+				<Position x="1.07314e-08" y="0.251469" z="-6.61047e-09" timestamp="166.667"/>
+				<Position x="4.05337e-08" y="0.251469" z="-7.91247e-09" timestamp="208.333"/>
+				<Position x="-1.90709e-08" y="0.251469" z="-3.75767e-09" timestamp="250"/>
+				<Position x="4.05337e-08" y="0.251469" z="-1.6595e-08" timestamp="291.667"/>
+				<Position x="1.07314e-08" y="0.251469" z="1.76374e-08" timestamp="333.333"/>
+				<Position x="4.05336e-08" y="0.251469" z="-5.08273e-08" timestamp="375"/>
+				<Position x="1.00138e-07" y="0.251469" z="-1.0589e-07" timestamp="416.667"/>
+				<Position x="1.07314e-08" y="0.251469" z="-5.18412e-09" timestamp="458.333"/>
+				<Position x="2.56326e-08" y="0.251469" z="-1.74276e-09" timestamp="500"/>
+				<Position x="-1.16202e-08" y="0.251469" z="6.79904e-08" timestamp="541.667"/>
+				<Position x="4.79843e-08" y="0.251469" z="-5.18425e-09" timestamp="583.333"/>
+				<Position x="-4.16998e-09" y="0.251469" z="-6.02467e-08" timestamp="625"/>
+				<Position x="4.05335e-08" y="0.251469" z="-4.88361e-08" timestamp="666.667"/>
+				<Position x="-1.90709e-08" y="0.251469" z="-3.75767e-09" timestamp="708.333"/>
+				<Position x="1.07314e-08" y="0.251469" z="-3.75777e-09" timestamp="750"/>
+				<Position x="1.07313e-08" y="0.251469" z="-3.55681e-08" timestamp="791.667"/>
+			</Positions>
+			<Rotations>
+				<Rotation w="1.8278e-06" x="-6.29807e-08" y="-0.980764" z="0.195196" timestamp="166.667"/>
+				<Rotation w="1.82776e-06" x="-6.0603e-08" y="-0.980764" z="0.195196" timestamp="208.333"/>
+				<Rotation w="1.82815e-06" x="-6.16301e-08" y="-0.980764" z="0.195196" timestamp="250"/>
+				<Rotation w="1.82779e-06" x="-6.34569e-08" y="-0.980764" z="0.195196" timestamp="291.667"/>
+				<Rotation w="1.83144e-06" x="-6.41841e-08" y="-0.980764" z="0.195196" timestamp="333.333"/>
+				<Rotation w="1.82815e-06" x="-6.16301e-08" y="-0.980764" z="0.195196" timestamp="375"/>
+				<Rotation w="1.82998e-06" x="-6.67424e-08" y="-0.980764" z="0.195196" timestamp="416.667"/>
+				<Rotation w="1.82708e-06" x="-6.28411e-08" y="-0.980764" z="0.195196" timestamp="458.333"/>
+				<Rotation w="1.83043e-06" x="-6.20846e-08" y="-0.980764" z="0.195196" timestamp="500"/>
+				<Rotation w="1.82889e-06" x="-6.74741e-08" y="-0.980764" z="0.195196" timestamp="541.667"/>
+				<Rotation w="1.8161e-06" x="-6.49291e-08" y="-0.980764" z="0.195196" timestamp="583.333"/>
+				<Rotation w="1.8308e-06" x="-6.7381e-08" y="-0.980764" z="0.195196" timestamp="625"/>
+				<Rotation w="1.83254e-06" x="-6.82012e-08" y="-0.980764" z="0.195196" timestamp="666.667"/>
+				<Rotation w="1.82722e-06" x="-6.33433e-08" y="-0.980764" z="0.195196" timestamp="708.333"/>
+				<Rotation w="1.82815e-06" x="-6.16301e-08" y="-0.980764" z="0.195196" timestamp="750"/>
+				<Rotation w="1.8287e-06" x="-6.36387e-08" y="-0.980764" z="0.195196" timestamp="791.667"/>
+			</Rotations>
+			<Scales>
+				<Scale x="1" y="1" z="1" timestamp="166.667"/>
+				<Scale x="1" y="1" z="1" timestamp="208.333"/>
+				<Scale x="1" y="1" z="1" timestamp="250"/>
+				<Scale x="1" y="1" z="1" timestamp="291.667"/>
+				<Scale x="1" y="1" z="1" timestamp="333.333"/>
+				<Scale x="1" y="1" z="1" timestamp="375"/>
+				<Scale x="1" y="1" z="1" timestamp="416.667"/>
+				<Scale x="1" y="1" z="1" timestamp="458.333"/>
+				<Scale x="1" y="1" z="1" timestamp="500"/>
+				<Scale x="1" y="1" z="1" timestamp="541.667"/>
+				<Scale x="1" y="1" z="1" timestamp="583.333"/>
+				<Scale x="1" y="1" z="1" timestamp="625"/>
+				<Scale x="1" y="1" z="1" timestamp="666.667"/>
+				<Scale x="1" y="1" z="1" timestamp="708.333"/>
+				<Scale x="1" y="1" z="1" timestamp="750"/>
+				<Scale x="1" y="1" z="1" timestamp="791.667"/>
+			</Scales>
+		</BoneChannel>
+	</BoneChannels>
+</Animation>

@@ -12,7 +12,7 @@ Skybox::Skybox(std::shared_ptr<CubemapTexture> pCubemapTexture, std::shared_ptr<
 
 bool Skybox::OnRender(Scene* pScene)
 {
-   RenderCommand renderCommand(&m_cubeMesh, m_pShaderProgram);
+   RenderCommand renderCommand(m_cubeMesh.GetVao(), m_cubeMesh.GetIndices().size(), m_pShaderProgram);
 
    renderCommand.RenderState.DepthWrite = false;
    renderCommand.RenderState.DepthCompare = RenderDevice::Func::LEQUAL;

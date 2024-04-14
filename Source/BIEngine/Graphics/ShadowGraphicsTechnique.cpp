@@ -15,6 +15,14 @@ bool ShadowGraphicsTechnique::Init()
    auto pointShadowShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPointShadowShaderProgramPath)->GetExtra());
    m_pPointLightShadowShader = pointShadowShaderProgramData->GetShaderProgram();
 
+   const std::string commonDirShadowSkinnedShaderProgramPath = "effects/dirShadowSkinned.sp";
+   auto dirShadowShaderSkinnedProgram = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonDirShadowSkinnedShaderProgramPath)->GetExtra());
+   m_pDirLightShadowSkinnedShader = dirShadowShaderSkinnedProgram->GetShaderProgram();
+
+   const std::string commonPointShadowSkinnedShaderProgramPath = "effects/pointShadowSkinned.sp";
+   auto pointShadowSkinnedShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPointShadowSkinnedShaderProgramPath)->GetExtra());
+   m_pPointLightShadowSkinnedShader = pointShadowSkinnedShaderProgramData->GetShaderProgram();
+
    for (int i = 0; i < m_maxDirLightsNum; ++i) {
       RenderDirLightShadowInfo dirLightShadowInfo;
       dirLightShadowInfo.pShadowMapBuffer = std::make_shared<Framebuffer>();
@@ -78,11 +86,10 @@ bool ShadowGraphicsTechnique::Init()
 
 void ShadowGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* const pStorage)
 {
-   m_pDirLightShadowShader->Use();
-
    const glm::mat4 dirProjMatr = glm::ortho(-20.0f, 20.0f, 20.0f, -20.0f, -15.0f, 100.0f);
 
    const auto& opaqueItems = pStorage->GetOpaqueRenderItems();
+   const auto& opaqueAnimatedItems = pStorage->GetOpaqueAnimatedRenderItems();
    auto& dirLights = pStorage->GetDirectionalLightItems();
    auto& pointLights = pStorage->GetPointLightItems();
    const auto& spotLights = pStorage->GetSpotLightItems();
@@ -98,17 +105,30 @@ void ShadowGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* 
 
       const glm::mat4 viewMatr = glm::lookAt(glm::normalize(-dirLights[i].direction) * 20.0f, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
       dirLights[i].LightMatr = dirProjMatr * viewMatr;
-      m_pDirLightShadowShader->SetMatrix4("lightSpaceMatrix", dirLights[i].LightMatr);
       dirLights[i].pShadowMap = dirLightShadowInfo.pDepthBuffer;
 
+      m_pDirLightShadowShader->Use();
+      m_pDirLightShadowShader->SetMatrix4("lightSpaceMatrix", dirLights[i].LightMatr);
+
       for (const auto& ritem : opaqueItems) {
-         RenderCommand renderCommand(ritem.pMesh.get(), m_pDirLightShadowShader);
+         RenderCommand renderCommand(ritem.pMesh->GetVao(), ritem.pMesh->GetIndices().size(), m_pDirLightShadowShader);
+         renderCommand.Transform = ritem.ModelTransform;
+         pScene->GetRenderer()->DrawRenderCommand(renderCommand);
+      }
+
+      m_pDirLightShadowSkinnedShader->Use();
+      m_pDirLightShadowSkinnedShader->SetMatrix4("lightSpaceMatrix", dirLights[i].LightMatr);
+
+      for (const auto& ritem : opaqueAnimatedItems) {
+         for (int j = 0; j < ritem.boneMatrices.size(); ++j) {
+            m_pDirLightShadowSkinnedShader->SetMatrix4("finalBonesMatrices[" + std::to_string(j) + "]", ritem.boneMatrices[j]);
+         }
+
+         RenderCommand renderCommand(ritem.pMesh->GetVao(), ritem.pMesh->GetIndices().size(), m_pDirLightShadowSkinnedShader);
          renderCommand.Transform = ritem.ModelTransform;
          pScene->GetRenderer()->DrawRenderCommand(renderCommand);
       }
    }
-
-   m_pPointLightShadowShader->Use();
 
    const float aspect = (float)SHADOW_MAP_WIDTH / (float)SHADOW_MAP_HEIGHT;
    constexpr float near = 1.0f;
@@ -132,15 +152,36 @@ void ShadowGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* 
       static const ColorRgba CLEAR_COLOR = ColorRgba(0.0f, 0.5f, 0.5f, 1.0f);
       pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
 
-      for (unsigned int i = 0; i < 6; ++i) {
-         m_pPointLightShadowShader->SetMatrix4("shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
+      pointLight.pShadowMap = pointLightShadowInfo.pDepthBuffer;
+
+      m_pPointLightShadowShader->Use();
+
+      for (unsigned int j = 0; j < 6; ++j) {
+         m_pPointLightShadowShader->SetMatrix4("shadowMatrices[" + std::to_string(j) + "]", shadowTransforms[j]);
       }
       m_pPointLightShadowShader->SetVector3f("lightPos", pointLight.position);
 
-      pointLight.pShadowMap = pointLightShadowInfo.pDepthBuffer;
 
       for (const auto& ritem : opaqueItems) {
-         RenderCommand renderCommand(ritem.pMesh.get(), m_pPointLightShadowShader);
+         RenderCommand renderCommand(ritem.pMesh->GetVao(), ritem.pMesh->GetIndices().size(), m_pPointLightShadowShader);
+         renderCommand.Transform = ritem.ModelTransform;
+         pScene->GetRenderer()->DrawRenderCommand(renderCommand);
+      }
+
+      m_pPointLightShadowSkinnedShader->Use();
+
+      for (unsigned int j = 0; j < 6; ++j) {
+         m_pPointLightShadowSkinnedShader->SetMatrix4("shadowMatrices[" + std::to_string(j) + "]", shadowTransforms[j]);
+      }
+      m_pPointLightShadowSkinnedShader->SetVector3f("lightPos", pointLight.position);
+
+
+      for (const auto& ritem : opaqueAnimatedItems) {
+         for (int j = 0; j < ritem.boneMatrices.size(); ++j) {
+            m_pPointLightShadowSkinnedShader->SetMatrix4("finalBonesMatrices[" + std::to_string(j) + "]", ritem.boneMatrices[j]);
+         }
+
+         RenderCommand renderCommand(ritem.pMesh->GetVao(), ritem.pMesh->GetIndices().size(), m_pPointLightShadowSkinnedShader);
          renderCommand.Transform = ritem.ModelTransform;
          pScene->GetRenderer()->DrawRenderCommand(renderCommand);
       }

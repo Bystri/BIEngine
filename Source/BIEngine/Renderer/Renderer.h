@@ -12,14 +12,19 @@
 namespace BIEngine {
 
 struct RenderCommand {
-   RenderCommand(const Mesh* pMesh, std::shared_ptr<ShaderProgram> pShader)
-      : pMesh(pMesh), m_pShaderProgram(pShader), m_shaderProgramState(pShader)
+   RenderCommand(unsigned int VAO, int indicesNum, std::shared_ptr<ShaderProgram> pShader)
+      : m_VAO(VAO), m_indicesNum(indicesNum), m_pShaderProgram(pShader), m_shaderProgramState(pShader)
    {
    }
 
-   const Mesh* GetMeshPtr() const
+   unsigned int GetVAO() const
    {
-      return pMesh;
+      return m_VAO;
+   }
+
+   int GetIndicesNum() const
+   {
+      return m_indicesNum;
    }
 
    ShaderProgramState& GetShaderProgramState()
@@ -32,7 +37,9 @@ struct RenderCommand {
    RenderState RenderState{};
 
 private:
-   const Mesh* const pMesh;
+   unsigned int m_VAO;
+   int m_indicesNum;
+
    std::shared_ptr<ShaderProgram> m_pShaderProgram;
    ShaderProgramState m_shaderProgramState;
 };

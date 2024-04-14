@@ -79,6 +79,12 @@ void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAtta
    glFramebufferTexture(GL_FRAMEBUFFER, FramebufferAttachementTypeToOpengl(type), attachement->GetId(), 0);
 }
 
+void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<CubemapTexture> attachement, int sideIndex)
+{
+   framebuffer->Bind();
+   glFramebufferTexture2D(GL_FRAMEBUFFER, FramebufferAttachementTypeToOpengl(type), GL_TEXTURE_CUBE_MAP_POSITIVE_X + sideIndex, attachement->GetId(), 0);
+}
+
 void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<Renderbuffer> attachement)
 {
    framebuffer->Bind();

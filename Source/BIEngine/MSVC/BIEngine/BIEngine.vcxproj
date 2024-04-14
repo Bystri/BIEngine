@@ -95,6 +95,7 @@
     <ClCompile Include="..\..\3rdParty\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="..\..\Actors\Actor.cpp" />
     <ClCompile Include="..\..\Actors\ActorFactory.cpp" />
+    <ClCompile Include="..\..\Actors\AnimationComponent.cpp" />
     <ClCompile Include="..\..\Actors\LightComponent.cpp" />
     <ClCompile Include="..\..\Actors\NavAgentComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DComponent.cpp" />
@@ -113,6 +114,10 @@
     <ClCompile Include="..\..\EngineCore\GameLogic.cpp" />
     <ClCompile Include="..\..\EventManager\EventManager.cpp" />
     <ClCompile Include="..\..\EventManager\Events.cpp" />
+    <ClCompile Include="..\..\Graphics\Animation.cpp" />
+    <ClCompile Include="..\..\Graphics\AnimationLoader.cpp" />
+    <ClCompile Include="..\..\Graphics\Animator.cpp" />
+    <ClCompile Include="..\..\Graphics\BoneAnimChannel.cpp" />
     <ClCompile Include="..\..\Graphics\Camera.cpp" />
     <ClCompile Include="..\..\Graphics\GraphicsRenderPass.cpp" />
     <ClCompile Include="..\..\Graphics\LightGraphicsTechnique.cpp" />
@@ -126,6 +131,9 @@
     <ClCompile Include="..\..\Graphics\Scene.cpp" />
     <ClCompile Include="..\..\Graphics\SceneNodes.cpp" />
     <ClCompile Include="..\..\Graphics\ShadowGraphicsTechnique.cpp" />
+    <ClCompile Include="..\..\Graphics\SkeletalModel.cpp" />
+    <ClCompile Include="..\..\Graphics\SkeletalModelLoader.cpp" />
+    <ClCompile Include="..\..\Graphics\Skeleton.cpp" />
     <ClCompile Include="..\..\Graphics\Skybox.cpp" />
     <ClCompile Include="..\..\Graphics\SkyboxGraphicsTechnique.cpp" />
     <ClCompile Include="..\..\Graphics\Sprite.cpp" />
@@ -163,9 +171,11 @@
     <ClCompile Include="..\..\Renderer\ShaderProgram.cpp" />
     <ClCompile Include="..\..\Renderer\ShaderProgramState.cpp" />
     <ClCompile Include="..\..\Renderer\ShadersLoader.cpp" />
+    <ClCompile Include="..\..\Renderer\SkeletalMesh.cpp" />
     <ClCompile Include="..\..\Renderer\Texture.cpp" />
     <ClCompile Include="..\..\Renderer\ImageLoader.cpp" />
     <ClCompile Include="..\..\Renderer\TextureLoader.cpp" />
+    <ClCompile Include="..\..\Renderer\Vertex.cpp" />
     <ClCompile Include="..\..\ResourceCache\DirFile.cpp" />
     <ClCompile Include="..\..\ResourceCache\ResCache.cpp" />
     <ClCompile Include="..\..\ResourceCache\XmlLoader.cpp" />
@@ -197,6 +207,7 @@
     <ClInclude Include="..\..\Actors\Actor.h" />
     <ClInclude Include="..\..\Actors\ActorComponent.h" />
     <ClInclude Include="..\..\Actors\ActorFactory.h" />
+    <ClInclude Include="..\..\Actors\AnimationComponent.h" />
     <ClInclude Include="..\..\Actors\LightComponent.h" />
     <ClInclude Include="..\..\Actors\NavAgentComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DComponent.h" />
@@ -216,6 +227,11 @@
     <ClInclude Include="..\..\EngineCore\GameLogic.h" />
     <ClInclude Include="..\..\EventManager\EventManager.h" />
     <ClInclude Include="..\..\EventManager\Events.h" />
+    <ClInclude Include="..\..\Graphics\Animation.h" />
+    <ClInclude Include="..\..\Graphics\AnimationLoader.h" />
+    <ClInclude Include="..\..\Graphics\Animator.h" />
+    <ClInclude Include="..\..\Graphics\BoneAnimChannel.h" />
+    <ClInclude Include="..\..\Graphics\Skeleton.h" />
     <ClInclude Include="..\..\Graphics\Camera.h" />
     <ClInclude Include="..\..\Graphics\GraphicsRenderPass.h" />
     <ClInclude Include="..\..\Graphics\LightGraphicsTechnique.h" />
@@ -229,6 +245,8 @@
     <ClInclude Include="..\..\Graphics\Scene.h" />
     <ClInclude Include="..\..\Graphics\SceneNodes.h" />
     <ClInclude Include="..\..\Graphics\ShadowGraphicsTechnique.h" />
+    <ClInclude Include="..\..\Graphics\SkeletalModel.h" />
+    <ClInclude Include="..\..\Graphics\SkeletalModelLoader.h" />
     <ClInclude Include="..\..\Graphics\Skybox.h" />
     <ClInclude Include="..\..\Graphics\SkyboxGraphicsTechnique.h" />
     <ClInclude Include="..\..\Graphics\Sprite.h" />
@@ -269,9 +287,11 @@
     <ClInclude Include="..\..\Renderer\ShaderProgram.h" />
     <ClInclude Include="..\..\Renderer\ShaderProgramState.h" />
     <ClInclude Include="..\..\Renderer\ShadersLoader.h" />
+    <ClInclude Include="..\..\Renderer\SkeletalMesh.h" />
     <ClInclude Include="..\..\Renderer\Texture.h" />
     <ClInclude Include="..\..\Renderer\ImageLoader.h" />
     <ClInclude Include="..\..\Renderer\TextureLoader.h" />
+    <ClInclude Include="..\..\Renderer\Vertex.h" />
     <ClInclude Include="..\..\ResourceCache\DirFile.h" />
     <ClInclude Include="..\..\ResourceCache\ResCache.h" />
     <ClInclude Include="..\..\ResourceCache\XmlLoader.h" />
