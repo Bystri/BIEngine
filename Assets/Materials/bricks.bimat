@@ -1,0 +1,16 @@
+<Material>
+	<ShaderProgram path="Effects/mesh.sp"/>
+	<Params isDoubleSided="false"/>
+	<ColorsRgba>
+		<Color paramName="material.color" r="1.0" g="1.0" b="1.0" a="1.0"/>
+	</ColorsRgba>
+	<Floats>
+		<Float paramName="material.shininess" f="64.0"/>
+	</Floats>
+	<Textures>
+		<Texture paramName="material.diffuse" slot="0" path="textures/bricks_diffuse.bitf"/>
+		<Texture paramName="material.specular" slot="1" path="textures/specular_default.bitf"/>
+		<Texture paramName="material.normal" slot="2" path="textures/bricks_normal.bitf"/>
+		<Texture paramName="material.displacement" slot="3" path="textures/bricks_displacement.bitf"/>
+	</Textures>
+</Material>

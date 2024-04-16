@@ -10,17 +10,9 @@ namespace BIEngine {
 
 class Sprite {
 public:
-   explicit Sprite(std::shared_ptr<Texture2D> pTexture);
+   explicit Sprite(std::shared_ptr<Material> pMaterial);
 
    std::shared_ptr<Mesh> GetMesh() const { return m_pSpriteMesh; }
-
-   std::shared_ptr<Texture2D> GetTexture() const { return m_pMaterial->GetDiffuseMap(); }
-
-   void SetSprite(std::shared_ptr<Texture2D> texture) { m_pMaterial->SetDiffuseMap(texture); }
-
-   void SetColor(const ColorRgba& color) { m_pMaterial->SetColor(color); }
-
-   const ColorRgba& GetColor() const { return m_pMaterial->GetColor(); }
 
    std::shared_ptr<ShaderProgram> GetShaderProgramPtr() { return m_pMaterial->GetShaderProgramPtr(); }
 

@@ -7,7 +7,6 @@
 
 #include "../../3rdParty/stb/stb_image.h"
 
-#include "LightReflectiveMaterial.h"
 #include "MaterialLoader.h"
 #include "AnimationLoader.h"
 #include "Animator.h"
@@ -17,7 +16,7 @@
 
 namespace BIEngine {
 
-static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMaterial* const mat, const aiScene* const scene)
+static std::shared_ptr<Material> modelLoadMaterial(const aiMaterial* const mat, const aiScene* const scene)
 {
    aiString name = mat->GetName();
 
@@ -46,8 +45,11 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
                return nullptr;
             }
 
-            auto material = std::make_shared<LightReflectiveMaterial>(shaderProgramData->GetShaderProgram());
-            material->SetDiffuseMap(t2);
+            auto material = std::make_shared<Material>(shaderProgramData->GetShaderProgram());
+            material->SetColorRgba("material.color", ColorRgba(1.0f, 1.0f, 1.0f, 1.0f));
+            material->SetFloat("material.shininess", 16.0f);
+
+            material->AddTexture("material.diffuse", 0, t2);
 
             auto specularMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/specular_default.bitf")->GetExtra());
 
@@ -55,7 +57,7 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
                return nullptr;
             }
 
-            material->SetSpecularMap(specularMapData->GetTexture());
+            material->AddTexture("material.specular", 1, specularMapData->GetTexture());
 
             auto normalMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/normal_default.bitf")->GetExtra());
 
@@ -63,7 +65,7 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
                return nullptr;
             }
 
-            material->SetNormalMap(normalMapData->GetTexture());
+            material->AddTexture("material.normal", 2, normalMapData->GetTexture());
 
             auto displacementMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/displacement_default.bitf")->GetExtra());
 
@@ -71,7 +73,7 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
                return nullptr;
             }
 
-            material->SetNormalMap(displacementMapData->GetTexture());
+            material->AddTexture("material.displacement", 3, displacementMapData->GetTexture());
 
             return material;
          } else {
@@ -81,14 +83,16 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
                return nullptr;
             }
 
-            auto material = std::make_shared<LightReflectiveMaterial>(shaderProgramData->GetShaderProgram());
+            auto material = std::make_shared<Material>(shaderProgramData->GetShaderProgram());
+            material->SetColorRgba("material.color", ColorRgba(1.0f, 1.0f, 1.0f, 1.0f));
+            material->SetFloat("material.shininess", 16.0f);
 
             auto diffuseMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/diffuse_default.bitf")->GetExtra());
 
             if (diffuseMapData == nullptr) {
                return nullptr;
             }
-            material->SetDiffuseMap(diffuseMapData->GetTexture());
+            material->AddTexture("material.diffuse", 0, diffuseMapData->GetTexture());
 
             auto specularMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/specular_default.bitf")->GetExtra());
 
@@ -96,7 +100,7 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
                return nullptr;
             }
 
-            material->SetSpecularMap(specularMapData->GetTexture());
+            material->AddTexture("material.specular", 1, specularMapData->GetTexture());
 
             auto normalMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/normal_default.bitf")->GetExtra());
 
@@ -104,7 +108,7 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
                return nullptr;
             }
 
-            material->SetNormalMap(normalMapData->GetTexture());
+            material->AddTexture("material.normal", 2, normalMapData->GetTexture());
 
             auto displacementMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/displacement_default.bitf")->GetExtra());
 
@@ -112,7 +116,7 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
                return nullptr;
             }
 
-            material->SetDisplacementMap(displacementMapData->GetTexture());
+            material->AddTexture("material.displacement", 3, displacementMapData->GetTexture());
 
             return material;
          }
@@ -126,14 +130,16 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
          return nullptr;
       }
 
-      auto material = std::make_shared<LightReflectiveMaterial>(shaderProgramData->GetShaderProgram());
+      auto material = std::make_shared<Material>(shaderProgramData->GetShaderProgram());
+      material->SetColorRgba("material.color", ColorRgba(1.0f, 1.0f, 1.0f, 1.0f));
+      material->SetFloat("material.shininess", 16.0f);
 
       auto diffuseMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/diffuse_default.bitf")->GetExtra());
 
       if (diffuseMapData == nullptr) {
          return nullptr;
       }
-      material->SetDiffuseMap(diffuseMapData->GetTexture());
+      material->AddTexture("material.diffuse", 0, diffuseMapData->GetTexture());
 
       auto specularMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/specular_default.bitf")->GetExtra());
 
@@ -141,7 +147,7 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
          return nullptr;
       }
 
-      material->SetSpecularMap(specularMapData->GetTexture());
+      material->AddTexture("material.specular", 1, specularMapData->GetTexture());
 
       auto normalMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/normal_default.bitf")->GetExtra());
 
@@ -149,7 +155,7 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
          return nullptr;
       }
 
-      material->SetNormalMap(normalMapData->GetTexture());
+      material->AddTexture("material.normal", 2, normalMapData->GetTexture());
 
       auto displacementMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/displacement_default.bitf")->GetExtra());
 
@@ -157,7 +163,7 @@ static std::shared_ptr<LightReflectiveMaterial> modelLoadMaterial(const aiMateri
          return nullptr;
       }
 
-      material->SetDisplacementMap(displacementMapData->GetTexture());
+      material->AddTexture("material.displacement", 3, displacementMapData->GetTexture());
 
       return material;
    }

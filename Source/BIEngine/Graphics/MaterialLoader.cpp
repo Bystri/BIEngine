@@ -7,6 +7,127 @@
 
 namespace BIEngine {
 
+static void materialLoaderLoadColorsRgb(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+{
+   tinyxml2::XMLElement* pColorsRgbElement = pRoot->FirstChildElement("ColorsRgb");
+   if (!pColorsRgbElement) {
+      return;
+   }
+
+   for (tinyxml2::XMLElement* pColorElement = pColorsRgbElement->FirstChildElement(); pColorElement; pColorElement = pColorElement->NextSiblingElement()) {
+      const char* paramName;
+      ColorRgb color;
+
+      pColorElement->QueryStringAttribute("paramName", &paramName);
+      pColorElement->QueryFloatAttribute("r", &color.r);
+      pColorElement->QueryFloatAttribute("g", &color.g);
+      pColorElement->QueryFloatAttribute("b", &color.b);
+
+      pMaterial->SetColorRgb(paramName, color);
+   }
+}
+
+static void materialLoaderLoadColorsRgba(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+{
+   tinyxml2::XMLElement* pColorsRgbaElement = pRoot->FirstChildElement("ColorsRgba");
+   if (!pColorsRgbaElement) {
+      return;
+   }
+
+   for (tinyxml2::XMLElement* pColorElement = pColorsRgbaElement->FirstChildElement(); pColorElement; pColorElement = pColorElement->NextSiblingElement()) {
+      const char* paramName;
+      ColorRgba color;
+
+      pColorElement->QueryStringAttribute("paramName", &paramName);
+      pColorElement->QueryFloatAttribute("r", &color.r);
+      pColorElement->QueryFloatAttribute("g", &color.g);
+      pColorElement->QueryFloatAttribute("b", &color.b);
+      pColorElement->QueryFloatAttribute("a", &color.a);
+
+      pMaterial->SetColorRgba(paramName, color);
+   }
+}
+
+static void materialLoaderLoadIntegers(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+{
+   tinyxml2::XMLElement* pIntegersElement = pRoot->FirstChildElement("Integers");
+   if (!pIntegersElement) {
+      return;
+   }
+
+   for (tinyxml2::XMLElement* pIntegerElement = pIntegersElement->FirstChildElement(); pIntegerElement; pIntegerElement = pIntegerElement->NextSiblingElement()) {
+      const char* paramName;
+      int val;
+
+      pIntegerElement->QueryStringAttribute("paramName", &paramName);
+      pIntegerElement->QueryIntAttribute("i", &val);
+
+      pMaterial->SetInteger(paramName, val);
+   }
+}
+
+static void materialLoaderLoadFloats(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+{
+   tinyxml2::XMLElement* pFloatsElement = pRoot->FirstChildElement("Floats");
+   if (!pFloatsElement) {
+      return;
+   }
+
+   for (tinyxml2::XMLElement* pFloatElement = pFloatsElement->FirstChildElement(); pFloatElement; pFloatElement = pFloatElement->NextSiblingElement()) {
+      const char* paramName;
+      float val;
+
+      pFloatElement->QueryStringAttribute("paramName", &paramName);
+      pFloatElement->QueryFloatAttribute("f", &val);
+
+      pMaterial->SetFloat(paramName, val);
+   }
+}
+
+static void materialLoaderLoadBools(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+{
+   tinyxml2::XMLElement* pBoolsEelemnt = pRoot->FirstChildElement("Bools");
+   if (!pBoolsEelemnt) {
+      return;
+   }
+
+   for (tinyxml2::XMLElement* pBoolElement = pBoolsEelemnt->FirstChildElement(); pBoolElement; pBoolElement = pBoolElement->NextSiblingElement()) {
+      const char* paramName;
+      bool val;
+
+      pBoolElement->QueryStringAttribute("paramName", &paramName);
+      pBoolElement->QueryBoolAttribute("b", &val);
+
+      pMaterial->SetBool(paramName, val);
+   }
+}
+
+static void materialLoaderLoadTextures(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+{
+   tinyxml2::XMLElement* pTexuresElement = pRoot->FirstChildElement("Textures");
+   if (!pTexuresElement) {
+      return;
+   }
+
+   for (tinyxml2::XMLElement* pTextureElement = pTexuresElement->FirstChildElement(); pTextureElement; pTextureElement = pTextureElement->NextSiblingElement()) {
+      const char* paramName;
+      int slot;
+      const char* texturePath;
+
+      pTextureElement->QueryStringAttribute("paramName", &paramName);
+      pTextureElement->QueryIntAttribute("slot", &slot);
+      pTextureElement->QueryStringAttribute("path", &texturePath);
+
+      auto textureData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(texturePath)->GetExtra());
+
+      if (textureData == nullptr) {
+         return;
+      }
+
+      pMaterial->AddTexture(paramName, slot, textureData->GetTexture());
+   }
+}
+
 bool MaterialResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
 {
    tinyxml2::XMLDocument xmlDoc;
@@ -35,107 +156,23 @@ bool MaterialResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize,
       return false;
    }
 
-   std::shared_ptr<LightReflectiveMaterial> pMaterial = std::make_shared<LightReflectiveMaterial>(shaderProgramData->GetShaderProgram());
+   std::shared_ptr<Material> pMaterial = std::make_shared<Material>(shaderProgramData->GetShaderProgram());
 
-   tinyxml2::XMLElement* pDiffuseColorElement = pRoot->FirstChildElement("DiffuseColor");
-   if (pDiffuseColorElement) {
-      float r = 0;
-      float g = 0;
-      float b = 0;
-      pDiffuseColorElement->QueryFloatAttribute("r", &r);
-      pDiffuseColorElement->QueryFloatAttribute("g", &g);
-      pDiffuseColorElement->QueryFloatAttribute("b", &b);
-      const ColorRgb diffuseColor = ColorRgb(r, g, b);
-      pMaterial->SetColor(diffuseColor);
+   tinyxml2::XMLElement* pParamsElement = pRoot->FirstChildElement("Params");
+   if (!pParamsElement) {
+      return false;
    }
 
-   tinyxml2::XMLElement* pDiffuseMapElement = pRoot->FirstChildElement("DiffuseMap");
-   if (pDiffuseMapElement) {
-      const char* path;
-      pDiffuseMapElement->QueryStringAttribute("path", &path);
+   bool isDoubleSided = false;
+   pParamsElement->QueryBoolAttribute("isDoubleSided", &isDoubleSided);
+   pMaterial->SetDoubleSided(isDoubleSided);
 
-      auto diffuseMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(path)->GetExtra());
-
-      if (diffuseMapData == nullptr) {
-         return false;
-      }
-
-      pMaterial->SetDiffuseMap(diffuseMapData->GetTexture());
-   } else {
-      auto diffuseMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/diffuse_default.bitf")->GetExtra());
-
-      if (diffuseMapData == nullptr) {
-         return false;
-      }
-
-      pMaterial->SetDiffuseMap(diffuseMapData->GetTexture());
-   }
-
-   tinyxml2::XMLElement* pSpecularMapElement = pRoot->FirstChildElement("SpecularMap");
-   if (pSpecularMapElement) {
-      const char* path;
-      pSpecularMapElement->QueryStringAttribute("path", &path);
-
-      auto specularMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(path)->GetExtra());
-
-      if (specularMapData == nullptr) {
-         return false;
-      }
-
-      pMaterial->SetSpecularMap(specularMapData->GetTexture());
-   } else {
-      auto specularMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/specular_default.bitf")->GetExtra());
-
-      if (specularMapData == nullptr) {
-         return false;
-      }
-
-      pMaterial->SetSpecularMap(specularMapData->GetTexture());
-   }
-
-   tinyxml2::XMLElement* pNormalMapElement = pRoot->FirstChildElement("NormalMap");
-   if (pNormalMapElement) {
-      const char* path;
-      pNormalMapElement->QueryStringAttribute("path", &path);
-
-      auto normalMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(path)->GetExtra());
-
-      if (normalMapData == nullptr) {
-         return false;
-      }
-
-      pMaterial->SetNormalMap(normalMapData->GetTexture());
-   } else {
-      auto normalMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/normal_default.bitf")->GetExtra());
-
-      if (normalMapData == nullptr) {
-         return false;
-      }
-
-      pMaterial->SetNormalMap(normalMapData->GetTexture());
-   }
-
-   tinyxml2::XMLElement* pDisplacementMapElement = pRoot->FirstChildElement("DisplacementMap");
-   if (pDisplacementMapElement) {
-      const char* path;
-      pDisplacementMapElement->QueryStringAttribute("path", &path);
-
-      auto displacementMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(path)->GetExtra());
-
-      if (displacementMapData == nullptr) {
-         return false;
-      }
-
-      pMaterial->SetNormalMap(displacementMapData->GetTexture());
-   } else {
-      auto displacementMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle("Textures/displacement_default.bitf")->GetExtra());
-
-      if (displacementMapData == nullptr) {
-         return false;
-      }
-
-      pMaterial->SetNormalMap(displacementMapData->GetTexture());
-   }
+   materialLoaderLoadColorsRgb(pRoot, pMaterial);
+   materialLoaderLoadColorsRgba(pRoot, pMaterial);
+   materialLoaderLoadIntegers(pRoot, pMaterial);
+   materialLoaderLoadFloats(pRoot, pMaterial);
+   materialLoaderLoadBools(pRoot, pMaterial);
+   materialLoaderLoadTextures(pRoot, pMaterial);
 
    std::shared_ptr<MaterialData> pExtra = std::make_shared<MaterialData>();
    pExtra->m_pMaterial = pMaterial;

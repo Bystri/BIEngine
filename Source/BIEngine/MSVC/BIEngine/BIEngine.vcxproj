@@ -121,7 +121,6 @@
     <ClCompile Include="..\..\Graphics\Camera.cpp" />
     <ClCompile Include="..\..\Graphics\GraphicsRenderPass.cpp" />
     <ClCompile Include="..\..\Graphics\LightGraphicsTechnique.cpp" />
-    <ClCompile Include="..\..\Graphics\LightReflectiveMaterial.cpp" />
     <ClCompile Include="..\..\Graphics\Material.cpp" />
     <ClCompile Include="..\..\Graphics\MaterialLoader.cpp" />
     <ClCompile Include="..\..\Graphics\Model.cpp" />
@@ -235,7 +234,6 @@
     <ClInclude Include="..\..\Graphics\Camera.h" />
     <ClInclude Include="..\..\Graphics\GraphicsRenderPass.h" />
     <ClInclude Include="..\..\Graphics\LightGraphicsTechnique.h" />
-    <ClInclude Include="..\..\Graphics\LightReflectiveMaterial.h" />
     <ClInclude Include="..\..\Graphics\Material.h" />
     <ClInclude Include="..\..\Graphics\MaterialLoader.h" />
     <ClInclude Include="..\..\Graphics\Model.h" />

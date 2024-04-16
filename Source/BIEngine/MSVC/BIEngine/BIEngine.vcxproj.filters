@@ -249,9 +249,6 @@
     <ClCompile Include="..\..\Renderer\Mesh.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Graphics\LightReflectiveMaterial.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Renderer\Framebuffer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -601,9 +598,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Renderer\Mesh.h">
       <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics\LightReflectiveMaterial.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Renderer\Framebuffer.h">
       <Filter>Renderer</Filter>

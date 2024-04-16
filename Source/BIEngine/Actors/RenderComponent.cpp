@@ -4,6 +4,7 @@
 #include "../EventManager/Events.h"
 #include "../Renderer/ShadersLoader.h"
 #include "../Graphics/ModelLoader.h"
+#include "../Graphics/MaterialLoader.h"
 #include "../Graphics/SkeletalModelLoader.h"
 #include "../Renderer/MeshGeometryGenerator.h"
 #include "../Actors/TransformComponent.h"
@@ -45,32 +46,19 @@ bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
       return false;
    }
 
-   tinyxml2::XMLElement* pShaderProgramInfo = pData->FirstChildElement("ShaderProgram");
+   tinyxml2::XMLElement* pMaterialElement = pData->FirstChildElement("Material");
 
-   if (pShaderProgramInfo == nullptr) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading RenderComponent for Actor with id: " + std::to_string(m_pOwner->GetId()) + "; No Shader was specified");
+   if (pMaterialElement == nullptr) {
+      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading RenderComponent for Actor with id: " + std::to_string(m_pOwner->GetId()) + "; No Material was specified");
       return false;
    }
 
-   const char* shaderProgramPath;
-   pShaderProgramInfo->QueryStringAttribute("shaderProgramPath", &shaderProgramPath);
+   const char* materialPath;
+   pMaterialElement->QueryStringAttribute("path", &materialPath);
 
-   m_shaderProgrampath = shaderProgramPath;
-   std::shared_ptr<ShaderProgramData> pShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(m_shaderProgrampath)->GetExtra());
-   m_pLightReflectionMaterial = std::make_shared<LightReflectiveMaterial>(pShaderProgramData->GetShaderProgram());
-   m_pLightReflectionMaterial->SetColor(COLOR_WHITE);
-
-   tinyxml2::XMLElement* pColorElement = pData->FirstChildElement("Color");
-   if (pColorElement) {
-      float r = 0;
-      float g = 0;
-      float b = 0;
-      pColorElement->QueryFloatAttribute("r", &r);
-      pColorElement->QueryFloatAttribute("g", &g);
-      pColorElement->QueryFloatAttribute("b", &b);
-      const ColorRgb matColor = ColorRgb(r, g, b);
-      m_pLightReflectionMaterial->SetColor(matColor);
-   }
+   m_materialPath = materialPath;
+   std::shared_ptr<MaterialData> pMaterialData = std::static_pointer_cast<MaterialData>(ResCache::Get()->GetHandle(m_materialPath)->GetExtra());
+   m_pMaterial = pMaterialData->GetMaterial();
 
    return true;
 }
@@ -79,15 +67,9 @@ tinyxml2::XMLElement* MeshBaseRenderComponent::GenerateXml(tinyxml2::XMLDocument
 {
    tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
 
-   tinyxml2::XMLElement* pShader = pDoc->NewElement("ShaderProgram");
-   pShader->SetAttribute("shaderProgramPath", m_shaderProgrampath.c_str());
-   pBaseElement->LinkEndChild(pShader);
-
-   tinyxml2::XMLElement* pColor = pDoc->NewElement("Color");
-   pColor->SetAttribute("r", std::to_string(m_pLightReflectionMaterial->GetColor().r).c_str());
-   pColor->SetAttribute("g", std::to_string(m_pLightReflectionMaterial->GetColor().g).c_str());
-   pColor->SetAttribute("b", std::to_string(m_pLightReflectionMaterial->GetColor().b).c_str());
-   pBaseElement->LinkEndChild(pColor);
+   tinyxml2::XMLElement* pMaterialElement = pDoc->NewElement("Material");
+   pMaterialElement->SetAttribute("path", m_materialPath.c_str());
+   pBaseElement->LinkEndChild(pMaterialElement);
 
    return pBaseElement;
 }
@@ -106,7 +88,12 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
       m_pSpriteNode = std::make_shared<SpriteNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
    }
 
-   ColorRgba spriteColor = COLOR_WHITE;
+   static const std::string SPRITE_SHADER_PROGRAM_PATH = "Effects/sprite.sp";
+
+   std::shared_ptr<ShaderProgramData> pShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(SPRITE_SHADER_PROGRAM_PATH)->GetExtra());
+   std::shared_ptr<Material> pMaterial = std::make_shared<Material>(pShaderProgramData->GetShaderProgram());
+
+   m_spriteColor = COLOR_WHITE;
 
    tinyxml2::XMLElement* pColorElement = pData->FirstChildElement("Color");
    if (pColorElement) {
@@ -116,8 +103,10 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
       pColorElement->QueryFloatAttribute("r", &r);
       pColorElement->QueryFloatAttribute("g", &g);
       pColorElement->QueryFloatAttribute("b", &b);
-      spriteColor = ColorRgba(r, g, b, 1.0f);
+      m_spriteColor = ColorRgba(r, g, b, 1.0f);
    }
+
+   pMaterial->SetColorRgba("material.color", m_spriteColor);
 
    tinyxml2::XMLElement* pSpriteElement = pData->FirstChildElement("Sprite");
    if (pSpriteElement) {
@@ -132,8 +121,9 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
          return false;
       }
 
-      std::shared_ptr<Sprite> pSprite = std::make_shared<Sprite>(spriteData->GetTexture());
-      pSprite->SetColor(spriteColor);
+      pMaterial->AddTexture("material.sprite", 0, spriteData->GetTexture());
+
+      std::shared_ptr<Sprite> pSprite = std::make_shared<Sprite>(pMaterial);
       m_pSpriteNode->SetSprite(pSprite);
    }
 
@@ -144,12 +134,10 @@ tinyxml2::XMLElement* SpriteRenderComponent::GenerateXml(tinyxml2::XMLDocument* 
 {
    tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
 
-   const ColorRgba& spriteColor = m_pSpriteNode->GetSprite()->GetColor();
-
    tinyxml2::XMLElement* pColor = pDoc->NewElement("Color");
-   pColor->SetAttribute("r", std::to_string(spriteColor.r).c_str());
-   pColor->SetAttribute("g", std::to_string(spriteColor.g).c_str());
-   pColor->SetAttribute("b", std::to_string(spriteColor.b).c_str());
+   pColor->SetAttribute("r", std::to_string(m_spriteColor.r).c_str());
+   pColor->SetAttribute("g", std::to_string(m_spriteColor.g).c_str());
+   pColor->SetAttribute("b", std::to_string(m_spriteColor.b).c_str());
    pBaseElement->LinkEndChild(pColor);
 
 
@@ -201,68 +189,13 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
 
    tinyxml2::XMLElement* pMaterialElement = pData->FirstChildElement("Material");
    if (pMaterialElement) {
-      float shininess = 64.0f;
-      pMaterialElement->QueryFloatAttribute("shininess", &shininess);
-      m_pLightReflectionMaterial->SetShininess(shininess);
+      const char* matPath;
+      pMaterialElement->QueryStringAttribute("path", &matPath);
 
-      bool isDoubleSided = false;
-      pMaterialElement->QueryBoolAttribute("isDoubleSided", &isDoubleSided);
-      m_pLightReflectionMaterial->SetDoubleSided(isDoubleSided);
-
-      const char* diffuseMapPath;
-      pMaterialElement->QueryStringAttribute("diffuseMapPath", &diffuseMapPath);
-      m_diffuseMapPath = diffuseMapPath;
-      auto diffuseMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(m_diffuseMapPath)->GetExtra());
-
-      if (diffuseMapData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading diffuse map texture for Actor with id: " + std::to_string(m_pOwner->GetId()));
-         m_pModelNode.reset();
-         return false;
-      }
-
-      m_pLightReflectionMaterial->SetDiffuseMap(diffuseMapData->GetTexture());
-
-      const char* specularMapPath;
-      pMaterialElement->QueryStringAttribute("specularMapPath", &specularMapPath);
-      m_specularMapPath = specularMapPath;
-      auto specularMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(m_specularMapPath)->GetExtra());
-
-      if (specularMapData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading specular map texture for Actor with id: " + std::to_string(m_pOwner->GetId()));
-         m_pModelNode.reset();
-         return false;
-      }
-
-      m_pLightReflectionMaterial->SetSpecularMap(specularMapData->GetTexture());
-
-      const char* normalMapPath;
-      pMaterialElement->QueryStringAttribute("normalMapPath", &normalMapPath);
-      m_normalMapPath = normalMapPath;
-      auto normalMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(m_normalMapPath)->GetExtra());
-
-      if (normalMapData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading normal map texture for Actor with id: " + std::to_string(m_pOwner->GetId()));
-         m_pModelNode.reset();
-         return false;
-      }
-
-      m_pLightReflectionMaterial->SetNormalMap(normalMapData->GetTexture());
-
-      const char* displacementMapPath;
-      pMaterialElement->QueryStringAttribute("displacementMapPath", &displacementMapPath);
-      m_displacementMapPath = displacementMapPath;
-      auto displacementMapData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(m_displacementMapPath)->GetExtra());
-
-      if (displacementMapData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading displacement map texture for Actor with id: " + std::to_string(m_pOwner->GetId()));
-         m_pModelNode.reset();
-         return false;
-      }
-
-      m_pLightReflectionMaterial->SetDisplacementMap(displacementMapData->GetTexture());
+      auto materialData = std::static_pointer_cast<MaterialData>(ResCache::Get()->GetHandle(matPath)->GetExtra());
 
       std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 0u));
-      std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, m_pLightReflectionMaterial);
+      std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, materialData->GetMaterial());
 
       std::shared_ptr<Model> pModel = std::make_shared<Model>();
       pModel->AddModelMesh(pModelMesh);
@@ -281,15 +214,6 @@ tinyxml2::XMLElement* BoxRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDo
    pSize->SetAttribute("h", std::to_string(m_height).c_str());
    pSize->SetAttribute("d", std::to_string(m_depth).c_str());
    pBaseElement->LinkEndChild(pSize);
-
-   tinyxml2::XMLElement* pMaterialElement = pDoc->NewElement("Material");
-   pMaterialElement->SetAttribute("shininess", m_pLightReflectionMaterial->GetShininess());
-   pMaterialElement->SetAttribute("isDoubleSided", m_pLightReflectionMaterial->IsDoubleSided());
-   pMaterialElement->SetAttribute("diffuseMapPath", m_diffuseMapPath.c_str());
-   pMaterialElement->SetAttribute("specularMapPath", m_specularMapPath.c_str());
-   pMaterialElement->SetAttribute("normalMapPath", m_normalMapPath.c_str());
-   pMaterialElement->SetAttribute("m_displacementMapPath", m_displacementMapPath.c_str());
-   pBaseElement->LinkEndChild(pMaterialElement);
 
    return pBaseElement;
 }

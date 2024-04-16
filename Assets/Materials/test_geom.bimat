@@ -1,0 +1,16 @@
+<Material>
+	<ShaderProgram path="Effects/test_geom_mesh.sp"/>
+	<Params isDoubleSided="true"/>
+	<ColorsRgba>
+		<Color paramName="material.color" r="1.0" g="0.0" b="0.0" a="1.0"/>
+	</ColorsRgba>
+	<Floats>
+		<Float paramName="material.shininess" f="64.0"/>
+	</Floats>
+	<Textures>
+		<Texture paramName="material.diffuse" slot="0" path="textures/container_diffuse.bitf"/>
+		<Texture paramName="material.specular" slot="1" path="textures/container_specular.bitf"/>
+		<Texture paramName="material.normal" slot="2" path="textures/normal_default.bitf"/>
+		<Texture paramName="material.displacement" slot="3" path="textures/displacement_default.bitf"/>
+	</Textures>
+</Material>

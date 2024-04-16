@@ -8,9 +8,9 @@
 		<Float paramName="material.shininess" f="64.0"/>
 	</Floats>
 	<Textures>
-		<Texture paramName="material.diffuse" slot="0" path="models/backpack/backpack_diffuse.bitf"/>
-		<Texture paramName="material.specular" slot="1" path="models/backpack/backpack_specular.bitf"/>
-		<Texture paramName="material.normal" slot="2" path="models/backpack/backpack_normal.bitf"/>
+		<Texture paramName="material.diffuse" slot="0" path="textures/brickwall_diffuse.bitf"/>
+		<Texture paramName="material.specular" slot="1" path="textures/specular_default.bitf"/>
+		<Texture paramName="material.normal" slot="2" path="textures/brickwall_normal.bitf"/>
 		<Texture paramName="material.displacement" slot="3" path="textures/displacement_default.bitf"/>
 	</Textures>
 </Material>

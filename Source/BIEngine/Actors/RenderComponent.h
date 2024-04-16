@@ -4,7 +4,6 @@
 
 #include "../EngineCore/Assert.h"
 #include "../Graphics/SpriteNode.h"
-#include "../Graphics/LightReflectiveMaterial.h"
 #include "../Renderer/Color.h"
 #include "../Graphics/Model.h"
 
@@ -40,7 +39,7 @@ private:
 class SpriteRenderComponent : public BaseRenderComponent {
 public:
    SpriteRenderComponent()
-      : BaseRenderComponent(), m_pSpriteNode(nullptr), m_spritePath() {}
+      : BaseRenderComponent(), m_pSpriteNode(nullptr), m_spritePath(), m_spriteColor(COLOR_WHITE) {}
 
    static ComponentId g_CompId;
 
@@ -56,6 +55,7 @@ protected:
 protected:
    std::shared_ptr<SpriteNode> m_pSpriteNode; // Узел на сцене, который отвечает за отрисовку этого компонента
    std::string m_spritePath;                  // Сохраняем путь к спрайту, из которого мы делаем текстуру, чтобы потом вставить его в XML, если понадобится
+   ColorRgba m_spriteColor;
 };
 
 static ActorComponent* CreateSpriteRenderComponent()
@@ -70,10 +70,10 @@ protected:
    tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
 private:
-   std::string m_shaderProgrampath;
+   std::string m_materialPath;
 
 protected:
-   std::shared_ptr<LightReflectiveMaterial> m_pLightReflectionMaterial;
+   std::shared_ptr<Material> m_pMaterial;
 };
 
 class ModelMesh;
@@ -100,10 +100,6 @@ protected:
 protected:
    std::shared_ptr<ModelNode> m_pModelNode; // Узел на сцене, который отвечает за отрисовку этого компонента
 
-   std::string m_diffuseMapPath;
-   std::string m_specularMapPath;
-   std::string m_normalMapPath;
-   std::string m_displacementMapPath;
 
    float m_width;
    float m_height;

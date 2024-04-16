@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LightReflectiveMaterial.h"
+#include "Material.h"
 #include "../ResourceCache/ResCache.h"
 
 namespace BIEngine {
@@ -21,10 +21,10 @@ public:
 
    virtual std::string ToString() override { return "MaterialData"; }
 
-   std::shared_ptr<LightReflectiveMaterial> GetMaterial() const { return m_pMaterial; }
+   std::shared_ptr<Material> GetMaterial() const { return m_pMaterial; }
 
 protected:
-   std::shared_ptr<LightReflectiveMaterial> m_pMaterial;
+   std::shared_ptr<Material> m_pMaterial;
 };
 
 class MaterialResourceLoader : public IResourceLoader {
