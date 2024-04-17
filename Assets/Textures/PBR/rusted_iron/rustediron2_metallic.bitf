@@ -1,0 +1,4 @@
+<Texture>
+	<ImgData path="images/textures/pbr/rusted_iron/rustediron2_metallic.jpg"/>
+	<CreationParams wrapS="Repeat" wrapT="Repeat" filterMin="Linear" filterMax="Linear"/>
+</Texture>

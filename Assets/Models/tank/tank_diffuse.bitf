@@ -1,4 +1,0 @@
-<Texture>
-	<ImgData path="models/tank/Metalslug_Tank_Lowpoly1_DefaultMaterial_Ba.png"/>
-	<CreationParams wrapS="Repeat" wrapT="Repeat" filterMin="Linear" filterMax="Linear"/>
-</Texture>

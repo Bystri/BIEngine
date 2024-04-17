@@ -6,7 +6,7 @@ in VertexData {
 	mat3 TBN;
 } fs_in;
 
-#include effects/common/lights.glsl
+#include effects/materials/blinn_phong.glsl
 #include effects/common/scene_uniforms.glsl
 
 out vec4 FragColor;

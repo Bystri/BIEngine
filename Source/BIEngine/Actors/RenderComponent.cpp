@@ -14,6 +14,7 @@
 namespace BIEngine {
 ComponentId SpriteRenderComponent::g_CompId = "SpriteRenderComponent";
 ComponentId BoxRenderComponent::g_CompId = "BoxRenderComponent";
+ComponentId SphereRenderComponent::g_CompId = "SphereRenderComponent";
 ComponentId ModelRenderComponent::g_CompId = "ModelRenderComponent";
 ComponentId SkeletalModelRenderComponent::g_CompId = "SkeletalModelRenderComponent";
 
@@ -187,20 +188,12 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
       m_depth = (float)d;
    }
 
-   tinyxml2::XMLElement* pMaterialElement = pData->FirstChildElement("Material");
-   if (pMaterialElement) {
-      const char* matPath;
-      pMaterialElement->QueryStringAttribute("path", &matPath);
+   std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 0u));
+   std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, m_pMaterial);
 
-      auto materialData = std::static_pointer_cast<MaterialData>(ResCache::Get()->GetHandle(matPath)->GetExtra());
-
-      std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 0u));
-      std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, materialData->GetMaterial());
-
-      std::shared_ptr<Model> pModel = std::make_shared<Model>();
-      pModel->AddModelMesh(pModelMesh);
-      m_pModelNode->SetModel(pModel);
-   }
+   std::shared_ptr<Model> pModel = std::make_shared<Model>();
+   pModel->AddModelMesh(pModelMesh);
+   m_pModelNode->SetModel(pModel);
 
    return true;
 }
@@ -219,6 +212,62 @@ tinyxml2::XMLElement* BoxRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDo
 }
 
 std::shared_ptr<SceneNode> BoxRenderComponent::CreateSceneNode()
+{
+   if (m_pModelNode == nullptr)
+      return std::shared_ptr<SceneNode>();
+
+   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   if (pTransformComponent) {
+      m_pModelNode->SetTransform(pTransformComponent);
+   }
+
+   return m_pModelNode;
+}
+
+/***********************************************************
+ * SphereRenderComponent
+ ************************************************************/
+
+bool SphereRenderComponent::Init(tinyxml2::XMLElement* pData)
+{
+   if (!MeshBaseRenderComponent::Init(pData)) {
+      return false;
+   }
+
+   if (m_pModelNode == nullptr) {
+      m_pModelNode = std::make_shared<ModelNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
+   }
+
+   tinyxml2::XMLElement* pSizeElement = pData->FirstChildElement("Size");
+   if (pSizeElement) {
+      double r;
+      pSizeElement->QueryDoubleAttribute("r", &r);
+
+      m_radius = (float)r;
+   }
+
+   std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateSphere(m_radius, 16.0f, 16.0f));
+   std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, m_pMaterial);
+
+   std::shared_ptr<Model> pModel = std::make_shared<Model>();
+   pModel->AddModelMesh(pModelMesh);
+   m_pModelNode->SetModel(pModel);
+
+   return true;
+}
+
+tinyxml2::XMLElement* SphereRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
+{
+   tinyxml2::XMLElement* pBaseElement = MeshBaseRenderComponent::GenerateXml(pDoc);
+
+   tinyxml2::XMLElement* pSize = pDoc->NewElement("Size");
+   pSize->SetAttribute("r", std::to_string(m_radius).c_str());
+   pBaseElement->LinkEndChild(pSize);
+
+   return pBaseElement;
+}
+
+std::shared_ptr<SceneNode> SphereRenderComponent::CreateSceneNode()
 {
    if (m_pModelNode == nullptr)
       return std::shared_ptr<SceneNode>();

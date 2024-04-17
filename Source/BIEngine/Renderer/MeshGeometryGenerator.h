@@ -11,6 +11,7 @@ public:
    static Mesh CreateQuad(float width, float height);
    static Mesh CreateBox(float width, float height, float depth, unsigned int numSubdivisions);
    static Mesh CreateGrid(float width, float depth, unsigned int m, unsigned int n);
+   static Mesh CreateSphere(float radius, unsigned int sliceCount, unsigned int stackCount);
 
 private:
    static void Subdivide(Mesh& meshData);

@@ -186,22 +186,15 @@
 				<Scale w="1.0" h="1.0" d="1.0"/>
 			</Physics3DComponent>
         </Actor>
-		<Actor name="sensor4">
+		<Actor name="SpherePBR">
             <TransformComponent>
-                <Position x="4" y="6" z="0"/>
+                <Position x="8" y="9" z="10"/>
                 <Size w="1.000000" h="1.000000" d="1.0"/>
-				<Rotation x="45.000000" y="45.000000" z="45.000000"/>
+				<Rotation x="0.0" y="0.0" z="0.0"/>
             </TransformComponent>
-			<BoxRenderComponent>
-				<Material path="materials/container.bimat"/>
-			</BoxRenderComponent>
-			<Physics3DComponent>
-				<Shape>Box</Shape>
-				<BodyType>Dynamic</BodyType>
-				<Density>air</Density>
-				<PhysicsMaterial>Normal</PhysicsMaterial>
-				<Scale w="1.0" h="1.0" d="1.0"/>
-			</Physics3DComponent>
+			<SphereRenderComponent>
+				<Material path="materials/pbr/rusted_iron.bimat"/>
+			</SphereRenderComponent>
         </Actor>
 		<Actor name="sensor3">
             <TransformComponent>
@@ -244,6 +237,16 @@
             </TransformComponent>
 			<ModelRenderComponent>
 				<Model path="Models/backpack/backpack.obj"/>
+			</ModelRenderComponent>
+        </Actor>
+		<Actor name="tank">
+            <TransformComponent>
+                <Position x="4" y="5.5" z="-4"/>
+                <Size w="0.500000" h="0.500000" d="0.5"/>
+				<Rotation x="0.000000" y="25.000000" z="0.000000"/>
+            </TransformComponent>
+			<ModelRenderComponent>
+				<Model path="Models/tank/tank.obj"/>
 			</ModelRenderComponent>
         </Actor>
 		<Actor name="sensor2">

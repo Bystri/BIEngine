@@ -1,0 +1,11 @@
+<Material>
+	<ShaderProgram path="effects/meshPBR.sp"/>
+	<Params isDoubleSided="false"/>
+	<Textures>
+		<Texture paramName="material.albedoMap" slot="0" path="textures/pbr/rusted_iron/rustediron2_albedo.bitf"/>
+		<Texture paramName="material.normalMap" slot="2" path="textures/pbr/rusted_iron/rustediron2_normal.bitf"/>
+		<Texture paramName="material.metallicMap" slot="1" path="textures/pbr/rusted_iron/rustediron2_metallic.bitf"/>
+		<Texture paramName="material.roughnessMap" slot="3" path="textures/pbr/rusted_iron/rustediron2_roughness.bitf"/>
+		<Texture paramName="material.aoMap" slot="4" path="textures/pbr/ao_default.bitf"/>
+	</Textures>
+</Material>

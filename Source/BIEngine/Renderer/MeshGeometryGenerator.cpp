@@ -190,6 +190,114 @@ Mesh MeshGeometryGenerator::CreateGrid(float width, float depth, unsigned int m,
    return Mesh(v, ind);
 }
 
+Mesh MeshGeometryGenerator::CreateSphere(float radius, unsigned int sliceCount, unsigned int stackCount)
+{
+   //
+   // Compute the vertices stating at the top pole and moving down the stacks.
+   //
+
+   // Poles: note that there will be texture coordinate distortion as there is
+   // not a unique point on the texture map to assign to the pole when mapping
+   // a rectangular texture onto a sphere.
+   const Vertex topVertex(0.0f, +radius, 0.0f, 0.0f, +1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+   const Vertex bottomVertex(0.0f, -radius, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+
+   std::vector<Vertex> v;
+
+   v.push_back(topVertex);
+
+   constexpr float PI = 3.1415927;
+
+   const float phiStep = PI / stackCount;
+   const float thetaStep = 2.0f * PI / sliceCount;
+
+   // Compute vertices for each stack ring (do not count the poles as rings).
+   for (unsigned int i = 1; i <= stackCount - 1; ++i) {
+      const float phi = i * phiStep;
+
+      // Vertices of ring.
+      for (unsigned int j = 0; j <= sliceCount; ++j) {
+         const float theta = j * thetaStep;
+
+         Vertex vert;
+
+         // spherical to cartesian
+         vert.Position.x = radius * sinf(phi) * cosf(theta);
+         vert.Position.y = radius * cosf(phi);
+         vert.Position.z = radius * sinf(phi) * sinf(theta);
+
+         // Partial derivative of P with respect to theta
+         vert.Tangent.x = -radius * sinf(phi) * sinf(theta);
+         vert.Tangent.y = 0.0f;
+         vert.Tangent.z = +radius * sinf(phi) * cosf(theta);
+
+         glm::normalize(vert.Tangent);
+
+         vert.Normal = vert.Position;
+         glm::normalize(vert.Normal);
+
+         vert.TexCoords.x = theta / PI;
+         vert.TexCoords.y = phi / PI;
+
+         v.push_back(vert);
+      }
+   }
+
+   v.push_back(bottomVertex);
+
+   //
+   // Compute indices for top stack.  The top stack was written first to the vertex buffer
+   // and connects the top pole to the first ring.
+   //
+
+   std::vector<unsigned int> ind;
+
+   for (unsigned i = 1; i <= sliceCount; ++i) {
+      ind.push_back(0);
+      ind.push_back(i + 1);
+      ind.push_back(i);
+   }
+
+   //
+   // Compute indices for inner stacks (not connected to poles).
+   //
+
+   // Offset the indices to the index of the first vertex in the first ring.
+   // This is just skipping the top pole vertex.
+   unsigned int baseIndex = 1;
+   const unsigned int ringVertexCount = sliceCount + 1;
+   for (unsigned int i = 0; i < stackCount - 2; ++i) {
+      for (unsigned int j = 0; j < sliceCount; ++j) {
+         ind.push_back(baseIndex + i * ringVertexCount + j);
+         ind.push_back(baseIndex + i * ringVertexCount + j + 1);
+         ind.push_back(baseIndex + (i + 1) * ringVertexCount + j);
+
+         ind.push_back(baseIndex + (i + 1) * ringVertexCount + j);
+         ind.push_back(baseIndex + i * ringVertexCount + j + 1);
+         ind.push_back(baseIndex + (i + 1) * ringVertexCount + j + 1);
+      }
+   }
+
+   //
+   // Compute indices for bottom stack.  The bottom stack was written last to the vertex buffer
+   // and connects the bottom pole to the bottom ring.
+   //
+
+   // South pole vertex was added last.
+   const unsigned int southPoleIndex = static_cast<unsigned int>(ind.size()) - 1;
+
+   // Offset the indices to the index of the first vertex in the last ring.
+   baseIndex = southPoleIndex - ringVertexCount;
+
+   for (unsigned int i = 0; i < sliceCount; ++i) {
+      ind.push_back(southPoleIndex);
+      ind.push_back(baseIndex + i);
+      ind.push_back(baseIndex + i + 1);
+   }
+
+   return Mesh(v, ind);
+}
+
 void MeshGeometryGenerator::Subdivide(Mesh& meshData)
 {
    Mesh inputCopy = meshData;
@@ -197,16 +305,6 @@ void MeshGeometryGenerator::Subdivide(Mesh& meshData)
 
    meshData.m_vertices.resize(0);
    meshData.m_indices.resize(0);
-
-   //       v1
-   //       *
-   //      / \
-		//     /   \
-		//  m0*-----*m1
-   //   / \   / \
-		//  /   \ /   \
-		// *-----*-----*
-   // v0    m2     v2
 
    unsigned int numTris = (unsigned int)inputCopy.m_indices.size() / 3;
    for (unsigned int i = 0; i < numTris; ++i) {

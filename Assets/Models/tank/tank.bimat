@@ -1,8 +1,11 @@
 <Material>
-	<ShaderProgram path="Effects/mesh.sp"/>
-	<DiffuseColor r="1.0" g="1.0" b="1.0"/>
-	<DiffuseMap path="models/tank/tank_diffuse.bitf"/>
-	<NormalMap path="models/tank/tank_normal.bitf"/>
-	<SpecularMap path="models/tank/tank_specular.bitf"/>
-	<DisplacementMap path="textures/displacement_default.bitf"/>
+	<ShaderProgram path="effects/meshPBR.sp"/>
+	<Params isDoubleSided="false"/>
+	<Textures>
+		<Texture paramName="material.albedoMap" slot="0" path="models/tank/tank_albedo.bitf"/>
+		<Texture paramName="material.normalMap" slot="1" path="models/tank/tank_normal.bitf"/>
+		<Texture paramName="material.metallicMap" slot="2" path="models/tank/tank_metallic.bitf"/>
+		<Texture paramName="material.roughnessMap" slot="3" path="models/tank/tank_roughness.bitf"/>
+		<Texture paramName="material.aoMap" slot="4" path="textures/pbr/ao_default.bitf"/>
+	</Textures>
 </Material>

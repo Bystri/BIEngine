@@ -111,6 +111,33 @@ static ActorComponent* CreateBoxRenderComponent()
    return new BoxRenderComponent;
 }
 
+class SphereRenderComponent : public MeshBaseRenderComponent {
+public:
+   SphereRenderComponent()
+      : MeshBaseRenderComponent(), m_pModelNode(nullptr), m_radius(1.0f) {}
+
+   static ComponentId g_CompId;
+
+   virtual ComponentId GetComponentId() const { return BoxRenderComponent::g_CompId; }
+
+   virtual bool Init(tinyxml2::XMLElement* pData);
+
+   virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
+
+protected:
+   virtual std::shared_ptr<SceneNode> CreateSceneNode();
+
+protected:
+   std::shared_ptr<ModelNode> m_pModelNode; // Узел на сцене, который отвечает за отрисовку этого компонента
+
+   float m_radius;
+};
+
+static ActorComponent* CreateSphereRenderComponent()
+{
+   return new SphereRenderComponent;
+}
+
 class ModelRenderComponent : public BaseRenderComponent {
 public:
    ModelRenderComponent()

@@ -1,0 +1,4 @@
+<Texture>
+	<ImgData path="images/textures/pbr/ao_default.png"/>
+	<CreationParams wrapS="Repeat" wrapT="Repeat" filterMin="Nearest" filterMax="Nearest"/>
+</Texture>
