@@ -112,7 +112,7 @@ vec3 CalculatePointLightLo(int index, vec3 normal, vec3 fragPos, vec3 viewDir, v
 	vec3 H = normalize(viewDir + L);
 	float distance = length(light.position-fragPos);
 	float attenuation = 1.0 / (distance * distance);
-	vec3 radiance = light.color * attenuation;
+	vec3 radiance = light.color * light.intensity * attenuation;
 
 	vec3 Lo = PbrUtilCalcLo(normal, viewDir, L, H, radiance, F0, albedo, metallic, roughness);
 	
@@ -135,7 +135,7 @@ vec3 CalculateSpotLightLo(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewD
 	vec3 H = normalize(viewDir + L);
 	float distance = length(light.position-fragPos);
 	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
-	vec3 radiance = light.diffuse * attenuation;
+	vec3 radiance = light.diffuse * intensity * attenuation;
 
 	vec3 Lo = PbrUtilCalcLo(normal, viewDir, L, H, radiance, F0, albedo, metallic, roughness);
 	
