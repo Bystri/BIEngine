@@ -25,6 +25,15 @@
     <ClCompile Include="Math\Math_UnitTest.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="Math\Curve_UnitTest.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\EngineCore\Assert.cpp">
+      <Filter>EngineSources\EngineCore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\Utilities\Logger.cpp">
+      <Filter>EngineSources\Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -35,6 +44,12 @@
     </Filter>
     <Filter Include="EngineSources\Math">
       <UniqueIdentifier>{e7148ba7-cee3-4142-8949-95cbd75896be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineSources\EngineCore">
+      <UniqueIdentifier>{5087a64f-42b9-4a0b-9acd-86afe9c6d042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineSources\Utilities">
+      <UniqueIdentifier>{6a90d9af-9818-4254-ad47-7d4bffcbc040}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +70,15 @@
     </ClInclude>
     <ClInclude Include="..\BIEngine\Math\Math.h">
       <Filter>EngineSources\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Math\Curve.h">
+      <Filter>EngineSources\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\EngineCore\Assert.h">
+      <Filter>EngineSources\EngineCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Utilities\Logger.h">
+      <Filter>EngineSources\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

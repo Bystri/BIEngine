@@ -746,6 +746,9 @@
     <ClInclude Include="..\..\Graphics\SkeletalModelLoader.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Math\Curve.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.clang-format" />
