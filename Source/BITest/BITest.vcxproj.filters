@@ -25,7 +25,7 @@
     <ClCompile Include="Math\Math_UnitTest.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="Math\Curve_UnitTest.cpp">
+    <ClCompile Include="Math\Spline_UnitTest.cpp">
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="..\BIEngine\EngineCore\Assert.cpp">
@@ -71,14 +71,14 @@
     <ClInclude Include="..\BIEngine\Math\Math.h">
       <Filter>EngineSources\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\BIEngine\Math\Curve.h">
-      <Filter>EngineSources\Math</Filter>
-    </ClInclude>
     <ClInclude Include="..\BIEngine\EngineCore\Assert.h">
       <Filter>EngineSources\EngineCore</Filter>
     </ClInclude>
     <ClInclude Include="..\BIEngine\Utilities\Logger.h">
       <Filter>EngineSources\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Math\Spline.h">
+      <Filter>EngineSources\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

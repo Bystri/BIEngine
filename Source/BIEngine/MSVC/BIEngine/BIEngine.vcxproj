@@ -251,7 +251,7 @@
     <ClInclude Include="..\..\Graphics\SpriteNode.h" />
     <ClInclude Include="..\..\Graphics\GraphicsTechnique.h" />
     <ClInclude Include="..\..\Graphics\WorldRenderPass.h" />
-    <ClInclude Include="..\..\Math\Curve.h" />
+    <ClInclude Include="..\..\Math\Spline.h" />
     <ClInclude Include="..\..\Math\Math.h" />
     <ClInclude Include="..\..\Math\Matrix.h" />
     <ClInclude Include="..\..\Math\Transform.h" />

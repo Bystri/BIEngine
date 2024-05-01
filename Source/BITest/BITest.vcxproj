@@ -72,7 +72,7 @@
     <ClCompile Include="..\BIEngine\Math\Transform.cpp" />
     <ClCompile Include="..\BIEngine\Math\Trigonometry.cpp" />
     <ClCompile Include="..\BIEngine\Utilities\Logger.cpp" />
-    <ClCompile Include="Math\Curve_UnitTest.cpp" />
+    <ClCompile Include="Math\Spline_UnitTest.cpp" />
     <ClCompile Include="Math\Math_UnitTest.cpp" />
     <ClCompile Include="Math\Matrix_UnitTest.cpp" />
     <ClCompile Include="Math\Transform_UnitTest.cpp" />
@@ -84,9 +84,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIEngine\EngineCore\Assert.h" />
-    <ClInclude Include="..\BIEngine\Math\Curve.h" />
     <ClInclude Include="..\BIEngine\Math\Math.h" />
     <ClInclude Include="..\BIEngine\Math\Matrix.h" />
+    <ClInclude Include="..\BIEngine\Math\Spline.h" />
     <ClInclude Include="..\BIEngine\Math\Transform.h" />
     <ClInclude Include="..\BIEngine\Math\Trigonometry.h" />
     <ClInclude Include="..\BIEngine\Math\Vector.h" />

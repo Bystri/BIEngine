@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "../../BIEngine/Math/Curve.h"
+#include "../../BIEngine/Math/Spline.h"
 
 
 TEST(Curve, LinearSpline) {
