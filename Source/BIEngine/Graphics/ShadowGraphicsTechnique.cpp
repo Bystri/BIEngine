@@ -15,14 +15,6 @@ bool ShadowGraphicsTechnique::Init()
    auto pointShadowShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPointShadowShaderProgramPath)->GetExtra());
    m_pPointLightShadowShader = pointShadowShaderProgramData->GetShaderProgram();
 
-   const std::string commonDirShadowSkinnedShaderProgramPath = "effects/dirShadowSkinned.sp";
-   auto dirShadowShaderSkinnedProgram = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonDirShadowSkinnedShaderProgramPath)->GetExtra());
-   m_pDirLightShadowSkinnedShader = dirShadowShaderSkinnedProgram->GetShaderProgram();
-
-   const std::string commonPointShadowSkinnedShaderProgramPath = "effects/pointShadowSkinned.sp";
-   auto pointShadowSkinnedShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPointShadowSkinnedShaderProgramPath)->GetExtra());
-   m_pPointLightShadowSkinnedShader = pointShadowSkinnedShaderProgramData->GetShaderProgram();
-
    for (int i = 0; i < m_maxDirLightsNum; ++i) {
       RenderDirLightShadowInfo dirLightShadowInfo;
       dirLightShadowInfo.pShadowMapBuffer = std::make_shared<Framebuffer>();
@@ -89,7 +81,6 @@ void ShadowGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* 
    const glm::mat4 dirProjMatr = glm::ortho(-20.0f, 20.0f, 20.0f, -20.0f, -15.0f, 100.0f);
 
    const auto& opaqueItems = pStorage->GetOpaqueRenderItems();
-   const auto& opaqueAnimatedItems = pStorage->GetOpaqueAnimatedRenderItems();
    auto& dirLights = pStorage->GetDirectionalLightItems();
    auto& pointLights = pStorage->GetPointLightItems();
    const auto& spotLights = pStorage->GetSpotLightItems();
@@ -111,20 +102,7 @@ void ShadowGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* 
       m_pDirLightShadowShader->SetMatrix4("lightSpaceMatrix", dirLights[i].LightMatr);
 
       for (const auto& ritem : opaqueItems) {
-         RenderCommand renderCommand(ritem.pMesh->GetVao(), ritem.pMesh->GetIndices().size(), m_pDirLightShadowShader);
-         renderCommand.Transform = ritem.ModelTransform;
-         pScene->GetRenderer()->DrawRenderCommand(renderCommand);
-      }
-
-      m_pDirLightShadowSkinnedShader->Use();
-      m_pDirLightShadowSkinnedShader->SetMatrix4("lightSpaceMatrix", dirLights[i].LightMatr);
-
-      for (const auto& ritem : opaqueAnimatedItems) {
-         for (int j = 0; j < ritem.boneMatrices.size(); ++j) {
-            m_pDirLightShadowSkinnedShader->SetMatrix4("finalBonesMatrices[" + std::to_string(j) + "]", ritem.boneMatrices[j]);
-         }
-
-         RenderCommand renderCommand(ritem.pMesh->GetVao(), ritem.pMesh->GetIndices().size(), m_pDirLightShadowSkinnedShader);
+         RenderCommand renderCommand(ritem.VAO, ritem.IndicesSize, m_pDirLightShadowShader);
          renderCommand.Transform = ritem.ModelTransform;
          pScene->GetRenderer()->DrawRenderCommand(renderCommand);
       }
@@ -163,25 +141,7 @@ void ShadowGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* 
 
 
       for (const auto& ritem : opaqueItems) {
-         RenderCommand renderCommand(ritem.pMesh->GetVao(), ritem.pMesh->GetIndices().size(), m_pPointLightShadowShader);
-         renderCommand.Transform = ritem.ModelTransform;
-         pScene->GetRenderer()->DrawRenderCommand(renderCommand);
-      }
-
-      m_pPointLightShadowSkinnedShader->Use();
-
-      for (unsigned int j = 0; j < 6; ++j) {
-         m_pPointLightShadowSkinnedShader->SetMatrix4("shadowMatrices[" + std::to_string(j) + "]", shadowTransforms[j]);
-      }
-      m_pPointLightShadowSkinnedShader->SetVector3f("lightPos", pointLight.position);
-
-
-      for (const auto& ritem : opaqueAnimatedItems) {
-         for (int j = 0; j < ritem.boneMatrices.size(); ++j) {
-            m_pPointLightShadowSkinnedShader->SetMatrix4("finalBonesMatrices[" + std::to_string(j) + "]", ritem.boneMatrices[j]);
-         }
-
-         RenderCommand renderCommand(ritem.pMesh->GetVao(), ritem.pMesh->GetIndices().size(), m_pPointLightShadowSkinnedShader);
+         RenderCommand renderCommand(ritem.VAO, ritem.IndicesSize, m_pPointLightShadowShader);
          renderCommand.Transform = ritem.ModelTransform;
          pScene->GetRenderer()->DrawRenderCommand(renderCommand);
       }

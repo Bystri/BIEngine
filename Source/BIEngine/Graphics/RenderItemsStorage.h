@@ -16,17 +16,10 @@ class RenderItemsStorage {
 public:
    struct OpaqueRenderItem {
       ActorId actorId;
-      std::shared_ptr<Mesh> pMesh;
+      unsigned int VAO;
+      std::size_t IndicesSize;
       std::shared_ptr<Material> pMaterial;
       glm::mat4 ModelTransform;
-   };
-
-   struct OpaqueAnimatedRenderItem {
-      ActorId actorId;
-      std::shared_ptr<SkeletalMesh> pMesh;
-      std::shared_ptr<Material> pMaterial;
-      glm::mat4 ModelTransform;
-      std::vector<glm::mat4> boneMatrices;
    };
 
    struct DirectionalLightItem {
@@ -67,10 +60,6 @@ public:
 
    std::vector<OpaqueRenderItem>& GetOpaqueRenderItems() { return m_opaqueItems; }
 
-   void InsertOpaqueAnimatedRenderItem(const OpaqueAnimatedRenderItem& opaqueRitem);
-
-   std::vector<OpaqueAnimatedRenderItem>& GetOpaqueAnimatedRenderItems() { return m_opaqueAnimatedItems; }
-
    void InsertDirectionalLightInfo(const DirectionalLightItem& dirLight);
    void InsertPointLightInfo(const PointLightItem& pointLight);
    void InsertSpotLightInfo(const SpotLightItem& spotLight);
@@ -85,7 +74,6 @@ public:
 
 private:
    std::vector<OpaqueRenderItem> m_opaqueItems;
-   std::vector<OpaqueAnimatedRenderItem> m_opaqueAnimatedItems;
 
    std::vector<DirectionalLightItem> m_directionalLightItems;
    std::vector<PointLightItem> m_pointLightItems;

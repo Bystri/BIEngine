@@ -39,7 +39,7 @@ static std::shared_ptr<Material> modelLoadMaterial(const aiMaterial* const mat, 
             Texture2D::Format texureFormat = components > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
             auto t2 = Texture2D::Create(width, height, sizedFormat, texureFormat, image_data);
 
-            auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/skinnedMesh.sp")->GetExtra());
+            auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/mesh.sp")->GetExtra());
 
             if (shaderProgramData == nullptr) {
                return nullptr;
@@ -76,7 +76,7 @@ static std::shared_ptr<Material> modelLoadMaterial(const aiMaterial* const mat, 
 
             return material;
          } else {
-            auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/skinnedMesh.sp")->GetExtra());
+            auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/mesh.sp")->GetExtra());
 
             if (shaderProgramData == nullptr) {
                return nullptr;
@@ -123,7 +123,7 @@ static std::shared_ptr<Material> modelLoadMaterial(const aiMaterial* const mat, 
    }
 
    if (std::string(name.C_Str()).find("bimat") == std::string::npos) {
-      auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/skinnedMesh.sp")->GetExtra());
+      auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/mesh.sp")->GetExtra());
 
       if (shaderProgramData == nullptr) {
          return nullptr;
@@ -223,7 +223,7 @@ void modelLoaderExtractBoneWeightForVertices(std::vector<SkeletalMesh::VertexBon
    }
 }
 
-static std::shared_ptr<SkeletalModelMesh> modelLoaderProcessMesh(aiMesh* mesh, const aiScene* scene, const BoneInfoMap& boneInfoMap)
+static std::shared_ptr<SkeletalModelMesh> modelLoaderProcessMesh(aiMesh* mesh, const aiScene* scene, const BoneInfoMap& boneInfoMap, std::shared_ptr<Skeleton> pSkeleton)
 {
    std::vector<Vertex> vertices;
    std::vector<unsigned int> indices;
@@ -267,7 +267,7 @@ static std::shared_ptr<SkeletalModelMesh> modelLoaderProcessMesh(aiMesh* mesh, c
 
    modelLoaderExtractBoneWeightForVertices(bonesData, mesh, boneInfoMap);
 
-   std::shared_ptr<SkeletalMesh> pLoadedMesh = std::make_shared<SkeletalMesh>(vertices, indices, bonesData);
+   std::shared_ptr<SkeletalMesh> pLoadedMesh = std::make_shared<SkeletalMesh>(vertices, indices, bonesData, pSkeleton);
 
    std::shared_ptr<Material> pMaterial = nullptr;
    // process material
@@ -285,7 +285,7 @@ static void modelLoaderProcessNode(std::shared_ptr<SkeletalModel> pModel, aiNode
 {
    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
       aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-      pModel->AddSkeletalModelMesh(modelLoaderProcessMesh(mesh, scene, boneInfoMap));
+      pModel->AddSkeletalModelMesh(modelLoaderProcessMesh(mesh, scene, boneInfoMap, pModel->GetSkeleton()));
    }
 
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <queue>
 #include <memory>
 #include <map>
 
@@ -26,6 +27,11 @@ public:
       return m_pMaterial;
    }
 
+   void OnRender()
+   {
+      m_pMesh->OnRender();
+   }
+
 
 private:
    std::shared_ptr<SkeletalMesh> m_pMesh;
@@ -39,6 +45,13 @@ public:
 
    std::size_t AddSkeletalModelMesh(std::shared_ptr<SkeletalModelMesh> pMesh)
    {
+      if (!m_freeIndicies.empty()) {
+         auto idx = m_freeIndicies.front();
+         m_freeIndicies.pop();
+         m_meshes[idx] = pMesh;
+         return idx;
+      }
+
       m_meshes.push_back(pMesh);
       return m_meshes.size() - 1;
    }
@@ -49,7 +62,15 @@ public:
          return;
       }
 
-      m_meshes.erase(m_meshes.begin() + index);
+      m_meshes[index] = nullptr;
+      m_freeIndicies.push(index);
+   }
+
+   void OnRender()
+   {
+      for (auto& mesh : m_meshes) {
+         mesh->OnRender();
+      }
    }
 
    const std::vector<std::shared_ptr<SkeletalModelMesh>>& GetSkeletalMeshes() const { return m_meshes; }
@@ -58,6 +79,7 @@ public:
 
 private:
    std::vector<std::shared_ptr<SkeletalModelMesh>> m_meshes;
+   std::queue<std::size_t> m_freeIndicies;
    std::shared_ptr<Skeleton> m_pSkeleton;
 };
 

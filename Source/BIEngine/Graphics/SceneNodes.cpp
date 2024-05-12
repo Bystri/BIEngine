@@ -128,7 +128,8 @@ bool ModelNode::OnRender(Scene* pScene)
    for (const auto& pModelMesh : modelMeshes) {
       RenderItemsStorage::OpaqueRenderItem opaqueRitem;
       opaqueRitem.actorId = m_props.GetActorId();
-      opaqueRitem.pMesh = pModelMesh->GetMesh();
+      opaqueRitem.VAO = pModelMesh->GetMesh()->GetVao();
+      opaqueRitem.IndicesSize = pModelMesh->GetMesh()->GetIndices().size();
       opaqueRitem.pMaterial = pModelMesh->GetMaterial();
       opaqueRitem.ModelTransform = GetLocalModelMatrix();
       pScene->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);
@@ -139,18 +140,19 @@ bool ModelNode::OnRender(Scene* pScene)
 
 bool SkeletalModelNode::OnRender(Scene* pScene)
 {
+   m_pModel->OnRender();
+
    const std::vector<std::shared_ptr<SkeletalModelMesh>>& modelMeshes = m_pModel->GetSkeletalMeshes();
 
    for (const auto& pModelMesh : modelMeshes) {
-      RenderItemsStorage::OpaqueAnimatedRenderItem opaqueRitem;
+      RenderItemsStorage::OpaqueRenderItem opaqueRitem;
       opaqueRitem.actorId = m_props.GetActorId();
-      opaqueRitem.pMesh = pModelMesh->GetSkeletalMesh();
+      opaqueRitem.VAO = pModelMesh->GetSkeletalMesh()->GetVao();
+      opaqueRitem.IndicesSize = pModelMesh->GetSkeletalMesh()->GetIndices().size();
       opaqueRitem.pMaterial = pModelMesh->GetMaterial();
       opaqueRitem.ModelTransform = GetLocalModelMatrix();
 
-      opaqueRitem.boneMatrices = m_pModel->GetSkeleton()->GetFinalBoneMatrices();
-
-      pScene->GetRenderItemsStorage()->InsertOpaqueAnimatedRenderItem(opaqueRitem);
+      pScene->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);
    }
 
    return true;

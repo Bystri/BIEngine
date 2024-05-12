@@ -4,8 +4,8 @@
 
 namespace BIEngine {
 
-SkeletalMesh::SkeletalMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<VertexBoneData>& bones)
-   : m_vertices(vertices), m_indices(indices), m_bones(bones)
+SkeletalMesh::SkeletalMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<VertexBoneData>& bones, std::shared_ptr<Skeleton> pSkeleton)
+   : m_vertices(vertices), m_animatedVertices(vertices), m_indices(indices), m_bones(bones), m_pSkeleton(pSkeleton)
 {
    setupMesh();
 }
@@ -20,7 +20,7 @@ void SkeletalMesh::setupMesh()
    glBindVertexArray(m_VAO);
 
    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-   glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, m_animatedVertices.size() * sizeof(Vertex), m_animatedVertices.data(), GL_DYNAMIC_DRAW);
 
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
@@ -40,17 +40,48 @@ void SkeletalMesh::setupMesh()
    glEnableVertexAttribArray(3);
    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, TexCoords)));
 
-   glBindBuffer(GL_ARRAY_BUFFER, m_BBO);
-   glBufferData(GL_ARRAY_BUFFER, m_bones.size() * sizeof(VertexBoneData), m_bones.data(), GL_STATIC_DRAW);
+   glBindVertexArray(0);
+}
 
-   // Bone Ids
-   glEnableVertexAttribArray(4);
-   glVertexAttribIPointer(4, VertexBoneData::NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (void*)offsetof(VertexBoneData, IDs));
+void SkeletalMesh::OnRender()
+{
+   for (int i = 0; i < m_animatedVertices.size(); ++i) {
+      m_animatedVertices[i] = m_vertices[i];
 
-   // Bone Weights
-   glEnableVertexAttribArray(5);
-   glVertexAttribPointer(5, VertexBoneData::NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), (void*)offsetof(VertexBoneData, Weights));
+      glm::mat4 finalVertexTransform = glm::mat4(0.0f);
+      bool isVertexAnimated = false;
+
+      const auto& boneTransforms = m_pSkeleton->GetFinalBoneMatrices();
+
+      for (int inflBornId = 0; inflBornId < VertexBoneData::NUM_BONES_PER_VERTEX; ++inflBornId) {
+         if (m_bones[i].IDs[inflBornId] == -1) {
+            continue;
+         }
+
+         if (m_bones[i].IDs[inflBornId] > 100) {
+            isVertexAnimated = false;
+            break;
+         }
+
+         finalVertexTransform += boneTransforms[m_bones[i].IDs[inflBornId]] * m_bones[i].Weights[inflBornId];
+         isVertexAnimated = true;
+      }
+
+      if (isVertexAnimated) {
+         m_animatedVertices[i].Position = finalVertexTransform * glm::vec4(m_vertices[i].Position, 1.0f);
+         m_animatedVertices[i].Tangent = finalVertexTransform * glm::vec4(m_vertices[i].Tangent, 0.0f);
+         m_animatedVertices[i].Normal = finalVertexTransform * glm::vec4(m_vertices[i].Normal, 0.0f);
+      }
+   }
+
+   glBindVertexArray(m_VAO);
+
+   glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+   glBufferData(GL_ARRAY_BUFFER, m_animatedVertices.size() * sizeof(Vertex), m_animatedVertices.data(), GL_DYNAMIC_DRAW);
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
    glBindVertexArray(0);
 }
+
+
 } // namespace BIEngine

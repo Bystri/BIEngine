@@ -11,7 +11,6 @@ public:
         m_maxDirLightsNum(maxDirLightsNum), m_maxPointLightsNum(maxPointLightsNum),
         SHADOW_MAP_WIDTH(1024), SHADOW_MAP_HEIGHT(1024),
         m_pDirLightShadowShader(nullptr), m_pPointLightShadowShader(nullptr),
-        m_pDirLightShadowSkinnedShader(nullptr), m_pPointLightShadowSkinnedShader(nullptr),
         m_dirLightShadowInfos(), m_pointLightShadowInfos()
    {
    }
@@ -42,9 +41,6 @@ private:
 
    std::shared_ptr<ShaderProgram> m_pDirLightShadowShader;
    std::shared_ptr<ShaderProgram> m_pPointLightShadowShader;
-
-   std::shared_ptr<ShaderProgram> m_pDirLightShadowSkinnedShader;
-   std::shared_ptr<ShaderProgram> m_pPointLightShadowSkinnedShader;
 
    std::vector<RenderDirLightShadowInfo> m_dirLightShadowInfos;
    std::vector<RenderPointLightShadowInfo> m_pointLightShadowInfos;
