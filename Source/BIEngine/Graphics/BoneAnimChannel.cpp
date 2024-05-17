@@ -2,19 +2,11 @@
 
 namespace BIEngine {
 
-void BoneAnimChannel::Update(float animationTime)
+static float getCurveU(const std::vector<float>& framesTimes, const float animationTime)
 {
-   const glm::mat4 translation = interpolatePosition(animationTime);
-   const glm::mat4 rotation = interpolateRotation(animationTime);
-   const glm::mat4 scale = interpolateScaling(animationTime);
-   m_localTransform = translation * rotation * scale;
-}
-
-int BoneAnimChannel::getPositionIndex(float animationTime)
-{
-   for (int i = 0; i < m_positions.size() - 1; ++i) {
-      if (animationTime < m_positions[i + 1].timeStamp) {
-         return i;
+   for (int i = 0; i < framesTimes.size() - 1; ++i) {
+      if (animationTime < framesTimes[i + 1]) {
+         return static_cast<float>(i) + (animationTime - framesTimes[i])/(framesTimes[i + 1] - framesTimes[i]);
       }
    }
 
@@ -22,76 +14,61 @@ int BoneAnimChannel::getPositionIndex(float animationTime)
    return -1;
 }
 
-int BoneAnimChannel::getRotationIndex(float animationTime)
+void BoneAnimChannel::Update(float animationTime)
 {
-   for (int i = 0; i < m_rotations.size() - 1; ++i) {
-      if (animationTime < m_rotations[i + 1].timeStamp) {
-         return i;
-      }
+   {
+      const float u = getCurveU(m_positionFramesTimes, animationTime);
+      const Vector3 val = m_positionCurve.GetPointByU(u);
+      m_localTransform = glm::translate(glm::mat4(1.0f), glm::vec3(val.x, val.y, val.z));
    }
 
-   Assert(false, "There is no rotation in channel's bone for time %f", animationTime);
-   return -1;
-}
-
-int BoneAnimChannel::getScaleIndex(float animationTime)
-{
-   for (int i = 0; i < m_scales.size() - 1; ++i) {
-      if (animationTime < m_scales[i + 1].timeStamp) {
-         return i;
-      }
+   {
+      const float u = getCurveU(m_rotationFramesTimes, animationTime);
+      const Vector4 val = m_rotationCurve.GetPointByU(u);
+      m_localTransform *= glm::mat4(glm::normalize(glm::quat(val.x, val.y, val.z, val.w)));
    }
 
-   Assert(false, "There is no scales in channel's bone for time %f", animationTime);
-   return -1;
+   {
+      const float u = getCurveU(m_scaleFramesTimes, animationTime);
+      const Vector3 val = m_scaleCurve.GetPointByU(u);
+      m_localTransform *= glm::scale(glm::mat4(1.0f), glm::vec3(val.x, val.y, val.z));
+   }
 }
 
-float BoneAnimChannel::getScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime)
+CatmullRomSpline BoneAnimChannel::constructPositionCurve(const std::vector<KeyPosition>& positions)
 {
-   const float midWayLength = animationTime - lastTimeStamp;
-   const float framesDiff = nextTimeStamp - lastTimeStamp;
-   return midWayLength / framesDiff;
-}
+   std::vector<Vector3> vals;
 
-glm::mat4 BoneAnimChannel::interpolatePosition(float animationTime)
-{
-   if (m_positions.size() == 1) {
-      return glm::translate(glm::mat4(1.0f), m_positions[0].position);
+   vals.emplace_back(positions[positions.size() - 1].position.x, positions[positions.size() - 1].position.y, positions[positions.size() - 1].position.z);
+   for (int i = 0; i < positions.size(); ++i) {
+      vals.emplace_back(positions[i].position.x, positions[i].position.y, positions[i].position.z);
    }
 
-   const int p0Index = getPositionIndex(animationTime);
-   const int p1Index = p0Index + 1;
-
-   const float scaleFactor = getScaleFactor(m_positions[p0Index].timeStamp, m_positions[p1Index].timeStamp, animationTime);
-   const glm::vec3 finalPosition = glm::mix(m_positions[p0Index].position, m_positions[p1Index].position, scaleFactor);
-   return glm::translate(glm::mat4(1.0f), finalPosition);
+   return CatmullRomSpline(vals);
 }
 
-glm::mat4 BoneAnimChannel::interpolateRotation(float animationTime)
+CatmullRomSpline4d BoneAnimChannel::constructRotationCurve(const std::vector<KeyRotation>& rotations)
 {
-   if (m_rotations.size() == 1) {
-      return glm::mat4(glm::normalize(m_rotations[0].orientation));
+   std::vector<Vector4> vals;
+
+   vals.emplace_back(rotations[rotations.size() - 1].orientation.w, rotations[rotations.size() - 1].orientation.x, rotations[rotations.size() - 1].orientation.y, rotations[rotations.size() - 1].orientation.z);
+   for (int i = 0; i < rotations.size(); ++i) {
+      vals.emplace_back(rotations[i].orientation.w, rotations[i].orientation.x, rotations[i].orientation.y, rotations[i].orientation.z);
    }
 
-   const int p0Index = getRotationIndex(animationTime);
-   const int p1Index = p0Index + 1;
-   const float scaleFactor = getScaleFactor(m_rotations[p0Index].timeStamp, m_rotations[p1Index].timeStamp, animationTime);
-   const glm::quat finalRotation = glm::slerp(m_rotations[p0Index].orientation, m_rotations[p1Index].orientation, scaleFactor);
-
-   return glm::mat4(glm::normalize(finalRotation));
+   return CatmullRomSpline4d(vals);
 }
 
-glm::mat4 BoneAnimChannel::interpolateScaling(float animationTime)
+CatmullRomSpline BoneAnimChannel::constructScaleCurve(const std::vector<KeyScale>& scales)
 {
-   if (m_scales.size() == 1) {
-      return glm::scale(glm::mat4(1.0f), m_scales[0].scale);
+   std::vector<Vector3> vals;
+
+   vals.emplace_back(scales[scales.size() - 1].scale.x, scales[scales.size() - 1].scale.y, scales[scales.size() - 1].scale.z);
+   for (int i = 0; i < scales.size(); ++i) {
+      vals.emplace_back(scales[i].scale.x, scales[i].scale.y, scales[i].scale.z);
    }
 
-   const int p0Index = getScaleIndex(animationTime);
-   const int p1Index = p0Index + 1;
-   const float scaleFactor = getScaleFactor(m_scales[p0Index].timeStamp, m_scales[p1Index].timeStamp, animationTime);
-   const glm::vec3 finalScale = glm::mix(m_scales[p0Index].scale, m_scales[p1Index].scale, scaleFactor);
-   return glm::scale(glm::mat4(1.0f), finalScale);
+   return CatmullRomSpline(vals);
 }
 
 } // namespace BIEngine

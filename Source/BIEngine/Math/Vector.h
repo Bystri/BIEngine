@@ -297,7 +297,7 @@ struct Vector<T, 4> {
    {
       data[0] = x;
       data[1] = y;
-      data[2] = y;
+      data[2] = z;
       data[3] = w;
    }
 

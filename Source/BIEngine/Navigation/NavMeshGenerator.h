@@ -24,16 +24,16 @@ struct NavMeshBuildSettings {
    float CellHeight = 0.2f; // Cell height in world units
 
    float AgentHeight = 2.0f;    // Agent height in world units
-   float AgentRadius = 0.6;     // Agent radius in world units
-   float AgentMaxClimb = 0.9;   // Agent max climb in world units
+   float AgentRadius = 0.6f;    // Agent radius in world units
+   float AgentMaxClimb = 0.9f;  // Agent max climb in world units
    float AgentMaxSlope = 45.0f; // Agent max slope in degrees
 
 
    float RegionMinSize = 8.0f;    // Region minimum size in voxels.
    float RegionMergeSize = 20.0f; // Region merge size in voxels.
 
-   float EdgeMaxLen = 12.0f; // Edge max length in world units
-   float EdgeMaxError = 1.3; // Edge max error in voxels
+   float EdgeMaxLen = 12.0f;  // Edge max length in world units
+   float EdgeMaxError = 1.3f; // Edge max error in voxels
    float VertsPerPoly = 6.0f;
 
    float DetailSampleDist = 6.0f;     // Detail sample distance in voxels

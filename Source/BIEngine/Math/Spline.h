@@ -20,7 +20,12 @@ public:
       }
    }
 
-   virtual Vector<T, Dim> GetPoint(const T& t) const = 0;
+   virtual Vector<T, Dim> GetPointByU(const T& u) const = 0;
+
+   std::size_t GetCtrlPointsNum() const
+   {
+      return m_ctrlPoints.size();
+   }
 
 protected:
    std::vector<Vector<T, Dim>> m_ctrlPoints;
@@ -38,16 +43,16 @@ public:
    {
    }
 
-   virtual Vector<T, Dim> GetPoint(const T& t) const override
+   virtual Vector<T, Dim> GetPointByU(const T& u) const override
    {
-      Assert(m_ctrlPoints.size() > 0, "No points for interpolation");
+      Assert(this->m_ctrlPoints.size() > 0, "No points for interpolation");
 
-      const int idx = static_cast<int>(t);
-      Assert(idx < m_ctrlPoints.size() - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", m_ctrlPoints.size());
+      const int idx = static_cast<int>(u);
+      Assert(idx < this->m_ctrlPoints.size() - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.size());
 
-      const T u = t - static_cast<T>(idx);
+      const T t = u - static_cast<T>(idx);
 
-      return m_ctrlPoints[idx] + u * (m_ctrlPoints[idx + 1] - m_ctrlPoints[idx]);
+      return this->m_ctrlPoints[idx] + t * (this->m_ctrlPoints[idx + 1] - this->m_ctrlPoints[idx]);
    }
 };
 
@@ -63,23 +68,23 @@ public:
    {
    }
 
-   virtual Vector<T, Dim> GetPoint(const T& t) const override
+   virtual Vector<T, Dim> GetPointByU(const T& u) const override
    {
-      Assert(m_ctrlPoints.size() > 0, "No points for interpolation");
+      Assert(this->m_ctrlPoints.size() > 0, "No points for interpolation");
 
-      int idx = static_cast<int>(t);
-      Assert(idx < m_ctrlPoints.size() / 2 - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", m_ctrlPoints.size());
+      int idx = static_cast<int>(u);
+      Assert(idx < this->m_ctrlPoints.size() / 2 - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.size());
 
       static const Matrix<T, 4, 4> B = {{1.0f, 0.0f, -3.0f, 2.0f}, {0.0f, 1.0f, -2.0f, 1.0f}, {0.0f, 0.0f, 3.0f, -2.0f}, {0.0f, 0.0f, -1.0f, 1.0f}};
 
-      const T u = t - static_cast<T>(idx);
-      const Vector<T, 4> tPows = {1, u, u * u, u * u * u};
+      const T t = u - static_cast<T>(idx);
+      const Vector<T, 4> tPows = {1, t, t * t, t * t * t};
 
       idx *= 2;
 
       Vector<T, Dim> ret;
       for (int i = 0; i < 4; ++i) {
-         ret += Dot(B[i], tPows) * m_ctrlPoints[idx + i];
+         ret += Dot(B[i], tPows) * this->m_ctrlPoints[idx + i];
       }
 
       return ret;
@@ -113,21 +118,21 @@ public:
    {
    }
 
-   virtual Vector<T, Dim> GetPoint(const T& t) const override
+   virtual Vector<T, Dim> GetPointByU(const T& u) const override
    {
-      Assert(m_ctrlPoints.size() > 0, "No points for interpolation");
+      Assert(this->m_ctrlPoints.size() > 0, "No points for interpolation");
 
-      const int idx = static_cast<int>(t);
-      Assert(idx < m_ctrlPoints.size() - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", m_ctrlPoints.size());
+      int idx = static_cast<int>(u);
+      Assert(idx < this->m_ctrlPoints.size() - 3 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.size());
 
       static const Matrix<T, 4, 4> B = {{0.0f, -0.5f, 1.0f, -0.5f}, {1.0f, 0.0f, -2.5f, 1.5f}, {0.0f, 0.5f, 2.0f, -1.5f}, {0.0f, 0.0f, -0.5f, 0.5f}};
 
-      const T u = t - static_cast<T>(idx);
-      const Vector<T, 4> tPows = {1, u, u * u, u * u * u};
+      const T t = u - static_cast<T>(idx);
+      const Vector<T, 4> tPows = {1, t, t * t, t * t * t};
 
       Vector<T, Dim> ret;
       for (int i = 0; i < 4; ++i) {
-         ret += Dot(B[i], tPows) * m_ctrlPoints[idx + i];
+         ret += Dot(B[i], tPows) * this->m_ctrlPoints[idx + i];
       }
 
       return ret;
@@ -140,11 +145,8 @@ private:
 
       ctrlPoints.push_back(points[0] + (points[0] - points[1]));
 
-      for (int i = 0; i < points.size() - 3; ++i) {
+      for (int i = 0; i < points.size(); ++i) {
          ctrlPoints.push_back(points[i]);
-         ctrlPoints.push_back(points[i + 1]);
-         ctrlPoints.push_back(points[i + 2]);
-         ctrlPoints.push_back(points[i + 3]);
       }
 
       ctrlPoints.push_back(points[points.size() - 1] - (points[points.size() - 2] - points[points.size() - 1]));
@@ -165,20 +167,20 @@ public:
    {
    }
 
-   virtual Vector<T, Dim> GetPoint(const T& t) const override
+   virtual Vector<T, Dim> GetPointByU(const T& u) const override
    {
-      Assert(m_ctrlPoints.size() > 0, "No points for interpolation");
+      Assert(this->m_ctrlPoints.size() > 0, "No points for interpolation");
 
-      const int idx = static_cast<int>(t);
-      Assert(idx < m_ctrlPoints.size() - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", m_ctrlPoints.size());
+      const int idx = static_cast<int>(u);
+      Assert(idx < this->m_ctrlPoints.size() - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.size());
 
       static const Matrix<T, 4, 4> B = {{-1.0f / 6.0f, 0.5f, -0.5f, 1.0f / 6.0f}, {0.5f, -1.0f, 0.0f, 2.0f / 3.0f}, {-0.5f, 0.5f, 0.5f, 1.0f / 6.0f}, {1.0f / 6.0f, 0.0f, 0.0f, 0.0f}};
-      const T u = t - static_cast<T>(idx);
-      const Vector<T, 4> tPows = {u * u * u, u * u, u, 1.0f};
+      const T t = u - static_cast<T>(idx);
+      const Vector<T, 4> tPows = {t * t * t, t * t, t, 1.0f};
 
       Vector<T, Dim> ret;
       for (int i = 0; i < 4; ++i) {
-         ret += Dot(B[i], tPows) * m_ctrlPoints[idx + i];
+         ret += Dot(B[i], tPows) * this->m_ctrlPoints[idx + i];
       }
 
       return ret;
@@ -197,16 +199,16 @@ public:
    {
    }
 
-   virtual Vector<T, Dim> GetPoint(const T& t) const override
+   virtual Vector<T, Dim> GetPointByU(const T& u) const override
    {
-      Assert(m_ctrlPoints.size() > 0, "No points for interpolation");
+      Assert(this->m_ctrlPoints.size() > 0, "No points for interpolation");
 
-      int idx = static_cast<int>(t);
-      Assert(idx <= m_ctrlPoints.size() / 4 && idx >= 0, "Provided interpolation param is out of range [0, %d]", m_ctrlPoints.size() / 4);
+      int idx = static_cast<int>(u);
+      Assert(idx <= this->m_ctrlPoints.size() / 4 && idx >= 0, "Provided interpolation param is out of range [0, %d]", this->m_ctrlPoints.size() / 4);
 
       static const Matrix<T, 4, 4> B = {{1.0f, -3.0f, 3.0f, -1.0f}, {0.0f, 3.0f, -6.0f, 3.0f}, {0.0f, 0.0f, 3.0f, -3.0f}, {0.0f, 0.0f, 0.0f, 1.0f}};
-      const T u = t - static_cast<T>(idx);
-      const Vector<T, 4> tPows = {1, u, u * u, u * u * u};
+      const T t = u - static_cast<T>(idx);
+      const Vector<T, 4> tPows = {1, t, t * t, t * t * t};
 
       if (idx > 0) {
          idx *= 4;
@@ -215,7 +217,7 @@ public:
 
       Vector<T, Dim> ret;
       for (int i = 0; i < 4; ++i) {
-         ret += Dot(B[i], tPows) * m_ctrlPoints[idx + i];
+         ret += Dot(B[i], tPows) * this->m_ctrlPoints[idx + i];
       }
 
       return ret;
@@ -224,13 +226,18 @@ public:
 
 using LinearSpline2d = LinearSplineT<float, 2>;
 using LinearSpline = LinearSplineT<float, 3>;
+using LinearSpline4d = LinearSplineT<float, 4>;
 using HermiteSpline2d = HermiteSplineT<float, 2>;
 using HermiteSpline = HermiteSplineT<float, 3>;
+using HermiteSpline4d = HermiteSplineT<float, 4>;
 using CatmullRomSpline2d = CatmullRomSplineT<float, 2>;
 using CatmullRomSpline = CatmullRomSplineT<float, 3>;
+using CatmullRomSpline4d = CatmullRomSplineT<float, 4>;
 using BSpline2d = BSplineT<float, 2>;
 using BSpline = BSplineT<float, 3>;
+using BSpline4d = BSplineT<float, 4>;
 using BezierSpline2d = BezierSplineT<float, 2>;
 using BezierSpline = BezierSplineT<float, 3>;
+using BezierSpline4d = BezierSplineT<float, 4>;
 
 } // namespace BIEngine
