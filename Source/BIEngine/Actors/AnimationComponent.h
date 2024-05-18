@@ -46,8 +46,8 @@ private:
    std::shared_ptr<UpdateAnimProcess> m_pUpdateAnimProcess;
 };
 
-static ActorComponent* CreateAnimatorComponent()
+static std::unique_ptr<ActorComponent> CreateAnimatorComponent()
 {
-   return new AnimationComponent;
+   return std::make_unique<AnimationComponent>();
 }
 } // namespace BIEngine

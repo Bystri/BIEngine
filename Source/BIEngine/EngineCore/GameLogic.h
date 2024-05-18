@@ -12,7 +12,7 @@ class GameLogic {
    friend class GameApp;
 
 public:
-   typedef std::map<ActorId, std::shared_ptr<Actor>> ActorMap;
+   using ActorMap = std::map<ActorId, std::shared_ptr<Actor>>;
 
    GameLogic();
    virtual ~GameLogic();

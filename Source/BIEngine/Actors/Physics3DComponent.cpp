@@ -17,16 +17,12 @@ Physics3DComponent::Physics3DComponent()
    m_bodyType = IGamePhysics3D::BodyType::DYNAMIC;
 }
 
-Physics3DComponent::~Physics3DComponent()
-{
-   m_gamePhysics->RemoveActor(m_pOwner->GetId());
-}
-
 bool Physics3DComponent::Init(tinyxml2::XMLElement* pData)
 {
    m_gamePhysics = g_pApp->m_pGameLogic->GetGamePhysics3D();
-   if (!m_gamePhysics)
-      return false; // Если нет физического движка, то и смысла в дальнейшем использовании компонента тоже нет
+   if (!m_gamePhysics) {
+      return false;
+   }
 
    tinyxml2::XMLElement* pShape = pData->FirstChildElement("Shape");
    if (pShape) {
@@ -51,12 +47,14 @@ bool Physics3DComponent::Init(tinyxml2::XMLElement* pData)
    }
 
    tinyxml2::XMLElement* pDensity = pData->FirstChildElement("Density");
-   if (pDensity)
+   if (pDensity) {
       m_density = pDensity->FirstChild()->Value();
+   }
 
    tinyxml2::XMLElement* pMaterial = pData->FirstChildElement("PhysicsMaterial");
-   if (pMaterial)
+   if (pMaterial) {
       m_material = pMaterial->FirstChild()->Value();
+   }
 
    tinyxml2::XMLElement* pSizeElement = pData->FirstChildElement("Scale");
    if (pSizeElement) {
@@ -74,21 +72,26 @@ bool Physics3DComponent::Init(tinyxml2::XMLElement* pData)
 
 void Physics3DComponent::Activate()
 {
-   if (m_pOwner) {
-      switch (m_shape) {
-         case Shape3D::SPHERE:
-            m_gamePhysics->AddSphere((float)m_rigidBodyScale.x, m_bodyType, m_pOwner, m_density, m_material);
-            break;
-         case Shape3D::BOX:
-            m_gamePhysics->AddBox(m_rigidBodyScale, m_bodyType, m_pOwner, m_density, m_material);
-            break;
-         case Shape3D::POINT_CLOUD:
-            Logger::WriteLog(Logger::LogType::ERROR, "Not supported yet!");
-            break;
-         default:
-            break;
-      }
+   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+
+   switch (m_shape) {
+      case Shape3D::SPHERE:
+         m_gamePhysics->AddSphere((float)m_rigidBodyScale.x, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation(), m_density, m_material);
+         break;
+      case Shape3D::BOX:
+         m_gamePhysics->AddBox(m_rigidBodyScale, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation(), m_density, m_material);
+         break;
+      case Shape3D::POINT_CLOUD:
+         Logger::WriteLog(Logger::LogType::ERROR, "Not supported yet!");
+         break;
+      default:
+         break;
    }
+}
+
+void Physics3DComponent::Deactivate()
+{
+   m_gamePhysics->RemoveActor(m_pOwner->GetId());
 }
 
 tinyxml2::XMLElement* Physics3DComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)

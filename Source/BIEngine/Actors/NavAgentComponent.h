@@ -29,8 +29,8 @@ private:
    NavCrowd::NavAgentParams m_params;
 };
 
-static ActorComponent* CreateNavAgentComponent()
+static std::unique_ptr<ActorComponent> CreateNavAgentComponent()
 {
-   return new NavAgentComponent;
+   return std::make_unique<NavAgentComponent>();
 }
 } // namespace BIEngine

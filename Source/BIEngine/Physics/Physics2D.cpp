@@ -32,15 +32,15 @@ public:
 
    virtual void OnUpdate(const GameTimer& gt) override {}
 
-   virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
 
-   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
 
-   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
 
    virtual void RemoveActor(ActorId id) override {}
 
-   virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim) override {}
+   virtual void CreateTrigger(ActorId actorId, const glm::vec2& pos, const glm::vec2& dim) override {}
 
    virtual void ApplyForce(const glm::vec2& forceVec, ActorId aid) override {}
 
@@ -110,14 +110,14 @@ public:
    virtual void OnUpdate(const GameTimer& gt) override;
 
    // Добавляет физический объект в виде круга в физическую симуляцию
-   virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) override;
    // Добавляет физический объект в виде прямоугольника в физическую симуляцию
-   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
-   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) override;
    virtual void RemoveActor(ActorId id) override;
 
    // Добавляет триггер-объект с нулевой физикой в симуляцию
-   virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim) override;
+   virtual void CreateTrigger(ActorId actorId, const glm::vec2& pos, const glm::vec2& dim) override;
    // Применяет силу к объекту
    virtual void ApplyForce(const glm::vec2& forceVec, ActorId aid) override;
    // Применить момент силы к объекту
@@ -162,15 +162,15 @@ private:
    cpSpace* m_cpSpace;
 
    // Физические свойства материалов
-   typedef std::map<std::string, float> DensityTable;
-   typedef std::map<std::string, MaterialData> MaterialTable;
+   using DensityTable = std::map<std::string, float>;
+   using MaterialTable = std::map<std::string, MaterialData>;
    DensityTable m_densityTable;
    MaterialTable m_materialTable;
 
-   typedef std::map<ActorId, cpBody* const> ActorIDToRigidBodyMap;
+   using ActorIDToRigidBodyMap = std::map<ActorId, cpBody* const>;
    ActorIDToRigidBodyMap m_actorIdToRigidBody;
 
-   typedef std::map<cpBody const*, ActorId> RigidBodyToActorIDMap;
+   using RigidBodyToActorIDMap = std::map<cpBody const*, ActorId>;
    RigidBodyToActorIDMap m_rigidBodyToActorId;
 };
 
@@ -240,14 +240,9 @@ void Physics2D::OnUpdate(const GameTimer& gt)
    cpSpaceStep(m_cpSpace, gt.DeltaTime());
 }
 
-void Physics2D::AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics2D::AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial)
 {
-   std::shared_ptr<Actor> pStrongActor = gameActor.lock();
-   if (!pStrongActor)
-      return;
-
-   ActorId actorID = pStrongActor->GetId();
-   Assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.find(actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
    float specificGravity = LookupSpecificGravity(densityStr);
    MaterialData material(LookupMaterialData(physicsMaterial));
@@ -256,16 +251,6 @@ void Physics2D::AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> 
    const float mass = area * specificGravity;
    const float moment = cpMomentForCircle(mass, 0, radius, cpvzero);
 
-   glm::vec3 position;
-   float rotation = 0.0f;
-   std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
-   if (pTransformComponent) {
-      position = pTransformComponent->GetPosition();
-      rotation = pTransformComponent->GetRotation().z;
-   } else
-      return;
-
    cpBody* pBody;
 
    switch (bodyType) {
@@ -284,25 +269,20 @@ void Physics2D::AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> 
    }
 
    pBody = cpSpaceAddBody(m_cpSpace, pBody);
-   cpBodySetPosition(pBody, cpv(position.x, position.y));
-   cpBodySetAngle(pBody, (cpFloat)rotation);
+   cpBodySetPosition(pBody, cpv(pos.x, pos.y));
+   cpBodySetAngle(pBody, (cpFloat)rotAngle);
    cpShape* pShape = cpSpaceAddShape(m_cpSpace, cpCircleShapeNew(pBody, radius, cpvzero));
    cpShapeSetFriction(pShape, material.m_friction);
    cpShapeSetElasticity(pShape, material.m_restitution);
    cpShapeSetDensity(pShape, specificGravity);
 
-   m_actorIdToRigidBody.insert(std::make_pair(actorID, pBody));
-   m_rigidBodyToActorId[pBody] = actorID;
+   m_actorIdToRigidBody.insert(std::make_pair(actorId, pBody));
+   m_rigidBodyToActorId[pBody] = actorId;
 }
 
-void Physics2D::AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics2D::AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial)
 {
-   std::shared_ptr<Actor> pStrongActor = gameActor.lock();
-   if (!pStrongActor)
-      return;
-
-   ActorId actorID = pStrongActor->GetId();
-   Assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.find(actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
    float specificGravity = LookupSpecificGravity(densityStr);
    MaterialData material(LookupMaterialData(physicsMaterial));
@@ -311,16 +291,6 @@ void Physics2D::AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak
    const float mass = area * specificGravity;
    const float moment = cpMomentForBox(mass, dimensions.x, dimensions.y);
 
-   glm::vec3 position;
-   float rotation = 0.0f;
-   std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
-   if (pTransformComponent) {
-      position = pTransformComponent->GetPosition();
-      rotation = pTransformComponent->GetRotation().z;
-   } else
-      return;
-
    cpBody* pBody;
 
    switch (bodyType) {
@@ -339,26 +309,21 @@ void Physics2D::AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak
    }
 
    pBody = cpSpaceAddBody(m_cpSpace, pBody);
-   cpBodySetPosition(pBody, cpv(position.x, position.y));
-   cpBodySetAngle(pBody, (cpFloat)rotation);
+   cpBodySetPosition(pBody, cpv(pos.x, pos.y));
+   cpBodySetAngle(pBody, (cpFloat)rotAngle);
    cpShape* pShape = cpSpaceAddShape(m_cpSpace, cpBoxShapeNew(pBody, dimensions.x, dimensions.y, 0.0f));
    cpShapeSetFriction(pShape, material.m_friction);
    cpShapeSetElasticity(pShape, material.m_restitution);
    cpShapeSetDensity(pShape, specificGravity);
 
-   m_actorIdToRigidBody.insert(std::make_pair(actorID, pBody));
-   m_rigidBodyToActorId[pBody] = actorID;
+   m_actorIdToRigidBody.insert(std::make_pair(actorId, pBody));
+   m_rigidBodyToActorId[pBody] = actorId;
 }
 
 // Добавляет физических объект состоящий из произвольного набора точек в физическую симуляцию
-void Physics2D::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics2D::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial)
 {
-   std::shared_ptr<Actor> pStrongActor = gameActor.lock();
-   if (!pStrongActor)
-      return;
-
-   ActorId actorID = pStrongActor->GetId();
-   Assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.find(actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
    cpVect* cpVerts = new cpVect[numPoints];
    for (int i = 0; i < numPoints; ++i) {
@@ -372,17 +337,6 @@ void Physics2D::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bo
    const float mass = area * specificGravity;
    const float moment = cpMomentForPoly(mass, numPoints, cpVerts, cpvzero, 0.0f);
 
-   glm::vec3 position;
-   float rotation = 0.0f;
-   std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
-   if (pTransformComponent) {
-      position = pTransformComponent->GetPosition();
-      rotation = pTransformComponent->GetRotation().z;
-   } else
-      return;
-
-
    cpBody* pBody;
 
    switch (bodyType) {
@@ -401,8 +355,8 @@ void Physics2D::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bo
    }
 
    pBody = cpSpaceAddBody(m_cpSpace, pBody);
-   cpBodySetPosition(pBody, cpv(position.x, position.y));
-   cpBodySetAngle(pBody, (cpFloat)rotation);
+   cpBodySetPosition(pBody, cpv(pos.x, pos.y));
+   cpBodySetAngle(pBody, (cpFloat)rotAngle);
    cpShape* pShape = cpSpaceAddShape(m_cpSpace, cpPolyShapeNewRaw(pBody, numPoints, cpVerts, 0.0));
    cpShapeSetFriction(pShape, material.m_friction);
    cpShapeSetElasticity(pShape, material.m_restitution);
@@ -410,8 +364,8 @@ void Physics2D::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bo
 
    delete[] cpVerts;
 
-   m_actorIdToRigidBody.insert(std::make_pair(actorID, pBody));
-   m_rigidBodyToActorId[pBody] = actorID;
+   m_actorIdToRigidBody.insert(std::make_pair(actorId, pBody));
+   m_rigidBodyToActorId[pBody] = actorId;
 }
 
 // Удаляет физический объект из симуляции
@@ -424,32 +378,18 @@ void Physics2D::RemoveActor(ActorId id)
    }
 }
 
-void Physics2D::CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim)
+void Physics2D::CreateTrigger(ActorId actorId, const glm::vec2& pos, const glm::vec2& dim)
 {
-   std::shared_ptr<Actor> pStrongActor = pGameActor.lock();
-   if (!pStrongActor)
-      return;
-
-   ActorId actorID = pStrongActor->GetId();
-   Assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
-
-   glm::vec3 position;
-
-   std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
-   if (pTransformComponent) {
-      position = pTransformComponent->GetPosition();
-   } else
-      return;
+   Assert(m_actorIdToRigidBody.find(actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
    cpBody* pBody = cpSpaceAddBody(m_cpSpace, cpBodyNewKinematic());
-   cpBodySetPosition(pBody, cpv(position.x, position.y));
+   cpBodySetPosition(pBody, cpv(pos.x, pos.y));
    cpShape* pShape = cpSpaceAddShape(m_cpSpace, cpBoxShapeNew(pBody, dim.x, dim.y, 0.0f));
    cpShapeSetSensor(pShape, true);
 
 
-   m_actorIdToRigidBody.insert(std::make_pair(actorID, pBody));
-   m_rigidBodyToActorId[pBody] = actorID;
+   m_actorIdToRigidBody.insert(std::make_pair(actorId, pBody));
+   m_rigidBodyToActorId[pBody] = actorId;
 }
 
 void Physics2D::ApplyForce(const glm::vec2& dir, ActorId aid)

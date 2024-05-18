@@ -58,9 +58,9 @@ protected:
    ColorRgba m_spriteColor;
 };
 
-static ActorComponent* CreateSpriteRenderComponent()
+static std::unique_ptr<ActorComponent> CreateSpriteRenderComponent()
 {
-   return new SpriteRenderComponent;
+   return std::make_unique<SpriteRenderComponent>();
 }
 
 class MeshBaseRenderComponent : public BaseRenderComponent {
@@ -106,9 +106,9 @@ protected:
    float m_depth;
 };
 
-static ActorComponent* CreateBoxRenderComponent()
+static std::unique_ptr<ActorComponent>  CreateBoxRenderComponent()
 {
-   return new BoxRenderComponent;
+   return std::make_unique<BoxRenderComponent>();
 }
 
 class SphereRenderComponent : public MeshBaseRenderComponent {
@@ -133,9 +133,9 @@ protected:
    float m_radius;
 };
 
-static ActorComponent* CreateSphereRenderComponent()
+static std::unique_ptr<ActorComponent> CreateSphereRenderComponent()
 {
-   return new SphereRenderComponent;
+   return std::make_unique<SphereRenderComponent>();
 }
 
 class ModelRenderComponent : public BaseRenderComponent {
@@ -162,9 +162,9 @@ protected:
    std::string m_modelPath;
 };
 
-static ActorComponent* CreateModelRenderComponent()
+static std::unique_ptr<ActorComponent> CreateModelRenderComponent()
 {
-   return new ModelRenderComponent;
+   return std::make_unique<ModelRenderComponent>();
 }
 
 class SkeletalModelRenderComponent : public BaseRenderComponent {
@@ -191,8 +191,8 @@ protected:
    std::string m_modelPath;
 };
 
-static ActorComponent* CreateSkeletalModelRenderComponent()
+static std::unique_ptr<ActorComponent> CreateSkeletalModelRenderComponent()
 {
-   return new SkeletalModelRenderComponent;
+   return std::make_unique<SkeletalModelRenderComponent>();
 }
 } // namespace BIEngine

@@ -7,7 +7,7 @@
 
 namespace BIEngine {
 
-typedef std::string ComponentId;
+using ComponentId = std::string;
 
 class Actor;
 
@@ -34,7 +34,7 @@ public:
 
    virtual void Deactivate() {}
 
-   virtual void Terminate(){};
+   virtual void Terminate() {};
 
    // Получить XML-элемент, по которому можно воссоздать новую копию текущего компонента
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) = 0;
@@ -43,7 +43,7 @@ public:
    virtual ComponentId GetComponentId() const = 0;
 
 private:
-   void SetOwner(std::shared_ptr<Actor> pOwner) { m_pOwner = pOwner; }
+   void SetOwner(Actor* pOwner) { m_pOwner = pOwner; }
 
 protected:
    // Так как создание/инициализацию/модификацию компонентов проводит ActorFactory, то следующие методы доступны только ему
@@ -52,8 +52,6 @@ protected:
    virtual bool Init(tinyxml2::XMLElement* pData) = 0;
 
 protected:
-   // Указатель на актера, владеюущего данным компонентом.
-   // Назначается перед первичной инициализацией компонентаю
-   std::shared_ptr<Actor> m_pOwner;
+   Actor* m_pOwner;
 };
 } // namespace BIEngine

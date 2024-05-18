@@ -90,9 +90,9 @@ private:
    };
 };
 
-typedef Matrix<float, 2, 2> Matrix2;
-typedef Matrix<float, 3, 3> Matrix3;
-typedef Matrix<float, 4, 4> Matrix4;
+using Matrix2 = Matrix<float, 2, 2>;
+using Matrix3 = Matrix<float, 3, 3>;
+using Matrix4 = Matrix<float, 4, 4>;
 
 template <typename T, std::size_t n, std::size_t m>
 inline Matrix<T, n, m> operator+(const Matrix<T, n, m>& lhs, const Matrix<T, n, m>& rhs)

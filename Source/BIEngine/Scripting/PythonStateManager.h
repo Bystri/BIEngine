@@ -14,6 +14,21 @@ namespace BIEngine {
 
 class PythonStateManager {
 public:
+   template <typename T>
+   class RawPtrWrapper {
+   public:
+      explicit RawPtrWrapper(T* ptr)
+         : m_ptr(ptr)
+      {
+      }
+
+      const T* get() const { return m_ptr; }
+
+   private:
+      T* m_ptr;
+   };
+
+public:
    // Инициализация экземпляра одиночки
    static bool Create();
    // Уничтожение экземпляра одиночки
@@ -37,7 +52,7 @@ public:
 
 private:
    // Конструктуры приватны из-за того, что PythonStateManager реализован с помощью паттерна "одиночка"
-   explicit PythonStateManager();
+   PythonStateManager();
    ~PythonStateManager();
 
 private:
@@ -48,3 +63,5 @@ private:
 };
 
 } // namespace BIEngine
+
+PYBIND11_DECLARE_HOLDER_TYPE(T, BIEngine::PythonStateManager::RawPtrWrapper<T>);

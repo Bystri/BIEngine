@@ -65,14 +65,8 @@ bool NavCrowd::Initialize(std::shared_ptr<NavMeshManager> pNavMeshManager)
    return true;
 }
 
-NavAgentId NavCrowd::AddAgent(std::shared_ptr<Actor> pActor, const NavAgentParams& params)
+NavAgentId NavCrowd::AddAgent(ActorId actorId, const glm::vec3& pos, const NavAgentParams& params)
 {
-   std::shared_ptr<TransformComponent> pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
-   if (!pTransformComponent) {
-      return -1;
-   }
-
    dtCrowdAgentParams ap;
    memset(&ap, 0, sizeof(ap));
    ap.radius = params.Radius;
@@ -102,13 +96,13 @@ NavAgentId NavCrowd::AddAgent(std::shared_ptr<Actor> pActor, const NavAgentParam
    ap.obstacleAvoidanceType = 2;
    ap.separationWeight = params.SeparationWeight;
 
-   NavAgentId agentId = m_pCrowd->addAgent(&pTransformComponent->GetPosition()[0], &ap);
+   NavAgentId agentId = m_pCrowd->addAgent(&pos[0], &ap);
    if (agentId == -1) {
       return -1;
    }
 
-   m_actorToAgentMap[pActor->GetId()] = agentId;
-   m_agentToActorMap[agentId] = pActor->GetId();
+   m_actorToAgentMap[actorId] = agentId;
+   m_agentToActorMap[agentId] = actorId;
 
    return agentId;
 }

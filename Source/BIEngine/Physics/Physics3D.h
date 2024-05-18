@@ -35,13 +35,13 @@ public:
    virtual void DrawRenderDiagnostics() = 0;
 
    // Инициализация физических объектов
-   virtual void AddSphere(float radius, BodyType bodyType, std::weak_ptr<Actor> actor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
-   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
-   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) = 0;
    virtual void RemoveActor(ActorId id) = 0;
 
    // Взаимодейтсвие с физическим миром
-   virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec3& dim) = 0;
+   virtual void CreateTrigger(ActorId actorId, const glm::vec3& pos, const glm::vec3& dim) = 0;
    virtual void ApplyForce(const glm::vec3& forceVec, ActorId aid) = 0;
    virtual void ApplyTorque(const glm::vec3& torque, ActorId aid) = 0;
    virtual bool KinematicMove(ActorId aid, const glm::vec3& position, const glm::vec3& angles) = 0;

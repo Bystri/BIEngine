@@ -15,7 +15,7 @@ enum class GameViewType {
    Other
 };
 
-typedef unsigned int GameViewId;
+using GameViewId = unsigned int;
 
 class IGameView {
 public:
@@ -36,6 +36,6 @@ public:
    virtual void SetKey(int key, int scancode, bool state) = 0;
 };
 
-typedef std::list<std::shared_ptr<IGameView>> GameViewList;
+using GameViewList = std::list<std::shared_ptr<IGameView>>;
 
 } // namespace BIEngine

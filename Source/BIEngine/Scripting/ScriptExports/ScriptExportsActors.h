@@ -21,7 +21,7 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
    py::class_<BIEngine::ActorComponent, std::shared_ptr<BIEngine::ActorComponent>>(m, "ActorComponent")
       .def("GetComponentId", &BIEngine::ActorComponent::GetComponentId);
 
-   py::class_<BIEngine::Actor, std::shared_ptr<BIEngine::Actor>>(m, "Actor")
+   py::class_<BIEngine::Actor, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::Actor>>(m, "Actor")
       .def("GetId", &BIEngine::Actor::GetId)
       .def("GetName", &BIEngine::Actor::GetName)
       .def("GetComponent", [](std::shared_ptr<BIEngine::Actor>& self, const std::string& componentId) { return self->GetComponent<BIEngine::ActorComponent>(componentId).lock(); });

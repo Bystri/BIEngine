@@ -12,9 +12,9 @@
 namespace BIEngine {
 
 // Basic types
-typedef unsigned long dword;
-typedef unsigned short word;
-typedef unsigned char byte;
+using dword = unsigned long;
+using word = unsigned short;
+using byte = unsigned char;
 
 #pragma pack(1)
 

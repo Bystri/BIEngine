@@ -13,7 +13,7 @@
 
 namespace BIEngine {
 
-typedef std::map<ActorId, std::shared_ptr<ISceneNode>> SceneActorMap;
+using SceneActorMap = std::map<ActorId, std::shared_ptr<ISceneNode>>;
 
 class GraphicsRenderPass;
 class RenderItemsStorage;

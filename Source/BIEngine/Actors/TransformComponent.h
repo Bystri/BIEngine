@@ -51,9 +51,9 @@ private:
    glm::vec3 m_rotation;
 };
 
-static ActorComponent* CreateTransformComponent()
+static std::unique_ptr<ActorComponent> CreateTransformComponent()
 {
-   return new TransformComponent;
+   return std::make_unique<TransformComponent>();
 }
 
 } // namespace BIEngine

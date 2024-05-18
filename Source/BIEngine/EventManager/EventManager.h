@@ -9,7 +9,7 @@
 
 namespace BIEngine {
 
-typedef unsigned long EventType;
+using EventType = unsigned long;
 
 class IEventData {
 public:
@@ -26,8 +26,8 @@ public:
    virtual const char* GetName() const = 0;
 };
 
-typedef std::shared_ptr<IEventData> IEventDataPtr;
-typedef fastdelegate::FastDelegate1<IEventDataPtr> EventListenerDelegate;
+using IEventDataPtr = std::shared_ptr<IEventData>;
+using EventListenerDelegate = fastdelegate::FastDelegate1<IEventDataPtr>;
 
 class BaseEventData : public IEventData {
 public:
@@ -56,9 +56,9 @@ private:
 
 // Менеджер событий является Singleton-объектом, так как должен быть доступен практически из каждой системы
 class EventManager {
-   typedef std::list<EventListenerDelegate> EventListenerList;
-   typedef std::map<EventType, EventListenerList> EventListenerMap;
-   typedef std::list<IEventDataPtr> EventQueue;
+   using EventListenerList = std::list<EventListenerDelegate>;
+   using EventListenerMap = std::map<EventType, EventListenerList>;
+   using EventQueue = std::list<IEventDataPtr>;
 
    static const unsigned int EVENTMANAGER_NUM_QUEUES = 2;
 

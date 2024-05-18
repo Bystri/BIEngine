@@ -100,7 +100,7 @@ public:
    bool IsPaused() { return m_allPaused; }
 
 protected:
-   typedef std::list<IAudioBuffer*> AudioBufferList;
+   using AudioBufferList = std::list<IAudioBuffer*>;
 
    AudioBufferList m_allSamples;
    bool m_allPaused;

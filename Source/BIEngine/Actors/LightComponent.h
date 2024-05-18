@@ -26,9 +26,9 @@ protected:
    std::shared_ptr<DirectionalLightNode> m_pDirectionalLightNode;
 };
 
-static ActorComponent* CreateDirectionalLightComponent()
+static std::unique_ptr<ActorComponent> CreateDirectionalLightComponent()
 {
-   return new DirectionalLightComponent;
+   return std::make_unique<DirectionalLightComponent>();
 }
 
 class PointLightComponent : public BaseRenderComponent {
@@ -51,9 +51,9 @@ protected:
    std::shared_ptr<PointLightNode> m_pPointLightNode;
 };
 
-static ActorComponent* CreatePointLightComponent()
+static std::unique_ptr<ActorComponent> CreatePointLightComponent()
 {
-   return new PointLightComponent;
+   return std::make_unique<PointLightComponent>();
 }
 
 class SpotLightComponent : public BaseRenderComponent {
@@ -76,8 +76,8 @@ protected:
    std::shared_ptr<SpotLightNode> m_pSpotLightNode;
 };
 
-static ActorComponent* CreateSpotLightComponent()
+static std::unique_ptr<ActorComponent> CreateSpotLightComponent()
 {
-   return new SpotLightComponent;
+   return std::make_unique<SpotLightComponent>();
 }
 } // namespace BIEngine

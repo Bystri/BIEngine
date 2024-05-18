@@ -6,7 +6,7 @@ class dtCrowd;
 
 namespace BIEngine {
 
-typedef int NavAgentId;
+using NavAgentId = int;
 
 class NavCrowd {
 public:
@@ -35,7 +35,7 @@ public:
 
    bool Initialize(std::shared_ptr<NavMeshManager> pNavMeshManager);
 
-   NavAgentId AddAgent(std::shared_ptr<Actor> pActor, const NavAgentParams& params);
+   NavAgentId AddAgent(ActorId actorId, const glm::vec3& pos, const NavAgentParams& params);
    void RemoveAgent(NavAgentId id);
 
    bool SetDestination(NavAgentId id, const glm::vec3& pos);

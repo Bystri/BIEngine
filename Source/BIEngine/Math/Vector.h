@@ -356,9 +356,9 @@ struct Vector<T, 4> {
    };
 };
 
-typedef Vector<float, 2> Vector2;
-typedef Vector<float, 3> Vector3;
-typedef Vector<float, 4> Vector4;
+using Vector2 = Vector<float, 2>;
+using Vector3 = Vector<float, 3>;
+using Vector4 = Vector<float, 4>;
 
 template <typename T, std::size_t n>
 inline const Vector<T, n> operator-(const Vector<T, n>& rhs)

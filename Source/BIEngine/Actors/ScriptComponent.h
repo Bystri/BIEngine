@@ -34,8 +34,8 @@ private:
    pybind11::object m_pyObject;
 };
 
-static ActorComponent* CreateScriptComponent()
+static std::unique_ptr<ActorComponent> CreateScriptComponent()
 {
-   return new ScriptComponent;
+   return std::make_unique<ScriptComponent>();
 }
 } // namespace BIEngine

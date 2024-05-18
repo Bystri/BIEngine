@@ -10,13 +10,13 @@
 
 namespace BIEngine {
 
-typedef unsigned long ActorId;
+using ActorId = unsigned long;
 
 // Объект, который является главным дейтсвующим механизмом на сцене. Основные его свойства задаются с помощью компонентов, которые описываются в XML-файле актера
 class Actor {
    friend class ActorFactory;
 
-   typedef std::map<ComponentId, std::shared_ptr<ActorComponent>> ActorComponents;
+   using ActorComponents = std::map<ComponentId, std::shared_ptr<ActorComponent>>;
 
 public:
    const static ActorId INVALID_ACTOR_ID = -1;

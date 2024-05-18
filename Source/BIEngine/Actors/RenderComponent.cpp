@@ -31,8 +31,9 @@ void BaseRenderComponent::Activate()
 
 std::shared_ptr<SceneNode> BaseRenderComponent::GetSceneNode()
 {
-   if (!m_pSceneNode)
+   if (!m_pSceneNode) {
       m_pSceneNode = CreateSceneNode();
+   }
    return m_pSceneNode;
 }
 
@@ -151,8 +152,9 @@ tinyxml2::XMLElement* SpriteRenderComponent::GenerateXml(tinyxml2::XMLDocument* 
 
 std::shared_ptr<SceneNode> SpriteRenderComponent::CreateSceneNode()
 {
-   if (m_pSpriteNode == nullptr)
+   if (m_pSpriteNode == nullptr) {
       return std::shared_ptr<SceneNode>();
+   }
 
    std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
    if (pTransformComponent) {
@@ -213,8 +215,9 @@ tinyxml2::XMLElement* BoxRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDo
 
 std::shared_ptr<SceneNode> BoxRenderComponent::CreateSceneNode()
 {
-   if (m_pModelNode == nullptr)
+   if (m_pModelNode == nullptr) {
       return std::shared_ptr<SceneNode>();
+   }
 
    std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
    if (pTransformComponent) {
@@ -269,8 +272,9 @@ tinyxml2::XMLElement* SphereRenderComponent::GenerateXml(tinyxml2::XMLDocument* 
 
 std::shared_ptr<SceneNode> SphereRenderComponent::CreateSceneNode()
 {
-   if (m_pModelNode == nullptr)
+   if (m_pModelNode == nullptr) {
       return std::shared_ptr<SceneNode>();
+   }
 
    std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
    if (pTransformComponent) {

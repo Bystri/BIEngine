@@ -9,7 +9,7 @@ namespace BIEngine {
 // Данный класс реализован за счет шаблона "одиночка" и доступ к нему может быть получен через вызов  ProcessManager::Get()
 // Перед использованием класса требуется предварительная инициализация через Create()
 class ProcessManager {
-   typedef std::list<StrongProcessPtr> ProcessList;
+   using ProcessList = std::list<StrongProcessPtr>;
    ProcessList m_processList;
 
    static ProcessManager* s_pSingleton;

@@ -6,7 +6,7 @@
 
 namespace BIEngine {
 
-typedef std::map<std::string, int> DipContentsMap;
+using DipContentsMap = std::map<std::string, int>;
 
 // Является аналогией к классу ZipFile. Нужен для того, чтобы во время инициализации проверить все файлы в папке и записать всю информацию о них в контейнер
 class DirFile {

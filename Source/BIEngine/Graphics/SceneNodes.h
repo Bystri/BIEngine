@@ -82,7 +82,7 @@ public:
    virtual void RemoveChild(ActorId id) = 0;
 };
 
-typedef std::vector<std::shared_ptr<ISceneNode>> SceneNodeList;
+using SceneNodeList = std::vector<std::shared_ptr<ISceneNode>>;
 
 class SceneNode : public ISceneNode {
    friend class Scene;

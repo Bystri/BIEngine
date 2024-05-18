@@ -14,17 +14,12 @@ Physics2DTriggerComponent::Physics2DTriggerComponent()
    m_dimension = glm::vec2(1.f, 1.f);
 }
 
-Physics2DTriggerComponent::~Physics2DTriggerComponent()
-{
-   m_gamePhysics->RemoveActor(m_pOwner->GetId());
-}
-
 bool Physics2DTriggerComponent::Init(tinyxml2::XMLElement* pData)
 {
    m_gamePhysics = g_pApp->m_pGameLogic->GetGamePhysics2D();
-   if (!m_gamePhysics)
-      return false; // Если нет физического движка, то и смысла в дальнейшем использовании компонента тоже нет
-
+   if (!m_gamePhysics) {
+      return false;
+   }
 
    tinyxml2::XMLElement* pScaleElement = pData->FirstChildElement("Scale");
    if (pScaleElement) {
@@ -40,7 +35,13 @@ bool Physics2DTriggerComponent::Init(tinyxml2::XMLElement* pData)
 
 void Physics2DTriggerComponent::Activate()
 {
-   m_gamePhysics->CreateTrigger(m_pOwner, m_dimension);
+   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   m_gamePhysics->CreateTrigger(m_pOwner->GetId(), pTransformComponent->GetPosition(), m_dimension);
+}
+
+void Physics2DTriggerComponent::Deactivate()
+{
+   m_gamePhysics->RemoveActor(m_pOwner->GetId());
 }
 
 tinyxml2::XMLElement* Physics2DTriggerComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)

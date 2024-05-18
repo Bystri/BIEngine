@@ -17,16 +17,12 @@ Physics2DComponent::Physics2DComponent()
    m_bodyType = IGamePhysics2D::BodyType::DYNAMIC;
 }
 
-Physics2DComponent::~Physics2DComponent()
-{
-   m_gamePhysics->RemoveActor(m_pOwner->GetId());
-}
-
 bool Physics2DComponent::Init(tinyxml2::XMLElement* pData)
 {
    m_gamePhysics = g_pApp->m_pGameLogic->GetGamePhysics2D();
-   if (!m_gamePhysics)
-      return false; // Если нет физического движка, то и смысла в дальнейшем использовании компонента тоже нет
+   if (!m_gamePhysics) {
+      return false;
+   }
 
    tinyxml2::XMLElement* pShape = pData->FirstChildElement("Shape");
    if (pShape) {
@@ -72,21 +68,26 @@ bool Physics2DComponent::Init(tinyxml2::XMLElement* pData)
 
 void Physics2DComponent::Activate()
 {
-   if (m_pOwner) {
-      switch (m_shape) {
-         case Shape2D::CIRCLE:
-            m_gamePhysics->AddCircle((float)m_rigidBodyScale.x, m_bodyType, m_pOwner, m_density, m_material);
-            break;
-         case Shape2D::BOX:
-            m_gamePhysics->AddBox(m_rigidBodyScale, m_bodyType, m_pOwner, m_density, m_material);
-            break;
-         case Shape2D::POINT_CLOUD:
-            Logger::WriteLog(Logger::LogType::ERROR, "Not supported yet!");
-            break;
-         default:
-            break;
-      }
+   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+
+   switch (m_shape) {
+      case Shape2D::CIRCLE:
+         m_gamePhysics->AddCircle((float)m_rigidBodyScale.x, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation().z, m_density, m_material);
+         break;
+      case Shape2D::BOX:
+         m_gamePhysics->AddBox(m_rigidBodyScale, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation().z, m_density, m_material);
+         break;
+      case Shape2D::POINT_CLOUD:
+         Logger::WriteLog(Logger::LogType::ERROR, "Not supported yet!");
+         break;
+      default:
+         break;
    }
+}
+
+void Physics2DComponent::Deactivate()
+{
+   m_gamePhysics->RemoveActor(m_pOwner->GetId());
 }
 
 tinyxml2::XMLElement* Physics2DComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)

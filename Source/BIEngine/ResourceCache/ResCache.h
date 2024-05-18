@@ -141,9 +141,9 @@ public:
    virtual std::string GetPattern() { return "*"; }
 };
 
-typedef std::list<std::shared_ptr<ResHandle>> ResHandleList;
-typedef std::map<std::string, std::shared_ptr<ResHandle>> ResHandleMap;
-typedef std::list<std::shared_ptr<IResourceLoader>> ResourceLoaders;
+using ResHandleList = std::list<std::shared_ptr<ResHandle>>;
+using ResHandleMap = std::map<std::string, std::shared_ptr<ResHandle>>;
+using ResourceLoaders = std::list<std::shared_ptr<IResourceLoader>>;
 
 // ResCache основан на паттерне Singleton (да простят меня Боги)
 // Перед обращением к кэшу ресурсов его необходимо явно создать вызовом функции Create, чтобы кэш имел путь к хранилищу ресурсов и знал максимальный размер доступной для загруженных ресурсов памяти

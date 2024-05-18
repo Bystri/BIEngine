@@ -44,7 +44,7 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
    try {
       auto componentModule = pybind11::module_::import(m_componentScriptPath.c_str());
       m_pyObject = componentModule.attr("__dict__").cast<pybind11::dict>()[m_className.c_str()]().cast<pybind11::object>();
-      m_pyObject.attr("owner") = m_pOwner;
+      m_pyObject.attr("owner") = PythonStateManager::RawPtrWrapper<Actor>(m_pOwner);
    } catch (pybind11::error_already_set er) {
       Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error: ") + er.what());
       return false;

@@ -60,15 +60,15 @@ public:
 
    virtual void DrawRenderDiagnostics() override {}
 
-   virtual void AddSphere(float radius, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
 
-   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
 
-   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
 
    virtual void RemoveActor(ActorId id) override {}
 
-   virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec3& dim) override {}
+   virtual void CreateTrigger(ActorId actorId, const glm::vec3& pos, const glm::vec3& dim) override {}
 
    virtual void ApplyForce(const glm::vec3& forceVec, ActorId aid) override {}
 
@@ -183,13 +183,13 @@ public:
 
    virtual void DrawRenderDiagnostics() override;
 
-   virtual void AddSphere(float radius, BodyType bodyType, std::weak_ptr<Actor> pGameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
-   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
-   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override;
    virtual void RemoveActor(ActorId id) override;
 
    // Добавляет триггер-объект с нулевой физикой в симуляцию
-   virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec3& dim) override;
+   virtual void CreateTrigger(ActorId actorId, const glm::vec3& pos, const glm::vec3& dim) override;
    // Применяет силу к объекту
    virtual void ApplyForce(const glm::vec3& forceVec, ActorId aid) override;
    // Применить момент силы к объекту
@@ -222,7 +222,7 @@ private:
    btRigidBody* FindBulletRigidBody(ActorId const id) const;
    ActorId FindActorID(const btRigidBody* const body) const;
 
-   void AddShape(BodyType bodyType, const std::shared_ptr<Actor>& pGameActor, btCollisionShape* pSHape, float mass, const std::string& physicsMaterial);
+   void AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, btCollisionShape* pSHape, float mass, const std::string& physicsMaterial);
 
    // Работа с коллизией объектов
    void RemoveCollisionObject(btCollisionObject* const pBodyToRemove);
@@ -245,19 +245,19 @@ private:
 
    BulletDebugDrawer* m_pDebugDrawer;
 
-   typedef std::map<std::string, float> DensityTable;
-   typedef std::map<std::string, MaterialData> MaterialTable;
+   using DensityTable = std::map<std::string, float>;
+   using MaterialTable = std::map<std::string, MaterialData>;
    DensityTable m_densityTable;
    MaterialTable m_materialTable;
 
-   typedef std::map<ActorId, btRigidBody*> ActorIDToBulletRigidBodyMap;
+   using ActorIDToBulletRigidBodyMap = std::map<ActorId, btRigidBody*>;
    ActorIDToBulletRigidBodyMap m_actorIdToRigidBody;
 
-   typedef std::map<btRigidBody const*, ActorId> BulletRigidBodyToActorIDMap;
+   using BulletRigidBodyToActorIDMap = std::map<btRigidBody const*, ActorId>;
    BulletRigidBodyToActorIDMap m_rigidBodyToActorId;
 
-   typedef std::pair<btRigidBody const*, btRigidBody const*> CollisionPair;
-   typedef std::set<CollisionPair> CollisionPairs;
+   using CollisionPair = std::pair<btRigidBody const*, btRigidBody const*>;
+   using CollisionPairs = std::set<CollisionPair>;
    CollisionPairs m_previousTickCollisionPairs;
 };
 
@@ -412,37 +412,22 @@ void Physics3D::DrawRenderDiagnostics()
    m_pDynamicsWorld->debugDrawWorld();
 }
 
-void Physics3D::AddShape(BodyType bodyType, const std::shared_ptr<Actor>& pGameActor, btCollisionShape* pShape, float mass, const std::string& physicsMaterial)
+void Physics3D::AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, btCollisionShape* pShape, float mass, const std::string& physicsMaterial)
 {
-   Assert(pGameActor != nullptr, "Provided bad arguments");
-   if (!pGameActor) {
-      return;
-   }
-
-   ActorId actorID = pGameActor->GetId();
-   Assert(m_actorIdToRigidBody.find(actorID) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.find(actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
    MaterialData material(LookupMaterialData(physicsMaterial));
 
-   btVector3 localInertia(0.f, 0.f, 0.f);
-   if (mass > 0.f)
+   btVector3 localInertia(0.0f, 0.0f, 0.0f);
+   if (mass > 0.0f) {
       pShape->calculateLocalInertia(mass, localInertia);
-
+   }
 
    glm::mat4 transform = glm::mat4(1.0f);
-   std::shared_ptr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
-   if (pTransformComponent) {
-      transform = glm::translate(transform, pTransformComponent->GetPosition());
-      glm::vec3 rotationAngles = pTransformComponent->GetRotation();
-      transform = glm::rotate(transform, glm::radians(rotationAngles.x), glm::vec3(1.0f, 0.0f, 0.0f));
-      transform = glm::rotate(transform, glm::radians(rotationAngles.y), glm::vec3(0.0f, 1.0f, 0.0f));
-      transform = glm::rotate(transform, glm::radians(rotationAngles.z), glm::vec3(0.0f, 0.0f, 1.0f));
-
-   } else {
-      // Нет трансформ компоненты
-      return;
-   }
+   transform = glm::translate(transform, pos);
+   transform = glm::rotate(transform, glm::radians(eulerAngles.x), glm::vec3(1.0f, 0.0f, 0.0f));
+   transform = glm::rotate(transform, glm::radians(eulerAngles.y), glm::vec3(0.0f, 1.0f, 0.0f));
+   transform = glm::rotate(transform, glm::radians(eulerAngles.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
    ActorMotionState* const myMotionState = new ActorMotionState(transform);
 
@@ -460,18 +445,12 @@ void Physics3D::AddShape(BodyType bodyType, const std::shared_ptr<Actor>& pGameA
 
    m_pDynamicsWorld->addRigidBody(body);
 
-   m_actorIdToRigidBody[actorID] = body;
-   m_rigidBodyToActorId[body] = actorID;
+   m_actorIdToRigidBody[actorId] = body;
+   m_rigidBodyToActorId[body] = actorId;
 }
 
-void Physics3D::AddSphere(float radius, BodyType bodyType, std::weak_ptr<Actor> pGameActor, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics3D::AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial)
 {
-   std::shared_ptr<Actor> pStrongActor = pGameActor.lock();
-   if (!pStrongActor) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Passed null actor for Physics3D::AddSphere");
-      return;
-   }
-
    btSphereShape* const collisionShape = new btSphereShape(radius);
 
    // calculate absolute mass from specificGravity
@@ -479,17 +458,11 @@ void Physics3D::AddSphere(float radius, BodyType bodyType, std::weak_ptr<Actor> 
    float const volume = (4.f / 3.f) * M_PI * radius * radius * radius;
    btScalar mass = volume * specificGravity;
 
-   AddShape(bodyType, pStrongActor, collisionShape, mass, physicsMaterial);
+   AddShape(bodyType, actorId, pos, eulerAngles, collisionShape, mass, physicsMaterial);
 }
 
-void Physics3D::AddBox(const glm::vec3& dimensions, BodyType bodyType, std::weak_ptr<Actor> pGameActor, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics3D::AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial)
 {
-   std::shared_ptr<Actor> pStrongActor = pGameActor.lock();
-   if (!pStrongActor) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Passed null actor for Physics3D::AddBox");
-      return;
-   }
-
    glm::vec3 dimensionsHalfExtents = dimensions;
    dimensionsHalfExtents.x /= 2;
    dimensionsHalfExtents.y /= 2;
@@ -503,17 +476,11 @@ void Physics3D::AddBox(const glm::vec3& dimensions, BodyType bodyType, std::weak
    float const volume = dimensions.x * dimensions.y * dimensions.z;
    btScalar mass = volume * specificGravity;
 
-   AddShape(bodyType, pStrongActor, boxShape, mass, physicsMaterial);
+   AddShape(bodyType, actorId, pos, eulerAngles, boxShape, mass, physicsMaterial);
 }
 
-void Physics3D::AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> pGameActor, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics3D::AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial)
 {
-   std::shared_ptr<Actor> pStrongActor = pGameActor.lock();
-   if (!pStrongActor) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Passed null actor for Physics3D::AddPointCloud");
-      return;
-   }
-
    btConvexHullShape* const shape = new btConvexHullShape();
 
    for (int ii = 0; ii < numPoints; ++ii)
@@ -528,30 +495,18 @@ void Physics3D::AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bo
    float const volume = aabbExtents.x() * aabbExtents.y() * aabbExtents.z();
    btScalar const mass = volume * specificGravity;
 
-   AddShape(bodyType, pStrongActor, shape, mass, physicsMaterial);
+   AddShape(bodyType, actorId, pos, eulerAngles, shape, mass, physicsMaterial);
 }
 
-void Physics3D::CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec3& dim)
+void Physics3D::CreateTrigger(ActorId actorId, const glm::vec3& pos, const glm::vec3& dim)
 {
-   std::shared_ptr<Actor> pStrongActor = pGameActor.lock();
-   if (!pStrongActor) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Passed null actor for Physics3D::CreateTrigger");
-      return;
-   }
-
    btBoxShape* const boxShape = new btBoxShape(Vec3_to_btVector3(dim));
 
    // Bullet считаем объекты недвижемыми, если у них нулевая масса
    const btScalar mass = 0;
 
    glm::mat4x4 triggerTrans = glm::mat4x4(1.0f);
-
-   std::shared_ptr<TransformComponent> pTransformComponent = pStrongActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
-   if (pTransformComponent) {
-      glm::translate(triggerTrans, pTransformComponent->GetPosition());
-   } else
-      return;
+   glm::translate(triggerTrans, pos);
 
    ActorMotionState* const myMotionState = new ActorMotionState(triggerTrans);
 
@@ -563,8 +518,8 @@ void Physics3D::CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec3& 
    // Триггер ни с чем не контактирует
    body->setCollisionFlags(body->getCollisionFlags() | btRigidBody::CF_NO_CONTACT_RESPONSE);
 
-   m_actorIdToRigidBody[pStrongActor->GetId()] = body;
-   m_rigidBodyToActorId[body] = pStrongActor->GetId();
+   m_actorIdToRigidBody[actorId] = body;
+   m_rigidBodyToActorId[body] = actorId;
 }
 
 void Physics3D::RemoveActor(ActorId id)

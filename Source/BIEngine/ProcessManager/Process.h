@@ -9,8 +9,8 @@
 namespace BIEngine {
 
 class Process;
-typedef std::shared_ptr<Process> StrongProcessPtr;
-typedef std::weak_ptr<Process> WeakProcessPtr;
+using StrongProcessPtr = std::shared_ptr<Process>;
+using WeakProcessPtr = std::weak_ptr<Process>;
 
 class Process {
    friend class ProcessManager;

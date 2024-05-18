@@ -13,10 +13,10 @@ public:
 
 public:
    Physics3DComponent();
-   virtual ~Physics3DComponent();
 
    virtual bool Init(tinyxml2::XMLElement* pData) override;
    virtual void Activate() override;
+   virtual void Deactivate() override;
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
@@ -51,8 +51,8 @@ protected:
    std::shared_ptr<IGamePhysics3D> m_gamePhysics;
 };
 
-static ActorComponent* CreatePhysics3DComponent()
+static std::unique_ptr<ActorComponent> CreatePhysics3DComponent()
 {
-   return new Physics3DComponent;
+   return std::make_unique<Physics3DComponent>();
 }
 } // namespace BIEngine

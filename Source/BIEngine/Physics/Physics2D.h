@@ -28,13 +28,13 @@ public:
    virtual void OnUpdate(const GameTimer& gt) = 0;
 
    // Инициализация физических объектов
-   virtual void AddCircle(float radius, BodyType bodyType, std::weak_ptr<Actor> actor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
-   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
-   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, std::weak_ptr<Actor> gameActor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) = 0;
    virtual void RemoveActor(ActorId id) = 0;
 
    // Взаимодейтсвие с физическим миром
-   virtual void CreateTrigger(std::weak_ptr<Actor> pGameActor, const glm::vec2& dim) = 0;
+   virtual void CreateTrigger(ActorId actorId, const glm::vec2& pos, const glm::vec2& dim) = 0;
    virtual void ApplyForce(const glm::vec2& forceVec, ActorId aid) = 0;
    virtual void ApplyTorque(float torque, ActorId aid) = 0;
    virtual bool KinematicMove(ActorId aid, const glm::vec2& position, float angle) = 0;

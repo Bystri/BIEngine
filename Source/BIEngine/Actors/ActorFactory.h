@@ -9,8 +9,8 @@
 
 namespace BIEngine {
 
-typedef ActorComponent* (*ActorComponentCreator)();
-typedef std::map<std::string, ActorComponentCreator> ActorComponentCreatorMap;
+using ActorComponentCreator = std::unique_ptr<ActorComponent>(*)();
+using ActorComponentCreatorMap = std::map<std::string, ActorComponentCreator>;
 
 class ActorFactory {
 public:

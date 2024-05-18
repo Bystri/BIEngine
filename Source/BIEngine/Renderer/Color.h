@@ -37,7 +37,7 @@ struct Color<T, 3> {
    };
 };
 
-typedef Color<float, 3> ColorRgb;
+using ColorRgb = Color<float, 3>;
 
 template <typename T>
 struct Color<T, 4> {
@@ -68,7 +68,7 @@ struct Color<T, 4> {
    };
 };
 
-typedef Color<float, 4> ColorRgba;
+using ColorRgba = Color<float, 4>;
 
 template <typename T, std::size_t n>
 inline const Color<T, n> operator+(const Color<T, n>& lhs, const Color<T, n>& rhs)

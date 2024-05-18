@@ -90,14 +90,14 @@ std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(std::shared_ptr<Ac
    auto findIt = m_actorComponentCreators.find(name);
    if (findIt != m_actorComponentCreators.end()) {
       ActorComponentCreator creator = findIt->second;
-      pComponent.reset(creator());
+      pComponent = creator();
    } else {
       Logger::WriteLog(Logger::LogType::ERROR, "Couldn’t find ActorComponent named " + name);
       return std::shared_ptr<ActorComponent>();
    }
 
    // Назначаем владельца компонента
-   pComponent->SetOwner(pActor);
+   pComponent->SetOwner(pActor.get());
 
    // Инициализируем компонент
    if (pComponent) {

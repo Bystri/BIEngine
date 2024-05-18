@@ -9,7 +9,7 @@
 
 namespace BIEngine {
 
-typedef std::map<std::string, int> ZipContentsMap;
+using ZipContentsMap = std::map<std::string, int>;
 
 class ZipFile {
 public:
