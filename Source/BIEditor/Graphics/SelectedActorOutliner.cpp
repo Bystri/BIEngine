@@ -32,7 +32,7 @@ void SelectedActorOutliner::OnRender(BIEngine::Scene* const pScene, BIEngine::Re
          continue;
       }
 
-      BIEngine::RenderCommand renderCommandStencil(ritem.pMesh->GetVao(), ritem.pMesh->GetIndices().size(), m_pEmptyColorSp);
+      BIEngine::RenderCommand renderCommandStencil(ritem.VAO, ritem.IndicesSize, m_pEmptyColorSp);
       renderCommandStencil.Transform = ritem.ModelTransform;
       renderCommandStencil.RenderState.DepthTest = false;
       renderCommandStencil.RenderState.StencilTest = true;
@@ -43,7 +43,7 @@ void SelectedActorOutliner::OnRender(BIEngine::Scene* const pScene, BIEngine::Re
 
       pScene->GetRenderer()->DrawRenderCommand(renderCommandStencil);
 
-      BIEngine::RenderCommand renderCommandOutline(ritem.pMesh->GetVao(), ritem.pMesh->GetIndices().size(), m_pSolidColorSp);
+      BIEngine::RenderCommand renderCommandOutline(ritem.VAO, ritem.IndicesSize, m_pSolidColorSp);
       glm::mat4 scaledMatrix = ritem.ModelTransform;
 
       constexpr float outlineWidth = 0.2f;
