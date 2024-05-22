@@ -1,0 +1,4 @@
+<ShaderProgram>
+	<Vertex path="effects/sprite.vs"/>
+	<Fragment path="effects/sprite.frag"/>
+</ShaderProgram>

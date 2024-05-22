@@ -26,7 +26,7 @@ std::weak_ptr<ActorPickerInfoStorage> ActorPickingTechnique::GetPickingInfoStora
 
 bool ActorPickingTechnique::Init()
 {
-   const std::string spPath = "effects/actorPicking.sp";
+   const std::string spPath = "effects/actorPicking.bisp";
    auto pickingShaderProgram = std::static_pointer_cast<BIEngine::ShaderProgramData>(BIEngine::ResCache::Get()->GetHandle(spPath)->GetExtra());
    m_pShaderProgram = pickingShaderProgram->GetShaderProgram();
 

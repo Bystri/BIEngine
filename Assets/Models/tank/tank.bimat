@@ -1,5 +1,5 @@
 <Material>
-	<ShaderProgram path="effects/meshPBR.sp"/>
+	<ShaderProgram path="effects/meshPBR.bisp"/>
 	<Params isDoubleSided="false"/>
 	<Textures>
 		<Texture paramName="material.albedoMap" slot="0" path="models/tank/tank_albedo.bitf"/>

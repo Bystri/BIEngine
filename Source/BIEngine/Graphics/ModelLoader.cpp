@@ -39,7 +39,7 @@ static std::shared_ptr<Material> modelLoadMaterial(const aiMaterial* const mat, 
             Texture2D::Format texureFormat = components > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
             auto t2 = Texture2D::Create(width, height, sizedFormat, texureFormat, image_data);
 
-            auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/mesh.sp")->GetExtra());
+            auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/mesh.bisp")->GetExtra());
 
             if (shaderProgramData == nullptr) {
                return nullptr;
@@ -77,7 +77,7 @@ static std::shared_ptr<Material> modelLoadMaterial(const aiMaterial* const mat, 
 
             return material;
          } else {
-            auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/mesh.sp")->GetExtra());
+            auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/mesh.bisp")->GetExtra());
 
             if (shaderProgramData == nullptr) {
                return nullptr;
@@ -124,7 +124,7 @@ static std::shared_ptr<Material> modelLoadMaterial(const aiMaterial* const mat, 
    }
 
    if (std::string(name.C_Str()).find("bimat") == std::string::npos) {
-      auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/mesh.sp")->GetExtra());
+      auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/mesh.bisp")->GetExtra());
 
       if (shaderProgramData == nullptr) {
          return nullptr;

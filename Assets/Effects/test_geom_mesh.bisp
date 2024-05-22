@@ -1,0 +1,5 @@
+<ShaderProgram>
+	<Vertex path="effects/mesh.vs"/>
+	<Geometry path="effects/explosion.geom"/>
+	<Fragment path="effects/mesh.frag"/>
+</ShaderProgram>

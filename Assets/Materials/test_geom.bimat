@@ -1,5 +1,5 @@
 <Material>
-	<ShaderProgram path="Effects/test_geom_mesh.sp"/>
+	<ShaderProgram path="Effects/test_geom_mesh.bisp"/>
 	<Params isDoubleSided="true"/>
 	<ColorsRgba>
 		<Color paramName="material.color" r="1.0" g="0.0" b="0.0" a="1.0"/>

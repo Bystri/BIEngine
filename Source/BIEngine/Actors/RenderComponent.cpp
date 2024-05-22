@@ -90,7 +90,7 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
       m_pSpriteNode = std::make_shared<SpriteNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
    }
 
-   static const std::string SPRITE_SHADER_PROGRAM_PATH = "Effects/sprite.sp";
+   static const std::string SPRITE_SHADER_PROGRAM_PATH = "Effects/sprite.bisp";
 
    std::shared_ptr<ShaderProgramData> pShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(SPRITE_SHADER_PROGRAM_PATH)->GetExtra());
    std::shared_ptr<Material> pMaterial = std::make_shared<Material>(pShaderProgramData->GetShaderProgram());

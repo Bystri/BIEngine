@@ -1,0 +1,4 @@
+<ShaderProgram>
+	<Vertex path="effects/worldTransformOnly.vs"/>
+	<Fragment path="effects/actorPicking.frag"/>
+</ShaderProgram>

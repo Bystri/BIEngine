@@ -28,7 +28,7 @@ bool WorldRenderPass::InitInternal()
       return false;
    }
 
-   const std::string commonPostProcessingShaderProgramPath = "effects/commonPostProcessing.sp";
+   const std::string commonPostProcessingShaderProgramPath = "effects/commonPostProcessing.bisp";
    auto shaderPgrogramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPostProcessingShaderProgramPath)->GetExtra());
    m_pDefaultPostProcessor = std::make_shared<PostProcessor>(shaderPgrogramData->GetShaderProgram());
 

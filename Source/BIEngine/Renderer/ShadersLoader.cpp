@@ -1,5 +1,7 @@
 ﻿#include "ShadersLoader.h"
 
+#include <tinyxml2.h>
+
 #include <sstream>
 #include <string>
 #include <iostream>
@@ -142,72 +144,73 @@ enum class ShaderType {
    GEOMETRY_SHADER
 };
 
-static bool shaderLoaderReadShaderSettings(const std::string& shaderSettingsString, ShaderType& shaderType, std::string& fileName)
-{
-   if (shaderSettingsString[0] != '#') {
-      return false;
-   }
-
-   const size_t endTypeIdx = shaderSettingsString.find(':');
-   if (endTypeIdx == std::string::npos) {
-      return false;
-   }
-
-   const std::string typeName = shaderSettingsString.substr(1, endTypeIdx - 1);
-   if (typeName == "vertex") {
-      shaderType = ShaderType::VERTEX_SHADER;
-   } else if (typeName == "fragment") {
-      shaderType = ShaderType::FRAGMENT_SHADER;
-   } else if (typeName == "geometry") {
-      shaderType = ShaderType::GEOMETRY_SHADER;
-   } else {
-      return false;
-   }
-
-   const size_t endPathIdx = shaderSettingsString.find(';');
-   fileName = shaderSettingsString.substr(endTypeIdx + 1, endPathIdx - endTypeIdx - 1);
-
-   return true;
-}
-
 bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
 {
-   const std::string shaderProgramCode(rawBuffer, rawSize);
-   std::istringstream bufferStream = std::istringstream(shaderProgramCode);
+   tinyxml2::XMLDocument xmlDoc;
+   tinyxml2::XMLError error = xmlDoc.Parse(rawBuffer, rawSize);
 
    int vertexShaderIdx = -1;
    int fragmentShaderIdx = -1;
    int geometryShaderIdx = -1;
 
-   std::string line;
-   while (std::getline(bufferStream, line)) {
-      ShaderType shaderType;
-      std::string shaderPath;
-
-      if (!shaderLoaderReadShaderSettings(line, shaderType, shaderPath)) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Incorrect shader settings string int shader program file " + pHandle->GetName());
-         return false;
-      }
-
-      const std::shared_ptr<ShaderData> pShaderData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
-
-      if (!pShaderData) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Incorrect shader file path specified in shader program file " + pHandle->GetName());
-         return false;
-      }
-
-      if (shaderType == ShaderType::VERTEX_SHADER) {
-         vertexShaderIdx = pShaderData->GetShaderIndex();
-      } else if (shaderType == ShaderType::FRAGMENT_SHADER) {
-         fragmentShaderIdx = pShaderData->GetShaderIndex();
-      } else if (shaderType == ShaderType::GEOMETRY_SHADER) {
-         geometryShaderIdx = pShaderData->GetShaderIndex();
-      } else {
-         Logger::WriteLog(Logger::LogType::ERROR, "Incorrect shader type specified in shader program file " + pHandle->GetName());
-         return false;
-      }
+   if (error != tinyxml2::XMLError::XML_SUCCESS) {
+      return false;
    }
 
+   tinyxml2::XMLElement* pRoot = xmlDoc.RootElement();
+   if (!pRoot) {
+      return false;
+   }
+
+   tinyxml2::XMLElement* pVertexShader = pRoot->FirstChildElement("Vertex");
+   if (!pVertexShader) {
+      return false;
+   }
+
+   {
+      const char* shaderPath;
+      pVertexShader->QueryStringAttribute("path", &shaderPath);
+
+      auto pShaderData = std::dynamic_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
+
+      if (pShaderData == nullptr) {
+         return false;
+      }
+
+      vertexShaderIdx = pShaderData->GetShaderIndex();
+   }
+
+   tinyxml2::XMLElement* pFragmentShader = pRoot->FirstChildElement("Fragment");
+   if (!pFragmentShader) {
+      return false;
+   }
+
+   {
+      const char* shaderPath;
+      pFragmentShader->QueryStringAttribute("path", &shaderPath);
+
+      auto pShaderData = std::dynamic_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
+
+      if (pShaderData == nullptr) {
+         return false;
+      }
+
+      fragmentShaderIdx = pShaderData->GetShaderIndex();
+   }
+
+   tinyxml2::XMLElement* pGeometryShader = pRoot->FirstChildElement("Geometry");
+   if (pGeometryShader) {
+      const char* shaderPath;
+      pGeometryShader->QueryStringAttribute("path", &shaderPath);
+
+      auto pShaderData = std::dynamic_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
+
+      if (pShaderData == nullptr) {
+         return false;
+      }
+
+      geometryShaderIdx = pShaderData->GetShaderIndex();
+   }
 
    if (vertexShaderIdx == -1 || fragmentShaderIdx == -1) {
       Logger::WriteLog(Logger::LogType::ERROR, "Shader program " + pHandle->GetName() + " must have vertex and geometry shaders!");

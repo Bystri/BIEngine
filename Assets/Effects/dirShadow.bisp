@@ -1,0 +1,4 @@
+<ShaderProgram>
+	<Vertex path="effects/dirShadow.vs"/>
+	<Fragment path="effects/dirShadow.frag"/>
+</ShaderProgram>

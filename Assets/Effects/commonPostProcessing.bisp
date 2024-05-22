@@ -1,0 +1,4 @@
+<ShaderProgram>
+	<Vertex path="effects/commonPostProcessing.vs"/>
+	<Fragment path="effects/commonPostProcessing.frag"/>
+</ShaderProgram>

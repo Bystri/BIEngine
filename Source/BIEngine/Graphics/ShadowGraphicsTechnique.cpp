@@ -7,11 +7,11 @@ namespace BIEngine {
 
 bool ShadowGraphicsTechnique::Init()
 {
-   const std::string commonDirShadowShaderProgramPath = "effects/dirShadow.sp";
+   const std::string commonDirShadowShaderProgramPath = "effects/dirShadow.bisp";
    auto dirShadowShaderProgram = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonDirShadowShaderProgramPath)->GetExtra());
    m_pDirLightShadowShader = dirShadowShaderProgram->GetShaderProgram();
 
-   const std::string commonPointShadowShaderProgramPath = "effects/pointShadow.sp";
+   const std::string commonPointShadowShaderProgramPath = "effects/pointShadow.bisp";
    auto pointShadowShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPointShadowShaderProgramPath)->GetExtra());
    m_pPointLightShadowShader = pointShadowShaderProgramData->GetShaderProgram();
 

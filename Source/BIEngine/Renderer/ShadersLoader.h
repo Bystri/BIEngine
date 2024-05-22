@@ -118,7 +118,7 @@ public:
 
 class ShaderProgramResourceLoader : public IResourceLoader {
 public:
-   virtual std::string GetPattern() override { return "*.sp"; }
+   virtual std::string GetPattern() override { return "*.bisp"; }
 
    virtual bool UseRawFile() override { return false; }
 

@@ -4,11 +4,11 @@
 
 bool SelectedActorOutliner::Init()
 {
-   const std::string spEmptyColorPath = "effects/emptyColor.sp";
+   const std::string spEmptyColorPath = "effects/emptyColor.bisp";
    auto emptyColorSp = std::static_pointer_cast<BIEngine::ShaderProgramData>(BIEngine::ResCache::Get()->GetHandle(spEmptyColorPath)->GetExtra());
    m_pEmptyColorSp = emptyColorSp->GetShaderProgram();
 
-   const std::string spSolidColorPath = "effects/solidColor.sp";
+   const std::string spSolidColorPath = "effects/solidColor.bisp";
    auto solidColorSp = std::static_pointer_cast<BIEngine::ShaderProgramData>(BIEngine::ResCache::Get()->GetHandle(spSolidColorPath)->GetExtra());
    m_pSolidColorSp = solidColorSp->GetShaderProgram();
 
