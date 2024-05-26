@@ -4,6 +4,7 @@
 
 #include "BIEditorController.h"
 #include "BIFlyCameraSystem.h"
+#include "BIScriptExports.h"
 
 class BIEditorApp : public BIEngine::GameApp {
 public:
@@ -47,7 +48,10 @@ public:
    }
 
 private:
+   void showMenu();
    void showSceneTree();
+
+   void saveWorld();
 
 private:
    std::shared_ptr<BIEngine::Framebuffer> m_pGameRenderTarget;

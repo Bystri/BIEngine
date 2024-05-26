@@ -1,6 +1,7 @@
 ﻿
 #include "ScriptComponent.h"
 
+#include "../EngineCore/GameApp.h"
 #include "../Scripting/PythonStateManager.h"
 #include "../Utilities/Logger.h"
 #include "Actor.h"
@@ -10,6 +11,12 @@ namespace BIEngine {
 const ComponentId ScriptComponent::g_CompId = "ScriptComponent";
 
 ScriptComponent::ScriptComponent()
+   : m_isScriptInited(false),
+
+     m_isExternalScriptUsed(false),
+     m_externalScriptObjVarName(),
+     m_externalScriptObjPath(),
+     m_externalScriptObjClass()
 {
 }
 
@@ -77,7 +84,7 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
          Logger::WriteLog(Logger::LogType::ERROR, "No variable name in <ExternalScriptObj> tag");
          return false;
       }
-      const std::string externalScriptObjVarName = temp;
+      m_externalScriptObjVarName = temp;
 
 
       temp = pExternalScriptObject->Attribute("modulePath");
@@ -85,30 +92,24 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
          Logger::WriteLog(Logger::LogType::ERROR, "No module path in <ExternalScriptObj> tag");
          return false;
       }
-      const std::string externalScriptObjPath = temp;
+      m_externalScriptObjPath = temp;
 
       temp = pExternalScriptObject->Attribute("className");
       if (!temp || strlen(temp) == 0) {
          Logger::WriteLog(Logger::LogType::ERROR, "No class name in <ExternalScriptObj> tag");
          return false;
       }
-      const std::string externalScriptObjClass = temp;
+      m_externalScriptObjClass = temp;
 
       try {
-         py::object classInstance = py::module::import(externalScriptObjPath.c_str()).attr(externalScriptObjClass.c_str())();
-         m_pyObject.attr(externalScriptObjVarName.c_str()) = classInstance;
+         py::object classInstance = py::module::import(m_externalScriptObjPath.c_str()).attr(m_externalScriptObjClass.c_str())();
+         m_pyObject.attr(m_externalScriptObjVarName.c_str()) = classInstance;
       } catch (pybind11::error_already_set er) {
          Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error: ") + er.what());
          return false;
       }
-   }
 
-   try {
-      if (py::hasattr(m_pyObject, "OnInit")) {
-         m_pyObject.attr("OnInit")();
-      }
-   } catch (pybind11::error_already_set er) {
-      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnInit: ") + er.what());
+      m_isExternalScriptUsed = true;
    }
 
    return true;
@@ -116,6 +117,21 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
 
 void ScriptComponent::Activate()
 {
+   if (g_pApp->m_options.isEditorMode) {
+      return;
+   }
+
+   if (!m_isScriptInited) {
+      try {
+         if (py::hasattr(m_pyObject, "OnInit")) {
+            m_pyObject.attr("OnInit")();
+         }
+      } catch (pybind11::error_already_set er) {
+         Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnInit: ") + er.what());
+      }
+
+      m_isScriptInited = true;
+   }
    try {
       if (py::hasattr(m_pyObject, "OnActivate")) {
          m_pyObject.attr("OnActivate")();
@@ -127,6 +143,10 @@ void ScriptComponent::Activate()
 
 void ScriptComponent::Deactivate()
 {
+   if (g_pApp->m_options.isEditorMode) {
+      return;
+   }
+
    try {
       if (py::hasattr(m_pyObject, "OnDeactivate")) {
          m_pyObject.attr("OnDeactivate")();
@@ -138,6 +158,10 @@ void ScriptComponent::Deactivate()
 
 void ScriptComponent::Terminate()
 {
+   if (g_pApp->m_options.isEditorMode) {
+      return;
+   }
+
    try {
       if (py::hasattr(m_pyObject, "OnTerminate")) {
          m_pyObject.attr("OnTerminate")();
@@ -149,7 +173,7 @@ void ScriptComponent::Terminate()
 
 tinyxml2::XMLElement* ScriptComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(ScriptComponent::g_CompId.c_str());
 
    // ScriptObject
    tinyxml2::XMLElement* pScriptObjectElement = pDoc->NewElement("ScriptObject");
@@ -173,6 +197,15 @@ tinyxml2::XMLElement* ScriptComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
       pNumberData->SetAttribute(data.first.c_str(), std::to_string(data.second).c_str());
    }
    pBaseElement->LinkEndChild(pNumberData);
+
+   // ExternalScriptObj
+   if (m_isExternalScriptUsed) {
+      tinyxml2::XMLElement* pExternalScriptObj = pDoc->NewElement("ExternalScriptObj");
+      pExternalScriptObj->SetAttribute("varName", m_externalScriptObjVarName.c_str());
+      pExternalScriptObj->SetAttribute("modulePath", m_externalScriptObjPath.c_str());
+      pExternalScriptObj->SetAttribute("className", m_externalScriptObjClass.c_str());
+      pBaseElement->LinkEndChild(pExternalScriptObj);
+   }
 
    return pBaseElement;
 }

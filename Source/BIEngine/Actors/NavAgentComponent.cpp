@@ -131,7 +131,6 @@ tinyxml2::XMLElement* NavAgentComponent::GenerateXml(tinyxml2::XMLDocument* pDoc
    pPathOptimizations->SetAttribute("optimizeVis", m_params.OptimizeVis);
    pPathOptimizations->SetAttribute("pathOptimizationRange", m_params.PathOptimizationRange);
    pPathOptimizations->SetAttribute("optimizeTopo", m_params.OptimizeTopo);
-   pPathOptimizations->SetAttribute("maxAcceleration", m_params.MaxAcceleration);
    pBaseElement->LinkEndChild(pPathOptimizations);
 
    return pBaseElement;

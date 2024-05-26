@@ -25,8 +25,15 @@ public:
    pybind11::object GetObject();
 
 private:
+   bool m_isScriptInited;
+
    std::string m_componentScriptPath;
    std::string m_className;
+
+   bool m_isExternalScriptUsed;
+   std::string m_externalScriptObjVarName;
+   std::string m_externalScriptObjPath;
+   std::string m_externalScriptObjClass;
 
    std::vector<std::pair<std::string, float>> m_numVars;
    std::vector<std::pair<std::string, std::string>> m_strVars;

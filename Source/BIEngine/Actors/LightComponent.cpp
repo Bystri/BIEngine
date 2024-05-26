@@ -52,7 +52,7 @@ tinyxml2::XMLElement* DirectionalLightComponent::GenerateXml(tinyxml2::XMLDocume
 {
    tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
 
-   tinyxml2::XMLElement* pColorElement = pDoc->NewElement("Ambient");
+   tinyxml2::XMLElement* pColorElement = pDoc->NewElement("Color");
    const ColorRgb& color = m_pDirectionalLightNode->GetColor();
    pColorElement->SetAttribute("r", color.r);
    pColorElement->SetAttribute("g", color.g);
@@ -243,7 +243,7 @@ tinyxml2::XMLElement* SpotLightComponent::GenerateXml(tinyxml2::XMLDocument* pDo
    pSpecularElement->SetAttribute("r", m_pSpotLightNode->GetSpecular().r);
    pSpecularElement->SetAttribute("g", m_pSpotLightNode->GetSpecular().g);
    pSpecularElement->SetAttribute("b", m_pSpotLightNode->GetSpecular().b);
-   pBaseElement->LinkEndChild(pAmbientElement);
+   pBaseElement->LinkEndChild(pSpecularElement);
 
    tinyxml2::XMLElement* pAttenuationElement = pDoc->NewElement("Attenuation");
    pAttenuationElement->SetAttribute("constant", m_pSpotLightNode->GetAttenuationConstant());

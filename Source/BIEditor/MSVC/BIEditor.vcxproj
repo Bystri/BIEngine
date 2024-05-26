@@ -29,6 +29,7 @@
     <ClInclude Include="..\BIEditorController.h" />
     <ClInclude Include="..\BIEventListener.h" />
     <ClInclude Include="..\BIFlyCameraSystem.h" />
+    <ClInclude Include="..\BIScriptExports.h" />
     <ClInclude Include="..\Graphics\ActorPickingTechnique.h" />
     <ClInclude Include="..\Graphics\SelectedActorOutliner.h" />
     <ClInclude Include="..\Widgets\ActorEditorWidget.h" />

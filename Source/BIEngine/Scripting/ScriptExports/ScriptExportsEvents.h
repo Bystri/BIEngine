@@ -86,11 +86,11 @@ PYBIND11_EMBEDDED_MODULE(BIEEvent, m)
       BIEngine::ScriptEventListener* pListener = new BIEngine::ScriptEventListener(eventType, callbackFunction);
       BIEngine::EventManager::Get()->AddListener(pListener->GetDelegate(), eventType);
 
-      unsigned long handle = reinterpret_cast<unsigned long>(pListener);
+      uint64_t handle = reinterpret_cast<uint64_t>(pListener);
       return handle;
    });
 
-   m.def("RemoveEventListener", [](unsigned long listenerId) {
+   m.def("RemoveEventListener", [](uint64_t listenerId) {
       BIEngine::ScriptEventListener* pListener = reinterpret_cast<BIEngine::ScriptEventListener*>(listenerId);
       BIEngine::EventManager::Get()->RemoveListener(pListener->GetDelegate(), pListener->GetEventType());
    });

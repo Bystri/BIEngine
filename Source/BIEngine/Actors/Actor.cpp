@@ -16,7 +16,6 @@ Actor::Actor(ActorId id)
 
 Actor::~Actor()
 {
-   std::wstring msg;
    Logger::WriteLog(Logger::LogType::MESSAGE, "Actor: Destroying Actor " + std::to_string(m_id));
 }
 

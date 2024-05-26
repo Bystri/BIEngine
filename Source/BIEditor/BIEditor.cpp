@@ -26,6 +26,7 @@ int main(int argc, char* argv[])
    }
 
    BIEngine::g_pApp->m_options.useDevelopmentAssets = true;
+   BIEngine::g_pApp->m_options.isEditorMode = true;
    BIEngine::g_pApp->m_options.maximazeWindow = true;
    return BIEngine::Run(argc, argv);
 }
@@ -247,6 +248,7 @@ void BIEditorHumanView::OnUpdate(const BIEngine::GameTimer& gt)
 
 void BIEditorHumanView::OnRender(const BIEngine::GameTimer& gt)
 {
+   showMenu();
    showSceneTree();
 
    BIEngine::HumanView::OnRender(gt);
@@ -291,6 +293,19 @@ void BIEditorHumanView::OnRender(const BIEngine::GameTimer& gt)
    m_pRenderer->Clear(BIEngine::RenderDevice::ClearFlag::COLOR | BIEngine::RenderDevice::ClearFlag::DEPTH, CLEAR_COLOR);
 }
 
+void BIEditorHumanView::showMenu()
+{
+   if (ImGui::BeginMainMenuBar()) {
+      if (ImGui::BeginMenu("File")) {
+         if (ImGui::MenuItem("Save World")) {
+            saveWorld();
+         }
+         ImGui::EndMenu();
+      }
+      ImGui::EndMainMenuBar();
+   }
+}
+
 void BIEditorHumanView::showSceneTree()
 {
    if (ImGui::Begin("World")) {
@@ -317,4 +332,34 @@ void BIEditorHumanView::showSceneTree()
 
       ImGui::End();
    }
+}
+
+void BIEditorHumanView::saveWorld()
+{
+   const std::string fileName = "../Assets/" + BIEngine::g_pApp->m_options.mainWorldResNamePath + "/World.xml";
+
+   tinyxml2::XMLDocument worldDoc;
+   tinyxml2::XMLElement* pWorldRootElement = worldDoc.NewElement("World");
+   tinyxml2::XMLElement* pActorsRoot = worldDoc.NewElement("Actors");
+   auto pEditorLogic = std::dynamic_pointer_cast<BIEditorLogic>(BIEngine::g_pApp->m_pGameLogic);
+   for (const auto& actor : pEditorLogic->GetActorMap()) {
+      pActorsRoot->LinkEndChild(actor.second->ToXML(&worldDoc));
+   }
+   pWorldRootElement->LinkEndChild(pActorsRoot);
+
+
+   tinyxml2::XMLElement* pScriptElement = worldDoc.NewElement("Script");
+
+   const std::string preLoadScriptPath = BIEngine::g_pApp->m_options.mainWorldResNamePath + "/world_pre_init.py";
+   pScriptElement->SetAttribute("preLoad", preLoadScriptPath.c_str());
+
+   const std::string postLoadScriptPath = BIEngine::g_pApp->m_options.mainWorldResNamePath + "/world_POST_init.py";
+   pScriptElement->SetAttribute("postLoad", postLoadScriptPath.c_str());
+
+   pWorldRootElement->LinkEndChild(pScriptElement);
+
+
+   worldDoc.LinkEndChild(pWorldRootElement);
+
+   worldDoc.SaveFile(fileName.c_str());
 }

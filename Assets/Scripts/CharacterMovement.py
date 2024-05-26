@@ -18,7 +18,7 @@ class MoveProcess(BIEProcess.Process):
         self.movementProducer = movementProducer
         
     def __del__(self):
-        movementProducer.Terminate()
+        self.movementProducer.Terminate()
 
     def OnUpdate(self, dt):
         inputVec = self.movementProducer.GetVelocity() * self.speed

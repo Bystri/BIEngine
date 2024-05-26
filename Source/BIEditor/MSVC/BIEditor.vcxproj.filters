@@ -39,6 +39,7 @@
     <ClInclude Include="..\Graphics\SelectedActorOutliner.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\BIScriptExports.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Widgets">

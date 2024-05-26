@@ -106,7 +106,7 @@ protected:
    float m_depth;
 };
 
-static std::unique_ptr<ActorComponent>  CreateBoxRenderComponent()
+static std::unique_ptr<ActorComponent> CreateBoxRenderComponent()
 {
    return std::make_unique<BoxRenderComponent>();
 }
@@ -118,7 +118,7 @@ public:
 
    static ComponentId g_CompId;
 
-   virtual ComponentId GetComponentId() const { return BoxRenderComponent::g_CompId; }
+   virtual ComponentId GetComponentId() const { return SphereRenderComponent::g_CompId; }
 
    virtual bool Init(tinyxml2::XMLElement* pData);
 

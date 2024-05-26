@@ -14,6 +14,7 @@ struct Options {
    // То есть, если значение true - будет использована обычная папка
    // Если значение false - архив
    bool useDevelopmentAssets = false;
+   bool isEditorMode = false;
 
    // Имя мира, который загрузится первым
    std::string mainWorldResNamePath = "Worlds/World";
