@@ -1,7 +1,8 @@
 ﻿#include "BIGame.h"
 
 #include "../BIEngine/Graphics/WorldRenderPass.h"
-#include "../BIEngine/Graphics/ShadowGraphicsTechnique.h"
+#include "../BIEngine/Graphics/DirLightShadowGraphicsTechnique.h"
+#include "../BIEngine/Graphics/PointLightShadowGraphicsTechnique.h"
 #include "../BIEngine/Graphics/LightGraphicsTechnique.h"
 #include "../BIEngine/Graphics/OpaqueGraphicsTechnique.h"
 #include "../BIEngine/Graphics/SkyboxGraphicsTechnique.h"
@@ -146,7 +147,7 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
       height = cubemapTextureResExtraData->GetHeight();
    }
 
-   std::shared_ptr<BIEngine::CubemapTexture> pTexture = BIEngine::CubemapTexture::Create(width, height, BIEngine::CubemapTexture::Format::RGB, cubemapTextureImages);
+   std::shared_ptr<BIEngine::CubemapTexture> pTexture = BIEngine::CubemapTexture::Create(width, height, BIEngine::CubemapTexture::SizedFormat::RGB, BIEngine::CubemapTexture::Format::RGB, cubemapTextureImages);
 
    return std::make_shared<BIEngine::Skybox>(pTexture, pShaderProgram);
 }
@@ -163,8 +164,8 @@ bool BIGameHumanView::Init()
 
    std::shared_ptr<BIEngine::GraphicsRenderPass> pPreWorldRenderPass = std::make_shared<BIEngine::GraphicsRenderPass>();
 
-   std::shared_ptr<BIEngine::ShadowGraphicsTechnique> pShadowGraphicsTechnique = std::make_shared<BIEngine::ShadowGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM, MAX_POINT_LIGHTS_NUM);
-   pPreWorldRenderPass->AddTechnique(pShadowGraphicsTechnique);
+   pPreWorldRenderPass->AddTechnique(std::make_shared<BIEngine::DirLightShadowGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM));
+   pPreWorldRenderPass->AddTechnique(std::make_shared<BIEngine::PointLightShadowGraphicsTechnique>(MAX_POINT_LIGHTS_NUM));
 
    pPreWorldRenderPass->Init();
 

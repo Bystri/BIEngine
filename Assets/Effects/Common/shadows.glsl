@@ -53,9 +53,6 @@ float CalculatePointShadow(int index, vec3 fragPos)
     vec3 fragToLight = fragPos - pointLightShadowInfos[index].lightPos;
     // use the light to fragment vector to sample from the depth map    
     float closestDepth = texture(pointLightShadowInfos[index].shadowMap, fragToLight).r;
-    // it is currently in linear range between [0,1]. Re-transform back to original value
-	float far_plane = 25.0f;
-    closestDepth *= far_plane;
     // now get current linear depth as the length between the fragment and light position
     float currentDepth = length(fragToLight);
     // now test for shadows
@@ -76,7 +73,6 @@ float CalculatePointShadow(int index, vec3 fragPos)
 	for(int i = 0; i < samples; ++i)
 	{
 		float closestDepth = texture(pointLightShadowInfos[index].shadowMap, fragToLight + sampleOffsetDirections[i] * diskRadius).r;
-		closestDepth *= far_plane;   // undo mapping [0;1]
 		if(currentDepth - bias > closestDepth)
 			shadow += 1.0;
 	}

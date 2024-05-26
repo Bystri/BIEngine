@@ -16,6 +16,7 @@ public:
       ALPHA,
       RGB,
       RGBA,
+      R_8_F,
       R_16_F,
       R_32_F,
       RG_16_F,
@@ -178,7 +179,7 @@ public:
       TextureFunction FilterMax = TextureFunction::LINEAR;
    };
 
-   static std::shared_ptr<CubemapTexture> Create(unsigned int width, unsigned int height, Texture::Format internalFormat, const std::array<unsigned char*, 6>& data, CreationParams params = CreationParams());
+   static std::shared_ptr<CubemapTexture> Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, const std::array<unsigned char*, 6>& data, CreationParams params = CreationParams());
 
    // Сделаеть текстуру активной
    virtual void Bind(int textureIdx) const override;

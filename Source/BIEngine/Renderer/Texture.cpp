@@ -19,6 +19,8 @@ static unsigned int ConverSizedFormatToGl(Texture2D::SizedFormat format)
    }
 
    switch (format) {
+      case Texture2D::SizedFormat::R_8_F:
+         return GL_R8;
       case Texture2D::SizedFormat::R_16_F:
          return GL_R16F;
       case Texture2D::SizedFormat::R_32_F:
@@ -218,7 +220,7 @@ static unsigned int ConvertWrapToGl(CubemapTexture::TextureWrap wrap)
    }
 }
 
-std::shared_ptr<CubemapTexture> CubemapTexture::Create(unsigned int width, unsigned int height, Texture::Format internalFormat, const std::array<unsigned char*, 6>& data, CreationParams params)
+std::shared_ptr<CubemapTexture> CubemapTexture::Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, const std::array<unsigned char*, 6>& data, CreationParams params)
 {
    struct make_shared_enabler : public CubemapTexture {};
 
@@ -226,13 +228,14 @@ std::shared_ptr<CubemapTexture> CubemapTexture::Create(unsigned int width, unsig
 
    texture->m_width = width;
    texture->m_height = height;
+   texture->m_sizedFormat = sizedFormat;
    texture->m_internalFormat = internalFormat;
 
    // Создание текстуры
    glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_id);
 
    for (int i = 0; i < data.size(); ++i) {
-      glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_STENCIL_INDEX + static_cast<int>(internalFormat), width, height, 0, GL_STENCIL_INDEX + static_cast<int>(internalFormat), GL_BYTE + static_cast<int>(params.DataType), data[i]);
+      glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, ConverSizedFormatToGl(sizedFormat), width, height, 0, GL_STENCIL_INDEX + static_cast<int>(internalFormat), GL_BYTE + static_cast<int>(params.DataType), data[i]);
    }
 
    // Задаем параметры текстуры

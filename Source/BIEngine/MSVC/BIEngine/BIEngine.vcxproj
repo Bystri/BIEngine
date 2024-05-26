@@ -126,10 +126,11 @@
     <ClCompile Include="..\..\Graphics\Model.cpp" />
     <ClCompile Include="..\..\Graphics\ModelLoader.cpp" />
     <ClCompile Include="..\..\Graphics\OpaqueGraphicsTechnique.cpp" />
+    <ClCompile Include="..\..\Graphics\PointLightShadowGraphicsTechnique.cpp" />
     <ClCompile Include="..\..\Graphics\RenderItemsStorage.cpp" />
     <ClCompile Include="..\..\Graphics\Scene.cpp" />
     <ClCompile Include="..\..\Graphics\SceneNodes.cpp" />
-    <ClCompile Include="..\..\Graphics\ShadowGraphicsTechnique.cpp" />
+    <ClCompile Include="..\..\Graphics\DirLightShadowGraphicsTechnique.cpp" />
     <ClCompile Include="..\..\Graphics\SkeletalModel.cpp" />
     <ClCompile Include="..\..\Graphics\SkeletalModelLoader.cpp" />
     <ClCompile Include="..\..\Graphics\Skeleton.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="..\..\Graphics\AnimationLoader.h" />
     <ClInclude Include="..\..\Graphics\Animator.h" />
     <ClInclude Include="..\..\Graphics\BoneAnimChannel.h" />
+    <ClInclude Include="..\..\Graphics\PointLightShadowGraphicsTechnique.h" />
     <ClInclude Include="..\..\Graphics\Skeleton.h" />
     <ClInclude Include="..\..\Graphics\Camera.h" />
     <ClInclude Include="..\..\Graphics\GraphicsRenderPass.h" />
@@ -242,7 +244,7 @@
     <ClInclude Include="..\..\Graphics\RenderItemsStorage.h" />
     <ClInclude Include="..\..\Graphics\Scene.h" />
     <ClInclude Include="..\..\Graphics\SceneNodes.h" />
-    <ClInclude Include="..\..\Graphics\ShadowGraphicsTechnique.h" />
+    <ClInclude Include="..\..\Graphics\DirLightShadowGraphicsTechnique.h" />
     <ClInclude Include="..\..\Graphics\SkeletalModel.h" />
     <ClInclude Include="..\..\Graphics\SkeletalModelLoader.h" />
     <ClInclude Include="..\..\Graphics\Skybox.h" />

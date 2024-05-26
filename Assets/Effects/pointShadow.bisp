@@ -1,5 +1,4 @@
 <ShaderProgram>
 	<Vertex path="effects/pointShadow.vs"/>
-	<Geometry path="effects/pointShadow.geom"/>
 	<Fragment path="effects/pointShadow.frag"/>
 </ShaderProgram>

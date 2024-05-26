@@ -321,7 +321,7 @@
     <ClCompile Include="..\..\Graphics\RenderItemsStorage.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Graphics\ShadowGraphicsTechnique.cpp">
+    <ClCompile Include="..\..\Graphics\DirLightShadowGraphicsTechnique.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Graphics\OpaqueGraphicsTechnique.cpp">
@@ -376,6 +376,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Graphics\Skeleton.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Graphics\PointLightShadowGraphicsTechnique.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -686,7 +689,7 @@
     <ClInclude Include="..\..\Graphics\GraphicsTechnique.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Graphics\ShadowGraphicsTechnique.h">
+    <ClInclude Include="..\..\Graphics\DirLightShadowGraphicsTechnique.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Graphics\OpaqueGraphicsTechnique.h">
@@ -748,6 +751,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Math\Spline.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\PointLightShadowGraphicsTechnique.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

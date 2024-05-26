@@ -61,6 +61,32 @@ static unsigned int FramebufferAttachementTypeToOpengl(FramebufferAttachementTyp
    }
 }
 
+void FramebufferEnableColor(std::shared_ptr<Framebuffer> framebuffer, FramebufferColorOperationType op)
+{
+   framebuffer->Bind();
+
+   if (static_cast<bool>(op & FramebufferColorOperationType::DRAW)) {
+      glDrawBuffer(GL_COLOR_ATTACHMENT0);
+   }
+
+   if (static_cast<bool>(op & FramebufferColorOperationType::READ)) {
+      glReadBuffer(GL_COLOR_ATTACHMENT0);
+   }
+}
+
+void FramebufferDisableColor(std::shared_ptr<Framebuffer> framebuffer, FramebufferColorOperationType op)
+{
+   framebuffer->Bind();
+
+   if (static_cast<bool>(op & FramebufferColorOperationType::DRAW)) {
+      glDrawBuffer(GL_NONE);
+   }
+
+   if (static_cast<bool>(op & FramebufferColorOperationType::READ)) {
+      glReadBuffer(GL_NONE);
+   }
+}
+
 void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<Texture2D> attachement)
 {
    framebuffer->Bind();
