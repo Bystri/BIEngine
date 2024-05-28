@@ -8,6 +8,7 @@ class IKeyboardHandler {
 public:
    virtual bool OnKeyDown(int key, int scancode) = 0;
    virtual bool OnKeyUp(int key, int scancode) = 0;
+   virtual bool IsKeyPressed(int key) const = 0;
 };
 
 class IPointerHandler {

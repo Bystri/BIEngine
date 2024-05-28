@@ -88,6 +88,7 @@ void BIEditorLogic::OnUpdate(BIEngine::GameTimer& gt)
 BIEditorHumanView::BIEditorHumanView(unsigned int screenWidth, unsigned int screenHeight)
    : BIEngine::HumanView(screenWidth, screenHeight),
      m_pActorEditorWidget(nullptr),
+     m_wasCtrlButtonProcessed(false),
      m_bIsWindowFocused(false)
 {
 }
@@ -241,8 +242,24 @@ void BIEditorHumanView::OnUpdate(const BIEngine::GameTimer& gt)
 {
    BIEngine::HumanView::OnUpdate(gt);
 
-   if (m_pFlyCameraSystem && m_bIsWindowFocused) {
-      m_pFlyCameraSystem->OnUpdate(gt);
+   if ((m_pKeyboardHandler->IsKeyPressed(GLFW_KEY_LEFT_CONTROL) || m_pKeyboardHandler->IsKeyPressed(GLFW_KEY_RIGHT_CONTROL)) == false) {
+      if (m_pFlyCameraSystem && m_bIsWindowFocused) {
+         m_pFlyCameraSystem->OnUpdate(gt);
+      }
+
+      m_wasCtrlButtonProcessed = false;
+
+      return;
+   }
+
+   if (!m_wasCtrlButtonProcessed) {
+      if (m_pKeyboardHandler->IsKeyPressed(GLFW_KEY_D)) {
+         duplicateActor();
+         m_wasCtrlButtonProcessed = true;
+      } else if (m_pKeyboardHandler->IsKeyPressed(GLFW_KEY_S)) {
+         saveWorld();
+         m_wasCtrlButtonProcessed = true;
+      }
    }
 }
 
@@ -297,8 +314,14 @@ void BIEditorHumanView::showMenu()
 {
    if (ImGui::BeginMainMenuBar()) {
       if (ImGui::BeginMenu("File")) {
-         if (ImGui::MenuItem("Save World")) {
+         if (ImGui::MenuItem("Save World", "CTRL+S")) {
             saveWorld();
+         }
+         ImGui::EndMenu();
+      }
+      if (ImGui::BeginMenu("Edit")) {
+         if (ImGui::MenuItem("Duplicate", "CTRL+D")) {
+            duplicateActor();
          }
          ImGui::EndMenu();
       }
@@ -309,7 +332,7 @@ void BIEditorHumanView::showMenu()
 void BIEditorHumanView::showSceneTree()
 {
    if (ImGui::Begin("World")) {
-      int numActors = BIEngine::g_pApp->m_pGameLogic->GetNumActors();
+      const int numActors = BIEngine::g_pApp->m_pGameLogic->GetNumActors();
       for (int i = 0; i < numActors; ++i) {
          std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(i);
 
@@ -362,4 +385,50 @@ void BIEditorHumanView::saveWorld()
    worldDoc.LinkEndChild(pWorldRootElement);
 
    worldDoc.SaveFile(fileName.c_str());
+}
+
+static void editorHumanViewUpdateDuplicateActorName(std::string& name)
+{
+   std::size_t pos = name.find_last_of('_');
+   if (pos == std::string::npos) {
+      name += "_0";
+      return;
+   }
+
+   std::string numStr;
+   for (std::size_t i = pos + 1; i < name.size(); ++i) {
+      if (name[i] < '0' || name[i] > '9') {
+         name += "_0";
+         return;
+      }
+
+      numStr += name[i];
+   }
+
+   if (numStr.size() == 0) {
+      name += "_0";
+      return;
+   }
+
+   int num = std::atoi(numStr.c_str());
+
+   ++num;
+
+   numStr = std::to_string(num);
+   name.replace(pos + 1, numStr.size(), numStr.c_str());
+}
+
+void BIEditorHumanView::duplicateActor()
+{
+   const std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(m_pActorEditorWidget->GetCurrentSelectedActorId());
+
+   tinyxml2::XMLDocument actorDoc;
+   tinyxml2::XMLElement* const pActorNode = pActor->ToXML(&actorDoc);
+
+   const char* name = pActorNode->Attribute("name");
+   std::string strName = name;
+   editorHumanViewUpdateDuplicateActorName(strName);
+   pActorNode->SetAttribute("name", strName.c_str());
+
+   BIEngine::g_pApp->m_pGameLogic->CreateActor(pActorNode);
 }

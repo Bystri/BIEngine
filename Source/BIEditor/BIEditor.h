@@ -53,6 +53,8 @@ private:
 
    void saveWorld();
 
+   void duplicateActor();
+
 private:
    std::shared_ptr<BIEngine::Framebuffer> m_pGameRenderTarget;
    std::shared_ptr<BIEngine::Texture2D> m_pGameRenderTargetColorBuffer;
@@ -64,5 +66,6 @@ private:
 
    std::weak_ptr<ActorPickerInfoStorage> m_pActorPickerInfoStorage;
 
+   bool m_wasCtrlButtonProcessed;
    bool m_bIsWindowFocused;
 };

@@ -26,7 +26,7 @@ public:
 
    virtual bool OnPointerButtonUp(const Point& mousePos, const int radius, int buttonCode) override;
 
-   bool IsKeyPressed(int key) const;
+   bool IsKeyPressed(int key) const override;
 
    bool IsMouseButtonPressed(int buttonCode);
 
