@@ -64,14 +64,14 @@ void HumanView::Shutdown()
    }
 }
 
-void HumanView::OnUpdate(const GameTimer& gt)
+void HumanView::OnPreRender(const GameTimer& gt)
 {
-   m_pScene->OnUpdate(gt);
+   m_pScene->OnPreRender(gt);
 }
 
-void HumanView::OnRender(const GameTimer& gt)
+void HumanView::OnPostRender(const GameTimer& gt)
 {
-   m_pScene->OnRender(gt);
+   m_pScene->OnPostRender(gt);
    m_userInterface.OnRender(gt);
 }
 

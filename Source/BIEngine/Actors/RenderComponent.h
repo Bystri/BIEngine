@@ -3,58 +3,32 @@
 #include "ActorComponent.h"
 
 #include "../EngineCore/Assert.h"
-#include "../Graphics/SpriteNode.h"
+#include "../Graphics/Sprite.h"
 #include "../Renderer/Color.h"
 #include "../Graphics/Model.h"
+#include "../Graphics/SkeletalModel.h"
 
 namespace BIEngine {
-// Данный компонент отвечает за регестрацию на сцене объекта отрисовки. Делается это с помощью отрпавки сообщения, которое прослушивает сама сцена
-class BaseRenderComponent : public ActorComponent {
-protected:
-   std::shared_ptr<SceneNode> m_pSceneNode;
-
-public:
-   BaseRenderComponent() {}
-
-   bool Init(tinyxml2::XMLElement* pData) override
-   {
-      Assert(pData, "Bad arguments provided for initialization to Render Component");
-
-      return pData != nullptr;
-   }
-
-   tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override { return pDoc->NewElement(GetComponentId().c_str()); }
-
-   virtual void Activate() override;
-
-protected:
-   // В данном методе дочерние классы создают особые узлы сцены под свой заданный тип компонента актера
-   virtual std::shared_ptr<SceneNode> CreateSceneNode() = 0;
-
-private:
-   virtual std::shared_ptr<SceneNode> GetSceneNode();
-};
-
 // Создает и регестрирует в сцене спрайт для отрисовки актера
-class SpriteRenderComponent : public BaseRenderComponent {
+class SpriteRenderComponent : public ActorComponent {
 public:
    SpriteRenderComponent()
-      : BaseRenderComponent(), m_pSpriteNode(nullptr), m_spritePath(), m_spriteColor(COLOR_WHITE) {}
+      : ActorComponent(), m_spritePath(), m_spriteColor(COLOR_WHITE) {}
 
    static ComponentId g_CompId;
 
    virtual ComponentId GetComponentId() const { return SpriteRenderComponent::g_CompId; }
 
-   virtual bool Init(tinyxml2::XMLElement* pData);
+   virtual void OnRenderObject(const GameTimer& gt) override;
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
 protected:
-   virtual std::shared_ptr<SceneNode> CreateSceneNode();
+   virtual bool Init(tinyxml2::XMLElement* pData);
 
 protected:
-   std::shared_ptr<SpriteNode> m_pSpriteNode; // Узел на сцене, который отвечает за отрисовку этого компонента
-   std::string m_spritePath;                  // Сохраняем путь к спрайту, из которого мы делаем текстуру, чтобы потом вставить его в XML, если понадобится
+   std::shared_ptr<Sprite> m_pSprite;
+   std::string m_spritePath;
    ColorRgba m_spriteColor;
 };
 
@@ -63,11 +37,12 @@ static std::unique_ptr<ActorComponent> CreateSpriteRenderComponent()
    return std::make_unique<SpriteRenderComponent>();
 }
 
-class MeshBaseRenderComponent : public BaseRenderComponent {
+class MeshBaseRenderComponent : public ActorComponent {
+public:
+   tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
+
 protected:
    bool Init(tinyxml2::XMLElement* pData) override;
-
-   tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
 private:
    std::string m_materialPath;
@@ -76,31 +51,33 @@ protected:
    std::shared_ptr<Material> m_pMaterial;
 };
 
+class MeshRenderComponent : public MeshBaseRenderComponent {
+public:
+   std::shared_ptr<Model> GetModel() const { return m_pModel; }
+
+   virtual void OnRenderObject(const GameTimer& gt) override;
+
+protected:
+   std::shared_ptr<Model> m_pModel;
+};
+
 class ModelMesh;
 
-class BoxRenderComponent : public MeshBaseRenderComponent {
+class BoxRenderComponent : public MeshRenderComponent {
 public:
    BoxRenderComponent()
-      : MeshBaseRenderComponent(), m_pModelNode(nullptr), m_width(1.0f), m_height(1.0f), m_depth(1.0f) {}
+      : MeshRenderComponent(), m_width(1.0f), m_height(1.0f), m_depth(1.0f) {}
 
    static ComponentId g_CompId;
 
    virtual ComponentId GetComponentId() const { return BoxRenderComponent::g_CompId; }
 
-   virtual bool Init(tinyxml2::XMLElement* pData);
-
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
-   const std::vector<std::shared_ptr<ModelMesh>>& HackGetMeshes() const { return m_pModelNode->GetModel()->GetMeshes(); }
-
+protected:
+   virtual bool Init(tinyxml2::XMLElement* pData);
 
 protected:
-   virtual std::shared_ptr<SceneNode> CreateSceneNode();
-
-protected:
-   std::shared_ptr<ModelNode> m_pModelNode; // Узел на сцене, который отвечает за отрисовку этого компонента
-
-
    float m_width;
    float m_height;
    float m_depth;
@@ -111,25 +88,21 @@ static std::unique_ptr<ActorComponent> CreateBoxRenderComponent()
    return std::make_unique<BoxRenderComponent>();
 }
 
-class SphereRenderComponent : public MeshBaseRenderComponent {
+class SphereRenderComponent : public MeshRenderComponent {
 public:
    SphereRenderComponent()
-      : MeshBaseRenderComponent(), m_pModelNode(nullptr), m_radius(1.0f) {}
+      : MeshRenderComponent(), m_radius(1.0f) {}
 
    static ComponentId g_CompId;
 
    virtual ComponentId GetComponentId() const { return SphereRenderComponent::g_CompId; }
 
-   virtual bool Init(tinyxml2::XMLElement* pData);
-
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
 protected:
-   virtual std::shared_ptr<SceneNode> CreateSceneNode();
+   virtual bool Init(tinyxml2::XMLElement* pData);
 
 protected:
-   std::shared_ptr<ModelNode> m_pModelNode; // Узел на сцене, который отвечает за отрисовку этого компонента
-
    float m_radius;
 };
 
@@ -138,27 +111,23 @@ static std::unique_ptr<ActorComponent> CreateSphereRenderComponent()
    return std::make_unique<SphereRenderComponent>();
 }
 
-class ModelRenderComponent : public BaseRenderComponent {
+class ModelRenderComponent : public MeshRenderComponent {
 public:
    ModelRenderComponent()
-      : BaseRenderComponent(), m_pModelNode(nullptr), m_modelPath() {}
+      : MeshRenderComponent(), m_modelPath() {}
 
    static ComponentId g_CompId;
 
    virtual ComponentId GetComponentId() const { return ModelRenderComponent::g_CompId; }
 
-   virtual bool Init(tinyxml2::XMLElement* pData);
-
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
-   std::shared_ptr<Model> GetModel() const { return m_pModelNode->GetModel(); }
+   std::shared_ptr<Model> GetModel() const { return m_pModel; }
 
 protected:
-   virtual std::shared_ptr<SceneNode> CreateSceneNode();
+   virtual bool Init(tinyxml2::XMLElement* pData);
 
 protected:
-   std::shared_ptr<ModelNode> m_pModelNode; // Узел на сцене, который отвечает за отрисовку этого компонента
-
    std::string m_modelPath;
 };
 
@@ -167,27 +136,26 @@ static std::unique_ptr<ActorComponent> CreateModelRenderComponent()
    return std::make_unique<ModelRenderComponent>();
 }
 
-class SkeletalModelRenderComponent : public BaseRenderComponent {
+class SkeletalModelRenderComponent : public ActorComponent {
 public:
    SkeletalModelRenderComponent()
-      : BaseRenderComponent(), m_pModelNode(nullptr), m_modelPath() {}
+      : ActorComponent(), m_modelPath() {}
 
    static ComponentId g_CompId;
 
    virtual ComponentId GetComponentId() const { return SkeletalModelRenderComponent::g_CompId; }
 
-   virtual bool Init(tinyxml2::XMLElement* pData);
+   virtual void OnRenderObject(const GameTimer& gt) override;
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
-   std::shared_ptr<SkeletalModel> GetModel() const { return m_pModelNode->GetModel(); }
+   std::shared_ptr<SkeletalModel> GetModel() const { return m_pModel; }
 
 protected:
-   virtual std::shared_ptr<SceneNode> CreateSceneNode();
+   virtual bool Init(tinyxml2::XMLElement* pData);
 
 protected:
-   std::shared_ptr<SkeletalModelNode> m_pModelNode; // Узел на сцене, который отвечает за отрисовку этого компонента
-
+   std::shared_ptr<SkeletalModel> m_pModel;
    std::string m_modelPath;
 };
 

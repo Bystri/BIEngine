@@ -127,17 +127,25 @@ void GameLogic::OnUpdate(GameTimer& gt)
 
    ProcessManager::Get()->UpdateProcesses(gt);
 
-   for (const auto view : m_gameViews) {
-      view->OnUpdate(gt);
+   for (const auto& actor : m_actors) {
+      actor.second->OnUpdate(gt);
    }
 }
 
 void GameLogic::OnRender(const GameTimer& gt)
 {
+   for (const auto view : m_gameViews) {
+      view->OnPreRender(gt);
+   }
+
+   for (const auto& actor : m_actors) {
+      actor.second->OnRenderObject(gt);
+   }
+
    m_pPhysics3D->DrawRenderDiagnostics();
 
    for (const auto view : m_gameViews) {
-      view->OnRender(gt);
+      view->OnPostRender(gt);
    }
 }
 

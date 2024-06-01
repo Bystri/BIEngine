@@ -5,6 +5,7 @@
 #include <pybind11/embed.h>
 
 #include "../../EngineCore/GameApp.h"
+#include "../../Actors/TransformComponent.h"
 #include "../../Actors/NavAgentComponent.h"
 #include "../../Actors/Physics2DComponent.h"
 #include "../../Actors/Physics2DTriggerComponent.h"
@@ -65,9 +66,9 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
       .def("Stop", &BIEngine::Physics3DTriggerComponent::Stop);
 
 
-   py::class_<BIEngine::BaseRenderComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::BaseRenderComponent>>(m, "BaseRenderComponent");
-   py::class_<BIEngine::BoxRenderComponent, BIEngine::BaseRenderComponent, std::shared_ptr<BIEngine::BoxRenderComponent>>(m, "BoxRenderComponent");
-   py::class_<BIEngine::SpriteRenderComponent, BIEngine::BaseRenderComponent, std::shared_ptr<BIEngine::SpriteRenderComponent>>(m, "SpriteRenderComponent");
+   py::class_<BIEngine::BoxRenderComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::BoxRenderComponent>>(m, "BoxRenderComponent");
+   py::class_<BIEngine::SphereRenderComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::SphereRenderComponent>>(m, "SphereRenderComponent");
+   py::class_<BIEngine::SpriteRenderComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::SpriteRenderComponent>>(m, "SpriteRenderComponent");
 
    py::class_<BIEngine::ScriptComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::ScriptComponent>>(m, "ScriptComponent")
       .def("GetObject", &BIEngine::ScriptComponent::GetObject);

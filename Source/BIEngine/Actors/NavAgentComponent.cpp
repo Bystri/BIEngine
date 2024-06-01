@@ -1,5 +1,6 @@
 ﻿#include "NavAgentComponent.h"
 
+#include "../Actors/TransformComponent.h"
 #include "../EngineCore/GameApp.h"
 
 namespace BIEngine {

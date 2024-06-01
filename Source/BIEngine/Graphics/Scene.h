@@ -6,6 +6,7 @@
 
 #include "Skybox.h"
 #include "Camera.h"
+#include "RenderItemsStorage.h"
 #include "../Renderer/Renderer.h"
 #include "../Renderer/ConstantsBuffer.h"
 #include "../EventManager/Events.h"
@@ -13,16 +14,12 @@
 
 namespace BIEngine {
 
-using SceneActorMap = std::map<ActorId, std::shared_ptr<ISceneNode>>;
-
 class GraphicsRenderPass;
-class RenderItemsStorage;
 
 // Владеет всеми графическими элементами, необходимым для отрисовки
 class Scene {
 public:
    explicit Scene(std::shared_ptr<Renderer> pRenderer);
-   virtual ~Scene();
 
    /*
    Так как сцены работают с указателями на актеров и их компоненты, мы не можем просто так копировать сцену (и актеров), так как сцена не единственные (а еще и не главный),
@@ -37,29 +34,18 @@ public:
 
    void Init();
 
-   int OnRender(const GameTimer& gt);
-   int OnUpdate(const GameTimer& gt);
-
-   std::shared_ptr<ISceneNode> FindActor(ActorId id);
+   int OnPreRender(const GameTimer& gt);
+   int OnPostRender(const GameTimer& gt);
 
    void SetCamera(std::shared_ptr<Camera> pCamera) { m_pCamera = pCamera; }
 
    const std::shared_ptr<Camera> GetCamera() const { return m_pCamera; }
 
-   RenderItemsStorage* GetRenderItemsStorage() const { return m_pRenderItemsStorage; }
+   RenderItemsStorage* GetRenderItemsStorage() const { return m_pRenderItemsStorage.get(); }
 
    void AddRenderPass(std::shared_ptr<GraphicsRenderPass> pRenderPass) { m_graphicsRenderPasses.push_back(pRenderPass); }
 
-   void AddChild(ActorId id, std::shared_ptr<ISceneNode> pChild);
-   void RemoveChild(ActorId id);
-
    std::shared_ptr<Renderer> GetRenderer() { return m_pRenderer; }
-
-protected:
-   // Регистрация компонента, который необохдимо отрисовать
-   void NewRenderComponentDelegate(IEventDataPtr pEventData);
-   // Удаление уничтоженного актера из сцены
-   void DestroyActorDelegate(IEventDataPtr pEventData);
 
 private:
    struct GlobalRenderBufferData {
@@ -72,9 +58,6 @@ private:
    GlobalRenderBufferData m_globalRenderBufferData;
 
 protected:
-   // Основной узел дерева графических элементов
-   std::shared_ptr<SceneNode> m_pRoot;
-
    std::shared_ptr<Camera> m_pCamera;
 
    // Рисовальщик
@@ -82,9 +65,7 @@ protected:
    std::shared_ptr<ConstantsBuffer> m_pConstantsBuffer;
 
    std::vector<std::shared_ptr<GraphicsRenderPass>> m_graphicsRenderPasses;
-   RenderItemsStorage* m_pRenderItemsStorage;
-
-   SceneActorMap m_actorMap;
+   std::unique_ptr<RenderItemsStorage> m_pRenderItemsStorage;
 };
 
 } // namespace BIEngine

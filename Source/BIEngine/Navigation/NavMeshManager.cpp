@@ -6,6 +6,7 @@
 
 #include "NavMeshInputGeom.h"
 #include "NavSoloMeshGenerator.h"
+#include "../Actors/TransformComponent.h"
 #include "../Actors/RenderComponent.h"
 #include "../Actors/Physics3DComponent.h"
 #include "../Graphics/Model.h"
@@ -384,7 +385,7 @@ std::shared_ptr<NavMeshInputGeometry> NavMeshManager::prepareNavGeom()
       std::shared_ptr<Physics3DComponent> pPhysicsComponent = m_actors[i]->GetComponent<Physics3DComponent>(Physics3DComponent::g_CompId).lock();
 
       if (pTransformComponent && pBoxRenderComponent && pPhysicsComponent && pPhysicsComponent->GetBodyType() == IGamePhysics3D::BodyType::STATIC) {
-         const std::vector<std::shared_ptr<ModelMesh>>& modelMeshes = pBoxRenderComponent->HackGetMeshes();
+         const std::vector<std::shared_ptr<ModelMesh>>& modelMeshes = pBoxRenderComponent->GetModel()->GetMeshes();
          const glm::mat4 transformMatrix = pTransformComponent->GetTransformMatrix();
 
          for (int j = 0; j < modelMeshes.size(); ++j) {

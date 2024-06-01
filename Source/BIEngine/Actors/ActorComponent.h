@@ -5,6 +5,8 @@
 
 #include <tinyxml2.h>
 
+#include "../Utilities/GameTimer.h"
+
 namespace BIEngine {
 
 using ComponentId = std::string;
@@ -33,6 +35,10 @@ public:
    virtual void Activate() {}
 
    virtual void Deactivate() {}
+
+   virtual void OnUpdate(const GameTimer& gt) {}
+
+   virtual void OnRenderObject(const GameTimer& gt) {}
 
    virtual void Terminate() {};
 

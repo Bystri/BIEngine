@@ -129,7 +129,6 @@
     <ClCompile Include="..\..\Graphics\PointLightShadowGraphicsTechnique.cpp" />
     <ClCompile Include="..\..\Graphics\RenderItemsStorage.cpp" />
     <ClCompile Include="..\..\Graphics\Scene.cpp" />
-    <ClCompile Include="..\..\Graphics\SceneNodes.cpp" />
     <ClCompile Include="..\..\Graphics\DirLightShadowGraphicsTechnique.cpp" />
     <ClCompile Include="..\..\Graphics\SkeletalModel.cpp" />
     <ClCompile Include="..\..\Graphics\SkeletalModelLoader.cpp" />
@@ -137,7 +136,6 @@
     <ClCompile Include="..\..\Graphics\Skybox.cpp" />
     <ClCompile Include="..\..\Graphics\SkyboxGraphicsTechnique.cpp" />
     <ClCompile Include="..\..\Graphics\Sprite.cpp" />
-    <ClCompile Include="..\..\Graphics\SpriteNode.cpp" />
     <ClCompile Include="..\..\Graphics\WorldRenderPass.cpp" />
     <ClCompile Include="..\..\Math\Math.cpp" />
     <ClCompile Include="..\..\Math\Transform.cpp" />
@@ -243,14 +241,12 @@
     <ClInclude Include="..\..\Graphics\OpaqueGraphicsTechnique.h" />
     <ClInclude Include="..\..\Graphics\RenderItemsStorage.h" />
     <ClInclude Include="..\..\Graphics\Scene.h" />
-    <ClInclude Include="..\..\Graphics\SceneNodes.h" />
     <ClInclude Include="..\..\Graphics\DirLightShadowGraphicsTechnique.h" />
     <ClInclude Include="..\..\Graphics\SkeletalModel.h" />
     <ClInclude Include="..\..\Graphics\SkeletalModelLoader.h" />
     <ClInclude Include="..\..\Graphics\Skybox.h" />
     <ClInclude Include="..\..\Graphics\SkyboxGraphicsTechnique.h" />
     <ClInclude Include="..\..\Graphics\Sprite.h" />
-    <ClInclude Include="..\..\Graphics\SpriteNode.h" />
     <ClInclude Include="..\..\Graphics\GraphicsTechnique.h" />
     <ClInclude Include="..\..\Graphics\WorldRenderPass.h" />
     <ClInclude Include="..\..\Math\Spline.h" />

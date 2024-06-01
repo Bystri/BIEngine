@@ -1,29 +1,33 @@
 ﻿#pragma once
 
-#include "ActorComponent.h"
+#include <glm/glm.hpp>
 
-#include "../Actors/RenderComponent.h"
+#include "ActorComponent.h"
+#include "../Renderer/Color.h"
 
 namespace BIEngine {
 
-class DirectionalLightComponent : public BaseRenderComponent {
+class DirectionalLightComponent : public ActorComponent {
 public:
    DirectionalLightComponent()
-      : BaseRenderComponent(), m_pDirectionalLightNode(nullptr) {}
+      : ActorComponent(), m_irradiance(1.0f), m_color(0.75f, 0.75f, 0.05f)
+   {
+   }
 
    static ComponentId g_CompId;
 
    virtual ComponentId GetComponentId() const { return DirectionalLightComponent::g_CompId; }
 
-   virtual bool Init(tinyxml2::XMLElement* pData) override;
+   virtual void OnRenderObject(const GameTimer& gt) override;
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
 protected:
-   virtual std::shared_ptr<SceneNode> CreateSceneNode() override;
+   virtual bool Init(tinyxml2::XMLElement* pData) override;
 
 protected:
-   std::shared_ptr<DirectionalLightNode> m_pDirectionalLightNode;
+   float m_irradiance;
+   ColorRgb m_color;
 };
 
 static std::unique_ptr<ActorComponent> CreateDirectionalLightComponent()
@@ -31,24 +35,25 @@ static std::unique_ptr<ActorComponent> CreateDirectionalLightComponent()
    return std::make_unique<DirectionalLightComponent>();
 }
 
-class PointLightComponent : public BaseRenderComponent {
+class PointLightComponent : public ActorComponent {
 public:
    PointLightComponent()
-      : BaseRenderComponent(), m_pPointLightNode(nullptr) {}
+      : ActorComponent(), m_intensity(1.0f), m_color(0.75f, 0.75f, 0.05f) {}
 
    static ComponentId g_CompId;
 
    virtual ComponentId GetComponentId() const { return PointLightComponent::g_CompId; }
 
-   virtual bool Init(tinyxml2::XMLElement* pData) override;
+   virtual void OnRenderObject(const GameTimer& gt) override;
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
 protected:
-   virtual std::shared_ptr<SceneNode> CreateSceneNode() override;
+   virtual bool Init(tinyxml2::XMLElement* pData) override;
 
 protected:
-   std::shared_ptr<PointLightNode> m_pPointLightNode;
+   float m_intensity;
+   ColorRgb m_color;
 };
 
 static std::unique_ptr<ActorComponent> CreatePointLightComponent()
@@ -56,24 +61,38 @@ static std::unique_ptr<ActorComponent> CreatePointLightComponent()
    return std::make_unique<PointLightComponent>();
 }
 
-class SpotLightComponent : public BaseRenderComponent {
+class SpotLightComponent : public ActorComponent {
 public:
    SpotLightComponent()
-      : BaseRenderComponent(), m_pSpotLightNode(nullptr) {}
+      : ActorComponent(),
+        m_attenuationConstant(1.0f), m_attenuationLinear(0.09f), m_attenuationQuadratic(0.032f),
+        m_ambient(0.05f, 0.05f, 0.05f), m_diffuse(0.5f, 0.5f, 0.5f), m_specular(1.0f, 1.0f, 1.0f),
+        m_cutOff(glm::cos(glm::radians(12.5f))), m_outerCutOff(glm::cos(glm::radians(25.0f)))
+   {
+   }
 
    static ComponentId g_CompId;
 
    virtual ComponentId GetComponentId() const { return SpotLightComponent::g_CompId; }
 
-   virtual bool Init(tinyxml2::XMLElement* pData) override;
+   virtual void OnRenderObject(const GameTimer& gt) override;
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
 protected:
-   virtual std::shared_ptr<SceneNode> CreateSceneNode() override;
+   virtual bool Init(tinyxml2::XMLElement* pData) override;
 
 protected:
-   std::shared_ptr<SpotLightNode> m_pSpotLightNode;
+   float m_attenuationConstant;
+   float m_attenuationLinear;
+   float m_attenuationQuadratic;
+
+   ColorRgb m_ambient;
+   ColorRgb m_diffuse;
+   ColorRgb m_specular;
+
+   float m_cutOff;
+   float m_outerCutOff;
 };
 
 static std::unique_ptr<ActorComponent> CreateSpotLightComponent()

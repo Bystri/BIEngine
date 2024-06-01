@@ -47,15 +47,16 @@ void AnimationComponent::Activate()
    }
 
    m_pAnimator = std::make_shared<Animator>(pModelComponent->GetModel());
-
-   m_pUpdateAnimProcess = std::make_shared<UpdateAnimProcess>(m_pAnimator);
-   ProcessManager::Get()->AttachProcess(m_pUpdateAnimProcess);
 }
 
 void AnimationComponent::Deactivate()
 {
-   m_pUpdateAnimProcess->Succeed();
-   m_pUpdateAnimProcess = nullptr;
+   m_pAnimator = nullptr;
+}
+
+void AnimationComponent::OnUpdate(const GameTimer& gt)
+{
+   m_pAnimator->Update(gt.DeltaTime());
 }
 
 tinyxml2::XMLElement* AnimationComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
@@ -80,16 +81,6 @@ void AnimationComponent::PlayAnimation(const std::string& animName)
 void AnimationComponent::Stop()
 {
    m_pAnimator->PlayAnimation(nullptr);
-}
-
-AnimationComponent::UpdateAnimProcess::UpdateAnimProcess(std::shared_ptr<Animator> pAnimator)
-   : m_pAnimator(pAnimator)
-{
-}
-
-void AnimationComponent::UpdateAnimProcess::OnUpdate(float dt)
-{
-   m_pAnimator->Update(dt);
 }
 
 } // namespace BIEngine

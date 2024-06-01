@@ -168,13 +168,7 @@
     <ClCompile Include="..\..\Graphics\Scene.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Graphics\SceneNodes.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Graphics\Sprite.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics\SpriteNode.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Physics\Physics2D.cpp">
@@ -503,13 +497,7 @@
     <ClInclude Include="..\..\Graphics\Scene.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Graphics\SceneNodes.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Graphics\Sprite.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics\SpriteNode.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsActors.h">

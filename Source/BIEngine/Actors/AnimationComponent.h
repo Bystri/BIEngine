@@ -21,29 +21,17 @@ public:
    virtual void Activate() override;
    virtual void Deactivate() override;
 
+   virtual void OnUpdate(const GameTimer& gt) override;
+
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
    void PlayAnimation(const std::string& animName);
    void Stop();
 
 private:
-   class UpdateAnimProcess : public Process {
-   public:
-      UpdateAnimProcess(std::shared_ptr<Animator> pAnimator);
-
-   protected:
-      virtual void OnUpdate(float dt);
-
-   private:
-      std::shared_ptr<Animator> m_pAnimator;
-   };
-
-private:
    std::unordered_map<std::string, std::shared_ptr<Animation>> m_animations;
    std::unordered_map<std::string, std::string> m_animationPaths;
    std::shared_ptr<Animator> m_pAnimator;
-
-   std::shared_ptr<UpdateAnimProcess> m_pUpdateAnimProcess;
 };
 
 static std::unique_ptr<ActorComponent> CreateAnimatorComponent()

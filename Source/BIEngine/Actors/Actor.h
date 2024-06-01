@@ -37,6 +37,9 @@ public:
    void Activate();
    void Deactivate();
 
+   void OnUpdate(const GameTimer& gt);
+   void OnRenderObject(const GameTimer& gt);
+
    // Удаление всех умных указателей на компоненты текущего актера.
    void Destroy();
 

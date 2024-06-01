@@ -10,6 +10,7 @@
 #include "../Actors/TransformComponent.h"
 #include "../Utilities/Logger.h"
 #include "../Renderer/TextureLoader.h"
+#include "../EngineCore/GameApp.h"
 
 namespace BIEngine {
 ComponentId SpriteRenderComponent::g_CompId = "SpriteRenderComponent";
@@ -19,35 +20,12 @@ ComponentId ModelRenderComponent::g_CompId = "ModelRenderComponent";
 ComponentId SkeletalModelRenderComponent::g_CompId = "SkeletalModelRenderComponent";
 
 /***********************************************************
- * BaseRenderComponent
- ************************************************************/
-
-void BaseRenderComponent::Activate()
-{
-   std::shared_ptr<SceneNode> pSceneNode(GetSceneNode());
-   std::shared_ptr<EvtData_New_Render_Component> pEvent = std::make_shared<EvtData_New_Render_Component>(m_pOwner->GetId(), pSceneNode);
-   EventManager::Get()->TriggerEvent(pEvent);
-}
-
-std::shared_ptr<SceneNode> BaseRenderComponent::GetSceneNode()
-{
-   if (!m_pSceneNode) {
-      m_pSceneNode = CreateSceneNode();
-   }
-   return m_pSceneNode;
-}
-
-/***********************************************************
  * MeshBaseRenderComponent
  ************************************************************/
 
 
 bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
 {
-   if (!BaseRenderComponent::Init(pData)) {
-      return false;
-   }
-
    tinyxml2::XMLElement* pMaterialElement = pData->FirstChildElement("Material");
 
    if (pMaterialElement == nullptr) {
@@ -67,7 +45,7 @@ bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
 
 tinyxml2::XMLElement* MeshBaseRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
 
    tinyxml2::XMLElement* pMaterialElement = pDoc->NewElement("Material");
    pMaterialElement->SetAttribute("path", m_materialPath.c_str());
@@ -77,19 +55,35 @@ tinyxml2::XMLElement* MeshBaseRenderComponent::GenerateXml(tinyxml2::XMLDocument
 }
 
 /***********************************************************
+ * MeshRenderComponent
+ ************************************************************/
+
+void MeshRenderComponent::OnRenderObject(const GameTimer& gt)
+{
+   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   if (!pTransformComponent) {
+      return;
+   }
+
+   const std::vector<std::shared_ptr<ModelMesh>>& modelMeshes = m_pModel->GetMeshes();
+
+   for (const auto& pModelMesh : modelMeshes) {
+      RenderItemsStorage::OpaqueRenderItem opaqueRitem;
+      opaqueRitem.actorId = m_pOwner->GetId();
+      opaqueRitem.VAO = pModelMesh->GetMesh()->GetVao();
+      opaqueRitem.IndicesSize = pModelMesh->GetMesh()->GetIndices().size();
+      opaqueRitem.pMaterial = pModelMesh->GetMaterial();
+      opaqueRitem.ModelTransform = pTransformComponent->GetTransformMatrix();
+      g_pApp->TryGetHumanView(0)->GetScene()->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);
+   }
+}
+
+/***********************************************************
  * SpriteRenderComponent
  ************************************************************/
 
 bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
 {
-   if (!BaseRenderComponent::Init(pData)) {
-      return false;
-   }
-
-   if (m_pSpriteNode == nullptr) {
-      m_pSpriteNode = std::make_shared<SpriteNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
-   }
-
    static const std::string SPRITE_SHADER_PROGRAM_PATH = "Effects/sprite.bisp";
 
    std::shared_ptr<ShaderProgramData> pShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(SPRITE_SHADER_PROGRAM_PATH)->GetExtra());
@@ -119,22 +113,38 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
 
       if (spriteData == nullptr) {
          Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + std::to_string(m_pOwner->GetId()));
-         m_pSpriteNode.reset();
          return false;
       }
 
       pMaterial->AddTexture("material.sprite", 0, spriteData->GetTexture());
 
-      std::shared_ptr<Sprite> pSprite = std::make_shared<Sprite>(pMaterial);
-      m_pSpriteNode->SetSprite(pSprite);
+      m_pSprite = std::make_shared<Sprite>(pMaterial);
    }
 
    return true;
 }
 
+void SpriteRenderComponent::OnRenderObject(const GameTimer& gt)
+{
+   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   if (!pTransformComponent) {
+      return;
+   }
+
+   RenderCommand renderCommand(m_pSprite->GetMesh()->GetVao(), m_pSprite->GetMesh()->GetIndices().size(), m_pSprite->GetShaderProgramPtr());
+
+   renderCommand.RenderState = m_pSprite->GetRanderState();
+   renderCommand.RenderState.Cull = true;
+   renderCommand.Transform = pTransformComponent->GetTransformMatrix();
+
+   renderCommand.GetShaderProgramState() = m_pSprite->ConstructShaderProgramState();
+
+   g_pApp->TryGetHumanView(0)->GetScene()->GetRenderer()->DrawRenderCommand(renderCommand);
+}
+
 tinyxml2::XMLElement* SpriteRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
 
    tinyxml2::XMLElement* pColor = pDoc->NewElement("Color");
    pColor->SetAttribute("r", std::to_string(m_spriteColor.r).c_str());
@@ -150,32 +160,14 @@ tinyxml2::XMLElement* SpriteRenderComponent::GenerateXml(tinyxml2::XMLDocument* 
    return pBaseElement;
 }
 
-std::shared_ptr<SceneNode> SpriteRenderComponent::CreateSceneNode()
-{
-   if (m_pSpriteNode == nullptr) {
-      return std::shared_ptr<SceneNode>();
-   }
-
-   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   if (pTransformComponent) {
-      m_pSpriteNode->SetTransform(pTransformComponent);
-   }
-
-   return m_pSpriteNode;
-}
-
 /***********************************************************
  * BoxRenderComponent
  ************************************************************/
 
 bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
 {
-   if (!MeshBaseRenderComponent::Init(pData)) {
+   if (!MeshRenderComponent::Init(pData)) {
       return false;
-   }
-
-   if (m_pModelNode == nullptr) {
-      m_pModelNode = std::make_shared<ModelNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
    }
 
    tinyxml2::XMLElement* pSizeElement = pData->FirstChildElement("Size");
@@ -193,16 +185,15 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
    std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 0u));
    std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, m_pMaterial);
 
-   std::shared_ptr<Model> pModel = std::make_shared<Model>();
-   pModel->AddModelMesh(pModelMesh);
-   m_pModelNode->SetModel(pModel);
+   m_pModel = std::make_shared<Model>();
+   m_pModel->AddModelMesh(pModelMesh);
 
    return true;
 }
 
 tinyxml2::XMLElement* BoxRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = MeshBaseRenderComponent::GenerateXml(pDoc);
+   tinyxml2::XMLElement* pBaseElement = MeshRenderComponent::GenerateXml(pDoc);
 
    tinyxml2::XMLElement* pSize = pDoc->NewElement("Size");
    pSize->SetAttribute("w", std::to_string(m_width).c_str());
@@ -213,32 +204,14 @@ tinyxml2::XMLElement* BoxRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDo
    return pBaseElement;
 }
 
-std::shared_ptr<SceneNode> BoxRenderComponent::CreateSceneNode()
-{
-   if (m_pModelNode == nullptr) {
-      return std::shared_ptr<SceneNode>();
-   }
-
-   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   if (pTransformComponent) {
-      m_pModelNode->SetTransform(pTransformComponent);
-   }
-
-   return m_pModelNode;
-}
-
 /***********************************************************
  * SphereRenderComponent
  ************************************************************/
 
 bool SphereRenderComponent::Init(tinyxml2::XMLElement* pData)
 {
-   if (!MeshBaseRenderComponent::Init(pData)) {
+   if (!MeshRenderComponent::Init(pData)) {
       return false;
-   }
-
-   if (m_pModelNode == nullptr) {
-      m_pModelNode = std::make_shared<ModelNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
    }
 
    tinyxml2::XMLElement* pSizeElement = pData->FirstChildElement("Size");
@@ -252,16 +225,15 @@ bool SphereRenderComponent::Init(tinyxml2::XMLElement* pData)
    std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateSphere(m_radius, 16.0f, 16.0f));
    std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, m_pMaterial);
 
-   std::shared_ptr<Model> pModel = std::make_shared<Model>();
-   pModel->AddModelMesh(pModelMesh);
-   m_pModelNode->SetModel(pModel);
+   m_pModel = std::make_shared<Model>();
+   m_pModel->AddModelMesh(pModelMesh);
 
    return true;
 }
 
 tinyxml2::XMLElement* SphereRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = MeshBaseRenderComponent::GenerateXml(pDoc);
+   tinyxml2::XMLElement* pBaseElement = MeshRenderComponent::GenerateXml(pDoc);
 
    tinyxml2::XMLElement* pSize = pDoc->NewElement("Size");
    pSize->SetAttribute("r", std::to_string(m_radius).c_str());
@@ -270,38 +242,15 @@ tinyxml2::XMLElement* SphereRenderComponent::GenerateXml(tinyxml2::XMLDocument* 
    return pBaseElement;
 }
 
-std::shared_ptr<SceneNode> SphereRenderComponent::CreateSceneNode()
-{
-   if (m_pModelNode == nullptr) {
-      return std::shared_ptr<SceneNode>();
-   }
-
-   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   if (pTransformComponent) {
-      m_pModelNode->SetTransform(pTransformComponent);
-   }
-
-   return m_pModelNode;
-}
-
 /******************************************/
 /***********ModelRenderComponent***********/
 /******************************************/
 
 bool ModelRenderComponent::Init(tinyxml2::XMLElement* pData)
 {
-   if (!BaseRenderComponent::Init(pData)) {
-      return false;
-   }
-
-   if (m_pModelNode == nullptr) {
-      m_pModelNode = std::make_shared<ModelNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
-   }
-
    tinyxml2::XMLElement* pModel = pData->FirstChildElement("Model");
    if (!pModel) {
       Logger::WriteLog(Logger::LogType::ERROR, "Erro while loading actor" + std::to_string(m_pOwner->GetId()) + "; ModelRenderComponent must have path for model loading;");
-      m_pModelNode.reset();
       return false;
    }
 
@@ -313,18 +262,17 @@ bool ModelRenderComponent::Init(tinyxml2::XMLElement* pData)
 
    if (modelData == nullptr) {
       Logger::WriteLog(Logger::LogType::ERROR, "Error while loading actor" + std::to_string(m_pOwner->GetId()) + "; Error while loading model in ModelRenderComponent;");
-      m_pModelNode.reset();
       return false;
    }
 
-   m_pModelNode->SetModel(modelData->GetModel());
+   m_pModel = modelData->GetModel();
 
    return true;
 }
 
 tinyxml2::XMLElement* ModelRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
 
    tinyxml2::XMLElement* pMaterialElement = pDoc->NewElement("Model");
    pMaterialElement->SetAttribute("path", m_modelPath.c_str());
@@ -333,38 +281,15 @@ tinyxml2::XMLElement* ModelRenderComponent::GenerateXml(tinyxml2::XMLDocument* p
    return pBaseElement;
 }
 
-std::shared_ptr<SceneNode> ModelRenderComponent::CreateSceneNode()
-{
-   if (m_pModelNode == nullptr) {
-      return std::shared_ptr<SceneNode>();
-   }
-
-   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   if (pTransformComponent) {
-      m_pModelNode->SetTransform(pTransformComponent);
-   }
-
-   return m_pModelNode;
-}
-
 /******************************************/
 /***********SkeletalModelRenderComponent***********/
 /******************************************/
 
 bool SkeletalModelRenderComponent::Init(tinyxml2::XMLElement* pData)
 {
-   if (!BaseRenderComponent::Init(pData)) {
-      return false;
-   }
-
-   if (m_pModelNode == nullptr) {
-      m_pModelNode = std::make_shared<SkeletalModelNode>(m_pOwner->GetId(), RenderLayer::OPAQUE);
-   }
-
    tinyxml2::XMLElement* pModel = pData->FirstChildElement("Model");
    if (!pModel) {
       Logger::WriteLog(Logger::LogType::ERROR, "Erro while loading actor" + std::to_string(m_pOwner->GetId()) + "; ModelRenderComponent must have path for model loading;");
-      m_pModelNode.reset();
       return false;
    }
 
@@ -376,18 +301,17 @@ bool SkeletalModelRenderComponent::Init(tinyxml2::XMLElement* pData)
 
    if (modelData == nullptr) {
       Logger::WriteLog(Logger::LogType::ERROR, "Error while loading actor" + std::to_string(m_pOwner->GetId()) + "; Error while loading model in ModelRenderComponent;");
-      m_pModelNode.reset();
       return false;
    }
 
-   m_pModelNode->SetSkeletalModel(modelData->GetSkeletalModel());
+   m_pModel = modelData->GetSkeletalModel();
 
    return true;
 }
 
 tinyxml2::XMLElement* SkeletalModelRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = BaseRenderComponent::GenerateXml(pDoc);
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
 
    tinyxml2::XMLElement* pMaterialElement = pDoc->NewElement("Model");
    pMaterialElement->SetAttribute("path", m_modelPath.c_str());
@@ -396,18 +320,27 @@ tinyxml2::XMLElement* SkeletalModelRenderComponent::GenerateXml(tinyxml2::XMLDoc
    return pBaseElement;
 }
 
-std::shared_ptr<SceneNode> SkeletalModelRenderComponent::CreateSceneNode()
+void SkeletalModelRenderComponent::OnRenderObject(const GameTimer& gt)
 {
-   if (m_pModelNode == nullptr) {
-      return std::shared_ptr<SceneNode>();
-   }
-
    std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   if (pTransformComponent) {
-      m_pModelNode->SetTransform(pTransformComponent);
+   if (!pTransformComponent) {
+      return;
    }
 
-   return m_pModelNode;
+   m_pModel->OnRender();
+
+   const std::vector<std::shared_ptr<SkeletalModelMesh>>& modelMeshes = m_pModel->GetSkeletalMeshes();
+
+   for (const auto& pModelMesh : modelMeshes) {
+      RenderItemsStorage::OpaqueRenderItem opaqueRitem;
+      opaqueRitem.actorId = m_pOwner->GetId();
+      opaqueRitem.VAO = pModelMesh->GetSkeletalMesh()->GetVao();
+      opaqueRitem.IndicesSize = pModelMesh->GetSkeletalMesh()->GetIndices().size();
+      opaqueRitem.pMaterial = pModelMesh->GetMaterial();
+      opaqueRitem.ModelTransform = pTransformComponent->GetTransformMatrix();
+
+      g_pApp->TryGetHumanView(0)->GetScene()->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);
+   }
 }
 
 } // namespace BIEngine

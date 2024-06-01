@@ -40,6 +40,8 @@ void Actor::Activate()
    for (auto it = m_components.begin(); it != m_components.end(); ++it) {
       it->second->Activate();
    }
+
+   m_bIsActivated = true;
 }
 
 void Actor::Deactivate()
@@ -50,6 +52,30 @@ void Actor::Deactivate()
 
    for (auto it = m_components.begin(); it != m_components.end(); ++it) {
       it->second->Deactivate();
+   }
+
+   m_bIsActivated = false;
+}
+
+void Actor::OnUpdate(const GameTimer& gt)
+{
+   if (!m_bIsActivated) {
+      return;
+   }
+
+   for (auto it = m_components.begin(); it != m_components.end(); ++it) {
+      it->second->OnUpdate(gt);
+   }
+}
+
+void Actor::OnRenderObject(const GameTimer& gt)
+{
+   if (!m_bIsActivated) {
+      return;
+   }
+
+   for (auto it = m_components.begin(); it != m_components.end(); ++it) {
+      it->second->OnRenderObject(gt);
    }
 }
 
