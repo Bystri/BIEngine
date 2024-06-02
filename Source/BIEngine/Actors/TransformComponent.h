@@ -15,11 +15,13 @@ public:
    virtual ComponentId GetComponentId() const { return TransformComponent::g_CompId; };
 
    TransformComponent()
-      : m_position(0.0, 0.0, 0.0), m_size(1.0, 1.0, 1.0), m_rotation(0), m_transform(1.0f) {}
+      : m_position(0.0, 0.0, 0.0), m_size(1.0, 1.0, 1.0), m_rotation(0), m_worldTransform(1.0f), m_localTransform(1.0f) {}
 
    virtual bool Init(tinyxml2::XMLElement* pData);
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
+
+   virtual void OnUpdate(const GameTimer& gt) override;
 
    // Задание и получение свойств
    glm::vec3 GetPosition() const { return m_position; }
@@ -36,15 +38,19 @@ public:
 
    void SetSize(const glm::vec3& size);
 
-   void SetTransformMatrix(const glm::mat4& trans);
+   void SetLocalTransformMatrix(const glm::mat4& trans);
 
-   glm::mat4 GetTransformMatrix() const { return m_transform; }
+   glm::mat4 GetWorldTransformMatrix() const { return m_worldTransform; }
+
+   glm::mat4 GetLocalTransformMatrix() const { return m_localTransform; }
 
 private:
-   void RecalculateTransformMatrix();
+   void recalculateLocalTransformMatrix();
+   void updateWorldTransformMatrix();
 
 private:
-   glm::mat4 m_transform;
+   glm::mat4 m_worldTransform;
+   glm::mat4 m_localTransform;
 
    glm::vec3 m_position;
    glm::vec3 m_size;

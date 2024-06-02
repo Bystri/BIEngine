@@ -185,11 +185,19 @@ void GameLogic::SetKey(int key, int scancode, bool state)
    }
 }
 
+static void gameLogicInsertActorToMap(GameLogic::ActorMap& actors, std::shared_ptr<Actor> pActor)
+{
+   actors.insert(std::make_pair(pActor->GetId(), pActor));
+   for (const auto& child : pActor->GetChildren()) {
+      gameLogicInsertActorToMap(actors, child);
+   }
+}
+
 std::shared_ptr<Actor> GameLogic::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation)
 {
    std::shared_ptr<Actor> pActor = m_pActorFactory->CreateActor(pRoot, pPosition, pRotation);
    if (pActor) {
-      m_actors.insert(std::make_pair(pActor->GetId(), pActor));
+      gameLogicInsertActorToMap(m_actors, pActor);
 
       std::shared_ptr<EvtData_Actor_Created> pEvent = std::make_shared<EvtData_Actor_Created>(pActor->GetId());
       EventManager::Get()->TriggerEvent(pEvent);
@@ -216,16 +224,28 @@ void GameLogic::RequestDestroyActorDelegate(IEventDataPtr pEventData)
    DestroyActor(pCastEventData->GetActorId());
 }
 
+static void gameLogicDestroyActorFromMap(GameLogic::ActorMap& actors, const ActorId actorId)
+{
+   auto findIt = actors.find(actorId);
+
+   if (findIt == actors.end()) {
+      return;
+   }
+
+   for (auto& child : findIt->second->GetChildren()) {
+      gameLogicDestroyActorFromMap(actors, child->GetId());
+   }
+
+   findIt->second->Destroy();
+   actors.erase(findIt);
+}
+
 void GameLogic::DestroyActor(const ActorId actorId)
 {
    // TODO: нам необходимо создать и триггерить событие фактического уничтожения актера, чтобы все системы успели выполнить подготовку к уничтожению
    std::shared_ptr<EvtData_Destroy_Actor> pEvent = std::make_shared<EvtData_Destroy_Actor>(actorId);
    EventManager::Get()->TriggerEvent(pEvent);
 
-   auto findIt = m_actors.find(actorId);
-   if (findIt != m_actors.end()) {
-      findIt->second->Destroy();
-      m_actors.erase(findIt);
-   }
+   gameLogicDestroyActorFromMap(m_actors, actorId);
 }
 } // namespace BIEngine

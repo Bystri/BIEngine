@@ -49,6 +49,8 @@ public:
 
    int GetNumActors() const { return m_actors.size(); };
 
+   const ActorMap& GetActors() const { return m_actors; }
+
    // Обработчики событий устройств ввода
    void OnPointerMove(float xpos, float ypos);
    void SetPointerButton(int button, bool state);

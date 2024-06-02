@@ -24,8 +24,6 @@ public:
    virtual bool Init();
 
    virtual void OnUpdate(BIEngine::GameTimer& gt) override;
-
-   const ActorMap& GetActorMap() { return m_actors; }
 };
 
 class ActorEditorWidget;
@@ -50,6 +48,7 @@ public:
 private:
    void showMenu();
    void showSceneTree();
+   void showActorTreeNode(std::shared_ptr<BIEngine::Actor> pActor);
 
    void saveWorld();
 

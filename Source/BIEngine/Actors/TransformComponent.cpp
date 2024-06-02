@@ -5,6 +5,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 
 #include "../EngineCore/Assert.h"
+#include "../Actors/Actor.h"
 
 namespace BIEngine {
 
@@ -47,6 +48,8 @@ bool TransformComponent::Init(tinyxml2::XMLElement* pData)
       SetRotation(glm::vec3(x, y, z));
    }
 
+   updateWorldTransformMatrix();
+
    return true;
 }
 
@@ -75,27 +78,32 @@ tinyxml2::XMLElement* TransformComponent::GenerateXml(tinyxml2::XMLDocument* pDo
    return pBaseElement;
 }
 
+void TransformComponent::OnUpdate(const GameTimer& gt)
+{
+   updateWorldTransformMatrix();
+}
+
 void TransformComponent::SetPosition(const glm::vec3& pos)
 {
    m_position = pos;
-   m_transform[3][0] = m_size.x;
-   m_transform[3][1] = m_size.y;
-   m_transform[3][2] = m_size.z;
+   m_localTransform[3][0] = m_size.x;
+   m_localTransform[3][1] = m_size.y;
+   m_localTransform[3][2] = m_size.z;
 }
 
 void TransformComponent::SetRotation(const glm::vec3& rot)
 {
    m_rotation = rot;
-   RecalculateTransformMatrix();
+   recalculateLocalTransformMatrix();
 }
 
 void TransformComponent::SetSize(const glm::vec3& size)
 {
    m_size = size;
-   RecalculateTransformMatrix();
+   recalculateLocalTransformMatrix();
 }
 
-void TransformComponent::SetTransformMatrix(const glm::mat4& trans)
+void TransformComponent::SetLocalTransformMatrix(const glm::mat4& trans)
 {
    glm::quat qRotation;
    glm::vec3 translation;
@@ -108,7 +116,7 @@ void TransformComponent::SetTransformMatrix(const glm::mat4& trans)
    m_rotation.y = glm::degrees(m_rotation.y);
    m_rotation.z = glm::degrees(m_rotation.z);
 
-   m_transform = trans;
+   m_localTransform = trans;
 }
 
 glm::vec3 TransformComponent::GetDir() const
@@ -127,7 +135,7 @@ glm::vec3 TransformComponent::GetDir() const
    return glm::vec3(dir);
 }
 
-void TransformComponent::RecalculateTransformMatrix()
+void TransformComponent::recalculateLocalTransformMatrix()
 {
    const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
    const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -136,8 +144,24 @@ void TransformComponent::RecalculateTransformMatrix()
    const glm::mat4 roationMatrix = transformZ * transformY * transformX;
 
    // translation * rotation * scale
-   m_transform = glm::translate(glm::mat4(1.0f), m_position) *
-                 roationMatrix *
-                 glm::scale(glm::mat4(1.0f), m_size);
+   m_localTransform = glm::translate(glm::mat4(1.0f), m_position) *
+                      roationMatrix *
+                      glm::scale(glm::mat4(1.0f), m_size);
 }
+
+void TransformComponent::updateWorldTransformMatrix()
+{
+   if (m_pOwner->GetParent()) {
+      std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+
+      if (pTransformComponent != nullptr) {
+         m_worldTransform = pTransformComponent->GetWorldTransformMatrix() * m_localTransform;
+      } else {
+         m_worldTransform = m_localTransform;
+      }
+   } else {
+      m_worldTransform = m_localTransform;
+   }
+}
+
 } // namespace BIEngine

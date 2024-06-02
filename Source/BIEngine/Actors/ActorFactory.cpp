@@ -49,33 +49,46 @@ std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, co
       return std::shared_ptr<Actor>();
    }
 
-   // Создаем актера
+   // Create actor
    std::shared_ptr<Actor> pActor = std::shared_ptr<Actor>(new Actor(GetNextActorId()));
    if (!pActor->Init(pRoot)) {
       Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize actor from XML");
       return std::shared_ptr<Actor>();
    }
 
-   // Загружаем компоненты
-   for (tinyxml2::XMLElement* pNode = pRoot->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
-      std::shared_ptr<ActorComponent> pComponent(CreateComponent(pActor, pNode));
-      if (pComponent) {
-         pActor->AddComponent(pComponent);
-      } else {
-         return std::shared_ptr<Actor>();
+   // Load components
+   tinyxml2::XMLElement* const pComponentsElement = pRoot->FirstChildElement("Components");
+   if (pComponentsElement) {
+      for (tinyxml2::XMLElement* pNode = pComponentsElement->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
+         std::shared_ptr<ActorComponent> pComponent(CreateComponent(pActor, pNode));
+         if (pComponent) {
+            pActor->AddComponent(pComponent);
+         } else {
+            return std::shared_ptr<Actor>();
+         }
       }
    }
 
-   // Немного хаков для изменения позиции перед тем, как ее считают другие компоненты (например физика)
+   // Hack for change position before another components can read it
    auto pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
 
-   if (pPosition)
+   if (pPosition) {
       pTransformComponent->SetPosition(*pPosition);
+   }
 
-   if (pRotation)
+   if (pRotation) {
       pTransformComponent->SetRotation(*pRotation);
+   }
 
-   // Теперь можем инициализировать компоненты
+   // Load Children
+   tinyxml2::XMLElement* const pChildrenElement = pRoot->FirstChildElement("Children");
+   if (pChildrenElement) {
+      for (tinyxml2::XMLElement* pNode = pChildrenElement->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
+         pActor->AddChild(CreateActor(pNode));
+      }
+   }
+
+   // Init components
    if (g_pApp->m_pGameLogic->IsLevelLoaded()) {
       pActor->Activate();
    }
@@ -112,7 +125,8 @@ std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(std::shared_ptr<Ac
 
 void ActorFactory::ModifyActor(std::shared_ptr<Actor> pActor, tinyxml2::XMLElement* overrides)
 {
-   for (tinyxml2::XMLElement* pNode = overrides->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
+   tinyxml2::XMLElement* const pComponents = overrides->FirstChildElement("Components");
+   for (tinyxml2::XMLElement* pNode = pComponents->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
       std::string name(pNode->Value());
       auto pComponent = pActor->GetComponent<ActorComponent>(name).lock();
       if (pComponent)

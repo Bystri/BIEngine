@@ -386,7 +386,7 @@ std::shared_ptr<NavMeshInputGeometry> NavMeshManager::prepareNavGeom()
 
       if (pTransformComponent && pBoxRenderComponent && pPhysicsComponent && pPhysicsComponent->GetBodyType() == IGamePhysics3D::BodyType::STATIC) {
          const std::vector<std::shared_ptr<ModelMesh>>& modelMeshes = pBoxRenderComponent->GetModel()->GetMeshes();
-         const glm::mat4 transformMatrix = pTransformComponent->GetTransformMatrix();
+         const glm::mat4 transformMatrix = pTransformComponent->GetWorldTransformMatrix();
 
          for (int j = 0; j < modelMeshes.size(); ++j) {
             pMeshesManager->AddMesh(transformMatrix, modelMeshes[j]->GetMesh());

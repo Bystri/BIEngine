@@ -73,7 +73,7 @@ void MeshRenderComponent::OnRenderObject(const GameTimer& gt)
       opaqueRitem.VAO = pModelMesh->GetMesh()->GetVao();
       opaqueRitem.IndicesSize = pModelMesh->GetMesh()->GetIndices().size();
       opaqueRitem.pMaterial = pModelMesh->GetMaterial();
-      opaqueRitem.ModelTransform = pTransformComponent->GetTransformMatrix();
+      opaqueRitem.ModelTransform = pTransformComponent->GetWorldTransformMatrix();
       g_pApp->TryGetHumanView(0)->GetScene()->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);
    }
 }
@@ -135,7 +135,7 @@ void SpriteRenderComponent::OnRenderObject(const GameTimer& gt)
 
    renderCommand.RenderState = m_pSprite->GetRanderState();
    renderCommand.RenderState.Cull = true;
-   renderCommand.Transform = pTransformComponent->GetTransformMatrix();
+   renderCommand.Transform = pTransformComponent->GetWorldTransformMatrix();
 
    renderCommand.GetShaderProgramState() = m_pSprite->ConstructShaderProgramState();
 
@@ -337,7 +337,7 @@ void SkeletalModelRenderComponent::OnRenderObject(const GameTimer& gt)
       opaqueRitem.VAO = pModelMesh->GetSkeletalMesh()->GetVao();
       opaqueRitem.IndicesSize = pModelMesh->GetSkeletalMesh()->GetIndices().size();
       opaqueRitem.pMaterial = pModelMesh->GetMaterial();
-      opaqueRitem.ModelTransform = pTransformComponent->GetTransformMatrix();
+      opaqueRitem.ModelTransform = pTransformComponent->GetWorldTransformMatrix();
 
       g_pApp->TryGetHumanView(0)->GetScene()->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);
    }

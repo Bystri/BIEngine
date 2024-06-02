@@ -332,28 +332,46 @@ void BIEditorHumanView::showMenu()
 void BIEditorHumanView::showSceneTree()
 {
    if (ImGui::Begin("World")) {
-      const int numActors = BIEngine::g_pApp->m_pGameLogic->GetNumActors();
-      for (int i = 0; i < numActors; ++i) {
-         std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(i);
-
-         ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-         const bool isSelected = pActor->GetId() == m_pActorEditorWidget->GetCurrentSelectedActorId();
-         if (isSelected) {
-            nodeFlags |= ImGuiTreeNodeFlags_Selected;
+      for (const auto& actor : BIEngine::g_pApp->m_pGameLogic->GetActors()) {
+         if (actor.second->GetParent() != nullptr) {
+            continue;
          }
 
-         if (ImGui::TreeNodeEx((void*)(intptr_t)i, nodeFlags, pActor->GetName().c_str())) {
-            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
-               m_pActorEditorWidget->SetCurrentEditableActorId(pActor->GetId());
-            }
-         }
-
-         if (pActor->GetId() == m_pActorEditorWidget->GetCurrentSelectedActorId()) {
-            m_pActorEditorWidget->Show();
-         }
+         showActorTreeNode(actor.second);
       }
 
       ImGui::End();
+   }
+}
+
+void BIEditorHumanView::showActorTreeNode(std::shared_ptr<BIEngine::Actor> pActor)
+{
+   ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_OpenOnArrow;
+   const bool isSelected = pActor->GetId() == m_pActorEditorWidget->GetCurrentSelectedActorId();
+   if (isSelected) {
+      nodeFlags |= ImGuiTreeNodeFlags_Selected;
+   }
+
+   if (pActor->GetChildren().size() == 0) {
+      nodeFlags |= ImGuiTreeNodeFlags_Leaf;
+   }
+
+   const bool isOpened = ImGui::TreeNodeEx((void*)pActor.get(), nodeFlags, pActor->GetName().c_str());
+
+   if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+      m_pActorEditorWidget->SetCurrentEditableActorId(pActor->GetId());
+   }
+
+   if (isOpened) {
+      for (const auto& child : pActor->GetChildren()) {
+         ImGui::Indent(3.0f);
+         showActorTreeNode(child);
+         ImGui::Unindent(3.0f);
+      }
+   }
+
+   if (pActor->GetId() == m_pActorEditorWidget->GetCurrentSelectedActorId()) {
+      m_pActorEditorWidget->Show();
    }
 }
 
@@ -362,16 +380,21 @@ void BIEditorHumanView::saveWorld()
    const std::string fileName = "../Assets/" + BIEngine::g_pApp->m_options.mainWorldResNamePath + "/World.xml";
 
    tinyxml2::XMLDocument worldDoc;
-   tinyxml2::XMLElement* pWorldRootElement = worldDoc.NewElement("World");
-   tinyxml2::XMLElement* pActorsRoot = worldDoc.NewElement("Actors");
-   auto pEditorLogic = std::dynamic_pointer_cast<BIEditorLogic>(BIEngine::g_pApp->m_pGameLogic);
-   for (const auto& actor : pEditorLogic->GetActorMap()) {
-      pActorsRoot->LinkEndChild(actor.second->ToXML(&worldDoc));
+   tinyxml2::XMLElement* const pWorldRootElement = worldDoc.NewElement("World");
+   tinyxml2::XMLElement* const pActorsRoot = worldDoc.NewElement("Actors");
+
+   for (const auto& actor : BIEngine::g_pApp->m_pGameLogic->GetActors()) {
+      if (actor.second->GetParent() != nullptr) {
+         continue;
+      }
+
+      tinyxml2::XMLElement* const pActorElement = actor.second->ToXML(&worldDoc);
+      pActorsRoot->LinkEndChild(pActorElement);
    }
    pWorldRootElement->LinkEndChild(pActorsRoot);
 
 
-   tinyxml2::XMLElement* pScriptElement = worldDoc.NewElement("Script");
+   tinyxml2::XMLElement* const pScriptElement = worldDoc.NewElement("Script");
 
    const std::string preLoadScriptPath = BIEngine::g_pApp->m_options.mainWorldResNamePath + "/world_pre_init.py";
    pScriptElement->SetAttribute("preLoad", preLoadScriptPath.c_str());
@@ -422,13 +445,14 @@ void BIEditorHumanView::duplicateActor()
 {
    const std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(m_pActorEditorWidget->GetCurrentSelectedActorId());
 
-   tinyxml2::XMLDocument actorDoc;
-   tinyxml2::XMLElement* const pActorNode = pActor->ToXML(&actorDoc);
+   tinyxml2::XMLDocument actorXmlDoc;
+   tinyxml2::XMLElement* const pActorElement = pActor->ToXML(&actorXmlDoc);
+   actorXmlDoc.LinkEndChild(pActorElement);
 
-   const char* name = pActorNode->Attribute("name");
+   const char* name = pActorElement->Attribute("name");
    std::string strName = name;
    editorHumanViewUpdateDuplicateActorName(strName);
-   pActorNode->SetAttribute("name", strName.c_str());
+   pActorElement->SetAttribute("name", strName.c_str());
 
-   BIEngine::g_pApp->m_pGameLogic->CreateActor(pActorNode);
+   BIEngine::g_pApp->m_pGameLogic->CreateActor(pActorElement);
 }

@@ -10,7 +10,7 @@
 namespace BIEngine {
 
 Actor::Actor(ActorId id)
-   : m_id(id), m_bIsActivated(false)
+   : m_id(id), m_bIsActivated(false), m_pParent(nullptr)
 {
 }
 
@@ -31,6 +31,29 @@ bool Actor::Init(tinyxml2::XMLElement* pData)
    return true;
 }
 
+void Actor::AddChild(std::shared_ptr<Actor> pChild)
+{
+   pChild->m_pParent = this;
+   m_children.push_back(pChild);
+}
+
+bool Actor::RemoveChild(ActorId id)
+{
+   for (auto itr = m_children.begin(); itr != m_children.end(); ++itr) {
+      if ((*itr)->RemoveChild(id)) {
+         return true;
+      }
+
+      if (id == (*itr)->GetId()) {
+         (*itr)->m_pParent = nullptr;
+         itr = m_children.erase(itr);
+         return true;
+      }
+   }
+
+   return false;
+}
+
 void Actor::Activate()
 {
    if (m_bIsActivated) {
@@ -41,6 +64,10 @@ void Actor::Activate()
       it->second->Activate();
    }
 
+   for (auto& child : m_children) {
+      child->Activate();
+   }
+
    m_bIsActivated = true;
 }
 
@@ -48,6 +75,10 @@ void Actor::Deactivate()
 {
    if (!m_bIsActivated) {
       return;
+   }
+
+   for (auto& child : m_children) {
+      child->Deactivate();
    }
 
    for (auto it = m_components.begin(); it != m_components.end(); ++it) {
@@ -66,6 +97,10 @@ void Actor::OnUpdate(const GameTimer& gt)
    for (auto it = m_components.begin(); it != m_components.end(); ++it) {
       it->second->OnUpdate(gt);
    }
+
+   for (auto& child : m_children) {
+      child->OnUpdate(gt);
+   }
 }
 
 void Actor::OnRenderObject(const GameTimer& gt)
@@ -77,13 +112,22 @@ void Actor::OnRenderObject(const GameTimer& gt)
    for (auto it = m_components.begin(); it != m_components.end(); ++it) {
       it->second->OnRenderObject(gt);
    }
+
+   for (auto& child : m_children) {
+      child->OnRenderObject(gt);
+   }
 }
 
 void Actor::Destroy()
 {
+   for (auto& child : m_children) {
+      child->Destroy();
+   }
+
    for (auto it = m_components.begin(); it != m_components.end(); ++it) {
       it->second->Terminate();
    }
+
    m_components.clear();
 }
 
@@ -95,19 +139,29 @@ void Actor::AddComponent(std::shared_ptr<ActorComponent> pComponent)
 
 tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const
 {
-   if (!pDoc)
+   if (!pDoc) {
       return nullptr;
+   }
 
-   // Создание и присоединение основного корня XML-элемента
-   tinyxml2::XMLElement* pActorElement = pDoc->NewElement("Actor");
+   // Generate actor info
+   tinyxml2::XMLElement* const pActorElement = pDoc->NewElement("Actor");
    pActorElement->SetAttribute("name", m_name.c_str());
-   pDoc->LinkEndChild(pActorElement);
 
-   // Создание и присоединение XML-элементов компонентов
+   // Add components
+   tinyxml2::XMLElement* pComponentsElement = pDoc->NewElement("Components");
+   pActorElement->LinkEndChild(pComponentsElement);
    for (auto it = m_components.begin(); it != m_components.end(); ++it) {
       auto pComponent = it->second;
-      tinyxml2::XMLElement* pComponentElement = pComponent->GenerateXml(pDoc);
-      pActorElement->LinkEndChild(pComponentElement);
+      tinyxml2::XMLElement* const pComponentElement = pComponent->GenerateXml(pDoc);
+      pComponentsElement->LinkEndChild(pComponentElement);
+   }
+
+   // Add children
+   tinyxml2::XMLElement* pChildrenElement = pDoc->NewElement("Children");
+   pActorElement->LinkEndChild(pChildrenElement);
+   for (const auto& child : m_children) {
+      tinyxml2::XMLElement* const childElement = child->ToXML(pDoc);
+      pChildrenElement->LinkEndChild(childElement);
    }
 
    return pActorElement;

@@ -44,22 +44,27 @@ private:
    static void numEdited(BIEngine::ActorId actorId, const std::string& componentName, const std::string& settingName, const std::string& parameterName, float value)
    {
       tinyxml2::XMLDocument changedActorParametrs;
-      tinyxml2::XMLElement* pRoot = changedActorParametrs.NewElement("Actor");
+      tinyxml2::XMLElement* const pRoot = changedActorParametrs.NewElement("Actor");
+      tinyxml2::XMLElement* const pRootComponents = changedActorParametrs.NewElement("Components");
+      pRoot->LinkEndChild(pRootComponents);
 
-      std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(actorId);
+
+      const std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(actorId);
 
       tinyxml2::XMLDocument actorXmlDoc;
-      pActor->ToXML(&actorXmlDoc);
+      tinyxml2::XMLElement* const pActorElement = pActor->ToXML(&actorXmlDoc);
+      actorXmlDoc.LinkEndChild(pActorElement);
 
-      for (tinyxml2::XMLElement* pComponentNode = actorXmlDoc.RootElement()->FirstChildElement(); pComponentNode; pComponentNode = pComponentNode->NextSiblingElement()) {
+      tinyxml2::XMLElement* const pComponentsElement = actorXmlDoc.RootElement()->FirstChildElement("Components");
+      for (tinyxml2::XMLElement* pComponentNode = pComponentsElement->FirstChildElement(); pComponentNode; pComponentNode = pComponentNode->NextSiblingElement()) {
          if (pComponentNode->Name() != componentName) {
             continue;
          }
 
-         tinyxml2::XMLElement* pNewComponentNode = pComponentNode->DeepClone(&changedActorParametrs)->ToElement();
+         tinyxml2::XMLElement* const pNewComponentNode = pComponentNode->DeepClone(&changedActorParametrs)->ToElement();
          pNewComponentNode->FirstChildElement(settingName.c_str())->SetAttribute(parameterName.c_str(), value);
 
-         pRoot->LinkEndChild(pNewComponentNode);
+         pRootComponents->LinkEndChild(pNewComponentNode);
          BIEngine::g_pApp->m_pGameLogic->ModifyActor(actorId, pRoot);
          return;
       }
@@ -149,9 +154,11 @@ void ActorEditorWidget::SetCurrentEditableActorId(BIEngine::ActorId actorId)
    std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(m_currentActorId);
 
    tinyxml2::XMLDocument actorXmlDoc;
-   pActor->ToXML(&actorXmlDoc);
+   tinyxml2::XMLElement* const pActorElement = pActor->ToXML(&actorXmlDoc);
+   actorXmlDoc.LinkEndChild(pActorElement);
 
-   for (tinyxml2::XMLElement* pNode = actorXmlDoc.RootElement()->LastChildElement(); pNode; pNode = pNode->PreviousSiblingElement()) {
+   tinyxml2::XMLElement* const pComponentsElement = pActorElement->FirstChildElement("Components");
+   for (tinyxml2::XMLElement* pNode = pComponentsElement->LastChildElement(); pNode; pNode = pNode->PreviousSiblingElement()) {
       auto itr = m_componentsSettings.find(pNode->Name());
 
       if (itr != m_componentsSettings.end()) {
@@ -165,7 +172,8 @@ void ActorEditorWidget::Show()
    std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(m_currentActorId);
 
    tinyxml2::XMLDocument actorXmlDoc;
-   pActor->ToXML(&actorXmlDoc);
+   tinyxml2::XMLElement* const pActorElement = pActor->ToXML(&actorXmlDoc);
+   actorXmlDoc.LinkEndChild(pActorElement);
 
    if (ImGui::Begin("Actor Editor")) {
       ImGui::PushID(m_currentActorId);

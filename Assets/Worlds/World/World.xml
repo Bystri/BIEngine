@@ -1,637 +1,781 @@
 <World>
     <Actors>
         <Actor name="Sun">
-            <DirectionalLightComponent>
-                <Color r="0.15000001" g="0.050000001" b="0.30000001"/>
-                <Irradiance i="1"/>
-            </DirectionalLightComponent>
-            <TransformComponent>
-                <Position x="-2.000000" y="25.000000" z="-1.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="-0.079700" y="-0.996000" z="-0.039800"/>
-            </TransformComponent>
+            <Components>
+                <DirectionalLightComponent>
+                    <Color r="0.15000001" g="0.050000001" b="0.30000001"/>
+                    <Irradiance i="1"/>
+                </DirectionalLightComponent>
+                <TransformComponent>
+                    <Position x="-2.000000" y="25.000000" z="-1.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="-0.079700" y="-0.996000" z="-0.039800"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="SpotLight">
-            <SpotLightComponent>
-                <Ambient r="0.050000001" g="0.050000001" b="0.050000001"/>
-                <Diffuse r="1" g="0.1" b="0.1"/>
-                <Specular r="0.5" g="0.5" b="0.5"/>
-                <Attenuation constant="1" linear="0.090000004" quadratic="0.032000002"/>
-                <cutOff innerCutOff="0.97629601" outterCurOff="0.90630776"/>
-            </SpotLightComponent>
-            <TransformComponent>
-                <Position x="-8.000000" y="15.000000" z="-8.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="-1.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <SpotLightComponent>
+                    <Ambient r="0.050000001" g="0.050000001" b="0.050000001"/>
+                    <Diffuse r="1" g="0.1" b="0.1"/>
+                    <Specular r="0.5" g="0.5" b="0.5"/>
+                    <Attenuation constant="1" linear="0.090000004" quadratic="0.032000002"/>
+                    <cutOff innerCutOff="0.97629601" outterCurOff="0.90630776"/>
+                </SpotLightComponent>
+                <TransformComponent>
+                    <Position x="-8.000000" y="15.000000" z="-8.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="-1.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="backpack1">
-            <ModelRenderComponent>
-                <Model path="Models/backpack/backpack.obj"/>
-            </ModelRenderComponent>
-            <TransformComponent>
-                <Position x="-8.000000" y="10.000000" z="-8.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/backpack/backpack.obj"/>
+                </ModelRenderComponent>
+                <TransformComponent>
+                    <Position x="-8.000000" y="10.000000" z="-8.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="ground">
-            <BoxRenderComponent>
-                <Material path="materials/container.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="100.000000" h="1.000000" d="100.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="0.000000" y="5.000000" z="0.000000"/>
-                <Size w="100.000000" h="1.000000" d="100.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/container.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="100.000000" h="1.000000" d="100.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="0.000000" y="5.000000" z="0.000000"/>
+                    <Size w="100.000000" h="1.000000" d="100.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="tile_ground_1">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="80.000000" y="5.000000" z="80.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="80.000000" y="5.000000" z="80.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="tile_ground_2">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="84.000000" y="5.000000" z="80.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="84.000000" y="5.000000" z="80.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="tile_ground_3">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="84.000000" y="5.000000" z="84.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="84.000000" y="5.000000" z="84.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="tile_ground_4">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="80.000000" y="5.000000" z="84.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="80.000000" y="5.000000" z="84.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall_1">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/wall/wall.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="82.000000" y="5.000000" z="78.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/wall/wall.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="82.000000" y="5.000000" z="78.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall_2">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/wall/wall.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="82.000000" y="5.000000" z="86.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/wall/wall.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="82.000000" y="5.000000" z="86.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall_3">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/wall/wall.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="74.000000" y="5.000000" z="82.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="90.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/wall/wall.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="74.000000" y="5.000000" z="82.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="90.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall_4">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/wall/wall.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="86.000000" y="5.000000" z="82.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="90.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/wall/wall.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="86.000000" y="5.000000" z="82.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="90.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall_corner_1">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/wall_corner/wall_corner.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="74.000000" y="5.000000" z="86.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="180.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/wall_corner/wall_corner.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="74.000000" y="5.000000" z="86.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="180.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall_corner_2">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/wall_corner/wall_corner.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="74.000000" y="5.000000" z="78.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="90.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/wall_corner/wall_corner.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="74.000000" y="5.000000" z="78.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="90.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall_corner_3">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/wall_corner/wall_corner.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="86.000000" y="5.000000" z="78.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/wall_corner/wall_corner.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="86.000000" y="5.000000" z="78.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall_corner_4">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/wall_corner/wall_corner.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="86.000000" y="5.000000" z="86.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="270.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/wall_corner/wall_corner.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="86.000000" y="5.000000" z="86.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="270.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall1">
-            <BoxRenderComponent>
-                <Material path="materials/brickwall.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="3.000000" d="3.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="10.500000" y="7.000000" z="0.000000"/>
-                <Size w="1.000000" h="3.000000" d="3.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/brickwall.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="3.000000" d="3.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="10.500000" y="7.000000" z="0.000000"/>
+                    <Size w="1.000000" h="3.000000" d="3.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall2">
-            <BoxRenderComponent>
-                <Material path="materials/bricks.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="3.000000" h="3.000000" d="0.010000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="0.000000" y="7.000000" z="-10.500000"/>
-                <Size w="3.000000" h="3.000000" d="0.010000"/>
-                <Rotation x="0.000000" y="-45.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/bricks.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="3.000000" h="3.000000" d="0.010000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="0.000000" y="7.000000" z="-10.500000"/>
+                    <Size w="3.000000" h="3.000000" d="0.010000"/>
+                    <Rotation x="0.000000" y="-45.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall3">
-            <BoxRenderComponent>
-                <Material path="materials/toybox.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="3.000000" h="3.000000" d="0.010000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="-5.000000" y="7.000000" z="-10.500000"/>
-                <Size w="3.000000" h="3.000000" d="0.010000"/>
-                <Rotation x="0.000000" y="45.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/toybox.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="3.000000" h="3.000000" d="0.010000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="-5.000000" y="7.000000" z="-10.500000"/>
+                    <Size w="3.000000" h="3.000000" d="0.010000"/>
+                    <Rotation x="0.000000" y="45.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="Container">
-            <BoxRenderComponent>
-                <Material path="materials/container.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="20.000000" h="20.000000" d="20.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="25.000000" y="0.000000" z="-10.500000"/>
-                <Size w="20.000000" h="20.000000" d="20.000000"/>
-                <Rotation x="45.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/container.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="20.000000" h="20.000000" d="20.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="27.000000" y="0.000000" z="-10.500000"/>
+                    <Size w="20.000000" h="20.000000" d="20.000000"/>
+                    <Rotation x="45.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="sensor9">
-            <BoxRenderComponent>
-                <Material path="materials/container.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Dynamic</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="8.000000" y="6.000000" z="-8.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="45.000000" y="45.000000" z="45.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/container.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Dynamic</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="8.000000" y="6.000000" z="-8.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="45.000000" y="45.000000" z="45.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="sensor8">
-            <BoxRenderComponent>
-                <Material path="materials/container.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Dynamic</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="-8.000000" y="6.000000" z="8.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="45.000000" y="45.000000" z="45.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/container.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Dynamic</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="-8.000000" y="6.000000" z="8.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="45.000000" y="45.000000" z="45.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="sensor7">
-            <BoxRenderComponent>
-                <Material path="materials/container.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Dynamic</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="-4.000000" y="6.000000" z="0.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="45.000000" y="45.000000" z="45.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/container.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Dynamic</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="-4.000000" y="6.000000" z="0.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="45.000000" y="45.000000" z="45.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="sensor5">
-            <BoxRenderComponent>
-                <Material path="materials/container.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Dynamic</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="0.000000" y="6.000000" z="-4.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="45.000000" y="45.000000" z="45.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/container.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Dynamic</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="0.000000" y="6.000000" z="-4.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="45.000000" y="45.000000" z="45.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="SpherePBR">
-            <SphereRenderComponent>
-                <Material path="materials/pbr/rusted_iron.bimat"/>
-                <Size r="1.000000"/>
-            </SphereRenderComponent>
-            <TransformComponent>
-                <Position x="8.000000" y="9.000000" z="10.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <SphereRenderComponent>
+                    <Material path="materials/pbr/rusted_iron.bimat"/>
+                    <Size r="1.000000"/>
+                </SphereRenderComponent>
+                <TransformComponent>
+                    <Position x="8.000000" y="9.000000" z="10.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children>
+                <Actor name="SpherePBR_2">
+                    <Components>
+                        <SphereRenderComponent>
+                            <Material path="materials/pbr/rusted_iron.bimat"/>
+                            <Size r="1.000000"/>
+                        </SphereRenderComponent>
+                        <TransformComponent>
+                            <Position x="0.000000" y="0.000000" z="2.000000"/>
+                            <Size w="0.750000" h="0.750000" d="0.750000"/>
+                            <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                        </TransformComponent>
+                    </Components>
+                    <Children>
+                        <Actor name="SpherePBR_3">
+                            <Components>
+                                <SphereRenderComponent>
+                                    <Material path="materials/pbr/rusted_iron.bimat"/>
+                                    <Size r="1.000000"/>
+                                </SphereRenderComponent>
+                                <TransformComponent>
+                                    <Position x="0.000000" y="0.000000" z="5.000000"/>
+                                    <Size w="5.000000" h="0.750000" d="1.000000"/>
+                                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                                </TransformComponent>
+                            </Components>
+                            <Children/>
+                        </Actor>
+                    </Children>
+                </Actor>
+            </Children>
         </Actor>
         <Actor name="sensor3">
-            <BoxRenderComponent>
-                <Material path="materials/test_geom.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <TransformComponent>
-                <Position x="-8.000000" y="8.000000" z="-4.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="45.000000" y="45.000000" z="45.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/test_geom.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <TransformComponent>
+                    <Position x="-8.000000" y="8.000000" z="-4.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="45.000000" y="45.000000" z="45.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="pointLight">
-            <PointLightComponent>
-                <Color r="0.75" g="0.75" b="0.050000001"/>
-                <Intensity i="300"/>
-            </PointLightComponent>
-            <TransformComponent>
-                <Position x="5.000000" y="10.000000" z="0.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="45.000000" y="45.000000" z="45.000000"/>
-            </TransformComponent>
+            <Components>
+                <PointLightComponent>
+                    <Color r="0.75" g="0.75" b="0.050000001"/>
+                    <Intensity i="300"/>
+                </PointLightComponent>
+                <TransformComponent>
+                    <Position x="5.000000" y="10.000000" z="0.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="45.000000" y="45.000000" z="45.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="SpotLight2">
-            <SpotLightComponent>
-                <Ambient r="0.050000001" g="0.050000001" b="0.050000001"/>
-                <Diffuse r="1" g="0.1" b="0.1"/>
-                <Specular r="0.5" g="0.5" b="0.5"/>
-                <Attenuation constant="1" linear="0.090000004" quadratic="0.032000002"/>
-                <cutOff innerCutOff="0.97629601" outterCurOff="0.90630776"/>
-            </SpotLightComponent>
-            <TransformComponent>
-                <Position x="8.000000" y="15.000000" z="5.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="-1.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <SpotLightComponent>
+                    <Ambient r="0.050000001" g="0.050000001" b="0.050000001"/>
+                    <Diffuse r="1" g="0.1" b="0.1"/>
+                    <Specular r="0.5" g="0.5" b="0.5"/>
+                    <Attenuation constant="1" linear="0.090000004" quadratic="0.032000002"/>
+                    <cutOff innerCutOff="0.97629601" outterCurOff="0.90630776"/>
+                </SpotLightComponent>
+                <TransformComponent>
+                    <Position x="8.000000" y="15.000000" z="5.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="-1.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="backpack2">
-            <ModelRenderComponent>
-                <Model path="Models/backpack/backpack.obj"/>
-            </ModelRenderComponent>
-            <TransformComponent>
-                <Position x="8.000000" y="8.000000" z="5.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="25.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/backpack/backpack.obj"/>
+                </ModelRenderComponent>
+                <TransformComponent>
+                    <Position x="8.000000" y="8.000000" z="5.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="25.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="tank">
-            <ModelRenderComponent>
-                <Model path="Models/tank/tank.obj"/>
-            </ModelRenderComponent>
-            <TransformComponent>
-                <Position x="4.000000" y="5.500000" z="-4.000000"/>
-                <Size w="0.500000" h="0.500000" d="0.500000"/>
-                <Rotation x="0.000000" y="25.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/tank/tank.obj"/>
+                </ModelRenderComponent>
+                <TransformComponent>
+                    <Position x="4.000000" y="5.500000" z="-4.000000"/>
+                    <Size w="0.500000" h="0.500000" d="0.500000"/>
+                    <Rotation x="0.000000" y="25.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="sensor2">
-            <BoxRenderComponent>
-                <Material path="materials/container.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <TransformComponent>
-                <Position x="8.000000" y="10.000000" z="0.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="45.000000" y="45.000000" z="45.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/container.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <TransformComponent>
+                    <Position x="8.000000" y="10.000000" z="0.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="45.000000" y="45.000000" z="45.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="sensor">
-            <BoxRenderComponent>
-                <Material path="materials/container.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Dynamic</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="0.000000" y="6.000000" z="0.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="45.000000" y="45.000000" z="45.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/container.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Dynamic</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="0.000000" y="6.000000" z="0.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="45.000000" y="45.000000" z="45.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="AiCharacter1">
-            <BoxRenderComponent>
-                <Material path="materials/container.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-            </BoxRenderComponent>
-            <ScriptComponent>
-                <ScriptObject modulePath="CharacterMovement" className="CharacterMovement"/>
-                <StringData/>
-                <NumberData/>
-                <ExternalScriptObj varName="movementProducer" modulePath="AiMovementProducer" className="AiMovementProducer"/>
-            </ScriptComponent>
-            <NavAgentComponent>
-                <Common radius="0.5" height="1" maxSpeed="3.5" maxAcceleration="8"/>
-                <Steering anticipateTurns="true"/>
-                <Separation enable="true" separationWeight="5"/>
-                <ObstacleAvoidance enable="true" collisionQueryRange="5"/>
-                <PathOptimizations optimizeVis="true" pathOptimizationRange="15" optimizeTopo="true"/>
-            </NavAgentComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Dynamic</BodyType>
-                <Density>lead</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="-10.000000" y="6.000000" z="0.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <BoxRenderComponent>
+                    <Material path="materials/container.bimat"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                </BoxRenderComponent>
+                <ScriptComponent>
+                    <ScriptObject modulePath="CharacterMovement" className="CharacterMovement"/>
+                    <StringData/>
+                    <NumberData/>
+                    <ExternalScriptObj varName="movementProducer" modulePath="AiMovementProducer" className="AiMovementProducer"/>
+                </ScriptComponent>
+                <NavAgentComponent>
+                    <Common radius="0.5" height="1" maxSpeed="3.5" maxAcceleration="8"/>
+                    <Steering anticipateTurns="true"/>
+                    <Separation enable="true" separationWeight="5"/>
+                    <ObstacleAvoidance enable="true" collisionQueryRange="5"/>
+                    <PathOptimizations optimizeVis="true" pathOptimizationRange="15" optimizeTopo="true"/>
+                </NavAgentComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Dynamic</BodyType>
+                    <Density>lead</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="-10.000000" y="6.000000" z="0.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="PlayerCharacter">
-            <AnimationComponent>
-                <Animation name="idle" path="Animations/Idle-loop.bi3dam"/>
-                <Animation name="run" path="Animations/Run-loop.bi3dam"/>
-            </AnimationComponent>
-            <ScriptComponent>
-                <ScriptObject modulePath="AnimationControllerComponent" className="AnimationControllerComponent"/>
-                <StringData/>
-                <NumberData/>
-            </ScriptComponent>
-            <ScriptComponent>
-                <ScriptObject modulePath="CameraFollowComponent" className="CameraFollowComponent"/>
-                <StringData/>
-                <NumberData dist="15.000000" height="15.000000"/>
-            </ScriptComponent>
-            <ScriptComponent>
-                <ScriptObject modulePath="CharacterMovement" className="CharacterMovement"/>
-                <StringData/>
-                <NumberData/>
-                <ExternalScriptObj varName="movementProducer" modulePath="InputMovementProducer" className="InputMovementProducer"/>
-            </ScriptComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Dynamic</BodyType>
-                <Density>lead</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="3.000000" h="0.500000" d="4.000000"/>
-            </Physics3DComponent>
-            <SkeletalModelRenderComponent>
-                <Model path="Models/godot_robot/3DGodotRobot.glb"/>
-            </SkeletalModelRenderComponent>
-            <TransformComponent>
-                <Position x="3.000000" y="6.000000" z="3.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <AnimationComponent>
+                    <Animation name="idle" path="Animations/Idle-loop.bi3dam"/>
+                    <Animation name="run" path="Animations/Run-loop.bi3dam"/>
+                </AnimationComponent>
+                <ScriptComponent>
+                    <ScriptObject modulePath="AnimationControllerComponent" className="AnimationControllerComponent"/>
+                    <StringData/>
+                    <NumberData/>
+                </ScriptComponent>
+                <ScriptComponent>
+                    <ScriptObject modulePath="CameraFollowComponent" className="CameraFollowComponent"/>
+                    <StringData/>
+                    <NumberData dist="15.000000" height="15.000000"/>
+                </ScriptComponent>
+                <ScriptComponent>
+                    <ScriptObject modulePath="CharacterMovement" className="CharacterMovement"/>
+                    <StringData/>
+                    <NumberData/>
+                    <ExternalScriptObj varName="movementProducer" modulePath="InputMovementProducer" className="InputMovementProducer"/>
+                </ScriptComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Dynamic</BodyType>
+                    <Density>lead</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="3.000000" h="0.500000" d="4.000000"/>
+                </Physics3DComponent>
+                <SkeletalModelRenderComponent>
+                    <Model path="Models/godot_robot/3DGodotRobot.glb"/>
+                </SkeletalModelRenderComponent>
+                <TransformComponent>
+                    <Position x="3.000000" y="6.000000" z="3.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="tile_ground_1">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="76.000000" y="5.000000" z="80.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="76.000000" y="5.000000" z="80.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="tile_ground_1">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="76.000000" y="5.000000" z="84.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/floor_tile_large/floor_tile_large.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="76.000000" y="5.000000" z="84.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall_1">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/wall/wall.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="78.000000" y="5.000000" z="78.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/wall/wall.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="78.000000" y="5.000000" z="78.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
         <Actor name="wall_2">
-            <ModelRenderComponent>
-                <Model path="Models/dungeon/wall/wall.obj"/>
-            </ModelRenderComponent>
-            <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Static</BodyType>
-                <Density>air</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
-            </Physics3DComponent>
-            <TransformComponent>
-                <Position x="78.000000" y="5.000000" z="86.000000"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-            </TransformComponent>
+            <Components>
+                <ModelRenderComponent>
+                    <Model path="Models/dungeon/wall/wall.obj"/>
+                </ModelRenderComponent>
+                <Physics3DComponent>
+                    <Shape>Box</Shape>
+                    <BodyType>Static</BodyType>
+                    <Density>air</Density>
+                    <PhysicsMaterial>Normal</PhysicsMaterial>
+                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                </Physics3DComponent>
+                <TransformComponent>
+                    <Position x="78.000000" y="5.000000" z="86.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
+                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                </TransformComponent>
+            </Components>
+            <Children/>
         </Actor>
     </Actors>
     <Script preLoad="Worlds/World/world_pre_init.py" postLoad="Worlds/World/world_POST_init.py"/>
