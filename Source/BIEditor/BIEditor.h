@@ -39,7 +39,7 @@ public:
    virtual void Shutdown() override;
 
    virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
-   virtual void OnRender(const BIEngine::GameTimer& gt) override;
+   virtual void OnPostRender(const BIEngine::GameTimer& gt) override;
 
    void SetController(std::shared_ptr<BIEditorController> controller)
    {

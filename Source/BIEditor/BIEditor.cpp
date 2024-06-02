@@ -263,12 +263,12 @@ void BIEditorHumanView::OnUpdate(const BIEngine::GameTimer& gt)
    }
 }
 
-void BIEditorHumanView::OnRender(const BIEngine::GameTimer& gt)
+void BIEditorHumanView::OnPostRender(const BIEngine::GameTimer& gt)
 {
    showMenu();
    showSceneTree();
 
-   BIEngine::HumanView::OnRender(gt);
+   BIEngine::HumanView::OnPostRender(gt);
 
 
    ImGui::SetNextWindowContentSize(ImVec2(m_screenWidth, m_screenHeight));

@@ -25,8 +25,11 @@ public:
 
    virtual bool Init() = 0;
 
-   virtual void OnPreRender(const GameTimer& gt) = 0;
-   virtual void OnPostRender(const GameTimer& gt) = 0;
+   virtual void OnUpdate(const GameTimer& gt) {}
+
+   virtual void OnPreRender(const GameTimer& gt) {}
+
+   virtual void OnPostRender(const GameTimer& gt) {}
 
    virtual GameViewType GetType() const = 0;
    virtual GameViewId GetId() const = 0;

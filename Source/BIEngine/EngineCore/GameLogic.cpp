@@ -130,6 +130,10 @@ void GameLogic::OnUpdate(GameTimer& gt)
    for (const auto& actor : m_actors) {
       actor.second->OnUpdate(gt);
    }
+
+   for (const auto view : m_gameViews) {
+      view->OnUpdate(gt);
+   }
 }
 
 void GameLogic::OnRender(const GameTimer& gt)
