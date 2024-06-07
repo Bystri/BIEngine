@@ -42,7 +42,7 @@ ActorFactory::ActorFactory()
    m_actorComponentCreators[AnimationComponent::g_CompId] = CreateAnimatorComponent;
 }
 
-std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation)
+std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation, Actor* const pParent)
 {
    if (!pRoot) {
       Logger::WriteLog(Logger::LogType::ERROR, "Failed to create actor from null XML-element");
@@ -51,6 +51,9 @@ std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, co
 
    // Create actor
    std::shared_ptr<Actor> pActor = std::shared_ptr<Actor>(new Actor(GetNextActorId()));
+
+   pActor->m_pParent = pParent;
+
    if (!pActor->Init(pRoot)) {
       Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize actor from XML");
       return std::shared_ptr<Actor>();
@@ -73,18 +76,18 @@ std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, co
    auto pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
 
    if (pPosition) {
-      pTransformComponent->SetPosition(*pPosition);
+      pTransformComponent->SetLocalPosition(*pPosition);
    }
 
    if (pRotation) {
-      pTransformComponent->SetRotation(*pRotation);
+      pTransformComponent->SetLocalRotation(*pRotation);
    }
 
    // Load Children
    tinyxml2::XMLElement* const pChildrenElement = pRoot->FirstChildElement("Children");
    if (pChildrenElement) {
       for (tinyxml2::XMLElement* pNode = pChildrenElement->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
-         pActor->AddChild(CreateActor(pNode));
+         pActor->AddChild(CreateActor(pNode, nullptr, nullptr, pActor.get()));
       }
    }
 

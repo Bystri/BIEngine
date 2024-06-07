@@ -9,7 +9,7 @@
 
 namespace BIEngine {
 
-using ActorComponentCreator = std::unique_ptr<ActorComponent>(*)();
+using ActorComponentCreator = std::unique_ptr<ActorComponent> (*)();
 using ActorComponentCreatorMap = std::map<std::string, ActorComponentCreator>;
 
 class ActorFactory {
@@ -30,7 +30,7 @@ public:
 
    // Создает актера со всеми требуемыми компонентами на основе XML-элемента.
    // Возвращает нулевой указатель, если требуется.
-   std::shared_ptr<Actor> CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition = nullptr, const glm::vec3* const pRotation = nullptr);
+   std::shared_ptr<Actor> CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition = nullptr, const glm::vec3* const pRotation = nullptr, Actor* const pParent = nullptr);
 
    // Модифицирует актера на основе предоставленного XML-элемента
    // В предоставленном элементе может быть полное или частичное описание уже имеющегося компонента актера - тогда он просто будет обновлен
