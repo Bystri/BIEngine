@@ -375,6 +375,12 @@
     <ClCompile Include="..\..\Graphics\PointLightShadowGraphicsTechnique.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Actors\MeshComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\MeshLoader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -742,6 +748,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Graphics\PointLightShadowGraphicsTechnique.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\MeshComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\MeshLoader.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

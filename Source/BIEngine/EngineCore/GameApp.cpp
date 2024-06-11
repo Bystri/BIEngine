@@ -4,6 +4,7 @@
 #include "../Renderer/ShadersLoader.h"
 #include "../Renderer/ImageLoader.h"
 #include "../Renderer/TextureLoader.h"
+#include "../Renderer/MeshLoader.h"
 #include "../Graphics/ModelLoader.h"
 #include "../Graphics/SkeletalModelLoader.h"
 #include "../Graphics/AnimationLoader.h"
@@ -57,6 +58,7 @@ bool GameApp::Init()
    ResCache::Get()->RegisterLoader(std::make_shared<ShaderProgramResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<ModelResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<SkeletalModelResourceLoader>());
+   ResCache::Get()->RegisterLoader(std::make_shared<MeshResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<AnimationResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<ScriptResourceLoader>());
    ResCache::Get()->RegisterLoader(std::make_shared<TextureResourceLoader>());

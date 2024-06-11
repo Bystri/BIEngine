@@ -11,6 +11,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BITest", "..\..\BITest\BITe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BIEditor", "..\..\BIEditor\MSVC\BIEditor.vcxproj", "{948DB339-D795-415B-B24B-8713F8D6A28B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{E2240317-E7DC-4740-9FDA-88DFC9FF9032}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BIModelConverter", "..\..\Tools\BIModelConverter\BIModelConverter.vcxproj", "{21D48FDA-2C6F-4EE8-BAFD-B0733FFAF180}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -33,9 +37,16 @@ Global
 		{948DB339-D795-415B-B24B-8713F8D6A28B}.Debug|x64.Build.0 = Debug|x64
 		{948DB339-D795-415B-B24B-8713F8D6A28B}.Release|x64.ActiveCfg = Release|x64
 		{948DB339-D795-415B-B24B-8713F8D6A28B}.Release|x64.Build.0 = Release|x64
+		{21D48FDA-2C6F-4EE8-BAFD-B0733FFAF180}.Debug|x64.ActiveCfg = Debug|x64
+		{21D48FDA-2C6F-4EE8-BAFD-B0733FFAF180}.Debug|x64.Build.0 = Debug|x64
+		{21D48FDA-2C6F-4EE8-BAFD-B0733FFAF180}.Release|x64.ActiveCfg = Release|x64
+		{21D48FDA-2C6F-4EE8-BAFD-B0733FFAF180}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{21D48FDA-2C6F-4EE8-BAFD-B0733FFAF180} = {E2240317-E7DC-4740-9FDA-88DFC9FF9032}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {787AFAB4-27F4-42F9-BE52-E475295FE0A1}

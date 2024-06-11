@@ -97,6 +97,7 @@
     <ClCompile Include="..\..\Actors\ActorFactory.cpp" />
     <ClCompile Include="..\..\Actors\AnimationComponent.cpp" />
     <ClCompile Include="..\..\Actors\LightComponent.cpp" />
+    <ClCompile Include="..\..\Actors\MeshComponent.cpp" />
     <ClCompile Include="..\..\Actors\NavAgentComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics3DComponent.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="..\..\Renderer\Framebuffer.cpp" />
     <ClCompile Include="..\..\Renderer\Mesh.cpp" />
     <ClCompile Include="..\..\Renderer\MeshGeometryGenerator.cpp" />
+    <ClCompile Include="..\..\Renderer\MeshLoader.cpp" />
     <ClCompile Include="..\..\Renderer\PostProcessor.cpp" />
     <ClCompile Include="..\..\Renderer\Renderbuffer.cpp" />
     <ClCompile Include="..\..\Renderer\RenderDevice.cpp" />
@@ -207,6 +209,7 @@
     <ClInclude Include="..\..\Actors\ActorFactory.h" />
     <ClInclude Include="..\..\Actors\AnimationComponent.h" />
     <ClInclude Include="..\..\Actors\LightComponent.h" />
+    <ClInclude Include="..\..\Actors\MeshComponent.h" />
     <ClInclude Include="..\..\Actors\NavAgentComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics3DComponent.h" />
@@ -276,6 +279,7 @@
     <ClInclude Include="..\..\Renderer\Framebuffer.h" />
     <ClInclude Include="..\..\Renderer\Mesh.h" />
     <ClInclude Include="..\..\Renderer\MeshGeometryGenerator.h" />
+    <ClInclude Include="..\..\Renderer\MeshLoader.h" />
     <ClInclude Include="..\..\Renderer\PostProcessor.h" />
     <ClInclude Include="..\..\Renderer\Renderbuffer.h" />
     <ClInclude Include="..\..\Renderer\RenderDevice.h" />

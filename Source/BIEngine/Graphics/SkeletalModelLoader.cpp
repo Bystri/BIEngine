@@ -342,7 +342,11 @@ static std::shared_ptr<Skeleton::BoneInfo> modelLoaderLoadBones(BoneInfoMap& bon
       boneMapItr->second->parentNodeTransform = modelLoaderConvertMatrixToGLMFormat(node->mTransformation);
 
       for (unsigned int i = 0; i < node->mNumChildren; i++) {
-         boneMapItr->second->children.push_back(modelLoaderLoadBones(boneInfoMap, node->mChildren[i], scene));
+         auto pChildBoneInfo = modelLoaderLoadBones(boneInfoMap, node->mChildren[i], scene);
+
+         if (pChildBoneInfo != nullptr) {
+            boneMapItr->second->children.push_back(pChildBoneInfo);
+         }
       }
 
       return boneMapItr->second;

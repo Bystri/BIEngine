@@ -79,7 +79,7 @@
                 </Physics3DComponent>
                 <TransformComponent>
                     <Position x="22.000000" y="7.000000" z="27.000000"/>
-                    <Size w="1.000000" h="1.0000" d="1.000000"/>
+                    <Size w="1.000000" h="1.000000" d="1.000000"/>
                     <Rotation x="0.000000" y="0.000000" z="0.000000"/>
                 </TransformComponent>
             </Components>
@@ -96,24 +96,24 @@
                     <Rotation x="0.000000" y="0.000000" z="0.000000"/>
                 </TransformComponent>
             </Components>
-			<Children>
-				<Actor name="wall_collider_1">
-					<Components>
-						<Physics3DComponent>
-							<Shape>Box</Shape>
-							<BodyType>Static</BodyType>
-							<Density>air</Density>
-							<PhysicsMaterial>Normal</PhysicsMaterial>
-							<Scale w="4.000000" h="4.000000" d="1.000000"/>
-						</Physics3DComponent>
-						<TransformComponent>
-							<Position x="0.000000" y="2.000000" z="0.0000"/>
-							<Size w="1.000000" h="1.000000" d="1.00000"/>
-							<Rotation x="0.000000" y="0.000000" z="0.000000"/>
-						</TransformComponent>
-					</Components>
-					<Children/>
-				</Actor>
+            <Children>
+                <Actor name="wall_collider_1">
+                    <Components>
+                        <Physics3DComponent>
+                            <Shape>Box</Shape>
+                            <BodyType>Static</BodyType>
+                            <Density>air</Density>
+                            <PhysicsMaterial>Normal</PhysicsMaterial>
+                            <Scale w="4.000000" h="4.000000" d="1.000000"/>
+                        </Physics3DComponent>
+                        <TransformComponent>
+                            <Position x="0.000000" y="2.000000" z="0.000000"/>
+                            <Size w="1.000000" h="1.000000" d="1.000000"/>
+                            <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                        </TransformComponent>
+                    </Components>
+                    <Children/>
+                </Actor>
             </Children>
         </Actor>
         <Actor name="wall_corner_1">
@@ -128,41 +128,41 @@
                 </TransformComponent>
             </Components>
             <Children>
-				<Actor name="wall_corner_collider_1">
-					<Components>
-						<Physics3DComponent>
-							<Shape>Box</Shape>
-							<BodyType>Static</BodyType>
-							<Density>air</Density>
-							<PhysicsMaterial>Normal</PhysicsMaterial>
-							<Scale w="1.000000" h="4.000000" d="1.500000"/>
-						</Physics3DComponent>
-						<TransformComponent>
-							<Position x="0.000000" y="2.000000" z="1.25000"/>
-							<Size w="1.000000" h="1.000000" d="1.00000"/>
-							<Rotation x="0.000000" y="0.000000" z="0.000000"/>
-						</TransformComponent>
-					</Components>
-					<Children/>
-				</Actor>
-				<Actor name="wall_corner_collider_2">
-					<Components>
-						<Physics3DComponent>
-							<Shape>Box</Shape>
-							<BodyType>Static</BodyType>
-							<Density>air</Density>
-							<PhysicsMaterial>Normal</PhysicsMaterial>
-							<Scale w="2.000000" h="4.000000" d="1.000000"/>
-						</Physics3DComponent>
-						<TransformComponent>
-							<Position x="-1.000000" y="2.000000" z="0"/>
-							<Size w="1.000000" h="1.000000" d="1"/>
-							<Rotation x="0.000000" y="0.000000" z="0.000000"/>
-						</TransformComponent>
-					</Components>
-					<Children/>
-				</Actor>
-			</Children>
+                <Actor name="wall_corner_collider_1">
+                    <Components>
+                        <Physics3DComponent>
+                            <Shape>Box</Shape>
+                            <BodyType>Static</BodyType>
+                            <Density>air</Density>
+                            <PhysicsMaterial>Normal</PhysicsMaterial>
+                            <Scale w="1.000000" h="4.000000" d="1.500000"/>
+                        </Physics3DComponent>
+                        <TransformComponent>
+                            <Position x="0.000000" y="2.000000" z="1.250000"/>
+                            <Size w="1.000000" h="1.000000" d="1.000000"/>
+                            <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                        </TransformComponent>
+                    </Components>
+                    <Children/>
+                </Actor>
+                <Actor name="wall_corner_collider_2">
+                    <Components>
+                        <Physics3DComponent>
+                            <Shape>Box</Shape>
+                            <BodyType>Static</BodyType>
+                            <Density>air</Density>
+                            <PhysicsMaterial>Normal</PhysicsMaterial>
+                            <Scale w="2.000000" h="4.000000" d="1.000000"/>
+                        </Physics3DComponent>
+                        <TransformComponent>
+                            <Position x="-1.000000" y="2.000000" z="0.000000"/>
+                            <Size w="1.000000" h="1.000000" d="1.000000"/>
+                            <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+                        </TransformComponent>
+                    </Components>
+                    <Children/>
+                </Actor>
+            </Children>
         </Actor>
         <Actor name="Container">
             <Components>
@@ -493,6 +493,637 @@
             </Components>
             <Children/>
         </Actor>
+        <Actor name="Rig">
+		<Components>
+			<TransformComponent>
+				<Position x="-3.000000" y="8.000000" z="-8.000000"/>
+				<Size w="1.000000" h="1.000000" d="1.000000"/>
+				<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+			</TransformComponent>
+		</Components>
+		<Children>
+			<Actor name="Barbarian_ArmLeft">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<MeshComponent>
+						<Mesh path="Models/dungeon_characters/barbarian/Cube.160.bimesh"/>
+						<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+					</MeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Barbarian_ArmRight">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<MeshComponent>
+						<Mesh path="Models/dungeon_characters/barbarian/Cube.161.bimesh"/>
+						<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+					</MeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Barbarian_Body">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<MeshComponent>
+						<Mesh path="Models/dungeon_characters/barbarian/PrototypePete_body.022.bimesh"/>
+						<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+					</MeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Barbarian_Head">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<MeshComponent>
+						<Mesh path="Models/dungeon_characters/barbarian/Cube.167.bimesh"/>
+						<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+					</MeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Barbarian_LegLeft">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<MeshComponent>
+						<Mesh path="Models/dungeon_characters/barbarian/Cube.165.bimesh"/>
+						<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+					</MeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Barbarian_LegRight">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<MeshComponent>
+						<Mesh path="Models/dungeon_characters/barbarian/Cube.163.bimesh"/>
+						<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+					</MeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="root">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="0.000014" z="0.000000"/>
+					</TransformComponent>
+				</Components>
+				<Children>
+					<Actor name="hips">
+						<Components>
+							<TransformComponent>
+								<Position x="0.000000" y="0.405663" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="0.000000" y="-0.000014" z="0.000000"/>
+							</TransformComponent>
+						</Components>
+						<Children>
+							<Actor name="spine">
+								<Components>
+									<TransformComponent>
+										<Position x="0.000000" y="0.191978" z="0.000000"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="0.000000" y="0.000000" z="0.000000"/>
+									</TransformComponent>
+								</Components>
+								<Children>
+									<Actor name="chest">
+										<Components>
+											<TransformComponent>
+												<Position x="0.000000" y="0.374988" z="0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000000"/>
+												<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+											</TransformComponent>
+										</Components>
+										<Children>
+											<Actor name="upperarm.l">
+												<Components>
+													<TransformComponent>
+														<Position x="0.212007" y="0.134132" z="0.000000"/>
+														<Size w="0.999999" h="0.999999" d="1.000000"/>
+														<Rotation x="-89.999550" y="-86.716095" z="-0.000417"/>
+													</TransformComponent>
+												</Components>
+												<Children>
+													<Actor name="lowerarm.l">
+														<Components>
+															<TransformComponent>
+																<Position x="-0.000000" y="0.241897" z="-0.000000"/>
+																<Size w="1.000000" h="1.000000" d="1.000000"/>
+																<Rotation x="0.000001" y="-0.000007" z="-6.338487"/>
+															</TransformComponent>
+														</Components>
+														<Children>
+															<Actor name="wrist.l">
+																<Components>
+																	<TransformComponent>
+																		<Position x="0.000000" y="0.260044" z="-0.000000"/>
+																		<Size w="1.000000" h="1.000000" d="1.000000"/>
+																		<Rotation x="-0.000000" y="-0.000000" z="3.055156"/>
+																	</TransformComponent>
+																</Components>
+																<Children>
+																	<Actor name="hand.l">
+																		<Components>
+																			<TransformComponent>
+																				<Position x="0.000000" y="0.073826" z="0.000000"/>
+																				<Size w="1.000000" h="1.000000" d="1.000000"/>
+																				<Rotation x="0.000000" y="0.000015" z="-0.000625"/>
+																			</TransformComponent>
+																		</Components>
+																		<Children>
+																			<Actor name="handslot.l">
+																				<Components>
+																					<TransformComponent>
+																						<Position x="0.000000" y="0.096125" z="-0.057500"/>
+																						<Size w="1.000000" h="1.000000" d="1.000000"/>
+																						<Rotation x="-0.000000" y="0.000000" z="-90.000008"/>
+																					</TransformComponent>
+																				</Components>
+																				<Children>
+																					<Actor name="1H_Axe_Offhand">
+																						<Components>
+																							<TransformComponent>
+																								<Position x="0.000000" y="0.033309" z="-0.000000"/>
+																								<Size w="1.000000" h="1.000000" d="1.000000"/>
+																								<Rotation x="-0.000000" y="-0.000033" z="0.000016"/>
+																							</TransformComponent>
+																							<MeshComponent>
+																								<Mesh path="Models/dungeon_characters/barbarian/Cube.001.bimesh"/>
+																								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+																							</MeshComponent>
+																						</Components>
+																						<Children/>
+																					</Actor>
+																					<Actor name="Barbarian_Round_Shield">
+																						<Components>
+																							<TransformComponent>
+																								<Position x="0.000000" y="0.017012" z="0.155885"/>
+																								<Size w="1.000000" h="1.000000" d="1.000000"/>
+																								<Rotation x="-0.000012" y="0.000019" z="0.000160"/>
+																							</TransformComponent>
+																							<MeshComponent>
+																								<Mesh path="Models/dungeon_characters/barbarian/Cylinder.404.bimesh"/>
+																								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+																							</MeshComponent>
+																						</Components>
+																						<Children/>
+																					</Actor>
+																				</Children>
+																			</Actor>
+																		</Children>
+																	</Actor>
+																</Children>
+															</Actor>
+														</Children>
+													</Actor>
+												</Children>
+											</Actor>
+											<Actor name="upperarm.r">
+												<Components>
+													<TransformComponent>
+														<Position x="-0.212007" y="0.134132" z="0.000000"/>
+														<Size w="0.999999" h="0.999999" d="1.000000"/>
+														<Rotation x="-89.999466" y="86.716164" z="0.000507"/>
+													</TransformComponent>
+												</Components>
+												<Children>
+													<Actor name="lowerarm.r">
+														<Components>
+															<TransformComponent>
+																<Position x="-0.000000" y="0.241897" z="-0.000000"/>
+																<Size w="1.000000" h="1.000000" d="1.000000"/>
+																<Rotation x="0.000001" y="0.000007" z="6.338487"/>
+															</TransformComponent>
+														</Components>
+														<Children>
+															<Actor name="wrist.r">
+																<Components>
+																	<TransformComponent>
+																		<Position x="-0.000000" y="0.260044" z="-0.000000"/>
+																		<Size w="1.000000" h="1.000000" d="1.000000"/>
+																		<Rotation x="-0.000000" y="0.000000" z="-3.055156"/>
+																	</TransformComponent>
+																</Components>
+																<Children>
+																	<Actor name="hand.r">
+																		<Components>
+																			<TransformComponent>
+																				<Position x="0.000000" y="0.073826" z="0.000000"/>
+																				<Size w="1.000000" h="1.000000" d="1.000000"/>
+																				<Rotation x="0.000000" y="-0.000010" z="0.000625"/>
+																			</TransformComponent>
+																		</Components>
+																		<Children>
+																			<Actor name="handslot.r">
+																				<Components>
+																					<TransformComponent>
+																						<Position x="-0.000000" y="0.096125" z="-0.057500"/>
+																						<Size w="1.000000" h="1.000000" d="1.000000"/>
+																						<Rotation x="-0.000000" y="-0.000000" z="90.000008"/>
+																					</TransformComponent>
+																				</Components>
+																				<Children>
+																					<Actor name="1H_Axe">
+																						<Components>
+																							<TransformComponent>
+																								<Position x="0.000000" y="0.033309" z="-0.000000"/>
+																								<Size w="1.000000" h="1.000000" d="1.000000"/>
+																								<Rotation x="-180.000000" y="-0.000001" z="179.999985"/>
+																							</TransformComponent>
+																							<MeshComponent>
+																								<Mesh path="Models/dungeon_characters/barbarian/Cube.12900.bimesh"/>
+																								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+																							</MeshComponent>
+																						</Components>
+																						<Children/>
+																					</Actor>
+																					<Actor name="2H_Axe">
+																						<Components>
+																							<TransformComponent>
+																								<Position x="0.000000" y="0.033309" z="-0.000000"/>
+																								<Size w="1.000000" h="1.000000" d="1.000000"/>
+																								<Rotation x="-180.000000" y="-0.000001" z="179.999985"/>
+																							</TransformComponent>
+																							<MeshComponent>
+																								<Mesh path="Models/dungeon_characters/barbarian/Cube.222.bimesh"/>
+																								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+																							</MeshComponent>
+																						</Components>
+																						<Children/>
+																					</Actor>
+																					<Actor name="Mug">
+																						<Components>
+																							<TransformComponent>
+																								<Position x="0.300566" y="-0.015637" z="-0.000000"/>
+																								<Size w="1.000000" h="1.000000" d="1.000000"/>
+																								<Rotation x="-180.000000" y="-0.000001" z="179.999985"/>
+																							</TransformComponent>
+																							<MeshComponent>
+																								<Mesh path="Models/dungeon_characters/barbarian/Cylinder.061.bimesh"/>
+																								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+																							</MeshComponent>
+																						</Components>
+																						<Children/>
+																					</Actor>
+																				</Children>
+																			</Actor>
+																		</Children>
+																	</Actor>
+																</Children>
+															</Actor>
+														</Children>
+													</Actor>
+												</Children>
+											</Actor>
+											<Actor name="head">
+												<Components>
+													<TransformComponent>
+														<Position x="0.000000" y="0.268797" z="0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+													</TransformComponent>
+												</Components>
+												<Children>
+													<Actor name="Barbarian_Hat">
+														<Components>
+															<TransformComponent>
+																<Position x="0.000000" y="-0.025552" z="-0.000000"/>
+																<Size w="1.000000" h="1.000000" d="1.000000"/>
+																<Rotation x="-0.000000" y="-0.000000" z="0.000000"/>
+															</TransformComponent>
+															<MeshComponent>
+																<Mesh path="Models/dungeon_characters/barbarian/Cube.166.bimesh"/>
+																<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+															</MeshComponent>
+														</Components>
+														<Children/>
+													</Actor>
+												</Children>
+											</Actor>
+											<Actor name="Barbarian_Cape">
+												<Components>
+													<TransformComponent>
+														<Position x="-0.000002" y="0.243245" z="-0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="0.000000" y="-0.000000" z="-0.000000"/>
+													</TransformComponent>
+													<MeshComponent>
+														<Mesh path="Models/dungeon_characters/barbarian/Plane.006.bimesh"/>
+														<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
+													</MeshComponent>
+												</Components>
+												<Children/>
+											</Actor>
+										</Children>
+									</Actor>
+								</Children>
+							</Actor>
+							<Actor name="upperleg.l">
+								<Components>
+									<TransformComponent>
+										<Position x="0.170945" y="0.113587" z="0.000000"/>
+										<Size w="1.000000" h="1.000000" d="1.000001"/>
+										<Rotation x="178.009079" y="0.000001" z="-0.000008"/>
+									</TransformComponent>
+								</Components>
+								<Children>
+									<Actor name="lowerleg.l">
+										<Components>
+											<TransformComponent>
+												<Position x="0.000000" y="0.227077" z="-0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000000"/>
+												<Rotation x="12.195514" y="0.000009" z="-0.000008"/>
+											</TransformComponent>
+										</Components>
+										<Children>
+											<Actor name="foot.l">
+												<Components>
+													<TransformComponent>
+														<Position x="0.000000" y="0.149437" z="0.000000"/>
+														<Size w="1.000000" h="1.000001" d="0.999999"/>
+														<Rotation x="-54.160633" y="-0.000000" z="-0.000004"/>
+													</TransformComponent>
+												</Components>
+												<Children>
+													<Actor name="toes.l">
+														<Components>
+															<TransformComponent>
+																<Position x="-0.000000" y="0.165650" z="0.000000"/>
+																<Size w="1.000000" h="1.000000" d="1.000000"/>
+																<Rotation x="-133.956009" y="0.000006" z="-180.000000"/>
+															</TransformComponent>
+														</Components>
+														<Children/>
+													</Actor>
+												</Children>
+											</Actor>
+										</Children>
+									</Actor>
+								</Children>
+							</Actor>
+							<Actor name="upperleg.r">
+								<Components>
+									<TransformComponent>
+										<Position x="-0.170945" y="0.113587" z="0.000000"/>
+										<Size w="1.000000" h="1.000000" d="1.000001"/>
+										<Rotation x="178.009079" y="0.000004" z="0.000008"/>
+									</TransformComponent>
+								</Components>
+								<Children>
+									<Actor name="lowerleg.r">
+										<Components>
+											<TransformComponent>
+												<Position x="-0.000000" y="0.227077" z="-0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000000"/>
+												<Rotation x="12.195514" y="-0.000009" z="0.000008"/>
+											</TransformComponent>
+										</Components>
+										<Children>
+											<Actor name="foot.r">
+												<Components>
+													<TransformComponent>
+														<Position x="-0.000000" y="0.149437" z="0.000000"/>
+														<Size w="1.000000" h="1.000001" d="0.999999"/>
+														<Rotation x="-54.160633" y="0.000017" z="-0.000008"/>
+													</TransformComponent>
+												</Components>
+												<Children>
+													<Actor name="toes.r">
+														<Components>
+															<TransformComponent>
+																<Position x="0.000000" y="0.165650" z="0.000000"/>
+																<Size w="1.000000" h="1.000000" d="1.000000"/>
+																<Rotation x="-133.956009" y="-0.000006" z="180.000000"/>
+															</TransformComponent>
+														</Components>
+														<Children/>
+													</Actor>
+												</Children>
+											</Actor>
+										</Children>
+									</Actor>
+								</Children>
+							</Actor>
+						</Children>
+					</Actor>
+					<Actor name="kneeIK.l">
+						<Components>
+							<TransformComponent>
+								<Position x="0.170945" y="0.292310" z="0.575812"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="90.000008" y="-0.000015" z="-0.000022"/>
+							</TransformComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="control-toe-roll.l">
+						<Components>
+							<TransformComponent>
+								<Position x="0.170945" y="0.025990" z="0.245789"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="-90.000008" y="-0.000011" z="0.000000"/>
+							</TransformComponent>
+						</Components>
+						<Children>
+							<Actor name="control-heel-roll.l">
+								<Components>
+									<TransformComponent>
+										<Position x="0.000000" y="0.362833" z="-0.000000"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="-0.000000" y="-0.000000" z="-180.000000"/>
+									</TransformComponent>
+								</Components>
+								<Children>
+									<Actor name="control-foot-roll.l">
+										<Components>
+											<TransformComponent>
+												<Position x="-0.000000" y="0.213436" z="-0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000000"/>
+												<Rotation x="46.043972" y="0.000010" z="-180.000000"/>
+											</TransformComponent>
+										</Components>
+										<Children>
+											<Actor name="heelIK.l">
+												<Components>
+													<TransformComponent>
+														<Position x="0.000000" y="0.165650" z="-0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="-46.043972" y="-0.000010" z="-0.000004"/>
+													</TransformComponent>
+												</Components>
+												<Children/>
+											</Actor>
+											<Actor name="IK-foot.l">
+												<Components>
+													<TransformComponent>
+														<Position x="0.000000" y="0.165650" z="-0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="-180.000000" y="-0.000022" z="-0.000000"/>
+													</TransformComponent>
+												</Components>
+												<Children/>
+											</Actor>
+										</Children>
+									</Actor>
+									<Actor name="IK-toe.l">
+										<Components>
+											<TransformComponent>
+												<Position x="-0.000000" y="-0.000000" z="-0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000000"/>
+												<Rotation x="0.000000" y="-0.000000" z="-0.000002"/>
+											</TransformComponent>
+										</Components>
+										<Children/>
+									</Actor>
+								</Children>
+							</Actor>
+						</Children>
+					</Actor>
+					<Actor name="kneeIK.r">
+						<Components>
+							<TransformComponent>
+								<Position x="-0.170945" y="0.292310" z="0.575812"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="90.000008" y="-0.000015" z="0.000009"/>
+							</TransformComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="control-toe-roll.r">
+						<Components>
+							<TransformComponent>
+								<Position x="-0.170945" y="0.025990" z="0.245789"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="-90.000008" y="-0.000011" z="0.000000"/>
+							</TransformComponent>
+						</Components>
+						<Children>
+							<Actor name="control-heel-roll.r">
+								<Components>
+									<TransformComponent>
+										<Position x="0.000000" y="0.362833" z="0.000000"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="-0.000000" y="-0.000000" z="-180.000000"/>
+									</TransformComponent>
+								</Components>
+								<Children>
+									<Actor name="control-foot-roll.r">
+										<Components>
+											<TransformComponent>
+												<Position x="0.000000" y="0.213436" z="0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000000"/>
+												<Rotation x="46.043972" y="0.000010" z="-180.000000"/>
+											</TransformComponent>
+										</Components>
+										<Children>
+											<Actor name="heelIK.r">
+												<Components>
+													<TransformComponent>
+														<Position x="-0.000000" y="0.165650" z="0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="-46.043972" y="-0.000010" z="-0.000004"/>
+													</TransformComponent>
+												</Components>
+												<Children/>
+											</Actor>
+											<Actor name="IK-foot.r">
+												<Components>
+													<TransformComponent>
+														<Position x="-0.000000" y="0.165650" z="0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="180.000000" y="-0.000022" z="0.000000"/>
+													</TransformComponent>
+												</Components>
+												<Children/>
+											</Actor>
+										</Children>
+									</Actor>
+									<Actor name="IK-toe.r">
+										<Components>
+											<TransformComponent>
+												<Position x="-0.000000" y="0.000000" z="-0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000000"/>
+												<Rotation x="0.000000" y="-0.000000" z="-0.000002"/>
+											</TransformComponent>
+										</Components>
+										<Children/>
+									</Actor>
+								</Children>
+							</Actor>
+						</Children>
+					</Actor>
+					<Actor name="elbowIK.l">
+						<Components>
+							<TransformComponent>
+								<Position x="0.453507" y="1.106761" z="-0.588859"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="-90.000008" y="-0.000012" z="0.000000"/>
+							</TransformComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="handIK.l">
+						<Components>
+							<TransformComponent>
+								<Position x="0.713181" y="1.106761" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="90.000000" y="-90.000000" z="180.000000"/>
+							</TransformComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="elbowIK.r">
+						<Components>
+							<TransformComponent>
+								<Position x="-0.453507" y="1.106761" z="-0.588860"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="-90.000008" y="-0.000012" z="0.000000"/>
+							</TransformComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="handIK.r">
+						<Components>
+							<TransformComponent>
+								<Position x="-0.713182" y="1.106761" z="-0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="-90.000008" y="90.000000" z="0.000000"/>
+							</TransformComponent>
+						</Components>
+						<Children/>
+					</Actor>
+				</Children>
+			</Actor>
+		</Children>
+	</Actor>
+
     </Actors>
     <Script preLoad="Worlds/World/world_pre_init.py" postLoad="Worlds/World/world_POST_init.py"/>
 </World>

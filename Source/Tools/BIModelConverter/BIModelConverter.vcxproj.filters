@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\BIEngine\EngineCore\Assert.cpp">
+      <Filter>EngineSources\EngineCore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\BIEngine\Utilities\Logger.cpp">
+      <Filter>EngineSources\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\BIEngine\3rdParty\tinyxml2\tinyxml2.cpp">
+      <Filter>EngineSources\3rdParty\tinyxml2</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\BIEngine\EngineCore\Assert.h">
+      <Filter>EngineSources\EngineCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\BIEngine\Utilities\Logger.h">
+      <Filter>EngineSources\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\BIEngine\3rdParty\tinyxml2\tinyxml2.h">
+      <Filter>EngineSources\3rdParty\tinyxml2</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="EngineSources">
+      <UniqueIdentifier>{05edeb8b-c109-4d98-bfe5-a3878c941dc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineSources\EngineCore">
+      <UniqueIdentifier>{86af47ef-0e8c-4691-9ea3-691ed6dbbd0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineSources\Utilities">
+      <UniqueIdentifier>{099fe8de-a54e-4cf2-9601-288c99a895b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineSources\3rdParty">
+      <UniqueIdentifier>{eb315299-5ee9-476a-8a9f-fb2e80e54a94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineSources\3rdParty\tinyxml2">
+      <UniqueIdentifier>{47be1499-b648-4ffc-af66-c50d61a5dcb6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

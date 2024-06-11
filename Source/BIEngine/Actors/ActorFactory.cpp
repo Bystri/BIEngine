@@ -14,6 +14,7 @@
 #include "Physics3DTriggerComponent.h"
 #include "NavAgentComponent.h"
 #include "ScriptComponent.h"
+#include "MeshComponent.h"
 #include "../Utilities/Logger.h"
 #include "../EngineCore/GameApp.h"
 
@@ -40,6 +41,7 @@ ActorFactory::ActorFactory()
    m_actorComponentCreators[NavAgentComponent::g_CompId] = CreateNavAgentComponent;
    m_actorComponentCreators[ScriptComponent::g_CompId] = CreateScriptComponent;
    m_actorComponentCreators[AnimationComponent::g_CompId] = CreateAnimatorComponent;
+   m_actorComponentCreators[MeshComponent::g_CompId] = CreateMeshComponent;
 }
 
 std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation, Actor* const pParent)
