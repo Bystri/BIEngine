@@ -1,11 +1,11 @@
 #include "Animator.h"
 
-#include "SkeletalModel.h"
+#include "../Actors/TransformComponent.h"
 
 namespace BIEngine {
 
-Animator::Animator(std::shared_ptr<SkeletalModel> pModel)
-   : m_pModel(pModel), m_currentTime(0.0f), m_pCurrentAnimation(nullptr)
+Animator::Animator(Actor* pRoot)
+   : m_pRoot(pRoot), m_currentTime(0.0f), m_pCurrentAnimation(nullptr)
 {
 }
 
@@ -14,7 +14,7 @@ void Animator::Update(float dt)
    if (m_pCurrentAnimation) {
       m_currentTime += m_pCurrentAnimation->GetTicksPerSecond() * dt;
       m_currentTime = fmod(m_currentTime, m_pCurrentAnimation->GetDuration());
-      calculateBoneTransform(m_pModel->GetSkeleton()->GetSkeletonRoot(), glm::mat4(1.0f));
+      calculateActorTransform(m_pRoot);
    }
 }
 
@@ -24,23 +24,18 @@ void Animator::PlayAnimation(std::shared_ptr<Animation> pAnimation)
    m_currentTime = 0.0f;
 }
 
-void Animator::calculateBoneTransform(std::shared_ptr<Skeleton::BoneInfo> node, glm::mat4 parentTransform)
+void Animator::calculateActorTransform(Actor* pActor)
 {
-   glm::mat4 nodeTransform = node->parentNodeTransform;
-
-   BoneAnimChannel* const boneChannel = m_pCurrentAnimation->FindBoneChannel(node->name);
+   BoneAnimChannel* const boneChannel = m_pCurrentAnimation->FindBoneChannel(pActor->GetName());
 
    if (boneChannel) {
       boneChannel->Update(m_currentTime);
-      nodeTransform = boneChannel->GetLocalTransform();
+      std::shared_ptr<TransformComponent> pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+      pTransformComponent->SetLocalTransformMatrix(boneChannel->GetLocalTransform());
    }
 
-   glm::mat4 globalTransformation = parentTransform * nodeTransform;
-
-   m_pModel->GetSkeleton()->SetBoneTransfrom(node->id, globalTransformation * node->offset);
-
-   for (int i = 0; i < node->children.size(); i++) {
-      calculateBoneTransform(node->children[i], globalTransformation);
+   for (const auto& child : pActor->GetChildren()) {
+      calculateActorTransform(child.get());
    }
 }
 

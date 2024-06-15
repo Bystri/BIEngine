@@ -56,9 +56,11 @@ public:
    Actor* GetParent() const { return m_pParent; }
 
    // Поле несет чисто косметический характер. Используется в редакторе для распознования объектов
-   std::string GetName() const { return m_name; }
+   const std::string& GetName() const { return m_name; }
 
    const std::vector<std::shared_ptr<Actor>>& GetChildren() const { return m_children; }
+
+   Actor* GetActorByPath(const std::string& path);
 
    // Шаблон функции для получения компонентов
    template <class ComponentType>

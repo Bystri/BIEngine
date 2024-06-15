@@ -5,7 +5,6 @@
 #include "../Renderer/ShadersLoader.h"
 #include "../Graphics/ModelLoader.h"
 #include "../Graphics/MaterialLoader.h"
-#include "../Graphics/SkeletalModelLoader.h"
 #include "../Renderer/MeshGeometryGenerator.h"
 #include "../Actors/TransformComponent.h"
 #include "../Utilities/Logger.h"
@@ -17,7 +16,6 @@ ComponentId SpriteRenderComponent::g_CompId = "SpriteRenderComponent";
 ComponentId BoxRenderComponent::g_CompId = "BoxRenderComponent";
 ComponentId SphereRenderComponent::g_CompId = "SphereRenderComponent";
 ComponentId ModelRenderComponent::g_CompId = "ModelRenderComponent";
-ComponentId SkeletalModelRenderComponent::g_CompId = "SkeletalModelRenderComponent";
 
 /***********************************************************
  * MeshBaseRenderComponent
@@ -279,68 +277,6 @@ tinyxml2::XMLElement* ModelRenderComponent::GenerateXml(tinyxml2::XMLDocument* p
    pBaseElement->LinkEndChild(pMaterialElement);
 
    return pBaseElement;
-}
-
-/******************************************/
-/***********SkeletalModelRenderComponent***********/
-/******************************************/
-
-bool SkeletalModelRenderComponent::Init(tinyxml2::XMLElement* pData)
-{
-   tinyxml2::XMLElement* pModel = pData->FirstChildElement("Model");
-   if (!pModel) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Erro while loading actor" + std::to_string(m_pOwner->GetId()) + "; ModelRenderComponent must have path for model loading;");
-      return false;
-   }
-
-   const char* modelPath;
-   pModel->QueryStringAttribute("path", &modelPath);
-   m_modelPath = modelPath;
-
-   auto modelData = std::static_pointer_cast<SkeletalModelData>(ResCache::Get()->GetHandle(m_modelPath)->GetExtra());
-
-   if (modelData == nullptr) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading actor" + std::to_string(m_pOwner->GetId()) + "; Error while loading model in ModelRenderComponent;");
-      return false;
-   }
-
-   m_pModel = modelData->GetSkeletalModel();
-
-   return true;
-}
-
-tinyxml2::XMLElement* SkeletalModelRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
-{
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
-
-   tinyxml2::XMLElement* pMaterialElement = pDoc->NewElement("Model");
-   pMaterialElement->SetAttribute("path", m_modelPath.c_str());
-   pBaseElement->LinkEndChild(pMaterialElement);
-
-   return pBaseElement;
-}
-
-void SkeletalModelRenderComponent::OnRenderObject(const GameTimer& gt)
-{
-   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   if (!pTransformComponent) {
-      return;
-   }
-
-   m_pModel->OnRender();
-
-   const std::vector<std::shared_ptr<SkeletalModelMesh>>& modelMeshes = m_pModel->GetSkeletalMeshes();
-
-   for (const auto& pModelMesh : modelMeshes) {
-      RenderItemsStorage::OpaqueRenderItem opaqueRitem;
-      opaqueRitem.actorId = m_pOwner->GetId();
-      opaqueRitem.VAO = pModelMesh->GetSkeletalMesh()->GetVao();
-      opaqueRitem.IndicesSize = pModelMesh->GetSkeletalMesh()->GetIndices().size();
-      opaqueRitem.pMaterial = pModelMesh->GetMaterial();
-      opaqueRitem.ModelTransform = pTransformComponent->GetWorldTransformMatrix();
-
-      g_pApp->TryGetHumanView(0)->GetScene()->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);
-   }
 }
 
 } // namespace BIEngine

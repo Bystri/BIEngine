@@ -357,20 +357,11 @@
     <ClCompile Include="..\..\Actors\AnimationComponent.cpp">
       <Filter>Actors</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Renderer\SkeletalMesh.cpp">
+    <ClCompile Include="..\..\Renderer\SkinnedMesh.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Renderer\Vertex.cpp">
       <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics\SkeletalModel.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics\SkeletalModelLoader.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Graphics\Skeleton.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Graphics\PointLightShadowGraphicsTechnique.cpp">
       <Filter>Graphics</Filter>
@@ -380,6 +371,21 @@
     </ClCompile>
     <ClCompile Include="..\..\Renderer\MeshLoader.cpp">
       <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\SkinnedMeshComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\SkinnedMeshLoader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Renderer\Skeleton.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\BoneComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Actors\SkeletonComponent.cpp">
+      <Filter>Actors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -722,26 +728,17 @@
     <ClInclude Include="..\..\Graphics\BoneAnimChannel.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Graphics\Skeleton.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Graphics\AnimationLoader.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Actors\AnimationComponent.h">
       <Filter>Actors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Renderer\SkeletalMesh.h">
+    <ClInclude Include="..\..\Renderer\SkinnedMesh.h">
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Renderer\Vertex.h">
       <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics\SkeletalModel.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Graphics\SkeletalModelLoader.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Math\Spline.h">
       <Filter>Math</Filter>
@@ -754,6 +751,21 @@
     </ClInclude>
     <ClInclude Include="..\..\Renderer\MeshLoader.h">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\SkinnedMeshComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\SkinnedMeshLoader.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Renderer\Skeleton.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\BoneComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\SkeletonComponent.h">
+      <Filter>Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

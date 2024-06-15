@@ -96,6 +96,7 @@
     <ClCompile Include="..\..\Actors\Actor.cpp" />
     <ClCompile Include="..\..\Actors\ActorFactory.cpp" />
     <ClCompile Include="..\..\Actors\AnimationComponent.cpp" />
+    <ClCompile Include="..\..\Actors\BoneComponent.cpp" />
     <ClCompile Include="..\..\Actors\LightComponent.cpp" />
     <ClCompile Include="..\..\Actors\MeshComponent.cpp" />
     <ClCompile Include="..\..\Actors\NavAgentComponent.cpp" />
@@ -105,6 +106,8 @@
     <ClCompile Include="..\..\Actors\Physics3DTriggerComponent.cpp" />
     <ClCompile Include="..\..\Actors\RenderComponent.cpp" />
     <ClCompile Include="..\..\Actors\ScriptComponent.cpp" />
+    <ClCompile Include="..\..\Actors\SkeletonComponent.cpp" />
+    <ClCompile Include="..\..\Actors\SkinnedMeshComponent.cpp" />
     <ClCompile Include="..\..\Actors\TransformComponent.cpp" />
     <ClCompile Include="..\..\Audio\Audio.cpp" />
     <ClCompile Include="..\..\Audio\irrKlangAudio.cpp" />
@@ -131,9 +134,6 @@
     <ClCompile Include="..\..\Graphics\RenderItemsStorage.cpp" />
     <ClCompile Include="..\..\Graphics\Scene.cpp" />
     <ClCompile Include="..\..\Graphics\DirLightShadowGraphicsTechnique.cpp" />
-    <ClCompile Include="..\..\Graphics\SkeletalModel.cpp" />
-    <ClCompile Include="..\..\Graphics\SkeletalModelLoader.cpp" />
-    <ClCompile Include="..\..\Graphics\Skeleton.cpp" />
     <ClCompile Include="..\..\Graphics\Skybox.cpp" />
     <ClCompile Include="..\..\Graphics\SkyboxGraphicsTechnique.cpp" />
     <ClCompile Include="..\..\Graphics\Sprite.cpp" />
@@ -171,7 +171,9 @@
     <ClCompile Include="..\..\Renderer\ShaderProgram.cpp" />
     <ClCompile Include="..\..\Renderer\ShaderProgramState.cpp" />
     <ClCompile Include="..\..\Renderer\ShadersLoader.cpp" />
-    <ClCompile Include="..\..\Renderer\SkeletalMesh.cpp" />
+    <ClCompile Include="..\..\Renderer\Skeleton.cpp" />
+    <ClCompile Include="..\..\Renderer\SkinnedMesh.cpp" />
+    <ClCompile Include="..\..\Renderer\SkinnedMeshLoader.cpp" />
     <ClCompile Include="..\..\Renderer\Texture.cpp" />
     <ClCompile Include="..\..\Renderer\ImageLoader.cpp" />
     <ClCompile Include="..\..\Renderer\TextureLoader.cpp" />
@@ -208,6 +210,7 @@
     <ClInclude Include="..\..\Actors\ActorComponent.h" />
     <ClInclude Include="..\..\Actors\ActorFactory.h" />
     <ClInclude Include="..\..\Actors\AnimationComponent.h" />
+    <ClInclude Include="..\..\Actors\BoneComponent.h" />
     <ClInclude Include="..\..\Actors\LightComponent.h" />
     <ClInclude Include="..\..\Actors\MeshComponent.h" />
     <ClInclude Include="..\..\Actors\NavAgentComponent.h" />
@@ -217,6 +220,8 @@
     <ClInclude Include="..\..\Actors\Physics3DTriggerComponent.h" />
     <ClInclude Include="..\..\Actors\RenderComponent.h" />
     <ClInclude Include="..\..\Actors\ScriptComponent.h" />
+    <ClInclude Include="..\..\Actors\SkeletonComponent.h" />
+    <ClInclude Include="..\..\Actors\SkinnedMeshComponent.h" />
     <ClInclude Include="..\..\Actors\TransformComponent.h" />
     <ClInclude Include="..\..\Audio\Audio.h" />
     <ClInclude Include="..\..\Audio\irrKlangAudio.h" />
@@ -233,7 +238,6 @@
     <ClInclude Include="..\..\Graphics\Animator.h" />
     <ClInclude Include="..\..\Graphics\BoneAnimChannel.h" />
     <ClInclude Include="..\..\Graphics\PointLightShadowGraphicsTechnique.h" />
-    <ClInclude Include="..\..\Graphics\Skeleton.h" />
     <ClInclude Include="..\..\Graphics\Camera.h" />
     <ClInclude Include="..\..\Graphics\GraphicsRenderPass.h" />
     <ClInclude Include="..\..\Graphics\LightGraphicsTechnique.h" />
@@ -245,8 +249,6 @@
     <ClInclude Include="..\..\Graphics\RenderItemsStorage.h" />
     <ClInclude Include="..\..\Graphics\Scene.h" />
     <ClInclude Include="..\..\Graphics\DirLightShadowGraphicsTechnique.h" />
-    <ClInclude Include="..\..\Graphics\SkeletalModel.h" />
-    <ClInclude Include="..\..\Graphics\SkeletalModelLoader.h" />
     <ClInclude Include="..\..\Graphics\Skybox.h" />
     <ClInclude Include="..\..\Graphics\SkyboxGraphicsTechnique.h" />
     <ClInclude Include="..\..\Graphics\Sprite.h" />
@@ -288,7 +290,9 @@
     <ClInclude Include="..\..\Renderer\ShaderProgram.h" />
     <ClInclude Include="..\..\Renderer\ShaderProgramState.h" />
     <ClInclude Include="..\..\Renderer\ShadersLoader.h" />
-    <ClInclude Include="..\..\Renderer\SkeletalMesh.h" />
+    <ClInclude Include="..\..\Renderer\Skeleton.h" />
+    <ClInclude Include="..\..\Renderer\SkinnedMesh.h" />
+    <ClInclude Include="..\..\Renderer\SkinnedMeshLoader.h" />
     <ClInclude Include="..\..\Renderer\Texture.h" />
     <ClInclude Include="..\..\Renderer\ImageLoader.h" />
     <ClInclude Include="..\..\Renderer\TextureLoader.h" />

@@ -46,7 +46,7 @@ bool GameLogic::LoadLevel(const std::string& path)
 
    tinyxml2::XMLElement* pRoot = levelXmlData->GetRootElement();
    if (!pRoot) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Failed to find level resource file: " + xmlWorldPath);
+      Assert(false, "Failed to load level-xml file %s", xmlWorldPath.c_str());
       return false;
    }
 

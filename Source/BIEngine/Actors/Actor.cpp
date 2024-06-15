@@ -167,4 +167,41 @@ tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const
    return pActorElement;
 }
 
+Actor* Actor::GetActorByPath(const std::string& path)
+{
+   if (path == ".") {
+      return this;
+   }
+
+   if (path.size() == 2 && path[0] == '.' && path[1] == '.') {
+      return m_pParent;
+   }
+
+   if (path.size() > 2 && path[0] == '.' && path[1] == '.' && path[2] == '/') {
+      const std::string newPath = &path.c_str()[3];
+      return m_pParent->GetActorByPath(newPath);
+   }
+
+   std::size_t delimPos = path.find('/');
+   if (delimPos == std::string::npos) {
+      for (const auto& child : m_children) {
+         if (child->GetName() == path) {
+            return child.get();
+         }
+      }
+
+      return nullptr;
+   }
+
+   const std::string childName = path.substr(0, delimPos);
+   for (const auto& child : m_children) {
+      if (child->GetName() == childName) {
+         const std::string newPath = &path.c_str()[delimPos + 1];
+         return child->GetActorByPath(newPath);
+      }
+   }
+
+   return nullptr;
+}
+
 } // namespace BIEngine

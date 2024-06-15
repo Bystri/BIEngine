@@ -6,7 +6,6 @@
 #include "../Graphics/Sprite.h"
 #include "../Renderer/Color.h"
 #include "../Graphics/Model.h"
-#include "../Graphics/SkeletalModel.h"
 
 namespace BIEngine {
 // Создает и регестрирует в сцене спрайт для отрисовки актера
@@ -136,31 +135,4 @@ static std::unique_ptr<ActorComponent> CreateModelRenderComponent()
    return std::make_unique<ModelRenderComponent>();
 }
 
-class SkeletalModelRenderComponent : public ActorComponent {
-public:
-   SkeletalModelRenderComponent()
-      : ActorComponent(), m_modelPath() {}
-
-   static ComponentId g_CompId;
-
-   virtual ComponentId GetComponentId() const { return SkeletalModelRenderComponent::g_CompId; }
-
-   virtual void OnRenderObject(const GameTimer& gt) override;
-
-   virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
-
-   std::shared_ptr<SkeletalModel> GetModel() const { return m_pModel; }
-
-protected:
-   virtual bool Init(tinyxml2::XMLElement* pData);
-
-protected:
-   std::shared_ptr<SkeletalModel> m_pModel;
-   std::string m_modelPath;
-};
-
-static std::unique_ptr<ActorComponent> CreateSkeletalModelRenderComponent()
-{
-   return std::make_unique<SkeletalModelRenderComponent>();
-}
 } // namespace BIEngine

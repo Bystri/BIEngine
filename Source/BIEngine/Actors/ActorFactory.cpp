@@ -15,6 +15,9 @@
 #include "NavAgentComponent.h"
 #include "ScriptComponent.h"
 #include "MeshComponent.h"
+#include "SkinnedMeshComponent.h"
+#include "SkeletonComponent.h"
+#include "BoneComponent.h"
 #include "../Utilities/Logger.h"
 #include "../EngineCore/GameApp.h"
 
@@ -33,7 +36,6 @@ ActorFactory::ActorFactory()
    m_actorComponentCreators[BoxRenderComponent::g_CompId] = CreateBoxRenderComponent;
    m_actorComponentCreators[SphereRenderComponent::g_CompId] = CreateSphereRenderComponent;
    m_actorComponentCreators[ModelRenderComponent::g_CompId] = CreateModelRenderComponent;
-   m_actorComponentCreators[SkeletalModelRenderComponent::g_CompId] = CreateSkeletalModelRenderComponent;
    m_actorComponentCreators[Physics2DComponent::g_CompId] = CreatePhysics2DComponent;
    m_actorComponentCreators[Physics2DTriggerComponent::g_CompId] = CreatePhysics2DTriggerComponent;
    m_actorComponentCreators[Physics3DComponent::g_CompId] = CreatePhysics3DComponent;
@@ -42,6 +44,9 @@ ActorFactory::ActorFactory()
    m_actorComponentCreators[ScriptComponent::g_CompId] = CreateScriptComponent;
    m_actorComponentCreators[AnimationComponent::g_CompId] = CreateAnimatorComponent;
    m_actorComponentCreators[MeshComponent::g_CompId] = CreateMeshComponent;
+   m_actorComponentCreators[SkinnedMeshComponent::g_CompId] = CreateSkinnedMeshComponent;
+   m_actorComponentCreators[SkeletonComponent::g_CompId] = CreateSkeletonComponent;
+   m_actorComponentCreators[BoneComponent::g_CompId] = CreateBoneComponent;
 }
 
 std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation, Actor* const pParent)

@@ -6,7 +6,6 @@
 #include <glm/glm.hpp>
 
 #include "Model.h"
-#include "SkeletalModel.h"
 #include "../Actors/Actor.h"
 #include "../Renderer/Color.h"
 

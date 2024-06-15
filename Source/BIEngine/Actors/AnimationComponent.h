@@ -3,8 +3,8 @@
 #include <unordered_map>
 
 #include "ActorComponent.h"
+#include "../Graphics/Animator.h"
 #include "../ProcessManager/Process.h"
-#include "../Graphics/SkeletalModel.h"
 
 namespace BIEngine {
 

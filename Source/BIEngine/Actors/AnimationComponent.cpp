@@ -3,7 +3,6 @@
 #include "Actor.h"
 #include "RenderComponent.h"
 #include "../Graphics/AnimationLoader.h"
-#include "../ProcessManager/ProcessManager.h"
 
 namespace BIEngine {
 
@@ -38,15 +37,7 @@ bool AnimationComponent::Init(tinyxml2::XMLElement* pData)
 
 void AnimationComponent::Activate()
 {
-   auto pWeakModelComponent = m_pOwner->GetComponent<SkeletalModelRenderComponent>(SkeletalModelRenderComponent::g_CompId);
-   auto pModelComponent = pWeakModelComponent.lock();
-
-   if (!pModelComponent) {
-      Assert(false, "Need SkeletalModelRenderComponent for AnimationComponent!");
-      return;
-   }
-
-   m_pAnimator = std::make_shared<Animator>(pModelComponent->GetModel());
+   m_pAnimator = std::make_shared<Animator>(m_pOwner);
 }
 
 void AnimationComponent::Deactivate()
