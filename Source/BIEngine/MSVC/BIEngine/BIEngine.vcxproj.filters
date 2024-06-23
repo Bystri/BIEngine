@@ -767,6 +767,9 @@
     <ClInclude Include="..\..\Actors\SkeletonComponent.h">
       <Filter>Actors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsMath.h">
+      <Filter>Scripting\ScriptExports</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.clang-format" />

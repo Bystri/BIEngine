@@ -22,7 +22,7 @@ class CameraFollowProcess(BIEProcess.Process):
         
         eyePos = tPos - self.tForward * self.dist + self.tUp * self.height
         camForward = tPos - eyePos
-        camForward.Normalize()
+        camForward = camForward.Normalize()
         
         camLeft = BIEVector.Cross(self.tUp, camForward).Normalize()
         camUp = BIEVector.Cross(camForward, camLeft).Normalize()

@@ -55,6 +55,8 @@ public:
 
    void SetLocalTransformMatrix(const glm::mat4& trans);
 
+   void SetWorldTransformMatrix(const glm::mat4& trans);
+
    glm::mat4 GetWorldTransformMatrix() const { return m_worldTransform; }
 
    glm::mat4 GetWorldToLocalTransformMatrix() const { return m_worldToLocal; }
@@ -68,6 +70,7 @@ private:
    void recalculateWorldTransformMatrix();
    void updateWorldTransformMatrix();
    void applyWorldTransformMatrix(const glm::mat4& trans);
+   void applyLocalTransformMatrix(const glm::mat4& trans);
 
 private:
    glm::mat4 m_worldTransform;

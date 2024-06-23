@@ -122,8 +122,9 @@ void GameLogic::OnUpdate(GameTimer& gt)
    m_pPhysics2D->OnUpdate(gt);
    m_pPhysics2D->SyncVisibleScene(m_actors);
 
+   m_pPhysics3D->BeforeUpdate(m_actors);
    m_pPhysics3D->OnUpdate(gt);
-   m_pPhysics3D->SyncVisibleScene(m_actors);
+   m_pPhysics3D->AfterUpdate(m_actors);
 
    ProcessManager::Get()->UpdateProcesses(gt);
 

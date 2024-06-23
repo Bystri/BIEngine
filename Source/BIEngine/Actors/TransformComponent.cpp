@@ -160,6 +160,42 @@ void TransformComponent::SetLocalTransformMatrix(const glm::mat4& trans)
    m_localTransform = trans;
 }
 
+void TransformComponent::SetWorldTransformMatrix(const glm::mat4& trans)
+{
+   glm::quat qRotation;
+   glm::vec3 translation;
+   glm::vec3 skew;
+   glm::vec4 perspective;
+   glm::decompose(trans, m_worldSize, qRotation, m_worldPos, skew, perspective);
+
+   m_worldRot = glm::eulerAngles(qRotation);
+   m_worldRot.x = glm::degrees(m_worldRot.x);
+   m_worldRot.y = glm::degrees(m_worldRot.y);
+   m_worldRot.z = glm::degrees(m_worldRot.z);
+
+   m_worldTransform = trans;
+
+
+   if (m_pOwner->GetParent()) {
+      std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+
+      if (pTransformComponent != nullptr) {
+         m_localPos = pTransformComponent->GetWorldTransformMatrix() * glm::vec4(m_worldPos, 1.0f);
+         m_localRot = pTransformComponent->GetWorldTransformMatrix() * glm::vec4(m_worldRot, 1.0f);
+         m_localSize = pTransformComponent->GetWorldTransformMatrix() * glm::vec4(m_worldSize, 1.0f);
+         recalculateLocalTransformMatrix();
+         recalculateWorldTransformMatrix();
+         return;
+      }
+   }
+
+   m_localPos = m_worldPos;
+   m_localRot = m_worldRot;
+   m_localSize = m_worldSize;
+   recalculateLocalTransformMatrix();
+   recalculateWorldTransformMatrix();
+}
+
 glm::vec3 TransformComponent::GetDir() const
 {
    // Calculate forward vector
@@ -206,14 +242,14 @@ void TransformComponent::SetRotation(const glm::vec3& rot)
       if (pTransformComponent != nullptr) {
          m_localRot = pTransformComponent->GetWorldToLocalTransformMatrix() * glm::vec4(m_worldRot, 1.0f);
          recalculateLocalTransformMatrix();
-         recalculateLocalTransformMatrix();
+         recalculateWorldTransformMatrix();
          return;
       }
    }
 
    m_localRot = m_worldRot;
    recalculateLocalTransformMatrix();
-   recalculateLocalTransformMatrix();
+   recalculateWorldTransformMatrix();
 }
 
 void TransformComponent::SetSize(const glm::vec3& size)
@@ -299,6 +335,22 @@ void TransformComponent::applyWorldTransformMatrix(const glm::mat4& trans)
    m_worldRot.z = glm::degrees(m_worldRot.z);
 
    m_worldToLocal = glm::inverse(trans);
+}
+
+void TransformComponent::applyLocalTransformMatrix(const glm::mat4& trans)
+{
+   glm::quat qRotation;
+   glm::vec3 translation;
+   glm::vec3 skew;
+   glm::vec4 perspective;
+   glm::decompose(trans, m_localSize, qRotation, m_localPos, skew, perspective);
+
+   m_localRot = glm::eulerAngles(qRotation);
+   m_localRot.x = glm::degrees(m_localRot.x);
+   m_localRot.y = glm::degrees(m_localRot.y);
+   m_localRot.z = glm::degrees(m_localRot.z);
+
+   m_worldTransform = glm::inverse(trans);
 }
 
 } // namespace BIEngine

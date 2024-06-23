@@ -307,6 +307,7 @@
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsCamera.h" />
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsDebug.h" />
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsEvents.h" />
+    <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsMath.h" />
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsPhysics3D.h" />
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsProcess.h" />
     <ClInclude Include="..\..\Scripting\ScriptResource.h" />

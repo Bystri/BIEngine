@@ -31,6 +31,8 @@ bool Physics3DComponent::Init(tinyxml2::XMLElement* pData)
          m_shape = Shape3D::SPHERE;
       else if (shapeStr == "Box")
          m_shape = Shape3D::BOX;
+      else if (shapeStr == "Capsule")
+         m_shape = Shape3D::CAPSULE;
       else if (shapeStr == "PointCloud")
          m_shape = Shape3D::POINT_CLOUD;
    }
@@ -67,6 +69,18 @@ bool Physics3DComponent::Init(tinyxml2::XMLElement* pData)
       m_rigidBodyScale = glm::vec3(w, h, d);
    }
 
+   tinyxml2::XMLElement* pAngularFactor = pData->FirstChildElement("AngularFactor");
+   m_angularFactor = glm::vec3(1.0f, 1.0f, 1.0f);
+   if (pAngularFactor) {
+      double x = 0;
+      double y = 0;
+      double z = 0;
+      pAngularFactor->QueryDoubleAttribute("x", &x);
+      pAngularFactor->QueryDoubleAttribute("y", &y);
+      pAngularFactor->QueryDoubleAttribute("z", &z);
+      m_angularFactor = glm::vec3(x, y, z);
+   }
+
    return true;
 }
 
@@ -76,10 +90,13 @@ void Physics3DComponent::Activate()
 
    switch (m_shape) {
       case Shape3D::SPHERE:
-         m_gamePhysics->AddSphere((float)m_rigidBodyScale.x, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation(), m_density, m_material);
+         m_gamePhysics->AddSphere((float)m_rigidBodyScale.x, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation(), m_angularFactor, m_density, m_material);
          break;
       case Shape3D::BOX:
-         m_gamePhysics->AddBox(m_rigidBodyScale, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation(), m_density, m_material);
+         m_gamePhysics->AddBox(m_rigidBodyScale, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation(), m_angularFactor, m_density, m_material);
+         break;
+      case Shape3D::CAPSULE:
+         m_gamePhysics->AddCapsule(m_rigidBodyScale.x, m_rigidBodyScale.y, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation(), m_angularFactor, m_density, m_material);
          break;
       case Shape3D::POINT_CLOUD:
          Logger::WriteLog(Logger::LogType::ERROR, "Not supported yet!");
@@ -153,6 +170,12 @@ tinyxml2::XMLElement* Physics3DComponent::GenerateXml(tinyxml2::XMLDocument* pDo
    pScale->SetAttribute("h", std::to_string(m_rigidBodyScale.y).c_str());
    pScale->SetAttribute("d", std::to_string(m_rigidBodyScale.z).c_str());
    pBaseElement->LinkEndChild(pScale);
+
+   tinyxml2::XMLElement* pAngularFactorElement = pDoc->NewElement("AngularFactor");
+   pAngularFactorElement->SetAttribute("x", std::to_string(m_angularFactor.x).c_str());
+   pAngularFactorElement->SetAttribute("y", std::to_string(m_angularFactor.y).c_str());
+   pAngularFactorElement->SetAttribute("z", std::to_string(m_angularFactor.z).c_str());
+   pBaseElement->LinkEndChild(pAngularFactorElement);
 
    return pBaseElement;
 }

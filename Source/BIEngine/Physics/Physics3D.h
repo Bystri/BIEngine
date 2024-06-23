@@ -30,14 +30,16 @@ public:
    // Служебные функции
    virtual bool Initialize() = 0;
    virtual void SetGravity(const glm::vec3& gravity) = 0;
-   virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& pActorMap) = 0;
+   virtual void BeforeUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& pActorMap) = 0;
    virtual void OnUpdate(const GameTimer& gt) = 0;
+   virtual void AfterUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& pActorMap) = 0;
    virtual void DrawRenderDiagnostics() = 0;
 
    // Инициализация физических объектов
-   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) = 0;
-   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) = 0;
-   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddCapsule(const float radius, const float height, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
    virtual void RemoveActor(ActorId id) = 0;
 
    // Взаимодейтсвие с физическим миром

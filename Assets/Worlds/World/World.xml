@@ -421,38 +421,38 @@
         </Actor>
         <Actor name="AiCharacter1">
             <Components>
-                <BoxRenderComponent>
-                    <Material path="materials/container.bimat"/>
-                    <Size w="1.000000" h="1.000000" d="1.000000"/>
-                </BoxRenderComponent>
-                <ScriptComponent>
-                    <ScriptObject modulePath="CharacterMovement" className="CharacterMovement"/>
-                    <StringData/>
-                    <NumberData/>
-                    <ExternalScriptObj varName="movementProducer" modulePath="AiMovementProducer" className="AiMovementProducer"/>
-                </ScriptComponent>
-                <NavAgentComponent>
-                    <Common radius="0.5" height="1" maxSpeed="3.5" maxAcceleration="8"/>
-                    <Steering anticipateTurns="true"/>
-                    <Separation enable="true" separationWeight="5"/>
-                    <ObstacleAvoidance enable="true" collisionQueryRange="5"/>
-                    <PathOptimizations optimizeVis="true" pathOptimizationRange="15" optimizeTopo="true"/>
-                </NavAgentComponent>
-                <Physics3DComponent>
-                    <Shape>Box</Shape>
-                    <BodyType>Dynamic</BodyType>
-                    <Density>lead</Density>
-                    <PhysicsMaterial>Normal</PhysicsMaterial>
-                    <Scale w="1.000000" h="1.000000" d="1.000000"/>
-                </Physics3DComponent>
-                <TransformComponent>
-                    <Position x="-10.000000" y="6.000000" z="0.000000"/>
-                    <Size w="1.000000" h="1.000000" d="1.000000"/>
-                    <Rotation x="0.000000" y="0.000000" z="0.000000"/>
-                </TransformComponent>
+              <BoxRenderComponent>
+                <Material path="materials/container.bimat"/>
+                <Size w="1.000000" h="1.000000" d="1.000000"/>
+              </BoxRenderComponent>
+              <ScriptComponent>
+                <ScriptObject modulePath="CharacterMovement" className="CharacterMovement"/>
+                <StringData/>
+                <NumberData/>
+                <ExternalScriptObj varName="movementProducer" modulePath="AiMovementProducer" className="AiMovementProducer"/>
+              </ScriptComponent>
+              <NavAgentComponent>
+                <Common radius="0.5" height="1" maxSpeed="3.5" maxAcceleration="8"/>
+                <Steering anticipateTurns="true"/>
+                <Separation enable="true" separationWeight="5"/>
+                <ObstacleAvoidance enable="true" collisionQueryRange="5"/>
+                <PathOptimizations optimizeVis="true" pathOptimizationRange="15" optimizeTopo="true"/>
+              </NavAgentComponent>
+              <Physics3DComponent>
+                <Shape>Box</Shape>
+                <BodyType>Dynamic</BodyType>
+                <Density>lead</Density>
+                <PhysicsMaterial>Normal</PhysicsMaterial>
+                <Scale w="1.000000" h="1.000000" d="1.000000"/>
+              </Physics3DComponent>
+              <TransformComponent>
+                <Position x="-10.000000" y="6.000000" z="0.000000"/>
+                <Size w="1.000000" h="1.000000" d="1.000000"/>
+                <Rotation x="0.000000" y="0.000000" z="0.000000"/>
+              </TransformComponent>
             </Components>
             <Children/>
-        </Actor>
+          </Actor>
         <Actor name="PlayerCharacter">
 			<Components>
 				<AnimationComponent>
@@ -476,16 +476,26 @@
 					<ExternalScriptObj varName="movementProducer" modulePath="InputMovementProducer" className="InputMovementProducer"/>
 				</ScriptComponent>
 				<Physics3DComponent>
-					<Shape>Box</Shape>
+					<Shape>Capsule</Shape>
 					<BodyType>Dynamic</BodyType>
 					<Density>lead</Density>
 					<PhysicsMaterial>Normal</PhysicsMaterial>
-					<Scale w="3.000000" h="0.500000" d="4.000000"/>
+					<Scale w="0.500000" h="1.500000" d="0.000000"/>
+					<AngularFactor x="0" y="0" z="0"/>
 				</Physics3DComponent>
 				<TransformComponent>
 					<Position x="3.000000" y="6.000000" z="3.000000"/>
 					<Size w="1.000000" h="1.000000" d="1.000000"/>
 					<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+				</TransformComponent>
+			</Components>
+			<Children>
+			<Actor name="Model">
+			<Components>
+				<TransformComponent>
+					<Position x="0.000000" y="-1.250000" z="0.000000"/>
+					<Size w="1.000000" h="1.000000" d="1.000000"/>
+					<Rotation x="0.000000" y="90.000000" z="0.000000"/>
 				</TransformComponent>
 			</Components>
 			<Children>
@@ -1155,6 +1165,8 @@
 						</Actor>
 					</Children>
 				</Actor>
+			</Children>
+			</Actor>
 			</Children>
 		</Actor>
     </Actors>

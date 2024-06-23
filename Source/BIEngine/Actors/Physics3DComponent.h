@@ -36,6 +36,7 @@ protected:
    enum class Shape3D {
       BOX,
       SPHERE,
+      CAPSULE,
       POINT_CLOUD,
       NONE
    };
@@ -47,6 +48,7 @@ protected:
    std::string m_material;
 
    glm::vec3 m_rigidBodyScale;
+   glm::vec3 m_angularFactor;
 
    std::shared_ptr<IGamePhysics3D> m_gamePhysics;
 };

@@ -54,17 +54,22 @@ public:
    virtual bool Initialize() override { return true; }
 
    virtual void SetGravity(const glm::vec3& gravity) override {};
-   virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
+
+   virtual void BeforeUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
 
    virtual void OnUpdate(const GameTimer& gt) override {}
 
+   virtual void AfterUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
+
    virtual void DrawRenderDiagnostics() override {}
 
-   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override {}
 
-   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override {}
 
-   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddCapsule(const float radius, const float height, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override {}
+
+   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override {}
 
    virtual void RemoveActor(ActorId id) override {}
 
@@ -175,17 +180,17 @@ public:
    virtual bool Initialize() override;
    // Задает двумерный вектор гравитации.
    virtual void SetGravity(const glm::vec3& gravity) override;
-   // Сравнивает сохраненное местоположение актеров и то местоположение, которое хранится внутри физической симуляции.
-   // В случае различия, местоположение актера обновляется
-   virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override;
-   // Шаг симуляции
+
+   virtual void BeforeUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override;
    virtual void OnUpdate(const GameTimer& gt) override;
+   virtual void AfterUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override;
 
    virtual void DrawRenderDiagnostics() override;
 
-   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override;
-   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override;
-   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddCapsule(const float radius, const float height, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override;
    virtual void RemoveActor(ActorId id) override;
 
    // Добавляет триггер-объект с нулевой физикой в симуляцию
@@ -222,7 +227,7 @@ private:
    btRigidBody* FindBulletRigidBody(ActorId const id) const;
    ActorId FindActorID(const btRigidBody* const body) const;
 
-   void AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, btCollisionShape* pSHape, float mass, const std::string& physicsMaterial);
+   void AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, btCollisionShape* pSHape, float mass, const std::string& physicsMaterial);
 
    // Работа с коллизией объектов
    void RemoveCollisionObject(btCollisionObject* const pBodyToRemove);
@@ -343,7 +348,52 @@ void Physics3D::SetGravity(const glm::vec3& gravity)
    m_pDynamicsWorld->setGravity(Vec3_to_btVector3(gravity));
 }
 
-void Physics3D::SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap)
+void Physics3D::BeforeUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap)
+{
+   for (ActorIDToBulletRigidBodyMap::const_iterator it = m_actorIdToRigidBody.begin();
+        it != m_actorIdToRigidBody.end(); ++it) {
+      const ActorId id = it->first;
+
+      ActorMotionState* const actorMotionState = static_cast<ActorMotionState*>(it->second->getMotionState());
+      Assert(actorMotionState, "Rigid body doesn't nave motion state");
+
+      if (!actorMotionState) {
+         continue;
+      }
+
+      auto actorIt = actorMap.find(id);
+      Assert(actorIt != actorMap.end(), "Actor with id %d registered in physics system but doesn't exist", id);
+      if (actorIt == actorMap.end()) {
+         continue;
+      }
+
+      std::shared_ptr<Actor> pGameActor = actorIt->second;
+      if (pGameActor && actorMotionState) {
+         std::shared_ptr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+         if (pTransformComponent) {
+            glm::mat4 trans = glm::mat4(1.0f);
+            trans = glm::translate(trans, pTransformComponent->GetPosition());
+            glm::vec3 rotationAngles = pTransformComponent->GetRotation();
+            const glm::quat quat = glm::quat(glm::vec3(glm::radians(rotationAngles.x), glm::radians(rotationAngles.y), glm::radians(rotationAngles.z)));
+
+            trans *= glm::mat4_cast(quat);
+
+            actorMotionState->setWorldTransform(Mat4x4_to_btTransform(trans));
+            m_actorIdToRigidBody[pGameActor->GetId()]->setWorldTransform(Mat4x4_to_btTransform(trans));
+         }
+      }
+   }
+}
+
+void Physics3D::OnUpdate(const GameTimer& gt)
+{
+   // Bullet будет проводить симуляцию мира, которая должна была пройти за заданный промежуток времени, но будет делать количество проходов не больше чем MAX_PASSES
+   // То есть, если dt слишком большое, Bullet может остановиться раньше
+   const int MAX_PASSES = 4;
+   m_pDynamicsWorld->stepSimulation(gt.DeltaTime(), MAX_PASSES);
+}
+
+void Physics3D::AfterUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap)
 {
    for (ActorIDToBulletRigidBodyMap::const_iterator it = m_actorIdToRigidBody.begin();
         it != m_actorIdToRigidBody.end(); ++it) {
@@ -399,20 +449,12 @@ void Physics3D::SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>
    }
 }
 
-void Physics3D::OnUpdate(const GameTimer& gt)
-{
-   // Bullet будет проводить симуляцию мира, которая должна была пройти за заданный промежуток времени, но будет делать количество проходов не больше чем MAX_PASSES
-   // То есть, если dt слишком большое, Bullet может остановиться раньше
-   const int MAX_PASSES = 4;
-   m_pDynamicsWorld->stepSimulation(gt.DeltaTime(), MAX_PASSES);
-}
-
 void Physics3D::DrawRenderDiagnostics()
 {
    m_pDynamicsWorld->debugDrawWorld();
 }
 
-void Physics3D::AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, btCollisionShape* pShape, float mass, const std::string& physicsMaterial)
+void Physics3D::AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, btCollisionShape* pShape, float mass, const std::string& physicsMaterial)
 {
    Assert(m_actorIdToRigidBody.find(actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
@@ -442,6 +484,7 @@ void Physics3D::AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& po
    }
 
    btRigidBody* const body = new btRigidBody(rbInfo);
+   body->setAngularFactor(Vec3_to_btVector3(angularFactor));
 
    m_pDynamicsWorld->addRigidBody(body);
 
@@ -449,7 +492,7 @@ void Physics3D::AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& po
    m_rigidBodyToActorId[body] = actorId;
 }
 
-void Physics3D::AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics3D::AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial)
 {
    btSphereShape* const collisionShape = new btSphereShape(radius);
 
@@ -458,10 +501,10 @@ void Physics3D::AddSphere(float radius, BodyType bodyType, ActorId actorId, cons
    float const volume = (4.f / 3.f) * M_PI * radius * radius * radius;
    btScalar mass = volume * specificGravity;
 
-   AddShape(bodyType, actorId, pos, eulerAngles, collisionShape, mass, physicsMaterial);
+   AddShape(bodyType, actorId, pos, eulerAngles, angularFactor, collisionShape, mass, physicsMaterial);
 }
 
-void Physics3D::AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics3D::AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial)
 {
    glm::vec3 dimensionsHalfExtents = dimensions;
    dimensionsHalfExtents.x /= 2;
@@ -476,10 +519,22 @@ void Physics3D::AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId a
    float const volume = dimensions.x * dimensions.y * dimensions.z;
    btScalar mass = volume * specificGravity;
 
-   AddShape(bodyType, actorId, pos, eulerAngles, boxShape, mass, physicsMaterial);
+   AddShape(bodyType, actorId, pos, eulerAngles, angularFactor, boxShape, mass, physicsMaterial);
 }
 
-void Physics3D::AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics3D::AddCapsule(const float radius, const float height, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial)
+{
+   btCapsuleShape* const collisionShape = new btCapsuleShape(radius, height);
+
+   // calculate absolute mass from specificGravity
+   const float specificGravity = LookupSpecificGravity(densityStr);
+   const float volume = ((4.0f / 3.0f) * radius + height) * M_PI * radius * radius;
+   const btScalar mass = volume * specificGravity;
+
+   AddShape(bodyType, actorId, pos, eulerAngles, angularFactor, collisionShape, mass, physicsMaterial);
+}
+
+void Physics3D::AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial)
 {
    btConvexHullShape* const shape = new btConvexHullShape();
 
@@ -495,7 +550,7 @@ void Physics3D::AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bo
    float const volume = aabbExtents.x() * aabbExtents.y() * aabbExtents.z();
    btScalar const mass = volume * specificGravity;
 
-   AddShape(bodyType, actorId, pos, eulerAngles, shape, mass, physicsMaterial);
+   AddShape(bodyType, actorId, pos, eulerAngles, angularFactor, shape, mass, physicsMaterial);
 }
 
 void Physics3D::CreateTrigger(ActorId actorId, const glm::vec3& pos, const glm::vec3& dim)
