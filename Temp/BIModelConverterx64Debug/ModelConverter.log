@@ -1,0 +1,7 @@
+﻿  main.cpp
+D:\BystrovI\Projects\BIEngine\Source\Tools\ModelConverter\main.cpp(42,38): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\ModelConverter\main.cpp(81,22): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\ModelConverter\main.cpp(90,25): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\ModelConverter\main.cpp(162,22): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\ModelConverter\main.cpp(408,14): warning C4101: 'translation': unreferenced local variable
+  ModelConverter.vcxproj -> D:\BystrovI\Projects\BIEngine\Tools\BIModelConverterx64Debug\BIModelConverter.exe

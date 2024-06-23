@@ -1,0 +1,11 @@
+﻿  main.cpp
+D:\BystrovI\Projects\BIEngine\Source\Tools\BIModelConverter\main.cpp(58,22): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\BIModelConverter\main.cpp(67,25): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\BIModelConverter\main.cpp(80,25): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\BIModelConverter\main.cpp(94,25): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\BIModelConverter\main.cpp(112,22): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\BIModelConverter\main.cpp(119,22): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\BIModelConverter\main.cpp(187,22): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\BIModelConverter\main.cpp(196,25): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\BIModelConverter\main.cpp(268,22): warning C4018: '<': signed/unsigned mismatch
+  BIModelConverter.vcxproj -> D:\BystrovI\Projects\BIEngine\Tools\BIModelConverterx64Debug\BIModelConverter.exe

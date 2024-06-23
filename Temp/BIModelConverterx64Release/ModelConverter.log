@@ -1,0 +1,15 @@
+﻿  tinyxml2.cpp
+  Assert.cpp
+  Logger.cpp
+  main.cpp
+D:\BystrovI\Projects\BIEngine\Source\Tools\ModelConverter\main.cpp(42,38): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\ModelConverter\main.cpp(81,22): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\ModelConverter\main.cpp(90,25): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\ModelConverter\main.cpp(162,22): warning C4018: '<': signed/unsigned mismatch
+D:\BystrovI\Projects\BIEngine\Source\Tools\ModelConverter\main.cpp(408,14): warning C4101: 'translation': unreferenced local variable
+  Generating code
+  657 of 657 functions (100.0%) were compiled.
+    647 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  ModelConverter.vcxproj -> D:\BystrovI\Projects\BIEngine\Tools\BIModelConverterx64Release\BIModelConverter.exe

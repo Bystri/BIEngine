@@ -21,6 +21,11 @@ class MoveProcess(BIEProcess.Process):
         self.desiredVelocity = BIEVector.Vec3(0.0, 0.0, 0.0)
         self.turnSmoothVelocity = 0.0
         
+        # Euler angles are stored as Quat in a transformComponent; A single rotation can have multiple representations in eulerAngles 
+        # This way we can get different angles using self.transformComponent.GetRotation()
+        # Here we storage for last euler angles for gradual increasing in the future
+        self.currentEulerAngles = self.transformComponent.GetRotation()
+        
         movementProducer.Init(movableActor)
         self.movementProducer = movementProducer
         
@@ -32,8 +37,16 @@ class MoveProcess(BIEProcess.Process):
 
         if inputVec.Length() > 0.001:
             targetAngle = math.degrees(math.atan2(-inputVec.z, inputVec.x))
-            angle, self.turnSmoothVelocity = BIEMath.SmoothDamp(self.transformComponent.GetRotation().y, targetAngle, self.turnSmoothVelocity, self.turnSmoothTime, dt, self.maxAngularSpeed)
-            self.transformComponent.SetRotation(BIEVector.Vec3(0.0, angle, 0.0))
+            
+            if abs(targetAngle - self.currentEulerAngles.y) > abs(targetAngle + 360.0 - self.currentEulerAngles.y):
+                targetAngle += 360.0
+                
+            if abs(targetAngle - self.currentEulerAngles.y) > abs(targetAngle - 360.0 - self.currentEulerAngles.y):
+                targetAngle -= 360.0
+            
+            angle, self.turnSmoothVelocity = BIEMath.SmoothDamp(self.currentEulerAngles.y, targetAngle, self.turnSmoothVelocity, self.turnSmoothTime, dt, self.maxAngularSpeed)
+            self.currentEulerAngles.y = angle
+            self.transformComponent.SetRotation(self.currentEulerAngles)
         else:
             self.turnSmoothVelocity = 0.0
             
