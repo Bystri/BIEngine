@@ -421,10 +421,15 @@
         </Actor>
         <Actor name="AiCharacter1">
             <Components>
-              <BoxRenderComponent>
-                <Material path="materials/container.bimat"/>
-                <Size w="1.000000" h="1.000000" d="1.000000"/>
-              </BoxRenderComponent>
+			  <AnimationComponent>
+					<Animation name="idle" path="Animations/dungeon_character/skeleton_minion/Idle.bi3dam"/>
+					<Animation name="run" path="Animations/dungeon_character/skeleton_minion/Running_A.bi3dam"/>
+			  </AnimationComponent>
+			  <ScriptComponent>
+					<ScriptObject modulePath="AnimationControllerComponent" className="AnimationControllerComponent"/>
+					<StringData/>
+					<NumberData/>
+				</ScriptComponent>
               <ScriptComponent>
                 <ScriptObject modulePath="CharacterMovement" className="CharacterMovement"/>
                 <StringData/>
@@ -439,11 +444,12 @@
                 <PathOptimizations optimizeVis="true" pathOptimizationRange="15" optimizeTopo="true"/>
               </NavAgentComponent>
               <Physics3DComponent>
-                <Shape>Box</Shape>
-                <BodyType>Dynamic</BodyType>
-                <Density>lead</Density>
-                <PhysicsMaterial>Normal</PhysicsMaterial>
-                <Scale w="1.000000" h="1.000000" d="1.000000"/>
+                <Shape>Capsule</Shape>
+				<BodyType>Dynamic</BodyType>
+				<Density>lead</Density>
+				<PhysicsMaterial>Normal</PhysicsMaterial>
+				<Scale w="0.500000" h="1.500000" d="0.000000"/>
+				<AngularFactor x="0" y="0" z="0"/>
               </Physics3DComponent>
               <TransformComponent>
                 <Position x="-10.000000" y="6.000000" z="0.000000"/>
@@ -451,7 +457,629 @@
                 <Rotation x="0.000000" y="0.000000" z="0.000000"/>
               </TransformComponent>
             </Components>
-            <Children/>
+            <Children>
+			<Actor name="Model">
+				<Components>
+				<TransformComponent>
+					<Position x="0.000000" y="-1.250000" z="0.000000"/>
+					<Size w="1.000000" h="1.000000" d="1.000000"/>
+					<Rotation x="0.000000" y="90.000000" z="0.000000"/>
+				</TransformComponent>
+				</Components>
+				<Children>
+					<Actor name="Skeleton_Minion_ArmLeft">
+						<Components>
+							<TransformComponent>
+								<Position x="0.000000" y="0.000000" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+							</TransformComponent>
+							<SkinnedMeshComponent>
+								<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_ArmLeft.biskmesh"/>
+								<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+								<Skelet relPath="../root"/>
+							</SkinnedMeshComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="Skeleton_Minion_ArmRight">
+						<Components>
+							<TransformComponent>
+								<Position x="0.000000" y="0.000000" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+							</TransformComponent>
+							<SkinnedMeshComponent>
+								<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_ArmRight.biskmesh"/>
+								<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+								<Skelet relPath="../root"/>
+							</SkinnedMeshComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="Skeleton_Minion_Body">
+						<Components>
+							<TransformComponent>
+								<Position x="0.000000" y="0.000000" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+							</TransformComponent>
+							<SkinnedMeshComponent>
+								<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_Body.biskmesh"/>
+								<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+								<Skelet relPath="../root"/>
+							</SkinnedMeshComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="Skeleton_Minion_Cloak">
+						<Components>
+							<TransformComponent>
+								<Position x="0.000000" y="0.000000" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+							</TransformComponent>
+							<SkinnedMeshComponent>
+								<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_Cloak.biskmesh"/>
+								<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+								<Skelet relPath="../root"/>
+							</SkinnedMeshComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="Skeleton_Minion_Eyes">
+						<Components>
+							<TransformComponent>
+								<Position x="0.000000" y="0.000000" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+							</TransformComponent>
+							<SkinnedMeshComponent>
+								<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_Eyes.biskmesh"/>
+								<Material path="Models/dungeon_characters/skeleton_minion/Glow.bimat"/>
+								<Skelet relPath="../root"/>
+							</SkinnedMeshComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="Skeleton_Minion_Head">
+						<Components>
+							<TransformComponent>
+								<Position x="0.000000" y="0.000000" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+							</TransformComponent>
+							<SkinnedMeshComponent>
+								<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_Head.biskmesh"/>
+								<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+								<Skelet relPath="../root"/>
+							</SkinnedMeshComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="Skeleton_Minion_Jaw">
+						<Components>
+							<TransformComponent>
+								<Position x="0.000000" y="0.000000" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+							</TransformComponent>
+							<SkinnedMeshComponent>
+								<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_Jaw.biskmesh"/>
+								<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+								<Skelet relPath="../root"/>
+							</SkinnedMeshComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="Skeleton_Minion_LegLeft">
+						<Components>
+							<TransformComponent>
+								<Position x="0.000000" y="0.000000" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+							</TransformComponent>
+							<SkinnedMeshComponent>
+								<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_LegLeft.biskmesh"/>
+								<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+								<Skelet relPath="../root"/>
+							</SkinnedMeshComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="Skeleton_Minion_LegRight">
+						<Components>
+							<TransformComponent>
+								<Position x="0.000000" y="0.000000" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+							</TransformComponent>
+							<SkinnedMeshComponent>
+								<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_LegRight.biskmesh"/>
+								<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+								<Skelet relPath="../root"/>
+							</SkinnedMeshComponent>
+						</Components>
+						<Children/>
+					</Actor>
+					<Actor name="root">
+						<Components>
+							<TransformComponent>
+								<Position x="0.000000" y="0.000000" z="0.000000"/>
+								<Size w="1.000000" h="1.000000" d="1.000000"/>
+								<Rotation x="0.000000" y="0.000014" z="0.000000"/>
+							</TransformComponent>
+							<SkeletonComponent/>
+						</Components>
+						<Children>
+							<Actor name="hips">
+								<Components>
+									<TransformComponent>
+										<Position x="0.000000" y="0.405663" z="0.000000"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="0.000000" y="-0.000014" z="0.000000"/>
+									</TransformComponent>
+									<BoneComponent/>
+								</Components>
+								<Children>
+									<Actor name="spine">
+										<Components>
+											<TransformComponent>
+												<Position x="0.000000" y="0.191978" z="0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000000"/>
+												<Rotation x="0.000000" y="0.000000" z="0.000000"/>
+											</TransformComponent>
+											<BoneComponent/>
+										</Components>
+										<Children>
+											<Actor name="chest">
+												<Components>
+													<TransformComponent>
+														<Position x="0.000000" y="0.374988" z="0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+													</TransformComponent>
+													<BoneComponent/>
+												</Components>
+												<Children>
+													<Actor name="upperarm.l">
+														<Components>
+															<TransformComponent>
+																<Position x="0.212007" y="0.134132" z="0.000000"/>
+																<Size w="0.999999" h="0.999999" d="1.000000"/>
+																<Rotation x="-89.999550" y="-86.716095" z="-0.000417"/>
+															</TransformComponent>
+															<BoneComponent/>
+														</Components>
+														<Children>
+															<Actor name="lowerarm.l">
+																<Components>
+																	<TransformComponent>
+																		<Position x="-0.000000" y="0.241897" z="-0.000000"/>
+																		<Size w="1.000000" h="1.000000" d="1.000000"/>
+																		<Rotation x="0.000001" y="-0.000007" z="-6.338487"/>
+																	</TransformComponent>
+																	<BoneComponent/>
+																</Components>
+																<Children>
+																	<Actor name="wrist.l">
+																		<Components>
+																			<TransformComponent>
+																				<Position x="0.000000" y="0.260044" z="-0.000000"/>
+																				<Size w="1.000000" h="1.000000" d="1.000000"/>
+																				<Rotation x="-0.000000" y="-0.000000" z="3.055156"/>
+																			</TransformComponent>
+																			<BoneComponent/>
+																		</Components>
+																		<Children>
+																			<Actor name="hand.l">
+																				<Components>
+																					<TransformComponent>
+																						<Position x="0.000000" y="0.073826" z="0.000000"/>
+																						<Size w="1.000000" h="1.000000" d="1.000000"/>
+																						<Rotation x="0.000000" y="0.000015" z="-0.000625"/>
+																					</TransformComponent>
+																					<BoneComponent/>
+																				</Components>
+																				<Children>
+																					<Actor name="handslot.l">
+																						<Components>
+																							<TransformComponent>
+																								<Position x="0.000000" y="0.096125" z="-0.057500"/>
+																								<Size w="1.000000" h="1.000000" d="1.000000"/>
+																								<Rotation x="-0.000000" y="0.000000" z="-90.000008"/>
+																							</TransformComponent>
+																							<BoneComponent/>
+																						</Components>
+																						<Children/>
+																					</Actor>
+																				</Children>
+																			</Actor>
+																		</Children>
+																	</Actor>
+																</Children>
+															</Actor>
+														</Children>
+													</Actor>
+													<Actor name="upperarm.r">
+														<Components>
+															<TransformComponent>
+																<Position x="-0.212007" y="0.134132" z="0.000000"/>
+																<Size w="0.999999" h="0.999999" d="1.000000"/>
+																<Rotation x="-89.999466" y="86.716164" z="0.000507"/>
+															</TransformComponent>
+															<BoneComponent/>
+														</Components>
+														<Children>
+															<Actor name="lowerarm.r">
+																<Components>
+																	<TransformComponent>
+																		<Position x="-0.000000" y="0.241897" z="-0.000000"/>
+																		<Size w="1.000000" h="1.000000" d="1.000000"/>
+																		<Rotation x="0.000001" y="0.000007" z="6.338487"/>
+																	</TransformComponent>
+																	<BoneComponent/>
+																</Components>
+																<Children>
+																	<Actor name="wrist.r">
+																		<Components>
+																			<TransformComponent>
+																				<Position x="-0.000000" y="0.260044" z="-0.000000"/>
+																				<Size w="1.000000" h="1.000000" d="1.000000"/>
+																				<Rotation x="-0.000000" y="0.000000" z="-3.055156"/>
+																			</TransformComponent>
+																			<BoneComponent/>
+																		</Components>
+																		<Children>
+																			<Actor name="hand.r">
+																				<Components>
+																					<TransformComponent>
+																						<Position x="0.000000" y="0.073826" z="0.000000"/>
+																						<Size w="1.000000" h="1.000000" d="1.000000"/>
+																						<Rotation x="0.000000" y="-0.000010" z="0.000625"/>
+																					</TransformComponent>
+																					<BoneComponent/>
+																				</Components>
+																				<Children>
+																					<Actor name="handslot.r">
+																						<Components>
+																							<TransformComponent>
+																								<Position x="-0.000000" y="0.096125" z="-0.057500"/>
+																								<Size w="1.000000" h="1.000000" d="1.000000"/>
+																								<Rotation x="-0.000000" y="-0.000000" z="90.000008"/>
+																							</TransformComponent>
+																							<BoneComponent/>
+																						</Components>
+																						<Children/>
+																					</Actor>
+																				</Children>
+																			</Actor>
+																		</Children>
+																	</Actor>
+																</Children>
+															</Actor>
+														</Children>
+													</Actor>
+													<Actor name="head">
+														<Components>
+															<TransformComponent>
+																<Position x="0.000000" y="0.268797" z="0.000000"/>
+																<Size w="1.000000" h="1.000000" d="1.000000"/>
+																<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+															</TransformComponent>
+															<BoneComponent/>
+														</Components>
+														<Children/>
+													</Actor>
+												</Children>
+											</Actor>
+										</Children>
+									</Actor>
+									<Actor name="upperleg.l">
+										<Components>
+											<TransformComponent>
+												<Position x="0.170945" y="0.113587" z="0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000001"/>
+												<Rotation x="178.009079" y="0.000001" z="-0.000008"/>
+											</TransformComponent>
+											<BoneComponent/>
+										</Components>
+										<Children>
+											<Actor name="lowerleg.l">
+												<Components>
+													<TransformComponent>
+														<Position x="0.000000" y="0.227077" z="-0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="12.195514" y="0.000009" z="-0.000008"/>
+													</TransformComponent>
+													<BoneComponent/>
+												</Components>
+												<Children>
+													<Actor name="foot.l">
+														<Components>
+															<TransformComponent>
+																<Position x="0.000000" y="0.149437" z="0.000000"/>
+																<Size w="1.000000" h="1.000001" d="0.999999"/>
+																<Rotation x="-54.160633" y="-0.000000" z="-0.000004"/>
+															</TransformComponent>
+															<BoneComponent/>
+														</Components>
+														<Children>
+															<Actor name="toes.l">
+																<Components>
+																	<TransformComponent>
+																		<Position x="-0.000000" y="0.165650" z="0.000000"/>
+																		<Size w="1.000000" h="0.999997" d="1.000004"/>
+																		<Rotation x="-133.956055" y="0.000008" z="180.000000"/>
+																	</TransformComponent>
+																	<BoneComponent/>
+																</Components>
+																<Children/>
+															</Actor>
+														</Children>
+													</Actor>
+												</Children>
+											</Actor>
+										</Children>
+									</Actor>
+									<Actor name="upperleg.r">
+										<Components>
+											<TransformComponent>
+												<Position x="-0.170945" y="0.113587" z="0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000001"/>
+												<Rotation x="178.009079" y="0.000004" z="0.000008"/>
+											</TransformComponent>
+											<BoneComponent/>
+										</Components>
+										<Children>
+											<Actor name="lowerleg.r">
+												<Components>
+													<TransformComponent>
+														<Position x="-0.000000" y="0.227077" z="-0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="12.195514" y="-0.000009" z="0.000008"/>
+													</TransformComponent>
+													<BoneComponent/>
+												</Components>
+												<Children>
+													<Actor name="foot.r">
+														<Components>
+															<TransformComponent>
+																<Position x="-0.000000" y="0.149437" z="0.000000"/>
+																<Size w="1.000000" h="1.000001" d="0.999999"/>
+																<Rotation x="-54.160633" y="0.000017" z="-0.000008"/>
+															</TransformComponent>
+															<BoneComponent/>
+														</Components>
+														<Children>
+															<Actor name="toes.r">
+																<Components>
+																	<TransformComponent>
+																		<Position x="0.000000" y="0.165650" z="0.000000"/>
+																		<Size w="1.000000" h="0.999997" d="1.000004"/>
+																		<Rotation x="-133.956055" y="0.000008" z="-180.000000"/>
+																	</TransformComponent>
+																	<BoneComponent/>
+																</Components>
+																<Children/>
+															</Actor>
+														</Children>
+													</Actor>
+												</Children>
+											</Actor>
+										</Children>
+									</Actor>
+								</Children>
+							</Actor>
+							<Actor name="kneeIK.l">
+								<Components>
+									<TransformComponent>
+										<Position x="0.170945" y="0.292310" z="0.575812"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="90.000008" y="-0.000015" z="-0.000022"/>
+									</TransformComponent>
+									<BoneComponent/>
+								</Components>
+								<Children/>
+							</Actor>
+							<Actor name="control-toe-roll.l">
+								<Components>
+									<TransformComponent>
+										<Position x="0.170945" y="0.025990" z="0.245789"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="-90.000008" y="-0.000011" z="0.000000"/>
+									</TransformComponent>
+									<BoneComponent/>
+								</Components>
+								<Children>
+									<Actor name="control-heel-roll.l">
+										<Components>
+											<TransformComponent>
+												<Position x="0.000000" y="0.362833" z="-0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000000"/>
+												<Rotation x="-0.000000" y="-0.000000" z="-180.000000"/>
+											</TransformComponent>
+											<BoneComponent/>
+										</Components>
+										<Children>
+											<Actor name="control-foot-roll.l">
+												<Components>
+													<TransformComponent>
+														<Position x="-0.000000" y="0.213436" z="-0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="46.043972" y="0.000010" z="-180.000000"/>
+													</TransformComponent>
+													<BoneComponent/>
+												</Components>
+												<Children>
+													<Actor name="heelIK.l">
+														<Components>
+															<TransformComponent>
+																<Position x="0.000000" y="0.165650" z="-0.000000"/>
+																<Size w="1.000000" h="1.000000" d="1.000000"/>
+																<Rotation x="-46.043972" y="-0.000010" z="-0.000004"/>
+															</TransformComponent>
+															<BoneComponent/>
+														</Components>
+														<Children/>
+													</Actor>
+													<Actor name="IK-foot.l">
+														<Components>
+															<TransformComponent>
+																<Position x="0.000000" y="0.165650" z="-0.000000"/>
+																<Size w="1.000000" h="1.000000" d="1.000000"/>
+																<Rotation x="-180.000000" y="-0.000022" z="-0.000000"/>
+															</TransformComponent>
+															<BoneComponent/>
+														</Components>
+														<Children/>
+													</Actor>
+												</Children>
+											</Actor>
+											<Actor name="IK-toe.l">
+												<Components>
+													<TransformComponent>
+														<Position x="-0.000000" y="-0.000000" z="-0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="0.000000" y="-0.000000" z="-0.000002"/>
+													</TransformComponent>
+													<BoneComponent/>
+												</Components>
+												<Children/>
+											</Actor>
+										</Children>
+									</Actor>
+								</Children>
+							</Actor>
+							<Actor name="kneeIK.r">
+								<Components>
+									<TransformComponent>
+										<Position x="-0.170945" y="0.292310" z="0.575812"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="90.000008" y="-0.000015" z="0.000009"/>
+									</TransformComponent>
+									<BoneComponent/>
+								</Components>
+								<Children/>
+							</Actor>
+							<Actor name="control-toe-roll.r">
+								<Components>
+									<TransformComponent>
+										<Position x="-0.170945" y="0.025990" z="0.245789"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="-90.000008" y="-0.000011" z="0.000000"/>
+									</TransformComponent>
+									<BoneComponent/>
+								</Components>
+								<Children>
+									<Actor name="control-heel-roll.r">
+										<Components>
+											<TransformComponent>
+												<Position x="0.000000" y="0.362833" z="0.000000"/>
+												<Size w="1.000000" h="1.000000" d="1.000000"/>
+												<Rotation x="-0.000000" y="-0.000000" z="-180.000000"/>
+											</TransformComponent>
+											<BoneComponent/>
+										</Components>
+										<Children>
+											<Actor name="control-foot-roll.r">
+												<Components>
+													<TransformComponent>
+														<Position x="0.000000" y="0.213436" z="0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="46.043972" y="0.000010" z="-180.000000"/>
+													</TransformComponent>
+													<BoneComponent/>
+												</Components>
+												<Children>
+													<Actor name="heelIK.r">
+														<Components>
+															<TransformComponent>
+																<Position x="-0.000000" y="0.165650" z="0.000000"/>
+																<Size w="1.000000" h="1.000000" d="1.000000"/>
+																<Rotation x="-46.043972" y="-0.000010" z="-0.000004"/>
+															</TransformComponent>
+															<BoneComponent/>
+														</Components>
+														<Children/>
+													</Actor>
+													<Actor name="IK-foot.r">
+														<Components>
+															<TransformComponent>
+																<Position x="-0.000000" y="0.165650" z="0.000000"/>
+																<Size w="1.000000" h="1.000000" d="1.000000"/>
+																<Rotation x="180.000000" y="-0.000022" z="0.000000"/>
+															</TransformComponent>
+															<BoneComponent/>
+														</Components>
+														<Children/>
+													</Actor>
+												</Children>
+											</Actor>
+											<Actor name="IK-toe.r">
+												<Components>
+													<TransformComponent>
+														<Position x="-0.000000" y="0.000000" z="-0.000000"/>
+														<Size w="1.000000" h="1.000000" d="1.000000"/>
+														<Rotation x="0.000000" y="-0.000000" z="-0.000002"/>
+													</TransformComponent>
+													<BoneComponent/>
+												</Components>
+												<Children/>
+											</Actor>
+										</Children>
+									</Actor>
+								</Children>
+							</Actor>
+							<Actor name="elbowIK.l">
+								<Components>
+									<TransformComponent>
+										<Position x="0.453507" y="1.106761" z="-0.588859"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="-90.000008" y="-0.000012" z="0.000000"/>
+									</TransformComponent>
+									<BoneComponent/>
+								</Components>
+								<Children/>
+							</Actor>
+							<Actor name="handIK.l">
+								<Components>
+									<TransformComponent>
+										<Position x="0.713181" y="1.106761" z="0.000000"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="90.000000" y="-90.000000" z="180.000000"/>
+									</TransformComponent>
+									<BoneComponent/>
+								</Components>
+								<Children/>
+							</Actor>
+							<Actor name="elbowIK.r">
+								<Components>
+									<TransformComponent>
+										<Position x="-0.453507" y="1.106761" z="-0.588860"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="-90.000008" y="-0.000012" z="0.000000"/>
+									</TransformComponent>
+									<BoneComponent/>
+								</Components>
+								<Children/>
+							</Actor>
+							<Actor name="handIK.r">
+								<Components>
+									<TransformComponent>
+										<Position x="-0.713182" y="1.106761" z="-0.000000"/>
+										<Size w="1.000000" h="1.000000" d="1.000000"/>
+										<Rotation x="-90.000008" y="90.000000" z="0.000000"/>
+									</TransformComponent>
+									<BoneComponent/>
+								</Components>
+								<Children/>
+							</Actor>
+						</Children>
+					</Actor>
+				</Children>
+			</Actor>
+			</Children>
           </Actor>
         <Actor name="PlayerCharacter">
 			<Components>

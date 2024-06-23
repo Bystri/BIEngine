@@ -1,0 +1,4 @@
+<Texture>
+    <ImgData path="Models/dungeon_characters/skeleton_minion/skeleton_texture.png"/>
+    <CreationParams wrapS="Repeat" wrapT="Repeat" filterMin="Linear" filterMax="Linear"/>
+</Texture>

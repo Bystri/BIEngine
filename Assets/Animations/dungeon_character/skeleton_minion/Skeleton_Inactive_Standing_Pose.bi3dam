@@ -1,0 +1,456 @@
+<Animation>
+    <Params duration="0" tickPerSecond="1000"/>
+    <BoneChannels>
+        <BoneChannel boneName="root">
+            <Positions>
+                <Position x="0" y="0" z="-0.5" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="1" x="0" y="1.1920928e-07" z="0" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="hips">
+            <Positions>
+                <Position x="4.9782041e-09" y="0.26501498" z="-0.020880103" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="1" x="0" y="-1.1920928e-07" z="0" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="upperarm.l">
+            <Positions>
+                <Position x="0.20005943" y="0.067989588" z="0.034628782" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.037926726" x="-0.67296344" y="-0.22294059" z="-0.70425802" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="0.9999994" y="0.99999887" z="0.99999988" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="spine">
+            <Positions>
+                <Position x="0" y="0.1919775" z="0" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.99518216" x="-0.097741738" y="0.00075124676" z="-0.0076489984" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999994" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="lowerarm.l">
+            <Positions>
+                <Position x="-5.2998804e-08" y="0.24189742" z="5.9408315e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.95350385" x="-7.3111073e-09" y="-6.7475931e-08" z="-0.30138087" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="chest">
+            <Positions>
+                <Position x="2.3283064e-09" y="0.3749879" z="2.9802322e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.93127239" x="0.3252494" y="0.052465547" z="0.15553777" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="wrist.l">
+            <Positions>
+                <Position x="7.1300019e-09" y="0.26004386" z="-1.5019519e-10" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.99964464" x="7.3505548e-09" y="-9.9822289e-11" z="0.026658099" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="0.99999994" y="0.99999994" z="0.99999994" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="hand.l">
+            <Positions>
+                <Position x="-1.2212453e-15" y="0.073825806" z="5.9604645e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.88961083" x="-0.054202016" y="-0.42175812" z="0.16665785" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999994" z="0.99999994" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="handslot.l">
+            <Positions>
+                <Position x="-6.6157479e-09" y="0.096125141" z="-0.057500064" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.8870365" x="-0.023957886" y="0.017617609" z="-0.46074063" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="0.99999994" y="0.99999994" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="upperarm.r">
+            <Positions>
+                <Position x="-0.22395527" y="0.067989558" z="0.034628779" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.36614752" x="-0.83961779" y="0.22415234" z="0.3327668" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="0.99999952" y="0.99999881" z="0.99999982" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="lowerarm.r">
+            <Positions>
+                <Position x="1.2046615e-07" y="0.24189736" z="5.9408304e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.66205311" x="-2.129956e-07" y="6.8910865e-08" z="0.74945694" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="wrist.r">
+            <Positions>
+                <Position x="-3.9532391e-09" y="0.26004392" z="5.945445e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.99964464" x="-7.9425462e-09" y="-1.4398807e-08" z="-0.026658088" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="0.99999994" y="0.99999994" z="0.99999994" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="hand.r">
+            <Positions>
+                <Position x="2.9802322e-08" y="0.073825896" z="2.2204463e-16" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.8005355" x="-0.18486153" y="0.43848258" z="-0.36428306" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999994" z="0.99999994" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="handslot.r">
+            <Positions>
+                <Position x="-4.5538322e-08" y="0.096125156" z="-0.057500005" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.88098067" x="0.10999656" y="-0.20396163" z="0.41252089" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1.0000001" z="1.0000001" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="head">
+            <Positions>
+                <Position x="-2.9802322e-08" y="0.26879656" z="0" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.97550011" x="0.19427453" y="0.088682935" z="0.052842189" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1.0000001" y="1.0000001" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="upperleg.l">
+            <Positions>
+                <Position x="0.17094506" y="0.11358723" z="1.4958685e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.31140974" x="0.9469316" y="0.077807546" z="0.017044194" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="0.99999994" y="0.99999988" z="1.0000011" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="lowerleg.l">
+            <Positions>
+                <Position x="3.5798271e-09" y="0.22707753" z="3.2926899e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.60601455" x="0.79545361" y="3.7566664e-08" z="-5.6344061e-07" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1.0000005" z="1.0000001" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="foot.l">
+            <Positions>
+                <Position x="1.5084384e-08" y="0.14943707" z="5.6838001e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.55422664" x="-0.80797762" y="-0.16304694" z="0.11584787" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1.0000008" z="0.99999875" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="toes.l">
+            <Positions>
+                <Position x="5.9391578e-08" y="0.16565004" z="6.2826068e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="2.7301761e-05" x="-0.00012224964" y="0.92014301" z="-0.39158252" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.9999966" z="1.0000037" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="upperleg.r">
+            <Positions>
+                <Position x="-0.17094506" y="0.11358723" z="1.4958685e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.43252906" x="0.89235502" y="-0.10677028" z="-0.072258197" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999982" z="1.0000012" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="lowerleg.r">
+            <Positions>
+                <Position x="-3.5798391e-09" y="0.22707754" z="9.7482172e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.64544755" x="0.76380461" y="-4.0066109e-08" z="5.3684181e-07" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1.0000005" z="1.0000001" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="foot.r">
+            <Positions>
+                <Position x="2.9619102e-08" y="0.149437" z="5.9688134e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.69169968" x="-0.67524838" y="0.21921228" z="-0.13242814" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1.0000008" z="0.99999875" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="toes.r">
+            <Positions>
+                <Position x="-2.9589259e-08" y="0.16565005" z="2.0302261e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="5.0464576e-05" x="-0.00022403467" y="-0.92003888" z="0.39182702" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.9999966" z="1.0000037" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="kneeIK.l">
+            <Positions>
+                <Position x="0.20272517" y="0.2923103" z="1.0758125" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.70710683" x="0.70710683" y="-2.2930233e-07" z="-4.6055185e-08" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999988" z="0.99999988" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="control-toe-roll.l">
+            <Positions>
+                <Position x="0.17094497" y="0.025990263" z="0.24578938" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.70710683" x="-0.70710683" y="-7.05285e-08" z="-7.0528486e-08" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1.0000001" z="1.0000001" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="control-heel-roll.l">
+            <Positions>
+                <Position x="1.945811e-08" y="0.36283267" z="-2.4286129e-15" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.19282077" x="-3.1355277e-15" y="2.1239931e-15" z="-0.98123401" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="control-foot-roll.l">
+            <Positions>
+                <Position x="3.3555267e-08" y="0.21343614" z="5.0188396e-15" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="3.1058597e-08" x="9.3326022e-08" y="-0.39108434" z="-0.92035484" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999994" z="0.99999988" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="heelIK.l">
+            <Positions>
+                <Position x="3.8392205e-08" y="0.16565004" z="-5.0913602e-09" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.92035484" x="-0.39108434" y="-6.8849999e-08" z="-6.5628775e-08" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999994" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="IK-foot.l">
+            <Positions>
+                <Position x="8.5898701e-09" y="0.16565004" z="2.4710955e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="1.4901163e-08" x="-1" y="5.2039297e-09" z="-2.0432401e-07" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1" z="0.99999994" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="IK-toe.l">
+            <Positions>
+                <Position x="2.5245374e-08" y="-7.9503037e-10" z="-1.8626451e-09" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="1" x="2.3114773e-22" y="-6.7409992e-17" z="-1.9466935e-08" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999994" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="kneeIK.r">
+            <Positions>
+                <Position x="-0.17094518" y="0.29231027" z="0.57581234" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.70710683" x="0.70710683" y="-3.8238493e-08" z="1.4500867e-07" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999988" z="0.99999988" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="control-toe-roll.r">
+            <Positions>
+                <Position x="-0.17094509" y="0.025990263" z="0.24578929" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.70710683" x="-0.70710683" y="-7.0528507e-08" z="-7.05285e-08" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1.0000001" z="1.0000001" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="control-heel-roll.r">
+            <Positions>
+                <Position x="-0.018567514" y="0.28817689" z="1.8626478e-09" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.20725907" x="1.1075e-14" y="5.9898803e-16" z="0.97828615" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="control-foot-roll.r">
+            <Positions>
+                <Position x="-2.6049381e-08" y="0.21343613" z="1.0726934e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="3.8857902e-08" x="9.5297686e-08" y="-0.39108434" z="-0.92035484" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999994" z="0.99999988" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="heelIK.r">
+            <Positions>
+                <Position x="-3.6113597e-08" y="0.16565004" z="1.366077e-09" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.92035484" x="-0.39108434" y="-6.8850014e-08" z="-6.5628754e-08" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999994" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="IK-foot.r">
+            <Positions>
+                <Position x="-6.3112866e-09" y="0.16565004" z="3.1168405e-08" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="2.9802326e-08" x="1" y="9.6972261e-09" z="1.8942285e-07" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1" z="0.99999994" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="IK-toe.r">
+            <Positions>
+                <Position x="-4.5569442e-09" y="3.0597356e-08" z="1.6489131e-29" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="1" x="1.0277844e-21" y="-6.7409866e-17" z="-1.9466921e-08" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="0.99999994" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="elbowIK.l">
+            <Positions>
+                <Position x="0.52206111" y="0.55472422" z="-0.44966781" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.70710683" x="-0.70710683" y="-7.279511e-08" z="-7.2795089e-08" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="handIK.l">
+            <Positions>
+                <Position x="0.46669132" y="0.54415983" z="0.0074154474" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.054290067" x="-0.89162087" y="-0.19044292" z="-0.40718099" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="0.99999988" y="0.99999988" z="0.99999994" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="elbowIK.r">
+            <Positions>
+                <Position x="-0.45350721" y="0.55111611" z="-0.44966805" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.70710683" x="-0.70710683" y="-7.279511e-08" z="-7.2795089e-08" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+        <BoneChannel boneName="handIK.r">
+            <Positions>
+                <Position x="-0.46631056" y="0.58541006" z="0.032590501" timestamp="0"/>
+            </Positions>
+            <Rotations>
+                <Rotation w="0.10070775" x="0.87432009" y="-0.14602853" z="-0.45177212" timestamp="0"/>
+            </Rotations>
+            <Scales>
+                <Scale x="1" y="1" z="1" timestamp="0"/>
+            </Scales>
+        </BoneChannel>
+    </BoneChannels>
+</Animation>

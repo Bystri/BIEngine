@@ -1,0 +1,209 @@
+<SkinnedMesh>
+    <Vertices>
+        <Vertex posX="0.14167419" posY="1.5901572" posZ="0.244877" normX="-0.74867934" normY="-0.66195351" normZ="0.036011085" tanX="0.048044097" tanY="-1.8265983e-07" tanZ="0.99884522" texX="0.91406268" texY="0.96860272"/>
+        <Vertex posX="0.14311235" posY="1.5901572" posZ="0.27477637" normX="-0.70547742" normY="-0.64424926" normZ="0.2953718" tanX="0.32924834" tanY="0.071141578" tanZ="0.94155967" texX="0.92161274" texY="0.96860272"/>
+        <Vertex posX="0.13047838" posY="1.6201553" posZ="0.27791589" normX="-0.92334408" normY="-0.1862653" normZ="0.3357693" tanX="0.3524197" tanY="-0.06395261" tanZ="0.93365443" texX="0.91467613" texY="0.94877321"/>
+        <Vertex posX="0.12904026" posY="1.6201553" posZ="0.24801661" normX="-0.97769862" normY="-0.20468009" normZ="0.047026601" tanX="0.048043735" tanY="5.44463e-08" tanZ="0.99884534" texX="0.90712452" texY="0.94877321"/>
+        <Vertex posX="0.22975491" posY="1.661711" posZ="0.25273281" normX="0.97275525" normY="0.17036231" normZ="0.15723853" tanX="0.16762875" tanY="-0.048335508" tanZ="-0.98466456" texX="0.96906614" texY="0.93643737"/>
+        <Vertex posX="0.21762706" posY="1.6917094" posZ="0.25605944" normX="0.78027701" normY="0.60347915" normZ="0.16425814" tanX="-0.10215301" tanY="-0.13613383" tanZ="0.98540974" texX="0.96247554" texY="0.90606755"/>
+        <Vertex posX="0.21309738" posY="1.6862044" posZ="0.27368012" normX="0.69589436" normY="0.44017902" normZ="0.56742716" tanX="0.6149509" tanY="0.04282831" tanZ="-0.7874015" texX="0.96367639" texY="0.90770167"/>
+        <Vertex posX="0.21882392" posY="1.661711" posZ="0.27589607" normX="0.76471585" normY="0.12887642" normZ="0.63134825" tanX="0.63305712" tanY="0.032511041" tanZ="-0.77342212" texX="0.96763337" texY="0.93643737"/>
+        <Vertex posX="0.16074838" posY="1.5777313" posZ="0.24013701" normX="-0.2492076" normY="-0.96837592" normZ="0.011986757" tanX="0.048044361" tanY="-1.0921665e-07" tanZ="0.99884522" texX="0.92453265" texY="0.97229135"/>
+        <Vertex posX="0.16218653" posY="1.5777313" posZ="0.27003634" normX="-0.2043101" normY="-0.94003731" normZ="0.27310663" tanX="0.10548573" tanY="0.25622505" tanZ="0.96084416" texX="0.93208426" texY="0.97229135"/>
+        <Vertex posX="0.14406215" posY="1.6201553" posZ="0.2945216" normX="-0.51486492" normY="-0.15418696" normZ="0.84329146" tanX="0.84792042" tanY="0.053303111" tanZ="0.52743703" texX="0.92659801" texY="0.94877321"/>
+        <Vertex posX="0.14406215" posY="1.661711" posZ="0.2945216" normX="-0.51486498" normY="0.15418652" normZ="0.84329158" tanX="0.85678905" tanY="0.059559043" tanZ="0.51221609" texX="0.92659801" texY="0.93643737"/>
+        <Vertex posX="0.13047838" posY="1.661711" posZ="0.27791589" normX="-0.92334408" normY="0.18626456" normZ="0.33576968" tanX="0.33108684" tanY="-0.056659363" tanZ="0.94189763" texX="0.91467613" texY="0.93643737"/>
+        <Vertex posX="0.14948487" posY="1.6862044" posZ="0.28950733" normX="-0.46127683" normY="0.48455495" normZ="0.74325657" tanX="0.88276899" tanY="0.16649714" tanZ="0.43931517" texX="0.92875677" texY="0.90770167"/>
+        <Vertex posX="0.14311235" posY="1.6917094" posZ="0.27477637" normX="-0.70547628" normY="0.64425039" normZ="0.29537222" tanX="0.24061896" tanY="-0.17428544" tanZ="0.954844" texX="0.92161274" texY="0.90606755"/>
+        <Vertex posX="0.22979613" posY="1.6201553" posZ="0.25274801" normX="0.97277844" normY="-0.1700583" normZ="0.15742403" tanX="0.16777398" tanY="0.048219107" tanZ="-0.98464555" texX="0.9690938" texY="0.94877321"/>
+        <Vertex posX="0.21883576" posY="1.6201553" posZ="0.27590042" normX="0.7646153" normY="-0.12869783" normZ="0.63150638" tanX="0.63322902" tanY="-0.032326996" tanZ="-0.77328908" texX="0.96764219" texY="0.94877321"/>
+        <Vertex posX="0.21310951" posY="1.5956619" posZ="0.27368459" normX="0.69546503" normY="-0.44089708" normZ="0.56739599" tanX="0.66997737" tanY="0.11245802" tanZ="-0.73381442" texX="0.96368486" texY="0.96696866"/>
+        <Vertex posX="0.21761784" posY="1.5901572" posZ="0.25605601" normX="0.77921373" normY="-0.60495234" normZ="0.16388611" tanX="-0.097701997" tanY="0.14104423" tanZ="0.98517048" texX="0.96247023" texY="0.96860272"/>
+        <Vertex posX="0.16218653" posY="1.7041352" posZ="0.27003634" normX="-0.20437013" normY="0.94001549" normZ="0.27313694" tanX="0.95021635" tanY="0.2575475" tanZ="-0.17538016" texX="0.93208426" texY="0.90237898"/>
+        <Vertex posX="0.16313629" posY="1.6917094" posZ="0.28978163" normX="-0.046439186" normY="0.6067422" normZ="0.79354101" tanX="0.98750383" tanY="0.14764851" tanZ="-0.055102009" texX="0.93706954" texY="0.90606755"/>
+        <Vertex posX="0.16352969" posY="1.6201553" posZ="0.29796028" normX="0.039246928" normY="-0.12745713" normZ="0.99106729" tanX="0.99873674" tanY="-0.026142675" tanZ="-0.042912737" texX="0.93913651" texY="0.94877321"/>
+        <Vertex posX="0.14948487" posY="1.5956619" posZ="0.28950733" normX="-0.46127662" normY="-0.48455721" normZ="0.74325514" tanX="0.796422" tanY="0.14310151" tanZ="0.58756632" texX="0.92875677" texY="0.96696866"/>
+        <Vertex posX="0.16313629" posY="1.5901572" posZ="0.28978163" normX="-0.046401095" normY="-0.60681129" normZ="0.79349041" tanX="0.98750323" tanY="-0.14763284" tanZ="-0.055153817" texX="0.93706954" texY="0.96860272"/>
+        <Vertex posX="0.16352969" posY="1.661711" posZ="0.29796028" normX="0.039246559" normY="0.12745664" normZ="0.99106735" tanX="0.99873674" tanY="0.026142625" tanZ="-0.042912357" texX="0.93913651" texY="0.93643737"/>
+        <Vertex posX="0.20021899" posY="1.6201553" posZ="0.28884283" normX="0.40171966" normY="-0.1202777" normZ="0.90782964" tanX="0.91528934" tanY="0.020865068" tanZ="-0.40225622" texX="0.95927817" texY="0.94877321"/>
+        <Vertex posX="0.20021899" posY="1.661711" posZ="0.28884283" normX="0.40182853" normY="0.12034104" normZ="0.90777302" tanX="0.91524106" tanY="-0.02089107" tanZ="-0.40236482" texX="0.95927817" texY="0.93643737"/>
+        <Vertex posX="0.22731104" posY="1.6201553" posZ="0.22246161" normX="0.97917205" normY="-0.18731117" normZ="-0.078337304" tanX="0.07982" tanY="0.00037456726" tanZ="0.9968093" texX="0.96082187" texY="0.94877321"/>
+        <Vertex posX="0.2272487" posY="1.661711" posZ="0.22243857" normX="0.97909319" normY="0.18768756" normZ="-0.078421928" tanX="0.079932615" tanY="-0.00048211074" tanZ="0.99680024" texX="0.96077943" texY="0.93643737"/>
+        <Vertex posX="0.19712691" posY="1.7041352" posZ="0.23090468" normX="0.32038251" normY="0.94705856" normZ="-0.020861782" tanX="0.071323365" tanY="-0.0021563128" tanZ="0.99745095" texX="0.94446278" texY="0.90237898"/>
+        <Vertex posX="0.16074838" posY="1.7041352" posZ="0.24013701" normX="-0.24944627" normY="0.96831435" normZ="0.01199817" tanX="0.048044346" tanY="1.744789e-07" tanZ="0.99884522" texX="0.92453265" texY="0.90237898"/>
+        <Vertex posX="0.19886607" posY="1.7041352" posZ="0.26091522" normX="0.31328854" normY="0.9224844" normZ="0.22555007" tanX="0.92144752" tanY="-0.23782422" tanZ="-0.30720374" texX="0.95221871" texY="0.90237898"/>
+        <Vertex posX="0.14167419" posY="1.6917094" posZ="0.244877" normX="-0.74867803" normY="0.66195512" normZ="0.036010787" tanX="0.048043929" tanY="3.4701955e-07" tanZ="0.99884528" texX="0.91406268" texY="0.90606755"/>
+        <Vertex posX="0.1998256" posY="1.6917094" posZ="0.28066418" normX="0.38041863" normY="0.57582986" normZ="0.72367227" tanX="0.91391277" tanY="-0.11427843" tanZ="-0.38949189" texX="0.95721275" texY="0.90606755"/>
+        <Vertex posX="0.19881406" posY="1.5777313" posZ="0.260896" normX="0.31268242" normY="-0.92286718" normZ="0.22482425" tanX="-0.027676411" tanY="0.22774018" tanZ="0.97332853" texX="0.95218349" texY="0.97229135"/>
+        <Vertex posX="0.1998256" posY="1.5901572" posZ="0.28066418" normX="0.38032317" normY="-0.5761866" normZ="0.72343862" tanX="0.91393912" tanY="0.11432713" tanZ="-0.38941586" texX="0.95721275" texY="0.96860272"/>
+        <Vertex posX="0.12904026" posY="1.661711" posZ="0.24801661" normX="-0.97769892" normY="0.20467895" normZ="0.04702647" tanX="0.04804359" tanY="-2.5391612e-08" tanZ="0.99884534" texX="0.90712452" texY="0.93643737"/>
+        <Vertex posX="0.1969382" posY="1.5777313" posZ="0.23083493" normX="0.31810522" normY="-0.9478125" normZ="-0.021462655" tanX="0.82268935" tanY="0.26471907" tanZ="0.50309646" texX="0.94433302" texY="0.97229135"/>
+        <Vertex posX="0.21542946" posY="1.5901572" posZ="0.22587939" normX="0.78486061" normY="-0.61694556" normZ="-0.058068786" tanX="0.073230565" tanY="-0.00070844474" tanZ="0.99731481" texX="0.95440352" texY="0.96860272"/>
+        <Vertex posX="0.21544732" posY="1.6917094" posZ="0.225886" normX="0.78663546" normY="0.61471742" normZ="-0.057681695" tanX="0.076651372" tanY="-0.0045310017" tanZ="0.99704766" texX="0.9544161" texY="0.90606755"/>
+        <Vertex posX="-0.14165512" posY="1.5901572" posZ="0.244877" normX="0.74867964" normY="-0.66195321" normZ="0.036010757" tanX="-0.048043642" tanY="-1.8265978e-07" tanZ="0.99884534" texX="0.91406268" texY="0.96860272"/>
+        <Vertex posX="-0.12902118" posY="1.6201553" posZ="0.24801661" normX="0.97769868" normY="-0.20468007" normZ="0.04702634" tanX="-0.048043475" tanY="0" tanZ="0.99884534" texX="0.90712452" texY="0.94877321"/>
+        <Vertex posX="-0.13045931" posY="1.6201553" posZ="0.27791589" normX="0.92334425" normY="-0.18626514" normZ="0.33576891" tanX="-0.30950478" tanY="0.15649189" tanZ="0.93793231" texX="0.91467613" texY="0.94877321"/>
+        <Vertex posX="-0.14309326" posY="1.5901572" posZ="0.27477637" normX="0.70547771" normY="-0.64424902" normZ="0.29537156" tanX="-0.32924804" tanY="0.071141444" tanZ="0.94155973" texX="0.92161274" texY="0.96860272"/>
+        <Vertex posX="-0.22973582" posY="1.661711" posZ="0.25273281" normX="-0.97275525" normY="0.17036223" normZ="0.15723877" tanX="-0.16762897" tanY="-0.048335455" tanZ="-0.98466456" texX="0.96906614" texY="0.93643737"/>
+        <Vertex posX="-0.21880484" posY="1.661711" posZ="0.27589607" normX="-0.76471603" normY="0.12887649" normZ="0.63134807" tanX="-0.63307703" tanY="0.032345649" tanZ="-0.77341276" texX="0.96763337" texY="0.93643737"/>
+        <Vertex posX="-0.21307829" posY="1.6862044" posZ="0.27368012" normX="-0.69589418" normY="0.44017935" normZ="0.56742716" tanX="-0.63204557" tanY="-0.00027214095" tanZ="-0.77493125" texX="0.96367639" texY="0.90770167"/>
+        <Vertex posX="-0.21760798" posY="1.6917094" posZ="0.25605944" normX="-0.78027689" normY="0.60347933" normZ="0.16425817" tanX="0.10215301" tanY="-0.13613389" tanZ="0.98540974" texX="0.96247554" texY="0.90606755"/>
+        <Vertex posX="-0.16072929" posY="1.5777313" posZ="0.24013701" normX="0.24920766" normY="-0.96837586" normZ="0.011986684" tanX="-0.93599695" tanY="-0.24401547" tanZ="-0.25370517" texX="0.92453265" texY="0.97229135"/>
+        <Vertex posX="-0.16216743" posY="1.5777313" posZ="0.27003634" normX="0.20431025" normY="-0.94003737" normZ="0.27310637" tanX="-0.86903071" tanY="-0.045752734" tanZ="0.49263814" texX="0.93208426" texY="0.97229135"/>
+        <Vertex posX="-0.14404306" posY="1.6201553" posZ="0.2945216" normX="0.51486522" normY="-0.15418686" normZ="0.84329134" tanX="-0.84792024" tanY="0.053303111" tanZ="0.52743721" texX="0.92659801" texY="0.94877321"/>
+        <Vertex posX="-0.13045931" posY="1.661711" posZ="0.27791589" normX="0.92334419" normY="0.1862645" normZ="0.33576936" tanX="-0.33108655" tanY="-0.056659285" tanZ="0.94189787" texX="0.91467613" texY="0.93643737"/>
+        <Vertex posX="-0.14404306" posY="1.661711" posZ="0.2945216" normX="0.51486516" normY="0.15418637" normZ="0.84329146" tanX="-0.85678893" tanY="0.059559021" tanZ="0.51221627" texX="0.92659801" texY="0.93643737"/>
+        <Vertex posX="-0.14309326" posY="1.6917094" posZ="0.27477637" normX="0.70547658" normY="0.64425021" normZ="0.29537195" tanX="-0.24061897" tanY="-0.17428499" tanZ="0.95484412" texX="0.92161274" texY="0.90606755"/>
+        <Vertex posX="-0.14946578" posY="1.6862044" posZ="0.28950733" normX="0.4612771" normY="0.48455483" normZ="0.74325645" tanX="-0.86755449" tanY="0.42187515" tanZ="0.26338333" texX="0.92875677" texY="0.90770167"/>
+        <Vertex posX="-0.22977702" posY="1.6201553" posZ="0.25274801" normX="-0.97277838" normY="-0.17005834" normZ="0.1574243" tanX="-0.16781002" tanY="0.048439343" tanZ="-0.98462862" texX="0.9690938" texY="0.94877321"/>
+        <Vertex posX="-0.21759875" posY="1.5901572" posZ="0.25605601" normX="-0.77921373" normY="-0.60495228" normZ="0.16388643" tanX="0.10143629" tanY="0.13631295" tanZ="0.98545903" texX="0.96247023" texY="0.96860272"/>
+        <Vertex posX="-0.21309042" posY="1.5956619" posZ="0.27368459" normX="-0.69546503" normY="-0.44089711" normZ="0.56739599" tanX="-0.71027005" tanY="0.30220449" tanZ="-0.63575864" texX="0.96368486" texY="0.96696866"/>
+        <Vertex posX="-0.21881667" posY="1.6201553" posZ="0.27590042" normX="-0.76461554" normY="-0.12869799" normZ="0.63150609" tanX="-0.63322872" tanY="-0.032327056" tanZ="-0.77328938" texX="0.96764219" texY="0.94877321"/>
+        <Vertex posX="-0.16216743" posY="1.7041352" posZ="0.27003634" normX="0.2043706" normY="0.94001544" normZ="0.27313685" tanX="-0.95021629" tanY="0.25754794" tanZ="-0.17538008" texX="0.93208426" texY="0.90237898"/>
+        <Vertex posX="-0.1631172" posY="1.6917094" posZ="0.28978163" normX="0.046439294" normY="0.60674232" normZ="0.79354095" tanX="-0.98750383" tanY="0.1476486" tanZ="-0.055101942" texX="0.93706954" texY="0.90606755"/>
+        <Vertex posX="-0.16351061" posY="1.6201553" posZ="0.29796028" normX="-0.039246868" normY="-0.1274571" normZ="0.99106729" tanX="-0.99873674" tanY="-0.026142679" tanZ="-0.042912677" texX="0.93913651" texY="0.94877321"/>
+        <Vertex posX="-0.1631172" posY="1.5901572" posZ="0.28978163" normX="0.046401013" normY="-0.60681152" normZ="0.79349029" tanX="-0.98750323" tanY="-0.14763278" tanZ="-0.055153891" texX="0.93706954" texY="0.96860272"/>
+        <Vertex posX="-0.14946578" posY="1.5956619" posZ="0.28950733" normX="0.46127674" normY="-0.48455718" normZ="0.74325514" tanX="-0.65436798" tanY="0.37992838" tanZ="0.65380198" texX="0.92875677" texY="0.96696866"/>
+        <Vertex posX="-0.16351061" posY="1.661711" posZ="0.29796028" normX="-0.039246578" normY="0.12745661" normZ="0.99106735" tanX="-0.99873674" tanY="0.026142603" tanZ="-0.042912375" texX="0.93913651" texY="0.93643737"/>
+        <Vertex posX="-0.2001999" posY="1.6201553" posZ="0.28884283" normX="-0.40171993" normY="-0.12027774" normZ="0.90782952" tanX="-0.91528922" tanY="0.020865126" tanZ="-0.40225649" texX="0.95927817" texY="0.94877321"/>
+        <Vertex posX="-0.2001999" posY="1.661711" posZ="0.28884283" normX="-0.40182865" normY="0.1203411" normZ="0.90777302" tanX="-0.91524106" tanY="-0.020891096" tanZ="-0.40236497" texX="0.95927817" texY="0.93643737"/>
+        <Vertex posX="-0.22729196" posY="1.6201553" posZ="0.22246161" normX="-0.97917211" normY="-0.18731113" normZ="-0.078336321" tanX="-0.079487517" tanY="-0.0013689738" tanZ="0.99683493" texX="0.96082187" texY="0.94877321"/>
+        <Vertex posX="-0.22722961" posY="1.661711" posZ="0.22243857" normX="-0.97909325" normY="0.18768737" normZ="-0.078421146" tanX="-0.079931855" tanY="-0.00048225519" tanZ="0.9968003" texX="0.96077943" texY="0.93643737"/>
+        <Vertex posX="-0.19710782" posY="1.7041352" posZ="0.23090468" normX="-0.32038218" normY="0.94705862" normZ="-0.020861784" tanX="-0.058588348" tanY="0.0021701255" tanZ="0.99827993" texX="0.94446278" texY="0.90237898"/>
+        <Vertex posX="-0.19884697" posY="1.7041352" posZ="0.26091522" normX="-0.31328806" normY="0.92248464" normZ="0.22554992" tanX="-0.92141229" tanY="-0.23777701" tanZ="-0.3073459" texX="0.95221871" texY="0.90237898"/>
+        <Vertex posX="-0.16072929" posY="1.7041352" posZ="0.24013701" normX="0.24944659" normY="0.96831423" normZ="0.011998253" tanX="-0.048043903" tanY="-1.2961289e-08" tanZ="0.99884534" texX="0.92453265" texY="0.90237898"/>
+        <Vertex posX="-0.14165512" posY="1.6917094" posZ="0.244877" normX="0.74867815" normY="0.66195494" normZ="0.036010664" tanX="-0.048043616" tanY="1.8543024e-07" tanZ="0.99884528" texX="0.91406268" texY="0.90606755"/>
+        <Vertex posX="-0.19980651" posY="1.6917094" posZ="0.28066418" normX="-0.38041863" normY="0.57583016" normZ="0.72367215" tanX="-0.91391277" tanY="-0.11427856" tanZ="-0.38949189" texX="0.95721275" texY="0.90606755"/>
+        <Vertex posX="-0.19879498" posY="1.5777313" posZ="0.260896" normX="-0.31268257" normY="-0.92286712" normZ="0.22482426" tanX="-0.91979492" tanY="0.23510511" tanZ="-0.31417015" texX="0.95218349" texY="0.97229135"/>
+        <Vertex posX="-0.19980651" posY="1.5901572" posZ="0.28066418" normX="-0.38032323" normY="-0.57618672" normZ="0.72343844" tanX="-0.91393912" tanY="0.11432721" tanZ="-0.38941595" texX="0.95721275" texY="0.96860272"/>
+        <Vertex posX="-0.12902118" posY="1.661711" posZ="0.24801661" normX="0.97769892" normY="0.20467907" normZ="0.047026228" tanX="-0.04804337" tanY="9.5832625e-08" tanZ="0.99884528" texX="0.90712452" texY="0.93643737"/>
+        <Vertex posX="-0.21541037" posY="1.5901572" posZ="0.22587939" normX="-0.78486085" normY="-0.61694533" normZ="-0.058068365" tanX="-0.073230222" tanY="-0.00070817512" tanZ="0.99731481" texX="0.95440352" texY="0.96860272"/>
+        <Vertex posX="-0.19691911" posY="1.5777313" posZ="0.23083493" normX="-0.31810552" normY="-0.94781232" normZ="-0.02146245" tanX="-0.91491544" tanY="0.31284049" tanZ="-0.25506964" texX="0.94433302" texY="0.97229135"/>
+        <Vertex posX="-0.21542823" posY="1.6917094" posZ="0.225886" normX="-0.7866354" normY="0.61471748" normZ="-0.057681695" tanX="-0.072723366" tanY="0.0005241058" tanZ="0.997352" texX="0.9544161" texY="0.90606755"/>
+    </Vertices>
+    <Indices>0 1 2 0 2 3 4 5 6 4 6 7 8 9 1 8 1 0 10 11 12 10 12 2 12 11 13 12 13 14 15 16 17 15 17 18 19 14 13 19 13 20 21 10 22 21 22 23 24 20 13 24 13 11 9 23 22 9 22 1 25 26 24 25 24 21 27 28 4 27 4 15 29 30 19 29 19 31 19 30 32 19 32 14 26 7 6 26 6 33 31 33 6 31 6 5 21 24 11 21 11 10 34 18 17 34 17 35 25 35 17 25 17 16 2 12 36 2 36 3 2 1 22 2 22 10 14 32 36 14 36 12 34 37 38 34 38 18 18 38 27 18 27 15 29 31 5 29 5 39 39 5 4 39 4 28 26 25 16 26 16 7 7 16 15 7 15 4 9 34 35 9 35 23 23 35 25 23 25 21 31 19 20 31 20 33 33 20 24 33 24 26 8 37 34 8 34 9 40 41 42 40 42 43 44 45 46 44 46 47 48 40 43 48 43 49 50 42 51 50 51 52 51 53 54 51 54 52 55 56 57 55 57 58 59 60 54 59 54 53 61 62 63 61 63 50 64 52 54 64 54 60 49 43 63 49 63 62 65 61 64 65 64 66 67 55 44 67 44 68 69 70 59 69 59 71 59 53 72 59 72 71 66 73 46 66 46 45 70 47 46 70 46 73 61 50 52 61 52 64 74 75 57 74 57 56 65 58 57 65 57 75 42 41 76 42 76 51 42 50 63 42 63 43 53 51 76 53 76 72 74 56 77 74 77 78 56 55 67 56 67 77 69 79 47 69 47 70 79 68 44 79 44 47 66 45 58 66 58 65 45 44 55 45 55 58 49 62 75 49 75 74 62 61 65 62 65 75 70 73 60 70 60 59 73 66 64 73 64 60 48 49 74 48 74 78</Indices>
+    <BoneWeights>
+        <Bone name="root"/>
+        <Bone name="hips"/>
+        <Bone name="spine"/>
+        <Bone name="chest"/>
+        <Bone name="upperarm.l"/>
+        <Bone name="lowerarm.l"/>
+        <Bone name="wrist.l"/>
+        <Bone name="hand.l"/>
+        <Bone name="handslot.l"/>
+        <Bone name="upperarm.r"/>
+        <Bone name="lowerarm.r"/>
+        <Bone name="wrist.r"/>
+        <Bone name="hand.r"/>
+        <Bone name="handslot.r"/>
+        <Bone name="head">
+            <Weight vertId="0" weight="1"/>
+            <Weight vertId="1" weight="1"/>
+            <Weight vertId="2" weight="1"/>
+            <Weight vertId="3" weight="1"/>
+            <Weight vertId="4" weight="1"/>
+            <Weight vertId="5" weight="1"/>
+            <Weight vertId="6" weight="1"/>
+            <Weight vertId="7" weight="1"/>
+            <Weight vertId="8" weight="1"/>
+            <Weight vertId="9" weight="1"/>
+            <Weight vertId="10" weight="1"/>
+            <Weight vertId="11" weight="1"/>
+            <Weight vertId="12" weight="1"/>
+            <Weight vertId="13" weight="1"/>
+            <Weight vertId="14" weight="1"/>
+            <Weight vertId="15" weight="1"/>
+            <Weight vertId="16" weight="1"/>
+            <Weight vertId="17" weight="1"/>
+            <Weight vertId="18" weight="1"/>
+            <Weight vertId="19" weight="1"/>
+            <Weight vertId="20" weight="1"/>
+            <Weight vertId="21" weight="1"/>
+            <Weight vertId="22" weight="1"/>
+            <Weight vertId="23" weight="1"/>
+            <Weight vertId="24" weight="1"/>
+            <Weight vertId="25" weight="1"/>
+            <Weight vertId="26" weight="1"/>
+            <Weight vertId="27" weight="1"/>
+            <Weight vertId="28" weight="1"/>
+            <Weight vertId="29" weight="1"/>
+            <Weight vertId="30" weight="1"/>
+            <Weight vertId="31" weight="1"/>
+            <Weight vertId="32" weight="1"/>
+            <Weight vertId="33" weight="1"/>
+            <Weight vertId="34" weight="1"/>
+            <Weight vertId="35" weight="1"/>
+            <Weight vertId="36" weight="1"/>
+            <Weight vertId="37" weight="1"/>
+            <Weight vertId="38" weight="1"/>
+            <Weight vertId="39" weight="1"/>
+            <Weight vertId="40" weight="1"/>
+            <Weight vertId="41" weight="1"/>
+            <Weight vertId="42" weight="1"/>
+            <Weight vertId="43" weight="1"/>
+            <Weight vertId="44" weight="1"/>
+            <Weight vertId="45" weight="1"/>
+            <Weight vertId="46" weight="1"/>
+            <Weight vertId="47" weight="1"/>
+            <Weight vertId="48" weight="1"/>
+            <Weight vertId="49" weight="1"/>
+            <Weight vertId="50" weight="1"/>
+            <Weight vertId="51" weight="1"/>
+            <Weight vertId="52" weight="1"/>
+            <Weight vertId="53" weight="1"/>
+            <Weight vertId="54" weight="1"/>
+            <Weight vertId="55" weight="1"/>
+            <Weight vertId="56" weight="1"/>
+            <Weight vertId="57" weight="1"/>
+            <Weight vertId="58" weight="1"/>
+            <Weight vertId="59" weight="1"/>
+            <Weight vertId="60" weight="1"/>
+            <Weight vertId="61" weight="1"/>
+            <Weight vertId="62" weight="1"/>
+            <Weight vertId="63" weight="1"/>
+            <Weight vertId="64" weight="1"/>
+            <Weight vertId="65" weight="1"/>
+            <Weight vertId="66" weight="1"/>
+            <Weight vertId="67" weight="1"/>
+            <Weight vertId="68" weight="1"/>
+            <Weight vertId="69" weight="1"/>
+            <Weight vertId="70" weight="1"/>
+            <Weight vertId="71" weight="1"/>
+            <Weight vertId="72" weight="1"/>
+            <Weight vertId="73" weight="1"/>
+            <Weight vertId="74" weight="1"/>
+            <Weight vertId="75" weight="1"/>
+            <Weight vertId="76" weight="1"/>
+            <Weight vertId="77" weight="1"/>
+            <Weight vertId="78" weight="1"/>
+            <Weight vertId="79" weight="1"/>
+        </Bone>
+        <Bone name="upperleg.l"/>
+        <Bone name="lowerleg.l"/>
+        <Bone name="foot.l"/>
+        <Bone name="toes.l"/>
+        <Bone name="upperleg.r"/>
+        <Bone name="lowerleg.r"/>
+        <Bone name="foot.r"/>
+        <Bone name="toes.r"/>
+        <Bone name="kneeIK.l"/>
+        <Bone name="control-toe-roll.l"/>
+        <Bone name="control-heel-roll.l"/>
+        <Bone name="control-foot-roll.l"/>
+        <Bone name="heelIK.l"/>
+        <Bone name="IK-foot.l"/>
+        <Bone name="IK-toe.l"/>
+        <Bone name="kneeIK.r"/>
+        <Bone name="control-toe-roll.r"/>
+        <Bone name="control-heel-roll.r"/>
+        <Bone name="control-foot-roll.r"/>
+        <Bone name="heelIK.r"/>
+        <Bone name="IK-foot.r"/>
+        <Bone name="IK-toe.r"/>
+        <Bone name="elbowIK.l"/>
+        <Bone name="handIK.l"/>
+        <Bone name="elbowIK.r"/>
+        <Bone name="handIK.r"/>
+    </BoneWeights>
+</SkinnedMesh>
