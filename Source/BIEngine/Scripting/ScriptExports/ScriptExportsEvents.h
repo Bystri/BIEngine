@@ -73,6 +73,11 @@ PYBIND11_EMBEDDED_MODULE(BIEEvent, m)
       .def("GetSumFrictionForce", &BIEngine::EvtData_Phys2DCollision::GetSumFrictionForce)
       .def("GetCollisionPoints", &BIEngine::EvtData_Phys2DCollision::GetCollisionPoints);
 
+   py::class_<BIEngine::EvtData_Phys3DTrigger_Enter, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Phys3DTrigger_Enter>>(m, "EvtData_Phys3DTrigger_Enter")
+      .def_readonly_static("eventType", &BIEngine::EvtData_Phys3DTrigger_Enter::sk_EventType)
+      .def("GetTriggerId", &BIEngine::EvtData_Phys3DTrigger_Enter::GetTriggerId)
+      .def("GetOtherActor", &BIEngine::EvtData_Phys3DTrigger_Enter::GetOtherActor);
+
    py::class_<BIEngine::EvtData_Phys3DCollision, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Phys3DCollision>>(m, "EvtData_Phys3DCollision")
       .def("GetActorA", &BIEngine::EvtData_Phys3DCollision::GetActorA)
       .def("GetActorB", &BIEngine::EvtData_Phys3DCollision::GetActorB)

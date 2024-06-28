@@ -153,9 +153,6 @@
     <ClCompile Include="..\..\UserInterface\UserInterface.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Actors\Physics3DTriggerComponent.cpp">
-      <Filter>Actors</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ResourceCache\DirFile.cpp">
       <Filter>ResourceCache</Filter>
     </ClCompile>
@@ -493,9 +490,6 @@
     </ClInclude>
     <ClInclude Include="..\..\UserInterface\UserInterface.h">
       <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Actors\Physics3DTriggerComponent.h">
-      <Filter>Actors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ResourceCache\DirFile.h">
       <Filter>ResourceCache</Filter>

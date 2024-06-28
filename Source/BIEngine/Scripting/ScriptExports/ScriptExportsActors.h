@@ -10,7 +10,6 @@
 #include "../../Actors/Physics2DComponent.h"
 #include "../../Actors/Physics2DTriggerComponent.h"
 #include "../../Actors/Physics3DComponent.h"
-#include "../../Actors/Physics3DTriggerComponent.h"
 #include "../../Actors/RenderComponent.h"
 #include "../../Actors/AnimationComponent.h"
 #include "../../Actors/ScriptComponent.h"
@@ -25,7 +24,9 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
    py::class_<BIEngine::Actor, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::Actor>>(m, "Actor")
       .def("GetId", &BIEngine::Actor::GetId)
       .def("GetName", &BIEngine::Actor::GetName)
-      .def("GetComponent", [](std::shared_ptr<BIEngine::Actor>& self, const std::string& componentId) { return self->GetComponent<BIEngine::ActorComponent>(componentId).lock(); });
+      .def("GetActorByPath", &BIEngine::Actor::GetActorByPath)
+      .def("GetComponent", [](std::shared_ptr<BIEngine::Actor>& self, const std::string& componentId) { return self->GetComponent<BIEngine::ActorComponent>(componentId).lock(); })
+      .def("SetActivate", &BIEngine::Actor::SetActivate);
 
    py::class_<BIEngine::NavAgentComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::NavAgentComponent>>(m, "NavAgentComponent")
       .def("SetDestination", &BIEngine::NavAgentComponent::SetDestination)
@@ -57,13 +58,6 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
       .def("SetAngularVelocity", &BIEngine::Physics3DComponent::SetAngularVelocity)
       .def("GetAngularVelocity", &BIEngine::Physics3DComponent::GetAngularVelocity)
       .def("Stop", &BIEngine::Physics3DComponent::Stop);
-
-   py::class_<BIEngine::Physics3DTriggerComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::Physics3DTriggerComponent>>(m, "Physics3DTriggerComponent")
-      .def("GetVelocity", &BIEngine::Physics3DTriggerComponent::GetVelocity)
-      .def("SetVelocity", &BIEngine::Physics3DTriggerComponent::SetVelocity)
-      .def("SetRotation", &BIEngine::Physics3DTriggerComponent::RotateY)
-      .def("SetPosition", &BIEngine::Physics3DTriggerComponent::SetPosition)
-      .def("Stop", &BIEngine::Physics3DTriggerComponent::Stop);
 
 
    py::class_<BIEngine::BoxRenderComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::BoxRenderComponent>>(m, "BoxRenderComponent");
@@ -99,7 +93,11 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
       return std::shared_ptr<BIEngine::Actor>();
    });
 
-   m.def("DestroyActor", [](const std::shared_ptr<BIEngine::Actor>& act) {
-      BIEngine::g_pApp->m_pGameLogic->DestroyActor(act->GetId());
+   m.def("GetActor", [](BIEngine::ActorId actorId) {
+      return BIEngine::g_pApp->m_pGameLogic->GetActor(actorId).get();
+   });
+
+   m.def("DestroyActor", [](BIEngine::ActorId actorId) {
+      BIEngine::g_pApp->m_pGameLogic->DestroyActor(actorId);
    });
 }

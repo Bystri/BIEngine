@@ -63,17 +63,15 @@ public:
 
    virtual void DrawRenderDiagnostics() override {}
 
-   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddSphere(float radius, const ShapeCreationParams& creationParams) override {}
 
-   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddBox(const glm::vec3& dimensions, const ShapeCreationParams& creationParams) override {}
 
-   virtual void AddCapsule(const float radius, const float height, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddCapsule(const float radius, const float height, const ShapeCreationParams& creationParams) override {}
 
-   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, const ShapeCreationParams& creationParams) override {}
 
    virtual void RemoveActor(ActorId id) override {}
-
-   virtual void CreateTrigger(ActorId actorId, const glm::vec3& pos, const glm::vec3& dim) override {}
 
    virtual void ApplyForce(const glm::vec3& forceVec, ActorId aid) override {}
 
@@ -187,14 +185,12 @@ public:
 
    virtual void DrawRenderDiagnostics() override;
 
-   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override;
-   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override;
-   virtual void AddCapsule(const float radius, const float height, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override;
-   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddSphere(float radius, const ShapeCreationParams& creationParams) override;
+   virtual void AddBox(const glm::vec3& dimensions, const ShapeCreationParams& creationParams) override;
+   virtual void AddCapsule(const float radius, const float height, const ShapeCreationParams& creationParams) override;
+   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, const ShapeCreationParams& creationParams) override;
    virtual void RemoveActor(ActorId id) override;
 
-   // Добавляет триггер-объект с нулевой физикой в симуляцию
-   virtual void CreateTrigger(ActorId actorId, const glm::vec3& pos, const glm::vec3& dim) override;
    // Применяет силу к объекту
    virtual void ApplyForce(const glm::vec3& forceVec, ActorId aid) override;
    // Применить момент силы к объекту
@@ -227,7 +223,7 @@ private:
    btRigidBody* FindBulletRigidBody(ActorId const id) const;
    ActorId FindActorID(const btRigidBody* const body) const;
 
-   void AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, btCollisionShape* pSHape, float mass, const std::string& physicsMaterial);
+   void AddShape(btCollisionShape* const pShape, const float volume, const ShapeCreationParams& creationParams);
 
    // Работа с коллизией объектов
    void RemoveCollisionObject(btCollisionObject* const pBodyToRemove);
@@ -454,11 +450,14 @@ void Physics3D::DrawRenderDiagnostics()
    m_pDynamicsWorld->debugDrawWorld();
 }
 
-void Physics3D::AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, btCollisionShape* pShape, float mass, const std::string& physicsMaterial)
+void Physics3D::AddShape(btCollisionShape* const pShape, const float volume, const ShapeCreationParams& creationParams)
 {
-   Assert(m_actorIdToRigidBody.find(actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.find(creationParams.actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
 
-   MaterialData material(LookupMaterialData(physicsMaterial));
+   const float specificGravity = LookupSpecificGravity(creationParams.densityStr);
+   const btScalar mass = volume * specificGravity;
+
+   MaterialData material(LookupMaterialData(creationParams.physicsMaterial));
 
    btVector3 localInertia(0.0f, 0.0f, 0.0f);
    if (mass > 0.0f) {
@@ -466,10 +465,10 @@ void Physics3D::AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& po
    }
 
    glm::mat4 transform = glm::mat4(1.0f);
-   transform = glm::translate(transform, pos);
-   transform = glm::rotate(transform, glm::radians(eulerAngles.x), glm::vec3(1.0f, 0.0f, 0.0f));
-   transform = glm::rotate(transform, glm::radians(eulerAngles.y), glm::vec3(0.0f, 1.0f, 0.0f));
-   transform = glm::rotate(transform, glm::radians(eulerAngles.z), glm::vec3(0.0f, 0.0f, 1.0f));
+   transform = glm::translate(transform, creationParams.pos);
+   transform = glm::rotate(transform, glm::radians(creationParams.eulerAngles.x), glm::vec3(1.0f, 0.0f, 0.0f));
+   transform = glm::rotate(transform, glm::radians(creationParams.eulerAngles.y), glm::vec3(0.0f, 1.0f, 0.0f));
+   transform = glm::rotate(transform, glm::radians(creationParams.eulerAngles.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
    ActorMotionState* const myMotionState = new ActorMotionState(transform);
 
@@ -479,102 +478,72 @@ void Physics3D::AddShape(BodyType bodyType, ActorId actorId, const glm::vec3& po
    rbInfo.m_friction = material.m_friction;
 
    // Bullet считаем объекты недвижемыми, если у них нулевая масса
-   if (bodyType != BodyType::DYNAMIC) {
+   if (creationParams.bodyType != BodyType::DYNAMIC) {
       rbInfo.m_mass = 0;
    }
 
    btRigidBody* const body = new btRigidBody(rbInfo);
-   body->setAngularFactor(Vec3_to_btVector3(angularFactor));
+   body->setAngularFactor(Vec3_to_btVector3(creationParams.angularFactor));
 
    m_pDynamicsWorld->addRigidBody(body);
 
-   m_actorIdToRigidBody[actorId] = body;
-   m_rigidBodyToActorId[body] = actorId;
+   if (creationParams.isTrigger) {
+      body->setCollisionFlags(body->getCollisionFlags() | btRigidBody::CF_NO_CONTACT_RESPONSE);
+      body->setUserPointer((void*)creationParams.actorId);
+   }
+
+   m_actorIdToRigidBody[creationParams.actorId] = body;
+   m_rigidBodyToActorId[body] = creationParams.actorId;
 }
 
-void Physics3D::AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics3D::AddSphere(float radius, const ShapeCreationParams& creationParams)
 {
    btSphereShape* const collisionShape = new btSphereShape(radius);
 
    // calculate absolute mass from specificGravity
-   float specificGravity = LookupSpecificGravity(densityStr);
    float const volume = (4.f / 3.f) * M_PI * radius * radius * radius;
-   btScalar mass = volume * specificGravity;
 
-   AddShape(bodyType, actorId, pos, eulerAngles, angularFactor, collisionShape, mass, physicsMaterial);
+   AddShape(collisionShape, volume, creationParams);
 }
 
-void Physics3D::AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics3D::AddBox(const glm::vec3& dimensions, const ShapeCreationParams& creationParams)
 {
    glm::vec3 dimensionsHalfExtents = dimensions;
    dimensionsHalfExtents.x /= 2;
    dimensionsHalfExtents.y /= 2;
    dimensionsHalfExtents.z /= 2;
 
-   // create the collision body, which specifies the shape of the object
-   btBoxShape* const boxShape = new btBoxShape(Vec3_to_btVector3(dimensionsHalfExtents));
+   btBoxShape* const collisionShape = new btBoxShape(Vec3_to_btVector3(dimensionsHalfExtents));
 
-   // calculate absolute mass from specificGravity
-   float specificGravity = LookupSpecificGravity(densityStr);
    float const volume = dimensions.x * dimensions.y * dimensions.z;
-   btScalar mass = volume * specificGravity;
 
-   AddShape(bodyType, actorId, pos, eulerAngles, angularFactor, boxShape, mass, physicsMaterial);
+   AddShape(collisionShape, volume, creationParams);
 }
 
-void Physics3D::AddCapsule(const float radius, const float height, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics3D::AddCapsule(const float radius, const float height, const ShapeCreationParams& creationParams)
 {
    btCapsuleShape* const collisionShape = new btCapsuleShape(radius, height);
 
-   // calculate absolute mass from specificGravity
-   const float specificGravity = LookupSpecificGravity(densityStr);
    const float volume = ((4.0f / 3.0f) * radius + height) * M_PI * radius * radius;
-   const btScalar mass = volume * specificGravity;
 
-   AddShape(bodyType, actorId, pos, eulerAngles, angularFactor, collisionShape, mass, physicsMaterial);
+   AddShape(collisionShape, volume, creationParams);
 }
 
-void Physics3D::AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics3D::AddPointCloud(const glm::vec3* verts, int numPoints, const ShapeCreationParams& creationParams)
 {
-   btConvexHullShape* const shape = new btConvexHullShape();
+   btConvexHullShape* const collisionShape = new btConvexHullShape();
 
-   for (int ii = 0; ii < numPoints; ++ii)
-      shape->addPoint(Vec3_to_btVector3(verts[ii]));
+   for (int ii = 0; ii < numPoints; ++ii) {
+      collisionShape->addPoint(Vec3_to_btVector3(verts[ii]));
+   }
 
    btVector3 aabbMin(0, 0, 0), aabbMax(0, 0, 0);
-   shape->getAabb(btTransform::getIdentity(), aabbMin, aabbMax);
+   collisionShape->getAabb(btTransform::getIdentity(), aabbMin, aabbMax);
 
    btVector3 const aabbExtents = aabbMax - aabbMin;
-
-   float specificGravity = LookupSpecificGravity(densityStr);
    float const volume = aabbExtents.x() * aabbExtents.y() * aabbExtents.z();
-   btScalar const mass = volume * specificGravity;
 
-   AddShape(bodyType, actorId, pos, eulerAngles, angularFactor, shape, mass, physicsMaterial);
-}
-
-void Physics3D::CreateTrigger(ActorId actorId, const glm::vec3& pos, const glm::vec3& dim)
-{
-   btBoxShape* const boxShape = new btBoxShape(Vec3_to_btVector3(dim));
-
-   // Bullet считаем объекты недвижемыми, если у них нулевая масса
-   const btScalar mass = 0;
-
-   glm::mat4x4 triggerTrans = glm::mat4x4(1.0f);
-   glm::translate(triggerTrans, pos);
-
-   ActorMotionState* const myMotionState = new ActorMotionState(triggerTrans);
-
-   btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, boxShape, btVector3(0, 0, 0));
-   btRigidBody* const body = new btRigidBody(rbInfo);
-
-   m_pDynamicsWorld->addRigidBody(body);
-
-   // Триггер ни с чем не контактирует
-   body->setCollisionFlags(body->getCollisionFlags() | btRigidBody::CF_NO_CONTACT_RESPONSE);
-
-   m_actorIdToRigidBody[actorId] = body;
-   m_rigidBodyToActorId[body] = actorId;
+   AddShape(collisionShape, volume, creationParams);
 }
 
 void Physics3D::RemoveActor(ActorId id)
@@ -858,8 +827,6 @@ void Physics3D::RemoveCollisionObject(btCollisionObject* const pBodyToRemove)
       // delete the components of the object
       delete body->getMotionState();
       delete body->getCollisionShape();
-      delete body->getUserPointer();
-      delete body->getUserPointer();
 
       for (int ii = body->getNumConstraintRefs() - 1; ii >= 0; --ii) {
          btTypedConstraint* const constraint = body->getConstraintRef(ii);
@@ -885,7 +852,7 @@ void Physics3D::SendCollisionPairAddEvent(btPersistentManifold const* manifold, 
          triggerBody = body1;
       }
 
-      int const triggerId = *static_cast<int*>(triggerBody->getUserPointer());
+      const ActorId triggerId = (ActorId)triggerBody->getUserPointer();
       std::shared_ptr<EvtData_Phys3DTrigger_Enter> pEvent = std::make_shared<EvtData_Phys3DTrigger_Enter>(triggerId, FindActorID(otherBody));
       EventManager::Get()->QueueEvent(pEvent);
    } else {
@@ -929,7 +896,7 @@ void Physics3D::SendCollisionPairRemoveEvent(const btRigidBody* const body0, con
          triggerBody = body1;
       }
 
-      int const triggerId = *static_cast<int*>(triggerBody->getUserPointer());
+      const ActorId triggerId = (ActorId)triggerBody->getUserPointer();
       std::shared_ptr<EvtData_Phys3DTrigger_Leave> pEvent = std::make_shared<EvtData_Phys3DTrigger_Leave>(triggerId, FindActorID(otherBody));
       EventManager::Get()->QueueEvent(pEvent);
    } else {

@@ -10,7 +10,7 @@
 namespace BIEngine {
 
 Actor::Actor(ActorId id)
-   : m_id(id), m_bIsActivated(false), m_pParent(nullptr)
+   : m_id(id), m_bIsActivated(false), m_activateFlag(true), m_isLevelLoaded(false), m_pParent(nullptr)
 {
 }
 
@@ -56,7 +56,7 @@ bool Actor::RemoveChild(ActorId id)
 
 void Actor::Activate()
 {
-   if (m_bIsActivated) {
+   if (!m_activateFlag || m_bIsActivated) {
       return;
    }
 
@@ -86,6 +86,30 @@ void Actor::Deactivate()
    }
 
    m_bIsActivated = false;
+   m_activateFlag = false;
+}
+
+void Actor::SetActivate(bool value)
+{
+   m_activateFlag = value;
+   if (!m_isLevelLoaded) {
+      return;
+   }
+
+   if (m_activateFlag) {
+      Activate();
+   } else {
+      Deactivate();
+   }
+}
+
+void Actor::OnLevelLoaded()
+{
+   m_isLevelLoaded = true;
+
+   for (auto& child : m_children) {
+      child->OnLevelLoaded();
+   }
 }
 
 void Actor::OnUpdate(const GameTimer& gt)

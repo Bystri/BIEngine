@@ -50,7 +50,7 @@ static BoneAnimChannel animationLoaderReadBoneChannel(tinyxml2::XMLElement* cons
    return BoneAnimChannel(boneName, positions, rotations, scales);
 }
 
-static bool animationLoaderReadParams(tinyxml2::XMLElement* const pRoot, float& duration, int& tickPerSecond)
+static bool animationLoaderReadParams(tinyxml2::XMLElement* const pRoot, float& duration, int& tickPerSecond, bool& isLooped)
 {
    tinyxml2::XMLElement* pParamsElement = pRoot->FirstChildElement("Params");
    if (!pParamsElement) {
@@ -59,6 +59,7 @@ static bool animationLoaderReadParams(tinyxml2::XMLElement* const pRoot, float& 
 
    pParamsElement->QueryFloatAttribute("duration", &duration);
    pParamsElement->QueryIntAttribute("tickPerSecond", &tickPerSecond);
+   pParamsElement->QueryBoolAttribute("isLooped", &isLooped);
 
    return true;
 }
@@ -81,7 +82,8 @@ bool AnimationResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize
 
    float duration;
    int ticlsPerSecond;
-   if (!animationLoaderReadParams(pRoot, duration, ticlsPerSecond)) {
+   bool isLooped = false;
+   if (!animationLoaderReadParams(pRoot, duration, ticlsPerSecond, isLooped)) {
       return false;
    }
 
@@ -96,7 +98,7 @@ bool AnimationResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize
       boneChannels.push_back(animationLoaderReadBoneChannel(pBoneChannel));
    }
 
-   pExtra->m_pAnimation = std::make_shared<Animation>(duration, ticlsPerSecond, boneChannels);
+   pExtra->m_pAnimation = std::make_shared<Animation>(duration, ticlsPerSecond, boneChannels, isLooped);
    pHandle->SetExtra(pExtra);
 
    return true;

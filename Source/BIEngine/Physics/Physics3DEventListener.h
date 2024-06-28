@@ -11,7 +11,7 @@ namespace BIEngine {
 
 // Данное событие возникает, когда физический объект входит в триггерную зону
 class EvtData_Phys3DTrigger_Enter : public BaseEventData {
-   int m_triggerID;
+   ActorId m_triggerID;
    ActorId m_other;
 
 public:
@@ -24,11 +24,11 @@ public:
 
    EvtData_Phys3DTrigger_Enter()
    {
-      m_triggerID = -1;
+      m_triggerID = Actor::INVALID_ACTOR_ID;
       m_other = Actor::INVALID_ACTOR_ID;
    }
 
-   explicit EvtData_Phys3DTrigger_Enter(int triggerID, ActorId other)
+   explicit EvtData_Phys3DTrigger_Enter(ActorId triggerID, ActorId other)
       : m_triggerID(triggerID),
         m_other(other)
    {

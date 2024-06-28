@@ -103,7 +103,6 @@
     <ClCompile Include="..\..\Actors\Physics2DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics3DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DTriggerComponent.cpp" />
-    <ClCompile Include="..\..\Actors\Physics3DTriggerComponent.cpp" />
     <ClCompile Include="..\..\Actors\RenderComponent.cpp" />
     <ClCompile Include="..\..\Actors\ScriptComponent.cpp" />
     <ClCompile Include="..\..\Actors\SkeletonComponent.cpp" />
@@ -217,7 +216,6 @@
     <ClInclude Include="..\..\Actors\Physics2DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics3DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DTriggerComponent.h" />
-    <ClInclude Include="..\..\Actors\Physics3DTriggerComponent.h" />
     <ClInclude Include="..\..\Actors\RenderComponent.h" />
     <ClInclude Include="..\..\Actors\ScriptComponent.h" />
     <ClInclude Include="..\..\Actors\SkeletonComponent.h" />

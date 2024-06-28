@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "../../ProcessManager/ProcessManager.h"
+#include "../../ProcessManager/DelayProcess.h"
 #include "../../Utilities/Logger.h"
 
 namespace BIEngine {
@@ -35,7 +36,26 @@ namespace py = pybind11;
 
 PYBIND11_EMBEDDED_MODULE(BIEProcess, m)
 {
-   py::class_<BIEngine::PyProcess, std::shared_ptr<BIEngine::PyProcess>> processPyClass(m, "Process");
+   py::class_<BIEngine::Process, std::shared_ptr<BIEngine::Process>>(m, "BaseProcess")
+      .def("Succeed", &BIEngine::Process::Succeed)
+      .def("Fail", &BIEngine::Process::Fail)
+      .def("Pause", &BIEngine::Process::Pause)
+      .def("UnPause", &BIEngine::Process::UnPause)
+
+      .def("GetState", &BIEngine::Process::GetState)
+      .def("IsAlive", &BIEngine::Process::IsAlive)
+      .def("IsDead", &BIEngine::Process::IsDead)
+      .def("IsRemoved", &BIEngine::Process::IsRemoved)
+      .def("IsPaused", &BIEngine::Process::IsPaused)
+
+      .def("AttachChild", &BIEngine::Process::AttachChild)
+      .def("RemoveChild", &BIEngine::Process::RemoveChild)
+      .def("PeekChild", &BIEngine::Process::PeekChild);
+
+   py::class_<BIEngine::DelayProcess, BIEngine::Process, std::shared_ptr<BIEngine::DelayProcess>>(m, "DelayProcess")
+      .def(py::init<float>());
+
+   py::class_<BIEngine::PyProcess, BIEngine::Process, std::shared_ptr<BIEngine::PyProcess>> processPyClass(m, "Process");
 
    py::enum_<BIEngine::PyProcess::State>(processPyClass, "State")
       .value("UNINITIALIZED", BIEngine::PyProcess::State::UNINITIALIZED)
@@ -48,26 +68,7 @@ PYBIND11_EMBEDDED_MODULE(BIEProcess, m)
       .export_values();
 
    processPyClass
-      // Конструкторы
-      .def(py::init<>()) // Конструктор по умолчанию
+      .def(py::init<>());
 
-      // Биндинг функций и членов класса
-      .def("OnUpdate", &BIEngine::PyProcess::OnUpdate)
-      .def("Succeed", &BIEngine::PyProcess::Succeed)
-      .def("Fail", &BIEngine::PyProcess::Fail)
-      .def("Pause", &BIEngine::PyProcess::Pause)
-      .def("UnPause", &BIEngine::PyProcess::UnPause)
-
-      .def("GetState", &BIEngine::PyProcess::GetState)
-      .def("IsAlive", &BIEngine::PyProcess::IsAlive)
-      .def("IsDead", &BIEngine::PyProcess::IsDead)
-      .def("IsRemoved", &BIEngine::PyProcess::IsRemoved)
-      .def("IsPaused", &BIEngine::PyProcess::IsPaused)
-
-      .def("AttachChild", &BIEngine::PyProcess::AttachChild)
-      .def("RemoveChild", &BIEngine::PyProcess::RemoveChild)
-      .def("PeekChild", &BIEngine::PyProcess::PeekChild);
-
-   // Глобальная функция привязки процесса
-   m.def("AttachProcess", [](const std::shared_ptr<BIEngine::PyProcess>& pProcess) { BIEngine::ProcessManager::Get()->AttachProcess(pProcess); });
+   m.def("AttachProcess", [](const std::shared_ptr<BIEngine::Process>& pProcess) { BIEngine::ProcessManager::Get()->AttachProcess(pProcess); });
 }

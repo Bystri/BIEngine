@@ -58,6 +58,12 @@ bool Physics3DComponent::Init(tinyxml2::XMLElement* pData)
       m_material = pMaterial->FirstChild()->Value();
    }
 
+   tinyxml2::XMLElement* pParamsElement = pData->FirstChildElement("Params");
+   m_isTrigger = false;
+   if (pParamsElement) {
+      pParamsElement->QueryBoolAttribute("isTrigger", &m_isTrigger);
+   }
+
    tinyxml2::XMLElement* pSizeElement = pData->FirstChildElement("Scale");
    if (pSizeElement) {
       double w = 0;
@@ -88,15 +94,25 @@ void Physics3DComponent::Activate()
 {
    std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
 
+   IGamePhysics3D::ShapeCreationParams creationParams;
+   creationParams.actorId = m_pOwner->GetId();
+   creationParams.bodyType = m_bodyType;
+   creationParams.pos = pTransformComponent->GetPosition();
+   creationParams.eulerAngles = pTransformComponent->GetRotation();
+   creationParams.angularFactor = m_angularFactor;
+   creationParams.densityStr = m_density;
+   creationParams.physicsMaterial = m_material;
+   creationParams.isTrigger = m_isTrigger;
+
    switch (m_shape) {
       case Shape3D::SPHERE:
-         m_gamePhysics->AddSphere((float)m_rigidBodyScale.x, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation(), m_angularFactor, m_density, m_material);
+         m_gamePhysics->AddSphere((float)m_rigidBodyScale.x, creationParams);
          break;
       case Shape3D::BOX:
-         m_gamePhysics->AddBox(m_rigidBodyScale, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation(), m_angularFactor, m_density, m_material);
+         m_gamePhysics->AddBox(m_rigidBodyScale, creationParams);
          break;
       case Shape3D::CAPSULE:
-         m_gamePhysics->AddCapsule(m_rigidBodyScale.x, m_rigidBodyScale.y, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation(), m_angularFactor, m_density, m_material);
+         m_gamePhysics->AddCapsule(m_rigidBodyScale.x, m_rigidBodyScale.y, creationParams);
          break;
       case Shape3D::POINT_CLOUD:
          Logger::WriteLog(Logger::LogType::ERROR, "Not supported yet!");
@@ -164,6 +180,10 @@ tinyxml2::XMLElement* Physics3DComponent::GenerateXml(tinyxml2::XMLDocument* pDo
    tinyxml2::XMLText* pPhysicsMaterialText = pDoc->NewText(m_material.c_str());
    pPhysicsMaterial->LinkEndChild(pPhysicsMaterialText);
    pBaseElement->LinkEndChild(pPhysicsMaterial);
+
+   tinyxml2::XMLElement* pParamsElement = pDoc->NewElement("Params");
+   pParamsElement->SetAttribute("isTrigger", m_isTrigger);
+   pBaseElement->LinkEndChild(pParamsElement);
 
    tinyxml2::XMLElement* pScale = pDoc->NewElement("Scale");
    pScale->SetAttribute("w", std::to_string(m_rigidBodyScale.x).c_str());

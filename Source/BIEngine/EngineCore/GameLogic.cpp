@@ -93,6 +93,10 @@ bool GameLogic::LoadLevel(const std::string& path)
    m_bIsLevelLoaded = true;
 
    for (auto& actor : m_actors) {
+      actor.second->OnLevelLoaded();
+   }
+
+   for (auto& actor : m_actors) {
       actor.second->Activate();
    }
 

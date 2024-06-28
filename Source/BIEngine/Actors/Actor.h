@@ -41,6 +41,10 @@ public:
    void Activate();
    void Deactivate();
 
+   void SetActivate(bool value);
+
+   void OnLevelLoaded();
+
    void OnUpdate(const GameTimer& gt);
    void OnRenderObject(const GameTimer& gt);
 
@@ -95,6 +99,9 @@ private:
    // Идентификатор актера, по которому к нему идет обращение из других систем
    ActorId m_id;
    bool m_bIsActivated;
+   bool m_activateFlag;
+   bool m_isLevelLoaded;
+
    // Поле несет чисто косметический характер. Используется в редакторе.
    std::string m_name;
    ActorComponents m_components;

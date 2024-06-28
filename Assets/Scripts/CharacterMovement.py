@@ -15,9 +15,9 @@ class MoveProcess(BIEProcess.Process):
         self.transformComponent = cast(BIEActor.TransformComponent, movableActor.GetComponent("TransformComponent"))
         self.physics3DComponent = cast(BIEActor.Physics3DComponent, movableActor.GetComponent("Physics3DComponent"))
         self.maxSpeed = 5.0
-        self.maxAngularSpeed = 360.0
+        self.maxAngularSpeed = 2000.0
         self.maxAcceleration = 10.0
-        self.turnSmoothTime = 0.01
+        self.turnSmoothTime = 0.05
         self.desiredVelocity = BIEVector.Vec3(0.0, 0.0, 0.0)
         self.turnSmoothVelocity = 0.0
         

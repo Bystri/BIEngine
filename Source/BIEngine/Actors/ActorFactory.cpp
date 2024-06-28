@@ -11,7 +11,6 @@
 #include "Physics2DComponent.h"
 #include "Physics2DTriggerComponent.h"
 #include "Physics3DComponent.h"
-#include "Physics3DTriggerComponent.h"
 #include "NavAgentComponent.h"
 #include "ScriptComponent.h"
 #include "MeshComponent.h"
@@ -39,7 +38,6 @@ ActorFactory::ActorFactory()
    m_actorComponentCreators[Physics2DComponent::g_CompId] = CreatePhysics2DComponent;
    m_actorComponentCreators[Physics2DTriggerComponent::g_CompId] = CreatePhysics2DTriggerComponent;
    m_actorComponentCreators[Physics3DComponent::g_CompId] = CreatePhysics3DComponent;
-   m_actorComponentCreators[Physics3DTriggerComponent::g_CompId] = CreatePhysics3DTriggerComponent;
    m_actorComponentCreators[NavAgentComponent::g_CompId] = CreateNavAgentComponent;
    m_actorComponentCreators[ScriptComponent::g_CompId] = CreateScriptComponent;
    m_actorComponentCreators[AnimationComponent::g_CompId] = CreateAnimatorComponent;
@@ -100,6 +98,7 @@ std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, co
 
    // Init components
    if (g_pApp->m_pGameLogic->IsLevelLoaded()) {
+      pActor->OnLevelLoaded();
       pActor->Activate();
    }
    return pActor;

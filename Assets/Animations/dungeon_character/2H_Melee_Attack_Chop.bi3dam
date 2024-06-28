@@ -1,5 +1,5 @@
 <Animation>
-    <Params duration="1633.3333740234375" tickPerSecond="1000"/>
+    <Params duration="1633.3333740234375" tickPerSecond="1000" isLooped="false"/>
     <BoneChannels>
         <BoneChannel boneName="root">
             <Positions>

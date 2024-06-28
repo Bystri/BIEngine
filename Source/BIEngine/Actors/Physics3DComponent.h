@@ -47,6 +47,8 @@ protected:
    std::string m_density;
    std::string m_material;
 
+   bool m_isTrigger;
+
    glm::vec3 m_rigidBodyScale;
    glm::vec3 m_angularFactor;
 

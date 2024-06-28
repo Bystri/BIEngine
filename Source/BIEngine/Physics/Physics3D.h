@@ -25,6 +25,17 @@ public:
       STATIC     // Вообще не учавствуют в физической симуляции (например, триггеры)
    };
 
+   struct ShapeCreationParams {
+      BodyType bodyType;
+      ActorId actorId;
+      glm::vec3 pos;
+      glm::vec3 eulerAngles;
+      glm::vec3 angularFactor;
+      std::string densityStr;
+      std::string physicsMaterial;
+      bool isTrigger;
+   };
+
    virtual ~IGamePhysics3D(){};
 
    // Служебные функции
@@ -36,14 +47,13 @@ public:
    virtual void DrawRenderDiagnostics() = 0;
 
    // Инициализация физических объектов
-   virtual void AddSphere(float radius, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
-   virtual void AddBox(const glm::vec3& dimensions, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
-   virtual void AddCapsule(const float radius, const float height, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
-   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec3& pos, const glm::vec3& eulerAngles, const glm::vec3& angularFactor, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddSphere(float radius, const ShapeCreationParams& creationParams) = 0;
+   virtual void AddBox(const glm::vec3& dimensions, const ShapeCreationParams& creationParams) = 0;
+   virtual void AddCapsule(const float radius, const float height, const ShapeCreationParams& creationParams) = 0;
+   virtual void AddPointCloud(const glm::vec3* verts, int numPoints, const ShapeCreationParams& creationParams) = 0;
    virtual void RemoveActor(ActorId id) = 0;
 
    // Взаимодейтсвие с физическим миром
-   virtual void CreateTrigger(ActorId actorId, const glm::vec3& pos, const glm::vec3& dim) = 0;
    virtual void ApplyForce(const glm::vec3& forceVec, ActorId aid) = 0;
    virtual void ApplyTorque(const glm::vec3& torque, ActorId aid) = 0;
    virtual bool KinematicMove(ActorId aid, const glm::vec3& position, const glm::vec3& angles) = 0;

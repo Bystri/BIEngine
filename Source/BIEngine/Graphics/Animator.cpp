@@ -5,7 +5,7 @@
 namespace BIEngine {
 
 Animator::Animator(Actor* pRoot)
-   : m_pRoot(pRoot), m_currentTime(0.0f), m_pCurrentAnimation(nullptr)
+   : m_pRoot(pRoot), m_pCurrentAnimation(nullptr), m_currentTime(0.0f)
 {
 }
 
@@ -13,8 +13,14 @@ void Animator::Update(float dt)
 {
    if (m_pCurrentAnimation) {
       m_currentTime += m_pCurrentAnimation->GetTicksPerSecond() * dt;
+
+      const float notClampedTime = m_currentTime;
       m_currentTime = fmod(m_currentTime, m_pCurrentAnimation->GetDuration());
       calculateActorTransform(m_pRoot);
+
+      if (!m_pCurrentAnimation->IsLooped() && notClampedTime >= m_pCurrentAnimation->GetDuration()) {
+         m_pCurrentAnimation = nullptr;
+      }
    }
 }
 
