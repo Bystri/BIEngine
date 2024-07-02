@@ -5,19 +5,18 @@ import BIEVector
 import math
 from typing import cast
 
-import MovementProducer
-
 class AnimationControllerProcess(BIEProcess.Process):
     def __init__(self, movableActor : BIEActor.Actor):
         BIEProcess.Process.__init__(self)
         
         self.physics3DComponent = cast(BIEActor.Physics3DComponent, movableActor.GetComponent("Physics3DComponent"))
         self.animationComponent = cast(BIEActor.AnimationComponent, movableActor.GetComponent("AnimationComponent"))
+        self.meleeAttackComponent = movableActor.GetComponent("MeleeAttackComponent").GetObject()
         
         self.isRunning = True
         
     def OnUpdate(self, dt):
-        if self.physics3DComponent.GetVelocity().Length() > 1.5:
+        if self.physics3DComponent.GetVelocity().Length() > 1.5 and not self.meleeAttackComponent.IsAttackInProgress():
             if self.isRunning == False:
                 self.animationComponent.PlayAnimation("run")
                 self.isRunning = True

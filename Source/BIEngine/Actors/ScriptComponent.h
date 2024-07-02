@@ -20,6 +20,8 @@ public:
    virtual void Deactivate() override;
    virtual void Terminate() override;
 
+   virtual void OnUpdate(const GameTimer& gt) override;
+
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
    pybind11::object GetObject();

@@ -171,6 +171,21 @@ void ScriptComponent::Terminate()
    }
 }
 
+void ScriptComponent::OnUpdate(const GameTimer& gt)
+{
+   if (g_pApp->m_options.isEditorMode) {
+      return;
+   }
+
+   try {
+      if (py::hasattr(m_pyObject, "OnUpdate")) {
+         m_pyObject.attr("OnUpdate")(gt.DeltaTime());
+      }
+   } catch (pybind11::error_already_set er) {
+      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnUpdate: ") + er.what());
+   }
+}
+
 tinyxml2::XMLElement* ScriptComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
    tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(ScriptComponent::g_CompId.c_str());

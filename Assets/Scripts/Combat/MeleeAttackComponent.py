@@ -37,9 +37,6 @@ class MeleeAttackComponent():
         pass
         
     def OnInit(self):
-        self.OnKeyDownCallback = lambda eventData : self.OnKeyDown(eventData)
-        self.keyDownListenerHandler = BIEEvent.RegisterEventListener(BIGInputEvent.EvtData_OnKeyDown.eventType, self.OnKeyDownCallback)
-        
         self.OnTriggerEnterCallback = lambda eventData : self.OnTriggerEnter(eventData)
         self.onTriggerEnterListenerHandler = BIEEvent.RegisterEventListener(BIEEvent.EvtData_Phys3DTrigger_Enter.eventType, self.OnTriggerEnterCallback)
         
@@ -47,6 +44,10 @@ class MeleeAttackComponent():
         self.meleeTriggerActor = self.owner.GetActorByPath("MeleeAttackTrigger")
         self.meleeTriggerActor.SetActivate(False)
         
+        self.startAttack = None
+        self.activateProcess = None
+        self.hitWindow = None
+        self.deactivateProcess = None      
         
     def OnTerminate(self):
         pass
@@ -67,23 +68,28 @@ class MeleeAttackComponent():
         targetDamagableComponent = collidedActor.GetComponent("DamagableComponent")
         if targetDamagableComponent is not None:
             targetDamagableComponent.GetObject().GotDamage()
+            
+    def OnUpdate(self, dt):
+        if self.deactivateProcess is not None and self.deactivateProcess.IsDead():
+            self.startAttack = None
+            self.activateProcess = None
+            self.hitWindow = None
+            self.deactivateProcess = None
+            
+    def IsAttackInProgress(self):
+        return self.deactivateProcess is not None
+            
+    def Attack(self):
+        self.startAttack = BIEProcess.DelayProcess(0.75) 
+        self.activateProcess = ActivateTriggerProcess(self.meleeTriggerActor)
+        self.startAttack.AttachChild(self.activateProcess)
         
-    def OnKeyDown(self, eventData : BIEEvent.BaseEventData):
-        onKeyDownData = cast(BIGInputEvent.EvtData_OnKeyDown, eventData)
-        keyCode = onKeyDownData.GetKey()
+        self.hitWindow = BIEProcess.DelayProcess(0.5) 
+        self.activateProcess.AttachChild(self.hitWindow)
         
-        if keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.SPACE:
-
-            self.startAttack = BIEProcess.DelayProcess(0.75) 
-            self.activateProcess = ActivateTriggerProcess(self.meleeTriggerActor)
-            self.startAttack.AttachChild(self.activateProcess)
-            
-            self.hitWindow = BIEProcess.DelayProcess(0.5) 
-            self.activateProcess.AttachChild(self.hitWindow)
-            
-            self.deactivateProcess = DeactivateTriggerProcess(self.meleeTriggerActor)
-            self.hitWindow.AttachChild(self.deactivateProcess)
-            
-            BIEProcess.AttachProcess(self.startAttack)
-            
-            self.animationComponent.PlayAnimation("2H_Melee_Attack_Chop")
+        self.deactivateProcess = DeactivateTriggerProcess(self.meleeTriggerActor)
+        self.hitWindow.AttachChild(self.deactivateProcess)
+        
+        BIEProcess.AttachProcess(self.startAttack)
+        
+        self.animationComponent.PlayAnimation("2H_Melee_Attack_Chop")

@@ -1,32 +1,42 @@
-import MovementProducer
-
 import BIEActor
 import BIEEvent
 import BIEVector
 import BIGInputEvent
 
+from Movement.MovementCommand import MovementCommand
+from Combat.MeleeAttackCommand import MeleeAttackCommand
+
 from typing import cast
 
-class InputMovementProducer(MovementProducer.MovementProducer):
-    def Init(self, owner : BIEActor.Actor):
-        super().Init(owner)
-        
+class PlayerActionBinderComponent():
+    def __init__(self):
         self.up = False
         self.down = False
         self.left = False
         self.right = False
         
+        self.isNeedMoving = False
+        self.isNeedAttack = False;
+        
+    def OnInit(self):
+        self.characterCommandMngComponent = self.owner.GetComponent("CharacterCommandMngComponent").GetObject()
+        
+    def OnActivate(self):
+        self.OnKeyDownCallback = lambda eventData : self.OnKeyDown(eventData)
+        self.keyDownListenerHandler = BIEEvent.RegisterEventListener(BIGInputEvent.EvtData_OnKeyDown.eventType, self.OnKeyDownCallback)
+    
         self.OnKeyDownCallback = lambda eventData : self.OnKeyDown(eventData)
         self.keyDownListenerHandler = BIEEvent.RegisterEventListener(BIGInputEvent.EvtData_OnKeyDown.eventType, self.OnKeyDownCallback)
         
         self.OnKeyUpCallback = lambda eventData : self.OnKeyUp(eventData)
         self.keyUpListenerHandler = BIEEvent.RegisterEventListener(BIGInputEvent.EvtData_OnKeyUp.eventType, self.OnKeyUpCallback)
         
-    def Terminate(self):
+    def OnDeactivate(self):
         BIEEvent.RemoveEventListener(self.keyDownListenerHandler)
         BIEEvent.RemoveEventListener(self.keyUpListenerHandler)
         
-        super().Terminate()
+    def OnTerminate(self):
+        pass
         
     def OnKeyDown(self, eventData : BIEEvent.BaseEventData):
         onKeyDownData = cast(BIGInputEvent.EvtData_OnKeyDown, eventData)
@@ -41,6 +51,11 @@ class InputMovementProducer(MovementProducer.MovementProducer):
         elif  keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.L:
             self.right = True 
             
+        self.isNeedMoving = self.up or self.down or self.left or self.right
+        
+        if keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.SPACE:
+            self.isNeedAttack = True
+            
     def OnKeyUp(self, eventData : BIEEvent.BaseEventData):
         onKeyUpData = cast(BIGInputEvent.EvtData_OnKeyUp, eventData)
         keyCode = onKeyUpData.GetKey()
@@ -54,7 +69,18 @@ class InputMovementProducer(MovementProducer.MovementProducer):
         elif  keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.L:
             self.right = False 
             
-    def GetVelocity(self):
+        self.isNeedMoving = self.up or self.down or self.left or self.right
+            
+    def OnUpdate(self, dt):
+        if self.isNeedAttack:
+            attackCommand = MeleeAttackCommand(self.owner)
+            self.characterCommandMngComponent.ExecuteCommand(attackCommand)
+            self.isNeedAttack = False
+            return
+    
+        if not self.isNeedMoving:
+            return
+    
         vertical = 0
         horizontal = 0
         
@@ -76,4 +102,5 @@ class InputMovementProducer(MovementProducer.MovementProducer):
         if resLength > 1.0:
             res /= resLength
             
-        return res
+        command = MovementCommand(self.owner, res)
+        self.characterCommandMngComponent.ExecuteCommand(command)

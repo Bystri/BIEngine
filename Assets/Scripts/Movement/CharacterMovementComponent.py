@@ -6,37 +6,43 @@ import BIEMath
 import math
 from typing import cast
 
-import MovementProducer
-
-class MoveProcess(BIEProcess.Process):
-    def __init__(self, movableActor : BIEActor.Actor, movementProducer : MovementProducer.MovementProducer):
-        BIEProcess.Process.__init__(self)
+class CharacterMovementComponent():
+    def __init__(self):
+        pass 
         
-        self.transformComponent = cast(BIEActor.TransformComponent, movableActor.GetComponent("TransformComponent"))
-        self.physics3DComponent = cast(BIEActor.Physics3DComponent, movableActor.GetComponent("Physics3DComponent"))
+    def OnInit(self):
+        self.transformComponent = cast(BIEActor.TransformComponent, self.owner.GetComponent("TransformComponent"))
+        self.physics3DComponent = cast(BIEActor.Physics3DComponent, self.owner.GetComponent("Physics3DComponent"))
         self.maxSpeed = 5.0
         self.maxAngularSpeed = 2000.0
         self.maxAcceleration = 10.0
         self.turnSmoothTime = 0.05
-        self.desiredVelocity = BIEVector.Vec3(0.0, 0.0, 0.0)
         self.turnSmoothVelocity = 0.0
+        
+        self.inputVector = BIEVector.Vec3(0.0, 0.0, 0.0)
+        self.desiredVelocity = BIEVector.Vec3(0.0, 0.0, 0.0)
         
         # Euler angles are stored as Quat in a transformComponent; A single rotation can have multiple representations in eulerAngles 
         # This way we can get different angles using self.transformComponent.GetRotation()
         # Here we storage for last euler angles for gradual increasing in the future
         self.currentEulerAngles = self.transformComponent.GetRotation()
         
-        movementProducer.Init(movableActor)
-        self.movementProducer = movementProducer
         
-    def __del__(self):
-        self.movementProducer.Terminate()
-
+    def OnActivate(self):
+        pass
+        
+    def OnDeactivate(self):
+        pass
+        
+    def OnTerminate(self):
+        pass
+        
+    def Move(self, inputVector, dt):
+        self.inputVector = inputVector
+        
     def OnUpdate(self, dt):
-        inputVec = self.movementProducer.GetVelocity()
-
-        if inputVec.Length() > 0.001:
-            targetAngle = math.degrees(math.atan2(-inputVec.z, inputVec.x))
+        if self.inputVector.Length() > 0.001:
+            targetAngle = math.degrees(math.atan2(-self.inputVector.z, self.inputVector.x))
             
             if abs(targetAngle - self.currentEulerAngles.y) > abs(targetAngle + 360.0 - self.currentEulerAngles.y):
                 targetAngle += 360.0
@@ -50,31 +56,12 @@ class MoveProcess(BIEProcess.Process):
         else:
             self.turnSmoothVelocity = 0.0
             
-        self.desiredVelocity = BIEVector.Vec3(inputVec.x, 0.0, inputVec.z) * self.maxSpeed
+        self.desiredVelocity = BIEVector.Vec3(self.inputVector.x, 0.0, self.inputVector.z) * self.maxSpeed
          
         velocity = self.physics3DComponent.GetVelocity()
         maxSpeedChange = self.maxAcceleration * dt
         velocity.x = BIEMath.MoveTowards(velocity.x, self.desiredVelocity.x, maxSpeedChange)
         velocity.z = BIEMath.MoveTowards(velocity.z, self.desiredVelocity.z, maxSpeedChange)
         self.physics3DComponent.SetVelocity(velocity)
-
-
-class CharacterMovement():
-    def __init__(self):
-        pass 
         
-    def Clear(self):
-        pass
-        
-    def OnInit(self):
-        self.proc = MoveProcess(self.owner, self.movementProducer)    
-        BIEProcess.AttachProcess(self.proc)
-        
-    def OnActivate(self):
-        self.proc.UnPause()
-        
-    def OnDeactivate(self):
-        self.proc.Pause()
-        
-    def OnTerminate(self):
-        self.proc.Success()
+        self.inputVector = BIEVector.Vec3(0.0, 0.0, 0.0)
