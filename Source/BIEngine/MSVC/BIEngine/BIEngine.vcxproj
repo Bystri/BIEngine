@@ -148,6 +148,7 @@
     <ClCompile Include="..\..\Navigation\NavMeshManager.cpp" />
     <ClCompile Include="..\..\Navigation\NavSoloMeshGenerator.cpp" />
     <ClCompile Include="..\..\Navigation\NavWorld.cpp" />
+    <ClCompile Include="..\..\Network\Socket.cpp" />
     <ClCompile Include="..\..\Physics\Physics2D.cpp" />
     <ClCompile Include="..\..\Physics\Physics3D.cpp" />
     <ClCompile Include="..\..\Physics\Physics2DEventListener.cpp" />
@@ -266,6 +267,7 @@
     <ClInclude Include="..\..\Navigation\NavMeshManager.h" />
     <ClInclude Include="..\..\Navigation\NavSoloMeshGenerator.h" />
     <ClInclude Include="..\..\Navigation\NavWorld.h" />
+    <ClInclude Include="..\..\Network\Socket.h" />
     <ClInclude Include="..\..\Physics\Physics2D.h" />
     <ClInclude Include="..\..\Physics\Physics3D.h" />
     <ClInclude Include="..\..\Physics\Physics2DEventListener.h" />

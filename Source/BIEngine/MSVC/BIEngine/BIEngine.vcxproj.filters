@@ -67,6 +67,9 @@
     <Filter Include="Navigation">
       <UniqueIdentifier>{02f7d1f7-7045-429d-b12b-d161abf09a3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{b4403590-093c-49a5-8fa6-23007d3ad58a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCore\GameApp.cpp">
@@ -383,6 +386,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Actors\SkeletonComponent.cpp">
       <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\Socket.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -763,6 +769,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsMath.h">
       <Filter>Scripting\ScriptExports</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Socket.h">
+      <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
