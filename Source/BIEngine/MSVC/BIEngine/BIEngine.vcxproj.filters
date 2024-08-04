@@ -390,6 +390,9 @@
     <ClCompile Include="..\..\Network\Socket.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Network\Serialization.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -771,6 +774,9 @@
       <Filter>Scripting\ScriptExports</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Network\Socket.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Serialization.h">
       <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
