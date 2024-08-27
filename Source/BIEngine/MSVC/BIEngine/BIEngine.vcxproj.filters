@@ -393,6 +393,9 @@
     <ClCompile Include="..\..\Network\Serialization.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Network\ObjectReplication.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -777,6 +780,9 @@
       <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Network\Serialization.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\ObjectReplication.h">
       <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
