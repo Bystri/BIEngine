@@ -20,6 +20,18 @@ int main(int argc, char* argv[])
    }
 
    BIEngine::g_pApp->m_options.useDevelopmentAssets = true;
+   for (int i = 0; i < argc; ++i) {
+      if (std::memcmp(argv[i], "-pn", 3) == 0) {
+         BIEngine::g_pApp->m_options.playerName = argv[i + 1];
+      }
+      if (std::memcmp(argv[i], "-ha", 3) == 0) {
+         BIEngine::g_pApp->m_options.hostAddress = argv[i + 1];
+      }
+      if (std::memcmp(argv[i], "-hp", 3) == 0) {
+         BIEngine::g_pApp->m_options.hostPort = std::atoi(argv[i + 1]);
+      }
+   }
+
    return BIEngine::Run(argc, argv);
 }
 
@@ -36,8 +48,14 @@ BIGameApp::~BIGameApp()
 
 bool BIGameApp::Init()
 {
-   if (!BIEngine::GameApp::Init())
+   if (BIEngine::SocketUtil::Init()) {
+      BIEngine::Logger::WriteErrorLog("Error while init");
       return false;
+   }
+
+   if (!BIEngine::GameApp::Init()) {
+      return false;
+   }
 
    return true;
 }
@@ -45,6 +63,7 @@ bool BIGameApp::Init()
 void BIGameApp::Close()
 {
    BIEngine::GameApp::Close();
+   BIEngine::SocketUtil::Terminate();
 }
 
 BIGameLogic::BIGameLogic()
@@ -57,8 +76,16 @@ BIGameLogic::BIGameLogic()
 
 bool BIGameLogic::Init()
 {
-   if (!GameLogic::Init())
+   if (!GameLogic::Init()) {
       return false;
+   }
+
+   if (BIEngine::g_pApp->m_options.hostAddress.empty()) {
+      m_pNetworkManager = BIEngine::NetworkManager::CreateAsMasterPeer(BIEngine::g_pApp->m_options.hostPort, BIEngine::g_pApp->m_options.playerName);
+   } else {
+      BIEngine::SocketAddressPtr sockAddr = BIEngine::SocketUtil::CreateIPv4SocketFromString(BIEngine::g_pApp->m_options.hostAddress);
+      m_pNetworkManager = BIEngine::NetworkManager::CreateAsPeer(*sockAddr, BIEngine::g_pApp->m_options.playerName);
+   }
 
    m_pPhysics2D->Initialize();
    m_pPhysics3D->Initialize();
@@ -80,10 +107,20 @@ bool BIGameLogic::LoadLevelDelegate(tinyxml2::XMLElement* pRoot)
 
 void BIGameLogic::OnUpdate(BIEngine::GameTimer& gt)
 {
-   GameLogic::OnUpdate(gt);
-   m_pNavWorld->GetNavCrowd()->UpdateCrowdInfo(m_actors);
-   m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
-   m_pNavWorld->GetNavMeshManager()->RenderMesh();
+   if (m_pNetworkManager->GetState() != BIEngine::NetworkManager::NetworkManagerState::Delay) {
+      GameLogic::OnUpdate(gt);
+      m_pNavWorld->GetNavCrowd()->UpdateCrowdInfo(m_actors);
+      m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
+      m_pNavWorld->GetNavMeshManager()->RenderMesh();
+
+      m_pNetworkManager->ProcessIncomingPackets(gt.DeltaTime());
+      m_pNetworkManager->SendOutgoingPackets(gt);
+      return;
+   }
+
+   // only grab the incoming packets because if I'm in delay,
+   // the only way I'm getting out is if an incoming packet saves me
+   m_pNetworkManager->ProcessIncomingPackets(gt.DeltaTime());
 }
 
 static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()

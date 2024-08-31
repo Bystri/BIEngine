@@ -26,6 +26,33 @@ public:
    SocketAddress();
    SocketAddress(uint32_t address, uint16_t port);
 
+   uint32_t GetAddress() const
+   {
+      const sockaddr_in* const pSocketAddrIn = GetAsSockAddrIn();
+      return pSocketAddrIn->sin_addr.S_un.S_addr;
+   }
+
+   uint16_t GetPort() const
+   {
+      const sockaddr_in* const pSocketAddrIn = GetAsSockAddrIn();
+      return pSocketAddrIn->sin_port;
+   }
+
+   bool operator==(const SocketAddress& inOther) const
+   {
+      return (m_sockAddr.ss_family == AF_INET &&
+              GetAsSockAddrIn()->sin_port == inOther.GetAsSockAddrIn()->sin_port) &&
+             (GetAsSockAddrIn()->sin_addr.S_un.S_addr == inOther.GetAsSockAddrIn()->sin_addr.S_un.S_addr);
+   }
+
+   size_t GetHash() const
+   {
+      return (GetAsSockAddrIn()->sin_addr.S_un.S_addr) |
+             ((static_cast<uint32_t>(GetAsSockAddrIn()->sin_port)) << 13) |
+             m_sockAddr.ss_family;
+   }
+
+
 private:
    SocketAddress(const sockaddr_storage& sockAddr);
 
@@ -42,6 +69,11 @@ private:
    sockaddr_in* GetAsSockAddrIn()
    {
       return reinterpret_cast<sockaddr_in*>(&m_sockAddr);
+   }
+
+   const sockaddr_in* GetAsSockAddrIn() const
+   {
+      return reinterpret_cast<const sockaddr_in*>(&m_sockAddr);
    }
 
    std::size_t GetSize() const { return sizeof(m_sockAddr); }
@@ -132,3 +164,13 @@ private:
 };
 
 } // namespace BIEngine
+
+namespace std {
+template <>
+struct hash<BIEngine::SocketAddress> {
+   size_t operator()(const BIEngine::SocketAddress& inAddress) const
+   {
+      return inAddress.GetHash();
+   }
+};
+} // namespace std

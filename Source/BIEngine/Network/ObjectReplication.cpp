@@ -50,21 +50,21 @@ void ReplicationHeader::Write(OutputMemoryBitStream& stream)
 {
    stream.WriteBits(static_cast<uint32_t>(m_replicationAction), GetRequiredBits<static_cast<int>(ReplicationAction::MAX)>::Value);
 
-   stream.Write(m_networkId);
+   Serialize(stream, m_networkId);
    if (m_replicationAction != ReplicationAction::Destroy) {
-      stream.Write(m_classId);
+      Serialize(stream, m_classId);
    }
 }
 
 void ReplicationHeader::Read(InputMemoryBitStream& stream)
 {
    uint32_t repAct = 0;
-   stream.Read(repAct, GetRequiredBits<static_cast<int>(ReplicationAction::MAX)>::Value);
+   Deserialize(stream, repAct, GetRequiredBits<static_cast<int>(ReplicationAction::MAX)>::Value);
    m_replicationAction = static_cast<ReplicationAction>(repAct);
 
-   stream.Read(m_networkId);
+   Deserialize(stream, m_networkId);
    if (m_replicationAction != ReplicationAction::Destroy) {
-      stream.Read(m_classId);
+      Deserialize(stream, m_classId);
    }
 };
 
@@ -139,7 +139,7 @@ void RPCManager::RegisterUnwrapFunction(uint32_t id, RPCUnwrapFunc func)
 void RPCManager::ProcessRPC(InputMemoryBitStream& stream)
 {
    uint32_t name;
-   stream.Read(name);
+   Deserialize(stream, name);
    m_nameToRPCTable[name](stream);
 }
 } // namespace BIEngine

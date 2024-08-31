@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../BIEngine/EngineCore/BIEngine.h"
+#include "../BIEngine/Network/NetworkManagerP2P.h"
 
 #include "BIGameController.h"
 #include "BIScriptExports.h"
@@ -25,6 +26,9 @@ public:
    virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) override;
 
    virtual void OnUpdate(BIEngine::GameTimer& gt) override;
+
+private:
+   std::unique_ptr<BIEngine::NetworkManager> m_pNetworkManager;
 };
 
 class BIGameHumanView : public BIEngine::HumanView {

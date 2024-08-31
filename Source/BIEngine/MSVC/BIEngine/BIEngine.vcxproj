@@ -62,7 +62,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>LinearMath.lib;BulletDynamics.lib;BulletCollision.lib;python310.lib;freetype.lib;irrKlang.lib;libvorbis_static.lib;libogg_static.lib;libvorbisfile_static.lib;luaplus51-1201.lib;chipmunk.lib;zlibstat.lib;glfw3.lib;opengl32.lib;assimp-vc143-mtd.lib;Detour-d.lib;DetourCrowd-d.lib;DetourTileCache-d.lib;Recast-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;LinearMath.lib;BulletDynamics.lib;BulletCollision.lib;python310.lib;freetype.lib;irrKlang.lib;libvorbis_static.lib;libogg_static.lib;libvorbisfile_static.lib;luaplus51-1201.lib;chipmunk.lib;zlibstat.lib;glfw3.lib;opengl32.lib;assimp-vc143-mtd.lib;Detour-d.lib;DetourCrowd-d.lib;DetourTileCache-d.lib;Recast-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -80,7 +80,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>LinearMath.lib;BulletDynamics.lib;BulletCollision.lib;python310.lib;freetype.lib;irrKlang.lib;libvorbis_static.lib;libogg_static.lib;libvorbisfile_static.lib;luaplus51-1201.lib;chipmunk.lib;zlibstat.lib;glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;Recast.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;LinearMath.lib;BulletDynamics.lib;BulletCollision.lib;python310.lib;freetype.lib;irrKlang.lib;libvorbis_static.lib;libogg_static.lib;libvorbisfile_static.lib;luaplus51-1201.lib;chipmunk.lib;zlibstat.lib;glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;Recast.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -148,6 +148,7 @@
     <ClCompile Include="..\..\Navigation\NavMeshManager.cpp" />
     <ClCompile Include="..\..\Navigation\NavSoloMeshGenerator.cpp" />
     <ClCompile Include="..\..\Navigation\NavWorld.cpp" />
+    <ClCompile Include="..\..\Network\NetworkManagerP2P.cpp" />
     <ClCompile Include="..\..\Network\ObjectReplication.cpp" />
     <ClCompile Include="..\..\Network\Serialization.cpp" />
     <ClCompile Include="..\..\Network\Socket.cpp" />
@@ -269,6 +270,7 @@
     <ClInclude Include="..\..\Navigation\NavMeshManager.h" />
     <ClInclude Include="..\..\Navigation\NavSoloMeshGenerator.h" />
     <ClInclude Include="..\..\Navigation\NavWorld.h" />
+    <ClInclude Include="..\..\Network\NetworkManagerP2P.h" />
     <ClInclude Include="..\..\Network\ObjectReplication.h" />
     <ClInclude Include="..\..\Network\Serialization.h" />
     <ClInclude Include="..\..\Network\Socket.h" />

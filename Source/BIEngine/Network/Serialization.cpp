@@ -149,4 +149,18 @@ void InputMemoryBitStream::ReadBits(void* outData, uint32_t bitCount)
    }
 }
 
+void Serialize(OutputMemoryBitStream& stream, const std::string& data)
+{
+   Serialize(stream, data.size(), sizeof(uint32_t) * 8);
+   stream.WriteBits(data.data(), data.size() * 8);
+}
+
+void Deserialize(InputMemoryBitStream& stream, std::string& data)
+{
+   int strSize;
+   Deserialize(stream, strSize, sizeof(uint32_t) * 8);
+   data.resize(strSize);
+   stream.ReadBits(data.data(), strSize * 8);
+}
+
 } // namespace BIEngine

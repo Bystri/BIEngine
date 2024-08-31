@@ -65,6 +65,10 @@ int UdpSocket::ReceiveFrom(void* buffer, int maxLen, SocketAddress& from)
    }
 
    int errCode = SocketUtil::GetLastError();
+   if (errCode == WSAEWOULDBLOCK) {
+      return 0;
+   }
+
    Logger::WriteErrorLog("Udp socket error - ReceiveFrom; Error code: %d", errCode);
    return -errCode;
 }
@@ -248,7 +252,7 @@ UdpSocketPtr SocketUtil::CreateUdpSocket(SocketAddressFamily inFamily)
       return UdpSocketPtr(new UdpSocket(s));
    }
 
-   Logger::WriteErrorLog("Error while creating udp socket");
+   Logger::WriteErrorLog("Error while creating udp socket; Error code: %d", SocketUtil::GetLastError());
    return nullptr;
 }
 
@@ -259,7 +263,7 @@ TcpSocketPtr SocketUtil::CreateTcpSocket(SocketAddressFamily inFamily)
       return TcpSocketPtr(new TcpSocket(s));
    }
 
-   Logger::WriteErrorLog("Error while creating udp socket");
+   Logger::WriteErrorLog("Error while creating udp socket; Error code: %d", SocketUtil::GetLastError());
    return nullptr;
 }
 

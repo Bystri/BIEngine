@@ -3,6 +3,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdint>
+#include <string>
 #include <algorithm>
 #include <memory>
 
@@ -187,16 +188,6 @@ public:
 
    void WriteBytes(const void* data, size_t byteCount) { WriteBits(data, byteCount << 3); }
 
-   template <typename T>
-   void Write(T data, size_t bitCount = sizeof(T) * 8)
-   {
-      static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value, "Generic Write only supports primitive data types");
-      if (!netIsPlatformLittleEndian()) {
-         data = ByteSwap(data);
-      }
-      WriteBits(&data, bitCount);
-   }
-
 private:
    void reallocBuffer(uint32_t newBitCapacity);
 
@@ -219,26 +210,46 @@ public:
 
    uint32_t GetRemainingBitCount() const { return m_bitCapacity - m_bitHead; }
 
+   void ResetToCapacity(uint32_t byteCapacity)
+   {
+      m_bitCapacity = byteCapacity << 3;
+      m_bitHead = 0;
+   }
+
    void ReadBits(uint8_t& outData, uint32_t bitCount);
    void ReadBits(void* outData, uint32_t bitCount);
 
    void ReadBytes(void* outData, uint32_t byteCount) { ReadBits(outData, byteCount << 3); }
-
-   template <typename T>
-   void Read(T& inData, size_t bitCount = sizeof(T) * 8)
-   {
-      static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value, "Generic Write only supports primitive data types");
-      ReadBits(&inData, bitCount);
-
-      if (!netIsPlatformLittleEndian()) {
-         inData = ByteSwap(inData);
-      }
-   }
 
 private:
    std::shared_ptr<char> m_pBuffer;
    uint32_t m_bitHead;
    uint32_t m_bitCapacity;
 };
+
+template <typename T>
+void Serialize(OutputMemoryBitStream& stream, T data, size_t bitCount = sizeof(T) * 8)
+{
+   static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value, "Generic Write only supports primitive data types");
+   if (!netIsPlatformLittleEndian()) {
+      data = ByteSwap(data);
+   }
+   stream.WriteBits(&data, bitCount);
+}
+
+void Serialize(OutputMemoryBitStream& stream, const std::string& data);
+
+template <typename T>
+void Deserialize(InputMemoryBitStream& stream, T& inData, size_t bitCount = sizeof(T) * 8)
+{
+   static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value, "Generic Write only supports primitive data types");
+   stream.ReadBits(&inData, bitCount);
+
+   if (!netIsPlatformLittleEndian()) {
+      inData = ByteSwap(inData);
+   }
+}
+
+void Deserialize(InputMemoryBitStream& stream, std::string& data);
 
 } // namespace BIEngine
