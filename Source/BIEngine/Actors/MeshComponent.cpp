@@ -54,6 +54,12 @@ bool MeshComponent::Init(tinyxml2::XMLElement* pData)
 
 void MeshComponent::OnRenderObject(const GameTimer& gt)
 {
+   std::shared_ptr<HumanView> pHumanView = g_pApp->TryGetHumanView(0);
+
+   if (pHumanView == nullptr) {
+      return;
+   }
+
    RenderItemsStorage::OpaqueRenderItem opaqueRitem;
    opaqueRitem.actorId = m_pOwner->GetId();
    opaqueRitem.VAO = m_pMesh->GetVao();
@@ -63,7 +69,7 @@ void MeshComponent::OnRenderObject(const GameTimer& gt)
    std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
    opaqueRitem.ModelTransform = pTransformComponent->GetWorldTransformMatrix();
 
-   g_pApp->TryGetHumanView(0)->GetScene()->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);
+   pHumanView->GetScene()->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);
 }
 
 tinyxml2::XMLElement* MeshComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)

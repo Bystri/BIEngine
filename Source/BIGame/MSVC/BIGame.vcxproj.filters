@@ -1,18 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\BIGameController.cpp" />
     <ClCompile Include="..\BIEventListener.cpp" />
     <ClCompile Include="..\BIGame.cpp" />
+    <ClCompile Include="..\BICameraManager.cpp" />
+    <ClCompile Include="..\PlayerManager\PlayerManager.cpp">
+      <Filter>PlayerManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Network\AttachedActorReplicationUnit.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGame.h" />
-    <ClInclude Include="..\BIGameController.h" />
     <ClInclude Include="..\BIEventListener.h" />
     <ClInclude Include="..\BIScriptExports.h" />
+    <ClInclude Include="..\BICameraManager.h" />
+    <ClInclude Include="..\Network\ReplicationObjectPlayerCharacter.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Network\ReplicationObjectPlayer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PlayerManager\PlayerManager.h">
+      <Filter>PlayerManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Network\AttachedActorReplicationUnit.h">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.clang-format" />
     <None Include="..\.clang-tidy" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Network">
+      <UniqueIdentifier>{b6f77106-0e23-41b9-9507-32a3f33a3d46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayerManager">
+      <UniqueIdentifier>{202dd021-2f17-4688-abb1-43fd733cfce2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

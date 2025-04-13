@@ -1,7 +1,7 @@
 import BIEActor
 import BIEEvent
 import BIEVector
-import BIGInputEvent
+import BIGActionEvent
 
 from Movement.MovementCommand import MovementCommand
 from Combat.MeleeAttackCommand import MeleeAttackCommand
@@ -16,62 +16,39 @@ class PlayerActionBinderComponent():
         self.right = False
         
         self.isNeedMoving = False
-        self.isNeedAttack = False;
+        self.isNeedAttack = False
         
     def OnInit(self):
         self.characterCommandMngComponent = self.owner.GetComponent("CharacterCommandMngComponent").GetObject()
         
     def OnActivate(self):
-        self.OnKeyDownCallback = lambda eventData : self.OnKeyDown(eventData)
-        self.keyDownListenerHandler = BIEEvent.RegisterEventListener(BIGInputEvent.EvtData_OnKeyDown.eventType, self.OnKeyDownCallback)
-    
-        self.OnKeyDownCallback = lambda eventData : self.OnKeyDown(eventData)
-        self.keyDownListenerHandler = BIEEvent.RegisterEventListener(BIGInputEvent.EvtData_OnKeyDown.eventType, self.OnKeyDownCallback)
+        self.OnMoveCallback = lambda eventData : self.OnMoveDelegate(eventData)
+        self.OnMoveListenerHandler = BIEEvent.RegisterEventListener(BIGActionEvent.EvtData_Move.eventType, self.OnMoveCallback)
         
-        self.OnKeyUpCallback = lambda eventData : self.OnKeyUp(eventData)
-        self.keyUpListenerHandler = BIEEvent.RegisterEventListener(BIGInputEvent.EvtData_OnKeyUp.eventType, self.OnKeyUpCallback)
-        
-    def OnDeactivate(self):
-        BIEEvent.RemoveEventListener(self.keyDownListenerHandler)
-        BIEEvent.RemoveEventListener(self.keyUpListenerHandler)
+    def OnDeactivate(self):  
+        BIEEvent.RemoveEventListener(self.OnMoveListenerHandler)
         
     def OnTerminate(self):
         pass
         
-    def OnKeyDown(self, eventData : BIEEvent.BaseEventData):
-        onKeyDownData = cast(BIGInputEvent.EvtData_OnKeyDown, eventData)
-        keyCode = onKeyDownData.GetKey()
+    def OnMoveDelegate(self, eventData : BIEEvent.BaseEventData):
+        onMoveData = cast(BIGActionEvent.EvtData_Move, eventData)
         
-        if keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.I:
-            self.up = True 
-        elif  keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.K:
-            self.down = True            
-        elif  keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.J:
-            self.left = True        
-        elif  keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.L:
-            self.right = True 
+        playerId = self.owner.GetComponent("PlayerComponent").GetPlayerId()
+         
+        if onMoveData.GetPlayerId() != playerId:
+            return
             
-        self.isNeedMoving = self.up or self.down or self.left or self.right
-        
-        if keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.SPACE:
-            self.isNeedAttack = True
-            
-    def OnKeyUp(self, eventData : BIEEvent.BaseEventData):
-        onKeyUpData = cast(BIGInputEvent.EvtData_OnKeyUp, eventData)
-        keyCode = onKeyUpData.GetKey()
-        
-        if keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.I:
-            self.up = False
-        elif  keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.K:
-            self.down = False           
-        elif  keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.J:
-            self.left = False      
-        elif  keyCode == BIGInputEvent.EvtData_OnKeyEvent.Key.L:
-            self.right = False 
-            
-        self.isNeedMoving = self.up or self.down or self.left or self.right
+        res = BIEVector.Vec3(onMoveData.GetDesiredHorizontalAmount(), 0.0, onMoveData.GetDesiredVerticalAmount())
+        resLength = res.Length()
+        if resLength > 0.0:
+            res /= resLength
+                 
+        command = MovementCommand(self.owner, res)
+        self.characterCommandMngComponent.ExecuteCommand(command)  
             
     def OnUpdate(self, dt):
+        return
         if self.isNeedAttack:
             attackCommand = MeleeAttackCommand(self.owner)
             self.characterCommandMngComponent.ExecuteCommand(attackCommand)

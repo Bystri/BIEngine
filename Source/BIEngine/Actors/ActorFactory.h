@@ -38,6 +38,8 @@ public:
    void ModifyActor(std::shared_ptr<Actor> pActor, tinyxml2::XMLElement* pOverrides);
 
 protected:
+   std::shared_ptr<Actor> CreateActorFromRootElement(tinyxml2::XMLElement* pRoot, Actor* const pParent = nullptr);
+
    // Создает компонент на основе информации из XML-структуры. Вернет нулевой указатель, если данный компонент не может быть создан
    virtual std::shared_ptr<ActorComponent> CreateComponent(std::shared_ptr<Actor> pActor, tinyxml2::XMLElement* pData);
 

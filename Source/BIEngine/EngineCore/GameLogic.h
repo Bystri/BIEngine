@@ -28,6 +28,8 @@ public:
 
    virtual bool Init();
 
+   virtual void Terminate() {}
+
    bool LoadLevel(const std::string& path);
 
    bool IsLevelLoaded() const { return m_bIsLevelLoaded; };

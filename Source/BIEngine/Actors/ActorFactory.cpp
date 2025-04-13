@@ -17,6 +17,7 @@
 #include "SkinnedMeshComponent.h"
 #include "SkeletonComponent.h"
 #include "BoneComponent.h"
+#include "PlayerComponent.h"
 #include "../Utilities/Logger.h"
 #include "../EngineCore/GameApp.h"
 
@@ -45,36 +46,15 @@ ActorFactory::ActorFactory()
    m_actorComponentCreators[SkinnedMeshComponent::g_CompId] = CreateSkinnedMeshComponent;
    m_actorComponentCreators[SkeletonComponent::g_CompId] = CreateSkeletonComponent;
    m_actorComponentCreators[BoneComponent::g_CompId] = CreateBoneComponent;
+   m_actorComponentCreators[PlayerComponent::g_CompId] = CreateBIPlayerComponent;
 }
 
 std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation, Actor* const pParent)
 {
-   if (!pRoot) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Failed to create actor from null XML-element");
-      return std::shared_ptr<Actor>();
-   }
-
    // Create actor
-   std::shared_ptr<Actor> pActor = std::shared_ptr<Actor>(new Actor(GetNextActorId()));
-
-   pActor->m_pParent = pParent;
-
-   if (!pActor->Init(pRoot)) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize actor from XML");
-      return std::shared_ptr<Actor>();
-   }
-
-   // Load components
-   tinyxml2::XMLElement* const pComponentsElement = pRoot->FirstChildElement("Components");
-   if (pComponentsElement) {
-      for (tinyxml2::XMLElement* pNode = pComponentsElement->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
-         std::shared_ptr<ActorComponent> pComponent(CreateComponent(pActor, pNode));
-         if (pComponent) {
-            pActor->AddComponent(pComponent);
-         } else {
-            return std::shared_ptr<Actor>();
-         }
-      }
+   std::shared_ptr<Actor> pActor = CreateActorFromRootElement(pRoot, pParent);
+   if (pActor == nullptr) {
+      return pActor;
    }
 
    // Hack for change position before another components can read it
@@ -88,19 +68,52 @@ std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, co
       pTransformComponent->SetLocalRotation(*pRotation);
    }
 
-   // Load Children
-   tinyxml2::XMLElement* const pChildrenElement = pRoot->FirstChildElement("Children");
-   if (pChildrenElement) {
-      for (tinyxml2::XMLElement* pNode = pChildrenElement->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
-         pActor->AddChild(CreateActor(pNode, nullptr, nullptr, pActor.get()));
-      }
-   }
-
    // Init components
    if (g_pApp->m_pGameLogic->IsLevelLoaded()) {
       pActor->OnLevelLoaded();
       pActor->Activate();
    }
+
+   return pActor;
+}
+
+std::shared_ptr<Actor> ActorFactory::CreateActorFromRootElement(tinyxml2::XMLElement* pRoot, Actor* const pParent)
+{
+   if (!pRoot) {
+      Logger::WriteLog(Logger::LogType::ERROR, "Failed to create actor from null XML-element");
+      return nullptr;
+   }
+
+   // Create actor
+   std::shared_ptr<Actor> pActor = std::shared_ptr<Actor>(new Actor(GetNextActorId()));
+
+   pActor->m_pParent = pParent;
+
+   if (!pActor->Init(pRoot)) {
+      Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize actor from XML");
+      return nullptr;
+   }
+
+   // Load components
+   tinyxml2::XMLElement* const pComponentsElement = pRoot->FirstChildElement("Components");
+   if (pComponentsElement) {
+      for (tinyxml2::XMLElement* pNode = pComponentsElement->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
+         std::shared_ptr<ActorComponent> pComponent(CreateComponent(pActor, pNode));
+         if (pComponent) {
+            pActor->AddComponent(pComponent);
+         } else {
+            return nullptr;
+         }
+      }
+   }
+
+   tinyxml2::XMLElement* const pChildrenElement = pRoot->FirstChildElement("Children");
+   if (pChildrenElement) {
+      for (tinyxml2::XMLElement* pNode = pChildrenElement->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
+         pActor->AddChild(CreateActorFromRootElement(pNode, pActor.get()));
+      }
+   }
+
    return pActor;
 }
 

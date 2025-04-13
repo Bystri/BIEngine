@@ -5,6 +5,8 @@
 #include <map>
 #include <memory>
 
+#include "../Network/Serialization.h"
+#include "../Utilities/GenericObjectFactory.h"
 #include "../3rdParty/FastDelegate/FastDelegate.h"
 
 namespace BIEngine {
@@ -19,9 +21,9 @@ public:
    // Методы передачи данных в потоке
 
    // Отправляет в поток вывода сериализованное представление события
-   virtual void Serialize(std::ostrstream& os) const = 0;
+   virtual void Write(OutputMemoryBitStream& os) const = 0;
    // Отправляет в поток ввода десериализованное представление события
-   virtual void Deserialize(std::istrstream& is) const = 0;
+   virtual void Read(InputMemoryBitStream& is) = 0;
 
    virtual const char* GetName() const = 0;
 };
@@ -44,15 +46,17 @@ public:
 
    float GetTimeStamp() const override { return m_timeStamp; }
 
-   virtual void Serialize(std::ostrstream& out) const override {}
+   virtual void Write(OutputMemoryBitStream& out) const override {}
 
-   virtual void Deserialize(std::istrstream& in) const override {}
+   virtual void Read(InputMemoryBitStream& in) override {}
 
    virtual const char* GetName() const { return "Unknown"; }
 
 private:
    const float m_timeStamp;
 };
+
+extern GenericObjectFactory<IEventData, EventType> g_eventFactory;
 
 // Менеджер событий является Singleton-объектом, так как должен быть доступен практически из каждой системы
 class EventManager {

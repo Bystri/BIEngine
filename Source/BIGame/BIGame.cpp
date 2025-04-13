@@ -48,11 +48,6 @@ BIGameApp::~BIGameApp()
 
 bool BIGameApp::Init()
 {
-   if (BIEngine::SocketUtil::Init()) {
-      BIEngine::Logger::WriteErrorLog("Error while init");
-      return false;
-   }
-
    if (!BIEngine::GameApp::Init()) {
       return false;
    }
@@ -63,40 +58,46 @@ bool BIGameApp::Init()
 void BIGameApp::Close()
 {
    BIEngine::GameApp::Close();
-   BIEngine::SocketUtil::Terminate();
 }
 
 BIGameLogic::BIGameLogic()
+{
+}
+
+bool BIGameLogic::Init()
 {
    m_pPhysics2D.reset(BIEngine::CreateGamePhysics2D());
    m_pPhysics3D.reset(BIEngine::CreateGamePhysics3D());
 
    m_pNavWorld = std::make_unique<BIEngine::NavWorld>();
-}
 
-bool BIGameLogic::Init()
-{
    if (!GameLogic::Init()) {
       return false;
-   }
-
-   if (BIEngine::g_pApp->m_options.hostAddress.empty()) {
-      m_pNetworkManager = BIEngine::NetworkManager::CreateAsMasterPeer(BIEngine::g_pApp->m_options.hostPort, BIEngine::g_pApp->m_options.playerName);
-   } else {
-      BIEngine::SocketAddressPtr sockAddr = BIEngine::SocketUtil::CreateIPv4SocketFromString(BIEngine::g_pApp->m_options.hostAddress);
-      m_pNetworkManager = BIEngine::NetworkManager::CreateAsPeer(*sockAddr, BIEngine::g_pApp->m_options.playerName);
    }
 
    m_pPhysics2D->Initialize();
    m_pPhysics3D->Initialize();
 
-   std::shared_ptr<BIGameHumanView> pHumanView = std::make_shared<BIGameHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
-   AddGameView(pHumanView);
+   m_pHumanView = std::make_shared<BIGameHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
+   m_pHumanView->Init();
+   AddGameView(m_pHumanView);
 
-   // Загружаем стартовый мир
+   m_pCameraManager = std::make_unique<BICameraManager>(m_pHumanView->GetScene()->GetCamera());
+
+   BIRegisterEvents();
+
+   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIGameLogic::NewPlayerActorDelegate), EvtData_PlayerActor_Created::sk_EventType);
+
    LoadLevel(BIEngine::g_pApp->m_options.mainWorldResNamePath);
 
    return true;
+}
+
+void BIGameLogic::Terminate()
+{
+   BIEngine::EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &BIGameLogic::NewPlayerActorDelegate), EvtData_PlayerActor_Created::sk_EventType);
+
+   m_pCameraManager->Terminate();
 }
 
 bool BIGameLogic::LoadLevelDelegate(tinyxml2::XMLElement* pRoot)
@@ -107,20 +108,15 @@ bool BIGameLogic::LoadLevelDelegate(tinyxml2::XMLElement* pRoot)
 
 void BIGameLogic::OnUpdate(BIEngine::GameTimer& gt)
 {
-   if (m_pNetworkManager->GetState() != BIEngine::NetworkManager::NetworkManagerState::Delay) {
-      GameLogic::OnUpdate(gt);
-      m_pNavWorld->GetNavCrowd()->UpdateCrowdInfo(m_actors);
-      m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
-      m_pNavWorld->GetNavMeshManager()->RenderMesh();
+   GameLogic::OnUpdate(gt);
+   m_pNavWorld->GetNavCrowd()->UpdateCrowdInfo(m_actors);
+   m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
+}
 
-      m_pNetworkManager->ProcessIncomingPackets(gt.DeltaTime());
-      m_pNetworkManager->SendOutgoingPackets(gt);
-      return;
-   }
-
-   // only grab the incoming packets because if I'm in delay,
-   // the only way I'm getting out is if an incoming packet saves me
-   m_pNetworkManager->ProcessIncomingPackets(gt.DeltaTime());
+void BIGameLogic::OnRender(const BIEngine::GameTimer& gt)
+{
+   BIEngine::GameLogic::OnRender(gt);
+   m_pNavWorld->GetNavMeshManager()->RenderMesh();
 }
 
 static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
@@ -223,9 +219,6 @@ bool BIGameHumanView::Init()
    pWorldRenderPass->Init();
 
    m_pScene->AddRenderPass(pWorldRenderPass);
-
-   std::shared_ptr<BIGameController> pGameController = std::make_shared<BIGameController>();
-   SetController(pGameController);
 
    return true;
 }

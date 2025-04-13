@@ -70,17 +70,24 @@ int Run(int argc, char* argv[])
       return -1;
    }
 
+   constexpr double fpsLimit = 1.0 / 30.0;
+   double lastFrameTime = 0.0;
+
    GameTimer gt;
    gt.Start();
    // Основной цикл
    while (!glfwWindowShouldClose(window)) {
-      gt.Tick();
+      const double now = glfwGetTime();
+
+      if ((now - lastFrameTime) < fpsLimit) {
+         continue;
+      }
+
+      lastFrameTime = now;
 
       glfwPollEvents();
 
-      ImGui_ImplOpenGL3_NewFrame();
-      ImGui_ImplGlfw_NewFrame();
-      ImGui::NewFrame();
+      gt.Tick();
 
       g_pApp->ProcessInput(gt);
       // Обновление логики
@@ -88,9 +95,6 @@ int Run(int argc, char* argv[])
 
       // Отрисовка
       g_pApp->OnRender(gt);
-
-      ImGui::Render();
-      ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
       glfwSwapBuffers(window);
    }

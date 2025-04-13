@@ -9,14 +9,18 @@ class AnimationControllerProcess(BIEProcess.Process):
     def __init__(self, movableActor : BIEActor.Actor):
         BIEProcess.Process.__init__(self)
         
-        self.physics3DComponent = cast(BIEActor.Physics3DComponent, movableActor.GetComponent("Physics3DComponent"))
+        self.transformComponent = cast(BIEActor.TransformComponent, movableActor.GetComponent("TransformComponent"))
         self.animationComponent = cast(BIEActor.AnimationComponent, movableActor.GetComponent("AnimationComponent"))
         self.meleeAttackComponent = movableActor.GetComponent("MeleeAttackComponent").GetObject()
+        self.cachedPosition = self.transformComponent.GetPosition()
         
         self.isRunning = True
         
     def OnUpdate(self, dt):
-        if self.physics3DComponent.GetVelocity().Length() > 1.5 and not self.meleeAttackComponent.IsAttackInProgress():
+        newPosition = self.transformComponent.GetPosition()
+        traveledVec = newPosition - self.cachedPosition  
+        
+        if traveledVec.Length() > 0.001 and not self.meleeAttackComponent.IsAttackInProgress():
             if self.isRunning == False:
                 self.animationComponent.PlayAnimation("run")
                 self.isRunning = True
@@ -24,6 +28,8 @@ class AnimationControllerProcess(BIEProcess.Process):
             if self.isRunning == True:
                 self.animationComponent.PlayAnimation("idle")
                 self.isRunning = False
+                
+        self.cachedPosition = newPosition
 
 
 class AnimationControllerComponent():

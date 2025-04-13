@@ -1,5 +1,9 @@
 ﻿#include "GameApp.h"
 
+#include <imgui.h>
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
+
 #include "../ResourceCache/ResCache.h"
 #include "../Renderer/ShadersLoader.h"
 #include "../Renderer/ImageLoader.h"
@@ -98,6 +102,8 @@ std::shared_ptr<HumanView> GameApp::TryGetHumanView(unsigned int playerId)
 
 void GameApp::Close()
 {
+   m_pGameLogic->Terminate();
+
    // Освобождение кэша ресурсов
    ResCache::Destroy();
 }
@@ -113,7 +119,14 @@ void GameApp::ProcessInput(const GameTimer& gt)
 
 void GameApp::OnRender(const GameTimer& gt)
 {
+   ImGui_ImplOpenGL3_NewFrame();
+   ImGui_ImplGlfw_NewFrame();
+   ImGui::NewFrame();
+
    m_pGameLogic->OnRender(gt);
+
+   ImGui::Render();
+   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void GameApp::OnPointerMove(float xpos, float ypos)

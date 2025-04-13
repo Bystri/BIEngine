@@ -1,7 +1,6 @@
 import BIEActor
 import BIEEvent
 import BIEProcess
-import BIGInputEvent
 
 from Combat.DamagableComponent import DamagableComponent
 

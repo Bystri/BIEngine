@@ -70,6 +70,12 @@
     <Filter Include="Network">
       <UniqueIdentifier>{b4403590-093c-49a5-8fa6-23007d3ad58a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network\Replication">
+      <UniqueIdentifier>{56b4dafe-f6f1-4ba4-b26a-22fe7443335b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Replication\ReplicationObjectActor">
+      <UniqueIdentifier>{2dfb477b-83a2-4657-92dd-c267c520f02c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCore\GameApp.cpp">
@@ -393,11 +399,35 @@
     <ClCompile Include="..\..\Network\Serialization.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Network\ObjectReplication.cpp">
+    <ClCompile Include="..\..\Actors\PlayerComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\NetworkManager.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Network\NetworkManagerP2P.cpp">
-      <Filter>Network</Filter>
+    <ClCompile Include="..\..\Network\Replication\ObjectReplicationManagerMaster.cpp">
+      <Filter>Network\Replication</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\Replication\ObjectReplicationManagerSlave.cpp">
+      <Filter>Network\Replication</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\Replication\ReplicationHeader.cpp">
+      <Filter>Network\Replication</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\Replication\RPCManager.cpp">
+      <Filter>Network\Replication</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\Replication\ReplicationObjectActor\ReplicationObjectActor.cpp">
+      <Filter>Network\Replication\ReplicationObjectActor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\Replication\ReplicationObjectActor\TransformReplicationUnit.cpp">
+      <Filter>Network\Replication\ReplicationObjectActor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\Replication\ReplicationActionReader.cpp">
+      <Filter>Network\Replication</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\Replication\ReplicationActionWriter.cpp">
+      <Filter>Network\Replication</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -785,11 +815,50 @@
     <ClInclude Include="..\..\Network\Serialization.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Network\ObjectReplication.h">
+    <ClInclude Include="..\..\Actors\PlayerComponent.h">
+      <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Utilities\GenericObjectFactory.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\NetworkManager.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Network\NetworkManagerP2P.h">
-      <Filter>Network</Filter>
+    <ClInclude Include="..\..\Utilities\LinkingContext.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Replication\NetworkObjectCreationRegistry.h">
+      <Filter>Network\Replication</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Replication\ObjectReplication.h">
+      <Filter>Network\Replication</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Replication\ObjectReplicationManagerMaster.h">
+      <Filter>Network\Replication</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Replication\ObjectReplicationManagerSlave.h">
+      <Filter>Network\Replication</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Replication\ReplicationActionReader.h">
+      <Filter>Network\Replication</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Replication\ReplicationActionWriter.h">
+      <Filter>Network\Replication</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Replication\ReplicationHeader.h">
+      <Filter>Network\Replication</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Replication\ReplicationUnit.h">
+      <Filter>Network\Replication</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Replication\RPCManager.h">
+      <Filter>Network\Replication</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Replication\ReplicationObjectActor\ReplicationObjectActor.h">
+      <Filter>Network\Replication\ReplicationObjectActor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Replication\ReplicationObjectActor\TransformReplicationUnit.h">
+      <Filter>Network\Replication\ReplicationObjectActor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

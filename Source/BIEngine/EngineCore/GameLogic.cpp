@@ -60,13 +60,6 @@ bool GameLogic::LoadLevel(const std::string& path)
       postLoadScript = pScriptElement->Attribute("postLoad");
    }
 
-
-   // Инициализируем вьюшки
-   for (auto& view : m_gameViews) {
-      view->Init();
-   }
-
-
    // Выполнения скрипта перед загрузкой уровня
    if (preLoadScript) {
       // Загрузки ресурсов уже автоматически исполняет скрипт, поэтому нам ничего делать не нужно

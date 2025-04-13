@@ -103,6 +103,7 @@
     <ClCompile Include="..\..\Actors\Physics2DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics3DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DTriggerComponent.cpp" />
+    <ClCompile Include="..\..\Actors\PlayerComponent.cpp" />
     <ClCompile Include="..\..\Actors\RenderComponent.cpp" />
     <ClCompile Include="..\..\Actors\ScriptComponent.cpp" />
     <ClCompile Include="..\..\Actors\SkeletonComponent.cpp" />
@@ -148,8 +149,15 @@
     <ClCompile Include="..\..\Navigation\NavMeshManager.cpp" />
     <ClCompile Include="..\..\Navigation\NavSoloMeshGenerator.cpp" />
     <ClCompile Include="..\..\Navigation\NavWorld.cpp" />
-    <ClCompile Include="..\..\Network\NetworkManagerP2P.cpp" />
-    <ClCompile Include="..\..\Network\ObjectReplication.cpp" />
+    <ClCompile Include="..\..\Network\NetworkManager.cpp" />
+    <ClCompile Include="..\..\Network\Replication\ObjectReplicationManagerMaster.cpp" />
+    <ClCompile Include="..\..\Network\Replication\ObjectReplicationManagerSlave.cpp" />
+    <ClCompile Include="..\..\Network\Replication\ReplicationActionReader.cpp" />
+    <ClCompile Include="..\..\Network\Replication\ReplicationActionWriter.cpp" />
+    <ClCompile Include="..\..\Network\Replication\ReplicationHeader.cpp" />
+    <ClCompile Include="..\..\Network\Replication\ReplicationObjectActor\ReplicationObjectActor.cpp" />
+    <ClCompile Include="..\..\Network\Replication\ReplicationObjectActor\TransformReplicationUnit.cpp" />
+    <ClCompile Include="..\..\Network\Replication\RPCManager.cpp" />
     <ClCompile Include="..\..\Network\Serialization.cpp" />
     <ClCompile Include="..\..\Network\Socket.cpp" />
     <ClCompile Include="..\..\Physics\Physics2D.cpp" />
@@ -220,6 +228,7 @@
     <ClInclude Include="..\..\Actors\Physics2DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics3DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DTriggerComponent.h" />
+    <ClInclude Include="..\..\Actors\PlayerComponent.h" />
     <ClInclude Include="..\..\Actors\RenderComponent.h" />
     <ClInclude Include="..\..\Actors\ScriptComponent.h" />
     <ClInclude Include="..\..\Actors\SkeletonComponent.h" />
@@ -270,8 +279,18 @@
     <ClInclude Include="..\..\Navigation\NavMeshManager.h" />
     <ClInclude Include="..\..\Navigation\NavSoloMeshGenerator.h" />
     <ClInclude Include="..\..\Navigation\NavWorld.h" />
-    <ClInclude Include="..\..\Network\NetworkManagerP2P.h" />
-    <ClInclude Include="..\..\Network\ObjectReplication.h" />
+    <ClInclude Include="..\..\Network\NetworkManager.h" />
+    <ClInclude Include="..\..\Network\Replication\NetworkObjectCreationRegistry.h" />
+    <ClInclude Include="..\..\Network\Replication\ObjectReplication.h" />
+    <ClInclude Include="..\..\Network\Replication\ObjectReplicationManagerMaster.h" />
+    <ClInclude Include="..\..\Network\Replication\ObjectReplicationManagerSlave.h" />
+    <ClInclude Include="..\..\Network\Replication\ReplicationActionReader.h" />
+    <ClInclude Include="..\..\Network\Replication\ReplicationActionWriter.h" />
+    <ClInclude Include="..\..\Network\Replication\ReplicationHeader.h" />
+    <ClInclude Include="..\..\Network\Replication\ReplicationObjectActor\ReplicationObjectActor.h" />
+    <ClInclude Include="..\..\Network\Replication\ReplicationObjectActor\TransformReplicationUnit.h" />
+    <ClInclude Include="..\..\Network\Replication\ReplicationUnit.h" />
+    <ClInclude Include="..\..\Network\Replication\RPCManager.h" />
     <ClInclude Include="..\..\Network\Serialization.h" />
     <ClInclude Include="..\..\Network\Socket.h" />
     <ClInclude Include="..\..\Physics\Physics2D.h" />
@@ -323,6 +342,8 @@
     <ClInclude Include="..\..\UserInterface\UserInterface.h" />
     <ClInclude Include="..\..\Utilities\DebugDraw.h" />
     <ClInclude Include="..\..\Utilities\GameTimer.h" />
+    <ClInclude Include="..\..\Utilities\GenericObjectFactory.h" />
+    <ClInclude Include="..\..\Utilities\LinkingContext.h" />
     <ClInclude Include="..\..\Utilities\Logger.h" />
     <ClInclude Include="..\..\Utilities\String.h" />
   </ItemGroup>

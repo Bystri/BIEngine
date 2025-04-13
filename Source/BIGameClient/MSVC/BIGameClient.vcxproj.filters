@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\BICameraManager.cpp" />
+    <ClCompile Include="..\BIGCEventListener.cpp" />
+    <ClCompile Include="..\BIGameClient.cpp" />
+    <ClCompile Include="..\BIGameController.cpp" />
+    <ClCompile Include="..\BIInputActionController.cpp" />
+    <ClCompile Include="..\BINetworkManagerClient.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\BICameraManager.h" />
+    <ClInclude Include="..\BIGCEventListener.h" />
+    <ClInclude Include="..\BIGameClient.h" />
+    <ClInclude Include="..\BIGameController.h" />
+    <ClInclude Include="..\BIInputActiorController.h" />
+    <ClInclude Include="..\BINetworkManagerClient.h" />
+    <ClInclude Include="..\BIGCScriptExports.h" />
+  </ItemGroup>
+</Project>

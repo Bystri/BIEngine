@@ -193,8 +193,8 @@ private:
 
 private:
    std::shared_ptr<char> m_pBuffer;
-   uint32_t m_bitHead;
-   uint32_t m_bitCapacity;
+   uint32_t m_bitHead = 0u;
+   uint32_t m_bitCapacity = 0u;
 };
 
 class InputMemoryBitStream {

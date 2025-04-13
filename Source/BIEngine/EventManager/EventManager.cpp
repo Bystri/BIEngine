@@ -11,6 +11,7 @@ namespace BIEngine {
 const EventType BaseEventData::sk_EventType(0x00000000);
 
 static EventManager* g_pEventMgr = nullptr;
+GenericObjectFactory<IEventData, EventType> g_eventFactory;
 
 EventManager* EventManager::Get()
 {

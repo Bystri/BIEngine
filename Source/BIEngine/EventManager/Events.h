@@ -31,14 +31,14 @@ public:
       return std::make_shared<EvtData_Actor_Created>(m_id);
    }
 
-   virtual void Serialize(std::ostrstream& out) const
+   virtual void Write(OutputMemoryBitStream& out) const override
    {
-      out << m_id;
+      Serialize(out, m_id);
    }
 
-   virtual void Deserialize(std::istrstream& in)
+   virtual void Read(InputMemoryBitStream& in) override
    {
-      in >> m_id;
+      Deserialize(in, m_id);
    }
 
    virtual const char* GetName(void) const
@@ -71,14 +71,14 @@ public:
       return std::make_shared<EvtData_Destroy_Actor>(m_id);
    }
 
-   virtual void Serialize(std::ostrstream& out) const
+   virtual void Write(OutputMemoryBitStream& out) const override
    {
-      out << m_id;
+      Serialize(out, m_id);
    }
 
-   virtual void Deserialize(std::istrstream& in)
+   virtual void Read(InputMemoryBitStream& in) override
    {
-      in >> m_id;
+      Deserialize(in, m_id);
    }
 
    virtual const char* GetName(void) const

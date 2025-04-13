@@ -27,29 +27,29 @@ public:
    virtual void OnUpdate(const GameTimer& gt) override;
 
    // Задание и получение свойств
-   glm::vec3 GetLocalPosition() const { return m_localPos; }
+   const glm::vec3& GetLocalPosition() const { return m_localPos; }
 
    void SetLocalPosition(const glm::vec3& pos);
 
-   glm::vec3 GetLocalRotation() const { return m_localRot; }
+   const glm::vec3& GetLocalRotation() const { return m_localRot; }
 
    glm::vec3 GetDir() const;
 
    void SetLocalRotation(const glm::vec3& rot);
 
-   glm::vec3 GetLocalSize() const { return m_localSize; }
+   const glm::vec3& GetLocalSize() const { return m_localSize; }
 
    void SetLocalSize(const glm::vec3& size);
 
-   glm::vec3 GetPosition() const { return m_worldPos; }
+   const glm::vec3& GetPosition() const { return m_worldPos; }
 
    void SetPosition(const glm::vec3& pos);
 
-   glm::vec3 GetRotation() const { return m_worldRot; }
+   const glm::vec3& GetRotation() const { return m_worldRot; }
 
    void SetRotation(const glm::vec3& rot);
 
-   glm::vec3 GetSize() const { return m_worldSize; }
+   const glm::vec3& GetSize() const { return m_worldSize; }
 
    void SetSize(const glm::vec3& size);
 
@@ -57,13 +57,13 @@ public:
 
    void SetWorldTransformMatrix(const glm::mat4& trans);
 
-   glm::mat4 GetWorldTransformMatrix() const { return m_worldTransform; }
+   const glm::mat4& GetWorldTransformMatrix() const { return m_worldTransform; }
 
-   glm::mat4 GetWorldToLocalTransformMatrix() const { return m_worldToLocal; }
+   const glm::mat4& GetWorldToLocalTransformMatrix() const { return m_worldToLocal; }
 
-   glm::mat4 GetLocalTransformMatrix() const { return m_localTransform; }
+   const glm::mat4& GetLocalTransformMatrix() const { return m_localTransform; }
 
-   glm::mat4 GetLocalToWorldTransformMatrix() const { return m_localToWorld; }
+   const glm::mat4& GetLocalToWorldTransformMatrix() const { return m_localToWorld; }
 
 private:
    void recalculateLocalTransformMatrix();

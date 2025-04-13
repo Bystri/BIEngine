@@ -2,7 +2,7 @@
 
 #include "../BIEngine/EngineCore/Assert.h"
 
-#include "BIEventListener.h"
+#include "BIGCEventListener.h"
 
 bool BIGameController::OnPointerMove(const Point& mousePos, const int radius)
 {
@@ -62,7 +62,7 @@ bool BIGameController::OnKeyDown(int key, int scancode)
    // Обновляем таблицу клавиш
    m_isKeyPressed[key] = true;
 
-   std::shared_ptr<EvtData_OnKeyDown> pEvent = std::make_shared<EvtData_OnKeyDown>(static_cast<EvtData_OnKeyEvent::Key>(key));
+   std::shared_ptr<EvtData_OnKeyDown> pEvent = std::make_shared<EvtData_OnKeyDown>(0, static_cast<EvtData_OnKeyEvent::Key>(key));
    BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
    return true;
@@ -78,7 +78,7 @@ bool BIGameController::OnKeyUp(int key, int scancode)
    // Обновляем таблицу клавиш
    m_isKeyPressed[key] = false;
 
-   std::shared_ptr<EvtData_OnKeyUp> pEvent = std::make_shared<EvtData_OnKeyUp>(static_cast<EvtData_OnKeyEvent::Key>(key));
+   std::shared_ptr<EvtData_OnKeyUp> pEvent = std::make_shared<EvtData_OnKeyUp>(0, static_cast<EvtData_OnKeyEvent::Key>(key));
    BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
    return true;

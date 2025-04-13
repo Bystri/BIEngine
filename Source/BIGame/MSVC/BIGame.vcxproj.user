@@ -3,10 +3,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerWorkingDirectory>..\..\..\Game\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>-pn Player2 -ha 127.0.0.1:40000</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerWorkingDirectory>..\..\..\Game\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>-pn Player1 -hp 40000 </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-pn Player2 -ha 127.0.0.1:40000</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>
