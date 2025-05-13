@@ -3,13 +3,13 @@ import BIGActor
 
 from CharacterCommands.CharacterCommand import CharacterCommand
 
-class MovementCommand(CharacterCommand):
-    def __init__(self, actor : BIEActor.Actor, inputVector):
+class TurnCommand(CharacterCommand):
+    def __init__(self, actor : BIEActor.Actor, desiredDir):
         CharacterCommand.__init__(self, actor)
         
         self.locomotionInfoComponent = actor.GetComponent("LocomotionInfoComponent")
-        self.inputVector = inputVector
+        self.desiredDir = desiredDir
         
     def OnUpdate(self, dt):
-        self.locomotionInfoComponent.SetInputVel(self.inputVector)
+        self.locomotionInfoComponent.SetInputDir(self.desiredDir)
         self.Succeed()

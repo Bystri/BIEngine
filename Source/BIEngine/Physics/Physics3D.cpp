@@ -447,7 +447,7 @@ void Physics3D::AfterUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& act
 
 void Physics3D::DrawRenderDiagnostics()
 {
-   m_pDynamicsWorld->debugDrawWorld();
+   // m_pDynamicsWorld->debugDrawWorld();
 }
 
 void Physics3D::AddShape(btCollisionShape* const pShape, const float volume, const ShapeCreationParams& creationParams)

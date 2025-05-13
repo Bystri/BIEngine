@@ -3,8 +3,10 @@
 #include <string>
 
 #include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 #include "../EngineCore/Assert.h"
+#include "../Utilities/Logger.h"
 #include "../Actors/Actor.h"
 
 namespace BIEngine {
@@ -198,12 +200,26 @@ void TransformComponent::SetWorldTransformMatrix(const glm::mat4& trans)
 
 glm::vec3 TransformComponent::GetDir() const
 {
-   // Calculate forward vector
-   glm::vec4 dir = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+   glm::vec4 dir = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 
-   const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(m_localRot.x), glm::vec3(1.0f, 0.0f, 0.0f));
-   const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(m_localRot.y), glm::vec3(0.0f, 1.0f, 0.0f));
-   const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(m_localRot.z), glm::vec3(0.0f, 0.0f, 1.0f));
+   const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(m_worldRot.x), glm::vec3(1.0f, 0.0f, 0.0f));
+   const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(m_worldRot.y), glm::vec3(0.0f, 1.0f, 0.0f));
+   const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(m_worldRot.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+   const glm::mat4 roationMatrix = transformZ * transformY * transformX;
+
+   dir = roationMatrix * dir;
+
+   return glm::vec3(dir);
+}
+
+glm::vec3 TransformComponent::GetRight() const
+{
+   glm::vec4 dir = glm::vec4(0.0f, 0.0f, 1.0f, 0.0f);
+
+   const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(m_worldRot.x), glm::vec3(1.0f, 0.0f, 0.0f));
+   const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(m_worldRot.y), glm::vec3(0.0f, 1.0f, 0.0f));
+   const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(m_worldRot.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
    const glm::mat4 roationMatrix = transformZ * transformY * transformX;
 

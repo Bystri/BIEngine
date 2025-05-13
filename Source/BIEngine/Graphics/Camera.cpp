@@ -7,6 +7,16 @@
 
 namespace BIEngine {
 
+Camera::Camera(glm::vec3 worldUp /* = glm::vec3(0.0f, 1.0f, 0.0f) */)
+   : m_projType(ProjectionType::PERSPECTIVE),
+     m_position(glm::vec3(0.0f)), m_forward(glm::vec3(0.0f, 0.0f, -1.0f)), m_up(worldUp), m_right(glm::vec3(1.0f, 0.0f, 0.0f)), m_worldUp(worldUp),
+     m_rotationY(0.0f), m_rotationZ(0.0f),
+     m_fov(45.0f), m_aspectRatio((float)g_pApp->m_options.screenWidth / (float)g_pApp->m_options.screenHeight),
+     m_near(0.1f), m_far(1000.0f)
+{
+   updateCameraVectors();
+}
+
 glm::mat4 Camera::GetViewMatrix() const
 {
    return glm::lookAt(m_position, m_position + m_forward, m_up);
@@ -46,6 +56,32 @@ void Camera::SetRotationZ(float rotation)
 {
    m_rotationZ = rotation;
    updateCameraVectors();
+}
+
+glm::vec3 Camera::ScreenToWorldPoint(const glm::vec2& pos) const
+{
+   const glm::mat4 invVP = glm::inverse(GetProjMatrix() * GetViewMatrix());
+
+   const float ndcX = (pos.x / (float)g_pApp->m_options.screenWidth) * 2.f - 1.f;
+   const float ndcY = -(pos.y / (float)g_pApp->m_options.screenHeight) * 2.f + 1.f;
+
+   glm::vec4 worldPos = invVP * glm::vec4(ndcX, ndcY, -1.0f, 1.0f);
+   worldPos /= worldPos.w;
+
+   return worldPos;
+}
+
+glm::vec3 Camera::ScreenToViewportPoint(const glm::vec2& pos) const
+{
+   const glm::mat4 invVP = glm::inverse(GetProjMatrix());
+
+   const float ndcX = (pos.x / (float)g_pApp->m_options.screenWidth) * 2.f - 1.f;
+   const float ndcY = -(pos.y / (float)g_pApp->m_options.screenHeight) * 2.f + 1.f;
+
+   glm::vec4 worldPos = invVP * glm::vec4(ndcX, ndcY, -1.0f, 1.0f);
+   worldPos /= worldPos.w;
+
+   return worldPos;
 }
 
 void Camera::LookAt(const glm::vec3& eyePos, const glm::vec3& forward, const glm::vec3& up)

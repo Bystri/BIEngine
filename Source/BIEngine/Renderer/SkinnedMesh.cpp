@@ -16,6 +16,20 @@ SkinnedMesh::SkinnedMesh(const std::vector<Vertex>& vertices, const std::vector<
    setupMesh();
 }
 
+SkinnedMesh::SkinnedMesh(const SkinnedMesh& other)
+   : m_vertices(other.m_vertices), m_animatedVertices(other.m_vertices), m_indices(other.m_indices), m_bones(other.m_bones)
+{
+   setupMesh();
+}
+
+SkinnedMesh::~SkinnedMesh()
+{
+   glDeleteBuffers(1, &m_VBO);
+   glDeleteBuffers(1, &m_EBO);
+   glDeleteBuffers(1, &m_BBO);
+   glDeleteVertexArrays(1, &m_VAO);
+}
+
 void SkinnedMesh::setupMesh()
 {
    glGenVertexArrays(1, &m_VAO);

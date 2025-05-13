@@ -14,26 +14,7 @@ public:
       PERSPECTIVE
    };
 
-   explicit Camera(glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f))
-      : m_projType(ProjectionType::PERSPECTIVE)
-
-        ,
-        m_position(glm::vec3(0.0f)), m_forward(glm::vec3(0.0f, 0.0f, -1.0f)), m_up(worldUp), m_right(glm::vec3(1.0f, 0.0f, 0.0f)), m_worldUp(worldUp)
-
-        ,
-        m_rotationY(0.0f), m_rotationZ(0.0f)
-
-        ,
-        m_fov(45.0f)
-
-        ,
-        m_aspectRatio(800.0f / 600.0f)
-
-        ,
-        m_near(0.1f), m_far(1000.0f)
-   {
-      updateCameraVectors();
-   }
+   explicit Camera(glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f));
 
    Camera(float upX, float upY, float upZ)
       : Camera(glm::vec3(upX, upY, upZ))
@@ -54,6 +35,9 @@ public:
    float GetRotationY() const { return m_rotationY; }
 
    float GetRotationZ() const { return m_rotationZ; }
+
+   glm::vec3 ScreenToWorldPoint(const glm::vec2& pos) const;
+   glm::vec3 ScreenToViewportPoint(const glm::vec2& pos) const;
 
    void LookAt(const glm::vec3& eyePos, const glm::vec3& forward, const glm::vec3& up);
 

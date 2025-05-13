@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include "PlayerManager/PlayerManager.h"
 #include "../BIEngine/EventManager/EventManager.h"
 #include "../BIEngine/Actors/Actor.h"
@@ -121,6 +123,54 @@ private:
 
    float m_desiredHorizontalAmount = 0.0f;
    float m_desiredVerticalAmount = 0.0f;
+};
+
+class EvtData_Turn : public BIEngine::BaseEventData {
+public:
+   static const BIEngine::EventType sk_EventType;
+
+   EvtData_Turn() = default;
+
+   EvtData_Turn(PlayerId playerId, const glm::vec2& desiredDir)
+      : m_playerId(playerId), m_desiredDir(desiredDir)
+   {
+   }
+
+   virtual const BIEngine::EventType& GetEventType(void) const
+   {
+      return sk_EventType;
+   }
+
+   virtual BIEngine::IEventDataPtr Copy(void) const
+   {
+      return std::make_shared<EvtData_Turn>(m_playerId, m_desiredDir);
+   }
+
+   virtual const char* GetName(void) const
+   {
+      return "EvtData_Turn";
+   }
+
+   virtual void Write(BIEngine::OutputMemoryBitStream& out) const override
+   {
+      Serialize(out, m_playerId);
+      out.WriteBytes(&m_desiredDir.x, sizeof(m_desiredDir));
+   }
+
+   virtual void Read(BIEngine::InputMemoryBitStream& in) override
+   {
+      Deserialize(in, m_playerId);
+      in.ReadBytes(&m_desiredDir.x, sizeof(m_desiredDir));
+   }
+
+   PlayerId GetPlayerId() const { return m_playerId; };
+
+   const glm::vec2& GetDesiredDir() const { return m_desiredDir; }
+
+private:
+   PlayerId m_playerId = PlayerManager::INVALID_PLAYER_ID;
+
+   glm::vec2 m_desiredDir = glm::vec2(0.0f);
 };
 
 void BIRegisterEvents();

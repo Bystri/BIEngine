@@ -58,13 +58,11 @@ void NetworkManager::ReadIncomingPackets()
 
 void NetworkManager::SendPacket(const OutputMemoryBitStream& outputStream, const SocketAddress& fromAddress)
 {
-   BIEngine::Logger::WriteMsgLog("SendPacket with byte length %d", outputStream.GetByteLength());
    m_socket->SendTo(outputStream.GetBufferPtr().get(), outputStream.GetByteLength(), fromAddress);
 
    InputMemoryBitStream inputStream(outputStream.GetBufferPtr(), outputStream.GetBitLength());
    uint32_t packetType;
    BIEngine::Deserialize(inputStream, packetType);
-   BIEngine::Logger::WriteMsgLog("Packet type %zu", packetType);
 }
 
 } // namespace BIEngine

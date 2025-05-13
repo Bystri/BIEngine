@@ -4,6 +4,7 @@ import BIEVector
 import BIGActionEvent
 
 from Movement.MovementCommand import MovementCommand
+from Movement.TurnCommand import TurnCommand
 from Combat.MeleeAttackCommand import MeleeAttackCommand
 
 from typing import cast
@@ -25,6 +26,9 @@ class PlayerActionBinderComponent():
         self.OnMoveCallback = lambda eventData : self.OnMoveDelegate(eventData)
         self.OnMoveListenerHandler = BIEEvent.RegisterEventListener(BIGActionEvent.EvtData_Move.eventType, self.OnMoveCallback)
         
+        self.OnTurnCallback = lambda eventData : self.OnTurnDelegate(eventData)
+        self.OnTurnListenerHandler = BIEEvent.RegisterEventListener(BIGActionEvent.EvtData_Turn.eventType, self.OnTurnCallback)
+        
     def OnDeactivate(self):  
         BIEEvent.RemoveEventListener(self.OnMoveListenerHandler)
         
@@ -45,6 +49,17 @@ class PlayerActionBinderComponent():
             res /= resLength
                  
         command = MovementCommand(self.owner, res)
+        self.characterCommandMngComponent.ExecuteCommand(command)  
+        
+    def OnTurnDelegate(self, eventData : BIEEvent.BaseEventData):
+        onTurnData = cast(BIGActionEvent.EvtData_Turn, eventData)
+        
+        playerId = self.owner.GetComponent("PlayerComponent").GetPlayerId()
+         
+        if onTurnData.GetPlayerId() != playerId:
+            return
+                 
+        command = TurnCommand(self.owner, onTurnData.GetDesiredDir())
         self.characterCommandMngComponent.ExecuteCommand(command)  
             
     def OnUpdate(self, dt):

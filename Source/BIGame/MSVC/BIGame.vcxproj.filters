@@ -10,6 +10,10 @@
     <ClCompile Include="..\Network\AttachedActorReplicationUnit.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\Locomotion\LocomotionInfoComponent.cpp" />
+    <ClCompile Include="..\Network\LocomotionInfoReplicationUnit.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGame.h" />
@@ -26,6 +30,10 @@
       <Filter>PlayerManager</Filter>
     </ClInclude>
     <ClInclude Include="..\Network\AttachedActorReplicationUnit.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Locomotion\LocomotionInfoComponent.h" />
+    <ClInclude Include="..\Network\LocomotionInfoReplicationUnit.h">
       <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>

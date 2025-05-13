@@ -77,6 +77,8 @@ bool BIServerGameLogic::Init()
 
    m_pNavWorld = std::make_unique<BIEngine::NavWorld>();
 
+   m_pActorFactory->AddComponentCreator(LocomotionInfoComponent::g_CompId, CreateLocomotionInfoComponent);
+
    if (!GameLogic::Init()) {
       return false;
    }

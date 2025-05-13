@@ -14,7 +14,9 @@
     <ClCompile Include="..\BICameraManager.cpp" />
     <ClCompile Include="..\BIEventListener.cpp" />
     <ClCompile Include="..\BIGame.cpp" />
+    <ClCompile Include="..\Locomotion\LocomotionInfoComponent.cpp" />
     <ClCompile Include="..\Network\AttachedActorReplicationUnit.cpp" />
+    <ClCompile Include="..\Network\LocomotionInfoReplicationUnit.cpp" />
     <ClCompile Include="..\PlayerManager\PlayerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -22,7 +24,9 @@
     <ClInclude Include="..\BIEventListener.h" />
     <ClInclude Include="..\BIGame.h" />
     <ClInclude Include="..\BIScriptExports.h" />
+    <ClInclude Include="..\Locomotion\LocomotionInfoComponent.h" />
     <ClInclude Include="..\Network\AttachedActorReplicationUnit.h" />
+    <ClInclude Include="..\Network\LocomotionInfoReplicationUnit.h" />
     <ClInclude Include="..\Network\ReplicationObjectPlayer.h" />
     <ClInclude Include="..\Network\ReplicationObjectPlayerCharacter.h" />
     <ClInclude Include="..\PlayerManager\PlayerManager.h" />

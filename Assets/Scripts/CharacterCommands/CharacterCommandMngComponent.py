@@ -21,11 +21,11 @@ class CharacterCommandMngComponent():
             self.currentCommand = None
         
     def ExecuteCommand(self, command):
-        if self.currentCommand is not None:
-            if self.currentCommand.IsInterruptible():
-                self.currentCommand.Fail()
-            else:
-                return
+        #if self.currentCommand is not None:
+        #   if self.currentCommand.IsInterruptible():
+        #       self.currentCommand.Fail()
+        #   else:
+        #       return
             
         self.currentCommand = command
         BIEProcess.AttachProcess(self.currentCommand)

@@ -6,7 +6,7 @@ static float getCurveU(const std::vector<float>& framesTimes, const float animat
 {
    for (int i = 0; i < framesTimes.size() - 1; ++i) {
       if (animationTime < framesTimes[i + 1]) {
-         return static_cast<float>(i) + (animationTime - framesTimes[i])/(framesTimes[i + 1] - framesTimes[i]);
+         return static_cast<float>(i) + (animationTime - framesTimes[i]) / (framesTimes[i + 1] - framesTimes[i]);
       }
    }
 

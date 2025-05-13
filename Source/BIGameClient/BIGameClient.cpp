@@ -81,6 +81,8 @@ bool BIGameClientLogic::Init()
 
    m_pNavWorld = std::make_unique<BIEngine::NavWorld>();
 
+   m_pActorFactory->AddComponentCreator(LocomotionInfoComponent::g_CompId, CreateLocomotionInfoComponent);
+
    if (!GameLogic::Init()) {
       return false;
    }
@@ -142,7 +144,7 @@ void BIGameClientLogic::NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventDat
 
    pActor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).lock()->SetPlayerId(m_pNetworkManager->GetPlayerId());
 
-   m_pInputActionController->Init(m_pNetworkManager->GetPlayerId());
+   m_pInputActionController->Init(m_pNetworkManager->GetPlayerId(), m_pHumanView->GetScene()->GetCamera());
    m_pCameraManager->FollowActor(pActor);
 }
 

@@ -108,7 +108,12 @@ PYBIND11_EMBEDDED_MODULE(BIEVector, m)
       // Биндинг функций и членов класса
       .def_readwrite("x", &glm::vec2::x)
       .def_readwrite("y", &glm::vec2::y)
-      .def("Length", &glm::vec2::length)
+      .def("Length", [](const glm::vec2& vec) {
+         return glm::length(vec);
+      })
+      .def("Normalize", [](const glm::vec2& vec) {
+         return glm::normalize(vec);
+      })
 
       // Перегрузка операторов
       .def(py::self + py::self)

@@ -8,6 +8,9 @@ bool BIGameController::OnPointerMove(const Point& mousePos, const int radius)
 {
    m_currentPointerPos = mousePos;
 
+   std::shared_ptr<EvtData_OnPointerMove> pEvent = std::make_shared<EvtData_OnPointerMove>(0, m_currentPointerPos);
+   BIEngine::EventManager::Get()->QueueEvent(pEvent);
+
    return true;
 }
 

@@ -19,6 +19,7 @@ void BINetworkManagerClient::Init(const BIEngine::SocketAddress& serverAddress, 
    m_name = name;
 
    BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BINetworkManagerClient::StoreEventToForwardDelegate), EvtData_Move::sk_EventType);
+   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BINetworkManagerClient::StoreEventToForwardDelegate), EvtData_Turn::sk_EventType);
 }
 
 void BINetworkManagerClient::SendOutgoingPackets(const BIEngine::GameTimer& gt)
@@ -56,10 +57,8 @@ void BINetworkManagerClient::SendHelloPacket()
 
 void BINetworkManagerClient::ProcessPacket(BIEngine::InputMemoryBitStream& inputStream, const BIEngine::SocketAddress& fromAddress)
 {
-   BIEngine::Logger::WriteMsgLog("ProcessPacket with byte length %d", inputStream.GetRemainingBitCount());
    uint32_t packetType;
    BIEngine::Deserialize(inputStream, packetType);
-   BIEngine::Logger::WriteMsgLog("Packet type %zu", packetType);
    switch (packetType) {
       case kWelcomeCC:
          HandleWelcomePacket(inputStream);
@@ -85,7 +84,6 @@ void BINetworkManagerClient::HandleStatePacket(BIEngine::InputMemoryBitStream& i
       //  ReadLastMoveProcessedOnServerTimestamp(inInputStream);
 
       // tell the replication manager to handle the rest...
-      BIEngine::Logger::WriteMsgLog("Got state packet");
       m_pReplicationManager->ProcessPacket(inputStream);
    }
 }

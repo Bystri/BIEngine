@@ -30,6 +30,9 @@ public:
 
 public:
    SkinnedMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<VertexBoneData>& bones);
+   SkinnedMesh(const SkinnedMesh& other);
+
+   ~SkinnedMesh();
 
    unsigned int GetVao() const { return m_VAO; }
 

@@ -34,6 +34,7 @@ public:
    const glm::vec3& GetLocalRotation() const { return m_localRot; }
 
    glm::vec3 GetDir() const;
+   glm::vec3 GetRight() const;
 
    void SetLocalRotation(const glm::vec3& rot);
 

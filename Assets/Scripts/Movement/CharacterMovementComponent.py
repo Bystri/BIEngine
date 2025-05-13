@@ -3,6 +3,8 @@ import BIEProcess
 import BIEVector
 import BIEMath
 
+import BIGActor
+
 import math
 from typing import cast
 
@@ -13,6 +15,7 @@ class CharacterMovementComponent():
     def OnInit(self):
         self.transformComponent = cast(BIEActor.TransformComponent, self.owner.GetComponent("TransformComponent"))
         self.physics3DComponent = cast(BIEActor.Physics3DComponent, self.owner.GetComponent("Physics3DComponent"))
+        self.locomotionInfoComponent = cast(BIGActor.LocomotionInfoComponent, self.owner.GetComponent("LocomotionInfoComponent"))
         self.maxSpeed = 5.0
         self.maxAngularSpeed = 2000.0
         self.maxAcceleration = 10.0
@@ -37,12 +40,11 @@ class CharacterMovementComponent():
     def OnTerminate(self):
         pass
         
-    def Move(self, inputVector, dt):
-        self.inputVector = inputVector
-        
     def OnUpdate(self, dt):
-        if self.inputVector.Length() > 0.001:
-            targetAngle = math.degrees(math.atan2(-self.inputVector.z, self.inputVector.x))
+        inputVector = self.locomotionInfoComponent.GetInputVel()
+        desiredDir = self.locomotionInfoComponent.GetInputDir()
+        if desiredDir.Length() > 0.001:
+            targetAngle = math.degrees(math.atan2(-desiredDir.y, desiredDir.x))
             
             if abs(targetAngle - self.currentEulerAngles.y) > abs(targetAngle + 360.0 - self.currentEulerAngles.y):
                 targetAngle += 360.0
@@ -56,9 +58,16 @@ class CharacterMovementComponent():
         else:
             self.turnSmoothVelocity = 0.0
             
-        self.desiredVelocity = BIEVector.Vec3(self.inputVector.x, 0.0, self.inputVector.z) * self.maxSpeed
+        charDir = self.transformComponent.GetDir()
+        dir2d = BIEVector.Vec2(charDir.x, charDir.z)
+        dir2d = dir2d.Normalize()
+        self.locomotionInfoComponent.SetCurrentDir(dir2d)
+            
+        self.desiredVelocity = BIEVector.Vec3(inputVector.x, 0.0, inputVector.z) * self.maxSpeed
          
         velocity = self.physics3DComponent.GetVelocity()
+        self.locomotionInfoComponent.SetCurrentVel(velocity)
+        
         maxSpeedChange = self.maxAcceleration * dt
         velocity.x = BIEMath.MoveTowards(velocity.x, self.desiredVelocity.x, maxSpeedChange)
         velocity.z = BIEMath.MoveTowards(velocity.z, self.desiredVelocity.z, maxSpeedChange)

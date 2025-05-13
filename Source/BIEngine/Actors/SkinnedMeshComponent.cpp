@@ -32,7 +32,7 @@ bool SkinnedMeshComponent::Init(tinyxml2::XMLElement* pData)
          return false;
       }
 
-      m_pMesh = meshData->GetSkinnedMesh();
+      m_pMesh = std::make_shared<SkinnedMesh>(*meshData->GetSkinnedMesh());
    }
 
    tinyxml2::XMLElement* pMatElement = pData->FirstChildElement("Material");

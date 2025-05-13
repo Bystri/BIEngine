@@ -1,5 +1,8 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
+#include "../BIEngine/UserInterface/InputDevices.h"
 #include "../BIEngine/EventManager/EventManager.h"
 #include "../BIEngine/Actors/Actor.h"
 #include "../BIGame/BIEventListener.h"
@@ -211,6 +214,47 @@ public:
    {
       return "EvtData_OnKeyUp";
    }
+};
+
+class EvtData_OnPointerMove : public BIEngine::BaseEventData {
+public:
+   static const BIEngine::EventType sk_EventType;
+
+   virtual const BIEngine::EventType& GetEventType() const
+   {
+      return sk_EventType;
+   }
+
+   EvtData_OnPointerMove() = default;
+
+   EvtData_OnPointerMove(uint32_t playerId, const BIEngine::IPointerHandler::Point& pointerPos)
+      : m_playerId(playerId), m_pointerPos(pointerPos)
+   {
+   }
+
+   uint32_t GetPlayerId() const
+   {
+      return m_playerId;
+   }
+
+   const BIEngine::IPointerHandler::Point& GetPointerPos() const
+   {
+      return m_pointerPos;
+   }
+
+   virtual BIEngine::IEventDataPtr Copy() const
+   {
+      return std::make_shared<EvtData_OnPointerMove>(m_playerId, m_pointerPos);
+   }
+
+   virtual const char* GetName() const
+   {
+      return "EvtData_OnPointerMove";
+   }
+
+private:
+   uint32_t m_playerId = -1;
+   BIEngine::IPointerHandler::Point m_pointerPos = BIEngine::IPointerHandler::Point{0.0f, 0.0f};
 };
 
 void BIGCRegisterEvents();

@@ -2,6 +2,7 @@
 
 const BIEngine::EventType EvtData_OnKeyDown::sk_EventType(0x247efb52);
 const BIEngine::EventType EvtData_OnKeyUp::sk_EventType(0x87adcf25);
+const BIEngine::EventType EvtData_OnPointerMove::sk_EventType(0xaeb0b775);
 
 void BIGCRegisterEvents()
 {
