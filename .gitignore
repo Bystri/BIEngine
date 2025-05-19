@@ -1,10 +1,12 @@
 Editor
 Game
 Test
-Assets/Scripts/__pycache__
-Source/BIEngine/MSVC/.vs
-Source/BIEngine/MSVC/packages
+Tools/**
+Assets/Scripts/**/__pycache__
 Source/BIEngine/MSVC/BIEngine.VC.db
 Source/BIEngine/3rdParty
+Source/BIGame/MSVC/BIEngine.VC.db
 Source/Lib
-Source/Temp
+**/MSVC/.vs
+**/MSVC/packages
+**/Temp/**
