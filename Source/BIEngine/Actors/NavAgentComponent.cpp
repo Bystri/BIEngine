@@ -98,8 +98,8 @@ void NavAgentComponent::Activate()
 
    m_pNavCrowd = g_pApp->m_pGameLogic->GetNavWorld()->GetNavCrowd();
 
-   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   m_agentId = m_pNavCrowd->AddAgent(m_pOwner->GetId(), pTransformComponent->GetPosition(), m_params);
+   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   m_agentId = m_pNavCrowd->AddAgent(GetOwner()->GetId(), pTransformComponent->GetPosition(), m_params);
 }
 
 tinyxml2::XMLElement* NavAgentComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)

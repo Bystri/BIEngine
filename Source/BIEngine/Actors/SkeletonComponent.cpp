@@ -47,11 +47,11 @@ static std::shared_ptr<Skeleton::BoneInfo> skeletonComponentCalculateSkeleton(co
 void SkeletonComponent::Activate()
 {
    std::shared_ptr<Skeleton::BoneInfo> pRoot = std::make_shared<Skeleton::BoneInfo>();
-   pRoot->name = m_pOwner->GetName();
+   pRoot->name = GetOwner()->GetName();
    pRoot->offset = glm::mat4(1.0f);
    pRoot->localTransform = glm::mat4(1.0f);
 
-   for (const auto& child : m_pOwner->GetChildren()) {
+   for (const auto& child : GetOwner()->GetChildren()) {
       std::shared_ptr<Skeleton::BoneInfo> pChildBone = skeletonComponentCalculateSkeleton(glm::mat4(1.0f), child.get());
       if (pChildBone == nullptr) {
          continue;

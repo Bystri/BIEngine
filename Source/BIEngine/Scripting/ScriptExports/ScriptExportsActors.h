@@ -19,21 +19,21 @@ namespace py = pybind11;
 
 PYBIND11_EMBEDDED_MODULE(BIEActor, m)
 {
-   py::class_<BIEngine::ActorComponent, std::shared_ptr<BIEngine::ActorComponent>>(m, "ActorComponent")
+   py::class_<BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::ActorComponent>>(m, "ActorComponent")
       .def("GetComponentId", &BIEngine::ActorComponent::GetComponentId);
 
    py::class_<BIEngine::Actor, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::Actor>>(m, "Actor")
       .def("GetId", &BIEngine::Actor::GetId)
       .def("GetName", &BIEngine::Actor::GetName)
       .def("GetActorByPath", &BIEngine::Actor::GetActorByPath)
-      .def("GetComponent", [](std::shared_ptr<BIEngine::Actor>& self, const std::string& componentId) { return self->GetComponent<BIEngine::ActorComponent>(componentId).lock(); })
+      .def("GetComponent", [](BIEngine::Actor* self, const std::string& componentId) { return self->GetComponent<BIEngine::ActorComponent>(componentId).lock().get(); })
       .def("SetActivate", &BIEngine::Actor::SetActivate);
 
-   py::class_<BIEngine::NavAgentComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::NavAgentComponent>>(m, "NavAgentComponent")
+   py::class_<BIEngine::NavAgentComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::NavAgentComponent>>(m, "NavAgentComponent")
       .def("SetDestination", &BIEngine::NavAgentComponent::SetDestination)
       .def("GetVelocity", &BIEngine::NavAgentComponent::GetVelocity);
 
-   py::class_<BIEngine::Physics2DComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::Physics2DComponent>>(m, "Physics2DComponent")
+   py::class_<BIEngine::Physics2DComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::Physics2DComponent>>(m, "Physics2DComponent")
       .def("ApplyForce", &BIEngine::Physics2DComponent::ApplyForce)
       .def("ApplyTorque", &BIEngine::Physics2DComponent::ApplyTorque)
       .def("KinematicMove", &BIEngine::Physics2DComponent::KinematicMove)
@@ -43,14 +43,14 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
       .def("GetAngularVelocity", &BIEngine::Physics2DComponent::GetAngularVelocity)
       .def("Stop", &BIEngine::Physics2DComponent::Stop);
 
-   py::class_<BIEngine::Physics2DTriggerComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::Physics2DTriggerComponent>>(m, "Physics2DTriggerComponent")
+   py::class_<BIEngine::Physics2DTriggerComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::Physics2DTriggerComponent>>(m, "Physics2DTriggerComponent")
       .def("GetVelocity", &BIEngine::Physics2DTriggerComponent::GetVelocity)
       .def("SetVelocity", &BIEngine::Physics2DTriggerComponent::SetVelocity)
       .def("SetRotation", &BIEngine::Physics2DTriggerComponent::Rotate)
       .def("SetPosition", &BIEngine::Physics2DTriggerComponent::SetPosition)
       .def("Stop", &BIEngine::Physics2DTriggerComponent::Stop);
 
-   py::class_<BIEngine::Physics3DComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::Physics3DComponent>>(m, "Physics3DComponent")
+   py::class_<BIEngine::Physics3DComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::Physics3DComponent>>(m, "Physics3DComponent")
       .def("ApplyForce", &BIEngine::Physics3DComponent::ApplyForce)
       .def("ApplyTorque", &BIEngine::Physics3DComponent::ApplyTorque)
       .def("KinematicMove", &BIEngine::Physics3DComponent::KinematicMove)
@@ -61,14 +61,14 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
       .def("Stop", &BIEngine::Physics3DComponent::Stop);
 
 
-   py::class_<BIEngine::BoxRenderComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::BoxRenderComponent>>(m, "BoxRenderComponent");
-   py::class_<BIEngine::SphereRenderComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::SphereRenderComponent>>(m, "SphereRenderComponent");
-   py::class_<BIEngine::SpriteRenderComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::SpriteRenderComponent>>(m, "SpriteRenderComponent");
+   py::class_<BIEngine::BoxRenderComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::BoxRenderComponent>>(m, "BoxRenderComponent");
+   py::class_<BIEngine::SphereRenderComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::SphereRenderComponent>>(m, "SphereRenderComponent");
+   py::class_<BIEngine::SpriteRenderComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::SpriteRenderComponent>>(m, "SpriteRenderComponent");
 
-   py::class_<BIEngine::ScriptComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::ScriptComponent>>(m, "ScriptComponent")
+   py::class_<BIEngine::ScriptComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::ScriptComponent>>(m, "ScriptComponent")
       .def("GetObject", &BIEngine::ScriptComponent::GetObject);
 
-   py::class_<BIEngine::TransformComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::TransformComponent>>(m, "TransformComponent")
+   py::class_<BIEngine::TransformComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::TransformComponent>>(m, "TransformComponent")
       .def("GetPosition", &BIEngine::TransformComponent::GetPosition)
       .def("SetPosition", &BIEngine::TransformComponent::SetPosition)
       .def("GetRotation", &BIEngine::TransformComponent::GetRotation)
@@ -78,11 +78,11 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
       .def("GetSize", &BIEngine::TransformComponent::GetSize)
       .def("SetSize", &BIEngine::TransformComponent::SetSize);
 
-   py::class_<BIEngine::AnimationComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::AnimationComponent>>(m, "AnimationComponent")
+   py::class_<BIEngine::AnimationComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::AnimationComponent>>(m, "AnimationComponent")
       .def("PlayAnimation", &BIEngine::AnimationComponent::PlayAnimation)
       .def("Stop", &BIEngine::AnimationComponent::Stop);
 
-   py::class_<BIEngine::PlayerComponent, BIEngine::ActorComponent, std::shared_ptr<BIEngine::PlayerComponent>>(m, "PlayerComponent")
+   py::class_<BIEngine::PlayerComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::PlayerComponent>>(m, "PlayerComponent")
       .def("GetPlayerId", &BIEngine::PlayerComponent::GetPlayerId);
 
    m.def("CreateActor", [](const char* actorArchetypeXmlPath, const glm::vec3& pos, const glm::vec3& rot) {
@@ -92,10 +92,10 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
       if (pActor) {
          // std::shared_ptr<EvtData_New_Actor> pNewActorEvent(GCC_NEW EvtData_New_Actor(pActor->GetId()));
          // IEventManager::Get()->VQueueEvent(pNewActorEvent);
-         return pActor;
+         return BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::Actor>(pActor.get());
       }
 
-      return std::shared_ptr<BIEngine::Actor>();
+      return BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::Actor>(nullptr);
    });
 
    m.def("GetActor", [](BIEngine::ActorId actorId) {

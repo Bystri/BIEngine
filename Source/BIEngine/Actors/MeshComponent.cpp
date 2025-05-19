@@ -27,7 +27,7 @@ bool MeshComponent::Init(tinyxml2::XMLElement* pData)
       auto meshData = std::static_pointer_cast<MeshExtraData>(ResCache::Get()->GetHandle(m_meshPath)->GetExtra());
 
       if (meshData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh for Actor with id: " + std::to_string(m_pOwner->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh for Actor with id: " + std::to_string(GetOwner()->GetId()));
          return false;
       }
 
@@ -42,7 +42,7 @@ bool MeshComponent::Init(tinyxml2::XMLElement* pData)
       auto matData = std::static_pointer_cast<MaterialData>(ResCache::Get()->GetHandle(m_matPath)->GetExtra());
 
       if (matData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh material for Actor with id: " + std::to_string(m_pOwner->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh material for Actor with id: " + std::to_string(GetOwner()->GetId()));
          return false;
       }
 
@@ -61,12 +61,12 @@ void MeshComponent::OnRenderObject(const GameTimer& gt)
    }
 
    RenderItemsStorage::OpaqueRenderItem opaqueRitem;
-   opaqueRitem.actorId = m_pOwner->GetId();
+   opaqueRitem.actorId = GetOwner()->GetId();
    opaqueRitem.VAO = m_pMesh->GetVao();
    opaqueRitem.IndicesSize = m_pMesh->GetIndices().size();
    opaqueRitem.pMaterial = m_pMaterial;
 
-   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
    opaqueRitem.ModelTransform = pTransformComponent->GetWorldTransformMatrix();
 
    pHumanView->GetScene()->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);

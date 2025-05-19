@@ -68,14 +68,14 @@ bool Physics2DComponent::Init(tinyxml2::XMLElement* pData)
 
 void Physics2DComponent::Activate()
 {
-   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
 
    switch (m_shape) {
       case Shape2D::CIRCLE:
-         m_gamePhysics->AddCircle((float)m_rigidBodyScale.x, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation().z, m_density, m_material);
+         m_gamePhysics->AddCircle((float)m_rigidBodyScale.x, m_bodyType, GetOwner()->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation().z, m_density, m_material);
          break;
       case Shape2D::BOX:
-         m_gamePhysics->AddBox(m_rigidBodyScale, m_bodyType, m_pOwner->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation().z, m_density, m_material);
+         m_gamePhysics->AddBox(m_rigidBodyScale, m_bodyType, GetOwner()->GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation().z, m_density, m_material);
          break;
       case Shape2D::POINT_CLOUD:
          Logger::WriteLog(Logger::LogType::ERROR, "Not supported yet!");
@@ -87,7 +87,7 @@ void Physics2DComponent::Activate()
 
 void Physics2DComponent::Deactivate()
 {
-   m_gamePhysics->RemoveActor(m_pOwner->GetId());
+   m_gamePhysics->RemoveActor(GetOwner()->GetId());
 }
 
 tinyxml2::XMLElement* Physics2DComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
@@ -108,7 +108,7 @@ tinyxml2::XMLElement* Physics2DComponent::GenerateXml(tinyxml2::XMLDocument* pDo
          pShapeText = pDoc->NewText("PointCloud");
          break;
       default:
-         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics shape type in Physics2DComponent for actor with ActorID: " + std::to_string(m_pOwner->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics shape type in Physics2DComponent for actor with ActorID: " + std::to_string(GetOwner()->GetId()));
    }
    pShape->LinkEndChild(pShapeText);
    pBaseElement->LinkEndChild(pShape);
@@ -127,7 +127,7 @@ tinyxml2::XMLElement* Physics2DComponent::GenerateXml(tinyxml2::XMLDocument* pDo
          pBodyTypeText = pDoc->NewText("Static");
          break;
       default:
-         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics body shape type in Physics2DComponent for actor with ActorID: " + std::to_string(m_pOwner->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics body shape type in Physics2DComponent for actor with ActorID: " + std::to_string(GetOwner()->GetId()));
    }
    pBodyType->LinkEndChild(pBodyTypeText);
    pBaseElement->LinkEndChild(pBodyType);
@@ -154,42 +154,42 @@ tinyxml2::XMLElement* Physics2DComponent::GenerateXml(tinyxml2::XMLDocument* pDo
 
 void Physics2DComponent::ApplyForce(const glm::vec2& direction)
 {
-   m_gamePhysics->ApplyForce(direction, m_pOwner->GetId());
+   m_gamePhysics->ApplyForce(direction, GetOwner()->GetId());
 }
 
 void Physics2DComponent::ApplyTorque(float torque)
 {
-   m_gamePhysics->ApplyTorque(torque, m_pOwner->GetId());
+   m_gamePhysics->ApplyTorque(torque, GetOwner()->GetId());
 }
 
 bool Physics2DComponent::KinematicMove(const glm::vec2& position, float rotation)
 {
-   return m_gamePhysics->KinematicMove(m_pOwner->GetId(), position, rotation);
+   return m_gamePhysics->KinematicMove(GetOwner()->GetId(), position, rotation);
 }
 
 glm::vec2 Physics2DComponent::GetVelocity() const
 {
-   return m_gamePhysics->GetVelocity(m_pOwner->GetId());
+   return m_gamePhysics->GetVelocity(GetOwner()->GetId());
 }
 
 void Physics2DComponent::SetVelocity(const glm::vec2& velocity)
 {
-   m_gamePhysics->SetVelocity(m_pOwner->GetId(), velocity);
+   m_gamePhysics->SetVelocity(GetOwner()->GetId(), velocity);
 }
 
 void Physics2DComponent::SetAngularVelocity(float angle)
 {
-   m_gamePhysics->SetAngularVelocity(m_pOwner->GetId(), angle);
+   m_gamePhysics->SetAngularVelocity(GetOwner()->GetId(), angle);
 }
 
 float Physics2DComponent::GetAngularVelocity() const
 {
-   return m_gamePhysics->GetAngularVelocity(m_pOwner->GetId());
+   return m_gamePhysics->GetAngularVelocity(GetOwner()->GetId());
 }
 
 void Physics2DComponent::Stop()
 {
-   return m_gamePhysics->StopActor(m_pOwner->GetId());
+   return m_gamePhysics->StopActor(GetOwner()->GetId());
 }
 
 } // namespace BIEngine

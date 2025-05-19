@@ -35,13 +35,13 @@ bool Physics2DTriggerComponent::Init(tinyxml2::XMLElement* pData)
 
 void Physics2DTriggerComponent::Activate()
 {
-   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-   m_gamePhysics->CreateTrigger(m_pOwner->GetId(), pTransformComponent->GetPosition(), m_dimension);
+   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   m_gamePhysics->CreateTrigger(GetOwner()->GetId(), pTransformComponent->GetPosition(), m_dimension);
 }
 
 void Physics2DTriggerComponent::Deactivate()
 {
-   m_gamePhysics->RemoveActor(m_pOwner->GetId());
+   m_gamePhysics->RemoveActor(GetOwner()->GetId());
 }
 
 tinyxml2::XMLElement* Physics2DTriggerComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
@@ -58,27 +58,27 @@ tinyxml2::XMLElement* Physics2DTriggerComponent::GenerateXml(tinyxml2::XMLDocume
 
 glm::vec2 Physics2DTriggerComponent::GetVelocity()
 {
-   return m_gamePhysics->GetVelocity(m_pOwner->GetId());
+   return m_gamePhysics->GetVelocity(GetOwner()->GetId());
 }
 
 void Physics2DTriggerComponent::SetVelocity(const glm::vec2& velocity)
 {
-   m_gamePhysics->SetVelocity(m_pOwner->GetId(), velocity);
+   m_gamePhysics->SetVelocity(GetOwner()->GetId(), velocity);
 }
 
 void Physics2DTriggerComponent::Rotate(float angle)
 {
-   m_gamePhysics->Rotate(m_pOwner->GetId(), angle);
+   m_gamePhysics->Rotate(GetOwner()->GetId(), angle);
 }
 
 void Physics2DTriggerComponent::SetPosition(const glm::vec2& position)
 {
-   m_gamePhysics->SetPosition(m_pOwner->GetId(), position);
+   m_gamePhysics->SetPosition(GetOwner()->GetId(), position);
 }
 
 void Physics2DTriggerComponent::Stop()
 {
-   return m_gamePhysics->StopActor(m_pOwner->GetId());
+   return m_gamePhysics->StopActor(GetOwner()->GetId());
 }
 
 } // namespace BIEngine

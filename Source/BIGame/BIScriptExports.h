@@ -2,6 +2,8 @@
 
 #include <pybind11/embed.h>
 
+#include "../BIEngine/Scripting/PythonStateManager.h"
+
 #include "BIEventListener.h"
 #include "Locomotion/LocomotionInfoComponent.h"
 
@@ -23,7 +25,7 @@ PYBIND11_EMBEDDED_MODULE(BIGActionEvent, m)
 
 PYBIND11_EMBEDDED_MODULE(BIGActor, m)
 {
-   py::class_<LocomotionInfoComponent, BIEngine::ActorComponent, std::shared_ptr<LocomotionInfoComponent>>(m, "LocomotionInfoComponent")
+   py::class_<LocomotionInfoComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<LocomotionInfoComponent>>(m, "LocomotionInfoComponent")
       .def("SetCurrentDir", &LocomotionInfoComponent::SetCurrentDir)
       .def("GetCurrentDir", &LocomotionInfoComponent::GetCurrentDir)
       .def("SetCurrentVel", &LocomotionInfoComponent::SetCurrentVel)

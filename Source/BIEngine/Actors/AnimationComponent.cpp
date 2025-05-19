@@ -37,7 +37,7 @@ bool AnimationComponent::Init(tinyxml2::XMLElement* pData)
 
 void AnimationComponent::Activate()
 {
-   m_pAnimator = std::make_shared<Animator>(m_pOwner);
+   m_pAnimator = std::make_shared<Animator>(GetOwner());
 }
 
 void AnimationComponent::Deactivate()

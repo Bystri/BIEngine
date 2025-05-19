@@ -57,7 +57,9 @@ protected:
    // Данная функция должна представлять полноценную реализацию для определения всех частей компонента и подготовки его к полноценному встраиванию в систему во время пост-инициализации
    virtual bool Init(tinyxml2::XMLElement* pData) = 0;
 
-protected:
+   Actor* GetOwner() const { return m_pOwner; }
+
+private:
    Actor* m_pOwner;
 };
 } // namespace BIEngine

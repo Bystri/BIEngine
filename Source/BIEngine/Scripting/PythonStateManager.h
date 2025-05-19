@@ -17,12 +17,12 @@ public:
    template <typename T>
    class RawPtrWrapper {
    public:
-      explicit RawPtrWrapper(T* ptr)
+      RawPtrWrapper(T* ptr)
          : m_ptr(ptr)
       {
       }
 
-      const T* get() const { return m_ptr; }
+      T* get() const { return m_ptr; }
 
    private:
       T* m_ptr;

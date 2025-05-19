@@ -27,7 +27,7 @@ bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
    tinyxml2::XMLElement* pMaterialElement = pData->FirstChildElement("Material");
 
    if (pMaterialElement == nullptr) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading RenderComponent for Actor with id: " + std::to_string(m_pOwner->GetId()) + "; No Material was specified");
+      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading RenderComponent for Actor with id: " + std::to_string(GetOwner()->GetId()) + "; No Material was specified");
       return false;
    }
 
@@ -58,7 +58,7 @@ tinyxml2::XMLElement* MeshBaseRenderComponent::GenerateXml(tinyxml2::XMLDocument
 
 void MeshRenderComponent::OnRenderObject(const GameTimer& gt)
 {
-   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
    if (!pTransformComponent) {
       return;
    }
@@ -67,7 +67,7 @@ void MeshRenderComponent::OnRenderObject(const GameTimer& gt)
 
    for (const auto& pModelMesh : modelMeshes) {
       RenderItemsStorage::OpaqueRenderItem opaqueRitem;
-      opaqueRitem.actorId = m_pOwner->GetId();
+      opaqueRitem.actorId = GetOwner()->GetId();
       opaqueRitem.VAO = pModelMesh->GetMesh()->GetVao();
       opaqueRitem.IndicesSize = pModelMesh->GetMesh()->GetIndices().size();
       opaqueRitem.pMaterial = pModelMesh->GetMaterial();
@@ -110,7 +110,7 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
       auto spriteData = std::static_pointer_cast<TextureData>(ResCache::Get()->GetHandle(spritePath)->GetExtra());
 
       if (spriteData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + std::to_string(m_pOwner->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + std::to_string(GetOwner()->GetId()));
          return false;
       }
 
@@ -124,7 +124,7 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
 
 void SpriteRenderComponent::OnRenderObject(const GameTimer& gt)
 {
-   std::shared_ptr<TransformComponent> pTransformComponent = m_pOwner->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
    if (!pTransformComponent) {
       return;
    }
@@ -248,7 +248,7 @@ bool ModelRenderComponent::Init(tinyxml2::XMLElement* pData)
 {
    tinyxml2::XMLElement* pModel = pData->FirstChildElement("Model");
    if (!pModel) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Erro while loading actor" + std::to_string(m_pOwner->GetId()) + "; ModelRenderComponent must have path for model loading;");
+      Logger::WriteLog(Logger::LogType::ERROR, "Erro while loading actor" + std::to_string(GetOwner()->GetId()) + "; ModelRenderComponent must have path for model loading;");
       return false;
    }
 
@@ -259,7 +259,7 @@ bool ModelRenderComponent::Init(tinyxml2::XMLElement* pData)
    auto modelData = std::static_pointer_cast<ModelData>(ResCache::Get()->GetHandle(m_modelPath)->GetExtra());
 
    if (modelData == nullptr) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading actor" + std::to_string(m_pOwner->GetId()) + "; Error while loading model in ModelRenderComponent;");
+      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading actor" + std::to_string(GetOwner()->GetId()) + "; Error while loading model in ModelRenderComponent;");
       return false;
    }
 
