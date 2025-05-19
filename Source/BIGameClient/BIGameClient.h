@@ -7,6 +7,7 @@
 #include "BIGCScriptExports.h"
 #include "BICameraManager.h"
 #include "BIInputActiorController.h"
+#include "BIDebugMenuController.h"
 
 class BIGameClientApp : public BIEngine::GameApp {
 public:
@@ -48,7 +49,7 @@ public:
    void NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventData);
 
    virtual void OnUpdate(BIEngine::GameTimer& gt) override;
-   virtual void OnRender(const BIEngine::GameTimer& gt) override;
+   virtual void OnRenderDebug(const BIEngine::GameTimer& gt) override;
 
 private:
    std::unique_ptr<BIInputActionController> m_pInputActionController;
@@ -56,4 +57,6 @@ private:
 
    std::unique_ptr<BINetworkManagerClient> m_pNetworkManager;
    std::shared_ptr<BIGameClientHumanView> m_pHumanView;
+
+   std::unique_ptr<BIDebugMenuController> m_pDebugMenuController;
 };

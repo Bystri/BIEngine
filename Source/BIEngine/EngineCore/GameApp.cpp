@@ -124,6 +124,7 @@ void GameApp::OnRender(const GameTimer& gt)
    ImGui::NewFrame();
 
    m_pGameLogic->OnRender(gt);
+   m_pGameLogic->OnRenderDebug(gt);
 
    ImGui::Render();
    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

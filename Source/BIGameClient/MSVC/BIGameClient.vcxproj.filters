@@ -16,5 +16,6 @@
     <ClInclude Include="..\BIInputActiorController.h" />
     <ClInclude Include="..\BINetworkManagerClient.h" />
     <ClInclude Include="..\BIGCScriptExports.h" />
+    <ClInclude Include="..\BIDebugMenuController.h" />
   </ItemGroup>
 </Project>

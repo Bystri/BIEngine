@@ -294,7 +294,7 @@ void NavMeshManager::renderNavMeshWindow()
    ImGui::End();
 }
 
-void NavMeshManager::RenderMesh()
+void NavMeshManager::DrawRenderDiagnostics()
 {
    renderNavMeshWindow();
 

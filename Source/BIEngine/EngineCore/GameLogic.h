@@ -46,6 +46,7 @@ public:
 
    virtual void OnUpdate(GameTimer& gt);
    virtual void OnRender(const GameTimer& gt);
+   virtual void OnRenderDebug(const GameTimer& gt);
 
    std::shared_ptr<Actor> GetActor(ActorId id) const;
 

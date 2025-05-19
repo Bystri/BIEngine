@@ -8,6 +8,7 @@
 #include <map>
 #include <algorithm>
 
+#include <imgui.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/ext/matrix_relational.hpp>
@@ -245,6 +246,7 @@ private:
    btDefaultCollisionConfiguration* m_pCollisionConfiguration;
 
    BulletDebugDrawer* m_pDebugDrawer;
+   bool m_isRenderDebugDiagnostics = false;
 
    using DensityTable = std::map<std::string, float>;
    using MaterialTable = std::map<std::string, MaterialData>;
@@ -447,7 +449,21 @@ void Physics3D::AfterUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& act
 
 void Physics3D::DrawRenderDiagnostics()
 {
-   // m_pDynamicsWorld->debugDrawWorld();
+   ImGui::SetNextWindowSize(ImVec2(275, 100), ImGuiCond_Always);
+
+   if (!ImGui::Begin("Physcis3D settings")) {
+      ImGui::End();
+      return;
+   }
+
+   ImGui::Text("Debug");
+   ImGui::Checkbox("Render Debug Diagnostics", &m_isRenderDebugDiagnostics);
+
+   ImGui::End();
+
+   if (m_isRenderDebugDiagnostics) {
+      m_pDynamicsWorld->debugDrawWorld();
+   }
 }
 
 void Physics3D::AddShape(btCollisionShape* const pShape, const float volume, const ShapeCreationParams& creationParams)

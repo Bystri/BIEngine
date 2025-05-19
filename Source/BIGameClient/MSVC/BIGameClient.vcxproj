@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BICameraManager.h" />
+    <ClInclude Include="..\BIDebugMenuController.h" />
     <ClInclude Include="..\BIGCEventListener.h" />
     <ClInclude Include="..\BIGameClient.h" />
     <ClInclude Include="..\BIGameController.h" />

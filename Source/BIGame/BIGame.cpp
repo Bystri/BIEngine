@@ -113,12 +113,6 @@ void BIGameLogic::OnUpdate(BIEngine::GameTimer& gt)
    m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
 }
 
-void BIGameLogic::OnRender(const BIEngine::GameTimer& gt)
-{
-   BIEngine::GameLogic::OnRender(gt);
-   m_pNavWorld->GetNavMeshManager()->RenderMesh();
-}
-
 static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
 {
    auto xmlExtraData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/scene.xml")->GetExtra());

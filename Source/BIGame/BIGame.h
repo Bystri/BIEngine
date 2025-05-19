@@ -38,7 +38,6 @@ public:
    void NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventData);
 
    virtual void OnUpdate(BIEngine::GameTimer& gt) override;
-   virtual void OnRender(const BIEngine::GameTimer& gt) override;
 
 private:
    std::unique_ptr<BICameraManager> m_pCameraManager;

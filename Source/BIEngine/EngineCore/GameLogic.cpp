@@ -144,11 +144,13 @@ void GameLogic::OnRender(const GameTimer& gt)
       actor.second->OnRenderObject(gt);
    }
 
-   m_pPhysics3D->DrawRenderDiagnostics();
-
    for (const auto view : m_gameViews) {
       view->OnPostRender(gt);
    }
+}
+
+void GameLogic::OnRenderDebug(const GameTimer& gt)
+{
 }
 
 std::shared_ptr<Actor> GameLogic::GetActor(ActorId id) const

@@ -103,10 +103,9 @@ bool BIGameClientLogic::Init()
    m_pHumanView->Init();
    AddGameView(m_pHumanView);
 
-
    m_pInputActionController = std::make_unique<BIInputActionController>();
-
    m_pCameraManager = std::make_unique<BICameraManager>(m_pHumanView->GetScene()->GetCamera());
+   m_pDebugMenuController = std::make_unique<BIDebugMenuController>();
 
    BIRegisterEvents();
 
@@ -160,10 +159,18 @@ void BIGameClientLogic::OnUpdate(BIEngine::GameTimer& gt)
    m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
 }
 
-void BIGameClientLogic::OnRender(const BIEngine::GameTimer& gt)
+void BIGameClientLogic::OnRenderDebug(const BIEngine::GameTimer& gt)
 {
-   BIEngine::GameLogic::OnRender(gt);
-   m_pNavWorld->GetNavMeshManager()->RenderMesh();
+   BIEngine::GameLogic::OnRenderDebug(gt);
+   m_pDebugMenuController->OnUpdate();
+
+   if (m_pDebugMenuController->IsShowNavMeshWindow()) {
+      m_pNavWorld->GetNavMeshManager()->DrawRenderDiagnostics();
+   }
+
+   if (m_pDebugMenuController->IsShowPhysics3dWindow()) {
+      m_pPhysics3D->DrawRenderDiagnostics();
+   }
 }
 
 static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()

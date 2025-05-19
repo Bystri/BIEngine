@@ -25,7 +25,7 @@ public:
    void SetBuildSettings(const NavMeshBuildSettings& settings) { m_buildSettings = settings; }
 
    bool BuildNavmesh();
-   void RenderMesh();
+   void DrawRenderDiagnostics();
 
    dtNavMesh* GetNavMesh();
    dtNavMeshQuery* GetNavMeshQuery();
