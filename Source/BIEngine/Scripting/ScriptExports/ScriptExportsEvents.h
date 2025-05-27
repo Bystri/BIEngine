@@ -9,59 +9,12 @@
 
 namespace py = pybind11;
 
-namespace BIEngine {
-
-class ScriptEventListener {
-public:
-   using EventCallback = std::function<void(const std::shared_ptr<BaseEventData>)>;
-
-   ScriptEventListener(const EventType& eventType, const EventCallback& scriptCallbackFunction);
-   ~ScriptEventListener();
-
-   EventListenerDelegate GetDelegate() { return fastdelegate::MakeDelegate(this, &ScriptEventListener::ScriptEventDelegate); }
-
-   EventType GetEventType() const { return m_eventType; }
-
-   void ScriptEventDelegate(IEventDataPtr pEventPtr);
-
-private:
-   EventType m_eventType;
-   EventCallback m_scriptCallbackFunction;
-};
-
-ScriptEventListener::ScriptEventListener(const EventType& eventType, const EventCallback& scriptCallbackFunction)
-   : m_scriptCallbackFunction(scriptCallbackFunction)
-{
-   m_eventType = eventType;
-}
-
-ScriptEventListener::~ScriptEventListener()
-{
-}
-
-// Вызов настоящей функции-слушателя внутри скрипта
-void ScriptEventListener::ScriptEventDelegate(IEventDataPtr pEvent)
-{
-   // Вызов Python-функции
-   std::shared_ptr<BaseEventData> pScriptEvent = std::static_pointer_cast<BaseEventData>(pEvent);
-
-   try {
-      m_scriptCallbackFunction(pScriptEvent);
-   } catch (py::error_already_set& e) {
-      Logger::WriteLog(Logger::LogType::ERROR, e.what());
-   } catch (std::runtime_error& e) {
-      Logger::WriteLog(Logger::LogType::ERROR, e.what());
-   }
-}
-} // namespace BIEngine
-
 PYBIND11_EMBEDDED_MODULE(BIEEvent, m)
 {
    py::class_<BIEngine::BaseEventData, std::shared_ptr<BIEngine::BaseEventData>>(m, "BaseEventData")
       .def(py::init<>())
       .def("GetName", &BIEngine::BaseEventData::GetName)
-      .def("GetEventType", &BIEngine::BaseEventData::GetEventType)
-      .def("GetTimeStamp", &BIEngine::BaseEventData::GetTimeStamp);
+      .def("GetEventType", &BIEngine::BaseEventData::GetEventType);
 
    py::class_<BIEngine::EvtData_Request_Destroy_Actor, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Request_Destroy_Actor>>(m, "EvtData_Request_Destroy_Actor")
       .def("GetActorId", &BIEngine::EvtData_Request_Destroy_Actor::GetActorId);
@@ -86,18 +39,24 @@ PYBIND11_EMBEDDED_MODULE(BIEEvent, m)
       .def("GetCollisionPoints", &BIEngine::EvtData_Phys3DCollision::GetCollisionPoints);
 
 
-   m.def("RegisterEventListener", [](BIEngine::EventType eventType, BIEngine::ScriptEventListener::EventCallback callbackFunction) {
-      // Создаем C++ прокси-слушателя, который ссылает на настоящую функцию-слушателя внутри скрипта
-      BIEngine::ScriptEventListener* pListener = new BIEngine::ScriptEventListener(eventType, callbackFunction);
-      BIEngine::EventManager::Get()->AddListener(pListener->GetDelegate(), eventType);
+   m.def("RegisterEventListener", [](BIEngine::EventType eventType, std::function<void(const std::shared_ptr<BIEngine::BaseEventData>)> callbackFunction) {
+      auto scriptListener = [callbackFunction](BIEngine::IEventDataPtr pEvent) {
+         std::shared_ptr<BIEngine::BaseEventData> pScriptEvent = std::static_pointer_cast<BIEngine::BaseEventData>(pEvent);
 
-      uint64_t handle = reinterpret_cast<uint64_t>(pListener);
-      return handle;
+         try {
+            callbackFunction(pScriptEvent);
+         } catch (py::error_already_set& e) {
+            BIEngine::Logger::WriteErrorLog(e.what());
+         } catch (std::runtime_error& e) {
+            BIEngine::Logger::WriteErrorLog(e.what());
+         }
+      };
+
+      return BIEngine::EventManager::Get()->AddListener(std::move(scriptListener), eventType);
    });
 
    m.def("RemoveEventListener", [](uint64_t listenerId) {
-      BIEngine::ScriptEventListener* pListener = reinterpret_cast<BIEngine::ScriptEventListener*>(listenerId);
-      BIEngine::EventManager::Get()->RemoveListener(pListener->GetDelegate(), pListener->GetEventType());
+      BIEngine::EventManager::Get()->RemoveListener(listenerId);
    });
 
    m.def("QueueEvent", [](BIEngine::EventType eventType, const BIEngine::IEventDataPtr& pEventData) {

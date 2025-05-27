@@ -26,6 +26,10 @@ public:
    void OnUpdate();
 
 private:
+   BIEngine::EventManager::DelegateHandler m_onPointerMoveDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_onKeyDownDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_onKeyUpDelegateHandler;
+
    int m_playerId;
 
    std::shared_ptr<BIEngine::Camera> m_pCamera;

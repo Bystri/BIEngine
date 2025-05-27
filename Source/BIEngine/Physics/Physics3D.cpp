@@ -236,6 +236,8 @@ private:
    void DestroyActorDelegate(IEventDataPtr pEventData);
 
 private:
+   EventManager::DelegateHandler m_destroyActorDelegateHandler;
+
    // Главная точка управления в bullet
    btDynamicsWorld* m_pDynamicsWorld;
    // Bullet сначала ищет коллизии возможное коллизии между объектами с помощью Broadphase, а потом отправляет всех подозреваемых в CollisionDispatcher на дополнительный обсчет
@@ -267,12 +269,12 @@ private:
 Physics3D::Physics3D()
    : IGamePhysics3D()
 {
-   EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Physics3D::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
+   m_destroyActorDelegateHandler = EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(Physics3D::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
 }
 
 Physics3D::~Physics3D()
 {
-   EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Physics3D::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
+   EventManager::Get()->RemoveListener(m_destroyActorDelegateHandler);
 
    for (int ii = m_pDynamicsWorld->getNumCollisionObjects() - 1; ii >= 0; --ii) {
       btCollisionObject* const obj = m_pDynamicsWorld->getCollisionObjectArray()[ii];

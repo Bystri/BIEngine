@@ -2,41 +2,38 @@
 
 #include <strstream>
 #include <list>
-#include <map>
+#include <unordered_map>
 #include <memory>
+#include <functional>
 
 #include "../Network/Serialization.h"
 #include "../Utilities/GenericObjectFactory.h"
-#include "../3rdParty/FastDelegate/FastDelegate.h"
 
 namespace BIEngine {
 
-using EventType = unsigned long;
+using EventType = uint32_t;
 
 class IEventData {
 public:
    virtual const EventType& GetEventType() const = 0;
-   virtual float GetTimeStamp() const = 0;
 
-   // Методы передачи данных в потоке
-
-   // Отправляет в поток вывода сериализованное представление события
    virtual void Write(OutputMemoryBitStream& os) const = 0;
-   // Отправляет в поток ввода десериализованное представление события
    virtual void Read(InputMemoryBitStream& is) = 0;
 
    virtual const char* GetName() const = 0;
 };
 
 using IEventDataPtr = std::shared_ptr<IEventData>;
-using EventListenerDelegate = fastdelegate::FastDelegate1<IEventDataPtr>;
+using EventListenerDelegate = std::function<void(IEventDataPtr)>;
+
+#define MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(func) \
+   std::bind(&func, this, std::placeholders::_1)
 
 class BaseEventData : public IEventData {
 public:
    static const EventType sk_EventType;
 
-   explicit BaseEventData(const float timeStamp = 0.0f)
-      : m_timeStamp(timeStamp)
+   BaseEventData()
    {
    }
 
@@ -44,24 +41,23 @@ public:
 
    virtual const EventType& GetEventType() const override { return sk_EventType; }
 
-   float GetTimeStamp() const override { return m_timeStamp; }
-
    virtual void Write(OutputMemoryBitStream& out) const override {}
 
    virtual void Read(InputMemoryBitStream& in) override {}
 
    virtual const char* GetName() const { return "Unknown"; }
-
-private:
-   const float m_timeStamp;
 };
 
 extern GenericObjectFactory<IEventData, EventType> g_eventFactory;
 
 // Менеджер событий является Singleton-объектом, так как должен быть доступен практически из каждой системы
 class EventManager {
-   using EventListenerList = std::list<EventListenerDelegate>;
-   using EventListenerMap = std::map<EventType, EventListenerList>;
+public:
+   using DelegateHandler = uint64_t;
+
+private:
+   using EventListenerStorage = std::vector<EventListenerDelegate>;
+   using EventHandlerStorage = std::vector<DelegateHandler>;
    using EventQueue = std::list<IEventDataPtr>;
 
    static const unsigned int EVENTMANAGER_NUM_QUEUES = 2;
@@ -71,8 +67,8 @@ public:
 
    static EventManager* Get();
 
-   virtual bool AddListener(const EventListenerDelegate& eventDelegate, const EventType& type);
-   virtual bool RemoveListener(const EventListenerDelegate& eventDelegate, const EventType& type);
+   virtual DelegateHandler AddListener(EventListenerDelegate&& eventDelegate, const EventType& type);
+   virtual bool RemoveListener(DelegateHandler handler);
 
    // Выполнение события сразу, не дожидаясь выполнения событий из очереди
    virtual bool TriggerEvent(const IEventDataPtr& pEvent) const;
@@ -83,11 +79,13 @@ public:
    virtual bool TickUpdate(long long maxMillis = INFINITE_TIME);
 
 private:
-   explicit EventManager();
+   EventManager();
    virtual ~EventManager();
 
 private:
-   EventListenerMap m_eventListeners;
+   uint32_t m_nextId = 0;
+   std::unordered_map<EventType, EventListenerStorage> m_eventListeners;
+   std::unordered_map<EventType, EventHandlerStorage> m_delegateHandlers;
    EventQueue m_queue[EVENTMANAGER_NUM_QUEUES];
    int m_activeQueue;
 };

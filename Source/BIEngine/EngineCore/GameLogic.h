@@ -28,7 +28,7 @@ public:
 
    virtual bool Init();
 
-   virtual void Terminate() {}
+   virtual void Terminate();
 
    bool LoadLevel(const std::string& path);
 
@@ -65,6 +65,8 @@ protected:
    virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) { return true; }
 
 protected:
+   EventManager::DelegateHandler m_requestDestroyActorDelegateHandler;
+
    bool m_bIsLevelLoaded;
 
    GameViewList m_gameViews;

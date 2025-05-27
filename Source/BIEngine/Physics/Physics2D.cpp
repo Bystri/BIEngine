@@ -159,6 +159,8 @@ private:
    void DestroyActorDelegate(IEventDataPtr pEventData);
 
 private:
+   EventManager::DelegateHandler m_destroyActorDelegateHandler;
+
    cpSpace* m_cpSpace;
 
    // Физические свойства материалов
@@ -177,12 +179,12 @@ private:
 Physics2D::Physics2D()
    : IGamePhysics2D()
 {
-   EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &Physics2D::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
+   m_destroyActorDelegateHandler = EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(Physics2D::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
 }
 
 Physics2D::~Physics2D()
 {
-   EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &Physics2D::DestroyActorDelegate), EvtData_Destroy_Actor::sk_EventType);
+   EventManager::Get()->RemoveListener(m_destroyActorDelegateHandler);
 
    cpSpaceFree(m_cpSpace);
 }

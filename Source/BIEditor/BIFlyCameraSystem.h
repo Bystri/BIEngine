@@ -23,6 +23,9 @@ private:
    void OnKeyUpCallback(BIEngine::IEventDataPtr pEventData);
 
 private:
+   BIEngine::EventManager::DelegateHandler m_onKeyDownDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_onKeyUpDelegateHandler;
+
    std::shared_ptr<BIEngine::Camera> m_pCamera;
    std::shared_ptr<BIEditorController> m_pInputController;
 

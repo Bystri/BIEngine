@@ -31,9 +31,6 @@
     <Filter Include="EventManager">
       <UniqueIdentifier>{a26e3b6b-902e-4fa2-9034-d59a7b33e902}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty\FastDelegate">
-      <UniqueIdentifier>{f68a87e8-d1a3-4313-845c-3124c2402cd1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Physics">
       <UniqueIdentifier>{eb336de6-cf03-4f85-9bd1-04e12ac16280}</UniqueIdentifier>
     </Filter>
@@ -490,12 +487,6 @@
     </ClInclude>
     <ClInclude Include="..\..\EventManager\Events.h">
       <Filter>EventManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdParty\FastDelegate\FastDelegate.h">
-      <Filter>3rdParty\FastDelegate</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdParty\FastDelegate\FastDelegateBind.h">
-      <Filter>3rdParty\FastDelegate</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ResourceCache\XmlLoader.h">
       <Filter>ResourceCache</Filter>

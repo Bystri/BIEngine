@@ -13,6 +13,7 @@ class BINetworkManagerClient : public BIEngine::NetworkManager {
 
 public:
    void Init(const BIEngine::SocketAddress& serverAddress, const std::string& name);
+   void Terminate();
 
    int GetPlayerId() const { return m_playerId; }
 
@@ -35,6 +36,9 @@ private:
 private:
    BIEngine::SocketAddress m_serverAddress;
    NetworkClientState m_state = NetworkClientState::Uninitialized;
+
+   BIEngine::EventManager::DelegateHandler m_storeEventMoveDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_storeEventTurnDelegateHandler;
 
    float m_timeOfLastHello;
    float m_timeOfLastEventPacket;

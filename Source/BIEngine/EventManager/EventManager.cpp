@@ -41,37 +41,47 @@ EventManager::~EventManager()
    }
 }
 
-bool EventManager::AddListener(const EventListenerDelegate& eventDelegate, const EventType& type)
+EventManager::DelegateHandler EventManager::AddListener(EventListenerDelegate&& eventDelegate, const EventType& type)
 {
    auto& eventListenerList = m_eventListeners[type];
-   for (auto delegate : eventListenerList) {
-      if (eventDelegate == delegate) {
-         Logger::WriteLog(Logger::LogType::WARNING, "Attempting to double-register a delegate");
-         return false;
-      }
-   }
+   auto& delegateHandlersList = m_delegateHandlers[type];
 
-   eventListenerList.push_back(eventDelegate);
-   return true;
+   eventListenerList.push_back(std::move(eventDelegate));
+
+   DelegateHandler newHandler = type;
+   newHandler <<= 32;
+   newHandler |= m_nextId;
+   delegateHandlersList.push_back(newHandler);
+
+   ++m_nextId;
+
+   return newHandler;
 }
 
-bool EventManager::RemoveListener(const EventListenerDelegate& eventDelegate, const EventType& type)
+bool EventManager::RemoveListener(const EventManager::DelegateHandler handler)
 {
-   bool success = false;
+   const EventType type = handler >> 32;
 
-   auto findIt = m_eventListeners.find(type);
-   if (findIt != m_eventListeners.end()) {
-      EventListenerList& listeners = findIt->second;
-      for (auto itr = listeners.begin(); itr != listeners.end(); ++itr) {
-         if (eventDelegate == (*itr)) {
-            listeners.erase(itr);
-            success = true;
-            break;
-         }
+   auto findIt = m_delegateHandlers.find(type);
+
+   if (findIt == m_delegateHandlers.end()) {
+      return false;
+   }
+
+   auto& handlersStorage = findIt->second;
+
+   auto itr = handlersStorage.begin();
+   for (int idx = 0; itr != handlersStorage.end(); ++itr, ++idx) {
+      if ((*itr) == handler) {
+         auto& listenersStorage = m_eventListeners[type];
+         listenersStorage.erase(listenersStorage.begin() + idx);
+         handlersStorage.erase(itr);
+
+         return true;
       }
    }
 
-   return success;
+   return false;
 }
 
 bool EventManager::TriggerEvent(const IEventDataPtr& pEvent) const
@@ -80,7 +90,7 @@ bool EventManager::TriggerEvent(const IEventDataPtr& pEvent) const
 
    auto findIt = m_eventListeners.find(pEvent->GetEventType());
    if (findIt != m_eventListeners.end()) {
-      const EventListenerList& eventListenerList = findIt->second;
+      const EventListenerStorage& eventListenerList = findIt->second;
       for (auto itr = eventListenerList.cbegin(); itr != eventListenerList.cend(); ++itr) {
          EventListenerDelegate listener = (*itr);
          listener(pEvent);
@@ -149,7 +159,7 @@ bool EventManager::TickUpdate(long long maxMillis)
 
       auto findIt = m_eventListeners.find(eventType);
       if (findIt != m_eventListeners.end()) {
-         const EventListenerList& eventListeners = findIt->second;
+         const EventListenerStorage& eventListeners = findIt->second;
 
          for (auto it = eventListeners.begin(); it != eventListeners.end(); ++it) {
             EventListenerDelegate listener = (*it);

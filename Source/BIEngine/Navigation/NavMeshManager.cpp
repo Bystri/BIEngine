@@ -1,7 +1,5 @@
 #include "NavMeshManager.h"
 
-#include "../3rdParty/FastDelegate/FastDelegate.h"
-
 #include <imgui.h>
 
 #include "NavMeshInputGeom.h"
@@ -23,12 +21,14 @@ NavMeshManager::NavMeshManager()
 
    m_pNavQuery = dtAllocNavMeshQuery();
 
-   EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &NavMeshManager::HandleActorAdded), EvtData_Actor_Created::sk_EventType);
-   EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &NavMeshManager::HandleActorDestroyed), EvtData_Destroy_Actor::sk_EventType);
+   m_handleActorAddedDelegateHandler = EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(NavMeshManager::HandleActorAdded), EvtData_Actor_Created::sk_EventType);
+   m_handleActorDestroyedDelegateHandler = EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(NavMeshManager::HandleActorDestroyed), EvtData_Destroy_Actor::sk_EventType);
 }
 
 NavMeshManager::~NavMeshManager()
 {
+   EventManager::Get()->RemoveListener(m_handleActorAddedDelegateHandler);
+   EventManager::Get()->RemoveListener(m_handleActorDestroyedDelegateHandler);
 }
 
 static bool SaveGeom(const std::string& filepath, std::shared_ptr<NavMeshInputGeometry> pGeom)

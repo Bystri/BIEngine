@@ -8,16 +8,16 @@ void BIInputActionController::Init(int playerId, std::shared_ptr<BIEngine::Camer
    m_playerId = playerId;
    m_pCamera = pCamera;
 
-   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIInputActionController::OnPointerMoveDelegate), EvtData_OnPointerMove::sk_EventType);
-   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIInputActionController::OnKeyDownDelegate), EvtData_OnKeyDown::sk_EventType);
-   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIInputActionController::OnKeyUpDelegate), EvtData_OnKeyUp::sk_EventType);
+   m_onPointerMoveDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIInputActionController::OnPointerMoveDelegate), EvtData_OnPointerMove::sk_EventType);
+   m_onKeyDownDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIInputActionController::OnKeyDownDelegate), EvtData_OnKeyDown::sk_EventType);
+   m_onKeyUpDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIInputActionController::OnKeyUpDelegate), EvtData_OnKeyUp::sk_EventType);
 }
 
 void BIInputActionController::Term()
 {
-   BIEngine::EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &BIInputActionController::OnKeyDownDelegate), EvtData_OnPointerMove::sk_EventType);
-   BIEngine::EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &BIInputActionController::OnKeyDownDelegate), EvtData_OnKeyDown::sk_EventType);
-   BIEngine::EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &BIInputActionController::OnKeyUpDelegate), EvtData_OnKeyUp::sk_EventType);
+   BIEngine::EventManager::Get()->RemoveListener(m_onPointerMoveDelegateHandler);
+   BIEngine::EventManager::Get()->RemoveListener(m_onKeyDownDelegateHandler);
+   BIEngine::EventManager::Get()->RemoveListener(m_onKeyUpDelegateHandler);
 }
 
 void BIInputActionController::OnPointerMoveDelegate(BIEngine::IEventDataPtr pEventData)

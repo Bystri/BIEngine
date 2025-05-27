@@ -23,9 +23,14 @@ bool GameLogic::Init()
 {
    ProcessManager::Create();
 
-   EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &GameLogic::RequestDestroyActorDelegate), EvtData_Request_Destroy_Actor::sk_EventType);
+   m_requestDestroyActorDelegateHandler = EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(GameLogic::RequestDestroyActorDelegate), EvtData_Request_Destroy_Actor::sk_EventType);
 
    return true;
+}
+
+void GameLogic::Terminate()
+{
+   EventManager::Get()->RemoveListener(m_requestDestroyActorDelegateHandler);
 }
 
 bool GameLogic::LoadLevel(const std::string& path)

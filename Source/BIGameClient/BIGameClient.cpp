@@ -109,7 +109,7 @@ bool BIGameClientLogic::Init()
 
    BIRegisterEvents();
 
-   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIGameClientLogic::NewPlayerActorDelegate), EvtData_PlayerActor_Created::sk_EventType);
+   m_newPlayerActorDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIGameClientLogic::NewPlayerActorDelegate), EvtData_PlayerActor_Created::sk_EventType);
 
    LoadLevel(BIEngine::g_pApp->m_options.mainWorldResNamePath);
 
@@ -118,7 +118,9 @@ bool BIGameClientLogic::Init()
 
 void BIGameClientLogic::Terminate()
 {
-   BIEngine::EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &BIGameClientLogic::NewPlayerActorDelegate), EvtData_PlayerActor_Created::sk_EventType);
+   m_pNetworkManager->Terminate();
+
+   BIEngine::EventManager::Get()->RemoveListener(m_newPlayerActorDelegateHandler);
 
    m_pCameraManager->Terminate();
    m_pInputActionController->Term();

@@ -18,8 +18,14 @@ void BINetworkManagerClient::Init(const BIEngine::SocketAddress& serverAddress, 
    m_timeOfLastEventPacket = 0.0f;
    m_name = name;
 
-   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BINetworkManagerClient::StoreEventToForwardDelegate), EvtData_Move::sk_EventType);
-   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BINetworkManagerClient::StoreEventToForwardDelegate), EvtData_Turn::sk_EventType);
+   m_storeEventMoveDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BINetworkManagerClient::StoreEventToForwardDelegate), EvtData_Move::sk_EventType);
+   m_storeEventTurnDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BINetworkManagerClient::StoreEventToForwardDelegate), EvtData_Turn::sk_EventType);
+}
+
+void BINetworkManagerClient::Terminate()
+{
+   BIEngine::EventManager::Get()->RemoveListener(m_storeEventMoveDelegateHandler);
+   BIEngine::EventManager::Get()->RemoveListener(m_storeEventTurnDelegateHandler);
 }
 
 void BINetworkManagerClient::SendOutgoingPackets(const BIEngine::GameTimer& gt)

@@ -10,14 +10,14 @@ BIFlyCameraSystem::BIFlyCameraSystem(std::shared_ptr<BIEngine::Camera> pCamera, 
      m_up(false), m_down(false), m_left(false), m_right(false),
      m_lastPointerX(BIEngine::g_pApp->m_options.screenWidth / 2.0f), m_lastPointerY(BIEngine::g_pApp->m_options.screenHeight / 2.0f)
 {
-   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIFlyCameraSystem::OnKeyDownCallback), EvtData_OnKeyDown::sk_EventType);
-   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIFlyCameraSystem::OnKeyUpCallback), EvtData_OnKeyUp::sk_EventType);
+   m_onKeyDownDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIFlyCameraSystem::OnKeyDownCallback), EvtData_OnKeyDown::sk_EventType);
+   m_onKeyUpDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIFlyCameraSystem::OnKeyUpCallback), EvtData_OnKeyUp::sk_EventType);
 }
 
 BIFlyCameraSystem::~BIFlyCameraSystem()
 {
-   BIEngine::EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &BIFlyCameraSystem::OnKeyDownCallback), EvtData_OnKeyDown::sk_EventType);
-   BIEngine::EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &BIFlyCameraSystem::OnKeyUpCallback), EvtData_OnKeyUp::sk_EventType);
+   BIEngine::EventManager::Get()->RemoveListener(m_onKeyDownDelegateHandler);
+   BIEngine::EventManager::Get()->RemoveListener(m_onKeyUpDelegateHandler);
 }
 
 void BIFlyCameraSystem::OnKeyDownCallback(BIEngine::IEventDataPtr pEventData)

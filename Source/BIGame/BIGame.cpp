@@ -86,8 +86,6 @@ bool BIGameLogic::Init()
 
    BIRegisterEvents();
 
-   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIGameLogic::NewPlayerActorDelegate), EvtData_PlayerActor_Created::sk_EventType);
-
    LoadLevel(BIEngine::g_pApp->m_options.mainWorldResNamePath);
 
    return true;
@@ -95,8 +93,6 @@ bool BIGameLogic::Init()
 
 void BIGameLogic::Terminate()
 {
-   BIEngine::EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &BIGameLogic::NewPlayerActorDelegate), EvtData_PlayerActor_Created::sk_EventType);
-
    m_pCameraManager->Terminate();
 }
 

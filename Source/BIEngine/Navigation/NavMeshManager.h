@@ -44,6 +44,9 @@ private:
    std::shared_ptr<NavMeshInputGeometry> prepareNavGeom();
 
 private:
+   EventManager::DelegateHandler m_handleActorAddedDelegateHandler;
+   EventManager::DelegateHandler m_handleActorDestroyedDelegateHandler;
+
    NavMeshBuildSettings m_buildSettings;
 
    std::vector<std::shared_ptr<Actor>> m_actors;

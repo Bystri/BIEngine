@@ -41,8 +41,9 @@ public:
    virtual void OnRender(const BIEngine::GameTimer& gt) override {}
 
    void PlayerCreatedDelegate(BIEngine::IEventDataPtr pEventData);
-   void NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventData);
 
 private:
+   BIEngine::EventManager::DelegateHandler m_playerCreatedDelegateHandler;
+
    std::unique_ptr<BINetworkManagerServer> m_pNetworkManager;
 };

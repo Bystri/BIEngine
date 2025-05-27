@@ -85,7 +85,7 @@ bool BIServerGameLogic::Init()
 
    PlayerManager::Create();
 
-   BIEngine::EventManager::Get()->AddListener(fastdelegate::MakeDelegate(this, &BIServerGameLogic::PlayerCreatedDelegate), EvtData_Player_Created::sk_EventType);
+   m_playerCreatedDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIServerGameLogic::PlayerCreatedDelegate), EvtData_Player_Created::sk_EventType);
 
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayer>(ReplicationObjectPlayer::sk_ClassType);
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayerCharacter>(ReplicationObjectPlayerCharacter::sk_ClassType);
@@ -111,8 +111,7 @@ bool BIServerGameLogic::Init()
 
 void BIServerGameLogic::Terminate()
 {
-   BIEngine::EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &BIServerGameLogic::NewPlayerActorDelegate), EvtData_PlayerActor_Created::sk_EventType);
-   BIEngine::EventManager::Get()->RemoveListener(fastdelegate::MakeDelegate(this, &BIServerGameLogic::PlayerCreatedDelegate), EvtData_Player_Created::sk_EventType);
+   BIEngine::EventManager::Get()->RemoveListener(m_playerCreatedDelegateHandler);
 }
 
 bool BIServerGameLogic::LoadLevelDelegate(tinyxml2::XMLElement* pRoot)
@@ -139,15 +138,4 @@ void BIServerGameLogic::PlayerCreatedDelegate(BIEngine::IEventDataPtr pEventData
 
    std::shared_ptr<BIEngine::ReplicationObjectActor> pGameObject = std::static_pointer_cast<BIEngine::ReplicationObjectActor>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayerCharacter::sk_ClassType));
    pCastEventData->GetPlayer()->SetPlayableActor(pGameObject->GetReplicatedObject());
-}
-
-void BIServerGameLogic::NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventData)
-{
-   std::shared_ptr<EvtData_PlayerActor_Created> pCastEventData = std::static_pointer_cast<EvtData_PlayerActor_Created>(pEventData);
-
-   BIEngine::Logger::WriteMsgLog("Got NewPlayerActorDelegate for player: %d", pCastEventData->GetPlayerId());
-
-   std::shared_ptr<BIEngine::Actor> pActor = GetActor(pCastEventData->GetActorId());
-
-   pActor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).lock()->SetPlayerId(pCastEventData->GetPlayerId());
 }

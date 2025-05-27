@@ -52,6 +52,8 @@ public:
    virtual void OnRenderDebug(const BIEngine::GameTimer& gt) override;
 
 private:
+   BIEngine::EventManager::DelegateHandler m_newPlayerActorDelegateHandler;
+
    std::unique_ptr<BIInputActionController> m_pInputActionController;
    std::unique_ptr<BICameraManager> m_pCameraManager;
 

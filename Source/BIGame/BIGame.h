@@ -35,8 +35,6 @@ public:
 
    virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) override;
 
-   void NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventData);
-
    virtual void OnUpdate(BIEngine::GameTimer& gt) override;
 
 private:
