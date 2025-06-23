@@ -1,14 +1,14 @@
 ﻿#pragma once
 
-#include <array>
 #include <initializer_list>
 
 #include "Math.h"
 #include "../EngineCore/Assert.h"
+#include "../StdLib/Array.h"
 
 namespace BIEngine {
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 struct Vector {
    Vector()
       : data()
@@ -33,9 +33,9 @@ struct Vector {
       }
    }
 
-   T& operator[](const std::size_t idx) { return data[idx]; }
+   T& operator[](const SizeT idx) { return data[idx]; }
 
-   T operator[](const std::size_t idx) const { return data[idx]; }
+   T operator[](const SizeT idx) const { return data[idx]; }
 
    inline Vector<T, n>& operator+=(const Vector<T, n>& rhs)
    {
@@ -75,7 +75,7 @@ struct Vector {
       return *this;
    }
 
-   std::array<T, n> data;
+   Array<T, n> data;
 };
 
 template <typename T>
@@ -110,9 +110,9 @@ struct Vector<T, 2> {
       data[1] = y;
    }
 
-   T& operator[](const std::size_t idx) { return data[idx]; }
+   T& operator[](const SizeT idx) { return data[idx]; }
 
-   T operator[](const std::size_t idx) const { return data[idx]; }
+   T operator[](const SizeT idx) const { return data[idx]; }
 
    inline Vector<T, 2>& operator+=(const Vector<T, 2>& rhs)
    {
@@ -153,7 +153,7 @@ struct Vector<T, 2> {
    }
 
    union {
-      std::array<T, 2> data;
+      Array<T, 2> data;
 
       struct
       {
@@ -204,9 +204,9 @@ struct Vector<T, 3> {
       data[2] = z;
    }
 
-   T& operator[](const std::size_t idx) { return data[idx]; }
+   T& operator[](const SizeT idx) { return data[idx]; }
 
-   T operator[](const std::size_t idx) const { return data[idx]; }
+   T operator[](const SizeT idx) const { return data[idx]; }
 
    inline Vector<T, 3>& operator+=(const Vector<T, 3>& rhs)
    {
@@ -247,7 +247,7 @@ struct Vector<T, 3> {
    }
 
    union {
-      std::array<T, 3> data;
+      Array<T, 3> data;
 
       struct
       {
@@ -301,9 +301,9 @@ struct Vector<T, 4> {
       data[3] = w;
    }
 
-   T& operator[](const std::size_t idx) { return data[idx]; }
+   T& operator[](const SizeT idx) { return data[idx]; }
 
-   T operator[](const std::size_t idx) const { return data[idx]; }
+   T operator[](const SizeT idx) const { return data[idx]; }
 
    inline Vector<T, 4>& operator+=(const Vector<T, 4>& rhs)
    {
@@ -344,7 +344,7 @@ struct Vector<T, 4> {
    }
 
    union {
-      std::array<T, 4> data;
+      Array<T, 4> data;
 
       struct
       {
@@ -360,7 +360,7 @@ using Vector2 = Vector<float, 2>;
 using Vector3 = Vector<float, 3>;
 using Vector4 = Vector<float, 4>;
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline const Vector<T, n> operator-(const Vector<T, n>& rhs)
 {
    Vector<T, n> res = rhs;
@@ -372,7 +372,7 @@ inline const Vector<T, n> operator-(const Vector<T, n>& rhs)
    return res;
 }
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline const Vector<T, n> operator+(const Vector<T, n>& lhs, const Vector<T, n>& rhs)
 {
    Vector<T, n> res = lhs;
@@ -384,7 +384,7 @@ inline const Vector<T, n> operator+(const Vector<T, n>& lhs, const Vector<T, n>&
    return res;
 }
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline const Vector<T, n> operator-(const Vector<T, n>& lhs, const Vector<T, n>& rhs)
 {
    Vector<T, n> res = lhs;
@@ -396,7 +396,7 @@ inline const Vector<T, n> operator-(const Vector<T, n>& lhs, const Vector<T, n>&
    return res;
 }
 
-template <typename T, typename U, std::size_t n>
+template <typename T, typename U, SizeT n>
 inline const Vector<T, n> operator*(const Vector<T, n>& lhs, const U& scalar)
 {
    Vector<T, n> res = lhs;
@@ -408,13 +408,13 @@ inline const Vector<T, n> operator*(const Vector<T, n>& lhs, const U& scalar)
    return res;
 }
 
-template <typename T, typename U, std::size_t n>
+template <typename T, typename U, SizeT n>
 inline const Vector<T, n> operator*(const U& scalar, const Vector<T, n>& rhs)
 {
    return rhs * scalar;
 }
 
-template <typename T, typename U, std::size_t n>
+template <typename T, typename U, SizeT n>
 inline const Vector<T, n> operator/(const Vector<T, n>& lhs, const U& scalar)
 {
    Vector<T, n> res = lhs;
@@ -426,7 +426,7 @@ inline const Vector<T, n> operator/(const Vector<T, n>& lhs, const U& scalar)
    return res;
 }
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline T Length2(const Vector<T, n>& vector)
 {
    T length2 = {};
@@ -438,13 +438,13 @@ inline T Length2(const Vector<T, n>& vector)
    return length2;
 }
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline T Length(const Vector<T, n>& vector)
 {
    return Sqrt(Length2(vector));
 }
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline void Normalize(Vector<T, n>& vector)
 {
    const T l = Length(vector);
@@ -454,7 +454,7 @@ inline void Normalize(Vector<T, n>& vector)
    }
 }
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline Vector<T, n> Normalized(const Vector<T, n>& vector)
 {
    Vector<T, n> norm = vector;
@@ -463,7 +463,7 @@ inline Vector<T, n> Normalized(const Vector<T, n>& vector)
    return norm;
 }
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline T Dot(const Vector<T, n>& lhs, const Vector<T, n>& rhs)
 {
    T scalar = {};

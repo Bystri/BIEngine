@@ -147,7 +147,7 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
       "cubemapTextureFrontPath",
       "cubemapTextureBackPath"};
 
-   std::array<unsigned char*, 6> cubemapTextureImages;
+   BIEngine::Array<unsigned char*, 6> cubemapTextureImages;
    int width = -1;
    int height = -1;
 

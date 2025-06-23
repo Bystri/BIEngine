@@ -73,6 +73,9 @@
     <Filter Include="Network\Replication\ReplicationObjectActor">
       <UniqueIdentifier>{2dfb477b-83a2-4657-92dd-c267c520f02c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="StdLib">
+      <UniqueIdentifier>{927cdce1-ad87-4bad-a4eb-6d3775ca0b9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCore\GameApp.cpp">
@@ -850,6 +853,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Network\Replication\ReplicationObjectActor\TransformReplicationUnit.h">
       <Filter>Network\Replication\ReplicationObjectActor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\StdLib\Array.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\StdLib\StdLib.h">
+      <Filter>StdLib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

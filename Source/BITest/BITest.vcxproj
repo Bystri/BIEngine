@@ -78,6 +78,7 @@
     <ClCompile Include="Math\Transform_UnitTest.cpp" />
     <ClCompile Include="Math\Trigonometry_UnitTest.cpp" />
     <ClCompile Include="Math\Vector_UnitTest.cpp" />
+    <ClCompile Include="StdLib\Array_UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -90,6 +91,8 @@
     <ClInclude Include="..\BIEngine\Math\Transform.h" />
     <ClInclude Include="..\BIEngine\Math\Trigonometry.h" />
     <ClInclude Include="..\BIEngine\Math\Vector.h" />
+    <ClInclude Include="..\BIEngine\StdLib\Array.h" />
+    <ClInclude Include="..\BIEngine\StdLib\StdLib.h" />
     <ClInclude Include="..\BIEngine\Utilities\Logger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

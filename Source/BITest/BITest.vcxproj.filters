@@ -34,6 +34,9 @@
     <ClCompile Include="..\BIEngine\Utilities\Logger.cpp">
       <Filter>EngineSources\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="StdLib\Array_UnitTest.cpp">
+      <Filter>StdLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -50,6 +53,12 @@
     </Filter>
     <Filter Include="EngineSources\Utilities">
       <UniqueIdentifier>{6a90d9af-9818-4254-ad47-7d4bffcbc040}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StdLib">
+      <UniqueIdentifier>{a15ef873-cf7b-4415-9883-930b0c109cdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineSources\StdLib">
+      <UniqueIdentifier>{3f68a34d-83eb-43fc-8a09-24e9fd2b4c88}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +88,12 @@
     </ClInclude>
     <ClInclude Include="..\BIEngine\Math\Spline.h">
       <Filter>EngineSources\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\StdLib\Array.h">
+      <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\StdLib\StdLib.h">
+      <Filter>EngineSources\StdLib</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

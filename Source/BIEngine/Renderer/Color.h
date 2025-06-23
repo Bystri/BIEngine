@@ -1,17 +1,17 @@
 #pragma once
 
-#include <array>
+#include "../StdLib/Array.h"
 
 namespace BIEngine {
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 struct Color {
    Color()
       : data()
    {
    }
 
-   std::array<T, n> data;
+   Array<T, n> data;
 };
 
 template <typename T>
@@ -27,7 +27,7 @@ struct Color<T, 3> {
    }
 
    union {
-      std::array<T, 3> data;
+      Array<T, 3> data;
 
       struct {
          T r;
@@ -57,7 +57,7 @@ struct Color<T, 4> {
    }
 
    union {
-      std::array<T, 4> data;
+      Array<T, 4> data;
 
       struct {
          T r;
@@ -70,7 +70,7 @@ struct Color<T, 4> {
 
 using ColorRgba = Color<float, 4>;
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline const Color<T, n> operator+(const Color<T, n>& lhs, const Color<T, n>& rhs)
 {
    Color<T, n> res = lhs;
@@ -82,7 +82,7 @@ inline const Color<T, n> operator+(const Color<T, n>& lhs, const Color<T, n>& rh
    return res;
 }
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline const Color<T, n> operator-(const Color<T, n>& lhs, const Color<T, n>& rhs)
 {
    Color<T, n> res = lhs;
@@ -94,7 +94,7 @@ inline const Color<T, n> operator-(const Color<T, n>& lhs, const Color<T, n>& rh
    return res;
 }
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline const Color<T, n> operator*(const Color<T, n>& lhs, const Color<T, n>& rhs)
 {
    Color<T, n> res = lhs;
@@ -106,7 +106,7 @@ inline const Color<T, n> operator*(const Color<T, n>& lhs, const Color<T, n>& rh
    return res;
 }
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline const Color<T, n> operator*(const Color<T, n>& lhs, const T& scalar)
 {
    Color<T, n> res = lhs;
@@ -118,7 +118,7 @@ inline const Color<T, n> operator*(const Color<T, n>& lhs, const T& scalar)
    return res;
 }
 
-template <typename T, std::size_t n>
+template <typename T, SizeT n>
 inline const Color<T, n> operator/(const Color<T, n>& lhs, const T& scalar)
 {
    Color<T, n> res = lhs;

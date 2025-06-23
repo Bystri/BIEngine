@@ -1,5 +1,6 @@
 #include "PointLightShadowGraphicsTechnique.h"
 
+#include "../StdLib/Array.h"
 #include "../Renderer/ShadersLoader.h"
 #include "../Renderer/Renderbuffer.h"
 
@@ -12,10 +13,8 @@ bool PointLightShadowGraphicsTechnique::Init()
    m_pPointLightShadowShader = pointShadowShaderProgramData->GetShaderProgram();
 
    for (int i = 0; i < m_maxPointLightsNum; ++i) {
-      std::array<unsigned char*, 6> data;
-      for (int j = 0; j < data.size(); ++j) {
-         data[j] = nullptr;
-      }
+      Array<unsigned char*, 6> data;
+      data.Fill(nullptr);
 
       RenderPointLightShadowInfo pointLightShadowInfo;
       pointLightShadowInfo.pShadowMapBuffer = std::make_shared<Framebuffer>();

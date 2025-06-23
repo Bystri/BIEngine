@@ -220,7 +220,7 @@ static unsigned int ConvertWrapToGl(CubemapTexture::TextureWrap wrap)
    }
 }
 
-std::shared_ptr<CubemapTexture> CubemapTexture::Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, const std::array<unsigned char*, 6>& data, CreationParams params)
+std::shared_ptr<CubemapTexture> CubemapTexture::Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, const Array<unsigned char*, 6>& data, CreationParams params)
 {
    struct make_shared_enabler : public CubemapTexture {};
 
@@ -234,7 +234,7 @@ std::shared_ptr<CubemapTexture> CubemapTexture::Create(unsigned int width, unsig
    // Создание текстуры
    glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_id);
 
-   for (int i = 0; i < data.size(); ++i) {
+   for (int i = 0; i < data.Size(); ++i) {
       glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, ConverSizedFormatToGl(sizedFormat), width, height, 0, GL_STENCIL_INDEX + static_cast<int>(internalFormat), GL_BYTE + static_cast<int>(params.DataType), data[i]);
    }
 
