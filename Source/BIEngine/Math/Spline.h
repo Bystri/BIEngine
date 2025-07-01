@@ -1,53 +1,52 @@
 #pragma once
 
-#include <vector>
-
 #include "Vector.h"
 #include "Matrix.h"
+#include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
 
-template <typename T, std::size_t Dim, std::size_t N>
+template <typename T, SizeT Dim, SizeT N>
 class SplineT {
 public:
-   SplineT(const std::vector<Vector<T, Dim>>& ctrlPoints)
+   SplineT(const DynamicArray<Vector<T, Dim>>& ctrlPoints)
       : m_ctrlPoints(ctrlPoints)
    {
-      if (m_ctrlPoints.size() < N) {
+      if (m_ctrlPoints.Size() < N) {
          Assert(false, "Too little points provided for spline; Expected %d", N);
-         m_ctrlPoints.clear();
+         m_ctrlPoints.Clear();
       }
    }
 
    virtual Vector<T, Dim> GetPointByU(const T& u) const = 0;
 
-   std::size_t GetCtrlPointsNum() const
+   SizeT GetCtrlPointsNum() const
    {
       return m_ctrlPoints.size();
    }
 
 protected:
-   std::vector<Vector<T, Dim>> m_ctrlPoints;
+   DynamicArray<Vector<T, Dim>> m_ctrlPoints;
 };
 
 // Deg: 1
 // Cont: C0
 // Tangents: auto
 // Interpol: all
-template <typename T, std::size_t Dim>
+template <typename T, SizeT Dim>
 class LinearSplineT : public SplineT<T, Dim, 2> {
 public:
-   LinearSplineT(const std::vector<Vector<T, Dim>>& ctrlPoints)
+   LinearSplineT(const DynamicArray<Vector<T, Dim>>& ctrlPoints)
       : SplineT(ctrlPoints)
    {
    }
 
    virtual Vector<T, Dim> GetPointByU(const T& u) const override
    {
-      Assert(this->m_ctrlPoints.size() > 0, "No points for interpolation");
+      Assert(this->m_ctrlPoints.Size() > 0, "No points for interpolation");
 
       const int idx = static_cast<int>(u);
-      Assert(idx < this->m_ctrlPoints.size() - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.size());
+      Assert(idx < this->m_ctrlPoints.Size() - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.Size());
 
       const T t = u - static_cast<T>(idx);
 
@@ -59,20 +58,20 @@ public:
 // Cont: C0/C1
 // Tangents: explicit
 // Interpol: all
-template <typename T, std::size_t Dim>
+template <typename T, SizeT Dim>
 class HermiteSplineT : public SplineT<T, Dim, 4> {
 public:
-   HermiteSplineT(const std::vector<Vector<T, Dim>>& points, const std::vector<Vector<T, Dim>>& vels)
+   HermiteSplineT(const DynamicArray<Vector<T, Dim>>& points, const DynamicArray<Vector<T, Dim>>& vels)
       : SplineT(constructCtrlPoints(points, vels))
    {
    }
 
    virtual Vector<T, Dim> GetPointByU(const T& u) const override
    {
-      Assert(this->m_ctrlPoints.size() > 0, "No points for interpolation");
+      Assert(this->m_ctrlPoints.Size() > 0, "No points for interpolation");
 
       int idx = static_cast<int>(u);
-      Assert(idx < this->m_ctrlPoints.size() / 2 - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.size());
+      Assert(idx < this->m_ctrlPoints.Size() / 2 - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.Size());
 
       static const Matrix<T, 4, 4> B = {{1.0f, 0.0f, -3.0f, 2.0f}, {0.0f, 1.0f, -2.0f, 1.0f}, {0.0f, 0.0f, 3.0f, -2.0f}, {0.0f, 0.0f, -1.0f, 1.0f}};
 
@@ -90,15 +89,16 @@ public:
    }
 
 private:
-   static std::vector<Vector<T, Dim>> constructCtrlPoints(const std::vector<Vector<T, Dim>>& points, const std::vector<Vector<T, Dim>>& vels)
+   static DynamicArray<Vector<T, Dim>> constructCtrlPoints(const DynamicArray<Vector<T, Dim>>& points, const DynamicArray<Vector<T, Dim>>& vels)
    {
-      std::vector<Vector<T, Dim>> ctrlPoints;
+      DynamicArray<Vector<T, Dim>> ctrlPoints;
+      ctrlPoints.Reserve(points.Size() * 2);
 
-      Assert(points.size() == vels.size(), "The number of points and velocities for Hermite spline must be equal!");
+      Assert(points.Size() == vels.Size(), "The number of points and velocities for Hermite spline must be equal!");
 
-      for (int i = 0; i < points.size(); ++i) {
-         ctrlPoints.push_back(points[i]);
-         ctrlPoints.push_back(vels[i]);
+      for (int i = 0; i < points.Size(); ++i) {
+         ctrlPoints.PushBack(points[i]);
+         ctrlPoints.PushBack(vels[i]);
       }
 
       return ctrlPoints;
@@ -109,20 +109,20 @@ private:
 // Cont: C1
 // Tangents: auto
 // Interpol: all
-template <typename T, std::size_t Dim>
+template <typename T, SizeT Dim>
 class CatmullRomSplineT : public SplineT<T, Dim, 4> {
 public:
-   CatmullRomSplineT(const std::vector<Vector<T, Dim>>& points)
+   CatmullRomSplineT(const DynamicArray<Vector<T, Dim>>& points)
       : SplineT(constructCtrlPoints(points))
    {
    }
 
    virtual Vector<T, Dim> GetPointByU(const T& u) const override
    {
-      Assert(this->m_ctrlPoints.size() > 0, "No points for interpolation");
+      Assert(this->m_ctrlPoints.Size() > 0, "No points for interpolation");
 
       int idx = static_cast<int>(u);
-      Assert(idx < this->m_ctrlPoints.size() - 3 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.size());
+      Assert(idx < this->m_ctrlPoints.Size() - 3 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.Size());
 
       static const Matrix<T, 4, 4> B = {{0.0f, -0.5f, 1.0f, -0.5f}, {1.0f, 0.0f, -2.5f, 1.5f}, {0.0f, 0.5f, 2.0f, -1.5f}, {0.0f, 0.0f, -0.5f, 0.5f}};
 
@@ -138,17 +138,18 @@ public:
    }
 
 private:
-   static std::vector<Vector<T, Dim>> constructCtrlPoints(const std::vector<Vector<T, Dim>>& points)
+   static DynamicArray<Vector<T, Dim>> constructCtrlPoints(const DynamicArray<Vector<T, Dim>>& points)
    {
-      std::vector<Vector<T, Dim>> ctrlPoints;
+      DynamicArray<Vector<T, Dim>> ctrlPoints;
+      ctrlPoints.Reserve(points.Size() + 2);
 
-      ctrlPoints.push_back(points[0] + (points[0] - points[1]));
+      ctrlPoints.PushBack(points[0] + (points[0] - points[1]));
 
-      for (int i = 0; i < points.size(); ++i) {
-         ctrlPoints.push_back(points[i]);
+      for (int i = 0; i < points.Size(); ++i) {
+         ctrlPoints.PushBack(points[i]);
       }
 
-      ctrlPoints.push_back(points[points.size() - 1] - (points[points.size() - 2] - points[points.size() - 1]));
+      ctrlPoints.PushBack(points[points.Size() - 1] - (points[points.Size() - 2] - points[points.Size() - 1]));
 
       return ctrlPoints;
    }
@@ -161,17 +162,17 @@ private:
 template <typename T, std::size_t Dim>
 class BSplineT : public SplineT<T, Dim, 4> {
 public:
-   BSplineT(const std::vector<Vector<T, Dim>>& points)
+   BSplineT(const DynamicArray<Vector<T, Dim>>& points)
       : SplineT(points)
    {
    }
 
    virtual Vector<T, Dim> GetPointByU(const T& u) const override
    {
-      Assert(this->m_ctrlPoints.size() > 0, "No points for interpolation");
+      Assert(this->m_ctrlPoints.Size() > 0, "No points for interpolation");
 
       const int idx = static_cast<int>(u);
-      Assert(idx < this->m_ctrlPoints.size() - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.size());
+      Assert(idx < this->m_ctrlPoints.Size() - 1 && idx >= 0, "Provided interpolation param is out of range [0, %d)", this->m_ctrlPoints.Size());
 
       static const Matrix<T, 4, 4> B = {{-1.0f / 6.0f, 0.5f, -0.5f, 1.0f / 6.0f}, {0.5f, -1.0f, 0.0f, 2.0f / 3.0f}, {-0.5f, 0.5f, 0.5f, 1.0f / 6.0f}, {1.0f / 6.0f, 0.0f, 0.0f, 0.0f}};
       const T t = u - static_cast<T>(idx);
@@ -193,17 +194,17 @@ public:
 template <typename T, std::size_t Dim>
 class BezierSplineT : public SplineT<T, Dim, 4> {
 public:
-   BezierSplineT(const std::vector<Vector<T, Dim>>& points)
+   BezierSplineT(const DynamicArray<Vector<T, Dim>>& points)
       : SplineT(points)
    {
    }
 
    virtual Vector<T, Dim> GetPointByU(const T& u) const override
    {
-      Assert(this->m_ctrlPoints.size() > 0, "No points for interpolation");
+      Assert(this->m_ctrlPoints.Size() > 0, "No points for interpolation");
 
       int idx = static_cast<int>(u);
-      Assert(idx <= this->m_ctrlPoints.size() / 4 && idx >= 0, "Provided interpolation param is out of range [0, %d]", this->m_ctrlPoints.size() / 4);
+      Assert(idx <= this->m_ctrlPoints.Size() / 4 && idx >= 0, "Provided interpolation param is out of range [0, %d]", this->m_ctrlPoints.Size() / 4);
 
       static const Matrix<T, 4, 4> B = {{1.0f, -3.0f, 3.0f, -1.0f}, {0.0f, 3.0f, -6.0f, 3.0f}, {0.0f, 0.0f, 3.0f, -3.0f}, {0.0f, 0.0f, 0.0f, 1.0f}};
       const T t = u - static_cast<T>(idx);

@@ -63,13 +63,13 @@ void MeshRenderComponent::OnRenderObject(const GameTimer& gt)
       return;
    }
 
-   const std::vector<std::shared_ptr<ModelMesh>>& modelMeshes = m_pModel->GetMeshes();
+   const DynamicArray<std::shared_ptr<ModelMesh>>& modelMeshes = m_pModel->GetMeshes();
 
    for (const auto& pModelMesh : modelMeshes) {
       RenderItemsStorage::OpaqueRenderItem opaqueRitem;
       opaqueRitem.actorId = GetOwner()->GetId();
       opaqueRitem.VAO = pModelMesh->GetMesh()->GetVao();
-      opaqueRitem.IndicesSize = pModelMesh->GetMesh()->GetIndices().size();
+      opaqueRitem.IndicesSize = pModelMesh->GetMesh()->GetIndices().Size();
       opaqueRitem.pMaterial = pModelMesh->GetMaterial();
       opaqueRitem.ModelTransform = pTransformComponent->GetWorldTransformMatrix();
       g_pApp->TryGetHumanView(0)->GetScene()->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);
@@ -129,7 +129,7 @@ void SpriteRenderComponent::OnRenderObject(const GameTimer& gt)
       return;
    }
 
-   RenderCommand renderCommand(m_pSprite->GetMesh()->GetVao(), m_pSprite->GetMesh()->GetIndices().size(), m_pSprite->GetShaderProgramPtr());
+   RenderCommand renderCommand(m_pSprite->GetMesh()->GetVao(), m_pSprite->GetMesh()->GetIndices().Size(), m_pSprite->GetShaderProgramPtr());
 
    renderCommand.RenderState = m_pSprite->GetRanderState();
    renderCommand.RenderState.Cull = true;

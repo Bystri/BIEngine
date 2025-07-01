@@ -860,6 +860,9 @@
     <ClInclude Include="..\..\StdLib\StdLib.h">
       <Filter>StdLib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\StdLib\DynamicArray.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.clang-format" />

@@ -43,7 +43,7 @@ public:
 
    RenderItemsStorage* GetRenderItemsStorage() const { return m_pRenderItemsStorage.get(); }
 
-   void AddRenderPass(std::shared_ptr<GraphicsRenderPass> pRenderPass) { m_graphicsRenderPasses.push_back(pRenderPass); }
+   void AddRenderPass(std::shared_ptr<GraphicsRenderPass> pRenderPass) { m_graphicsRenderPasses.PushBack(pRenderPass); }
 
    std::shared_ptr<Renderer> GetRenderer() { return m_pRenderer; }
 
@@ -64,7 +64,7 @@ protected:
    std::shared_ptr<Renderer> m_pRenderer;
    std::shared_ptr<ConstantsBuffer> m_pConstantsBuffer;
 
-   std::vector<std::shared_ptr<GraphicsRenderPass>> m_graphicsRenderPasses;
+   DynamicArray<std::shared_ptr<GraphicsRenderPass>> m_graphicsRenderPasses;
    std::unique_ptr<RenderItemsStorage> m_pRenderItemsStorage;
 };
 

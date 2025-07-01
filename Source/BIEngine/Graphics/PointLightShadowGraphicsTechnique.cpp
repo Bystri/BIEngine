@@ -44,7 +44,7 @@ bool PointLightShadowGraphicsTechnique::Init()
          FramebufferAttach(pointLightShadowInfo.pShadowMapBuffer, FramebufferAttachementType::DEPTH, pointLightShadowInfo.pDepthBuffer);
       }
 
-      m_pointLightShadowInfos.push_back(pointLightShadowInfo);
+      m_pointLightShadowInfos.PushBack(pointLightShadowInfo);
    }
 
    return true;
@@ -60,16 +60,16 @@ void PointLightShadowGraphicsTechnique::OnRender(Scene* const pScene, RenderItem
    constexpr float far = 25.0f;
    const glm::mat4 pointProjMatr = glm::perspective(glm::radians(90.0f), aspect, near, far);
 
-   for (int i = 0; i < pointLights.size(); ++i) {
+   for (int i = 0; i < pointLights.Size(); ++i) {
       RenderItemsStorage::PointLightItem& pointLight = pointLights[i];
 
-      std::vector<glm::mat4> shadowTransforms;
-      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
-      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
-      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
-      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
-      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
-      shadowTransforms.push_back(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
+      DynamicArray<glm::mat4> shadowTransforms;
+      shadowTransforms.PushBack(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+      shadowTransforms.PushBack(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+      shadowTransforms.PushBack(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+      shadowTransforms.PushBack(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
+      shadowTransforms.PushBack(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
+      shadowTransforms.PushBack(pointProjMatr * glm::lookAt(pointLight.position, pointLight.position + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
 
 
       RenderPointLightShadowInfo& pointLightShadowInfo = m_pointLightShadowInfos[i];
@@ -78,7 +78,7 @@ void PointLightShadowGraphicsTechnique::OnRender(Scene* const pScene, RenderItem
 
       pointLight.pShadowMap = pointLightShadowInfo.pColorBuffer;
 
-      for (int sideIdx = 0; sideIdx < shadowTransforms.size(); ++sideIdx) {
+      for (int sideIdx = 0; sideIdx < shadowTransforms.Size(); ++sideIdx) {
          FramebufferAttach(pointLightShadowInfo.pShadowMapBuffer, FramebufferAttachementType::COLOR, pointLightShadowInfo.pColorBuffer, sideIdx);
          FramebufferEnableColor(pointLightShadowInfo.pShadowMapBuffer, FramebufferColorOperationType::DRAW);
 

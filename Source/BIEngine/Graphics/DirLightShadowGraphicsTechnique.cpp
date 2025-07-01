@@ -12,7 +12,7 @@ bool DirLightShadowGraphicsTechnique::Init()
    m_pDirLightShadowShader = dirShadowShaderProgram->GetShaderProgram();
 
    for (int i = 0; i < m_maxDirLightsNum; ++i) {
-      RenderDirLightShadowInfo dirLightShadowInfo;
+      RenderDirLightShadowInfo& dirLightShadowInfo = m_dirLightShadowInfos.EmplaceBack();
       dirLightShadowInfo.pShadowMapBuffer = std::make_shared<Framebuffer>();
 
       FramebufferDisableColor(dirLightShadowInfo.pShadowMapBuffer, FramebufferColorOperationType::ALL);
@@ -27,8 +27,6 @@ bool DirLightShadowGraphicsTechnique::Init()
          dirLightShadowInfo.pDepthBuffer = Texture2D::Create(SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT, Texture::SizedFormat::DEPTH_COMPONENT, Texture::Format::DEPTH_COMPONENT, nullptr, params);
          FramebufferAttach(dirLightShadowInfo.pShadowMapBuffer, FramebufferAttachementType::DEPTH, dirLightShadowInfo.pDepthBuffer);
       }
-
-      m_dirLightShadowInfos.push_back(dirLightShadowInfo);
    }
 
    return true;
@@ -41,7 +39,7 @@ void DirLightShadowGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsS
    const auto& opaqueItems = pStorage->GetOpaqueRenderItems();
    auto& dirLights = pStorage->GetDirectionalLightItems();
 
-   for (int i = 0; i < dirLights.size(); ++i) {
+   for (int i = 0; i < dirLights.Size(); ++i) {
       RenderDirLightShadowInfo& dirLightShadowInfo = m_dirLightShadowInfos[i];
 
       dirLightShadowInfo.pShadowMapBuffer->Bind();

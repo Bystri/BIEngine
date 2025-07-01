@@ -2,9 +2,9 @@
 
 namespace BIEngine {
 
-static float getCurveU(const std::vector<float>& framesTimes, const float animationTime)
+static float getCurveU(const DynamicArray<float>& framesTimes, const float animationTime)
 {
-   for (int i = 0; i < framesTimes.size() - 1; ++i) {
+   for (int i = 0; i < framesTimes.Size() - 1; ++i) {
       if (animationTime < framesTimes[i + 1]) {
          return static_cast<float>(i) + (animationTime - framesTimes[i]) / (framesTimes[i + 1] - framesTimes[i]);
       }
@@ -35,37 +35,40 @@ void BoneAnimChannel::Update(float animationTime)
    }
 }
 
-CatmullRomSpline BoneAnimChannel::constructPositionCurve(const std::vector<KeyPosition>& positions)
+CatmullRomSpline BoneAnimChannel::constructPositionCurve(const DynamicArray<KeyPosition>& positions)
 {
-   std::vector<Vector3> vals;
+   DynamicArray<Vector3> vals;
+   vals.Reserve(positions.Size() + 1);
 
-   vals.emplace_back(positions[positions.size() - 1].position.x, positions[positions.size() - 1].position.y, positions[positions.size() - 1].position.z);
-   for (int i = 0; i < positions.size(); ++i) {
-      vals.emplace_back(positions[i].position.x, positions[i].position.y, positions[i].position.z);
+   vals.EmplaceBack(positions[positions.Size() - 1].position.x, positions[positions.Size() - 1].position.y, positions[positions.Size() - 1].position.z);
+   for (int i = 0; i < positions.Size(); ++i) {
+      vals.EmplaceBack(positions[i].position.x, positions[i].position.y, positions[i].position.z);
    }
 
    return CatmullRomSpline(vals);
 }
 
-CatmullRomSpline4d BoneAnimChannel::constructRotationCurve(const std::vector<KeyRotation>& rotations)
+CatmullRomSpline4d BoneAnimChannel::constructRotationCurve(const DynamicArray<KeyRotation>& rotations)
 {
-   std::vector<Vector4> vals;
+   DynamicArray<Vector4> vals;
+   vals.Reserve(rotations.Size() + 1);
 
-   vals.emplace_back(rotations[rotations.size() - 1].orientation.w, rotations[rotations.size() - 1].orientation.x, rotations[rotations.size() - 1].orientation.y, rotations[rotations.size() - 1].orientation.z);
-   for (int i = 0; i < rotations.size(); ++i) {
-      vals.emplace_back(rotations[i].orientation.w, rotations[i].orientation.x, rotations[i].orientation.y, rotations[i].orientation.z);
+   vals.EmplaceBack(rotations[rotations.Size() - 1].orientation.w, rotations[rotations.Size() - 1].orientation.x, rotations[rotations.Size() - 1].orientation.y, rotations[rotations.Size() - 1].orientation.z);
+   for (int i = 0; i < rotations.Size(); ++i) {
+      vals.EmplaceBack(rotations[i].orientation.w, rotations[i].orientation.x, rotations[i].orientation.y, rotations[i].orientation.z);
    }
 
    return CatmullRomSpline4d(vals);
 }
 
-CatmullRomSpline BoneAnimChannel::constructScaleCurve(const std::vector<KeyScale>& scales)
+CatmullRomSpline BoneAnimChannel::constructScaleCurve(const DynamicArray<KeyScale>& scales)
 {
-   std::vector<Vector3> vals;
+   DynamicArray<Vector3> vals;
+   vals.Reserve(scales.Size() + 1);
 
-   vals.emplace_back(scales[scales.size() - 1].scale.x, scales[scales.size() - 1].scale.y, scales[scales.size() - 1].scale.z);
-   for (int i = 0; i < scales.size(); ++i) {
-      vals.emplace_back(scales[i].scale.x, scales[i].scale.y, scales[i].scale.z);
+   vals.EmplaceBack(scales[scales.Size() - 1].scale.x, scales[scales.Size() - 1].scale.y, scales[scales.Size() - 1].scale.z);
+   for (int i = 0; i < scales.Size(); ++i) {
+      vals.EmplaceBack(scales[i].scale.x, scales[i].scale.y, scales[i].scale.z);
    }
 
    return CatmullRomSpline(vals);

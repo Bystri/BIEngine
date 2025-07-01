@@ -2,9 +2,9 @@
 
 #include <memory>
 #include <string>
-#include <vector>
 
 #include "../Utilities/Logger.h"
+#include "../StdLib/DynamicArray.h"
 
 #include <WinSock2.h>
 #include <WS2tcpip.h>
@@ -156,11 +156,11 @@ public:
    static UdpSocketPtr CreateUdpSocket(SocketAddressFamily inFamily);
    static TcpSocketPtr CreateTcpSocket(SocketAddressFamily inFamily);
 
-   static int Select(const std::vector<TcpSocketPtr>* readSet, std::vector<TcpSocketPtr>* readedSockets, const std::vector<TcpSocketPtr>* writeSet, std::vector<TcpSocketPtr>* writedSockets, const std::vector<TcpSocketPtr>* exceptSet, std::vector<TcpSocketPtr>* exceptedSockets);
+   static int Select(const DynamicArray<TcpSocketPtr>* readSet, DynamicArray<TcpSocketPtr>* readedSockets, const DynamicArray<TcpSocketPtr>* writeSet, DynamicArray<TcpSocketPtr>* writedSockets, const DynamicArray<TcpSocketPtr>* exceptSet, DynamicArray<TcpSocketPtr>* exceptedSockets);
 
 private:
-   static fd_set* FillSetFromVector(fd_set& set, const std::vector<TcpSocketPtr>* sockets);
-   static void FillVectorFromSet(std::vector<TcpSocketPtr>* filledSockets, const std::vector<TcpSocketPtr>* sockets, const fd_set& set);
+   static fd_set* FillSetFromVector(fd_set& set, const DynamicArray<TcpSocketPtr>* sockets);
+   static void FillVectorFromSet(DynamicArray<TcpSocketPtr>* filledSockets, const DynamicArray<TcpSocketPtr>* sockets, const fd_set& set);
 };
 
 } // namespace BIEngine

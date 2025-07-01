@@ -267,7 +267,7 @@ TcpSocketPtr SocketUtil::CreateTcpSocket(SocketAddressFamily inFamily)
    return nullptr;
 }
 
-int SocketUtil::Select(const std::vector<TcpSocketPtr>* readSet, std::vector<TcpSocketPtr>* readedSockets, const std::vector<TcpSocketPtr>* writeSet, std::vector<TcpSocketPtr>* writedSockets, const std::vector<TcpSocketPtr>* exceptSet, std::vector<TcpSocketPtr>* exceptedSockets)
+int SocketUtil::Select(const DynamicArray<TcpSocketPtr>* readSet, DynamicArray<TcpSocketPtr>* readedSockets, const DynamicArray<TcpSocketPtr>* writeSet, DynamicArray<TcpSocketPtr>* writedSockets, const DynamicArray<TcpSocketPtr>* exceptSet, DynamicArray<TcpSocketPtr>* exceptedSockets)
 {
    // build up some sets from our vectors
    fd_set read, write, except;
@@ -283,7 +283,7 @@ int SocketUtil::Select(const std::vector<TcpSocketPtr>* readSet, std::vector<Tcp
    return toRet;
 }
 
-fd_set* SocketUtil::FillSetFromVector(fd_set& set, const std::vector<TcpSocketPtr>* sockets)
+fd_set* SocketUtil::FillSetFromVector(fd_set& set, const DynamicArray<TcpSocketPtr>* sockets)
 {
    if (sockets == nullptr) {
       return nullptr;
@@ -296,16 +296,16 @@ fd_set* SocketUtil::FillSetFromVector(fd_set& set, const std::vector<TcpSocketPt
    return &set;
 }
 
-void SocketUtil::FillVectorFromSet(std::vector<TcpSocketPtr>* filledSockets, const std::vector<TcpSocketPtr>* sockets, const fd_set& set)
+void SocketUtil::FillVectorFromSet(DynamicArray<TcpSocketPtr>* filledSockets, const DynamicArray<TcpSocketPtr>* sockets, const fd_set& set)
 {
    if (filledSockets == nullptr || sockets == nullptr) {
       return;
    }
 
-   filledSockets->clear();
+   filledSockets->Clear();
    for (const TcpSocketPtr& socket : *sockets) {
       if (FD_ISSET(socket->m_socket, &set)) {
-         filledSockets->push_back(socket);
+         filledSockets->PushBack(socket);
       }
    }
 }

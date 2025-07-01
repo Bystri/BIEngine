@@ -36,8 +36,8 @@ bool MeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, st
       return false;
    }
 
-   std::vector<Vertex> vertices;
-   std::vector<unsigned int> indices;
+   DynamicArray<Vertex> vertices;
+   DynamicArray<unsigned int> indices;
 
    for (tinyxml2::XMLElement* pVertElement = pVerticesElement->FirstChildElement(); pVertElement; pVertElement = pVertElement->NextSiblingElement()) {
       Vertex vertex;
@@ -58,7 +58,7 @@ bool MeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, st
       vertex.TexCoords[0] = pVertElement->FloatAttribute("texX");
       vertex.TexCoords[1] = pVertElement->FloatAttribute("texY");
 
-      vertices.push_back(vertex);
+      vertices.PushBack(vertex);
    }
 
 
@@ -71,7 +71,7 @@ bool MeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, st
    // process indices
    int index;
    while (indicesStream >> index) {
-      indices.push_back(index);
+      indices.PushBack(index);
    }
 
    pExtra->m_pMesh = std::make_shared<Mesh>(vertices, indices);

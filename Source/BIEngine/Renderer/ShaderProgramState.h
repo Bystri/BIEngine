@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 
+#include "../StdLib/DynamicArray.h"
 #include "ShaderProgram.h"
 #include "Texture.h"
 #include "Color.h"
@@ -28,7 +29,7 @@ public:
 
    void AddTexture(int slotId, std::shared_ptr<Texture> pTexture);
 
-   std::size_t GetTexturesNum() const { return m_textures.size(); }
+   std::size_t GetTexturesNum() const { return m_textures.Size(); }
 
 private:
    std::shared_ptr<ShaderProgram> m_pShaderProgram;
@@ -41,7 +42,7 @@ private:
    std::unordered_map<std::string, ColorRgb> m_uniformColorsRgb;
    std::unordered_map<std::string, ColorRgba> m_uniformColorsRgba;
 
-   std::vector<std::pair<int, std::shared_ptr<Texture>>> m_textures;
+   DynamicArray<std::pair<int, std::shared_ptr<Texture>>> m_textures;
 };
 
 } // namespace BIEngine

@@ -100,7 +100,7 @@ void BINetworkManagerClient::StoreEventToForwardDelegate(BIEngine::IEventDataPtr
       return;
    }
 
-   m_eventsToSend.push_back(pEventData);
+   m_eventsToSend.PushBack(pEventData);
 }
 
 void BINetworkManagerClient::UpdateSendingEventPacket(const BIEngine::GameTimer& gt)
@@ -112,19 +112,19 @@ void BINetworkManagerClient::UpdateSendingEventPacket(const BIEngine::GameTimer&
       m_timeOfLastEventPacket = time;
    }
 
-   m_eventsToSend.clear();
+   m_eventsToSend.Clear();
 }
 
 void BINetworkManagerClient::SendEventPacket()
 {
-   if (m_eventsToSend.empty()) {
+   if (m_eventsToSend.Empty()) {
       return;
    }
 
    BIEngine::OutputMemoryBitStream eventPacket;
    BIEngine::Serialize(eventPacket, kEventCC);
 
-   BIEngine::Serialize(eventPacket, m_eventsToSend.size(), 8);
+   BIEngine::Serialize(eventPacket, m_eventsToSend.Size(), 8);
 
    for (const auto& event : m_eventsToSend) {
       BIEngine::Serialize(eventPacket, event->GetEventType());

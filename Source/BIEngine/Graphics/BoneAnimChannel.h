@@ -1,12 +1,12 @@
 #pragma once
 
-#include <vector>
 #include <string>
 
 #include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtc/quaternion.hpp>
 
+#include "../StdLib/DynamicArray.h"
 #include "../EngineCore/Assert.h"
 #include "../Math/Spline.h"
 
@@ -30,25 +30,28 @@ public:
    };
 
 public:
-   BoneAnimChannel(const std::string boneName, const std::vector<KeyPosition>& positions, const std::vector<KeyRotation>& rotations, const std::vector<KeyScale>& scales)
+   BoneAnimChannel(const std::string boneName, const DynamicArray<KeyPosition>& positions, const DynamicArray<KeyRotation>& rotations, const DynamicArray<KeyScale>& scales)
       : m_boneName(boneName), m_localTransform(1.0f),
         m_positionCurve(constructPositionCurve(positions)),
         m_rotationCurve(constructRotationCurve(rotations)),
         m_scaleCurve(constructScaleCurve(scales))
    {
-      m_positionFramesTimes.push_back(0.0f);
-      for (int i = 0; i < positions.size(); ++i) {
-         m_positionFramesTimes.push_back(positions[i].timeStamp);
+      m_positionFramesTimes.Reserve(positions.Size() + 1);
+      m_positionFramesTimes.PushBack(0.0f);
+      for (int i = 0; i < positions.Size(); ++i) {
+         m_positionFramesTimes.PushBack(positions[i].timeStamp);
       }
 
-      m_rotationFramesTimes.push_back(0.0f);
-      for (int i = 0; i < rotations.size(); ++i) {
-         m_rotationFramesTimes.push_back(rotations[i].timeStamp);
+      m_rotationFramesTimes.Reserve(positions.Size() + 1);
+      m_rotationFramesTimes.PushBack(0.0f);
+      for (int i = 0; i < rotations.Size(); ++i) {
+         m_rotationFramesTimes.PushBack(rotations[i].timeStamp);
       }
 
-      m_scaleFramesTimes.push_back(0.0f);
-      for (int i = 0; i < scales.size(); ++i) {
-         m_scaleFramesTimes.push_back(scales[i].timeStamp);
+      m_scaleFramesTimes.Reserve(positions.Size() + 1);
+      m_scaleFramesTimes.PushBack(0.0f);
+      for (int i = 0; i < scales.Size(); ++i) {
+         m_scaleFramesTimes.PushBack(scales[i].timeStamp);
       }
    }
 
@@ -59,18 +62,18 @@ public:
    const std::string& GetBoneName() const { return m_boneName; }
 
 private:
-   static CatmullRomSpline constructPositionCurve(const std::vector<KeyPosition>& positions);
-   static CatmullRomSpline4d constructRotationCurve(const std::vector<KeyRotation>& rotations);
-   static CatmullRomSpline constructScaleCurve(const std::vector<KeyScale>& scales);
+   static CatmullRomSpline constructPositionCurve(const DynamicArray<KeyPosition>& positions);
+   static CatmullRomSpline4d constructRotationCurve(const DynamicArray<KeyRotation>& rotations);
+   static CatmullRomSpline constructScaleCurve(const DynamicArray<KeyScale>& scales);
 
 private:
    CatmullRomSpline m_positionCurve;
    CatmullRomSpline4d m_rotationCurve;
    CatmullRomSpline m_scaleCurve;
 
-   std::vector<float> m_positionFramesTimes;
-   std::vector<float> m_rotationFramesTimes;
-   std::vector<float> m_scaleFramesTimes;
+   DynamicArray<float> m_positionFramesTimes;
+   DynamicArray<float> m_rotationFramesTimes;
+   DynamicArray<float> m_scaleFramesTimes;
 
    glm::mat4 m_localTransform;
    std::string m_boneName;

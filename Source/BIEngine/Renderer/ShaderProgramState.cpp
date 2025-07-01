@@ -39,7 +39,7 @@ void ShaderProgramState::Use()
       m_pShaderProgram->SetColorRgba(uniform.first, uniform.second);
    }
 
-   for (int i = 0; i < m_textures.size(); ++i) {
+   for (int i = 0; i < m_textures.Size(); ++i) {
       if (m_textures[i].second) {
          m_textures[i].second->Bind(m_textures[i].first);
       }
@@ -88,7 +88,7 @@ void ShaderProgramState::SetColorRgba(const std::string& name, const ColorRgba& 
 
 void ShaderProgramState::AddTexture(int slotId, std::shared_ptr<Texture> pTexture)
 {
-   m_textures.push_back({slotId, pTexture});
+   m_textures.PushBack({slotId, pTexture});
 }
 
 } // namespace BIEngine

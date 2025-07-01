@@ -123,7 +123,7 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
    pShaderProgram->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
 
 
-   std::vector<std::string> faces{
+   BIEngine::DynamicArray<std::string> faces{
       "cubemapTextureRightPath",
       "cubemapTextureLeftPath",
       "cubemapTextureTopPath",
@@ -131,11 +131,11 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
       "cubemapTextureFrontPath",
       "cubemapTextureBackPath"};
 
-   std::array<unsigned char*, 6> cubemapTextureImages;
+   BIEngine::Array<unsigned char*, 6> cubemapTextureImages;
    int width = -1;
    int height = -1;
 
-   for (int i = 0; i < faces.size(); ++i) {
+   for (int i = 0; i < faces.Size(); ++i) {
       const char* cubemapTexturePath;
       pSkyboxSettingsNode->QueryStringAttribute(faces[i].c_str(), &cubemapTexturePath);
 
@@ -352,7 +352,7 @@ void BIEditorHumanView::showActorTreeNode(std::shared_ptr<BIEngine::Actor> pActo
       nodeFlags |= ImGuiTreeNodeFlags_Selected;
    }
 
-   if (pActor->GetChildren().size() == 0) {
+   if (pActor->GetChildren().Size() == 0) {
       nodeFlags |= ImGuiTreeNodeFlags_Leaf;
    }
 

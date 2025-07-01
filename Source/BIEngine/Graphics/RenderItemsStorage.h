@@ -57,26 +57,26 @@ public:
 
    void InsertOpaqueRenderItem(const OpaqueRenderItem& opaqueRitem);
 
-   std::vector<OpaqueRenderItem>& GetOpaqueRenderItems() { return m_opaqueItems; }
+   DynamicArray<OpaqueRenderItem>& GetOpaqueRenderItems() { return m_opaqueItems; }
 
    void InsertDirectionalLightInfo(const DirectionalLightItem& dirLight);
    void InsertPointLightInfo(const PointLightItem& pointLight);
    void InsertSpotLightInfo(const SpotLightItem& spotLight);
 
-   std::vector<DirectionalLightItem>& GetDirectionalLightItems() { return m_directionalLightItems; }
+   DynamicArray<DirectionalLightItem>& GetDirectionalLightItems() { return m_directionalLightItems; }
 
-   std::vector<PointLightItem>& GetPointLightItems() { return m_pointLightItems; }
+   DynamicArray<PointLightItem>& GetPointLightItems() { return m_pointLightItems; }
 
-   std::vector<SpotLightItem>& GetSpotLightItems() { return m_spotLightItems; }
+   DynamicArray<SpotLightItem>& GetSpotLightItems() { return m_spotLightItems; }
 
    void Clear();
 
 private:
-   std::vector<OpaqueRenderItem> m_opaqueItems;
+   DynamicArray<OpaqueRenderItem> m_opaqueItems;
 
-   std::vector<DirectionalLightItem> m_directionalLightItems;
-   std::vector<PointLightItem> m_pointLightItems;
-   std::vector<SpotLightItem> m_spotLightItems;
+   DynamicArray<DirectionalLightItem> m_directionalLightItems;
+   DynamicArray<PointLightItem> m_pointLightItems;
+   DynamicArray<SpotLightItem> m_spotLightItems;
 };
 
 } // namespace BIEngine

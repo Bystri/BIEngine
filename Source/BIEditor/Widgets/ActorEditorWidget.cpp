@@ -97,7 +97,7 @@ public:
          tinyxml2::XMLElement* pActorValues = actorComponentValues->FirstChildElement(namecstr);
 
          if (elementType == "Vec3") {
-            m_vectors.push_back(VecEdit(componentName, elementName, actorId, pActorValues));
+            m_vectors.PushBack(VecEdit(componentName, elementName, actorId, pActorValues));
          }
       }
    }
@@ -108,7 +108,7 @@ public:
          return;
       }
 
-      for (int i = 0; i < m_vectors.size(); ++i) {
+      for (int i = 0; i < m_vectors.Size(); ++i) {
          m_vectors[i].Show();
       }
    }
@@ -118,7 +118,7 @@ private:
 
    std::string m_componentName;
 
-   std::vector<VecEdit> m_vectors;
+   BIEngine::DynamicArray<VecEdit> m_vectors;
 };
 
 ActorEditorWidget::ActorEditorWidget()
@@ -145,11 +145,11 @@ void ActorEditorWidget::SetCurrentEditableActorId(BIEngine::ActorId actorId)
 
    m_currentActorId = actorId;
 
-   for (int i = 0; i < m_actorComponentEdits.size(); ++i) {
+   for (int i = 0; i < m_actorComponentEdits.Size(); ++i) {
       delete m_actorComponentEdits[i];
    }
 
-   m_actorComponentEdits.clear();
+   m_actorComponentEdits.Clear();
 
    std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(m_currentActorId);
 
@@ -162,7 +162,7 @@ void ActorEditorWidget::SetCurrentEditableActorId(BIEngine::ActorId actorId)
       auto itr = m_componentsSettings.find(pNode->Name());
 
       if (itr != m_componentsSettings.end()) {
-         m_actorComponentEdits.push_back(new ActorComponentEdit(m_currentActorId, pNode, m_componentsSettings[pNode->Name()]));
+         m_actorComponentEdits.PushBack(new ActorComponentEdit(m_currentActorId, pNode, m_componentsSettings[pNode->Name()]));
       }
    }
 }
@@ -178,7 +178,7 @@ void ActorEditorWidget::Show()
    if (ImGui::Begin("Actor Editor")) {
       ImGui::PushID(m_currentActorId);
 
-      for (int i = 0; i < m_actorComponentEdits.size(); ++i) {
+      for (int i = 0; i < m_actorComponentEdits.Size(); ++i) {
          m_actorComponentEdits[i]->Show();
       }
 

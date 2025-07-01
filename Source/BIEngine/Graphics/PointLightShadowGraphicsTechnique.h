@@ -33,7 +33,7 @@ private:
    const int SHADOW_MAP_HEIGHT;
 
    std::shared_ptr<ShaderProgram> m_pPointLightShadowShader;
-   std::vector<RenderPointLightShadowInfo> m_pointLightShadowInfos;
+   DynamicArray<RenderPointLightShadowInfo> m_pointLightShadowInfos;
 };
 
 } // namespace BIEngine

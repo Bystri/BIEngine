@@ -1,9 +1,8 @@
 #pragma once
 
-#include <vector>
-
 #include "Vertex.h"
 #include "Texture.h"
+#include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
 
@@ -11,20 +10,20 @@ class Mesh {
    friend class MeshGeometryGenerator;
 
 public:
-   Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
+   Mesh(DynamicArray<Vertex> vertices, DynamicArray<unsigned int> indices);
 
    unsigned int GetVao() const { return m_VAO; }
 
-   const std::vector<Vertex>& GetVertices() const { return m_vertices; }
+   const DynamicArray<Vertex>& GetVertices() const { return m_vertices; }
 
-   const std::vector<unsigned int>& GetIndices() const { return m_indices; }
+   const DynamicArray<unsigned int>& GetIndices() const { return m_indices; }
 
 private:
    void setupMesh();
 
 private:
-   std::vector<Vertex> m_vertices;
-   std::vector<unsigned int> m_indices;
+   DynamicArray<Vertex> m_vertices;
+   DynamicArray<unsigned int> m_indices;
 
    unsigned int m_VAO, m_VBO, m_EBO;
 };

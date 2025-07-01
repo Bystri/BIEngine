@@ -6,8 +6,8 @@ namespace BIEngine {
 
 Mesh MeshGeometryGenerator::CreateQuad(float width, float height)
 {
-   std::vector<Vertex> v;
-   v.resize(4);
+   DynamicArray<Vertex> v;
+   v.Resize(4);
 
    // Передняя сторона
    v[0] = Vertex(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
@@ -17,8 +17,8 @@ Mesh MeshGeometryGenerator::CreateQuad(float width, float height)
 
 
    // Индексы
-   std::vector<unsigned int> i;
-   i.resize(6);
+   DynamicArray<unsigned int> i;
+   i.Resize(6);
 
    // Передняя сторона
    i[0] = 0;
@@ -28,7 +28,7 @@ Mesh MeshGeometryGenerator::CreateQuad(float width, float height)
    i[4] = 2;
    i[5] = 3;
 
-   Mesh meshData(v, i);
+   Mesh meshData(std::move(v), std::move(i));
 
    return meshData;
 }
@@ -36,8 +36,8 @@ Mesh MeshGeometryGenerator::CreateQuad(float width, float height)
 Mesh MeshGeometryGenerator::CreateBox(float width, float height, float depth, unsigned int numSubdivisions)
 {
    // Вершины
-   std::vector<Vertex> v;
-   v.resize(24);
+   DynamicArray<Vertex> v;
+   v.Resize(24);
 
    float w2 = 0.5f * width;
    float h2 = 0.5f * height;
@@ -80,8 +80,8 @@ Mesh MeshGeometryGenerator::CreateBox(float width, float height, float depth, un
    v[23] = Vertex(+w2, -h2, +d2, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 
    // Индексы
-   std::vector<unsigned int> i;
-   i.resize(36);
+   DynamicArray<unsigned int> i;
+   i.Resize(36);
 
    // Передняя сторона
    i[0] = 0;
@@ -131,7 +131,7 @@ Mesh MeshGeometryGenerator::CreateBox(float width, float height, float depth, un
    i[34] = 22;
    i[35] = 23;
 
-   Mesh meshData(v, i);
+   Mesh meshData(std::move(v), std::move(i));
 
    // Берем минимально возможное значени разделений
    numSubdivisions = std::min<unsigned int>(numSubdivisions, 6u);
@@ -158,7 +158,7 @@ Mesh MeshGeometryGenerator::CreateGrid(float width, float depth, unsigned int m,
    const float du = 1.0f / (n - 1);
    const float dv = 1.0f / (m - 1);
 
-   std::vector<Vertex> v(vertexCount);
+   DynamicArray<Vertex> v(vertexCount);
    for (int i = 0; i < m; ++i) {
       const float z = halfDepth - i * dz;
       for (int j = 0; j < n; ++j) {
@@ -170,7 +170,7 @@ Mesh MeshGeometryGenerator::CreateGrid(float width, float depth, unsigned int m,
    }
 
 
-   std::vector<unsigned int> ind(faceCount * 3);
+   DynamicArray<unsigned int> ind(faceCount * 3);
 
    int k = 0;
    for (int i = 0; i < m - 1; ++i) {
@@ -187,7 +187,7 @@ Mesh MeshGeometryGenerator::CreateGrid(float width, float depth, unsigned int m,
       }
    }
 
-   return Mesh(v, ind);
+   return Mesh(std::move(v), std::move(ind));
 }
 
 Mesh MeshGeometryGenerator::CreateSphere(float radius, unsigned int sliceCount, unsigned int stackCount)
@@ -202,9 +202,9 @@ Mesh MeshGeometryGenerator::CreateSphere(float radius, unsigned int sliceCount, 
    const Vertex topVertex(0.0f, +radius, 0.0f, 0.0f, +1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
    const Vertex bottomVertex(0.0f, -radius, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
-   std::vector<Vertex> v;
+   DynamicArray<Vertex> v;
 
-   v.push_back(topVertex);
+   v.PushBack(topVertex);
 
    constexpr float PI = 3.1415927;
 
@@ -239,23 +239,23 @@ Mesh MeshGeometryGenerator::CreateSphere(float radius, unsigned int sliceCount, 
          vert.TexCoords.x = theta / PI;
          vert.TexCoords.y = phi / PI;
 
-         v.push_back(vert);
+         v.PushBack(vert);
       }
    }
 
-   v.push_back(bottomVertex);
+   v.PushBack(bottomVertex);
 
    //
    // Compute indices for top stack.  The top stack was written first to the vertex buffer
    // and connects the top pole to the first ring.
    //
 
-   std::vector<unsigned int> ind;
+   DynamicArray<unsigned int> ind;
 
    for (unsigned i = 1; i <= sliceCount; ++i) {
-      ind.push_back(0);
-      ind.push_back(i + 1);
-      ind.push_back(i);
+      ind.PushBack(0);
+      ind.PushBack(i + 1);
+      ind.PushBack(i);
    }
 
    //
@@ -268,13 +268,13 @@ Mesh MeshGeometryGenerator::CreateSphere(float radius, unsigned int sliceCount, 
    const unsigned int ringVertexCount = sliceCount + 1;
    for (unsigned int i = 0; i < stackCount - 2; ++i) {
       for (unsigned int j = 0; j < sliceCount; ++j) {
-         ind.push_back(baseIndex + i * ringVertexCount + j);
-         ind.push_back(baseIndex + i * ringVertexCount + j + 1);
-         ind.push_back(baseIndex + (i + 1) * ringVertexCount + j);
+         ind.PushBack(baseIndex + i * ringVertexCount + j);
+         ind.PushBack(baseIndex + i * ringVertexCount + j + 1);
+         ind.PushBack(baseIndex + (i + 1) * ringVertexCount + j);
 
-         ind.push_back(baseIndex + (i + 1) * ringVertexCount + j);
-         ind.push_back(baseIndex + i * ringVertexCount + j + 1);
-         ind.push_back(baseIndex + (i + 1) * ringVertexCount + j + 1);
+         ind.PushBack(baseIndex + (i + 1) * ringVertexCount + j);
+         ind.PushBack(baseIndex + i * ringVertexCount + j + 1);
+         ind.PushBack(baseIndex + (i + 1) * ringVertexCount + j + 1);
       }
    }
 
@@ -284,18 +284,18 @@ Mesh MeshGeometryGenerator::CreateSphere(float radius, unsigned int sliceCount, 
    //
 
    // South pole vertex was added last.
-   const unsigned int southPoleIndex = static_cast<unsigned int>(ind.size()) - 1;
+   const unsigned int southPoleIndex = static_cast<unsigned int>(ind.Size()) - 1;
 
    // Offset the indices to the index of the first vertex in the last ring.
    baseIndex = southPoleIndex - ringVertexCount;
 
    for (unsigned int i = 0; i < sliceCount; ++i) {
-      ind.push_back(southPoleIndex);
-      ind.push_back(baseIndex + i);
-      ind.push_back(baseIndex + i + 1);
+      ind.PushBack(southPoleIndex);
+      ind.PushBack(baseIndex + i);
+      ind.PushBack(baseIndex + i + 1);
    }
 
-   return Mesh(v, ind);
+   return Mesh(std::move(v), std::move(ind));
 }
 
 void MeshGeometryGenerator::Subdivide(Mesh& meshData)
@@ -303,10 +303,10 @@ void MeshGeometryGenerator::Subdivide(Mesh& meshData)
    Mesh inputCopy = meshData;
 
 
-   meshData.m_vertices.resize(0);
-   meshData.m_indices.resize(0);
+   meshData.m_vertices.Clear();
+   meshData.m_indices.Clear();
 
-   unsigned int numTris = (unsigned int)inputCopy.m_indices.size() / 3;
+   unsigned int numTris = (unsigned int)inputCopy.m_indices.Size() / 3;
    for (unsigned int i = 0; i < numTris; ++i) {
       Vertex v0 = inputCopy.m_vertices[inputCopy.m_indices[i * 3 + 0]];
       Vertex v1 = inputCopy.m_vertices[inputCopy.m_indices[i * 3 + 1]];
@@ -320,28 +320,28 @@ void MeshGeometryGenerator::Subdivide(Mesh& meshData)
 
 
       // Добавляем новую геометрию
-      meshData.m_vertices.push_back(v0); // 0
-      meshData.m_vertices.push_back(v1); // 1
-      meshData.m_vertices.push_back(v2); // 2
-      meshData.m_vertices.push_back(m0); // 3
-      meshData.m_vertices.push_back(m1); // 4
-      meshData.m_vertices.push_back(m2); // 5
+      meshData.m_vertices.PushBack(v0); // 0
+      meshData.m_vertices.PushBack(v1); // 1
+      meshData.m_vertices.PushBack(v2); // 2
+      meshData.m_vertices.PushBack(m0); // 3
+      meshData.m_vertices.PushBack(m1); // 4
+      meshData.m_vertices.PushBack(m2); // 5
 
-      meshData.m_indices.push_back(i * 6 + 0);
-      meshData.m_indices.push_back(i * 6 + 3);
-      meshData.m_indices.push_back(i * 6 + 5);
+      meshData.m_indices.PushBack(i * 6 + 0);
+      meshData.m_indices.PushBack(i * 6 + 3);
+      meshData.m_indices.PushBack(i * 6 + 5);
 
-      meshData.m_indices.push_back(i * 6 + 3);
-      meshData.m_indices.push_back(i * 6 + 4);
-      meshData.m_indices.push_back(i * 6 + 5);
+      meshData.m_indices.PushBack(i * 6 + 3);
+      meshData.m_indices.PushBack(i * 6 + 4);
+      meshData.m_indices.PushBack(i * 6 + 5);
 
-      meshData.m_indices.push_back(i * 6 + 5);
-      meshData.m_indices.push_back(i * 6 + 4);
-      meshData.m_indices.push_back(i * 6 + 2);
+      meshData.m_indices.PushBack(i * 6 + 5);
+      meshData.m_indices.PushBack(i * 6 + 4);
+      meshData.m_indices.PushBack(i * 6 + 2);
 
-      meshData.m_indices.push_back(i * 6 + 3);
-      meshData.m_indices.push_back(i * 6 + 1);
-      meshData.m_indices.push_back(i * 6 + 4);
+      meshData.m_indices.PushBack(i * 6 + 3);
+      meshData.m_indices.PushBack(i * 6 + 1);
+      meshData.m_indices.PushBack(i * 6 + 4);
    }
 }
 

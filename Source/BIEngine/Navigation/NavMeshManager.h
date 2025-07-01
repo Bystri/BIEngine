@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <memory>
 
 #include <DetourNavMeshQuery.h>
@@ -49,7 +48,7 @@ private:
 
    NavMeshBuildSettings m_buildSettings;
 
-   std::vector<std::shared_ptr<Actor>> m_actors;
+   DynamicArray<std::shared_ptr<Actor>> m_actors;
    std::shared_ptr<NavMeshGenerator> m_pNavMeshGenerator;
    dtNavMesh* m_pNavMesh;
    dtNavMeshQuery* m_pNavQuery;

@@ -12,39 +12,39 @@ public:
 
    SizeT Size() const { return N; }
 
-   T& operator[](SizeT idx) { return data[idx]; }
+   T& operator[](SizeT idx) { return m_pData[idx]; }
 
-   const T& operator[](SizeT idx) const { return data[idx]; }
+   const T& operator[](SizeT idx) const { return m_pData[idx]; }
 
-   T* Data() { return &data[0]; }
+   T* Data() { return &m_pData[0]; }
 
-   const T* Data() const { return &data[0]; }
+   const T* Data() const { return &m_pData[0]; }
 
-   T& Front() { return data[0]; }
+   T& Front() { return m_pData[0]; }
 
-   const T& Front() const { return data[0]; }
+   const T& Front() const { return m_pData[0]; }
 
-   T& Back() { return data[N - 1]; }
+   T& Back() { return m_pData[N - 1]; }
 
-   const T& Back() const { return data[N - 1]; }
+   const T& Back() const { return m_pData[N - 1]; }
 
-   Iterator Begin() { return &data[0]; }
+   Iterator Begin() { return &m_pData[0]; }
 
    Iterator End() { return Begin() + N; }
 
-   ConstIterator CBegin() const { return &data[0]; }
+   ConstIterator CBegin() const { return &m_pData[0]; }
 
    ConstIterator CEnd() const { return CBegin() + N; }
 
    void Fill(const T& val)
    {
       for (int i = 0; i < N; ++i) {
-         data[i] = val;
+         m_pData[i] = val;
       }
    }
 
 private:
-   T data[N];
+   T m_pData[N];
 };
 
 template <typename T, SizeT N>

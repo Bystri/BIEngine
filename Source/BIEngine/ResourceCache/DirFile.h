@@ -2,7 +2,8 @@
 
 #include <map>
 #include <string>
-#include <vector>
+
+#include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
 
@@ -19,7 +20,7 @@ public:
    bool Init(const std::string& resFileName);
    void End();
 
-   int GetNumFiles() const { return m_fileDatas.size(); }
+   int GetNumFiles() const { return m_fileDatas.Size(); }
 
    std::string GetFilename(int i) const;
    int GetFileLen(int i) const;
@@ -34,7 +35,7 @@ private:
    };
 
    std::string m_resFileName;
-   std::vector<FileData> m_fileDatas;
+   DynamicArray<FileData> m_fileDatas;
 
    DipContentsMap m_dirContentsMap;
 };

@@ -38,7 +38,7 @@ public:
 template <class ReplicatedObject>
 class ReplicationObjectT : public ReplicationObject {
 public:
-   using ReplicationUnitArray = std::vector<std::shared_ptr<ReplicationUnit<ReplicatedObject>>>;
+   using ReplicationUnitArray = DynamicArray<std::shared_ptr<ReplicationUnit<ReplicatedObject>>>;
 
    ReplicationObjectT(ReplicationUnitArray replicationUnits)
       : m_isDirtyMask(0u), m_replicationUnits(std::move(replicationUnits))
@@ -49,7 +49,7 @@ public:
    {
       m_pReplicatedObject = ConstructReplicatedObject(isMaster);
 
-      for (int i = 0; i < m_replicationUnits.size(); ++i) {
+      for (int i = 0; i < m_replicationUnits.Size(); ++i) {
          m_replicationUnits[i]->Init(m_pReplicatedObject);
       }
    }
@@ -57,7 +57,7 @@ public:
    void OnUpdate()
    {
       m_isDirtyMask = 0u;
-      for (int i = 0; i < m_replicationUnits.size(); ++i) {
+      for (int i = 0; i < m_replicationUnits.Size(); ++i) {
          if (m_replicationUnits[i]->IsStateChanged()) {
             m_isDirtyMask |= 1 << i;
          }
@@ -72,7 +72,7 @@ public:
    {
       const uint32_t dirtyMask = ignoreDirtyFlag ? 0xffffffff : m_isDirtyMask;
 
-      for (int i = 0; i < m_replicationUnits.size(); ++i) {
+      for (int i = 0; i < m_replicationUnits.Size(); ++i) {
          if ((dirtyMask & 1 << i) == 0) {
             Serialize(stream, false, 1);
             continue;
@@ -86,7 +86,7 @@ public:
    void Read(InputMemoryBitStream& stream)
    {
       unsigned char dirtyFlag;
-      for (int i = 0; i < m_replicationUnits.size(); ++i) {
+      for (int i = 0; i < m_replicationUnits.Size(); ++i) {
          Deserialize(stream, dirtyFlag, 1);
 
          if (dirtyFlag == 0) {

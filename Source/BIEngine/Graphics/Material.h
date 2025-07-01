@@ -6,6 +6,7 @@
 #include "../Renderer/Texture.h"
 #include "../Renderer/RenderState.h"
 #include "../Renderer/ShaderProgramState.h"
+#include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
 
@@ -47,7 +48,7 @@ private:
    std::unordered_map<std::string, ColorRgb> m_uniformColorsRgb;
    std::unordered_map<std::string, ColorRgba> m_uniformColorsRgba;
 
-   std::vector<std::pair<int, std::shared_ptr<Texture>>> m_textures;
+   DynamicArray<std::pair<int, std::shared_ptr<Texture>>> m_textures;
 };
 
 } // namespace BIEngine

@@ -34,25 +34,25 @@ public:
    Model()
       : m_meshes() {}
 
-   std::size_t AddModelMesh(std::shared_ptr<ModelMesh> pMesh)
+   SizeT AddModelMesh(std::shared_ptr<ModelMesh> pMesh)
    {
-      m_meshes.push_back(pMesh);
-      return m_meshes.size() - 1;
+      m_meshes.PushBack(pMesh);
+      return m_meshes.Size() - 1;
    }
 
-   void RemoveModelMesh(std::size_t index)
+   void RemoveModelMesh(SizeT index)
    {
-      if (m_meshes.size() <= index) {
+      if (m_meshes.Size() <= index) {
          return;
       }
 
-      m_meshes.erase(m_meshes.begin() + index);
+      m_meshes.Erase(m_meshes.Begin() + index);
    }
 
-   const std::vector<std::shared_ptr<ModelMesh>>& GetMeshes() const { return m_meshes; }
+   const DynamicArray<std::shared_ptr<ModelMesh>>& GetMeshes() const { return m_meshes; }
 
 private:
-   std::vector<std::shared_ptr<ModelMesh>> m_meshes;
+   DynamicArray<std::shared_ptr<ModelMesh>> m_meshes;
 };
 
 } // namespace BIEngine

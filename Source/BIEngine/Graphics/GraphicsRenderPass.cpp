@@ -4,7 +4,7 @@ namespace BIEngine {
 
 bool GraphicsRenderPass::Init()
 {
-   for (int i = 0; i < m_graphicsTechniques.size(); ++i) {
+   for (int i = 0; i < m_graphicsTechniques.Size(); ++i) {
       if (!m_graphicsTechniques[i]->Init()) {
          return false;
       }
@@ -15,14 +15,14 @@ bool GraphicsRenderPass::Init()
 
 void GraphicsRenderPass::AddTechnique(std::shared_ptr<IGraphicsTechnique> pTechnique)
 {
-   m_graphicsTechniques.push_back(pTechnique);
+   m_graphicsTechniques.PushBack(pTechnique);
 }
 
 void GraphicsRenderPass::OnRender(Scene* const pScene, RenderItemsStorage* const pStorage)
 {
    PreRender(pScene);
 
-   for (int i = 0; i < m_graphicsTechniques.size(); ++i) {
+   for (int i = 0; i < m_graphicsTechniques.Size(); ++i) {
       m_graphicsTechniques[i]->OnRender(pScene, pStorage);
    }
 

@@ -61,7 +61,7 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
    tinyxml2::XMLElement* pStringDataElement = pData->FirstChildElement("StringData");
    if (pStringDataElement) {
       for (const tinyxml2::XMLAttribute* pAttribute = pStringDataElement->FirstAttribute(); pAttribute != nullptr; pAttribute = pAttribute->Next()) {
-         m_strVars.push_back(std::pair<std::string, std::string>(pAttribute->Name(), pAttribute->Value()));
+         m_strVars.PushBack(std::pair<std::string, std::string>(pAttribute->Name(), pAttribute->Value()));
          m_pyObject.attr(pAttribute->Name()) = pAttribute->Value();
       }
    }
@@ -71,7 +71,7 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
    if (pNumberDataElement) {
       for (const tinyxml2::XMLAttribute* pAttribute = pNumberDataElement->FirstAttribute(); pAttribute != nullptr; pAttribute = pAttribute->Next()) {
          float val = std::atof(pAttribute->Value());
-         m_numVars.push_back(std::pair<std::string, float>(pAttribute->Name(), val));
+         m_numVars.PushBack(std::pair<std::string, float>(pAttribute->Name(), val));
          m_pyObject.attr(pAttribute->Name()) = val;
       }
    }

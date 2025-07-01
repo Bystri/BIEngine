@@ -38,7 +38,7 @@ static std::shared_ptr<Skeleton::BoneInfo> skeletonComponentCalculateSkeleton(co
       if (pChildBone == nullptr) {
          continue;
       }
-      pBone->children.push_back(pChildBone);
+      pBone->children.PushBack(pChildBone);
    }
 
    return pBone;
@@ -56,7 +56,7 @@ void SkeletonComponent::Activate()
       if (pChildBone == nullptr) {
          continue;
       }
-      pRoot->children.push_back(pChildBone);
+      pRoot->children.PushBack(pChildBone);
    }
 
    m_pSkeleton = std::make_shared<Skeleton>(pRoot);

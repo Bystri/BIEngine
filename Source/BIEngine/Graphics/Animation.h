@@ -1,18 +1,18 @@
 #pragma once
 
 #include <string>
-#include <vector>
 
 #include <glm/glm.hpp>
 
+#include "../StdLib/DynamicArray.h"
 #include "BoneAnimChannel.h"
 
 namespace BIEngine {
 
 class Animation {
 public:
-   Animation(float duration, int ticksPerSecond, const std::vector<BoneAnimChannel>& boneChannels, bool isLooped = false)
-      : m_duration(duration), m_ticksPerSecond(ticksPerSecond), m_boneChannels(boneChannels), m_isLooped(isLooped)
+   Animation(float duration, int ticksPerSecond, DynamicArray<BoneAnimChannel> boneChannels, bool isLooped = false)
+      : m_duration(duration), m_ticksPerSecond(ticksPerSecond), m_boneChannels(std::move(boneChannels)), m_isLooped(isLooped)
    {
    }
 
@@ -27,7 +27,7 @@ public:
 private:
    float m_duration;
    int m_ticksPerSecond;
-   std::vector<BoneAnimChannel> m_boneChannels;
+   DynamicArray<BoneAnimChannel> m_boneChannels;
    bool m_isLooped;
 };
 

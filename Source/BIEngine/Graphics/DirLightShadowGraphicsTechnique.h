@@ -32,7 +32,7 @@ private:
    const int SHADOW_MAP_HEIGHT;
 
    std::shared_ptr<ShaderProgram> m_pDirLightShadowShader;
-   std::vector<RenderDirLightShadowInfo> m_dirLightShadowInfos;
+   DynamicArray<RenderDirLightShadowInfo> m_dirLightShadowInfos;
 };
 
 } // namespace BIEngine

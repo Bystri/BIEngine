@@ -45,9 +45,9 @@ std::shared_ptr<ReplicationObject> ObjectReplicationCreate(uint32_t classId)
 
 void ObjectReplicationManagerMaster::AddClient(std::shared_ptr<Peer> pPeer)
 {
-   m_pPeers.push_back(pPeer);
-   std::unique_ptr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.emplace_back(std::make_unique<ReplicationActionWriter>(m_pLinkingContext));
-   OutputMemoryBitStream& replicationBuffer = m_replicationBuffersPerPeer.emplace_back(OutputMemoryBitStream());
+   m_pPeers.PushBack(pPeer);
+   std::unique_ptr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(std::make_unique<ReplicationActionWriter>(m_pLinkingContext));
+   OutputMemoryBitStream& replicationBuffer = m_replicationBuffersPerPeer.EmplaceBack(OutputMemoryBitStream());
 
    for (const auto& pObj : m_pReplicationObjects) {
       pReplicationManager->ReplicateCreate(replicationBuffer, pObj);
@@ -56,7 +56,7 @@ void ObjectReplicationManagerMaster::AddClient(std::shared_ptr<Peer> pPeer)
 
 void ObjectReplicationManagerMaster::SendPacket(NetworkManager* pNetworkManager)
 {
-   for (int i = 0; i < m_replicationBuffersPerPeer.size(); ++i) {
+   for (int i = 0; i < m_replicationBuffersPerPeer.Size(); ++i) {
       if (m_replicationBuffersPerPeer[i].GetBitLength() > 0) {
          SendStatePacketToClient(i, pNetworkManager);
          m_replicationBuffersPerPeer[i] = OutputMemoryBitStream();
@@ -70,7 +70,7 @@ void ObjectReplicationManagerMaster::OnUpdate()
       obj->OnUpdate();
 
       if (obj->IsDirty()) {
-         for (int i = 0; i < m_pReplicationManagersPerPeer.size(); ++i) {
+         for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
             m_pReplicationManagersPerPeer[i]->ReplicateUpdate(m_replicationBuffersPerPeer[i], obj);
          }
       }
@@ -79,9 +79,9 @@ void ObjectReplicationManagerMaster::OnUpdate()
 
 void ObjectReplicationManagerMaster::AddReplicationObject(std::shared_ptr<ReplicationObject> pObj)
 {
-   m_pReplicationObjects.push_back(pObj);
+   m_pReplicationObjects.PushBack(pObj);
 
-   for (int i = 0; i < m_pReplicationManagersPerPeer.size(); ++i) {
+   for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
       m_pReplicationManagersPerPeer[i]->ReplicateCreate(m_replicationBuffersPerPeer[i], pObj);
    }
 }

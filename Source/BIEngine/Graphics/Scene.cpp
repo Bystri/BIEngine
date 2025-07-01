@@ -34,7 +34,7 @@ int Scene::OnPreRender(const GameTimer& gt)
 
 int Scene::OnPostRender(const GameTimer& gt)
 {
-   for (int i = 0; i < m_graphicsRenderPasses.size(); ++i) {
+   for (int i = 0; i < m_graphicsRenderPasses.Size(); ++i) {
       m_graphicsRenderPasses[i]->OnRender(this, m_pRenderItemsStorage.get());
    }
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <vector>
 
+#include "../../StdLib/DynamicArray.h"
 #include "ObjectReplication.h"
 #include "ReplicationActionWriter.h"
 #include "NetworkObjectCreationRegistry.h"
@@ -33,10 +33,10 @@ private:
 private:
    std::shared_ptr<NewtworkObjectLinkingContexts> m_pLinkingContext;
 
-   std::vector<std::shared_ptr<Peer>> m_pPeers;
-   std::vector<std::unique_ptr<ReplicationActionWriter>> m_pReplicationManagersPerPeer;
-   std::vector<OutputMemoryBitStream> m_replicationBuffersPerPeer;
-   std::vector<std::shared_ptr<ReplicationObject>> m_pReplicationObjects;
+   DynamicArray<std::shared_ptr<Peer>> m_pPeers;
+   DynamicArray<std::unique_ptr<ReplicationActionWriter>> m_pReplicationManagersPerPeer;
+   DynamicArray<OutputMemoryBitStream> m_replicationBuffersPerPeer;
+   DynamicArray<std::shared_ptr<ReplicationObject>> m_pReplicationObjects;
 };
 
 std::shared_ptr<ReplicationObject> ObjectReplicationCreate(uint32_t classId);

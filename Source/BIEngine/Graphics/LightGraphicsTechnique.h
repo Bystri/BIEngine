@@ -6,7 +6,7 @@ namespace BIEngine {
 
 class LightGraphicsTechnique : public IGraphicsTechnique {
 public:
-   LightGraphicsTechnique(const std::size_t maxDirLightsNum, const std::size_t maxPointLightsNum, const std::size_t maxSpotLightsNum)
+   LightGraphicsTechnique(const SizeT maxDirLightsNum, const SizeT maxPointLightsNum, const SizeT maxSpotLightsNum)
       : IGraphicsTechnique(),
         m_maxDirLightsNum(maxDirLightsNum), m_maxPointLightsNum(maxPointLightsNum), m_maxSpotLightsNum(maxSpotLightsNum),
         m_lightsBufferData(), m_pLightConstantsBuffer(std::make_shared<ConstantsBuffer>())
@@ -81,9 +81,9 @@ private:
    };
 
 private:
-   const std::size_t m_maxDirLightsNum;
-   const std::size_t m_maxPointLightsNum;
-   const std::size_t m_maxSpotLightsNum;
+   const SizeT m_maxDirLightsNum;
+   const SizeT m_maxPointLightsNum;
+   const SizeT m_maxSpotLightsNum;
 
    LightUniformBufferData m_lightsBufferData;
    std::shared_ptr<ConstantsBuffer> m_pLightConstantsBuffer;

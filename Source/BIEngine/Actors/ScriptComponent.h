@@ -3,6 +3,7 @@
 #include <pybind11/pybind11.h>
 
 #include "ActorComponent.h"
+#include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
 class ScriptComponent : public ActorComponent {
@@ -37,8 +38,8 @@ private:
    std::string m_externalScriptObjPath;
    std::string m_externalScriptObjClass;
 
-   std::vector<std::pair<std::string, float>> m_numVars;
-   std::vector<std::pair<std::string, std::string>> m_strVars;
+   DynamicArray<std::pair<std::string, float>> m_numVars;
+   DynamicArray<std::pair<std::string, std::string>> m_strVars;
 
    pybind11::object m_pyObject;
 };

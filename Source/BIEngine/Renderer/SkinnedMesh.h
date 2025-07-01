@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>
 #include <string>
 #include <unordered_map>
 
 #include "Vertex.h"
 #include "Texture.h"
+#include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
 
@@ -29,16 +29,16 @@ public:
    };
 
 public:
-   SkinnedMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<VertexBoneData>& bones);
+   SkinnedMesh(const DynamicArray<Vertex>& vertices, DynamicArray<unsigned int> indices, DynamicArray<VertexBoneData> bones);
    SkinnedMesh(const SkinnedMesh& other);
 
    ~SkinnedMesh();
 
    unsigned int GetVao() const { return m_VAO; }
 
-   const std::vector<Vertex>& GetVertices() const { return m_animatedVertices; }
+   const DynamicArray<Vertex>& GetVertices() const { return m_animatedVertices; }
 
-   const std::vector<unsigned int>& GetIndices() const { return m_indices; }
+   const DynamicArray<unsigned int>& GetIndices() const { return m_indices; }
 
    void OnRender(Skeleton* pSkeleton);
 
@@ -46,10 +46,10 @@ private:
    void setupMesh();
 
 private:
-   std::vector<Vertex> m_vertices;
-   std::vector<Vertex> m_animatedVertices;
-   std::vector<unsigned int> m_indices;
-   std::vector<VertexBoneData> m_bones;
+   DynamicArray<Vertex> m_vertices;
+   DynamicArray<Vertex> m_animatedVertices;
+   DynamicArray<unsigned int> m_indices;
+   DynamicArray<VertexBoneData> m_bones;
 
    unsigned int m_VAO, m_VBO, m_EBO, m_BBO;
 };

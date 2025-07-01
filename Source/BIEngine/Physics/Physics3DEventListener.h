@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <vector>
-
 #include <glm/glm.hpp>
 
 #include "../EventManager/EventManager.h"
@@ -108,7 +106,7 @@ class EvtData_Phys3DCollision : public BaseEventData {
    ActorId m_ActorB;
    glm::vec3 m_SumNormalForce;
    float m_friction;
-   std::vector<glm::vec3> m_CollisionPoints;
+   DynamicArray<glm::vec3> m_CollisionPoints;
 
 public:
    static const EventType sk_EventType;
@@ -126,7 +124,7 @@ public:
       m_friction = 0.0f;
    }
 
-   explicit EvtData_Phys3DCollision(ActorId actorA, ActorId actorB, const glm::vec3& sumNormalForce, float friction, const std::vector<glm::vec3>& collisionPoints)
+   explicit EvtData_Phys3DCollision(ActorId actorA, ActorId actorB, const glm::vec3& sumNormalForce, float friction, const DynamicArray<glm::vec3>& collisionPoints)
       : m_ActorA(actorA),
         m_ActorB(actorB),
         m_SumNormalForce(sumNormalForce),
@@ -165,7 +163,7 @@ public:
       return m_friction;
    }
 
-   const std::vector<glm::vec3>& GetCollisionPoints() const
+   const DynamicArray<glm::vec3>& GetCollisionPoints() const
    {
       return m_CollisionPoints;
    }

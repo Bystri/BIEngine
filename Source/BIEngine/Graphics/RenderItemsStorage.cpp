@@ -4,31 +4,31 @@ namespace BIEngine {
 
 void RenderItemsStorage::InsertOpaqueRenderItem(const OpaqueRenderItem& opaqueRitem)
 {
-   m_opaqueItems.push_back(opaqueRitem);
+   m_opaqueItems.PushBack(opaqueRitem);
 }
 
 void RenderItemsStorage::InsertDirectionalLightInfo(const DirectionalLightItem& dirLight)
 {
-   m_directionalLightItems.push_back(dirLight);
+   m_directionalLightItems.PushBack(dirLight);
 }
 
 void RenderItemsStorage::InsertPointLightInfo(const PointLightItem& pointLight)
 {
-   m_pointLightItems.push_back(pointLight);
+   m_pointLightItems.PushBack(pointLight);
 }
 
 void RenderItemsStorage::InsertSpotLightInfo(const SpotLightItem& spotLight)
 {
-   m_spotLightItems.push_back(spotLight);
+   m_spotLightItems.PushBack(spotLight);
 }
 
 void RenderItemsStorage::Clear()
 {
-   m_opaqueItems.clear();
+   m_opaqueItems.Clear();
 
-   m_directionalLightItems.clear();
-   m_pointLightItems.clear();
-   m_spotLightItems.clear();
+   m_directionalLightItems.Clear();
+   m_pointLightItems.Clear();
+   m_spotLightItems.Clear();
 }
 
 } // namespace BIEngine

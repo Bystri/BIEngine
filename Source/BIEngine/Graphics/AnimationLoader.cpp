@@ -9,9 +9,9 @@ static BoneAnimChannel animationLoaderReadBoneChannel(tinyxml2::XMLElement* cons
    const char* boneName;
    pChannelElement->QueryStringAttribute("boneName", &boneName);
 
-   std::vector<BoneAnimChannel::KeyPosition> positions;
-   std::vector<BoneAnimChannel::KeyRotation> rotations;
-   std::vector<BoneAnimChannel::KeyScale> scales;
+   DynamicArray<BoneAnimChannel::KeyPosition> positions;
+   DynamicArray<BoneAnimChannel::KeyRotation> rotations;
+   DynamicArray<BoneAnimChannel::KeyScale> scales;
 
    tinyxml2::XMLElement* pPositionsElement = pChannelElement->FirstChildElement("Positions");
    for (tinyxml2::XMLElement* pPosElement = pPositionsElement->FirstChildElement(); pPosElement; pPosElement = pPosElement->NextSiblingElement()) {
@@ -21,7 +21,7 @@ static BoneAnimChannel animationLoaderReadBoneChannel(tinyxml2::XMLElement* cons
       pPosElement->QueryFloatAttribute("y", &data.position.y);
       pPosElement->QueryFloatAttribute("z", &data.position.z);
       pPosElement->QueryFloatAttribute("timestamp", &data.timeStamp);
-      positions.push_back(data);
+      positions.PushBack(data);
    }
 
    tinyxml2::XMLElement* pRotationsElement = pChannelElement->FirstChildElement("Rotations");
@@ -33,7 +33,7 @@ static BoneAnimChannel animationLoaderReadBoneChannel(tinyxml2::XMLElement* cons
       pRotElement->QueryFloatAttribute("y", &data.orientation.y);
       pRotElement->QueryFloatAttribute("z", &data.orientation.z);
       pRotElement->QueryFloatAttribute("timestamp", &data.timeStamp);
-      rotations.push_back(data);
+      rotations.PushBack(data);
    }
 
    tinyxml2::XMLElement* pScalesElement = pChannelElement->FirstChildElement("Scales");
@@ -44,7 +44,7 @@ static BoneAnimChannel animationLoaderReadBoneChannel(tinyxml2::XMLElement* cons
       pScaleElement->QueryFloatAttribute("y", &data.scale.y);
       pScaleElement->QueryFloatAttribute("z", &data.scale.z);
       pScaleElement->QueryFloatAttribute("timestamp", &data.timeStamp);
-      scales.push_back(data);
+      scales.PushBack(data);
    }
 
    return BoneAnimChannel(boneName, positions, rotations, scales);
@@ -92,13 +92,13 @@ bool AnimationResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize
    if (!pBoneChannelsElement) {
       return false;
    }
-   std::vector<BoneAnimChannel> boneChannels;
+   DynamicArray<BoneAnimChannel> boneChannels;
 
    for (tinyxml2::XMLElement* pBoneChannel = pBoneChannelsElement->FirstChildElement(); pBoneChannel; pBoneChannel = pBoneChannel->NextSiblingElement()) {
-      boneChannels.push_back(animationLoaderReadBoneChannel(pBoneChannel));
+      boneChannels.PushBack(animationLoaderReadBoneChannel(pBoneChannel));
    }
 
-   pExtra->m_pAnimation = std::make_shared<Animation>(duration, ticlsPerSecond, boneChannels, isLooped);
+   pExtra->m_pAnimation = std::make_shared<Animation>(duration, ticlsPerSecond, std::move(boneChannels), isLooped);
    pHandle->SetExtra(pExtra);
 
    return true;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../BIEngine/StdLib/DynamicArray.h"
 #include "../BIEngine/Network/NetworkManager.h"
 #include "../BIEngine/Network/Replication/ObjectReplicationManagerSlave.h"
 #include "../BIEngine/EventManager/EventManager.h"
@@ -48,7 +49,7 @@ private:
    int m_playerId;
    std::string m_name;
 
-   std::vector<BIEngine::IEventDataPtr> m_eventsToSend;
+   BIEngine::DynamicArray<BIEngine::IEventDataPtr> m_eventsToSend;
    /*
 
 public:

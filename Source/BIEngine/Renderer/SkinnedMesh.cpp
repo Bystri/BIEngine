@@ -10,8 +10,8 @@ namespace BIEngine {
 
 class Skeleton;
 
-SkinnedMesh::SkinnedMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<VertexBoneData>& bones)
-   : m_vertices(vertices), m_animatedVertices(vertices), m_indices(indices), m_bones(bones)
+SkinnedMesh::SkinnedMesh(const DynamicArray<Vertex>& vertices, DynamicArray<unsigned int> indices, DynamicArray<VertexBoneData> bones)
+   : m_vertices(vertices), m_animatedVertices(vertices), m_indices(std::move(indices)), m_bones(std::move(bones))
 {
    setupMesh();
 }
@@ -40,10 +40,10 @@ void SkinnedMesh::setupMesh()
    glBindVertexArray(m_VAO);
 
    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-   glBufferData(GL_ARRAY_BUFFER, m_animatedVertices.size() * sizeof(Vertex), m_animatedVertices.data(), GL_DYNAMIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, m_animatedVertices.Size() * sizeof(Vertex), m_animatedVertices.Data(), GL_DYNAMIC_DRAW);
 
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.Size() * sizeof(unsigned int), m_indices.Data(), GL_STATIC_DRAW);
 
    // Позиции вершин
    glEnableVertexAttribArray(0);
@@ -65,7 +65,7 @@ void SkinnedMesh::setupMesh()
 
 void SkinnedMesh::OnRender(Skeleton* pSkeleton)
 {
-   for (int i = 0; i < m_animatedVertices.size(); ++i) {
+   for (int i = 0; i < m_animatedVertices.Size(); ++i) {
       m_animatedVertices[i] = m_vertices[i];
 
       glm::mat4 finalVertexTransform = glm::mat4(0.0f);
@@ -90,7 +90,7 @@ void SkinnedMesh::OnRender(Skeleton* pSkeleton)
    glBindVertexArray(m_VAO);
 
    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-   glBufferData(GL_ARRAY_BUFFER, m_animatedVertices.size() * sizeof(Vertex), m_animatedVertices.data(), GL_DYNAMIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, m_animatedVertices.Size() * sizeof(Vertex), m_animatedVertices.Data(), GL_DYNAMIC_DRAW);
    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
    glBindVertexArray(0);

@@ -4,11 +4,11 @@ namespace BIEngine {
 
 BoneAnimChannel* Animation::FindBoneChannel(const std::string& boneName)
 {
-   auto iter = std::find_if(m_boneChannels.begin(), m_boneChannels.end(), [&](const BoneAnimChannel& Bone) {
+   auto iter = std::find_if(m_boneChannels.Begin(), m_boneChannels.End(), [&](const BoneAnimChannel& Bone) {
       return Bone.GetBoneName() == boneName;
    });
 
-   if (iter == m_boneChannels.end()) {
+   if (iter == m_boneChannels.End()) {
       return nullptr;
    }
 

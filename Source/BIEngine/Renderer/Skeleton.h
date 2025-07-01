@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <string>
 #include <memory>
 #include <unordered_map>
@@ -8,6 +7,7 @@
 #include <glm/glm.hpp>
 
 #include "../EngineCore/Assert.h"
+#include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
 
@@ -19,7 +19,7 @@ public:
       std::string name;
       glm::mat4 localTransform;
       glm::mat4 offset;
-      std::vector<std::shared_ptr<BoneInfo>> children;
+      DynamicArray<std::shared_ptr<BoneInfo>> children;
    };
 
 public:
@@ -44,7 +44,7 @@ private:
 
       m_finalBoneMatrices[node->name] = globalTransformation * node->offset;
 
-      for (int i = 0; i < node->children.size(); i++) {
+      for (int i = 0; i < node->children.Size(); i++) {
          calculateBoneTransform(node->children[i], globalTransformation);
       }
    }

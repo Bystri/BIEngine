@@ -46,12 +46,12 @@ EventManager::DelegateHandler EventManager::AddListener(EventListenerDelegate&& 
    auto& eventListenerList = m_eventListeners[type];
    auto& delegateHandlersList = m_delegateHandlers[type];
 
-   eventListenerList.push_back(std::move(eventDelegate));
+   eventListenerList.PushBack(std::move(eventDelegate));
 
    DelegateHandler newHandler = type;
    newHandler <<= 32;
    newHandler |= m_nextId;
-   delegateHandlersList.push_back(newHandler);
+   delegateHandlersList.PushBack(newHandler);
 
    ++m_nextId;
 
@@ -70,12 +70,12 @@ bool EventManager::RemoveListener(const EventManager::DelegateHandler handler)
 
    auto& handlersStorage = findIt->second;
 
-   auto itr = handlersStorage.begin();
-   for (int idx = 0; itr != handlersStorage.end(); ++itr, ++idx) {
+   auto itr = handlersStorage.Begin();
+   for (int idx = 0; itr != handlersStorage.End(); ++itr, ++idx) {
       if ((*itr) == handler) {
          auto& listenersStorage = m_eventListeners[type];
-         listenersStorage.erase(listenersStorage.begin() + idx);
-         handlersStorage.erase(itr);
+         listenersStorage.Erase(listenersStorage.Begin() + idx);
+         handlersStorage.Erase(itr);
 
          return true;
       }
@@ -91,7 +91,7 @@ bool EventManager::TriggerEvent(const IEventDataPtr& pEvent) const
    auto findIt = m_eventListeners.find(pEvent->GetEventType());
    if (findIt != m_eventListeners.end()) {
       const EventListenerStorage& eventListenerList = findIt->second;
-      for (auto itr = eventListenerList.cbegin(); itr != eventListenerList.cend(); ++itr) {
+      for (auto itr = eventListenerList.CBegin(); itr != eventListenerList.CEnd(); ++itr) {
          EventListenerDelegate listener = (*itr);
          listener(pEvent);
          processed = true;
@@ -161,8 +161,7 @@ bool EventManager::TickUpdate(long long maxMillis)
       if (findIt != m_eventListeners.end()) {
          const EventListenerStorage& eventListeners = findIt->second;
 
-         for (auto it = eventListeners.begin(); it != eventListeners.end(); ++it) {
-            EventListenerDelegate listener = (*it);
+         for (auto& listener : eventListeners) {
             listener(pEvent);
          }
       }

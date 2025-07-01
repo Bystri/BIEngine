@@ -3,11 +3,11 @@
 #include <map>
 #include <memory>
 #include <string>
-#include <vector>
 
 #include <tinyxml2.h>
 
 #include "ActorComponent.h"
+#include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
 
@@ -62,7 +62,7 @@ public:
    // Поле несет чисто косметический характер. Используется в редакторе для распознования объектов
    const std::string& GetName() const { return m_name; }
 
-   const std::vector<std::shared_ptr<Actor>>& GetChildren() const { return m_children; }
+   const DynamicArray<std::shared_ptr<Actor>>& GetChildren() const { return m_children; }
 
    Actor* GetActorByPath(const std::string& path);
 
@@ -107,7 +107,7 @@ private:
    ActorComponents m_components;
 
    Actor* m_pParent;
-   std::vector<std::shared_ptr<Actor>> m_children;
+   DynamicArray<std::shared_ptr<Actor>> m_children;
 };
 
 } // namespace BIEngine

@@ -4,7 +4,6 @@
 #include <cmath>
 #include <set>
 #include <iterator>
-#include <vector>
 #include <map>
 #include <algorithm>
 
@@ -882,14 +881,14 @@ void Physics3D::SendCollisionPairAddEvent(btPersistentManifold const* manifold, 
       }
 
       // this pair of colliding objects is new.  send a collision-begun event
-      std::vector<glm::vec3> collisionPoints;
+      DynamicArray<glm::vec3> collisionPoints;
       glm::vec3 sumNormalForce;
       glm::vec3 sumFrictionForce;
 
       for (int pointIdx = 0; pointIdx < manifold->getNumContacts(); ++pointIdx) {
          btManifoldPoint const& point = manifold->getContactPoint(pointIdx);
 
-         collisionPoints.push_back(btVector3_to_Vec3(point.getPositionWorldOnB()));
+         collisionPoints.PushBack(btVector3_to_Vec3(point.getPositionWorldOnB()));
 
          sumNormalForce += btVector3_to_Vec3(point.m_combinedRestitution * point.m_normalWorldOnB);
          sumFrictionForce += btVector3_to_Vec3(point.m_combinedFriction * point.m_lateralFrictionDir1);

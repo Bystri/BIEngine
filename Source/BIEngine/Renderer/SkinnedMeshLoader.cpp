@@ -53,8 +53,8 @@ bool SkinnedMeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawS
       return false;
    }
 
-   std::vector<Vertex> vertices;
-   std::vector<unsigned int> indices;
+   DynamicArray<Vertex> vertices;
+   DynamicArray<unsigned int> indices;
 
    for (tinyxml2::XMLElement* pVertElement = pVerticesElement->FirstChildElement(); pVertElement; pVertElement = pVertElement->NextSiblingElement()) {
       Vertex vertex;
@@ -75,7 +75,7 @@ bool SkinnedMeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawS
       vertex.TexCoords[0] = pVertElement->FloatAttribute("texX");
       vertex.TexCoords[1] = pVertElement->FloatAttribute("texY");
 
-      vertices.push_back(vertex);
+      vertices.PushBack(vertex);
    }
 
 
@@ -88,7 +88,7 @@ bool SkinnedMeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawS
    // process indices
    int index;
    while (indicesStream >> index) {
-      indices.push_back(index);
+      indices.PushBack(index);
    }
 
    tinyxml2::XMLElement* pBoneWeightsElement = pRoot->FirstChildElement("BoneWeights");
@@ -96,7 +96,7 @@ bool SkinnedMeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawS
       return false;
    }
 
-   std::vector<SkinnedMesh::VertexBoneData> bonesData(vertices.size());
+   DynamicArray<SkinnedMesh::VertexBoneData> bonesData(vertices.Size());
 
    for (tinyxml2::XMLElement* pBoneElement = pBoneWeightsElement->FirstChildElement(); pBoneElement; pBoneElement = pBoneElement->NextSiblingElement()) {
 
@@ -110,7 +110,7 @@ bool SkinnedMeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawS
       }
    }
 
-   pExtra->m_pSkinnedMesh = std::make_shared<SkinnedMesh>(vertices, indices, bonesData);
+   pExtra->m_pSkinnedMesh = std::make_shared<SkinnedMesh>(vertices, std::move(indices), std::move(bonesData));
    pHandle->SetExtra(pExtra);
 
    return true;

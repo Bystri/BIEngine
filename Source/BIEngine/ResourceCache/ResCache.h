@@ -2,11 +2,11 @@
 
 #include <memory>
 #include <list>
-#include <vector>
 
 #include "ZipFile.h"
 #include "DirFile.h"
 #include "../EngineCore/Assert.h"
+#include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
 
@@ -169,7 +169,7 @@ public:
    // Возвращает держатель ресурса со всей необходимой информацией для дальнейшей работой с данным ресурсом. Если файл не был загружен, внутри происходит неявная загрузка и, если требуется, свобождения памяти
    std::shared_ptr<ResHandle> GetHandle(const std::string& resName);
    // Возвращает список файлов, чье название внутри хранилища ресурсов подходит под заданный паттерн
-   std::vector<std::string> Match(const std::string& pattern);
+   DynamicArray<std::string> Match(const std::string& pattern);
 
 protected:
    // Освобожает место посредством освобождения из памяти самых редкоиспользуемых ресурсов

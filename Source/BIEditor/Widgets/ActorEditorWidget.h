@@ -22,7 +22,7 @@ public:
 
 private:
    BIEngine::ActorId m_currentActorId;
-   std::vector<ActorComponentEdit*> m_actorComponentEdits;
+   BIEngine::DynamicArray<ActorComponentEdit*> m_actorComponentEdits;
 
    std::unordered_map<std::string, tinyxml2::XMLElement*> m_componentsSettings;
 };

@@ -4,7 +4,6 @@
 #include <cmath>
 #include <set>
 #include <iterator>
-#include <vector>
 #include <map>
 
 #include <chipmunk/chipmunk.h>
@@ -608,7 +607,7 @@ void Physics2D::SendCollisionPairAddEvent(cpArbiter const* arb, cpShape const* s
 
       int numContacts = cpArbiterGetCount(arb);
 
-      std::vector<glm::vec2> collisionPoints;
+      DynamicArray<glm::vec2> collisionPoints;
       const cpVect cpVectNorm = cpArbiterGetNormal(arb);
       glm::vec2 normalForce = glm::vec2(cpVectNorm.x, cpVectNorm.y);
       float friction = cpArbiterGetFriction(arb);
@@ -617,7 +616,7 @@ void Physics2D::SendCollisionPairAddEvent(cpArbiter const* arb, cpShape const* s
          const cpVect pointA = cpArbiterGetPointA(arb, pointIdx);
          const cpVect pointB = cpArbiterGetPointB(arb, pointIdx);
 
-         collisionPoints.push_back(glm::vec2(pointA.x, pointA.y));
+         collisionPoints.EmplaceBack(pointA.x, pointA.y);
       }
 
       IEventDataPtr pEvent = std::make_shared<EvtData_Phys2DCollision>(id0, id1, normalForce, friction, collisionPoints);

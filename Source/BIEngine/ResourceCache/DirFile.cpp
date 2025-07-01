@@ -28,7 +28,7 @@ bool DirFile::Init(const std::string& resFileName)
 
       std::transform(path.begin(), path.end(), path.begin(), [](unsigned char c) { return std::tolower(c); });
 
-      m_fileDatas.push_back({path, static_cast<unsigned int>(dir_entry.file_size())});
+      m_fileDatas.PushBack({path, static_cast<unsigned int>(dir_entry.file_size())});
       m_dirContentsMap[path] = i++;
    }
 

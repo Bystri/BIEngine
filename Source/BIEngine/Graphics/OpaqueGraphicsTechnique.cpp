@@ -8,7 +8,7 @@ void OpaqueGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* 
    const auto& dirLights = pStorage->GetDirectionalLightItems();
    const auto& pointLights = pStorage->GetPointLightItems();
 
-   std::sort(opaqueItems.begin(), opaqueItems.end(), [](const RenderItemsStorage::OpaqueRenderItem& l, const RenderItemsStorage::OpaqueRenderItem& r) { return l.pMaterial->GetShaderProgramPtr()->GetId() < r.pMaterial->GetShaderProgramPtr()->GetId(); });
+   std::sort(opaqueItems.Begin(), opaqueItems.End(), [](const RenderItemsStorage::OpaqueRenderItem& l, const RenderItemsStorage::OpaqueRenderItem& r) { return l.pMaterial->GetShaderProgramPtr()->GetId() < r.pMaterial->GetShaderProgramPtr()->GetId(); });
 
    int lastShaderId = -1;
 
@@ -20,16 +20,16 @@ void OpaqueGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* 
 
          currentShader->Use();
 
-         for (int i = 0; i < dirLights.size(); ++i) {
+         for (int i = 0; i < dirLights.Size(); ++i) {
             currentShader->SetMatrix4("dirLightShadowInfos[" + std::to_string(i) + "].dirLightSpaceMatrix", dirLights[i].LightMatr);
             currentShader->SetInteger("dirLightShadowInfos[" + std::to_string(i) + "].shadowMap", 10 + i);
             dirLights[i].pShadowMap->Bind(10 + i);
          }
 
-         for (int i = 0; i < pointLights.size(); ++i) {
+         for (int i = 0; i < pointLights.Size(); ++i) {
             currentShader->SetVector3f("pointLightShadowInfos[" + std::to_string(i) + "].lightPos", pointLights[i].position);
-            currentShader->SetInteger("pointLightShadowInfos[" + std::to_string(i) + "].shadowMap", 10 + i + dirLights.size());
-            pointLights[i].pShadowMap->Bind(10 + i + dirLights.size());
+            currentShader->SetInteger("pointLightShadowInfos[" + std::to_string(i) + "].shadowMap", 10 + i + dirLights.Size());
+            pointLights[i].pShadowMap->Bind(10 + i + dirLights.Size());
          }
 
          lastShaderId = currentShader->GetId();

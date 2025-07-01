@@ -46,7 +46,7 @@ void DebugDraw::Init()
 
 class DbgLine {
    unsigned int VBO, VAO;
-   std::vector<float> vertices;
+   DynamicArray<float> vertices;
    glm::vec3 startPoint;
    glm::vec3 endPoint;
    glm::mat4 MVP;
@@ -75,7 +75,7 @@ public:
       glBindVertexArray(VAO);
 
       glBindBuffer(GL_ARRAY_BUFFER, VBO);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(), GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, vertices.Size() * sizeof(float), vertices.Data(), GL_STATIC_DRAW);
 
       glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
       glEnableVertexAttribArray(0);
@@ -109,19 +109,19 @@ public:
 
 class DbgPoly {
    unsigned int VBO, VAO;
-   std::vector<glm::vec3> m_vertices;
+   DynamicArray<glm::vec3> m_vertices;
    glm::mat4 m_MVP;
    ColorRgba m_color;
 
 public:
-   DbgPoly(const std::vector<glm::vec3>& verts)
+   DbgPoly(const DynamicArray<glm::vec3>& verts)
    {
       m_vertices = verts;
 
-      for (int i = 1; i < verts.size() - 1; ++i) {
-         m_vertices.push_back(verts[0]);
-         m_vertices.push_back(verts[i]);
-         m_vertices.push_back(verts[i + 1]);
+      for (int i = 1; i < verts.Size() - 1; ++i) {
+         m_vertices.PushBack(verts[0]);
+         m_vertices.PushBack(verts[i]);
+         m_vertices.PushBack(verts[i + 1]);
       }
 
       m_color = COLOR_WHITE;
@@ -132,7 +132,7 @@ public:
       glBindVertexArray(VAO);
 
       glBindBuffer(GL_ARRAY_BUFFER, VBO);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * m_vertices.Size(), m_vertices.Data(), GL_STATIC_DRAW);
 
       glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
       glEnableVertexAttribArray(0);
@@ -159,7 +159,7 @@ public:
       g_pDebugShader->SetColorRgba("color", m_color, false);
 
       glBindVertexArray(VAO);
-      glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+      glDrawArrays(GL_TRIANGLES, 0, m_vertices.Size());
       return 1;
    }
 };
@@ -183,7 +183,7 @@ struct PolyInfo {
    {
    }
 
-   std::vector<glm::vec3> verts;
+   DynamicArray<glm::vec3> verts;
    ColorRgba color;
 };
 
@@ -199,7 +199,7 @@ void DebugDraw::Line(const glm::vec3& fromPoint, const glm::vec3& toPoint, const
    m_drawReqQueue.push(info);
 }
 
-void DebugDraw::Poly(const std::vector<glm::vec3>& verts, const ColorRgba& color)
+void DebugDraw::Poly(const DynamicArray<glm::vec3>& verts, const ColorRgba& color)
 {
    PolyInfo poly;
    poly.verts = verts;

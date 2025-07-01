@@ -34,19 +34,19 @@ bool Actor::Init(tinyxml2::XMLElement* pData)
 void Actor::AddChild(std::shared_ptr<Actor> pChild)
 {
    pChild->m_pParent = this;
-   m_children.push_back(pChild);
+   m_children.PushBack(pChild);
 }
 
 bool Actor::RemoveChild(ActorId id)
 {
-   for (auto itr = m_children.begin(); itr != m_children.end(); ++itr) {
+   for (auto itr = m_children.Begin(); itr != m_children.End(); ++itr) {
       if ((*itr)->RemoveChild(id)) {
          return true;
       }
 
       if (id == (*itr)->GetId()) {
          (*itr)->m_pParent = nullptr;
-         itr = m_children.erase(itr);
+         itr = m_children.Erase(itr);
          return true;
       }
    }

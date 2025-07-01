@@ -37,6 +37,9 @@
     <ClCompile Include="StdLib\Array_UnitTest.cpp">
       <Filter>StdLib</Filter>
     </ClCompile>
+    <ClCompile Include="StdLib\DynamicArray_UnitTest.cpp">
+      <Filter>StdLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -93,6 +96,9 @@
       <Filter>EngineSources\StdLib</Filter>
     </ClInclude>
     <ClInclude Include="..\BIEngine\StdLib\StdLib.h">
+      <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\StdLib\DynamicArray.h">
       <Filter>EngineSources\StdLib</Filter>
     </ClInclude>
   </ItemGroup>

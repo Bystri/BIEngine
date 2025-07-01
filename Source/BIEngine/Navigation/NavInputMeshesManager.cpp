@@ -39,17 +39,17 @@ void NavInputMeshesManager::AddMesh(const glm::mat4& transform, std::shared_ptr<
 {
    const int initialVertsSize = m_vertCount;
 
-   const std::vector<Vertex>& verts = mesh->GetVertices();
+   const DynamicArray<Vertex>& verts = mesh->GetVertices();
 
-   for (int i = 0; i < verts.size(); ++i) {
+   for (int i = 0; i < verts.Size(); ++i) {
       const glm::vec3 transformedVert = transform * glm::vec4(verts[i].Position, 1.0f);
 
       addVertex(transformedVert.x, transformedVert.y, transformedVert.z);
    }
 
-   const std::vector<unsigned int>& inds = mesh->GetIndices();
+   const DynamicArray<unsigned int>& inds = mesh->GetIndices();
 
-   for (int i = 0; i < inds.size(); i += 3) {
+   for (int i = 0; i < inds.Size(); i += 3) {
       addTriangle(initialVertsSize + inds[i], initialVertsSize + inds[i + 1], initialVertsSize + inds[i + 2]);
    }
 }

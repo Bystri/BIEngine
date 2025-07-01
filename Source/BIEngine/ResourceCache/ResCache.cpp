@@ -190,9 +190,9 @@ std::shared_ptr<ResHandle> ResCache::GetHandle(const std::string& resName)
    return pHandle;
 }
 
-std::vector<std::string> ResCache::Match(const std::string& pattern)
+DynamicArray<std::string> ResCache::Match(const std::string& pattern)
 {
-   std::vector<std::string> matchingNames;
+   DynamicArray<std::string> matchingNames;
    if (m_pFile == nullptr)
       return matchingNames;
 
@@ -201,7 +201,7 @@ std::vector<std::string> ResCache::Match(const std::string& pattern)
       std::string name = m_pFile->GetResourceName(i);
       std::transform(name.begin(), name.end(), name.begin(), (int (*)(int))std::tolower);
       if (WildcardMatch(pattern.c_str(), name.c_str())) {
-         matchingNames.push_back(name);
+         matchingNames.PushBack(name);
       }
    }
    return matchingNames;

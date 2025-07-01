@@ -28,7 +28,7 @@ protected:
    virtual void PostRender(Scene* const pScene) {}
 
 private:
-   std::vector<std::shared_ptr<IGraphicsTechnique>> m_graphicsTechniques;
+   DynamicArray<std::shared_ptr<IGraphicsTechnique>> m_graphicsTechniques;
 };
 
 } // namespace BIEngine

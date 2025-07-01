@@ -194,7 +194,7 @@ static void duDebugDrawNavMeshPoly(const dtNavMesh& mesh, dtPolyRef ref, const C
 
    const dtPolyDetail* pd = &tile->detailMeshes[ip];
 
-   std::vector<glm::vec3> polyVerts;
+   DynamicArray<glm::vec3> polyVerts;
 
    constexpr float Y_LIFT = 0.5;
 
@@ -202,15 +202,15 @@ static void duDebugDrawNavMeshPoly(const dtNavMesh& mesh, dtPolyRef ref, const C
       const unsigned char* t = &tile->detailTris[(pd->triBase + i) * 4];
       for (int j = 0; j < 3; ++j) {
          if (t[j] < poly->vertCount)
-            polyVerts.push_back(glm::vec3(tile->verts[poly->verts[t[j]] * 3], tile->verts[poly->verts[t[j]] * 3 + 1] + Y_LIFT, tile->verts[poly->verts[t[j]] * 3 + 2]));
+            polyVerts.PushBack(glm::vec3(tile->verts[poly->verts[t[j]] * 3], tile->verts[poly->verts[t[j]] * 3 + 1] + Y_LIFT, tile->verts[poly->verts[t[j]] * 3 + 2]));
          else
-            polyVerts.push_back(glm::vec3(tile->detailVerts[(pd->vertBase + t[j] - poly->vertCount) * 3], tile->detailVerts[(pd->vertBase + t[j] - poly->vertCount) * 3 + 1] + Y_LIFT, tile->detailVerts[(pd->vertBase + t[j] - poly->vertCount) * 3 + 2]));
+            polyVerts.PushBack(glm::vec3(tile->detailVerts[(pd->vertBase + t[j] - poly->vertCount) * 3], tile->detailVerts[(pd->vertBase + t[j] - poly->vertCount) * 3 + 1] + Y_LIFT, tile->detailVerts[(pd->vertBase + t[j] - poly->vertCount) * 3 + 2]));
       }
    }
 
    DebugDraw::Poly(polyVerts, color);
 
-   for (int i = 0, j = polyVerts.size() - 1; i < polyVerts.size(); j = i++) {
+   for (int i = 0, j = polyVerts.Size() - 1; i < polyVerts.Size(); j = i++) {
       DebugDraw::Line(polyVerts[i], polyVerts[j], COLOR_BLUE);
    }
 }
@@ -353,15 +353,15 @@ void NavMeshManager::TryAddActor(std::shared_ptr<Actor> pActor)
    std::shared_ptr<BoxRenderComponent> pBoxRenderComponent = pActor->GetComponent<BoxRenderComponent>(BoxRenderComponent::g_CompId).lock();
 
    if (pBoxRenderComponent) {
-      m_actors.push_back(pActor);
+      m_actors.PushBack(pActor);
    }
 }
 
 void NavMeshManager::TryRemoveActor(ActorId id)
 {
-   for (auto itr = m_actors.begin(); itr != m_actors.end(); ++itr) {
+   for (auto itr = m_actors.Begin(); itr != m_actors.End(); ++itr) {
       if (itr->get()->GetId() == id) {
-         m_actors.erase(itr);
+         m_actors.Erase(itr);
          return;
       }
    }
@@ -379,16 +379,16 @@ std::shared_ptr<NavMeshInputGeometry> NavMeshManager::prepareNavGeom()
 
    std::shared_ptr<NavInputMeshesManager> pMeshesManager = std::make_shared<NavInputMeshesManager>();
 
-   for (int i = 0; i < m_actors.size(); ++i) {
+   for (int i = 0; i < m_actors.Size(); ++i) {
       std::shared_ptr<TransformComponent> pTransformComponent = m_actors[i]->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
       std::shared_ptr<BoxRenderComponent> pBoxRenderComponent = m_actors[i]->GetComponent<BoxRenderComponent>(BoxRenderComponent::g_CompId).lock();
       std::shared_ptr<Physics3DComponent> pPhysicsComponent = m_actors[i]->GetComponent<Physics3DComponent>(Physics3DComponent::g_CompId).lock();
 
       if (pTransformComponent && pBoxRenderComponent && pPhysicsComponent && pPhysicsComponent->GetBodyType() == IGamePhysics3D::BodyType::STATIC) {
-         const std::vector<std::shared_ptr<ModelMesh>>& modelMeshes = pBoxRenderComponent->GetModel()->GetMeshes();
+         const DynamicArray<std::shared_ptr<ModelMesh>>& modelMeshes = pBoxRenderComponent->GetModel()->GetMeshes();
          const glm::mat4 transformMatrix = pTransformComponent->GetWorldTransformMatrix();
 
-         for (int j = 0; j < modelMeshes.size(); ++j) {
+         for (int j = 0; j < modelMeshes.Size(); ++j) {
             pMeshesManager->AddMesh(transformMatrix, modelMeshes[j]->GetMesh());
          }
       }

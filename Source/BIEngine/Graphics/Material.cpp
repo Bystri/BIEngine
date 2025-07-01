@@ -37,7 +37,7 @@ void Material::SetColorRgba(const std::string& name, const ColorRgba& color)
 void Material::AddTexture(const std::string& name, int slotId, std::shared_ptr<Texture> pTexture)
 {
    m_uniformInts[name] = slotId;
-   m_textures.push_back({slotId, pTexture});
+   m_textures.PushBack({slotId, pTexture});
 }
 
 ShaderProgramState Material::ConstructShaderProgramState() const

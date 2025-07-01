@@ -4,8 +4,8 @@
 
 namespace BIEngine {
 
-Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
-   : m_vertices(vertices), m_indices(indices)
+Mesh::Mesh(DynamicArray<Vertex> vertices, DynamicArray<unsigned int> indices)
+   : m_vertices(std::move(vertices)), m_indices(std::move(indices))
 {
    setupMesh();
 }
@@ -19,10 +19,10 @@ void Mesh::setupMesh()
    glBindVertexArray(m_VAO);
 
    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-   glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, m_vertices.Size() * sizeof(Vertex), m_vertices.Data(), GL_STATIC_DRAW);
 
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.Size() * sizeof(unsigned int), m_indices.Data(), GL_STATIC_DRAW);
 
    // Позиции вершин
    glEnableVertexAttribArray(0);

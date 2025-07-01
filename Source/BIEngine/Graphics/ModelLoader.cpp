@@ -180,8 +180,10 @@ static std::shared_ptr<Material> modelLoadMaterial(const aiMaterial* const mat, 
 
 static std::shared_ptr<ModelMesh> modelLoaderProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
-   std::vector<Vertex> vertices;
-   std::vector<unsigned int> indices;
+   DynamicArray<Vertex> vertices;
+   DynamicArray<unsigned int> indices;
+
+   vertices.Reserve(mesh->mNumVertices);
 
    for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
       Vertex vertex;
@@ -208,18 +210,18 @@ static std::shared_ptr<ModelMesh> modelLoaderProcessMesh(aiMesh* mesh, const aiS
          vertex.TexCoords[1] = mesh->mTextureCoords[0][i].y;
       }
 
-      vertices.push_back(vertex);
+      vertices.PushBack(vertex);
    }
 
    // process indices
    for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
       aiFace face = mesh->mFaces[i];
       for (unsigned int j = 0; j < face.mNumIndices; j++) {
-         indices.push_back(face.mIndices[j]);
+         indices.PushBack(face.mIndices[j]);
       }
    }
 
-   std::shared_ptr<Mesh> pLoadedMesh = std::make_shared<Mesh>(vertices, indices);
+   std::shared_ptr<Mesh> pLoadedMesh = std::make_shared<Mesh>(std::move(vertices), std::move(indices));
 
    std::shared_ptr<Material> pMaterial = nullptr;
    // process material

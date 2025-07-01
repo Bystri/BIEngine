@@ -63,7 +63,7 @@ void MeshComponent::OnRenderObject(const GameTimer& gt)
    RenderItemsStorage::OpaqueRenderItem opaqueRitem;
    opaqueRitem.actorId = GetOwner()->GetId();
    opaqueRitem.VAO = m_pMesh->GetVao();
-   opaqueRitem.IndicesSize = m_pMesh->GetIndices().size();
+   opaqueRitem.IndicesSize = m_pMesh->GetIndices().Size();
    opaqueRitem.pMaterial = m_pMaterial;
 
    std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();

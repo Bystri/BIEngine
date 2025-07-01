@@ -6,6 +6,7 @@
 #include <memory>
 #include <functional>
 
+#include "../StdLib/DynamicArray.h"
 #include "../Network/Serialization.h"
 #include "../Utilities/GenericObjectFactory.h"
 
@@ -56,8 +57,8 @@ public:
    using DelegateHandler = uint64_t;
 
 private:
-   using EventListenerStorage = std::vector<EventListenerDelegate>;
-   using EventHandlerStorage = std::vector<DelegateHandler>;
+   using EventListenerStorage = DynamicArray<EventListenerDelegate>;
+   using EventHandlerStorage = DynamicArray<DelegateHandler>;
    using EventQueue = std::list<IEventDataPtr>;
 
    static const unsigned int EVENTMANAGER_NUM_QUEUES = 2;

@@ -1,9 +1,8 @@
 ﻿#pragma once
 
-#include <vector>
-
 #include <glm/glm.hpp>
 
+#include "../StdLib/DynamicArray.h"
 #include "../EventManager/EventManager.h"
 #include "../Actors/Actor.h"
 
@@ -108,7 +107,7 @@ class EvtData_Phys2DCollision : public BaseEventData {
    ActorId m_ActorB;
    glm::vec2 m_SumNormalForce;
    float m_friction;
-   std::vector<glm::vec2> m_CollisionPoints;
+   DynamicArray<glm::vec2> m_CollisionPoints;
 
 public:
    static const EventType sk_EventType;
@@ -126,7 +125,7 @@ public:
       m_friction = 0.0f;
    }
 
-   explicit EvtData_Phys2DCollision(ActorId actorA, ActorId actorB, const glm::vec2& sumNormalForce, float friction, const std::vector<glm::vec2>& collisionPoints)
+   explicit EvtData_Phys2DCollision(ActorId actorA, ActorId actorB, const glm::vec2& sumNormalForce, float friction, const DynamicArray<glm::vec2>& collisionPoints)
       : m_ActorA(actorA),
         m_ActorB(actorB),
         m_SumNormalForce(sumNormalForce),
@@ -165,7 +164,7 @@ public:
       return m_friction;
    }
 
-   const std::vector<glm::vec2>& GetCollisionPoints() const
+   const DynamicArray<glm::vec2>& GetCollisionPoints() const
    {
       return m_CollisionPoints;
    }
