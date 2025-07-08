@@ -104,14 +104,14 @@ bool GameLogic::LoadLevel(const std::string& path)
 
 void GameLogic::AddGameView(std::shared_ptr<IGameView> pView)
 {
-   m_gameViews.push_back(pView);
+   m_gameViews.PushBack(pView);
 }
 
 void GameLogic::RemoveGameView(std::shared_ptr<IGameView> pView)
 {
-   for (auto itr = m_gameViews.begin(); itr != m_gameViews.end(); ++itr) {
+   for (auto itr = m_gameViews.Begin(); itr != m_gameViews.End(); ++itr) {
       if (*itr == pView) {
-         m_gameViews.erase(itr);
+         m_gameViews.Erase(itr);
          return;
       }
    }

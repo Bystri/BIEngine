@@ -182,7 +182,7 @@ public:
       if (Size() < num) {
          Reserve(num);
          for (int i = Size(); i < num; ++i) {
-            PushBack(T());
+            EmplaceBack();
          }
          return;
       }

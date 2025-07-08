@@ -9,7 +9,7 @@ bool irrKlangAudio::Initialize()
    if (m_initialized)
       return true;
 
-   m_allSamples.clear();
+   m_allSamples.Clear();
 
    if (m_pSoundEngine) {
       m_pSoundEngine->drop();
@@ -44,7 +44,7 @@ IAudioBuffer* irrKlangAudio::InitAudioBuffer(std::shared_ptr<ResHandle> pResHand
       return nullptr;
 
    IAudioBuffer* pAudioBuffer = new irrKlangAudioBuffer(m_pSoundEngine, pResHandle);
-   m_allSamples.push_front(pAudioBuffer);
+   m_allSamples.PushFront(pAudioBuffer);
 
    return pAudioBuffer;
 }
@@ -52,7 +52,7 @@ IAudioBuffer* irrKlangAudio::InitAudioBuffer(std::shared_ptr<ResHandle> pResHand
 void irrKlangAudio::ReleaseAudioBuffer(IAudioBuffer* pSampleHandle)
 {
    pSampleHandle->Stop();
-   m_allSamples.remove(pSampleHandle);
+   m_allSamples.Remove(pSampleHandle);
 }
 
 irrKlangAudioBuffer::irrKlangAudioBuffer(irrklang::ISoundEngine* pSoundEngine, std::shared_ptr<ResHandle> pResource)

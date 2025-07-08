@@ -86,7 +86,7 @@ bool GameApp::Init()
 std::shared_ptr<HumanView> GameApp::TryGetHumanView(unsigned int playerId)
 {
    unsigned int currentPlayerId = 0;
-   for (GameViewList::iterator i = m_pGameLogic->m_gameViews.begin(); i != m_pGameLogic->m_gameViews.end(); ++i) {
+   for (GameViewList::Iterator i = m_pGameLogic->m_gameViews.Begin(); i != m_pGameLogic->m_gameViews.End(); ++i) {
       if ((*i)->GetType() == GameViewType::Human) {
          if (currentPlayerId != playerId) {
             ++currentPlayerId;

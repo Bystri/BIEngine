@@ -110,7 +110,7 @@ bool EventManager::QueueEvent(const IEventDataPtr& pEvent)
 
    auto findIt = m_eventListeners.find(pEvent->GetEventType());
    if (findIt != m_eventListeners.end()) {
-      m_queue[m_activeQueue].push_back(pEvent);
+      m_queue[m_activeQueue].PushBack(pEvent);
       return true;
    }
 
@@ -129,11 +129,11 @@ bool EventManager::AbortEvent(const EventType& inType, bool allOfType)
 
    if (findItr != m_eventListeners.end()) {
       EventQueue& eventQueue = m_queue[m_activeQueue];
-      for (auto itr = eventQueue.begin(); itr != eventQueue.end(); ++itr) {
+      for (auto itr = eventQueue.Begin(); itr != eventQueue.End(); ++itr) {
          if ((*itr)->GetEventType() == inType) {
-            itr = eventQueue.erase(itr);
+            itr = eventQueue.Erase(itr);
             success = true;
-            if (!allOfType && itr == eventQueue.end())
+            if (!allOfType && itr == eventQueue.End())
                break;
          }
       }
@@ -149,11 +149,11 @@ bool EventManager::TickUpdate(long long maxMillis)
 
    int queueToProcess = m_activeQueue;
    m_activeQueue = (m_activeQueue + 1) % EVENTMANAGER_NUM_QUEUES;
-   m_queue[m_activeQueue].clear();
+   m_queue[m_activeQueue].Clear();
 
-   while (!m_queue[queueToProcess].empty()) {
-      IEventDataPtr pEvent = m_queue[queueToProcess].front();
-      m_queue[queueToProcess].pop_front();
+   while (!m_queue[queueToProcess].Empty()) {
+      IEventDataPtr pEvent = m_queue[queueToProcess].Front();
+      m_queue[queueToProcess].PopFront();
 
       const EventType& eventType = pEvent->GetEventType();
 
@@ -173,12 +173,12 @@ bool EventManager::TickUpdate(long long maxMillis)
       }
    }
 
-   bool queueFlushed = m_queue[queueToProcess].empty();
+   bool queueFlushed = m_queue[queueToProcess].Empty();
    if (!queueFlushed) {
-      while (!m_queue[queueToProcess].empty()) {
-         IEventDataPtr pEvent = m_queue[queueToProcess].back();
-         m_queue[queueToProcess].pop_back();
-         m_queue[m_activeQueue].push_front(pEvent);
+      while (!m_queue[queueToProcess].Empty()) {
+         IEventDataPtr pEvent = m_queue[queueToProcess].Back();
+         m_queue[queueToProcess].PopBack();
+         m_queue[m_activeQueue].PushFront(pEvent);
       }
    }
 

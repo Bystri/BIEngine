@@ -159,7 +159,7 @@ ResCache::ResCache(const unsigned int sizeInMb, std::shared_ptr<IResourceFile> r
 
 ResCache::~ResCache()
 {
-   while (!m_lru.empty()) {
+   while (!m_lru.Empty()) {
       FreeOneResource();
    }
 }
@@ -176,7 +176,7 @@ bool ResCache::Init()
 
 void ResCache::RegisterLoader(std::shared_ptr<IResourceLoader> pLoader)
 {
-   m_resourceLoaders.push_front(pLoader);
+   m_resourceLoaders.PushFront(pLoader);
 }
 
 std::shared_ptr<ResHandle> ResCache::GetHandle(const std::string& resName)
@@ -212,9 +212,7 @@ std::shared_ptr<ResHandle> ResCache::Load(const std::string& resName)
    std::shared_ptr<IResourceLoader> pLoader;
    std::shared_ptr<ResHandle> pHandle;
 
-   for (ResourceLoaders::iterator it = m_resourceLoaders.begin(); it != m_resourceLoaders.end(); ++it) {
-      std::shared_ptr<IResourceLoader> pTestLoader = *it;
-
+   for (auto& pTestLoader : m_resourceLoaders) {
       if (WildcardMatch(pTestLoader->GetPattern().c_str(), resName.c_str())) {
          pLoader = pTestLoader;
          break;
@@ -276,7 +274,7 @@ std::shared_ptr<ResHandle> ResCache::Load(const std::string& resName)
 
    // Обновляем LRU кэш
    if (pHandle) {
-      m_lru.push_front(pHandle);
+      m_lru.PushFront(pHandle);
       m_resources[resName] = pHandle;
    }
 
@@ -294,8 +292,8 @@ std::shared_ptr<ResHandle> ResCache::Find(const std::string& resName)
 
 void ResCache::Update(std::shared_ptr<ResHandle> pHandle)
 {
-   m_lru.remove(pHandle);
-   m_lru.push_front(pHandle);
+   m_lru.Remove(pHandle);
+   m_lru.PushFront(pHandle);
 }
 
 char* ResCache::Allocate(unsigned int size)
@@ -312,22 +310,24 @@ char* ResCache::Allocate(unsigned int size)
 
 void ResCache::FreeOneResource()
 {
-   m_resources.erase(m_lru.back()->GetName());
-   m_lru.pop_back();
+   m_resources.erase(m_lru.Back()->GetName());
+   m_lru.PopBack();
    // Мы не уменьшает значение использованной памяти, так как кто-то еще может использовать ресурс.
    // Память освободится тогда, когда умный указатель на держатель ресурса вызовет деструктор
 }
 
 bool ResCache::MakeRoom(unsigned int size)
 {
-   if (size > m_cacheSize)
+   if (size > m_cacheSize) {
       return false;
+   }
 
    while (size > (m_cacheSize - m_allocated)) {
       // Может быть такое, что список задейтсовванных ресурсов пуст, а память не освободилась.
       // Это происходит из-за того, что ресурс еще кем-то используется и память не может быть освобождена
-      if (m_lru.empty())
+      if (m_lru.Empty()) {
          return false;
+      }
 
       FreeOneResource();
    }
@@ -337,7 +337,7 @@ bool ResCache::MakeRoom(unsigned int size)
 
 void ResCache::Free(std::shared_ptr<ResHandle> pGonner)
 {
-   m_lru.remove(pGonner);
+   m_lru.Remove(pGonner);
    m_resources.erase(pGonner->GetName());
    // Мы не уменьшает значение использованной памяти, так как кто-то еще может использовать ресурс.
    // Память освободится тогда, когда умный указатель на держатель ресурса вызовет деструктор

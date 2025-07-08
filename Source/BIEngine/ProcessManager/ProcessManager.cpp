@@ -45,8 +45,8 @@ unsigned int ProcessManager::UpdateProcesses(const GameTimer& gt)
    unsigned short int successCount = 0;
    unsigned short int failCount = 0;
 
-   ProcessList::iterator it = m_processList.begin();
-   while (it != m_processList.end()) {
+   ProcessList::Iterator it = m_processList.Begin();
+   while (it != m_processList.End()) {
       StrongProcessPtr pCurrProcess = *it;
 
       if (pCurrProcess->GetState() == Process::State::UNINITIALIZED) {
@@ -86,7 +86,7 @@ unsigned int ProcessManager::UpdateProcesses(const GameTimer& gt)
                break;
          }
 
-         it = m_processList.erase(it);
+         it = m_processList.Erase(it);
       } else {
          ++it;
       }
@@ -97,20 +97,20 @@ unsigned int ProcessManager::UpdateProcesses(const GameTimer& gt)
 
 WeakProcessPtr ProcessManager::AttachProcess(StrongProcessPtr pProcess)
 {
-   m_processList.push_front(pProcess);
+   m_processList.PushFront(pProcess);
    return WeakProcessPtr(pProcess);
 }
 
 void ProcessManager::AbortAllProcesses(bool immediate)
 {
-   for (auto it = m_processList.begin(); it != m_processList.end(); ++it) {
+   for (auto it = m_processList.Begin(); it != m_processList.End(); ++it) {
       StrongProcessPtr pProcess = *it;
       if (pProcess->IsAlive()) {
          pProcess->SetState(Process::State::ABORTED);
 
          if (immediate) {
             pProcess->OnAbort();
-            it = m_processList.erase(it);
+            it = m_processList.Erase(it);
          }
       }
    }
@@ -118,7 +118,7 @@ void ProcessManager::AbortAllProcesses(bool immediate)
 
 void ProcessManager::ClearAllProcesses()
 {
-   m_processList.clear();
+   m_processList.Clear();
 }
 
 } // namespace BIEngine

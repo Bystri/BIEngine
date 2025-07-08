@@ -14,21 +14,18 @@ Audio::Audio()
 
 void Audio::Shutdown()
 {
-   AudioBufferList::iterator i = m_allSamples.begin();
+   AudioBufferList::Iterator itr = m_allSamples.Begin();
 
-   while (i != m_allSamples.end()) {
-      IAudioBuffer* audioBuffer = (*i);
-      audioBuffer->Stop();
-      m_allSamples.pop_front();
+   while (itr != m_allSamples.End()) {
+      (*itr)->Stop();
+      ++itr;
+      m_allSamples.PopFront();
    }
 }
 
 void Audio::PauseAllSounds()
 {
-   AudioBufferList::iterator i;
-   AudioBufferList::iterator end;
-   for (i = m_allSamples.begin(), end = m_allSamples.end(); i != end; ++i) {
-      IAudioBuffer* audioBuffer = (*i);
+   for (auto& audioBuffer : m_allSamples) {
       audioBuffer->Pause();
    }
 
@@ -37,10 +34,7 @@ void Audio::PauseAllSounds()
 
 void Audio::ResumeAllSounds()
 {
-   AudioBufferList::iterator i;
-   AudioBufferList::iterator end;
-   for (i = m_allSamples.begin(), end = m_allSamples.end(); i != end; ++i) {
-      IAudioBuffer* audioBuffer = (*i);
+   for (auto& audioBuffer : m_allSamples) {
       audioBuffer->Resume();
    }
 
@@ -49,12 +43,7 @@ void Audio::ResumeAllSounds()
 
 void Audio::StopAllSounds()
 {
-   IAudioBuffer* audioBuffer = nullptr;
-
-   AudioBufferList::iterator i;
-   AudioBufferList::iterator end;
-   for (i = m_allSamples.begin(), end = m_allSamples.end(); i != end; ++i) {
-      audioBuffer = (*i);
+   for (auto& audioBuffer : m_allSamples) {
       audioBuffer->Stop();
    }
 

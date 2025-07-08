@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include <list>
 #include <memory>
 
 #include "../Utilities/GameTimer.h"
+#include "../StdLib/List.h"
 
 namespace BIEngine {
 
@@ -21,7 +21,7 @@ class IGameView {
 public:
    static const GameViewId INVALID_GAME_VIEW_ID = 0xffffffff;
 
-   virtual ~IGameView(){};
+   virtual ~IGameView() {};
 
    virtual bool Init() = 0;
 
@@ -39,6 +39,6 @@ public:
    virtual void SetKey(int key, int scancode, bool state) = 0;
 };
 
-using GameViewList = std::list<std::shared_ptr<IGameView>>;
+using GameViewList = List<std::shared_ptr<IGameView>>;
 
 } // namespace BIEngine

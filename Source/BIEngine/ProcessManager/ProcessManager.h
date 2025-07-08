@@ -1,15 +1,14 @@
 ﻿#pragma once
 
-#include <list>
-
 #include "Process.h"
+#include "../StdLib/List.h"
 
 namespace BIEngine {
 
 // Данный класс реализован за счет шаблона "одиночка" и доступ к нему может быть получен через вызов  ProcessManager::Get()
 // Перед использованием класса требуется предварительная инициализация через Create()
 class ProcessManager {
-   using ProcessList = std::list<StrongProcessPtr>;
+   using ProcessList = List<StrongProcessPtr>;
    ProcessList m_processList;
 
    static ProcessManager* s_pSingleton;
@@ -30,7 +29,7 @@ public:
    WeakProcessPtr AttachProcess(StrongProcessPtr pProcess);
    void AbortAllProcesses(bool immediate);
 
-   std::size_t GetProcessCount() const { return m_processList.size(); }
+   std::size_t GetProcessCount() const { return m_processList.Size(); }
 
 private:
    void ClearAllProcesses();

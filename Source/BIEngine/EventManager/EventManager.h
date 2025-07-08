@@ -1,11 +1,11 @@
 ﻿#pragma once
 
 #include <strstream>
-#include <list>
 #include <unordered_map>
 #include <memory>
 #include <functional>
 
+#include "../StdLib/List.h"
 #include "../StdLib/DynamicArray.h"
 #include "../Network/Serialization.h"
 #include "../Utilities/GenericObjectFactory.h"
@@ -59,7 +59,7 @@ public:
 private:
    using EventListenerStorage = DynamicArray<EventListenerDelegate>;
    using EventHandlerStorage = DynamicArray<DelegateHandler>;
-   using EventQueue = std::list<IEventDataPtr>;
+   using EventQueue = List<IEventDataPtr>;
 
    static const unsigned int EVENTMANAGER_NUM_QUEUES = 2;
 
