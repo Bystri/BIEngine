@@ -111,6 +111,7 @@ void ProcessManager::AbortAllProcesses(bool immediate)
          if (immediate) {
             pProcess->OnAbort();
             it = m_processList.Erase(it);
+            --it;
          }
       }
    }

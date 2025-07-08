@@ -109,12 +109,7 @@ void GameLogic::AddGameView(std::shared_ptr<IGameView> pView)
 
 void GameLogic::RemoveGameView(std::shared_ptr<IGameView> pView)
 {
-   for (auto itr = m_gameViews.Begin(); itr != m_gameViews.End(); ++itr) {
-      if (*itr == pView) {
-         m_gameViews.Erase(itr);
-         return;
-      }
-   }
+   m_gameViews.Remove(pView);
 }
 
 void GameLogic::OnUpdate(GameTimer& gt)

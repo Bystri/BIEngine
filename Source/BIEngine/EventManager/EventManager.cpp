@@ -129,13 +129,19 @@ bool EventManager::AbortEvent(const EventType& inType, bool allOfType)
 
    if (findItr != m_eventListeners.end()) {
       EventQueue& eventQueue = m_queue[m_activeQueue];
-      for (auto itr = eventQueue.Begin(); itr != eventQueue.End(); ++itr) {
-         if ((*itr)->GetEventType() == inType) {
-            itr = eventQueue.Erase(itr);
-            success = true;
-            if (!allOfType && itr == eventQueue.End())
-               break;
+      auto itr = eventQueue.Begin();
+      while (itr != eventQueue.End())
+      {
+         if ((*itr)->GetEventType() != inType) {
+            ++itr;
+            continue;
          }
+
+         itr = eventQueue.Erase(itr);
+         if (!allOfType) {
+            break;
+         }
+         success = true;
       }
    }
 
