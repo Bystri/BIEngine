@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "StdLib.h"
 
 namespace BIEngine {
@@ -263,7 +265,7 @@ public:
 
    void PushBack(T&& val)
    {
-      Node* newNode = new Node{m_pLast, nullptr, std::move(val)};
+      Node* newNode = new Node{m_pLast, nullptr, std::forward<T>(val)};
 
       pushBackImpl(newNode);
    }
@@ -300,7 +302,7 @@ public:
 
    void PushFront(T&& val)
    {
-      Node* newNode = new Node{nullptr, m_pFirst, std::move(val)};
+      Node* newNode = new Node{nullptr, m_pFirst, std::forward<T>(val)};
 
       pushFrontImpl(newNode);
    }
@@ -336,7 +338,7 @@ public:
 
    Iterator Insert(Iterator pos, T&& val)
    {
-      Node* newNode = new Node{pos.m_pCurNode->prev, pos.m_pCurNode, std::move(val)};
+      Node* newNode = new Node{pos.m_pCurNode->prev, pos.m_pCurNode, std::forward(val)};
       return inserImpl(pos, newNode);
    }
 

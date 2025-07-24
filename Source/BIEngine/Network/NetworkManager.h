@@ -1,7 +1,6 @@
 #pragma once
 
 #include <queue>
-#include <list>
 
 #include "Socket.h"
 #include "Serialization.h"
