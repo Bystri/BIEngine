@@ -1,11 +1,11 @@
 ﻿#pragma once
 
 #include <strstream>
-#include <unordered_map>
 #include <memory>
 #include <functional>
 
 #include "../StdLib/List.h"
+#include "../StdLib/HashMap.h"
 #include "../StdLib/DynamicArray.h"
 #include "../Network/Serialization.h"
 #include "../Utilities/GenericObjectFactory.h"
@@ -85,8 +85,8 @@ private:
 
 private:
    uint32_t m_nextId = 0;
-   std::unordered_map<EventType, EventListenerStorage> m_eventListeners;
-   std::unordered_map<EventType, EventHandlerStorage> m_delegateHandlers;
+   HashMap<EventType, EventListenerStorage> m_eventListeners;
+   HashMap<EventType, EventHandlerStorage> m_delegateHandlers;
    EventQueue m_queue[EVENTMANAGER_NUM_QUEUES];
    int m_activeQueue;
 };

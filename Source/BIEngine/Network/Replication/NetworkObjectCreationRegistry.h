@@ -20,7 +20,7 @@ public:
 private:
    NetworkObjectCreationRegistry() {}
 
-   std::unordered_map<uint32_t, GameObjectCreationFunc> m_nameToGameObjectCreationFunctionMap;
+   HashMap<uint32_t, GameObjectCreationFunc> m_nameToGameObjectCreationFunctionMap;
 };
 
 

@@ -14,8 +14,8 @@ void BINetworkManagerServer::ProcessPacket(BIEngine::InputMemoryBitStream& input
 {
    // try to get the client proxy for this address
    // pass this to the client proxy to process
-   auto it = m_addressToClientMap.find(fromAddress);
-   if (it == m_addressToClientMap.end()) {
+   auto it = m_addressToClientMap.Find(fromAddress);
+   if (it == m_addressToClientMap.End()) {
       // didn't find one? it's a new cilent..is the a HELO? if so, create a client proxy...
       HandlePacketFromNewClient(inputStream, fromAddress);
    } else {

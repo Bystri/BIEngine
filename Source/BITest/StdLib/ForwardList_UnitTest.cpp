@@ -293,3 +293,55 @@ TEST(ForwardList, EraseAfter) {
 		}
 	}
 }
+
+TEST(ForwardList, SpliceAfter) {
+	constexpr int valsToAdd = 10;
+	constexpr int posToMoveAfter = 5;
+
+	BIEngine::ForwardList<int> list;
+
+	auto itrToAdd = list.CBeforeBegin();
+	for (int i = 0; i < valsToAdd; ++i) {
+		itrToAdd = list.EmplaceAfter(itrToAdd, i);
+	}
+
+	BIEngine::ForwardList<int> listMoveFrom;
+	listMoveFrom.PushFront(100);
+	listMoveFrom.PushFront(101);
+	listMoveFrom.PushFront(102);
+
+	{
+		int i = 0;
+		for (auto itr = list.Begin(); itr != list.End(); ++itr, ++i) {
+			if (posToMoveAfter == i) {
+				auto itrToReplaceAfter = listMoveFrom.Begin();
+
+				list.SpliceAfter(itr, listMoveFrom, itrToReplaceAfter);
+				break;
+			}
+		}
+	}
+
+	{
+		int i = 0;
+		int additionalNum = 0;
+		for (auto itr = list.CBegin(); itr != list.CEnd(); ++itr, ++i) {
+			if (posToMoveAfter + 1 == i) {
+				EXPECT_EQ(*itr, 101);
+				additionalNum = -1;
+				continue;
+			}
+
+			EXPECT_EQ(*itr, i + additionalNum);
+		}
+	}
+
+	{
+		auto itr = listMoveFrom.CBegin();
+		EXPECT_EQ(*itr, 102);
+		++itr;
+		EXPECT_EQ(*itr, 100);
+		++itr;
+		EXPECT_EQ(itr, listMoveFrom.CEnd());
+	}
+}

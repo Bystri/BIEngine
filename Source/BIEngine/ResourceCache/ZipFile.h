@@ -1,15 +1,16 @@
 ﻿#pragma once
 
-#include <map>
 #include <string>
 #include <fstream>
+
+#include "../StdLib/HashMap.h"
 
 // Загрузчик ZIP-архивов. Оригинальный код пренадлежит Javier Arevalo.
 // https://www.flipcode.com/archives/Zip_File_Loader.shtml
 
 namespace BIEngine {
 
-using ZipContentsMap = std::map<std::string, int>;
+using ZipContentsMap = HashMap<std::string, int>;
 
 class ZipFile {
 public:

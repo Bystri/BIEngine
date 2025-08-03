@@ -4,7 +4,6 @@
 #include <cmath>
 #include <set>
 #include <iterator>
-#include <map>
 #include <algorithm>
 
 #include <imgui.h>
@@ -15,6 +14,7 @@
 #include <btBulletCollisionCommon.h>
 #include <BulletCollision/NarrowPhaseCollision/btRaycastCallback.h>
 
+#include "../StdLib/HashMap.h"
 #include "../EngineCore/GameApp.h"
 #include "../Actors/Actor.h"
 #include "../Actors/TransformComponent.h"
@@ -55,11 +55,11 @@ public:
 
    virtual void SetGravity(const glm::vec3& gravity) override {};
 
-   virtual void BeforeUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
+   virtual void BeforeUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
 
    virtual void OnUpdate(const GameTimer& gt) override {}
 
-   virtual void AfterUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
+   virtual void AfterUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
 
    virtual void DrawRenderDiagnostics() override {}
 
@@ -179,9 +179,9 @@ public:
    // Задает двумерный вектор гравитации.
    virtual void SetGravity(const glm::vec3& gravity) override;
 
-   virtual void BeforeUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override;
+   virtual void BeforeUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override;
    virtual void OnUpdate(const GameTimer& gt) override;
-   virtual void AfterUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override;
+   virtual void AfterUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override;
 
    virtual void DrawRenderDiagnostics() override;
 
@@ -249,15 +249,15 @@ private:
    BulletDebugDrawer* m_pDebugDrawer;
    bool m_isRenderDebugDiagnostics = false;
 
-   using DensityTable = std::map<std::string, float>;
-   using MaterialTable = std::map<std::string, MaterialData>;
+   using DensityTable = HashMap<std::string, float>;
+   using MaterialTable = HashMap<std::string, MaterialData>;
    DensityTable m_densityTable;
    MaterialTable m_materialTable;
 
-   using ActorIDToBulletRigidBodyMap = std::map<ActorId, btRigidBody*>;
+   using ActorIDToBulletRigidBodyMap = HashMap<ActorId, btRigidBody*>;
    ActorIDToBulletRigidBodyMap m_actorIdToRigidBody;
 
-   using BulletRigidBodyToActorIDMap = std::map<btRigidBody const*, ActorId>;
+   using BulletRigidBodyToActorIDMap = HashMap<btRigidBody const*, ActorId>;
    BulletRigidBodyToActorIDMap m_rigidBodyToActorId;
 
    using CollisionPair = std::pair<btRigidBody const*, btRigidBody const*>;
@@ -281,7 +281,7 @@ Physics3D::~Physics3D()
       RemoveCollisionObject(obj);
    }
 
-   m_rigidBodyToActorId.clear();
+   m_rigidBodyToActorId.Clear();
 
    if (m_pDynamicsWorld) {
       delete m_pDynamicsWorld;
@@ -347,10 +347,9 @@ void Physics3D::SetGravity(const glm::vec3& gravity)
    m_pDynamicsWorld->setGravity(Vec3_to_btVector3(gravity));
 }
 
-void Physics3D::BeforeUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap)
+void Physics3D::BeforeUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap)
 {
-   for (ActorIDToBulletRigidBodyMap::const_iterator it = m_actorIdToRigidBody.begin();
-        it != m_actorIdToRigidBody.end(); ++it) {
+   for (auto it = m_actorIdToRigidBody.CBegin(); it != m_actorIdToRigidBody.CEnd(); ++it) {
       const ActorId id = it->first;
 
       ActorMotionState* const actorMotionState = static_cast<ActorMotionState*>(it->second->getMotionState());
@@ -360,9 +359,9 @@ void Physics3D::BeforeUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& ac
          continue;
       }
 
-      auto actorIt = actorMap.find(id);
-      Assert(actorIt != actorMap.end(), "Actor with id %d registered in physics system but doesn't exist", id);
-      if (actorIt == actorMap.end()) {
+      auto actorIt = actorMap.Find(id);
+      Assert(actorIt != actorMap.CEnd(), "Actor with id %d registered in physics system but doesn't exist", id);
+      if (actorIt == actorMap.CEnd()) {
          continue;
       }
 
@@ -392,10 +391,9 @@ void Physics3D::OnUpdate(const GameTimer& gt)
    m_pDynamicsWorld->stepSimulation(gt.DeltaTime(), MAX_PASSES);
 }
 
-void Physics3D::AfterUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap)
+void Physics3D::AfterUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap)
 {
-   for (ActorIDToBulletRigidBodyMap::const_iterator it = m_actorIdToRigidBody.begin();
-        it != m_actorIdToRigidBody.end(); ++it) {
+   for (auto it = m_actorIdToRigidBody.CBegin(); it != m_actorIdToRigidBody.CEnd(); ++it) {
       const ActorId id = it->first;
 
       const ActorMotionState* const actorMotionState = static_cast<ActorMotionState*>(it->second->getMotionState());
@@ -405,9 +403,9 @@ void Physics3D::AfterUpdate(const std::map<ActorId, std::shared_ptr<Actor>>& act
          continue;
       }
 
-      auto actorIt = actorMap.find(id);
-      Assert(actorIt != actorMap.end(), "Actor with id %d registered in physics system but doesn't exist", id);
-      if (actorIt == actorMap.end()) {
+      auto actorIt = actorMap.Find(id);
+      Assert(actorIt != actorMap.CEnd(), "Actor with id %d registered in physics system but doesn't exist", id);
+      if (actorIt == actorMap.CEnd()) {
          continue;
       }
 
@@ -469,7 +467,7 @@ void Physics3D::DrawRenderDiagnostics()
 
 void Physics3D::AddShape(btCollisionShape* const pShape, const float volume, const ShapeCreationParams& creationParams)
 {
-   Assert(m_actorIdToRigidBody.find(creationParams.actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.Find(creationParams.actorId) == m_actorIdToRigidBody.End(), "Actor with more than one physics body?");
 
    const float specificGravity = LookupSpecificGravity(creationParams.densityStr);
    const btScalar mass = volume * specificGravity;
@@ -567,8 +565,8 @@ void Physics3D::RemoveActor(ActorId id)
 {
    if (btRigidBody* const body = FindBulletRigidBody(id)) {
       RemoveCollisionObject(body);
-      m_actorIdToRigidBody.erase(id);
-      m_rigidBodyToActorId.erase(body);
+      m_actorIdToRigidBody.Erase(id);
+      m_rigidBodyToActorId.Erase(body);
    }
 }
 
@@ -771,7 +769,7 @@ void Physics3D::LoadXml(tinyxml2::XMLElement* pRoot)
       double friction = 0;
       pNode->QueryDoubleAttribute("restitution", &restitution);
       pNode->QueryDoubleAttribute("friction", &friction);
-      m_materialTable.insert(std::make_pair(pNode->Value(), MaterialData((float)restitution, (float)friction)));
+      m_materialTable.Insert(pNode->Value(), MaterialData((float)restitution, (float)friction));
    }
 
    pParentNode = pRoot->FirstChildElement("DensityTable");
@@ -780,15 +778,15 @@ void Physics3D::LoadXml(tinyxml2::XMLElement* pRoot)
       return;
    }
    for (tinyxml2::XMLElement* pNode = pParentNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
-      m_densityTable.insert(std::make_pair(pNode->Value(), (float)atof(pNode->FirstChild()->Value())));
+      m_densityTable.Insert(pNode->Value(), (float)atof(pNode->FirstChild()->Value()));
    }
 }
 
 float Physics3D::LookupSpecificGravity(const std::string& densityStr)
 {
    float density = 0;
-   auto densityIt = m_densityTable.find(densityStr);
-   if (densityIt != m_densityTable.end())
+   auto densityIt = m_densityTable.Find(densityStr);
+   if (densityIt != m_densityTable.End())
       density = densityIt->second;
 
    return density;
@@ -796,8 +794,8 @@ float Physics3D::LookupSpecificGravity(const std::string& densityStr)
 
 MaterialData Physics3D::LookupMaterialData(const std::string& materialStr)
 {
-   auto materialIt = m_materialTable.find(materialStr);
-   if (materialIt != m_materialTable.end())
+   auto materialIt = m_materialTable.Find(materialStr);
+   if (materialIt != m_materialTable.End())
       return materialIt->second;
    else
       return MaterialData(0.0, 0.0);
@@ -805,18 +803,20 @@ MaterialData Physics3D::LookupMaterialData(const std::string& materialStr)
 
 btRigidBody* Physics3D::FindBulletRigidBody(ActorId const id) const
 {
-   ActorIDToBulletRigidBodyMap::const_iterator found = m_actorIdToRigidBody.find(id);
-   if (found != m_actorIdToRigidBody.end())
-      return found->second;
+   auto foundItr = m_actorIdToRigidBody.Find(id);
+   if (foundItr != m_actorIdToRigidBody.CEnd()) {
+      return foundItr->second;
+   }
 
    return nullptr;
 }
 
 ActorId Physics3D::FindActorID(const btRigidBody* const pBody) const
 {
-   BulletRigidBodyToActorIDMap::const_iterator found = m_rigidBodyToActorId.find(pBody);
-   if (found != m_rigidBodyToActorId.end())
-      return found->second;
+   auto foundItr = m_rigidBodyToActorId.Find(pBody);
+   if (foundItr != m_rigidBodyToActorId.CEnd()) {
+      return foundItr->second;
+   }
 
    return Actor::INVALID_ACTOR_ID;
 }

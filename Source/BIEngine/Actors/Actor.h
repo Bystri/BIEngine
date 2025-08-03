@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include <map>
 #include <memory>
 #include <string>
 
@@ -8,6 +7,7 @@
 
 #include "ActorComponent.h"
 #include "../StdLib/DynamicArray.h"
+#include "../StdLib/HashMap.h"
 
 namespace BIEngine {
 
@@ -17,7 +17,7 @@ using ActorId = unsigned long;
 class Actor {
    friend class ActorFactory;
 
-   using ActorComponents = std::map<ComponentId, std::shared_ptr<ActorComponent>>;
+   using ActorComponents = HashMap<ComponentId, std::shared_ptr<ActorComponent>>;
 
 public:
    const static ActorId INVALID_ACTOR_ID = -1;
@@ -70,17 +70,17 @@ public:
    template <class ComponentType>
    std::weak_ptr<ComponentType> GetComponent(ComponentId id)
    {
-      ActorComponents::iterator findIt = m_components.find(id);
-      if (findIt != m_components.end()) {
+      auto findIt = m_components.Find(id);
+      if (findIt != m_components.End()) {
          std::shared_ptr<ActorComponent> pBase(findIt->second);
 
          // Приведение к подклассу типа компонента
          std::shared_ptr<ComponentType> pSub(std::static_pointer_cast<ComponentType>(pBase));
          std::weak_ptr<ComponentType> pWeakSub(pSub); // Приведение сильного указателя к слабому
          return pWeakSub;
-      } else {
-         return std::weak_ptr<ComponentType>();
       }
+
+      return std::weak_ptr<ComponentType>();
    }
 
 private:

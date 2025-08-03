@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include <map>
 #include <string>
 
+#include "../StdLib/HashMap.h"
 #include "../Utilities/GameTimer.h"
 
 namespace BIEngine {
@@ -72,7 +72,7 @@ private:
    // Хранит ID, который будет присвоен следующему элементу
    int m_nextId;
 
-   std::map<int, IElementUI* const> m_elements;
+   HashMap<int, IElementUI* const> m_elements;
 };
 
 } // namespace BIEngine

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
+
+#include "../StdLib/HashMap.h"
 
 namespace BIEngine {
 
@@ -19,8 +20,8 @@ public:
    template <class SubClass>
    bool Register(IdType id)
    {
-      auto findIt = m_creationFunctions.find(id);
-      if (findIt == m_creationFunctions.end()) {
+      auto findIt = m_creationFunctions.Find(id);
+      if (findIt == m_creationFunctions.End()) {
          m_creationFunctions[id] = &GenericObjectCreationFunction<BaseClass, SubClass>;
          return true;
       }
@@ -30,8 +31,8 @@ public:
 
    std::shared_ptr<BaseClass> Create(IdType id)
    {
-      auto findIt = m_creationFunctions.find(id);
-      if (findIt != m_creationFunctions.end()) {
+      auto findIt = m_creationFunctions.Find(id);
+      if (findIt != m_creationFunctions.End()) {
          ObjectCreationFunction pFunc = findIt->second;
          return pFunc();
       }
@@ -40,7 +41,7 @@ public:
    }
 
 private:
-   std::unordered_map<IdType, ObjectCreationFunction> m_creationFunctions;
+   HashMap<IdType, ObjectCreationFunction> m_creationFunctions;
 };
 
 } // namespace BIEngine

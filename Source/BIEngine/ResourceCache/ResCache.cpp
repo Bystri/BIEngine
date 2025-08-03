@@ -283,9 +283,10 @@ std::shared_ptr<ResHandle> ResCache::Load(const std::string& resName)
 
 std::shared_ptr<ResHandle> ResCache::Find(const std::string& resName)
 {
-   auto itr = m_resources.find(resName);
-   if (itr == m_resources.end())
+   auto itr = m_resources.Find(resName);
+   if (itr == m_resources.End()) {
       return std::shared_ptr<ResHandle>();
+   }
 
    return itr->second;
 }
@@ -310,7 +311,7 @@ char* ResCache::Allocate(unsigned int size)
 
 void ResCache::FreeOneResource()
 {
-   m_resources.erase(m_lru.Back()->GetName());
+   m_resources.Erase(m_lru.Back()->GetName());
    m_lru.PopBack();
    // Мы не уменьшает значение использованной памяти, так как кто-то еще может использовать ресурс.
    // Память освободится тогда, когда умный указатель на держатель ресурса вызовет деструктор
@@ -338,7 +339,7 @@ bool ResCache::MakeRoom(unsigned int size)
 void ResCache::Free(std::shared_ptr<ResHandle> pGonner)
 {
    m_lru.Remove(pGonner);
-   m_resources.erase(pGonner->GetName());
+   m_resources.Erase(pGonner->GetName());
    // Мы не уменьшает значение использованной памяти, так как кто-то еще может использовать ресурс.
    // Память освободится тогда, когда умный указатель на держатель ресурса вызовет деструктор
 }

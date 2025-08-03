@@ -38,7 +38,7 @@ private:
 
    ShaderProgram m_textShader;
 
-   std::map<char, Character> m_characters;
+   HashMap<char, Character> m_characters;
 };
 
 TextRenderer::TextRenderer(unsigned int width, unsigned int height)
@@ -66,9 +66,7 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height)
 
 void TextRenderer::Load(std::string font, unsigned int fontSize)
 {
-
-   m_characters.clear();
-
+   m_characters.Clear();
 
    FT_Library ft;
    if (FT_Init_FreeType(&ft))
@@ -117,7 +115,7 @@ void TextRenderer::Load(std::string font, unsigned int fontSize)
          glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
          glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
          face->glyph->advance.x};
-      m_characters.insert(std::pair<char, Character>(c, character));
+      m_characters.Insert(c, character);
    }
    glBindTexture(GL_TEXTURE_2D, 0);
    FT_Done_Face(face);
@@ -204,14 +202,16 @@ bool UserInterface::Init(unsigned int width, unsigned int height)
 void UserInterface::Shutdown()
 {
    for (const auto& element : m_elements) {
-      if (element.second)
+      if (element.second) {
          delete element.second;
+      }
    }
 
-   m_elements.clear();
+   m_elements.Clear();
 
-   if (g_TextRenderer)
+   if (g_TextRenderer) {
       delete g_TextRenderer;
+   }
 }
 
 int UserInterface::CreateStatic(float x, float y, float scale, const std::string& text)
@@ -221,7 +221,7 @@ int UserInterface::CreateStatic(float x, float y, float scale, const std::string
    staticElement->SetCoord(x, y, scale);
    staticElement->SetText(text);
 
-   m_elements.insert({m_nextId, staticElement});
+   m_elements.Insert(m_nextId, staticElement);
    ++m_nextId;
 
    return (m_nextId - 1);
@@ -229,8 +229,8 @@ int UserInterface::CreateStatic(float x, float y, float scale, const std::string
 
 Text* UserInterface::GetStatic(int id)
 {
-   auto itr = m_elements.find(id);
-   if (itr == m_elements.end()) {
+   auto itr = m_elements.Find(id);
+   if (itr == m_elements.End()) {
       Logger::WriteLog(Logger::LogType::ERROR, "Attempt to get a nonexistent UI element");
       return nullptr;
    }

@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
 
 #include <tinyxml2.h>
 #include <imgui.h>
 
+#include "../../BIEngine/StdLib/HashMap.h"
 #include "../../BIEngine/Actors/Actor.h"
 #include "../../BIEngine/EngineCore/GameApp.h"
 
@@ -24,5 +24,5 @@ private:
    BIEngine::ActorId m_currentActorId;
    BIEngine::DynamicArray<ActorComponentEdit*> m_actorComponentEdits;
 
-   std::unordered_map<std::string, tinyxml2::XMLElement*> m_componentsSettings;
+   BIEngine::HashMap<std::string, tinyxml2::XMLElement*> m_componentsSettings;
 };

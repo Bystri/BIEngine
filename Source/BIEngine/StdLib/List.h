@@ -19,11 +19,6 @@ public:
       friend class List;
 
    public:
-      Iterator(List<T>* pList, Node* pCur)
-         : m_pList(pList), m_pCurNode(pCur)
-      {
-      }
-
       Iterator& operator++()
       {
          m_pCurNode = m_pCurNode == nullptr ? m_pList->m_pFirst : m_pCurNode->next;
@@ -71,6 +66,12 @@ public:
       }
 
    private:
+      Iterator(List<T>* pList, Node* pCur)
+         : m_pList(pList), m_pCurNode(pCur)
+      {
+      }
+
+   private:
       List<T>* m_pList;
       Node* m_pCurNode;
    };
@@ -79,11 +80,6 @@ public:
       friend class List;
 
    public:
-      ConstIterator(const List<T>* pList, Node* pCur)
-         : m_pList(pList), m_pCurNode(pCur)
-      {
-      }
-
       ConstIterator& operator++()
       {
          m_pCurNode = m_pCurNode == nullptr ? m_pList->m_pFirst : m_pCurNode->next;
@@ -128,6 +124,12 @@ public:
       friend bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
       {
          return !(lhs == rhs);
+      }
+
+   private:
+      ConstIterator(const List<T>* pList, Node* pCur)
+         : m_pList(pList), m_pCurNode(pCur)
+      {
       }
 
    private:

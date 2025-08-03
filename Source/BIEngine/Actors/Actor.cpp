@@ -60,7 +60,7 @@ void Actor::Activate()
       return;
    }
 
-   for (auto it = m_components.begin(); it != m_components.end(); ++it) {
+   for (auto it = m_components.Begin(); it != m_components.End(); ++it) {
       it->second->Activate();
    }
 
@@ -81,7 +81,7 @@ void Actor::Deactivate()
       child->Deactivate();
    }
 
-   for (auto it = m_components.begin(); it != m_components.end(); ++it) {
+   for (auto it = m_components.Begin(); it != m_components.End(); ++it) {
       it->second->Deactivate();
    }
 
@@ -118,7 +118,7 @@ void Actor::OnUpdate(const GameTimer& gt)
       return;
    }
 
-   for (auto it = m_components.begin(); it != m_components.end(); ++it) {
+   for (auto it = m_components.Begin(); it != m_components.End(); ++it) {
       it->second->OnUpdate(gt);
    }
 
@@ -133,7 +133,7 @@ void Actor::OnRenderObject(const GameTimer& gt)
       return;
    }
 
-   for (auto it = m_components.begin(); it != m_components.end(); ++it) {
+   for (auto it = m_components.Begin(); it != m_components.End(); ++it) {
       it->second->OnRenderObject(gt);
    }
 
@@ -148,16 +148,16 @@ void Actor::Destroy()
       child->Destroy();
    }
 
-   for (auto it = m_components.begin(); it != m_components.end(); ++it) {
+   for (auto it = m_components.Begin(); it != m_components.End(); ++it) {
       it->second->Terminate();
    }
 
-   m_components.clear();
+   m_components.Clear();
 }
 
 void Actor::AddComponent(std::shared_ptr<ActorComponent> pComponent)
 {
-   std::pair<ActorComponents::iterator, bool> success = m_components.insert(std::make_pair(pComponent->GetComponentId(), pComponent));
+   auto success = m_components.Insert(pComponent->GetComponentId(), pComponent);
    Assert(success.second, "Cant load component %s", pComponent->GetComponentId().c_str());
 }
 
@@ -174,7 +174,7 @@ tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const
    // Add components
    tinyxml2::XMLElement* pComponentsElement = pDoc->NewElement("Components");
    pActorElement->LinkEndChild(pComponentsElement);
-   for (auto it = m_components.begin(); it != m_components.end(); ++it) {
+   for (auto it = m_components.CBegin(); it != m_components.CEnd(); ++it) {
       auto pComponent = it->second;
       tinyxml2::XMLElement* const pComponentElement = pComponent->GenerateXml(pDoc);
       pComponentsElement->LinkEndChild(pComponentElement);

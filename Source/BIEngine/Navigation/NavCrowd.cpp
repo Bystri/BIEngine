@@ -114,8 +114,8 @@ void NavCrowd::RemoveAgent(NavAgentId id)
 
    ActorId actorId = m_agentToActorMap[id];
 
-   m_actorToAgentMap.erase(actorId);
-   m_agentToActorMap.erase(id);
+   m_actorToAgentMap.Erase(actorId);
+   m_agentToActorMap.Erase(id);
 }
 
 bool NavCrowd::SetDestination(NavAgentId id, const glm::vec3& pos)
@@ -147,11 +147,11 @@ glm::vec3 NavCrowd::GetVelocity(NavAgentId id) const
    return glm::vec3(ag->vel[0], ag->vel[1], ag->vel[2]);
 }
 
-void NavCrowd::UpdateCrowdInfo(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap)
+void NavCrowd::UpdateCrowdInfo(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap)
 {
-   for (auto itr = actorMap.cbegin(); itr != actorMap.end(); ++itr) {
-      auto agentId = m_actorToAgentMap.find(itr->first);
-      if (agentId != m_actorToAgentMap.end()) {
+   for (auto itr = actorMap.CBegin(); itr != actorMap.CEnd(); ++itr) {
+      auto agentId = m_actorToAgentMap.Find(itr->first);
+      if (agentId != m_actorToAgentMap.End()) {
          dtCrowdAgent* ag = m_pCrowd->getEditableAgent(agentId->second);
          if (!ag->active) {
             continue;

@@ -1,8 +1,7 @@
 #pragma once
 
-#include <unordered_map>
-
 #include "../Serialization.h"
+#include "../../StdLib/HashMap.h"
 
 namespace BIEngine {
 
@@ -14,7 +13,7 @@ public:
    void ProcessRPC(InputMemoryBitStream& stream);
 
 private:
-   std::unordered_map<uint32_t, RPCUnwrapFunc> m_nameToRPCTable;
+   HashMap<uint32_t, RPCUnwrapFunc> m_nameToRPCTable;
 };
 
 } // namespace BIEngine

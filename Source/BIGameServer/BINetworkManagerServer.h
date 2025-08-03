@@ -1,13 +1,12 @@
 #pragma once
 
-#include <unordered_map>
-
+#include "../BIEngine/StdLib/HashMap.h"
 #include "../BIEngine/Network/NetworkManager.h"
 #include "../BIEngine/Network/Replication/ObjectReplication.h"
 
 class BINetworkManagerServer : public BIEngine::NetworkManager {
-   using AddressToClientMap = std::unordered_map<BIEngine::SocketAddress, BIEngine::PeerPtr>;
-   using IntToClientMap = std::unordered_map<int, BIEngine::PeerPtr>;
+   using AddressToClientMap = BIEngine::HashMap<BIEngine::SocketAddress, BIEngine::PeerPtr>;
+   using IntToClientMap = BIEngine::HashMap<int, BIEngine::PeerPtr>;
 
 public:
    bool Init(uint16_t port);

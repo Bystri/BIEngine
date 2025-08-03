@@ -1,13 +1,13 @@
 ﻿#pragma once
 
-#include <map>
 #include <string>
 
+#include "../StdLib/HashMap.h"
 #include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
 
-using DipContentsMap = std::map<std::string, int>;
+using DipContentsMap = HashMap<std::string, int>;
 
 // Является аналогией к классу ZipFile. Нужен для того, чтобы во время инициализации проверить все файлы в папке и записать всю информацию о них в контейнер
 class DirFile {

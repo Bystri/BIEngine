@@ -1,7 +1,5 @@
 #include "SkinnedMesh.h"
 
-#include <unordered_map>
-
 #include <glad/glad.h>
 
 #include "Skeleton.h"

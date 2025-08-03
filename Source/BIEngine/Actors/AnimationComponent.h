@@ -1,7 +1,5 @@
 #pragma once
 
-#include <unordered_map>
-
 #include "ActorComponent.h"
 #include "../Graphics/Animator.h"
 #include "../ProcessManager/Process.h"
@@ -29,8 +27,8 @@ public:
    void Stop();
 
 private:
-   std::unordered_map<std::string, std::shared_ptr<Animation>> m_animations;
-   std::unordered_map<std::string, std::string> m_animationPaths;
+   HashMap<std::string, std::shared_ptr<Animation>> m_animations;
+   HashMap<std::string, std::string> m_animationPaths;
    std::shared_ptr<Animator> m_pAnimator;
 };
 

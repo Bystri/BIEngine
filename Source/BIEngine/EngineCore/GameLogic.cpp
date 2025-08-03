@@ -155,9 +155,9 @@ void GameLogic::OnRenderDebug(const GameTimer& gt)
 
 std::shared_ptr<Actor> GameLogic::GetActor(ActorId id) const
 {
-   auto it = m_actors.find(id);
+   auto it = m_actors.Find(id);
 
-   if (it == m_actors.end()) {
+   if (it == m_actors.CEnd()) {
       return std::shared_ptr<Actor>();
    }
 
@@ -187,7 +187,7 @@ void GameLogic::SetKey(int key, int scancode, bool state)
 
 static void gameLogicInsertActorToMap(GameLogic::ActorMap& actors, std::shared_ptr<Actor> pActor)
 {
-   actors.insert(std::make_pair(pActor->GetId(), pActor));
+   actors.Insert(pActor->GetId(), pActor);
    for (const auto& child : pActor->GetChildren()) {
       gameLogicInsertActorToMap(actors, child);
    }
@@ -211,8 +211,8 @@ std::shared_ptr<Actor> GameLogic::CreateActor(tinyxml2::XMLElement* pRoot, const
 
 void GameLogic::ModifyActor(ActorId actorId, tinyxml2::XMLElement* pOverrides)
 {
-   auto itr = m_actors.find(actorId);
-   if (itr != m_actors.end())
+   auto itr = m_actors.Find(actorId);
+   if (itr != m_actors.End())
       m_pActorFactory->ModifyActor(itr->second, pOverrides);
    else
       Logger::WriteLog(Logger::LogType::ERROR, "Attempt to change a non-existent actor");
@@ -226,9 +226,9 @@ void GameLogic::RequestDestroyActorDelegate(IEventDataPtr pEventData)
 
 static void gameLogicDestroyActorFromMap(GameLogic::ActorMap& actors, const ActorId actorId)
 {
-   auto findIt = actors.find(actorId);
+   auto findIt = actors.Find(actorId);
 
-   if (findIt == actors.end()) {
+   if (findIt == actors.End()) {
       return;
    }
 
@@ -237,7 +237,7 @@ static void gameLogicDestroyActorFromMap(GameLogic::ActorMap& actors, const Acto
    }
 
    findIt->second->Destroy();
-   actors.erase(findIt);
+   actors.Erase(findIt);
 }
 
 void GameLogic::DestroyActor(const ActorId actorId)

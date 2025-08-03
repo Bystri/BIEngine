@@ -19,12 +19,12 @@ public:
       STATIC     // Вообще не учавствуют в физической симуляции (например, триггеры)
    };
 
-   virtual ~IGamePhysics2D(){};
+   virtual ~IGamePhysics2D() {};
 
    // Служебные функции
    virtual bool Initialize() = 0;
    virtual void SetGravity(const glm::vec2& gravity) = 0;
-   virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& pActorMap) = 0;
+   virtual void SyncVisibleScene(const HashMap<ActorId, std::shared_ptr<Actor>>& pActorMap) = 0;
    virtual void OnUpdate(const GameTimer& gt) = 0;
 
    // Инициализация физических объектов

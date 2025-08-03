@@ -142,7 +142,7 @@ public:
 };
 
 using ResHandleList = List<std::shared_ptr<ResHandle>>;
-using ResHandleMap = std::map<std::string, std::shared_ptr<ResHandle>>;
+using ResHandleMap = HashMap<std::string, std::shared_ptr<ResHandle>>;
 using ResourceLoaders = List<std::shared_ptr<IResourceLoader>>;
 
 // ResCache основан на паттерне Singleton (да простят меня Боги)

@@ -62,9 +62,9 @@ bool EventManager::RemoveListener(const EventManager::DelegateHandler handler)
 {
    const EventType type = handler >> 32;
 
-   auto findIt = m_delegateHandlers.find(type);
+   auto findIt = m_delegateHandlers.Find(type);
 
-   if (findIt == m_delegateHandlers.end()) {
+   if (findIt == m_delegateHandlers.End()) {
       return false;
    }
 
@@ -88,8 +88,8 @@ bool EventManager::TriggerEvent(const IEventDataPtr& pEvent) const
 {
    bool processed = false;
 
-   auto findIt = m_eventListeners.find(pEvent->GetEventType());
-   if (findIt != m_eventListeners.end()) {
+   auto findIt = m_eventListeners.Find(pEvent->GetEventType());
+   if (findIt != m_eventListeners.CEnd()) {
       const EventListenerStorage& eventListenerList = findIt->second;
       for (auto itr = eventListenerList.CBegin(); itr != eventListenerList.CEnd(); ++itr) {
          EventListenerDelegate listener = (*itr);
@@ -108,8 +108,8 @@ bool EventManager::QueueEvent(const IEventDataPtr& pEvent)
       return false;
    }
 
-   auto findIt = m_eventListeners.find(pEvent->GetEventType());
-   if (findIt != m_eventListeners.end()) {
+   auto findIt = m_eventListeners.Find(pEvent->GetEventType());
+   if (findIt != m_eventListeners.End()) {
       m_queue[m_activeQueue].PushBack(pEvent);
       return true;
    }
@@ -125,13 +125,12 @@ bool EventManager::AbortEvent(const EventType& inType, bool allOfType)
    }
 
    bool success = false;
-   auto findItr = m_eventListeners.find(inType);
+   auto findItr = m_eventListeners.Find(inType);
 
-   if (findItr != m_eventListeners.end()) {
+   if (findItr != m_eventListeners.End()) {
       EventQueue& eventQueue = m_queue[m_activeQueue];
       auto itr = eventQueue.Begin();
-      while (itr != eventQueue.End())
-      {
+      while (itr != eventQueue.End()) {
          if ((*itr)->GetEventType() != inType) {
             ++itr;
             continue;
@@ -163,8 +162,8 @@ bool EventManager::TickUpdate(long long maxMillis)
 
       const EventType& eventType = pEvent->GetEventType();
 
-      auto findIt = m_eventListeners.find(eventType);
-      if (findIt != m_eventListeners.end()) {
+      auto findIt = m_eventListeners.Find(eventType);
+      if (findIt != m_eventListeners.End()) {
          const EventListenerStorage& eventListeners = findIt->second;
 
          for (auto& listener : eventListeners) {

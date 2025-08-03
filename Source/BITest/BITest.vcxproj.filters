@@ -43,6 +43,12 @@
     <ClCompile Include="StdLib\List_UnitTest.cpp">
       <Filter>StdLib</Filter>
     </ClCompile>
+    <ClCompile Include="StdLib\HashMap_UnitTest.cpp">
+      <Filter>StdLib</Filter>
+    </ClCompile>
+    <ClCompile Include="StdLib\ForwardList_UnitTest.cpp">
+      <Filter>StdLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -105,6 +111,12 @@
       <Filter>EngineSources\StdLib</Filter>
     </ClInclude>
     <ClInclude Include="..\BIEngine\StdLib\List.h">
+      <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\StdLib\HashMap.h">
+      <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\StdLib\ForwardList.h">
       <Filter>EngineSources\StdLib</Filter>
     </ClInclude>
   </ItemGroup>

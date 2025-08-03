@@ -1,10 +1,10 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
 
 #include <glm/glm.hpp>
 
+#include "../StdLib/HashMap.h"
 #include "../StdLib/DynamicArray.h"
 #include "ShaderProgram.h"
 #include "Texture.h"
@@ -34,13 +34,13 @@ public:
 private:
    std::shared_ptr<ShaderProgram> m_pShaderProgram;
 
-   std::unordered_map<std::string, bool> m_uniformBools;
-   std::unordered_map<std::string, int> m_uniformInts;
-   std::unordered_map<std::string, float> m_uniformFloats;
-   std::unordered_map<std::string, glm::vec3> m_uniformVectors;
-   std::unordered_map<std::string, glm::mat4> m_uniformMatricies;
-   std::unordered_map<std::string, ColorRgb> m_uniformColorsRgb;
-   std::unordered_map<std::string, ColorRgba> m_uniformColorsRgba;
+   HashMap<std::string, bool> m_uniformBools;
+   HashMap<std::string, int> m_uniformInts;
+   HashMap<std::string, float> m_uniformFloats;
+   HashMap<std::string, glm::vec3> m_uniformVectors;
+   HashMap<std::string, glm::mat4> m_uniformMatricies;
+   HashMap<std::string, ColorRgb> m_uniformColorsRgb;
+   HashMap<std::string, ColorRgba> m_uniformColorsRgba;
 
    DynamicArray<std::pair<int, std::shared_ptr<Texture>>> m_textures;
 };

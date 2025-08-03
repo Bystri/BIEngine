@@ -866,6 +866,12 @@
     <ClInclude Include="..\..\StdLib\List.h">
       <Filter>StdLib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\StdLib\ForwardList.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\StdLib\HashMap.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.clang-format" />

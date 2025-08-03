@@ -29,7 +29,8 @@ bool DirFile::Init(const std::string& resFileName)
       std::transform(path.begin(), path.end(), path.begin(), [](unsigned char c) { return std::tolower(c); });
 
       m_fileDatas.PushBack({path, static_cast<unsigned int>(dir_entry.file_size())});
-      m_dirContentsMap[path] = i++;
+
+      m_dirContentsMap.Insert(path, i++);
    }
 
    return true;
@@ -37,7 +38,7 @@ bool DirFile::Init(const std::string& resFileName)
 
 void DirFile::End()
 {
-   m_dirContentsMap.clear();
+   m_dirContentsMap.Clear();
 }
 
 std::string DirFile::GetFilename(int i) const
@@ -68,9 +69,10 @@ int DirFile::Find(const std::string& path) const
    std::string lowerCasePath = path;
    std::transform(lowerCasePath.begin(), lowerCasePath.end(), lowerCasePath.begin(), [](unsigned char c) { return std::tolower(c); });
 
-   auto itr = m_dirContentsMap.find(lowerCasePath);
-   if (itr == m_dirContentsMap.end())
+   auto itr = m_dirContentsMap.Find(lowerCasePath);
+   if (itr == m_dirContentsMap.CEnd()) {
       return -1;
+   }
 
    return itr->second;
 }

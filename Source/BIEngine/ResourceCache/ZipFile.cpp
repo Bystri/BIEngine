@@ -175,7 +175,7 @@ bool ZipFile::Init(const std::string& resFileName)
 
 void ZipFile::End()
 {
-   m_ZipContentsMap.clear();
+   m_ZipContentsMap.Clear();
    if (m_pDirData) {
       delete[] m_pDirData;
       m_pDirData = nullptr;
@@ -265,9 +265,10 @@ int ZipFile::Find(const std::string& path) const
    std::string lowerCasePath = path;
    std::transform(lowerCasePath.begin(), lowerCasePath.end(), lowerCasePath.begin(), [](unsigned char c) { return std::tolower(c); });
 
-   auto itr = m_ZipContentsMap.find(lowerCasePath);
-   if (itr == m_ZipContentsMap.end())
+   auto itr = m_ZipContentsMap.Find(lowerCasePath);
+   if (itr == m_ZipContentsMap.CEnd()) {
       return -1;
+   }
 
    return itr->second;
 }

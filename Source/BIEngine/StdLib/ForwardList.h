@@ -40,11 +40,6 @@ public:
       friend class ForwardList;
 
    public:
-      Iterator(NodeBase* pCur)
-         : m_pCurNode(pCur)
-      {
-      }
-
       Iterator& operator++()
       {
          m_pCurNode = m_pCurNode == nullptr ? nullptr : m_pCurNode->next;
@@ -79,6 +74,12 @@ public:
       }
 
    private:
+      Iterator(NodeBase* pCur)
+         : m_pCurNode(pCur)
+      {
+      }
+
+   private:
       NodeBase* m_pCurNode;
    };
 
@@ -86,11 +87,6 @@ public:
       friend class ForwardList;
 
    public:
-      ConstIterator(NodeBase* pCur)
-         : m_pCurNode(pCur)
-      {
-      }
-
       ConstIterator& operator++()
       {
          m_pCurNode = m_pCurNode == nullptr ? nullptr : m_pCurNode->next;
@@ -123,6 +119,13 @@ public:
       {
          return !(lhs == rhs);
       }
+
+   private:
+      ConstIterator(NodeBase* pCur)
+         : m_pCurNode(pCur)
+      {
+      }
+
 
    private:
       NodeBase* m_pCurNode;
@@ -285,6 +288,14 @@ public:
       Iterator itr(pos.m_pCurNode->next);
       delete pNodeToDelete;
       return itr;
+   }
+
+   void SpliceAfter(Iterator pos, const ForwardList<T>& other, Iterator itFromOther)
+   {
+      Node* const nodeToMove = static_cast<Node*>(itFromOther.m_pCurNode->next);
+      itFromOther.m_pCurNode->next = itFromOther.m_pCurNode->next->next;
+      nodeToMove->next = pos.m_pCurNode->next;
+      pos.m_pCurNode->next = nodeToMove;
    }
 
 private:

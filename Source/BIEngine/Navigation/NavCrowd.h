@@ -1,7 +1,5 @@
 #pragma once
 
-#include <unordered_map>
-
 #include "NavMeshManager.h"
 
 class dtCrowd;
@@ -43,14 +41,14 @@ public:
    bool SetDestination(NavAgentId id, const glm::vec3& pos);
    glm::vec3 GetVelocity(NavAgentId id) const;
 
-   void UpdateCrowdInfo(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap);
+   void UpdateCrowdInfo(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap);
    void OnUpdate(const GameTimer& gt);
 
 private:
    dtCrowd* m_pCrowd;
    std::shared_ptr<NavMeshManager> m_pNavMeshManager;
-   std::unordered_map<ActorId, NavAgentId> m_actorToAgentMap;
-   std::unordered_map<NavAgentId, ActorId> m_agentToActorMap;
+   HashMap<ActorId, NavAgentId> m_actorToAgentMap;
+   HashMap<NavAgentId, ActorId> m_agentToActorMap;
 };
 
 } // namespace BIEngine

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
+
+#include "../StdLib/HashMap.h"
 
 namespace BIEngine {
 
@@ -9,7 +10,7 @@ template <class ObjectType>
 class LinkingContext {
 
 public:
-   using IdToObjectMap = std::unordered_map<uint32_t, std::shared_ptr<ObjectType>>;
+   using IdToObjectMap = HashMap<uint32_t, std::shared_ptr<ObjectType>>;
 
 public:
    LinkingContext()
@@ -19,8 +20,8 @@ public:
 
    uint32_t GetId(std::shared_ptr<ObjectType> pObject, bool shouldCreateIfNotFound)
    {
-      auto it = m_objectToIdMap.find(pObject);
-      if (it != m_objectToIdMap.end()) {
+      auto it = m_objectToIdMap.Find(pObject);
+      if (it != m_objectToIdMap.End()) {
          return it->second;
       }
 
@@ -42,14 +43,14 @@ public:
    void RemoveObj(std::shared_ptr<ObjectType> pObject)
    {
       uint32_t id = m_objectToIdMap[pObject];
-      m_objectToIdMap.erase(pObject);
-      m_IdToObjectMap.erase(id);
+      m_objectToIdMap.Erase(pObject);
+      m_IdToObjectMap.Erase(id);
    }
 
    std::shared_ptr<ObjectType> GetObj(uint32_t id)
    {
-      auto it = m_IdToObjectMap.find(id);
-      if (it != m_IdToObjectMap.end()) {
+      auto it = m_IdToObjectMap.Find(id);
+      if (it != m_IdToObjectMap.End()) {
          return it->second;
       }
 
@@ -58,7 +59,7 @@ public:
 
 private:
    IdToObjectMap m_IdToObjectMap;
-   std::unordered_map<std::shared_ptr<ObjectType>, uint32_t> m_objectToIdMap;
+   HashMap<std::shared_ptr<ObjectType>, uint32_t> m_objectToIdMap;
    uint32_t m_nextId;
 };
 

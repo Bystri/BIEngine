@@ -4,10 +4,10 @@
 #include <cmath>
 #include <set>
 #include <iterator>
-#include <map>
 
 #include <chipmunk/chipmunk.h>
 
+#include "../StdLib/HashMap.h"
 #include "../Actors/Actor.h"
 #include "../Actors/TransformComponent.h"
 #include "../EventManager/EventManager.h"
@@ -27,7 +27,7 @@ public:
    virtual bool Initialize() override { return true; }
 
    virtual void SetGravity(const glm::vec2& gravity) override {};
-   virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
+   virtual void SyncVisibleScene(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
 
    virtual void OnUpdate(const GameTimer& gt) override {}
 
@@ -104,7 +104,7 @@ public:
    virtual void SetGravity(const glm::vec2& gravity) override;
    // Сравнивает сохраненное местоположение актеров и то местоположение, которое хранится внутри физической симуляции.
    // В случае различия, местоположение актера обновляется
-   virtual void SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap) override;
+   virtual void SyncVisibleScene(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override;
    // Шаг симуляции
    virtual void OnUpdate(const GameTimer& gt) override;
 
@@ -163,15 +163,15 @@ private:
    cpSpace* m_cpSpace;
 
    // Физические свойства материалов
-   using DensityTable = std::map<std::string, float>;
-   using MaterialTable = std::map<std::string, MaterialData>;
+   using DensityTable = HashMap<std::string, float>;
+   using MaterialTable = HashMap<std::string, MaterialData>;
    DensityTable m_densityTable;
    MaterialTable m_materialTable;
 
-   using ActorIDToRigidBodyMap = std::map<ActorId, cpBody* const>;
+   using ActorIDToRigidBodyMap = HashMap<ActorId, cpBody* const>;
    ActorIDToRigidBodyMap m_actorIdToRigidBody;
 
-   using RigidBodyToActorIDMap = std::map<cpBody const*, ActorId>;
+   using RigidBodyToActorIDMap = HashMap<cpBody const*, ActorId>;
    RigidBodyToActorIDMap m_rigidBodyToActorId;
 };
 
@@ -210,14 +210,13 @@ void Physics2D::SetGravity(const glm::vec2& gravity)
    cpSpaceSetGravity(m_cpSpace, grav);
 }
 
-void Physics2D::SyncVisibleScene(const std::map<ActorId, std::shared_ptr<Actor>>& actorMap)
+void Physics2D::SyncVisibleScene(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap)
 {
-   for (ActorIDToRigidBodyMap::const_iterator it = m_actorIdToRigidBody.begin();
-        it != m_actorIdToRigidBody.end();
+   for (auto it = m_actorIdToRigidBody.CBegin(); it != m_actorIdToRigidBody.CEnd();
         ++it) {
       ActorId const id = it->first;
 
-      std::shared_ptr<Actor> pGameActor = actorMap.find(id)->second;
+      std::shared_ptr<Actor> pGameActor = actorMap.Find(id)->second;
       if (pGameActor) {
          std::shared_ptr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
          if (pTransformComponent) {
@@ -243,7 +242,7 @@ void Physics2D::OnUpdate(const GameTimer& gt)
 
 void Physics2D::AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial)
 {
-   Assert(m_actorIdToRigidBody.find(actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.Find(actorId) == m_actorIdToRigidBody.End(), "Actor with more than one physics body?");
 
    float specificGravity = LookupSpecificGravity(densityStr);
    MaterialData material(LookupMaterialData(physicsMaterial));
@@ -277,13 +276,13 @@ void Physics2D::AddCircle(float radius, BodyType bodyType, ActorId actorId, cons
    cpShapeSetElasticity(pShape, material.m_restitution);
    cpShapeSetDensity(pShape, specificGravity);
 
-   m_actorIdToRigidBody.insert(std::make_pair(actorId, pBody));
+   m_actorIdToRigidBody.Insert(actorId, pBody);
    m_rigidBodyToActorId[pBody] = actorId;
 }
 
 void Physics2D::AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial)
 {
-   Assert(m_actorIdToRigidBody.find(actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.Find(actorId) == m_actorIdToRigidBody.End(), "Actor with more than one physics body?");
 
    float specificGravity = LookupSpecificGravity(densityStr);
    MaterialData material(LookupMaterialData(physicsMaterial));
@@ -317,14 +316,14 @@ void Physics2D::AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId a
    cpShapeSetElasticity(pShape, material.m_restitution);
    cpShapeSetDensity(pShape, specificGravity);
 
-   m_actorIdToRigidBody.insert(std::make_pair(actorId, pBody));
+   m_actorIdToRigidBody.Insert(actorId, pBody);
    m_rigidBodyToActorId[pBody] = actorId;
 }
 
 // Добавляет физических объект состоящий из произвольного набора точек в физическую симуляцию
 void Physics2D::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial)
 {
-   Assert(m_actorIdToRigidBody.find(actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.Find(actorId) == m_actorIdToRigidBody.End(), "Actor with more than one physics body?");
 
    cpVect* cpVerts = new cpVect[numPoints];
    for (int i = 0; i < numPoints; ++i) {
@@ -365,7 +364,7 @@ void Physics2D::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bo
 
    delete[] cpVerts;
 
-   m_actorIdToRigidBody.insert(std::make_pair(actorId, pBody));
+   m_actorIdToRigidBody.Insert(actorId, pBody);
    m_rigidBodyToActorId[pBody] = actorId;
 }
 
@@ -374,14 +373,14 @@ void Physics2D::RemoveActor(ActorId id)
 {
    if (cpBody* const body = FindChipmunkRigidBody(id)) {
       RemoveCollisionObject(body);
-      m_actorIdToRigidBody.erase(id);
-      m_rigidBodyToActorId.erase(body);
+      m_actorIdToRigidBody.Erase(id);
+      m_rigidBodyToActorId.Erase(body);
    }
 }
 
 void Physics2D::CreateTrigger(ActorId actorId, const glm::vec2& pos, const glm::vec2& dim)
 {
-   Assert(m_actorIdToRigidBody.find(actorId) == m_actorIdToRigidBody.end(), "Actor with more than one physics body?");
+   Assert(m_actorIdToRigidBody.Find(actorId) == m_actorIdToRigidBody.End(), "Actor with more than one physics body?");
 
    cpBody* pBody = cpSpaceAddBody(m_cpSpace, cpBodyNewKinematic());
    cpBodySetPosition(pBody, cpv(pos.x, pos.y));
@@ -389,7 +388,7 @@ void Physics2D::CreateTrigger(ActorId actorId, const glm::vec2& pos, const glm::
    cpShapeSetSensor(pShape, true);
 
 
-   m_actorIdToRigidBody.insert(std::make_pair(actorId, pBody));
+   m_actorIdToRigidBody.Insert(actorId, pBody);
    m_rigidBodyToActorId[pBody] = actorId;
 }
 
@@ -521,7 +520,7 @@ void Physics2D::LoadXml(tinyxml2::XMLElement* pRoot)
       double friction = 0;
       pNode->QueryDoubleAttribute("restitution", &restitution);
       pNode->QueryDoubleAttribute("friction", &friction);
-      m_materialTable.insert(std::make_pair(pNode->Value(), MaterialData((float)restitution, (float)friction)));
+      m_materialTable.Insert(pNode->Value(), MaterialData((float)restitution, (float)friction));
    }
 
    pParentNode = pRoot->FirstChildElement("DensityTable");
@@ -530,15 +529,15 @@ void Physics2D::LoadXml(tinyxml2::XMLElement* pRoot)
       return;
    }
    for (tinyxml2::XMLElement* pNode = pParentNode->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
-      m_densityTable.insert(std::make_pair(pNode->Value(), (float)atof(pNode->FirstChild()->Value())));
+      m_densityTable.Insert(pNode->Value(), (float)atof(pNode->FirstChild()->Value()));
    }
 }
 
 float Physics2D::LookupSpecificGravity(const std::string& densityStr)
 {
    float density = 0;
-   auto densityIt = m_densityTable.find(densityStr);
-   if (densityIt != m_densityTable.end())
+   auto densityIt = m_densityTable.Find(densityStr);
+   if (densityIt != m_densityTable.End())
       density = densityIt->second;
 
    return density;
@@ -546,8 +545,8 @@ float Physics2D::LookupSpecificGravity(const std::string& densityStr)
 
 MaterialData Physics2D::LookupMaterialData(const std::string& materialStr)
 {
-   auto materialIt = m_materialTable.find(materialStr);
-   if (materialIt != m_materialTable.end())
+   auto materialIt = m_materialTable.Find(materialStr);
+   if (materialIt != m_materialTable.End())
       return materialIt->second;
    else
       return MaterialData(0.0, 0.0);
@@ -555,18 +554,20 @@ MaterialData Physics2D::LookupMaterialData(const std::string& materialStr)
 
 cpBody* Physics2D::FindChipmunkRigidBody(ActorId const id) const
 {
-   ActorIDToRigidBodyMap::const_iterator found = m_actorIdToRigidBody.find(id);
-   if (found != m_actorIdToRigidBody.end())
-      return found->second;
+   auto foundItr = m_actorIdToRigidBody.Find(id);
+   if (foundItr != m_actorIdToRigidBody.CEnd()) {
+      return foundItr->second;
+   }
 
    return nullptr;
 }
 
 ActorId Physics2D::FindActorID(cpBody const* const body) const
 {
-   RigidBodyToActorIDMap::const_iterator found = m_rigidBodyToActorId.find(body);
-   if (found != m_rigidBodyToActorId.end())
-      return found->second;
+   auto foundItr = m_rigidBodyToActorId.Find(body);
+   if (foundItr != m_rigidBodyToActorId.CEnd()) {
+      return foundItr->second;
+   }
 
    return ActorId();
 }

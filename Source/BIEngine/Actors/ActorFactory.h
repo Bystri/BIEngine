@@ -1,16 +1,16 @@
 ﻿#pragma once
 
-#include <map>
 #include <string>
 
 #include <glm/glm.hpp>
 
+#include "../StdLib/HashMap.h"
 #include "Actor.h"
 
 namespace BIEngine {
 
 using ActorComponentCreator = std::unique_ptr<ActorComponent> (*)();
-using ActorComponentCreatorMap = std::map<std::string, ActorComponentCreator>;
+using ActorComponentCreatorMap = HashMap<std::string, ActorComponentCreator>;
 
 class ActorFactory {
 public:
@@ -25,7 +25,7 @@ public:
 
    void AddComponentCreator(const std::string& name, ActorComponentCreator pComponentCreator)
    {
-      m_actorComponentCreators.insert({name, pComponentCreator});
+      m_actorComponentCreators.Insert(name, pComponentCreator);
    }
 
    // Создает актера со всеми требуемыми компонентами на основе XML-элемента.

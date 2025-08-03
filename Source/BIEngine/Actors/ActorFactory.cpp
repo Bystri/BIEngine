@@ -122,8 +122,8 @@ std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(std::shared_ptr<Ac
    // Создаем нового актера
    std::string name(pData->Value());
    std::shared_ptr<ActorComponent> pComponent;
-   auto findIt = m_actorComponentCreators.find(name);
-   if (findIt != m_actorComponentCreators.end()) {
+   auto findIt = m_actorComponentCreators.Find(name);
+   if (findIt != m_actorComponentCreators.End()) {
       ActorComponentCreator creator = findIt->second;
       pComponent = creator();
    } else {

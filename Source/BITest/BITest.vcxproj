@@ -80,7 +80,9 @@
     <ClCompile Include="Math\Vector_UnitTest.cpp" />
     <ClCompile Include="StdLib\Array_UnitTest.cpp" />
     <ClCompile Include="StdLib\DynamicArray_UnitTest.cpp" />
+    <ClCompile Include="StdLib\ForwardList_UnitTest.cpp" />
     <ClCompile Include="StdLib\List_UnitTest.cpp" />
+    <ClCompile Include="StdLib\HashMap_UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -95,7 +97,9 @@
     <ClInclude Include="..\BIEngine\Math\Vector.h" />
     <ClInclude Include="..\BIEngine\StdLib\Array.h" />
     <ClInclude Include="..\BIEngine\StdLib\DynamicArray.h" />
+    <ClInclude Include="..\BIEngine\StdLib\ForwardList.h" />
     <ClInclude Include="..\BIEngine\StdLib\List.h" />
+    <ClInclude Include="..\BIEngine\StdLib\HashMap.h" />
     <ClInclude Include="..\BIEngine\StdLib\StdLib.h" />
     <ClInclude Include="..\BIEngine\Utilities\Logger.h" />
   </ItemGroup>

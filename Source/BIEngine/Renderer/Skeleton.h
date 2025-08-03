@@ -2,11 +2,11 @@
 
 #include <string>
 #include <memory>
-#include <unordered_map>
 
 #include <glm/glm.hpp>
 
 #include "../EngineCore/Assert.h"
+#include "../StdLib/HashMap.h"
 #include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
@@ -32,8 +32,8 @@ public:
 
    const glm::mat4& GetBoneMatrix(const std::string& boneName) const
    {
-      std::unordered_map<std::string, glm::mat4>::const_iterator itr = m_finalBoneMatrices.find(boneName);
-      Assert(itr != m_finalBoneMatrices.cend(), "Cannot find bone with name %s", boneName.c_str());
+      auto itr = m_finalBoneMatrices.Find(boneName);
+      Assert(itr != m_finalBoneMatrices.CEnd(), "Cannot find bone with name %s", boneName.c_str());
       return itr->second;
    }
 
@@ -52,7 +52,7 @@ private:
 private:
    std::shared_ptr<BoneInfo> m_pSkeletonRoot;
 
-   std::unordered_map<std::string, glm::mat4> m_finalBoneMatrices;
+   HashMap<std::string, glm::mat4> m_finalBoneMatrices;
 };
 
 } // namespace BIEngine

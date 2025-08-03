@@ -12,7 +12,7 @@ class GameLogic {
    friend class GameApp;
 
 public:
-   using ActorMap = std::map<ActorId, std::shared_ptr<Actor>>;
+   using ActorMap = HashMap<ActorId, std::shared_ptr<Actor>>;
 
    GameLogic();
    virtual ~GameLogic();
@@ -50,7 +50,7 @@ public:
 
    std::shared_ptr<Actor> GetActor(ActorId id) const;
 
-   int GetNumActors() const { return m_actors.size(); };
+   int GetNumActors() const { return m_actors.Size(); };
 
    const ActorMap& GetActors() const { return m_actors; }
 
