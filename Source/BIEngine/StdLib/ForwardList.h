@@ -36,57 +36,17 @@ class ForwardList {
    };
 
 public:
-   class Iterator {
-      friend class ForwardList;
-
-   public:
-      Iterator& operator++()
-      {
-         m_pCurNode = m_pCurNode == nullptr ? nullptr : m_pCurNode->next;
-         return *this;
-      }
-
-      Iterator operator++(int)
-      {
-         Iterator old = *this;
-         operator++();
-         return old;
-      }
-
-      T& operator*()
-      {
-         return static_cast<Node*>(m_pCurNode)->val;
-      }
-
-      T* operator->()
-      {
-         return &static_cast<Node*>(m_pCurNode)->val;
-      }
-
-      friend bool operator==(const Iterator& lhs, const Iterator& rhs)
-      {
-         return lhs.m_pCurNode == rhs.m_pCurNode;
-      }
-
-      friend bool operator!=(const Iterator& lhs, const Iterator& rhs)
-      {
-         return !(lhs == rhs);
-      }
-
-   private:
-      Iterator(NodeBase* pCur)
-         : m_pCurNode(pCur)
-      {
-      }
-
-   private:
-      NodeBase* m_pCurNode;
-   };
-
    class ConstIterator {
       friend class ForwardList;
 
    public:
+      ConstIterator& operator=(const ConstIterator& rhs)
+      {
+         m_pCurNode = rhs.m_pCurNode;
+
+         return *this;
+      }
+
       ConstIterator& operator++()
       {
          m_pCurNode = m_pCurNode == nullptr ? nullptr : m_pCurNode->next;
@@ -129,6 +89,27 @@ public:
 
    private:
       NodeBase* m_pCurNode;
+   };
+
+   class Iterator : public ConstIterator {
+      friend class ForwardList;
+
+   public:
+      T& operator*()
+      {
+         return static_cast<Node*>(m_pCurNode)->val;
+      }
+
+      T* operator->()
+      {
+         return &static_cast<Node*>(m_pCurNode)->val;
+      }
+
+   private:
+      Iterator(NodeBase* pCur)
+         : ConstIterator(pCur)
+      {
+      }
    };
 
    ForwardList() = default;
@@ -211,9 +192,9 @@ public:
       return Iterator(nullptr);
    }
 
-   Iterator CBeforeBegin()
+   ConstIterator CBeforeBegin()
    {
-      return Iterator(&m_head);
+      return ConstIterator(&m_head);
    }
 
    ConstIterator CBegin() const
@@ -262,25 +243,25 @@ public:
    }
 
    template <typename... U>
-   Iterator EmplaceAfter(Iterator pos, U&&... args)
+   Iterator EmplaceAfter(ConstIterator pos, U&&... args)
    {
       Node* newNode = new Node{pos.m_pCurNode->next, std::forward<U>(args)...};
       return insertImpl(pos, newNode);
    }
 
-   Iterator InsertAfter(Iterator pos, const T& val)
+   Iterator InsertAfter(ConstIterator pos, const T& val)
    {
       Node* newNode = new Node{pos.m_pCurNode->next, val};
       return insertImpl(pos, newNode);
    }
 
-   Iterator InsertAfter(Iterator pos, T&& val)
+   Iterator InsertAfter(ConstIterator pos, T&& val)
    {
       Node* newNode = new Node{pos.m_pCurNode->next, std::forward<T>(val)};
       return insertImpl(pos, newNode);
    }
 
-   Iterator EraseAfter(Iterator pos)
+   Iterator EraseAfter(ConstIterator pos)
    {
       Node* const pNodeToDelete = static_cast<Node*>(pos.m_pCurNode->next);
       pos.m_pCurNode->next = pos.m_pCurNode->next->next;
@@ -290,7 +271,7 @@ public:
       return itr;
    }
 
-   void SpliceAfter(Iterator pos, const ForwardList<T>& other, Iterator itFromOther)
+   void SpliceAfter(ConstIterator pos, const ForwardList<T>& other, ConstIterator itFromOther)
    {
       Node* const nodeToMove = static_cast<Node*>(itFromOther.m_pCurNode->next);
       itFromOther.m_pCurNode->next = itFromOther.m_pCurNode->next->next;
@@ -304,7 +285,7 @@ private:
       m_head.next = newNode;
    }
 
-   Iterator insertImpl(Iterator pos, Node* newNode)
+   Iterator insertImpl(ConstIterator pos, Node* newNode)
    {
       pos.m_pCurNode->next = newNode;
 

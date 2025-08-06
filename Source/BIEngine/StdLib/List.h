@@ -15,71 +15,18 @@ class List {
    };
 
 public:
-   class Iterator {
-      friend class List;
-
-   public:
-      Iterator& operator++()
-      {
-         m_pCurNode = m_pCurNode == nullptr ? m_pList->m_pFirst : m_pCurNode->next;
-         return *this;
-      }
-
-      Iterator operator++(int)
-      {
-         Iterator old = *this;
-         operator++();
-         return old;
-      }
-
-      Iterator& operator--()
-      {
-         m_pCurNode = m_pCurNode == nullptr ? m_pList->m_pLast : m_pCurNode->prev;
-         return *this;
-      }
-
-      Iterator operator--(int)
-      {
-         Iterator old = *this;
-         operator--();
-         return old;
-      }
-
-      T& operator*()
-      {
-         return m_pCurNode->val;
-      }
-
-      T* operator->()
-      {
-         return &m_pCurNode->val;
-      }
-
-      friend bool operator==(const Iterator& lhs, const Iterator& rhs)
-      {
-         return lhs.m_pCurNode == rhs.m_pCurNode;
-      }
-
-      friend bool operator!=(const Iterator& lhs, const Iterator& rhs)
-      {
-         return !(lhs == rhs);
-      }
-
-   private:
-      Iterator(List<T>* pList, Node* pCur)
-         : m_pList(pList), m_pCurNode(pCur)
-      {
-      }
-
-   private:
-      List<T>* m_pList;
-      Node* m_pCurNode;
-   };
-
    class ConstIterator {
       friend class List;
 
    public:
+      ConstIterator& operator=(const ConstIterator& rhs)
+      {
+         m_pList = rhs.m_pList;
+         m_pCurNode = rhs.m_pCurNode;
+
+         return *this;
+      }
+
       ConstIterator& operator++()
       {
          m_pCurNode = m_pCurNode == nullptr ? m_pList->m_pFirst : m_pCurNode->next;
@@ -133,8 +80,29 @@ public:
       }
 
    private:
-      const List<T>* const m_pList;
+      const List<T>* m_pList;
       Node* m_pCurNode;
+   };
+
+   class Iterator : public ConstIterator {
+      friend class List;
+
+   public:
+      T& operator*()
+      {
+         return m_pCurNode->val;
+      }
+
+      T* operator->()
+      {
+         return &m_pCurNode->val;
+      }
+
+   private:
+      Iterator(const List<T>* pList, Node* pCur)
+         : ConstIterator(pList, pCur)
+      {
+      }
    };
 
    List() = default;
@@ -332,19 +300,19 @@ public:
       m_pFirst->prev = nullptr;
    }
 
-   Iterator Insert(Iterator pos, const T& val)
+   Iterator Insert(ConstIterator pos, const T& val)
    {
       Node* newNode = new Node{pos.m_pCurNode->prev, pos.m_pCurNode, val};
       return inserImpl(pos, newNode);
    }
 
-   Iterator Insert(Iterator pos, T&& val)
+   Iterator Insert(ConstIterator pos, T&& val)
    {
       Node* newNode = new Node{pos.m_pCurNode->prev, pos.m_pCurNode, std::forward(val)};
       return inserImpl(pos, newNode);
    }
 
-   Iterator Erase(Iterator pos)
+   Iterator Erase(ConstIterator pos)
    {
       --m_size;
 
@@ -425,7 +393,7 @@ private:
       m_pFirst = newNode;
    }
 
-   Iterator inserImpl(Iterator pos, Node* newNode)
+   Iterator inserImpl(ConstIterator pos, Node* newNode)
    {
       pos.m_pCurNode->prev->next = newNode;
       pos.m_pCurNode->prev = newNode;
