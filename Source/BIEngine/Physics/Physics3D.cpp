@@ -2,7 +2,6 @@
 
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include <set>
 #include <iterator>
 #include <algorithm>
 
@@ -14,6 +13,7 @@
 #include <btBulletCollisionCommon.h>
 #include <BulletCollision/NarrowPhaseCollision/btRaycastCallback.h>
 
+#include "../StdLib/HashSet.h"
 #include "../StdLib/HashMap.h"
 #include "../EngineCore/GameApp.h"
 #include "../Actors/Actor.h"
@@ -261,7 +261,16 @@ private:
    BulletRigidBodyToActorIDMap m_rigidBodyToActorId;
 
    using CollisionPair = std::pair<btRigidBody const*, btRigidBody const*>;
-   using CollisionPairs = std::set<CollisionPair>;
+
+   class HashCollisionPair {
+   public:
+      SizeT operator()(const CollisionPair& pair)
+      {
+         return std::hash<btRigidBody const*>()(pair.first) ^ (std::hash<btRigidBody const*>()(pair.second) << 1);
+      }
+   };
+
+   using CollisionPairs = HashSet<CollisionPair, HashCollisionPair>;
    CollisionPairs m_previousTickCollisionPairs;
 };
 
@@ -827,14 +836,13 @@ void Physics3D::RemoveCollisionObject(btCollisionObject* const pBodyToRemove)
    m_pDynamicsWorld->removeCollisionObject(pBodyToRemove);
 
    // Потом удаляем объект из списка столкновений
-   for (CollisionPairs::iterator it = m_previousTickCollisionPairs.begin();
-        it != m_previousTickCollisionPairs.end();) {
-      CollisionPairs::iterator next = it;
+   for (auto it = m_previousTickCollisionPairs.Begin(); it != m_previousTickCollisionPairs.End();) {
+      auto next = it;
       ++next;
 
       if (it->first == pBodyToRemove || it->second == pBodyToRemove) {
          SendCollisionPairRemoveEvent(it->first, it->second);
-         m_previousTickCollisionPairs.erase(it);
+         m_previousTickCollisionPairs.Erase(it);
       }
 
       it = next;
@@ -951,7 +959,7 @@ void Physics3D::BulletInternalTickCallback(btDynamicsWorld* const world, const b
       Assert(manifold, "There is not data inside bullet for manifold with idx %d (Something really bad happened)", manifoldIdx);
 
       if (!manifold) {
-         return;
+         continue;
       }
 
       const btRigidBody* const body0 = static_cast<const btRigidBody*>(manifold->getBody0());
@@ -964,29 +972,22 @@ void Physics3D::BulletInternalTickCallback(btDynamicsWorld* const world, const b
       const btRigidBody* const sortedBodyB = swapped ? body0 : body1;
 
       CollisionPair const thisPair = std::make_pair(sortedBodyA, sortedBodyB);
-      currentTickCollisionPairs.insert(thisPair);
+      currentTickCollisionPairs.Insert(thisPair);
 
-      if (bulletPhysics->m_previousTickCollisionPairs.find(thisPair) == bulletPhysics->m_previousTickCollisionPairs.end()) {
+      if (bulletPhysics->m_previousTickCollisionPairs.Find(thisPair) == bulletPhysics->m_previousTickCollisionPairs.End()) {
          // Это новый контакт - отправляем событие
          bulletPhysics->SendCollisionPairAddEvent(manifold, body0, body1);
       }
    }
 
-   CollisionPairs removedCollisionPairs;
-
-   std::set_difference(bulletPhysics->m_previousTickCollisionPairs.begin(), bulletPhysics->m_previousTickCollisionPairs.end(), currentTickCollisionPairs.begin(), currentTickCollisionPairs.end(), std::inserter(removedCollisionPairs, removedCollisionPairs.begin()));
-
-   for (CollisionPairs::const_iterator it = removedCollisionPairs.begin(),
-                                       end = removedCollisionPairs.end();
-        it != end; ++it) {
-      btRigidBody const* const body0 = it->first;
-      btRigidBody const* const body1 = it->second;
-
-      bulletPhysics->SendCollisionPairRemoveEvent(body0, body1);
+   for (const auto collPair : bulletPhysics->m_previousTickCollisionPairs) {
+      if (currentTickCollisionPairs.Find(collPair) == currentTickCollisionPairs.End()) {
+         bulletPhysics->SendCollisionPairRemoveEvent(collPair.first, collPair.second);
+      }
    }
 
    // the current tick becomes the previous tick.  this is the way of all things.
-   bulletPhysics->m_previousTickCollisionPairs = currentTickCollisionPairs;
+   bulletPhysics->m_previousTickCollisionPairs = std::move(currentTickCollisionPairs);
 }
 
 void Physics3D::DestroyActorDelegate(IEventDataPtr pEventData)

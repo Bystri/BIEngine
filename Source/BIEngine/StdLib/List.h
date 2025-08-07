@@ -73,13 +73,13 @@ public:
          return !(lhs == rhs);
       }
 
-   private:
+   protected:
       ConstIterator(const List<T>* pList, Node* pCur)
          : m_pList(pList), m_pCurNode(pCur)
       {
       }
 
-   private:
+   protected:
       const List<T>* m_pList;
       Node* m_pCurNode;
    };
@@ -90,15 +90,15 @@ public:
    public:
       T& operator*()
       {
-         return m_pCurNode->val;
+         return this->m_pCurNode->val;
       }
 
       T* operator->()
       {
-         return &m_pCurNode->val;
+         return &this->m_pCurNode->val;
       }
 
-   private:
+   protected:
       Iterator(const List<T>* pList, Node* pCur)
          : ConstIterator(pList, pCur)
       {

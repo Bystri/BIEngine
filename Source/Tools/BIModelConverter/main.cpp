@@ -1,5 +1,3 @@
-#include <unordered_set>
-
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -7,13 +5,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
+#include "../../BIEngine/StdLib/HashSet.h"
 #include "../../BIEngine/Utilities/Logger.h"
 
 std::string gAssetPath;
 std::string gSaveFolder;
 
 std::string pRootBoneName;
-std::unordered_set<std::string> gBones;
+BIEngine::HashSet<std::string> gBones;
 
 static inline glm::mat4 modelLoaderConvertMatrixToGLMFormat(const aiMatrix4x4& from)
 {
@@ -113,20 +112,20 @@ static void modeLoaderLoadAnimations(const aiScene* const scene)
    }
 }
 
-static void modelLoaderProcessBoneInfoFromMesh(std::unordered_set<std::string>& bones, aiMesh* const mesh, const aiScene* const scene)
+static void modelLoaderProcessBoneInfoFromMesh(BIEngine::HashSet<std::string>& bones, aiMesh* const mesh, const aiScene* const scene)
 {
    for (int i = 0; i < mesh->mNumBones; ++i) {
       const std::string boneName = mesh->mBones[i]->mName.C_Str();
 
-      if (bones.find(boneName) != bones.end()) {
+      if (bones.Find(boneName) != bones.End()) {
          continue;
       }
 
-      bones.insert(boneName);
+      bones.Insert(boneName);
    }
 }
 
-static void modelLoaderLoadBonesInfoFromMeshes(std::unordered_set<std::string>& bones, aiNode* node, const aiScene* scene)
+static void modelLoaderLoadBonesInfoFromMeshes(BIEngine::HashSet<std::string>& bones, aiNode* node, const aiScene* scene)
 {
    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
       aiMesh* const mesh = scene->mMeshes[node->mMeshes[i]];
@@ -138,12 +137,12 @@ static void modelLoaderLoadBonesInfoFromMeshes(std::unordered_set<std::string>& 
    }
 }
 
-static bool modelLoaderExtractRootBonePath(std::unordered_set<std::string>& bones, aiNode* node, const aiScene* scene, std::string& path)
+static bool modelLoaderExtractRootBonePath(BIEngine::HashSet<std::string>& bones, aiNode* node, const aiScene* scene, std::string& path)
 {
    std::string tempPath = path + node->mName.C_Str();
 
-   auto boneSetItr = bones.find(node->mName.C_Str());
-   if (boneSetItr != bones.end()) {
+   auto boneSetItr = bones.Find(node->mName.C_Str());
+   if (boneSetItr != bones.End()) {
       path = tempPath;
       return true;
    }
@@ -164,8 +163,8 @@ static std::string modelLoaderGetRootBonePath(aiNode* node, const aiScene* scene
 {
    modelLoaderLoadBonesInfoFromMeshes(gBones, node, scene);
 
-   auto boneSetItr = gBones.find(node->mName.C_Str());
-   if (boneSetItr != gBones.end()) {
+   auto boneSetItr = gBones.Find(node->mName.C_Str());
+   if (boneSetItr != gBones.End()) {
       // This node is actually bone! Get needed info and return
       return ".";
    }
@@ -634,7 +633,7 @@ static tinyxml2::XMLElement* modelLoaderProcessNode(tinyxml2::XMLDocument* const
 
    if (pRootBoneName == nodeName) {
       pComponentsElement->LinkEndChild(modelLoaderCreateSkeletonComponent(pDoc));
-   } else if (gBones.find(nodeName) != gBones.end()) {
+   } else if (gBones.Find(nodeName) != gBones.End()) {
       pComponentsElement->LinkEndChild(modelLoaderCreateBoneComponent(pDoc));
    }
 

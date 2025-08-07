@@ -80,14 +80,13 @@ public:
          return !(lhs == rhs);
       }
 
-   private:
+   protected:
       ConstIterator(NodeBase* pCur)
          : m_pCurNode(pCur)
       {
       }
 
-
-   private:
+   protected:
       NodeBase* m_pCurNode;
    };
 
@@ -97,15 +96,15 @@ public:
    public:
       T& operator*()
       {
-         return static_cast<Node*>(m_pCurNode)->val;
+         return static_cast<Node*>(this->m_pCurNode)->val;
       }
 
       T* operator->()
       {
-         return &static_cast<Node*>(m_pCurNode)->val;
+         return &static_cast<Node*>(this->m_pCurNode)->val;
       }
 
-   private:
+   protected:
       Iterator(NodeBase* pCur)
          : ConstIterator(pCur)
       {

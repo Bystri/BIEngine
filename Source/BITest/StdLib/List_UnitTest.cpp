@@ -18,6 +18,31 @@ TEST(List, PushBack) {
 	EXPECT_EQ(i, valsToAdd + 1); // Plus one bc we iterated to past-of-end in the loop
 }
 
+TEST(List, IteratorChangeValue) {
+	constexpr int valsToAdd = 10;
+
+	BIEngine::List<int> list;
+
+	for (int i = 0; i <= valsToAdd; ++i) {
+		list.PushBack(i);
+	}
+
+	{
+		auto itr = list.Begin();
+		for (int i = valsToAdd; i >= 0; ++itr, --i) {
+			*itr = i;
+		}
+	}
+
+	{
+		auto itr = list.Begin();
+		for (int i = valsToAdd; i >= 0; ++itr, --i) {
+			EXPECT_EQ(*itr, i);
+		}
+	}
+}
+
+
 TEST(List, BackwardIteration) {
 	constexpr int valsToAdd = 10;
 
