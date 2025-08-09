@@ -105,6 +105,7 @@
     <ClInclude Include="..\BIEngine\StdLib\HashSet.h" />
     <ClInclude Include="..\BIEngine\StdLib\List.h" />
     <ClInclude Include="..\BIEngine\StdLib\HashMap.h" />
+    <ClInclude Include="..\BIEngine\StdLib\MemoryUtils.h" />
     <ClInclude Include="..\BIEngine\StdLib\StdLib.h" />
     <ClInclude Include="..\BIEngine\StdLib\UniquePtr.h" />
     <ClInclude Include="..\BIEngine\Utilities\Logger.h" />

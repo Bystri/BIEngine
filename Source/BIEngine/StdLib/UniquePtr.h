@@ -2,16 +2,9 @@
 
 #include <utility>
 
-namespace BIEngine {
+#include "MemoryUtils.h"
 
-template <typename T>
-class DefaultDeleter {
-public:
-   void operator()(T* ptr)
-   {
-      delete ptr;
-   }
-};
+namespace BIEngine {
 
 template <typename T, typename Deleter = DefaultDeleter<T>>
 class UniquePtr {
