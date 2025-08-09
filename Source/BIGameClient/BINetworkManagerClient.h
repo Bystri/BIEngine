@@ -44,7 +44,7 @@ private:
    float m_timeOfLastHello;
    float m_timeOfLastEventPacket;
 
-   std::unique_ptr<BIEngine::ObjectReplicationManagerSlave> m_pReplicationManager;
+   BIEngine::UniquePtr<BIEngine::ObjectReplicationManagerSlave> m_pReplicationManager;
 
    int m_playerId;
    std::string m_name;

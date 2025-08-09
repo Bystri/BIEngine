@@ -5,6 +5,7 @@
 #include "UserInterface.h"
 #include "../Renderer/Renderer.h"
 #include "../Graphics/Scene.h"
+#include "../StdLib/UniquePtr.h"
 
 namespace BIEngine {
 
@@ -20,7 +21,7 @@ public:
 
    std::shared_ptr<Renderer> GetRenderer() const { return m_pRenderer; }
 
-   const std::unique_ptr<Scene>& GetScene() const { return m_pScene; }
+   const UniquePtr<Scene>& GetScene() const { return m_pScene; }
 
    virtual void OnPreRender(const GameTimer& gt) override;
    virtual void OnPostRender(const GameTimer& gt) override;
@@ -42,7 +43,7 @@ protected:
    // Графическая часть
    UserInterface m_userInterface;
    std::shared_ptr<Renderer> m_pRenderer;
-   std::unique_ptr<Scene> m_pScene;
+   UniquePtr<Scene> m_pScene;
 
    // Переменные для контроля скорости обновления кадров
    float m_currTick; // Текущее время отображения

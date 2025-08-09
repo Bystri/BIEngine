@@ -54,11 +54,11 @@ public:
 private:
    BIEngine::EventManager::DelegateHandler m_newPlayerActorDelegateHandler;
 
-   std::unique_ptr<BIInputActionController> m_pInputActionController;
-   std::unique_ptr<BICameraManager> m_pCameraManager;
+   BIEngine::UniquePtr<BIInputActionController> m_pInputActionController;
+   BIEngine::UniquePtr<BICameraManager> m_pCameraManager;
 
-   std::unique_ptr<BINetworkManagerClient> m_pNetworkManager;
+   BIEngine::UniquePtr<BINetworkManagerClient> m_pNetworkManager;
    std::shared_ptr<BIGameClientHumanView> m_pHumanView;
 
-   std::unique_ptr<BIDebugMenuController> m_pDebugMenuController;
+   BIEngine::UniquePtr<BIDebugMenuController> m_pDebugMenuController;
 };

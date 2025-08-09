@@ -24,7 +24,7 @@ public:
 
    std::shared_ptr<IGamePhysics3D> GetGamePhysics3D() const { return m_pPhysics3D; }
 
-   std::unique_ptr<NavWorld>& GetNavWorld() { return m_pNavWorld; }
+   UniquePtr<NavWorld>& GetNavWorld() { return m_pNavWorld; }
 
    virtual bool Init();
 
@@ -76,7 +76,7 @@ protected:
 
    std::shared_ptr<IGamePhysics2D> m_pPhysics2D;
    std::shared_ptr<IGamePhysics3D> m_pPhysics3D;
-   std::unique_ptr<NavWorld> m_pNavWorld;
+   UniquePtr<NavWorld> m_pNavWorld;
 };
 
 } // namespace BIEngine

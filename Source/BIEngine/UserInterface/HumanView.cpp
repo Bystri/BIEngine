@@ -45,7 +45,7 @@ bool HumanView::Init()
       return false;
    }
    // Создания сцены на основе отображения
-   m_pScene = std::make_unique<Scene>(m_pRenderer);
+   m_pScene = MakeUnique<Scene>(m_pRenderer);
    m_pScene->Init();
 
    m_pScene->SetCamera(std::make_shared<Camera>());

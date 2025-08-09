@@ -7,7 +7,7 @@ template <typename... Args>
 std::string Format(const std::string& format, Args... args)
 {
    int size_s = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'
-   std::unique_ptr<char[]> buf(new char[size_s]);
+   UniquePointer<char[]> buf(new char[size_s]);
    std::snprintf(buf.get(), size_s, format.c_str(), args...);
    return std::string(buf.get(), buf.get() + size_s - 1); // We don't want the '\0' inside
 }

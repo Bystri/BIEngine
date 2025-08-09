@@ -75,7 +75,7 @@ bool BIServerGameLogic::Init()
    m_pPhysics2D.reset(BIEngine::CreateGamePhysics2D());
    m_pPhysics3D.reset(BIEngine::CreateGamePhysics3D());
 
-   m_pNavWorld = std::make_unique<BIEngine::NavWorld>();
+   m_pNavWorld = BIEngine::MakeUnique<BIEngine::NavWorld>();
 
    m_pActorFactory->AddComponentCreator(LocomotionInfoComponent::g_CompId, CreateLocomotionInfoComponent);
 
@@ -90,7 +90,7 @@ bool BIServerGameLogic::Init()
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayer>(ReplicationObjectPlayer::sk_ClassType);
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayerCharacter>(ReplicationObjectPlayerCharacter::sk_ClassType);
 
-   m_pNetworkManager = std::make_unique<BINetworkManagerServer>();
+   m_pNetworkManager = BIEngine::MakeUnique<BINetworkManagerServer>();
    if (!m_pNetworkManager->Init(BIEngine::g_pApp->m_options.hostPort)) {
       return false;
    }

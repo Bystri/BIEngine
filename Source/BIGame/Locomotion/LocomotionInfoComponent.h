@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "../../BIEngine/Actors/ActorComponent.h"
+#include "../../BIEngine/StdLib/UniquePtr.h"
 
 class LocomotionInfoComponent : public BIEngine::ActorComponent {
 public:
@@ -39,7 +40,7 @@ private:
    glm::vec2 m_currentDir = glm::vec2(0.0f);
 };
 
-static std::unique_ptr<BIEngine::ActorComponent> CreateLocomotionInfoComponent()
+static BIEngine::UniquePtr<BIEngine::ActorComponent> CreateLocomotionInfoComponent()
 {
-   return std::make_unique<LocomotionInfoComponent>();
+   return BIEngine::MakeUnique<LocomotionInfoComponent>();
 }

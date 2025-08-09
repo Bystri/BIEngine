@@ -46,7 +46,7 @@ std::shared_ptr<ReplicationObject> ObjectReplicationCreate(uint32_t classId)
 void ObjectReplicationManagerMaster::AddClient(std::shared_ptr<Peer> pPeer)
 {
    m_pPeers.PushBack(pPeer);
-   std::unique_ptr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(std::make_unique<ReplicationActionWriter>(m_pLinkingContext));
+   UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
    OutputMemoryBitStream& replicationBuffer = m_replicationBuffersPerPeer.EmplaceBack(OutputMemoryBitStream());
 
    for (const auto& pObj : m_pReplicationObjects) {

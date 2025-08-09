@@ -125,7 +125,7 @@ std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(std::shared_ptr<Ac
    auto findIt = m_actorComponentCreators.Find(name);
    if (findIt != m_actorComponentCreators.End()) {
       ActorComponentCreator creator = findIt->second;
-      pComponent = creator();
+      pComponent.reset(creator().Release());
    } else {
       Logger::WriteLog(Logger::LogType::ERROR, "Couldn’t find ActorComponent named " + name);
       return std::shared_ptr<ActorComponent>();

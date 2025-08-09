@@ -1,7 +1,7 @@
 ﻿#pragma once
 
+#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
-
 #include "../EngineCore/Assert.h"
 #include "../Graphics/Sprite.h"
 #include "../Renderer/Color.h"
@@ -31,9 +31,9 @@ protected:
    ColorRgba m_spriteColor;
 };
 
-static std::unique_ptr<ActorComponent> CreateSpriteRenderComponent()
+static UniquePtr<ActorComponent> CreateSpriteRenderComponent()
 {
-   return std::make_unique<SpriteRenderComponent>();
+   return MakeUnique<SpriteRenderComponent>();
 }
 
 class MeshBaseRenderComponent : public ActorComponent {
@@ -82,9 +82,9 @@ protected:
    float m_depth;
 };
 
-static std::unique_ptr<ActorComponent> CreateBoxRenderComponent()
+static UniquePtr<ActorComponent> CreateBoxRenderComponent()
 {
-   return std::make_unique<BoxRenderComponent>();
+   return MakeUnique<BoxRenderComponent>();
 }
 
 class SphereRenderComponent : public MeshRenderComponent {
@@ -105,9 +105,9 @@ protected:
    float m_radius;
 };
 
-static std::unique_ptr<ActorComponent> CreateSphereRenderComponent()
+static UniquePtr<ActorComponent> CreateSphereRenderComponent()
 {
-   return std::make_unique<SphereRenderComponent>();
+   return MakeUnique<SphereRenderComponent>();
 }
 
 class ModelRenderComponent : public MeshRenderComponent {
@@ -130,9 +130,9 @@ protected:
    std::string m_modelPath;
 };
 
-static std::unique_ptr<ActorComponent> CreateModelRenderComponent()
+static UniquePtr<ActorComponent> CreateModelRenderComponent()
 {
-   return std::make_unique<ModelRenderComponent>();
+   return MakeUnique<ModelRenderComponent>();
 }
 
 } // namespace BIEngine

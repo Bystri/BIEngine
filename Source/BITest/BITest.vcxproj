@@ -43,6 +43,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -58,6 +59,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -84,6 +86,7 @@
     <ClCompile Include="StdLib\HashSet_UnitTest.cpp" />
     <ClCompile Include="StdLib\List_UnitTest.cpp" />
     <ClCompile Include="StdLib\HashMap_UnitTest.cpp" />
+    <ClCompile Include="StdLib\UniquePtr_UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -103,6 +106,7 @@
     <ClInclude Include="..\BIEngine\StdLib\List.h" />
     <ClInclude Include="..\BIEngine\StdLib\HashMap.h" />
     <ClInclude Include="..\BIEngine\StdLib\StdLib.h" />
+    <ClInclude Include="..\BIEngine\StdLib\UniquePtr.h" />
     <ClInclude Include="..\BIEngine\Utilities\Logger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

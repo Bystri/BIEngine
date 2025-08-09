@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "../../StdLib/UniquePtr.h"
 #include "../../StdLib/DynamicArray.h"
 #include "ObjectReplication.h"
 #include "ReplicationActionWriter.h"
@@ -34,7 +35,7 @@ private:
    std::shared_ptr<NewtworkObjectLinkingContexts> m_pLinkingContext;
 
    DynamicArray<std::shared_ptr<Peer>> m_pPeers;
-   DynamicArray<std::unique_ptr<ReplicationActionWriter>> m_pReplicationManagersPerPeer;
+   DynamicArray<UniquePtr<ReplicationActionWriter>> m_pReplicationManagersPerPeer;
    DynamicArray<OutputMemoryBitStream> m_replicationBuffersPerPeer;
    DynamicArray<std::shared_ptr<ReplicationObject>> m_pReplicationObjects;
 };

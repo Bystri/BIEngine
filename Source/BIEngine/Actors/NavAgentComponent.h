@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
 #include "../Navigation/NavWorld.h"
 
@@ -29,8 +30,8 @@ private:
    NavCrowd::NavAgentParams m_params;
 };
 
-static std::unique_ptr<ActorComponent> CreateNavAgentComponent()
+static UniquePtr<ActorComponent> CreateNavAgentComponent()
 {
-   return std::make_unique<NavAgentComponent>();
+   return MakeUnique<NavAgentComponent>();
 }
 } // namespace BIEngine

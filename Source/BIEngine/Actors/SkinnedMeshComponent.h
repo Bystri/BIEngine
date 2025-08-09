@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 
+#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
 #include "../Renderer/Skeleton.h"
 
@@ -37,9 +38,9 @@ private:
    Actor* m_pSkeletonRootActor;
 };
 
-static std::unique_ptr<ActorComponent> CreateSkinnedMeshComponent()
+static UniquePtr<ActorComponent> CreateSkinnedMeshComponent()
 {
-   return std::make_unique<SkinnedMeshComponent>();
+   return MakeUnique<SkinnedMeshComponent>();
 }
 
 } // namespace BIEngine

@@ -45,5 +45,5 @@ public:
 private:
    BIEngine::EventManager::DelegateHandler m_playerCreatedDelegateHandler;
 
-   std::unique_ptr<BINetworkManagerServer> m_pNetworkManager;
+   BIEngine::UniquePtr<BINetworkManagerServer> m_pNetworkManager;
 };

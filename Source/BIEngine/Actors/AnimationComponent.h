@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
 #include "../Graphics/Animator.h"
 #include "../ProcessManager/Process.h"
@@ -32,8 +33,8 @@ private:
    std::shared_ptr<Animator> m_pAnimator;
 };
 
-static std::unique_ptr<ActorComponent> CreateAnimatorComponent()
+static UniquePtr<ActorComponent> CreateAnimatorComponent()
 {
-   return std::make_unique<AnimationComponent>();
+   return MakeUnique<AnimationComponent>();
 }
 } // namespace BIEngine

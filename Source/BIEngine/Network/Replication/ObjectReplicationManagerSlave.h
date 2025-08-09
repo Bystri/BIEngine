@@ -4,13 +4,14 @@
 
 #include "ObjectReplication.h"
 #include "ReplicationActionReader.h"
+#include "../../StdLib/UniquePtr.h"
 
 namespace BIEngine {
 
 class ObjectReplicationManagerSlave {
 public:
    ObjectReplicationManagerSlave()
-      : m_pLinkingContext(std::make_shared<NewtworkObjectLinkingContexts>()), m_pReplicationActionReader(std::make_unique<ReplicationActionReader>(m_pLinkingContext))
+      : m_pLinkingContext(std::make_shared<NewtworkObjectLinkingContexts>()), m_pReplicationActionReader(MakeUnique<ReplicationActionReader>(m_pLinkingContext))
    {
    }
 
@@ -18,7 +19,7 @@ public:
 
 private:
    std::shared_ptr<NewtworkObjectLinkingContexts> m_pLinkingContext;
-   std::unique_ptr<ReplicationActionReader> m_pReplicationActionReader;
+   UniquePtr<ReplicationActionReader> m_pReplicationActionReader;
 };
 
 } // namespace BIEngine

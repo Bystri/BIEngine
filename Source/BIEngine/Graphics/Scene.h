@@ -8,6 +8,7 @@
 #include "RenderItemsStorage.h"
 #include "../Renderer/Renderer.h"
 #include "../Renderer/ConstantsBuffer.h"
+#include "../StdLib/UniquePtr.h"
 #include "../EventManager/Events.h"
 #include "../Utilities/GameTimer.h"
 
@@ -40,7 +41,7 @@ public:
 
    const std::shared_ptr<Camera> GetCamera() const { return m_pCamera; }
 
-   RenderItemsStorage* GetRenderItemsStorage() const { return m_pRenderItemsStorage.get(); }
+   RenderItemsStorage* GetRenderItemsStorage() const { return m_pRenderItemsStorage.Get(); }
 
    void AddRenderPass(std::shared_ptr<GraphicsRenderPass> pRenderPass) { m_graphicsRenderPasses.PushBack(pRenderPass); }
 
@@ -64,7 +65,7 @@ protected:
    std::shared_ptr<ConstantsBuffer> m_pConstantsBuffer;
 
    DynamicArray<std::shared_ptr<GraphicsRenderPass>> m_graphicsRenderPasses;
-   std::unique_ptr<RenderItemsStorage> m_pRenderItemsStorage;
+   UniquePtr<RenderItemsStorage> m_pRenderItemsStorage;
 };
 
 } // namespace BIEngine

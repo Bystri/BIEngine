@@ -1,9 +1,10 @@
 ﻿#pragma once
 
-#include "ActorComponent.h"
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+#include "../StdLib/UniquePtr.h"
+#include "ActorComponent.h"
 
 namespace BIEngine {
 
@@ -88,9 +89,9 @@ private:
    glm::vec3 m_localSize;
 };
 
-static std::unique_ptr<ActorComponent> CreateTransformComponent()
+static UniquePtr<ActorComponent> CreateTransformComponent()
 {
-   return std::make_unique<TransformComponent>();
+   return MakeUnique<TransformComponent>();
 }
 
 } // namespace BIEngine

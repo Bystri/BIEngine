@@ -4,12 +4,13 @@
 
 #include <glm/glm.hpp>
 
+#include "../StdLib/UniquePtr.h"
 #include "../StdLib/HashMap.h"
 #include "Actor.h"
 
 namespace BIEngine {
 
-using ActorComponentCreator = std::unique_ptr<ActorComponent> (*)();
+using ActorComponentCreator = UniquePtr<ActorComponent> (*)();
 using ActorComponentCreatorMap = HashMap<std::string, ActorComponentCreator>;
 
 class ActorFactory {

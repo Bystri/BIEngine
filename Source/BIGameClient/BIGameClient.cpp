@@ -79,7 +79,7 @@ bool BIGameClientLogic::Init()
    m_pPhysics2D.reset(BIEngine::CreateGamePhysics2D());
    m_pPhysics3D.reset(BIEngine::CreateGamePhysics3D());
 
-   m_pNavWorld = std::make_unique<BIEngine::NavWorld>();
+   m_pNavWorld = BIEngine::MakeUnique<BIEngine::NavWorld>();
 
    m_pActorFactory->AddComponentCreator(LocomotionInfoComponent::g_CompId, CreateLocomotionInfoComponent);
 
@@ -90,7 +90,7 @@ bool BIGameClientLogic::Init()
    PlayerManager::Create();
 
    BIEngine::SocketAddressPtr sockAddr = BIEngine::SocketUtil::CreateIPv4SocketFromString(BIEngine::g_pApp->m_options.hostAddress);
-   m_pNetworkManager = std::make_unique<BINetworkManagerClient>();
+   m_pNetworkManager = BIEngine::MakeUnique<BINetworkManagerClient>();
    m_pNetworkManager->Init(*sockAddr, BIEngine::g_pApp->m_options.playerName);
 
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayer>(ReplicationObjectPlayer::sk_ClassType);
@@ -103,9 +103,9 @@ bool BIGameClientLogic::Init()
    m_pHumanView->Init();
    AddGameView(m_pHumanView);
 
-   m_pInputActionController = std::make_unique<BIInputActionController>();
-   m_pCameraManager = std::make_unique<BICameraManager>(m_pHumanView->GetScene()->GetCamera());
-   m_pDebugMenuController = std::make_unique<BIDebugMenuController>();
+   m_pInputActionController = BIEngine::MakeUnique<BIInputActionController>();
+   m_pCameraManager = BIEngine::MakeUnique<BICameraManager>(m_pHumanView->GetScene()->GetCamera());
+   m_pDebugMenuController = BIEngine::MakeUnique<BIDebugMenuController>();
 
    BIRegisterEvents();
 

@@ -10,7 +10,7 @@ void BINetworkManagerClient::Init(const BIEngine::SocketAddress& serverAddress, 
 {
    NetworkManager::InitInternal(0);
 
-   m_pReplicationManager = std::make_unique<BIEngine::ObjectReplicationManagerSlave>();
+   m_pReplicationManager = BIEngine::MakeUnique<BIEngine::ObjectReplicationManagerSlave>();
 
    m_serverAddress = serverAddress;
    m_state = NetworkClientState::SayingHello;

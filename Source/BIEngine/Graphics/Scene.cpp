@@ -6,7 +6,7 @@ namespace BIEngine {
 
 Scene::Scene(std::shared_ptr<Renderer> pRenderer)
    : m_pRenderer(pRenderer), m_pConstantsBuffer(std::make_shared<ConstantsBuffer>()), m_pCamera(nullptr),
-     m_graphicsRenderPasses(), m_pRenderItemsStorage(std::make_unique<RenderItemsStorage>())
+     m_graphicsRenderPasses(), m_pRenderItemsStorage(MakeUnique<RenderItemsStorage>())
 {
 }
 
@@ -35,7 +35,7 @@ int Scene::OnPreRender(const GameTimer& gt)
 int Scene::OnPostRender(const GameTimer& gt)
 {
    for (int i = 0; i < m_graphicsRenderPasses.Size(); ++i) {
-      m_graphicsRenderPasses[i]->OnRender(this, m_pRenderItemsStorage.get());
+      m_graphicsRenderPasses[i]->OnRender(this, m_pRenderItemsStorage.Get());
    }
 
    return 0;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
 
 namespace BIEngine {
@@ -23,9 +24,9 @@ private:
    uint32_t m_playerId = 0xffff;
 };
 
-static std::unique_ptr<ActorComponent> CreateBIPlayerComponent()
+static UniquePtr<ActorComponent> CreateBIPlayerComponent()
 {
-   return std::make_unique<PlayerComponent>();
+   return MakeUnique<PlayerComponent>();
 }
 
 } // namespace BIEngine

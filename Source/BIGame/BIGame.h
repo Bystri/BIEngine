@@ -38,6 +38,6 @@ public:
    virtual void OnUpdate(BIEngine::GameTimer& gt) override;
 
 private:
-   std::unique_ptr<BICameraManager> m_pCameraManager;
+   BIEngine::UniquePtr<BICameraManager> m_pCameraManager;
    std::shared_ptr<BIGameHumanView> m_pHumanView;
 };

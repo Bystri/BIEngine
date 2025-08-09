@@ -2,6 +2,7 @@
 
 #include <pybind11/pybind11.h>
 
+#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
 #include "../StdLib/DynamicArray.h"
 
@@ -44,8 +45,8 @@ private:
    pybind11::object m_pyObject;
 };
 
-static std::unique_ptr<ActorComponent> CreateScriptComponent()
+static UniquePtr<ActorComponent> CreateScriptComponent()
 {
-   return std::make_unique<ScriptComponent>();
+   return MakeUnique<ScriptComponent>();
 }
 } // namespace BIEngine

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
 #include "../Physics/Physics3D.h"
 
@@ -55,8 +56,8 @@ protected:
    std::shared_ptr<IGamePhysics3D> m_gamePhysics;
 };
 
-static std::unique_ptr<ActorComponent> CreatePhysics3DComponent()
+static UniquePtr<ActorComponent> CreatePhysics3DComponent()
 {
-   return std::make_unique<Physics3DComponent>();
+   return MakeUnique<Physics3DComponent>();
 }
 } // namespace BIEngine

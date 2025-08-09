@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 
+#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
 #include "../Renderer/Color.h"
 
@@ -30,9 +31,9 @@ protected:
    ColorRgb m_color;
 };
 
-static std::unique_ptr<ActorComponent> CreateDirectionalLightComponent()
+static UniquePtr<ActorComponent> CreateDirectionalLightComponent()
 {
-   return std::make_unique<DirectionalLightComponent>();
+   return MakeUnique<DirectionalLightComponent>();
 }
 
 class PointLightComponent : public ActorComponent {
@@ -56,9 +57,9 @@ protected:
    ColorRgb m_color;
 };
 
-static std::unique_ptr<ActorComponent> CreatePointLightComponent()
+static UniquePtr<ActorComponent> CreatePointLightComponent()
 {
-   return std::make_unique<PointLightComponent>();
+   return MakeUnique<PointLightComponent>();
 }
 
 class SpotLightComponent : public ActorComponent {
@@ -95,8 +96,8 @@ protected:
    float m_outerCutOff;
 };
 
-static std::unique_ptr<ActorComponent> CreateSpotLightComponent()
+static UniquePtr<ActorComponent> CreateSpotLightComponent()
 {
-   return std::make_unique<SpotLightComponent>();
+   return MakeUnique<SpotLightComponent>();
 }
 } // namespace BIEngine

@@ -69,7 +69,7 @@ bool BIGameLogic::Init()
    m_pPhysics2D.reset(BIEngine::CreateGamePhysics2D());
    m_pPhysics3D.reset(BIEngine::CreateGamePhysics3D());
 
-   m_pNavWorld = std::make_unique<BIEngine::NavWorld>();
+   m_pNavWorld = BIEngine::MakeUnique<BIEngine::NavWorld>();
 
    if (!GameLogic::Init()) {
       return false;
@@ -82,7 +82,7 @@ bool BIGameLogic::Init()
    m_pHumanView->Init();
    AddGameView(m_pHumanView);
 
-   m_pCameraManager = std::make_unique<BICameraManager>(m_pHumanView->GetScene()->GetCamera());
+   m_pCameraManager = BIEngine::MakeUnique<BICameraManager>(m_pHumanView->GetScene()->GetCamera());
 
    BIRegisterEvents();
 

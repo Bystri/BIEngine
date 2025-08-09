@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
 
 namespace BIEngine {
@@ -30,9 +31,9 @@ private:
    std::shared_ptr<Material> m_pMaterial;
 };
 
-static std::unique_ptr<ActorComponent> CreateMeshComponent()
+static UniquePtr<ActorComponent> CreateMeshComponent()
 {
-   return std::make_unique<MeshComponent>();
+   return MakeUnique<MeshComponent>();
 }
 
 } // namespace BIEngine

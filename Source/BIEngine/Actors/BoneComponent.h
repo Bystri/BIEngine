@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
 #include "../Renderer/Skeleton.h"
 
@@ -26,8 +27,8 @@ private:
    std::shared_ptr<Skeleton::BoneInfo> m_pBone;
 };
 
-static std::unique_ptr<ActorComponent> CreateBoneComponent()
+static UniquePtr<ActorComponent> CreateBoneComponent()
 {
-   return std::make_unique<BoneComponent>();
+   return MakeUnique<BoneComponent>();
 }
 } // namespace BIEngine
