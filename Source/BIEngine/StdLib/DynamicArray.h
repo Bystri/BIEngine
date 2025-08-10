@@ -11,6 +11,7 @@ namespace BIEngine {
 template <typename T>
 class DynamicArray {
 public:
+   using ValueType = T;
    using Iterator = T*;
    using ConstIterator = const T*;
 

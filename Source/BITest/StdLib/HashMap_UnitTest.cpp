@@ -111,6 +111,7 @@ TEST(HashMap, ConstIterator) {
 	}
 }
 
+static bool useMapTestObjDestructor = true;
 static int mapTestObjCnt = 0;
 
 class HashMapTestObj
@@ -129,13 +130,29 @@ public:
 
 	~HashMapTestObj()
 	{
+		if (!useMapTestObjDestructor) {
+			return;
+		}
 		--mapTestObjCnt;
 	}
 
 	int val = 0;
 };
 
+TEST(HashMap, InsertMove) {
+	mapTestObjCnt = 0;
+	useMapTestObjDestructor = false;
+
+	BIEngine::HashMap<int, HashMapTestObj> map;
+
+	HashMapTestObj obj;
+	map.Insert(10, std::move(obj));
+	EXPECT_EQ(mapTestObjCnt, 1);
+}
+
 TEST(HashMap, Emplace) {
+	mapTestObjCnt = 0;
+	useMapTestObjDestructor = true;
 
 	{
 		BIEngine::HashMap<int, HashMapTestObj> map;

@@ -292,3 +292,18 @@ TEST(HashSet, Find) {
 	auto findNotPresentedItr = set.Find(notPresentedVal);
 	EXPECT_EQ(findNotPresentedItr, set.End());
 }
+
+TEST(HashSet, InsertMove) {
+	setTestObjCnt = 0;
+	{
+		BIEngine::HashSet<HashSetTestObj, HashSetTestObjHash, HashSetTestObjEqualTo> set;
+
+		{
+			HashSetTestObj obj;
+
+			set.Insert(std::move(obj));
+		}
+		EXPECT_EQ(setTestObjCnt, 0);
+	}
+	EXPECT_EQ(setTestObjCnt, -1);
+}

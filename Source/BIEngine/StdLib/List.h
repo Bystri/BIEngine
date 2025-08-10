@@ -15,6 +15,8 @@ class List {
    };
 
 public:
+   using ValueType = T;
+
    class ConstIterator {
       friend class List;
 

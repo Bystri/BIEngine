@@ -7,6 +7,7 @@ namespace BIEngine {
 template <typename T, SizeT N>
 class Array {
 public:
+   using ValueType = T;
    using Iterator = T*;
    using ConstIterator = const T*;
 

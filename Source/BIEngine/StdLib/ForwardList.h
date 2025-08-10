@@ -36,6 +36,8 @@ class ForwardList {
    };
 
 public:
+   using ValueType = T;
+
    class ConstIterator {
       friend class ForwardList;
 
