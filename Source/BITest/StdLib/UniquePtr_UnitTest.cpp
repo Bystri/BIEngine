@@ -105,6 +105,14 @@ TEST(UniquePtr, Reset) {
 	EXPECT_EQ(newRawPtr->val, 12);
 }
 
+TEST(UniquePtr, PtrForUnboundedArray) {
+
+	BIEngine::UniquePtr<int[]> ptr(new int[10]);
+	ptr[2] = 2;
+
+	EXPECT_EQ(ptr[2], 2);
+}
+
 TEST(UniquePtr, MakeUnique) {
 	bool wasDeleted = false;
 

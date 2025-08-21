@@ -2,6 +2,7 @@
 
 #include <utility>
 
+#include "../StdLib/StdLib.h"
 #include "MemoryUtils.h"
 
 namespace BIEngine {
@@ -9,9 +10,7 @@ namespace BIEngine {
 template <typename T, typename Deleter = DefaultDeleter<T>>
 class UniquePtr {
 public:
-   UniquePtr()
-   {
-   }
+   UniquePtr() = default;
 
    explicit UniquePtr(T* ptr)
       : m_ptr(ptr)
@@ -68,6 +67,88 @@ public:
    T* operator->() const
    {
       return m_ptr;
+   }
+
+   T* Release()
+   {
+      T* temp = m_ptr;
+      m_ptr = nullptr;
+
+      return temp;
+   }
+
+   void Reset(T* ptr)
+   {
+      T* temp = m_ptr;
+      m_ptr = ptr;
+      if (temp) {
+         Deleter()(temp);
+      }
+   }
+
+private:
+   UniquePtr(const UniquePtr&) = delete;
+   UniquePtr& operator=(const UniquePtr&) = delete;
+
+private:
+   T* m_ptr = nullptr;
+};
+
+template <typename T, typename Deleter>
+class UniquePtr<T[], Deleter> {
+public:
+   UniquePtr() = default;
+
+   explicit UniquePtr(T* ptr)
+      : m_ptr(ptr)
+   {
+   }
+
+   template <typename T2, typename D2>
+   UniquePtr(UniquePtr<T2, D2>&& rhs)
+      : m_ptr(rhs.Get())
+   {
+      rhs.Release();
+   }
+
+   ~UniquePtr()
+   {
+      if (m_ptr == nullptr) {
+         return;
+      }
+
+      Deleter()(m_ptr);
+   }
+
+   UniquePtr& operator=(UniquePtr&& rhs)
+   {
+      if (*this == rhs) {
+         return *this;
+      }
+
+      if (m_ptr) {
+         Deleter()(m_ptr);
+      }
+
+      m_ptr = rhs.m_ptr;
+      rhs.m_ptr = nullptr;
+
+      return *this;
+   }
+
+   explicit operator bool() const
+   {
+      return m_ptr != nullptr;
+   }
+
+   T* Get() const
+   {
+      return m_ptr;
+   }
+
+   T& operator[](SizeT idx) const
+   {
+      return *(m_ptr + idx);
    }
 
    T* Release()

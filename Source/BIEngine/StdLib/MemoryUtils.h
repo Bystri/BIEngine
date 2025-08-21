@@ -11,4 +11,13 @@ public:
    }
 };
 
+template <typename T>
+class DefaultDeleter<T[]> {
+public:
+   void operator()(T* ptr)
+   {
+      delete[] ptr;
+   }
+};
+
 } // namespace BIEngine
