@@ -45,8 +45,8 @@ protected:
 
    Shape3D m_shape;
    IGamePhysics3D::BodyType m_bodyType;
-   std::string m_density;
-   std::string m_material;
+   String m_density;
+   String m_material;
 
    bool m_isTrigger;
 

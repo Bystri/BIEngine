@@ -26,7 +26,7 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
       .def("GetId", &BIEngine::Actor::GetId)
       .def("GetName", &BIEngine::Actor::GetName)
       .def("GetActorByPath", &BIEngine::Actor::GetActorByPath)
-      .def("GetComponent", [](BIEngine::Actor* self, const std::string& componentId) { return self->GetComponent<BIEngine::ActorComponent>(componentId).lock().get(); })
+      .def("GetComponent", [](BIEngine::Actor* self, const BIEngine::String& componentId) { return self->GetComponent<BIEngine::ActorComponent>(componentId).lock().get(); })
       .def("SetActivate", &BIEngine::Actor::SetActivate);
 
    py::class_<BIEngine::NavAgentComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::NavAgentComponent>>(m, "NavAgentComponent")

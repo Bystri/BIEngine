@@ -24,12 +24,12 @@ public:
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
-   void PlayAnimation(const std::string& animName);
+   void PlayAnimation(const String& animName);
    void Stop();
 
 private:
-   HashMap<std::string, std::shared_ptr<Animation>> m_animations;
-   HashMap<std::string, std::string> m_animationPaths;
+   HashMap<String, std::shared_ptr<Animation>> m_animations;
+   HashMap<String, String> m_animationPaths;
    std::shared_ptr<Animator> m_pAnimator;
 };
 

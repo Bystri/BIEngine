@@ -19,7 +19,7 @@ public:
    ModelData(const ModelData& orig) = delete;
    ModelData& operator=(const ModelData& orig) = delete;
 
-   virtual std::string ToString() override { return "ModelData"; }
+   virtual String ToString() override { return "ModelData"; }
 
    std::shared_ptr<Model> GetModel() const { return m_pModel; }
 
@@ -37,7 +37,7 @@ public:
 
    virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
 
-   virtual std::string GetPattern() { return "*.obj"; }
+   virtual String GetPattern() { return "*.obj"; }
 };
 
 } // namespace BIEngine

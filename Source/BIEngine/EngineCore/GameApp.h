@@ -10,7 +10,7 @@
 namespace BIEngine {
 
 struct Options {
-   std::string playerName;
+   String playerName;
 
    // Указывает, использовать ли хранилище ресурсов как обычную папку, или нет
    // То есть, если значение true - будет использована обычная папка
@@ -19,9 +19,9 @@ struct Options {
    bool isEditorMode = false;
 
    // Имя мира, который загрузится первым
-   std::string mainWorldResNamePath = "Worlds/World";
+   String mainWorldResNamePath = "Worlds/World";
 
-   std::string hostAddress = "";
+   String hostAddress = "";
    uint16_t hostPort = 0;
 
    unsigned int screenWidth = 1024;

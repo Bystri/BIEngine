@@ -123,7 +123,7 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
    pShaderProgram->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
 
 
-   BIEngine::DynamicArray<std::string> faces{
+   BIEngine::DynamicArray<BIEngine::String> faces{
       "cubemapTextureRightPath",
       "cubemapTextureLeftPath",
       "cubemapTextureTopPath",
@@ -137,7 +137,7 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
 
    for (int i = 0; i < faces.Size(); ++i) {
       const char* cubemapTexturePath;
-      pSkyboxSettingsNode->QueryStringAttribute(faces[i].c_str(), &cubemapTexturePath);
+      pSkyboxSettingsNode->QueryStringAttribute(faces[i].CStr(), &cubemapTexturePath);
 
       if (strlen(cubemapTexturePath) == 0) {
          return nullptr;
@@ -356,7 +356,7 @@ void BIEditorHumanView::showActorTreeNode(std::shared_ptr<BIEngine::Actor> pActo
       nodeFlags |= ImGuiTreeNodeFlags_Leaf;
    }
 
-   const bool isOpened = ImGui::TreeNodeEx((void*)pActor.get(), nodeFlags, pActor->GetName().c_str());
+   const bool isOpened = ImGui::TreeNodeEx((void*)pActor.get(), nodeFlags, pActor->GetName().CStr());
 
    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
       m_pActorEditorWidget->SetCurrentEditableActorId(pActor->GetId());
@@ -377,7 +377,7 @@ void BIEditorHumanView::showActorTreeNode(std::shared_ptr<BIEngine::Actor> pActo
 
 void BIEditorHumanView::saveWorld()
 {
-   const std::string fileName = "../Assets/" + BIEngine::g_pApp->m_options.mainWorldResNamePath + "/World.xml";
+   const BIEngine::String fileName = "../Assets/" + BIEngine::g_pApp->m_options.mainWorldResNamePath + "/World.xml";
 
    tinyxml2::XMLDocument worldDoc;
    tinyxml2::XMLElement* const pWorldRootElement = worldDoc.NewElement("World");
@@ -396,30 +396,30 @@ void BIEditorHumanView::saveWorld()
 
    tinyxml2::XMLElement* const pScriptElement = worldDoc.NewElement("Script");
 
-   const std::string preLoadScriptPath = BIEngine::g_pApp->m_options.mainWorldResNamePath + "/world_pre_init.py";
-   pScriptElement->SetAttribute("preLoad", preLoadScriptPath.c_str());
+   const BIEngine::String preLoadScriptPath = BIEngine::g_pApp->m_options.mainWorldResNamePath + "/world_pre_init.py";
+   pScriptElement->SetAttribute("preLoad", preLoadScriptPath.CStr());
 
-   const std::string postLoadScriptPath = BIEngine::g_pApp->m_options.mainWorldResNamePath + "/world_POST_init.py";
-   pScriptElement->SetAttribute("postLoad", postLoadScriptPath.c_str());
+   const BIEngine::String postLoadScriptPath = BIEngine::g_pApp->m_options.mainWorldResNamePath + "/world_POST_init.py";
+   pScriptElement->SetAttribute("postLoad", postLoadScriptPath.CStr());
 
    pWorldRootElement->LinkEndChild(pScriptElement);
 
 
    worldDoc.LinkEndChild(pWorldRootElement);
 
-   worldDoc.SaveFile(fileName.c_str());
+   worldDoc.SaveFile(fileName.CStr());
 }
 
-static void editorHumanViewUpdateDuplicateActorName(std::string& name)
+static void editorHumanViewUpdateDuplicateActorName(BIEngine::String& name)
 {
-   std::size_t pos = name.find_last_of('_');
-   if (pos == std::string::npos) {
+   std::size_t pos = name.RFind('_');
+   if (pos == BIEngine::String::NPos) {
       name += "_0";
       return;
    }
 
-   std::string numStr;
-   for (std::size_t i = pos + 1; i < name.size(); ++i) {
+   BIEngine::String numStr;
+   for (std::size_t i = pos + 1; i < name.Size(); ++i) {
       if (name[i] < '0' || name[i] > '9') {
          name += "_0";
          return;
@@ -428,17 +428,17 @@ static void editorHumanViewUpdateDuplicateActorName(std::string& name)
       numStr += name[i];
    }
 
-   if (numStr.size() == 0) {
+   if (numStr.Size() == 0) {
       name += "_0";
       return;
    }
 
-   int num = std::atoi(numStr.c_str());
+   int num = std::atoi(numStr.CStr());
 
    ++num;
 
-   numStr = std::to_string(num);
-   name.replace(pos + 1, numStr.size(), numStr.c_str());
+   numStr = BIEngine::ToString(num);
+   name.replace(pos + 1, numStr.Size(), numStr.CStr());
 }
 
 void BIEditorHumanView::duplicateActor()
@@ -450,9 +450,9 @@ void BIEditorHumanView::duplicateActor()
    actorXmlDoc.LinkEndChild(pActorElement);
 
    const char* name = pActorElement->Attribute("name");
-   std::string strName = name;
+   BIEngine::String strName = name;
    editorHumanViewUpdateDuplicateActorName(strName);
-   pActorElement->SetAttribute("name", strName.c_str());
+   pActorElement->SetAttribute("name", strName.CStr());
 
    BIEngine::g_pApp->m_pGameLogic->CreateActor(pActorElement);
 }

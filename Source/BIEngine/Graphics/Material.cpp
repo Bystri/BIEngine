@@ -9,32 +9,32 @@ Material::Material(std::shared_ptr<ShaderProgram> pShader)
 {
 }
 
-void Material::SetBool(const std::string& name, bool value)
+void Material::SetBool(const String& name, bool value)
 {
    m_uniformBools[name] = value;
 }
 
-void Material::SetInteger(const std::string& name, int value)
+void Material::SetInteger(const String& name, int value)
 {
    m_uniformInts[name] = value;
 }
 
-void Material::SetFloat(const std::string& name, float value)
+void Material::SetFloat(const String& name, float value)
 {
    m_uniformFloats[name] = value;
 }
 
-void Material::SetColorRgb(const std::string& name, const ColorRgb& color)
+void Material::SetColorRgb(const String& name, const ColorRgb& color)
 {
    m_uniformColorsRgb[name] = color;
 }
 
-void Material::SetColorRgba(const std::string& name, const ColorRgba& color)
+void Material::SetColorRgba(const String& name, const ColorRgba& color)
 {
    m_uniformColorsRgba[name] = color;
 }
 
-void Material::AddTexture(const std::string& name, int slotId, std::shared_ptr<Texture> pTexture)
+void Material::AddTexture(const String& name, int slotId, std::shared_ptr<Texture> pTexture)
 {
    m_uniformInts[name] = slotId;
    m_textures.PushBack({slotId, pTexture});

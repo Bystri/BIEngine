@@ -81,6 +81,7 @@
     <ClCompile Include="Math\Trigonometry_UnitTest.cpp" />
     <ClCompile Include="Math\Vector_UnitTest.cpp" />
     <ClCompile Include="StdLib\Array_UnitTest.cpp" />
+    <ClCompile Include="StdLib\String_UnitTest.cpp" />
     <ClCompile Include="StdLib\DynamicArray_UnitTest.cpp" />
     <ClCompile Include="StdLib\ForwardList_UnitTest.cpp" />
     <ClCompile Include="StdLib\HashSet_UnitTest.cpp" />
@@ -107,7 +108,9 @@
     <ClInclude Include="..\BIEngine\StdLib\HashMap.h" />
     <ClInclude Include="..\BIEngine\StdLib\MemoryUtils.h" />
     <ClInclude Include="..\BIEngine\StdLib\StdLib.h" />
+    <ClInclude Include="..\BIEngine\StdLib\String.h" />
     <ClInclude Include="..\BIEngine\StdLib\UniquePtr.h" />
+    <ClInclude Include="..\BIEngine\StdLib\Utility.h" />
     <ClInclude Include="..\BIEngine\Utilities\Logger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

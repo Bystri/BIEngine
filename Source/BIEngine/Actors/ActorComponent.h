@@ -1,15 +1,15 @@
 ﻿#pragma once
 
 #include <memory>
-#include <string>
 
 #include <tinyxml2.h>
 
 #include "../Utilities/GameTimer.h"
+#include "../StdLib/String.h"
 
 namespace BIEngine {
 
-using ComponentId = std::string;
+using ComponentId = String;
 
 class Actor;
 

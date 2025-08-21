@@ -1,9 +1,8 @@
 #pragma once
 
-#include <string>
-
 #include <glm/glm.hpp>
 
+#include "../StdLib/String.h"
 #include "../StdLib/DynamicArray.h"
 #include "BoneAnimChannel.h"
 
@@ -16,7 +15,7 @@ public:
    {
    }
 
-   BoneAnimChannel* FindBoneChannel(const std::string& boneName);
+   BoneAnimChannel* FindBoneChannel(const String& boneName);
 
    float GetTicksPerSecond() const { return m_ticksPerSecond; }
 

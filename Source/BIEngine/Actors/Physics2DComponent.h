@@ -42,8 +42,8 @@ protected:
 
    Shape2D m_shape;
    IGamePhysics2D::BodyType m_bodyType;
-   std::string m_density;
-   std::string m_material;
+   String m_density;
+   String m_material;
 
    glm::vec2 m_rigidBodyScale;
 

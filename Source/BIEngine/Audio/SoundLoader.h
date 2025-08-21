@@ -16,7 +16,7 @@ public:
 
    virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) { return true; }
 
-   virtual std::string GetPattern() { return "*.ogg"; }
+   virtual String GetPattern() { return "*.ogg"; }
 };
 
 class WavResourceLoader : public IResourceLoader {
@@ -29,7 +29,7 @@ public:
 
    virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) { return true; }
 
-   virtual std::string GetPattern() { return "*.wav"; }
+   virtual String GetPattern() { return "*.wav"; }
 };
 
 } // namespace BIEngine

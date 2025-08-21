@@ -30,7 +30,7 @@ public:
 
    virtual void Terminate();
 
-   bool LoadLevel(const std::string& path);
+   bool LoadLevel(const String& path);
 
    bool IsLevelLoaded() const { return m_bIsLevelLoaded; };
 

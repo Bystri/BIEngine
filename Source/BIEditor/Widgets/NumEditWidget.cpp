@@ -9,11 +9,11 @@ NumEditWidget::NumEditWidget()
 
 void NumEditWidget::Update()
 {
-   ImGui::PushID(m_text.c_str());
+   ImGui::PushID(m_text.CStr());
 
    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::ImColor(m_textColor.r, m_textColor.g, m_textColor.b));
    ImGui::BeginDisabled();
-   ImGui::Button(m_text.c_str());
+   ImGui::Button(m_text.CStr());
    ImGui::EndDisabled();
    ImGui::PopStyleColor(1);
 

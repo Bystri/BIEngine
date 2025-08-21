@@ -31,11 +31,11 @@ public:
 
    virtual void OnUpdate(const GameTimer& gt) override {}
 
-   virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngles, const String& densityStr, const String& physicsMaterial) override {}
 
-   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngles, const String& densityStr, const String& physicsMaterial) override {}
 
-   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngles, const std::string& densityStr, const std::string& physicsMaterial) override {}
+   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngles, const String& densityStr, const String& physicsMaterial) override {}
 
    virtual void RemoveActor(ActorId id) override {}
 
@@ -109,10 +109,10 @@ public:
    virtual void OnUpdate(const GameTimer& gt) override;
 
    // Добавляет физический объект в виде круга в физическую симуляцию
-   virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial) override;
    // Добавляет физический объект в виде прямоугольника в физическую симуляцию
-   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) override;
-   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) override;
+   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial) override;
+   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial) override;
    virtual void RemoveActor(ActorId id) override;
 
    // Добавляет триггер-объект с нулевой физикой в симуляцию
@@ -141,8 +141,8 @@ public:
 private:
    // Инициализация и работа с физическими материалами
    void LoadXml(tinyxml2::XMLElement* pRoot);
-   float LookupSpecificGravity(const std::string& densityStr);
-   MaterialData LookupMaterialData(const std::string& materialStr);
+   float LookupSpecificGravity(const String& densityStr);
+   MaterialData LookupMaterialData(const String& materialStr);
 
    cpBody* FindChipmunkRigidBody(ActorId const id) const;
    ActorId FindActorID(cpBody const*) const;
@@ -163,8 +163,8 @@ private:
    cpSpace* m_cpSpace;
 
    // Физические свойства материалов
-   using DensityTable = HashMap<std::string, float>;
-   using MaterialTable = HashMap<std::string, MaterialData>;
+   using DensityTable = HashMap<String, float>;
+   using MaterialTable = HashMap<String, MaterialData>;
    DensityTable m_densityTable;
    MaterialTable m_materialTable;
 
@@ -240,7 +240,7 @@ void Physics2D::OnUpdate(const GameTimer& gt)
    cpSpaceStep(m_cpSpace, gt.DeltaTime());
 }
 
-void Physics2D::AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics2D::AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial)
 {
    Assert(m_actorIdToRigidBody.Find(actorId) == m_actorIdToRigidBody.End(), "Actor with more than one physics body?");
 
@@ -280,7 +280,7 @@ void Physics2D::AddCircle(float radius, BodyType bodyType, ActorId actorId, cons
    m_rigidBodyToActorId[pBody] = actorId;
 }
 
-void Physics2D::AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics2D::AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial)
 {
    Assert(m_actorIdToRigidBody.Find(actorId) == m_actorIdToRigidBody.End(), "Actor with more than one physics body?");
 
@@ -321,7 +321,7 @@ void Physics2D::AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId a
 }
 
 // Добавляет физических объект состоящий из произвольного набора точек в физическую симуляцию
-void Physics2D::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial)
+void Physics2D::AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial)
 {
    Assert(m_actorIdToRigidBody.Find(actorId) == m_actorIdToRigidBody.End(), "Actor with more than one physics body?");
 
@@ -533,7 +533,7 @@ void Physics2D::LoadXml(tinyxml2::XMLElement* pRoot)
    }
 }
 
-float Physics2D::LookupSpecificGravity(const std::string& densityStr)
+float Physics2D::LookupSpecificGravity(const String& densityStr)
 {
    float density = 0;
    auto densityIt = m_densityTable.Find(densityStr);
@@ -543,7 +543,7 @@ float Physics2D::LookupSpecificGravity(const std::string& densityStr)
    return density;
 }
 
-MaterialData Physics2D::LookupMaterialData(const std::string& materialStr)
+MaterialData Physics2D::LookupMaterialData(const String& materialStr)
 {
    auto materialIt = m_materialTable.Find(materialStr);
    if (materialIt != m_materialTable.End())

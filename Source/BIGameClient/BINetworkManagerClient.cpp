@@ -6,7 +6,7 @@ static constexpr float TIME_BETWEEN_HELLOS = 2.f;
 
 static constexpr float TIME_BETWEEN_EVENT_PACKETS = 0.033f;
 
-void BINetworkManagerClient::Init(const BIEngine::SocketAddress& serverAddress, const std::string& name)
+void BINetworkManagerClient::Init(const BIEngine::SocketAddress& serverAddress, const BIEngine::String& name)
 {
    NetworkManager::InitInternal(0);
 
@@ -80,7 +80,7 @@ void BINetworkManagerClient::HandleWelcomePacket(BIEngine::InputMemoryBitStream&
    if (m_state == NetworkClientState::SayingHello) {
       BIEngine::Deserialize(inputStream, m_playerId);
       m_state = NetworkClientState::Welcomed;
-      BIEngine::Logger::WriteMsgLog("'%s' was welcomed on client as player %d", m_name.c_str(), m_playerId);
+      BIEngine::Logger::WriteMsgLog("'%s' was welcomed on client as player %d", m_name.CStr(), m_playerId);
    }
 }
 

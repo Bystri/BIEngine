@@ -2,18 +2,19 @@
 
 #include <functional>
 
+#include "../Utilities/Logger.h"
 #include "DynamicArray.h"
 #include "ForwardList.h"
 
 namespace BIEngine {
 
-template <typename Key, typename T, typename Hash = std::hash<Key>, typename KeyEqual = std::equal_to<Key>>
+template <typename Key, typename T, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
 class HashMap {
 public:
    using ValueType = std::pair<const Key, T>;
    using KeyType = Key;
    using MappedType = T;
-   using HashType = Hash;
+   using HashType = Hasher;
    using KeyEqualType = KeyEqual;
 
    class Iterator {
@@ -354,7 +355,7 @@ public:
 private:
    SizeT getBucketIdxFromKey(const KeyType& key, SizeT n) const
    {
-      const SizeT hash = Hash()(key);
+      const SizeT hash = Hasher()(key);
       return hash & (n - 1);
    }
 
@@ -388,26 +389,26 @@ private:
    DynamicArray<ForwardList<ValueType>> m_storage;
 };
 
-template <typename Key, typename T, typename Hash = std::hash<Key>, typename KeyEqual = std::equal_to<Key>>
-auto begin(HashMap<Key, T, Hash, KeyEqual>& map)
+template <typename Key, typename T, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
+auto begin(HashMap<Key, T, Hasher, KeyEqual>& map)
 {
    return map.Begin();
 }
 
-template <typename Key, typename T, typename Hash = std::hash<Key>, typename KeyEqual = std::equal_to<Key>>
-auto end(HashMap<Key, T, Hash, KeyEqual>& map)
+template <typename Key, typename T, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
+auto end(HashMap<Key, T, Hasher, KeyEqual>& map)
 {
    return map.End();
 }
 
-template <typename Key, typename T, typename Hash = std::hash<Key>, typename KeyEqual = std::equal_to<Key>>
-auto begin(const HashMap<Key, T, Hash, KeyEqual>& map)
+template <typename Key, typename T, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
+auto begin(const HashMap<Key, T, Hasher, KeyEqual>& map)
 {
    return map.CBegin();
 }
 
-template <typename Key, typename T, typename Hash = std::hash<Key>, typename KeyEqual = std::equal_to<Key>>
-auto end(const HashMap<Key, T, Hash, KeyEqual>& map)
+template <typename Key, typename T, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
+auto end(const HashMap<Key, T, Hasher, KeyEqual>& map)
 {
    return map.CEnd();
 }

@@ -12,7 +12,7 @@ public:
    MeshExtraData();
    virtual ~MeshExtraData();
 
-   virtual std::string ToString() { return "MeshExtraData"; }
+   virtual String ToString() { return "MeshExtraData"; }
 
    std::shared_ptr<Mesh> GetMesh() const { return m_pMesh; }
 
@@ -29,7 +29,7 @@ public:
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize);
    virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
 
-   virtual std::string GetPattern() { return "*.bimesh"; }
+   virtual String GetPattern() { return "*.bimesh"; }
 };
 
 } // namespace BIEngine

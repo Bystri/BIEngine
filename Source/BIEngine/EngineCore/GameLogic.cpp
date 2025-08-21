@@ -33,9 +33,9 @@ void GameLogic::Terminate()
    EventManager::Get()->RemoveListener(m_requestDestroyActorDelegateHandler);
 }
 
-bool GameLogic::LoadLevel(const std::string& path)
+bool GameLogic::LoadLevel(const String& path)
 {
-   const std::string xmlWorldPath = path + "/World.xml";
+   const String xmlWorldPath = path + "/World.xml";
 
    auto resourceHandle = ResCache::Get()->GetHandle(xmlWorldPath);
 
@@ -51,7 +51,7 @@ bool GameLogic::LoadLevel(const std::string& path)
 
    tinyxml2::XMLElement* pRoot = levelXmlData->GetRootElement();
    if (!pRoot) {
-      Assert(false, "Failed to load level-xml file %s", xmlWorldPath.c_str());
+      Assert(false, "Failed to load level-xml file %s", xmlWorldPath.CStr());
       return false;
    }
 

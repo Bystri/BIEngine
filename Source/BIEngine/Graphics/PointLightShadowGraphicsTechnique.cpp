@@ -8,7 +8,7 @@ namespace BIEngine {
 
 bool PointLightShadowGraphicsTechnique::Init()
 {
-   const std::string commonPointShadowShaderProgramPath = "effects/pointShadow.bisp";
+   const String commonPointShadowShaderProgramPath = "effects/pointShadow.bisp";
    auto pointShadowShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPointShadowShaderProgramPath)->GetExtra());
    m_pPointLightShadowShader = pointShadowShaderProgramData->GetShaderProgram();
 

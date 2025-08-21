@@ -29,9 +29,9 @@ public:
    TextRenderer(unsigned int width, unsigned int height);
 
    // Создает набор текстур символов для заданного шрифта
-   void Load(std::string font, unsigned int fontSize);
+   void Load(String font, unsigned int fontSize);
 
-   void RenderText(std::string text, float x, float y, float scale, glm::vec3 color = glm::vec3(1.0f));
+   void RenderText(String text, float x, float y, float scale, glm::vec3 color = glm::vec3(1.0f));
 
 private:
    unsigned int VAO, VBO;
@@ -64,7 +64,7 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height)
    glBindVertexArray(0);
 }
 
-void TextRenderer::Load(std::string font, unsigned int fontSize)
+void TextRenderer::Load(String font, unsigned int fontSize)
 {
    m_characters.Clear();
 
@@ -122,7 +122,7 @@ void TextRenderer::Load(std::string font, unsigned int fontSize)
    FT_Done_FreeType(ft);
 }
 
-void TextRenderer::RenderText(std::string text, float x, float y, float scale, glm::vec3 color)
+void TextRenderer::RenderText(String text, float x, float y, float scale, glm::vec3 color)
 {
 
    m_textShader.Use();
@@ -131,8 +131,8 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
    glBindVertexArray(this->VAO);
 
 
-   std::string::const_iterator c;
-   for (c = text.begin(); c != text.end(); c++) {
+   String::ConstIterator c;
+   for (c = text.Begin(); c != text.End(); c++) {
       Character ch = m_characters[*c];
 
       float xpos = x + ch.Bearing.x * scale;
@@ -214,7 +214,7 @@ void UserInterface::Shutdown()
    }
 }
 
-int UserInterface::CreateStatic(float x, float y, float scale, const std::string& text)
+int UserInterface::CreateStatic(float x, float y, float scale, const String& text)
 {
    Text* staticElement = new Text(m_nextId);
 
@@ -237,7 +237,7 @@ Text* UserInterface::GetStatic(int id)
 
    Text* staticElement = dynamic_cast<Text*>(itr->second);
    if (staticElement == nullptr) {
-      Logger::WriteLog(Logger::LogType::ERROR, "UI Element with id " + std::to_string(id) + "  is not Static");
+      Logger::WriteLog(Logger::LogType::ERROR, "UI Element with id " + ToString(id) + "  is not Static");
       return nullptr;
    }
 

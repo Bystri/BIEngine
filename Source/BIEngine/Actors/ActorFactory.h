@@ -1,9 +1,8 @@
 ﻿#pragma once
 
-#include <string>
-
 #include <glm/glm.hpp>
 
+#include "../StdLib/String.h"
 #include "../StdLib/UniquePtr.h"
 #include "../StdLib/HashMap.h"
 #include "Actor.h"
@@ -11,7 +10,7 @@
 namespace BIEngine {
 
 using ActorComponentCreator = UniquePtr<ActorComponent> (*)();
-using ActorComponentCreatorMap = HashMap<std::string, ActorComponentCreator>;
+using ActorComponentCreatorMap = HashMap<String, ActorComponentCreator>;
 
 class ActorFactory {
 public:
@@ -24,7 +23,7 @@ public:
    // копировать фабрики запрещено, по причине того, что тогда две фабрики будут выдавать актерам одинаковые ID.
    ActorFactory& operator=(const ActorFactory& orig) = delete;
 
-   void AddComponentCreator(const std::string& name, ActorComponentCreator pComponentCreator)
+   void AddComponentCreator(const String& name, ActorComponentCreator pComponentCreator)
    {
       m_actorComponentCreators.Insert(name, pComponentCreator);
    }

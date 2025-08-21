@@ -342,7 +342,9 @@
     <ClInclude Include="..\..\StdLib\List.h" />
     <ClInclude Include="..\..\StdLib\MemoryUtils.h" />
     <ClInclude Include="..\..\StdLib\StdLib.h" />
+    <ClInclude Include="..\..\StdLib\String.h" />
     <ClInclude Include="..\..\StdLib\UniquePtr.h" />
+    <ClInclude Include="..\..\StdLib\Utility.h" />
     <ClInclude Include="..\..\UserInterface\HumanView.h" />
     <ClInclude Include="..\..\UserInterface\IGameView.h" />
     <ClInclude Include="..\..\UserInterface\InputDevices.h" />

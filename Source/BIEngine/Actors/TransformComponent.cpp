@@ -1,10 +1,9 @@
 ﻿#include "TransformComponent.h"
 
-#include <string>
-
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
+#include "../StdLib/String.h"
 #include "../EngineCore/Assert.h"
 #include "../Utilities/Logger.h"
 #include "../Actors/Actor.h"
@@ -58,24 +57,24 @@ bool TransformComponent::Init(tinyxml2::XMLElement* pData)
 
 tinyxml2::XMLElement* TransformComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    tinyxml2::XMLElement* pPosition = pDoc->NewElement("Position");
-   pPosition->SetAttribute("x", std::to_string(m_localPos.x).c_str());
-   pPosition->SetAttribute("y", std::to_string(m_localPos.y).c_str());
-   pPosition->SetAttribute("z", std::to_string(m_localPos.z).c_str());
+   pPosition->SetAttribute("x", ToString(m_localPos.x).CStr());
+   pPosition->SetAttribute("y", ToString(m_localPos.y).CStr());
+   pPosition->SetAttribute("z", ToString(m_localPos.z).CStr());
    pBaseElement->LinkEndChild(pPosition);
 
    tinyxml2::XMLElement* pSize = pDoc->NewElement("Size");
-   pSize->SetAttribute("w", std::to_string(m_localSize.x).c_str());
-   pSize->SetAttribute("h", std::to_string(m_localSize.y).c_str());
-   pSize->SetAttribute("d", std::to_string(m_localSize.z).c_str());
+   pSize->SetAttribute("w", ToString(m_localSize.x).CStr());
+   pSize->SetAttribute("h", ToString(m_localSize.y).CStr());
+   pSize->SetAttribute("d", ToString(m_localSize.z).CStr());
    pBaseElement->LinkEndChild(pSize);
 
    tinyxml2::XMLElement* pRotation = pDoc->NewElement("Rotation");
-   pRotation->SetAttribute("x", std::to_string(m_localRot.x).c_str());
-   pRotation->SetAttribute("y", std::to_string(m_localRot.y).c_str());
-   pRotation->SetAttribute("z", std::to_string(m_localRot.z).c_str());
+   pRotation->SetAttribute("x", ToString(m_localRot.x).CStr());
+   pRotation->SetAttribute("y", ToString(m_localRot.y).CStr());
+   pRotation->SetAttribute("z", ToString(m_localRot.z).CStr());
    pBaseElement->LinkEndChild(pRotation);
 
    return pBaseElement;

@@ -23,13 +23,13 @@ void Assert(const bool expr, const char* format, ...)
       len = MSG_SIZE - 1;
       msg[MSG_SIZE - 1] = '\0';
 
-      const std::string errorMessage = "Log message was truncated";
+      const String errorMessage = "Log message was truncated";
       Logger::WriteLog(Logger::LogType::ERROR, errorMessage);
    }
    msg[len] = '\0';
    va_end(argList);
 
-   const std::string strMsg(msg);
+   const String strMsg(msg);
 
    Logger::WriteLog(Logger::LogType::ERROR, "[ASSERT]: " + strMsg);
 

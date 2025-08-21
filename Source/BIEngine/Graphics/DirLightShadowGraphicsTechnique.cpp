@@ -7,7 +7,7 @@ namespace BIEngine {
 
 bool DirLightShadowGraphicsTechnique::Init()
 {
-   const std::string commonDirShadowShaderProgramPath = "effects/dirShadow.bisp";
+   const String commonDirShadowShaderProgramPath = "effects/dirShadow.bisp";
    auto dirShadowShaderProgram = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonDirShadowShaderProgramPath)->GetExtra());
    m_pDirLightShadowShader = dirShadowShaderProgram->GetShaderProgram();
 

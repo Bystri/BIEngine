@@ -7,12 +7,12 @@
 
 namespace BIEngine {
 
-template <typename Key, typename Hash = std::hash<Key>, typename KeyEqual = std::equal_to<Key>>
+template <typename Key, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
 class HashSet {
 public:
    using ValueType = const Key;
    using KeyType = Key;
-   using HashType = Hash;
+   using HashType = Hasher;
    using KeyEqualType = KeyEqual;
 
    class ConstIterator {
@@ -73,13 +73,13 @@ public:
       }
 
    private:
-      ConstIterator(const HashSet<Key, Hash, KeyEqual>* pHashSet, SizeT bucketIdx, typename ForwardList<Key>::ConstIterator listItr)
+      ConstIterator(const HashSet<Key, Hasher, KeyEqual>* pHashSet, SizeT bucketIdx, typename ForwardList<Key>::ConstIterator listItr)
          : m_pHashSet(pHashSet), m_bucketIdx(bucketIdx), m_listItr(listItr)
       {
       }
 
    private:
-      const HashSet<Key, Hash, KeyEqual>* m_pHashSet;
+      const HashSet<Key, Hasher, KeyEqual>* m_pHashSet;
       SizeT m_bucketIdx;
       typename ForwardList<Key>::ConstIterator m_listItr;
    };
@@ -277,7 +277,7 @@ public:
 private:
    SizeT getBucketIdxFromKey(const KeyType& key, SizeT n) const
    {
-      const SizeT hash = Hash()(key);
+      const SizeT hash = Hasher()(key);
       return hash & (n - 1);
    }
 
@@ -311,26 +311,26 @@ private:
    DynamicArray<ForwardList<Key>> m_storage;
 };
 
-template <typename Key, typename Hash = std::hash<Key>, typename KeyEqual = std::equal_to<Key>>
-auto begin(HashSet<Key, Hash, KeyEqual>& set)
+template <typename Key, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
+auto begin(HashSet<Key, Hasher, KeyEqual>& set)
 {
    return set.Begin();
 }
 
-template <typename Key, typename Hash = std::hash<Key>, typename KeyEqual = std::equal_to<Key>>
-auto end(HashSet<Key, Hash, KeyEqual>& set)
+template <typename Key, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
+auto end(HashSet<Key, Hasher, KeyEqual>& set)
 {
    return set.End();
 }
 
-template <typename Key, typename Hash = std::hash<Key>, typename KeyEqual = std::equal_to<Key>>
-auto begin(const HashSet<Key, Hash, KeyEqual>& set)
+template <typename Key, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
+auto begin(const HashSet<Key, Hasher, KeyEqual>& set)
 {
    return set.CBegin();
 }
 
-template <typename Key, typename Hash = std::hash<Key>, typename KeyEqual = std::equal_to<Key>>
-auto end(const HashSet<Key, Hash, KeyEqual>& set)
+template <typename Key, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
+auto end(const HashSet<Key, Hasher, KeyEqual>& set)
 {
    return set.CEnd();
 }

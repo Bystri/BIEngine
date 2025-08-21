@@ -1,10 +1,9 @@
 #pragma once
 
-#include <string>
-
 #include "Vertex.h"
 #include "Texture.h"
 #include "../StdLib/DynamicArray.h"
+#include "../StdLib/String.h"
 
 namespace BIEngine {
 
@@ -23,7 +22,7 @@ public:
          }
       }
 
-      std::string boneNames[NUM_BONES_PER_VERTEX];
+      String boneNames[NUM_BONES_PER_VERTEX];
       float Weights[NUM_BONES_PER_VERTEX];
    };
 

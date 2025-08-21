@@ -21,12 +21,12 @@ public:
    UtilityShaderData(const UtilityShaderData& orig) = delete;
    UtilityShaderData& operator=(const UtilityShaderData& orig) = delete;
 
-   virtual std::string ToString() override { return "UtilityShaderData"; }
+   virtual String ToString() override { return "UtilityShaderData"; }
 
-   std::string GetUtilityShaderSource() const { return m_utilityShaderSource; }
+   String GetUtilityShaderSource() const { return m_utilityShaderSource; }
 
 protected:
-   std::string m_utilityShaderSource;
+   String m_utilityShaderSource;
 };
 
 class UtilityShaderResourceLoader : public IResourceLoader {
@@ -37,7 +37,7 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize) override { return 0; }
 
-   virtual std::string GetPattern() override { return "*.glsl"; }
+   virtual String GetPattern() override { return "*.glsl"; }
 
    virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
 };
@@ -57,7 +57,7 @@ public:
    ShaderData(const ShaderData& orig) = delete;
    ShaderData& operator=(const ShaderData& orig) = delete;
 
-   virtual std::string ToString() override { return "ShaderData"; }
+   virtual String ToString() override { return "ShaderData"; }
 
    unsigned int GetShaderIndex() const { return m_shaderIndex; }
 
@@ -76,7 +76,7 @@ public:
    ShaderProgramData(const ShaderData& orig) = delete;
    ShaderProgramData& operator=(const ShaderData& orig) = delete;
 
-   virtual std::string ToString() override { return "ShaderProgramData"; }
+   virtual String ToString() override { return "ShaderProgramData"; }
 
    std::shared_ptr<ShaderProgram> GetShaderProgram() const { return m_pShaderProgram; }
 
@@ -97,28 +97,28 @@ public:
 
 class VertexShaderResourceLoader : public ShaderResourceLoader {
 public:
-   virtual std::string GetPattern() override { return "*.vs"; }
+   virtual String GetPattern() override { return "*.vs"; }
 
    virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
 };
 
 class FragmentShaderResourceLoader : public ShaderResourceLoader {
 public:
-   virtual std::string GetPattern() override { return "*.frag"; }
+   virtual String GetPattern() override { return "*.frag"; }
 
    virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
 };
 
 class GeometryShaderResourceLoader : public ShaderResourceLoader {
 public:
-   virtual std::string GetPattern() override { return "*.geom"; }
+   virtual String GetPattern() override { return "*.geom"; }
 
    virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
 };
 
 class ShaderProgramResourceLoader : public IResourceLoader {
 public:
-   virtual std::string GetPattern() override { return "*.bisp"; }
+   virtual String GetPattern() override { return "*.bisp"; }
 
    virtual bool UseRawFile() override { return false; }
 

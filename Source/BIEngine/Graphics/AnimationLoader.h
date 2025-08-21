@@ -19,7 +19,7 @@ public:
    AnimationData(const AnimationData& orig) = delete;
    AnimationData& operator=(const AnimationData& orig) = delete;
 
-   virtual std::string ToString() override { return "AnimationData"; }
+   virtual String ToString() override { return "AnimationData"; }
 
    std::shared_ptr<Animation> GetAnimation() const { return m_pAnimation; }
 
@@ -37,7 +37,7 @@ public:
 
    virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
 
-   virtual std::string GetPattern() { return "*.bi3dam"; }
+   virtual String GetPattern() { return "*.bi3dam"; }
 };
 
 } // namespace BIEngine

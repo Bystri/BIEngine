@@ -26,7 +26,7 @@ bool Physics2DComponent::Init(tinyxml2::XMLElement* pData)
 
    tinyxml2::XMLElement* pShape = pData->FirstChildElement("Shape");
    if (pShape) {
-      std::string shapeStr = pShape->FirstChild()->Value();
+      String shapeStr = pShape->FirstChild()->Value();
       if (shapeStr == "Circle")
          m_shape = Shape2D::CIRCLE;
       else if (shapeStr == "Box")
@@ -37,7 +37,7 @@ bool Physics2DComponent::Init(tinyxml2::XMLElement* pData)
 
    tinyxml2::XMLElement* pBodyType = pData->FirstChildElement("BodyType");
    if (pBodyType) {
-      std::string typeStr = pBodyType->FirstChild()->Value();
+      String typeStr = pBodyType->FirstChild()->Value();
       if (typeStr == "Dynamic")
          m_bodyType = IGamePhysics2D::BodyType::DYNAMIC;
       else if (typeStr == "Kinematic")
@@ -92,7 +92,7 @@ void Physics2DComponent::Deactivate()
 
 tinyxml2::XMLElement* Physics2DComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    // Shape
    tinyxml2::XMLElement* pShape = pDoc->NewElement("Shape");
@@ -108,7 +108,7 @@ tinyxml2::XMLElement* Physics2DComponent::GenerateXml(tinyxml2::XMLDocument* pDo
          pShapeText = pDoc->NewText("PointCloud");
          break;
       default:
-         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics shape type in Physics2DComponent for actor with ActorID: " + std::to_string(GetOwner()->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics shape type in Physics2DComponent for actor with ActorID: " + ToString(GetOwner()->GetId()));
    }
    pShape->LinkEndChild(pShapeText);
    pBaseElement->LinkEndChild(pShape);
@@ -127,26 +127,26 @@ tinyxml2::XMLElement* Physics2DComponent::GenerateXml(tinyxml2::XMLDocument* pDo
          pBodyTypeText = pDoc->NewText("Static");
          break;
       default:
-         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics body shape type in Physics2DComponent for actor with ActorID: " + std::to_string(GetOwner()->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics body shape type in Physics2DComponent for actor with ActorID: " + ToString(GetOwner()->GetId()));
    }
    pBodyType->LinkEndChild(pBodyTypeText);
    pBaseElement->LinkEndChild(pBodyType);
 
    // Density
    tinyxml2::XMLElement* pDensity = pDoc->NewElement("Density");
-   tinyxml2::XMLText* pDensityText = pDoc->NewText(m_density.c_str());
+   tinyxml2::XMLText* pDensityText = pDoc->NewText(m_density.CStr());
    pDensity->LinkEndChild(pDensityText);
    pBaseElement->LinkEndChild(pDensity);
 
    // PhysicsMaterial
    tinyxml2::XMLElement* pPhysicsMaterial = pDoc->NewElement("PhysicsMaterial");
-   tinyxml2::XMLText* pPhysicsMaterialText = pDoc->NewText(m_material.c_str());
+   tinyxml2::XMLText* pPhysicsMaterialText = pDoc->NewText(m_material.CStr());
    pPhysicsMaterial->LinkEndChild(pPhysicsMaterialText);
    pBaseElement->LinkEndChild(pPhysicsMaterial);
 
    tinyxml2::XMLElement* pScale = pDoc->NewElement("Scale");
-   pScale->SetAttribute("w", std::to_string(m_rigidBodyScale.x).c_str());
-   pScale->SetAttribute("h", std::to_string(m_rigidBodyScale.y).c_str());
+   pScale->SetAttribute("w", ToString(m_rigidBodyScale.x).CStr());
+   pScale->SetAttribute("h", ToString(m_rigidBodyScale.y).CStr());
    pBaseElement->LinkEndChild(pScale);
 
    return pBaseElement;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "StdLib.h"
+#include "Utility.h"
 
 #include <cstring>
 #include <memory>
@@ -295,5 +296,14 @@ auto end(const DynamicArray<T>& arr)
 {
    return arr.CEnd();
 }
+
+template <typename T>
+struct Hash<DynamicArray<T>> {
+   SizeT operator()(const DynamicArray<T>& val) const
+   {
+      return HashRange(val.Begin(), val.End());
+   }
+};
+
 
 } // namespace BIEngine

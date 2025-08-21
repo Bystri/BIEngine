@@ -1,13 +1,13 @@
 ﻿#pragma once
 
 #include <memory>
-#include <string>
 
 #include <glm/glm.hpp>
 
 #include "../Actors/Actor.h"
 #include "../Utilities/GameTimer.h"
 #include "../ResourceCache/XmlLoader.h"
+#include "../StdLib/String.h"
 
 namespace BIEngine {
 
@@ -28,9 +28,9 @@ public:
    virtual void OnUpdate(const GameTimer& gt) = 0;
 
    // Инициализация физических объектов
-   virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) = 0;
-   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) = 0;
-   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const std::string& densityStr, const std::string& physicsMaterial) = 0;
+   virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial) = 0;
+   virtual void AddBox(const glm::vec2& dimensions, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial) = 0;
+   virtual void AddPointCloud(const glm::vec2* verts, int numPoints, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial) = 0;
    virtual void RemoveActor(ActorId id) = 0;
 
    // Взаимодейтсвие с физическим миром

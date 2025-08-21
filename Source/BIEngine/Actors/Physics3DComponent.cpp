@@ -26,7 +26,7 @@ bool Physics3DComponent::Init(tinyxml2::XMLElement* pData)
 
    tinyxml2::XMLElement* pShape = pData->FirstChildElement("Shape");
    if (pShape) {
-      std::string shapeStr = pShape->FirstChild()->Value();
+      String shapeStr = pShape->FirstChild()->Value();
       if (shapeStr == "Sphere")
          m_shape = Shape3D::SPHERE;
       else if (shapeStr == "Box")
@@ -39,7 +39,7 @@ bool Physics3DComponent::Init(tinyxml2::XMLElement* pData)
 
    tinyxml2::XMLElement* pBodyType = pData->FirstChildElement("BodyType");
    if (pBodyType) {
-      std::string typeStr = pBodyType->FirstChild()->Value();
+      String typeStr = pBodyType->FirstChild()->Value();
       if (typeStr == "Dynamic")
          m_bodyType = IGamePhysics3D::BodyType::DYNAMIC;
       else if (typeStr == "Kinematic")
@@ -129,7 +129,7 @@ void Physics3DComponent::Deactivate()
 
 tinyxml2::XMLElement* Physics3DComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    // Shape
    tinyxml2::XMLElement* pShape = pDoc->NewElement("Shape");
@@ -145,7 +145,7 @@ tinyxml2::XMLElement* Physics3DComponent::GenerateXml(tinyxml2::XMLDocument* pDo
          pShapeText = pDoc->NewText("PointCloud");
          break;
       default:
-         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics shape type in Physics3DComponent for actor with ActorID: " + std::to_string(GetOwner()->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics shape type in Physics3DComponent for actor with ActorID: " + ToString(GetOwner()->GetId()));
    }
    pShape->LinkEndChild(pShapeText);
    pBaseElement->LinkEndChild(pShape);
@@ -164,20 +164,20 @@ tinyxml2::XMLElement* Physics3DComponent::GenerateXml(tinyxml2::XMLDocument* pDo
          pBodyTypeText = pDoc->NewText("Static");
          break;
       default:
-         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics body shape type in Physics3DComponent for actor with ActorID: " + std::to_string(GetOwner()->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Unrecognized phycics body shape type in Physics3DComponent for actor with ActorID: " + ToString(GetOwner()->GetId()));
    }
    pBodyType->LinkEndChild(pBodyTypeText);
    pBaseElement->LinkEndChild(pBodyType);
 
    // Density
    tinyxml2::XMLElement* pDensity = pDoc->NewElement("Density");
-   tinyxml2::XMLText* pDensityText = pDoc->NewText(m_density.c_str());
+   tinyxml2::XMLText* pDensityText = pDoc->NewText(m_density.CStr());
    pDensity->LinkEndChild(pDensityText);
    pBaseElement->LinkEndChild(pDensity);
 
    // PhysicsMaterial
    tinyxml2::XMLElement* pPhysicsMaterial = pDoc->NewElement("PhysicsMaterial");
-   tinyxml2::XMLText* pPhysicsMaterialText = pDoc->NewText(m_material.c_str());
+   tinyxml2::XMLText* pPhysicsMaterialText = pDoc->NewText(m_material.CStr());
    pPhysicsMaterial->LinkEndChild(pPhysicsMaterialText);
    pBaseElement->LinkEndChild(pPhysicsMaterial);
 
@@ -186,15 +186,15 @@ tinyxml2::XMLElement* Physics3DComponent::GenerateXml(tinyxml2::XMLDocument* pDo
    pBaseElement->LinkEndChild(pParamsElement);
 
    tinyxml2::XMLElement* pScale = pDoc->NewElement("Scale");
-   pScale->SetAttribute("w", std::to_string(m_rigidBodyScale.x).c_str());
-   pScale->SetAttribute("h", std::to_string(m_rigidBodyScale.y).c_str());
-   pScale->SetAttribute("d", std::to_string(m_rigidBodyScale.z).c_str());
+   pScale->SetAttribute("w", ToString(m_rigidBodyScale.x).CStr());
+   pScale->SetAttribute("h", ToString(m_rigidBodyScale.y).CStr());
+   pScale->SetAttribute("d", ToString(m_rigidBodyScale.z).CStr());
    pBaseElement->LinkEndChild(pScale);
 
    tinyxml2::XMLElement* pAngularFactorElement = pDoc->NewElement("AngularFactor");
-   pAngularFactorElement->SetAttribute("x", std::to_string(m_angularFactor.x).c_str());
-   pAngularFactorElement->SetAttribute("y", std::to_string(m_angularFactor.y).c_str());
-   pAngularFactorElement->SetAttribute("z", std::to_string(m_angularFactor.z).c_str());
+   pAngularFactorElement->SetAttribute("x", ToString(m_angularFactor.x).CStr());
+   pAngularFactorElement->SetAttribute("y", ToString(m_angularFactor.y).CStr());
+   pAngularFactorElement->SetAttribute("z", ToString(m_angularFactor.z).CStr());
    pBaseElement->LinkEndChild(pAngularFactorElement);
 
    return pBaseElement;

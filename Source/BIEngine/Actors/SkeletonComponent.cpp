@@ -74,7 +74,7 @@ void SkeletonComponent::OnUpdate(const GameTimer& gt)
 
 tinyxml2::XMLElement* SkeletonComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    return pBaseElement;
 }

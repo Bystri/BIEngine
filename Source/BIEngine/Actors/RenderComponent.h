@@ -27,7 +27,7 @@ protected:
 
 protected:
    std::shared_ptr<Sprite> m_pSprite;
-   std::string m_spritePath;
+   String m_spritePath;
    ColorRgba m_spriteColor;
 };
 
@@ -44,7 +44,7 @@ protected:
    bool Init(tinyxml2::XMLElement* pData) override;
 
 private:
-   std::string m_materialPath;
+   String m_materialPath;
 
 protected:
    std::shared_ptr<Material> m_pMaterial;
@@ -127,7 +127,7 @@ protected:
    virtual bool Init(tinyxml2::XMLElement* pData);
 
 protected:
-   std::string m_modelPath;
+   String m_modelPath;
 };
 
 static UniquePtr<ActorComponent> CreateModelRenderComponent()

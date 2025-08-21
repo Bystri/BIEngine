@@ -1,11 +1,11 @@
 ﻿#pragma once
 
 #include <memory>
-#include <string>
 
 #include <glm/glm.hpp>
 
 #include "../Actors/Actor.h"
+#include "../StdLib/String.h"
 #include "../Utilities/GameTimer.h"
 #include "../ResourceCache/XmlLoader.h"
 
@@ -31,12 +31,12 @@ public:
       glm::vec3 pos;
       glm::vec3 eulerAngles;
       glm::vec3 angularFactor;
-      std::string densityStr;
-      std::string physicsMaterial;
+      String densityStr;
+      String physicsMaterial;
       bool isTrigger;
    };
 
-   virtual ~IGamePhysics3D(){};
+   virtual ~IGamePhysics3D() {};
 
    // Служебные функции
    virtual bool Initialize() = 0;

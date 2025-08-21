@@ -12,7 +12,7 @@ public:
    SkinnedMeshExtraData();
    virtual ~SkinnedMeshExtraData();
 
-   virtual std::string ToString() { return "SkinnedMeshExtraData"; }
+   virtual String ToString() { return "SkinnedMeshExtraData"; }
 
    std::shared_ptr<SkinnedMesh> GetSkinnedMesh() const { return m_pSkinnedMesh; }
 
@@ -29,7 +29,7 @@ public:
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize);
    virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
 
-   virtual std::string GetPattern() { return "*.biskmesh"; }
+   virtual String GetPattern() { return "*.biskmesh"; }
 };
 
 } // namespace BIEngine

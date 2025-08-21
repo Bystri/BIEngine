@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <string>
+#include "../StdLib/String.h"
 
 namespace BIEngine {
 
@@ -14,10 +14,12 @@ public:
       ERROR
    };
 
-   static void WriteLog(LogType type, const std::string& msg);
+   static void WriteLog(LogType type, const String& msg);
    static void WriteLog(LogType type, const char* format, ...);
+   static void WriteVLog(LogType type, const char* format, va_list args);
 
    static void WriteMsgLog(const char* format, ...);
+   static void WriteWarningLog(const char* format, ...);
    static void WriteErrorLog(const char* format, ...);
 
    static void Flush();

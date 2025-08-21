@@ -16,7 +16,7 @@ public:
 
    virtual ~XmlExtraData() {}
 
-   virtual std::string ToString() { return "XmlExtraData"; }
+   virtual String ToString() { return "XmlExtraData"; }
 
    tinyxml2::XMLElement* GetRootElement() { return m_xmlDoc.RootElement(); }
 
@@ -26,7 +26,7 @@ protected:
 
 class XmlResourceLoader : public IResourceLoader {
 public:
-   virtual std::string GetPattern() { return "*.xml"; }
+   virtual String GetPattern() { return "*.xml"; }
 
    virtual bool UseRawFile() { return false; }
 

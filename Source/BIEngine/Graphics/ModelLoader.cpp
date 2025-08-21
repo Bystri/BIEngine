@@ -123,7 +123,7 @@ static std::shared_ptr<Material> modelLoadMaterial(const aiMaterial* const mat, 
       }
    }
 
-   if (std::string(name.C_Str()).find("bimat") == std::string::npos) {
+   if (String(name.C_Str()).Find("bimat") == String::NPos) {
       auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle("Effects/mesh.bisp")->GetExtra());
 
       if (shaderProgramData == nullptr) {
@@ -171,7 +171,7 @@ static std::shared_ptr<Material> modelLoadMaterial(const aiMaterial* const mat, 
    auto materialData = std::dynamic_pointer_cast<MaterialData>(ResCache::Get()->GetHandle(name.C_Str())->GetExtra());
 
    if (materialData == nullptr) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading material for model; Material path: " + std::string(name.C_Str()));
+      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading material for model; Material path: " + String(name.C_Str()));
       return nullptr;
    }
 
@@ -256,7 +256,7 @@ bool ModelResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, st
    const aiScene* scene = importer.ReadFileFromMemory(rawBuffer, rawSize, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
 
    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Assimp error: " + std::string(importer.GetErrorString()));
+      Logger::WriteLog(Logger::LogType::ERROR, "Assimp error: " + String(importer.GetErrorString()));
       return false;
    }
 

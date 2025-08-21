@@ -17,7 +17,7 @@ public:
 
    virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pRandle);
 
-   virtual std::string GetPattern() { return "*.py"; }
+   virtual String GetPattern() { return "*.py"; }
 };
 
 } // namespace BIEngine

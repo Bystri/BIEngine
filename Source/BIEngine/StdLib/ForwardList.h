@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "StdLib.h"
+#include "Utility.h"
 
 namespace BIEngine {
 
@@ -330,5 +331,13 @@ auto end(const ForwardList<T>& list)
 {
    return list.CEnd();
 }
+
+template <typename T>
+struct Hash<ForwardList<T>> {
+   SizeT operator()(const ForwardList<T>& val) const
+   {
+      return HashRange(val.Begin(), val.End());
+   }
+};
 
 } // namespace BIEngine

@@ -20,13 +20,13 @@ public:
 
    bool IsDoubleSided() const { return m_isDoubleSided; }
 
-   void SetBool(const std::string& name, bool value);
-   void SetInteger(const std::string& name, int value);
-   void SetFloat(const std::string& name, float value);
-   void SetColorRgb(const std::string& name, const ColorRgb& color);
-   void SetColorRgba(const std::string& name, const ColorRgba& color);
+   void SetBool(const String& name, bool value);
+   void SetInteger(const String& name, int value);
+   void SetFloat(const String& name, float value);
+   void SetColorRgb(const String& name, const ColorRgb& color);
+   void SetColorRgba(const String& name, const ColorRgba& color);
 
-   void AddTexture(const std::string& name, int slotId, std::shared_ptr<Texture> pTexture);
+   void AddTexture(const String& name, int slotId, std::shared_ptr<Texture> pTexture);
 
    RenderState& GetRenderState() { return m_renderState; }
 
@@ -43,11 +43,11 @@ private:
    RenderState m_renderState;
    std::shared_ptr<ShaderProgram> m_pShaderProgram;
 
-   HashMap<std::string, bool> m_uniformBools;
-   HashMap<std::string, int> m_uniformInts;
-   HashMap<std::string, float> m_uniformFloats;
-   HashMap<std::string, ColorRgb> m_uniformColorsRgb;
-   HashMap<std::string, ColorRgba> m_uniformColorsRgba;
+   HashMap<String, bool> m_uniformBools;
+   HashMap<String, int> m_uniformInts;
+   HashMap<String, float> m_uniformFloats;
+   HashMap<String, ColorRgb> m_uniformColorsRgb;
+   HashMap<String, ColorRgba> m_uniformColorsRgba;
 
    DynamicArray<std::pair<int, std::shared_ptr<Texture>>> m_textures;
 };

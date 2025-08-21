@@ -1,10 +1,11 @@
 #pragma once
 
 #include <memory>
-#include <string>
 
 #include "../Utilities/Logger.h"
+#include "../StdLib/Utility.h"
 #include "../StdLib/DynamicArray.h"
+#include "../StdLib/String.h"
 
 #include <WinSock2.h>
 #include <WS2tcpip.h>
@@ -149,8 +150,8 @@ public:
 
    static int GetLastError();
 
-   static SocketAddressPtr CreateIPv4SocketFromString(const std::string& address);
-   static SocketAddressPtr CreateIPv6SocketFromString(const std::string& address);
+   static SocketAddressPtr CreateIPv4SocketFromString(const String& address);
+   static SocketAddressPtr CreateIPv6SocketFromString(const String& address);
 
 
    static UdpSocketPtr CreateUdpSocket(SocketAddressFamily inFamily);
@@ -163,14 +164,12 @@ private:
    static void FillVectorFromSet(DynamicArray<TcpSocketPtr>* filledSockets, const DynamicArray<TcpSocketPtr>* sockets, const fd_set& set);
 };
 
-} // namespace BIEngine
-
-namespace std {
 template <>
-struct hash<BIEngine::SocketAddress> {
-   size_t operator()(const BIEngine::SocketAddress& inAddress) const
+struct Hash<SocketAddress> {
+   SizeT operator()(const SocketAddress& inAddress) const
    {
       return inAddress.GetHash();
    }
 };
-} // namespace std
+
+} // namespace BIEngine

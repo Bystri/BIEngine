@@ -1,6 +1,7 @@
 #pragma once
 
 #include "StdLib.h"
+#include "Utility.h"
 
 namespace BIEngine {
 
@@ -71,5 +72,13 @@ auto end(const Array<T, N>& arr)
 {
    return arr.CEnd();
 }
+
+template <typename T, SizeT N>
+struct Hash<Array<T, N>> {
+   SizeT operator()(const Array<T, N>& val) const
+   {
+      return HashRange(val.Begin(), val.End());
+   }
+};
 
 } // namespace BIEngine

@@ -52,7 +52,7 @@ void DirectionalLightComponent::OnRenderObject(const GameTimer& gt)
 
 tinyxml2::XMLElement* DirectionalLightComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    tinyxml2::XMLElement* pColorElement = pDoc->NewElement("Color");
    pColorElement->SetAttribute("r", m_color.r);
@@ -107,7 +107,7 @@ void PointLightComponent::OnRenderObject(const GameTimer& gt)
 
 tinyxml2::XMLElement* PointLightComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    tinyxml2::XMLElement* pColorElement = pDoc->NewElement("Color");
    pColorElement->SetAttribute("r", m_color.r);
@@ -195,7 +195,7 @@ void SpotLightComponent::OnRenderObject(const GameTimer& gt)
 
 tinyxml2::XMLElement* SpotLightComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    tinyxml2::XMLElement* pAmbientElement = pDoc->NewElement("Ambient");
    pAmbientElement->SetAttribute("r", m_ambient.r);

@@ -49,11 +49,11 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
    m_className = temp;
 
    try {
-      auto componentModule = pybind11::module_::import(m_componentScriptPath.c_str());
-      m_pyObject = componentModule.attr("__dict__").cast<pybind11::dict>()[m_className.c_str()]().cast<pybind11::object>();
+      auto componentModule = pybind11::module_::import(m_componentScriptPath.CStr());
+      m_pyObject = componentModule.attr("__dict__").cast<pybind11::dict>()[m_className.CStr()]().cast<pybind11::object>();
       m_pyObject.attr("owner") = PythonStateManager::RawPtrWrapper<Actor>(GetOwner());
    } catch (pybind11::error_already_set er) {
-      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error: ") + er.what());
+      Logger::WriteLog(Logger::LogType::ERROR, String("Python error: ") + er.what());
       return false;
    }
 
@@ -61,7 +61,7 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
    tinyxml2::XMLElement* pStringDataElement = pData->FirstChildElement("StringData");
    if (pStringDataElement) {
       for (const tinyxml2::XMLAttribute* pAttribute = pStringDataElement->FirstAttribute(); pAttribute != nullptr; pAttribute = pAttribute->Next()) {
-         m_strVars.PushBack(std::pair<std::string, std::string>(pAttribute->Name(), pAttribute->Value()));
+         m_strVars.PushBack(std::pair<String, String>(pAttribute->Name(), pAttribute->Value()));
          m_pyObject.attr(pAttribute->Name()) = pAttribute->Value();
       }
    }
@@ -71,7 +71,7 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
    if (pNumberDataElement) {
       for (const tinyxml2::XMLAttribute* pAttribute = pNumberDataElement->FirstAttribute(); pAttribute != nullptr; pAttribute = pAttribute->Next()) {
          float val = std::atof(pAttribute->Value());
-         m_numVars.PushBack(std::pair<std::string, float>(pAttribute->Name(), val));
+         m_numVars.PushBack(std::pair<String, float>(pAttribute->Name(), val));
          m_pyObject.attr(pAttribute->Name()) = val;
       }
    }
@@ -102,10 +102,10 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
       m_externalScriptObjClass = temp;
 
       try {
-         py::object classInstance = py::module::import(m_externalScriptObjPath.c_str()).attr(m_externalScriptObjClass.c_str())();
-         m_pyObject.attr(m_externalScriptObjVarName.c_str()) = classInstance;
+         py::object classInstance = py::module::import(m_externalScriptObjPath.CStr()).attr(m_externalScriptObjClass.CStr())();
+         m_pyObject.attr(m_externalScriptObjVarName.CStr()) = classInstance;
       } catch (pybind11::error_already_set er) {
-         Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error: ") + er.what());
+         Logger::WriteLog(Logger::LogType::ERROR, String("Python error: ") + er.what());
          return false;
       }
 
@@ -127,7 +127,7 @@ void ScriptComponent::Activate()
             m_pyObject.attr("OnInit")();
          }
       } catch (pybind11::error_already_set er) {
-         Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnInit: ") + er.what());
+         Logger::WriteLog(Logger::LogType::ERROR, String("Python error while OnInit: ") + er.what());
       }
 
       m_isScriptInited = true;
@@ -137,7 +137,7 @@ void ScriptComponent::Activate()
          m_pyObject.attr("OnActivate")();
       }
    } catch (pybind11::error_already_set er) {
-      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnActivate: ") + er.what());
+      Logger::WriteLog(Logger::LogType::ERROR, String("Python error while OnActivate: ") + er.what());
    }
 }
 
@@ -152,7 +152,7 @@ void ScriptComponent::Deactivate()
          m_pyObject.attr("OnDeactivate")();
       }
    } catch (pybind11::error_already_set er) {
-      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnDeactivate: ") + er.what());
+      Logger::WriteLog(Logger::LogType::ERROR, String("Python error while OnDeactivate: ") + er.what());
    }
 }
 
@@ -167,7 +167,7 @@ void ScriptComponent::Terminate()
          m_pyObject.attr("OnTerminate")();
       }
    } catch (pybind11::error_already_set er) {
-      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnTerminate: ") + er.what());
+      Logger::WriteLog(Logger::LogType::ERROR, String("Python error while OnTerminate: ") + er.what());
    }
 }
 
@@ -182,26 +182,26 @@ void ScriptComponent::OnUpdate(const GameTimer& gt)
          m_pyObject.attr("OnUpdate")(gt.DeltaTime());
       }
    } catch (pybind11::error_already_set er) {
-      Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error while OnUpdate: ") + er.what());
+      Logger::WriteLog(Logger::LogType::ERROR, String("Python error while OnUpdate: ") + er.what());
    }
 }
 
 tinyxml2::XMLElement* ScriptComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(ScriptComponent::g_CompId.c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(ScriptComponent::g_CompId.CStr());
 
    // ScriptObject
    tinyxml2::XMLElement* pScriptObjectElement = pDoc->NewElement("ScriptObject");
 
-   pScriptObjectElement->SetAttribute("modulePath", m_componentScriptPath.c_str());
-   pScriptObjectElement->SetAttribute("className", m_className.c_str());
+   pScriptObjectElement->SetAttribute("modulePath", m_componentScriptPath.CStr());
+   pScriptObjectElement->SetAttribute("className", m_className.CStr());
    pBaseElement->LinkEndChild(pScriptObjectElement);
 
    // StringData
    tinyxml2::XMLElement* pStringData = pDoc->NewElement("StringData");
 
    for (const auto& data : m_strVars) {
-      pStringData->SetAttribute(data.first.c_str(), data.second.c_str());
+      pStringData->SetAttribute(data.first.CStr(), data.second.CStr());
    }
    pBaseElement->LinkEndChild(pStringData);
 
@@ -209,16 +209,16 @@ tinyxml2::XMLElement* ScriptComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
    tinyxml2::XMLElement* pNumberData = pDoc->NewElement("NumberData");
 
    for (const auto& data : m_numVars) {
-      pNumberData->SetAttribute(data.first.c_str(), std::to_string(data.second).c_str());
+      pNumberData->SetAttribute(data.first.CStr(), ToString(data.second).CStr());
    }
    pBaseElement->LinkEndChild(pNumberData);
 
    // ExternalScriptObj
    if (m_isExternalScriptUsed) {
       tinyxml2::XMLElement* pExternalScriptObj = pDoc->NewElement("ExternalScriptObj");
-      pExternalScriptObj->SetAttribute("varName", m_externalScriptObjVarName.c_str());
-      pExternalScriptObj->SetAttribute("modulePath", m_externalScriptObjPath.c_str());
-      pExternalScriptObj->SetAttribute("className", m_externalScriptObjClass.c_str());
+      pExternalScriptObj->SetAttribute("varName", m_externalScriptObjVarName.CStr());
+      pExternalScriptObj->SetAttribute("modulePath", m_externalScriptObjPath.CStr());
+      pExternalScriptObj->SetAttribute("className", m_externalScriptObjClass.CStr());
       pBaseElement->LinkEndChild(pExternalScriptObj);
    }
 

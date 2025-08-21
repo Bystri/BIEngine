@@ -1,9 +1,9 @@
 #pragma once
 
 #include <functional>
-#include <string>
 #include <memory>
 
+#include "../../BIEngine/StdLib/String.h"
 #include "../../BIEngine/Renderer/Color.h"
 
 class NumEditWidget {
@@ -15,7 +15,7 @@ public:
       m_pOnEditCallback = onEditCallback;
    }
 
-   void SetText(const std::string& text)
+   void SetText(const BIEngine::String& text)
    {
       m_text = text;
    }
@@ -40,7 +40,7 @@ public:
 private:
    std::shared_ptr<std::function<void(float)>> m_pOnEditCallback;
 
-   std::string m_text;
+   BIEngine::String m_text;
    BIEngine::ColorRgb m_textColor;
 
    float m_value;

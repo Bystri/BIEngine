@@ -46,42 +46,42 @@ void ShaderProgramState::Use()
    }
 }
 
-void ShaderProgramState::SetBool(const std::string& name, bool value)
+void ShaderProgramState::SetBool(const String& name, bool value)
 {
    m_uniformBools[name] = value;
 }
 
-void ShaderProgramState::SetInteger(const std::string& name, int value)
+void ShaderProgramState::SetInteger(const String& name, int value)
 {
    m_uniformInts[name] = value;
 }
 
-void ShaderProgramState::SetFloat(const std::string& name, float value)
+void ShaderProgramState::SetFloat(const String& name, float value)
 {
    m_uniformFloats[name] = value;
 }
 
-void ShaderProgramState::SetVector3f(const std::string& name, float x, float y, float z)
+void ShaderProgramState::SetVector3f(const String& name, float x, float y, float z)
 {
    m_uniformVectors[name] = glm::vec3(x, y, z);
 }
 
-void ShaderProgramState::SetVector3f(const std::string& name, const glm::vec3& vec)
+void ShaderProgramState::SetVector3f(const String& name, const glm::vec3& vec)
 {
    m_uniformVectors[name] = vec;
 }
 
-void ShaderProgramState::SetMatrix4(const std::string& name, const glm::mat4& mat)
+void ShaderProgramState::SetMatrix4(const String& name, const glm::mat4& mat)
 {
    m_uniformMatricies[name] = mat;
 }
 
-void ShaderProgramState::SetColorRgb(const std::string& name, const ColorRgb& color)
+void ShaderProgramState::SetColorRgb(const String& name, const ColorRgb& color)
 {
    m_uniformColorsRgb[name] = color;
 }
 
-void ShaderProgramState::SetColorRgba(const std::string& name, const ColorRgba& color)
+void ShaderProgramState::SetColorRgba(const String& name, const ColorRgba& color)
 {
    m_uniformColorsRgba[name] = color;
 }

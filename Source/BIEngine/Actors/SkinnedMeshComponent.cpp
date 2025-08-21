@@ -28,7 +28,7 @@ bool SkinnedMeshComponent::Init(tinyxml2::XMLElement* pData)
       auto meshData = std::static_pointer_cast<SkinnedMeshExtraData>(ResCache::Get()->GetHandle(m_meshPath)->GetExtra());
 
       if (meshData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh for Actor with id: " + std::to_string(GetOwner()->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh for Actor with id: " + ToString(GetOwner()->GetId()));
          return false;
       }
 
@@ -43,7 +43,7 @@ bool SkinnedMeshComponent::Init(tinyxml2::XMLElement* pData)
       auto matData = std::static_pointer_cast<MaterialData>(ResCache::Get()->GetHandle(m_matPath)->GetExtra());
 
       if (matData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh material for Actor with id: " + std::to_string(GetOwner()->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh material for Actor with id: " + ToString(GetOwner()->GetId()));
          return false;
       }
 
@@ -84,18 +84,18 @@ void SkinnedMeshComponent::OnRenderObject(const GameTimer& gt)
 
 tinyxml2::XMLElement* SkinnedMeshComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    tinyxml2::XMLElement* pMeshElement = pDoc->NewElement("Mesh");
-   pMeshElement->SetAttribute("path", m_meshPath.c_str());
+   pMeshElement->SetAttribute("path", m_meshPath.CStr());
    pBaseElement->LinkEndChild(pMeshElement);
 
    tinyxml2::XMLElement* pMaterialElement = pDoc->NewElement("Material");
-   pMaterialElement->SetAttribute("path", m_matPath.c_str());
+   pMaterialElement->SetAttribute("path", m_matPath.CStr());
    pBaseElement->LinkEndChild(pMaterialElement);
 
    tinyxml2::XMLElement* pSkeletElement = pDoc->NewElement("Skelet");
-   pSkeletElement->SetAttribute("relPath", m_rootActorPath.c_str());
+   pSkeletElement->SetAttribute("relPath", m_rootActorPath.CStr());
    pBaseElement->LinkEndChild(pSkeletElement);
 
    return pBaseElement;

@@ -52,19 +52,19 @@ void AnimationComponent::OnUpdate(const GameTimer& gt)
 
 tinyxml2::XMLElement* AnimationComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    for (const auto& anim : m_animationPaths) {
       tinyxml2::XMLElement* pAnimation = pDoc->NewElement("Animation");
-      pAnimation->SetAttribute("name", anim.first.c_str());
-      pAnimation->SetAttribute("path", anim.second.c_str());
+      pAnimation->SetAttribute("name", anim.first.CStr());
+      pAnimation->SetAttribute("path", anim.second.CStr());
       pBaseElement->LinkEndChild(pAnimation);
    }
 
    return pBaseElement;
 }
 
-void AnimationComponent::PlayAnimation(const std::string& animName)
+void AnimationComponent::PlayAnimation(const String& animName)
 {
    m_pAnimator->PlayAnimation(m_animations[animName]);
 }

@@ -3,32 +3,32 @@
 #include <tinyxml2.h>
 
 #include <sstream>
-#include <string>
 #include <iostream>
 
+#include "../StdLib/String.h"
 #include "../../Utilities/Logger.h"
 
 namespace BIEngine {
 
-static std::string shaderLoaderReadShaderCode(std::istringstream& shaderCode, const std::string& fileName)
+static String shaderLoaderReadShaderCode(std::istringstream& shaderCode, const String& fileName)
 {
-   std::string source, line;
-   while (std::getline(shaderCode, line)) {
-      if (line.substr(0, 8) == "#include") {
-         std::string includePath = line.substr(9);
+   String source, line;
+   while (Getline(shaderCode, line)) {
+      if (line.Substr(0, 8) == "#include") {
+         String includePath = line.Substr(9);
 
-         const size_t formatIndex = includePath.find(".glsl");
-         if (formatIndex == std::string::npos) {
+         const size_t formatIndex = includePath.Find(".glsl");
+         if (formatIndex == String::NPos) {
             Logger::WriteLog(Logger::LogType::ERROR, "Include file must be *.glsl in shader " + fileName);
-            return std::string();
+            return String();
          }
 
-         includePath = includePath.substr(0, formatIndex + 5);
+         includePath = includePath.Substr(0, formatIndex + 5);
          const std::shared_ptr<UtilityShaderData> pShaderData = std::static_pointer_cast<UtilityShaderData>(ResCache::Get()->GetHandle(includePath)->GetExtra());
 
          if (!pShaderData) {
             Logger::WriteLog(Logger::LogType::ERROR, "Failed to open include file " + includePath + " in shader " + fileName);
-            return std::string();
+            return String();
          }
 
          source += pShaderData->GetUtilityShaderSource();
@@ -43,8 +43,8 @@ bool UtilityShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int raw
 {
    std::shared_ptr<UtilityShaderData> pExtra = std::make_shared<UtilityShaderData>();
 
-   const std::string shaderCode(rawBuffer, rawSize);
-   pExtra->m_utilityShaderSource = shaderLoaderReadShaderCode(std::istringstream(shaderCode), pHandle->GetName());
+   const String shaderCode(rawBuffer, rawSize);
+   pExtra->m_utilityShaderSource = shaderLoaderReadShaderCode(std::istringstream(shaderCode.CStr()), pHandle->GetName());
    pHandle->SetExtra(pExtra);
 
    return true;
@@ -55,7 +55,7 @@ ShaderData::ShaderData()
 {
 }
 
-static void shaderLoaderCheckCompileErrors(unsigned int object, const std::string& type, const std::string& name)
+static void shaderLoaderCheckCompileErrors(unsigned int object, const String& type, const String& name)
 {
    constexpr unsigned int INFO_LOG_BUFFER_SIZE = 1024;
 
@@ -76,9 +76,9 @@ bool VertexShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawS
    unsigned int sVertex;
 
    // Загружаем код шейдера
-   const std::string rawShaderCode(rawBuffer, rawSize);
-   const std::string codeToCompile = shaderLoaderReadShaderCode(std::istringstream(rawShaderCode), pHandle->GetName());
-   const char* cstrCodeToCompile = codeToCompile.c_str();
+   const String rawShaderCode(rawBuffer, rawSize);
+   const String codeToCompile = shaderLoaderReadShaderCode(std::istringstream(rawShaderCode.CStr()), pHandle->GetName());
+   const char* cstrCodeToCompile = codeToCompile.CStr();
 
    // Компилируем шейдер
    sVertex = glCreateShader(GL_VERTEX_SHADER);
@@ -99,9 +99,9 @@ bool FragmentShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int ra
    unsigned int sFragment;
 
    // Загружаем код шейдера
-   const std::string rawShaderCode(rawBuffer, rawSize);
-   const std::string codeToCompile = shaderLoaderReadShaderCode(std::istringstream(rawShaderCode), pHandle->GetName());
-   const char* cstrCodeToCompile = codeToCompile.c_str();
+   const String rawShaderCode(rawBuffer, rawSize);
+   const String codeToCompile = shaderLoaderReadShaderCode(std::istringstream(rawShaderCode.CStr()), pHandle->GetName());
+   const char* cstrCodeToCompile = codeToCompile.CStr();
 
    // Компилируем шейдер
    sFragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -122,9 +122,9 @@ bool GeometryShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int ra
    unsigned int sGeometry;
 
    // Загружаем код шейдера
-   const std::string rawShaderCode(rawBuffer, rawSize);
-   const std::string codeToCompile = shaderLoaderReadShaderCode(std::istringstream(rawShaderCode), pHandle->GetName());
-   const char* cstrCodeToCompile = codeToCompile.c_str();
+   const String rawShaderCode(rawBuffer, rawSize);
+   const String codeToCompile = shaderLoaderReadShaderCode(std::istringstream(rawShaderCode.CStr()), pHandle->GetName());
+   const char* cstrCodeToCompile = codeToCompile.CStr();
 
    // Компилируем шейдер
    sGeometry = glCreateShader(GL_GEOMETRY_SHADER);

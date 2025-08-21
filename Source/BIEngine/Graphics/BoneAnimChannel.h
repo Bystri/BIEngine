@@ -1,11 +1,10 @@
 #pragma once
 
-#include <string>
-
 #include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtc/quaternion.hpp>
 
+#include "../StdLib/String.h"
 #include "../StdLib/DynamicArray.h"
 #include "../EngineCore/Assert.h"
 #include "../Math/Spline.h"
@@ -30,7 +29,7 @@ public:
    };
 
 public:
-   BoneAnimChannel(const std::string boneName, const DynamicArray<KeyPosition>& positions, const DynamicArray<KeyRotation>& rotations, const DynamicArray<KeyScale>& scales)
+   BoneAnimChannel(const String& boneName, const DynamicArray<KeyPosition>& positions, const DynamicArray<KeyRotation>& rotations, const DynamicArray<KeyScale>& scales)
       : m_boneName(boneName), m_localTransform(1.0f),
         m_positionCurve(constructPositionCurve(positions)),
         m_rotationCurve(constructRotationCurve(rotations)),
@@ -59,7 +58,7 @@ public:
 
    glm::mat4 GetLocalTransform() { return m_localTransform; }
 
-   const std::string& GetBoneName() const { return m_boneName; }
+   const String& GetBoneName() const { return m_boneName; }
 
 private:
    static CatmullRomSpline constructPositionCurve(const DynamicArray<KeyPosition>& positions);
@@ -76,7 +75,7 @@ private:
    DynamicArray<float> m_scaleFramesTimes;
 
    glm::mat4 m_localTransform;
-   std::string m_boneName;
+   String m_boneName;
 };
 
 } // namespace BIEngine

@@ -13,7 +13,7 @@ class BINetworkManagerClient : public BIEngine::NetworkManager {
    };
 
 public:
-   void Init(const BIEngine::SocketAddress& serverAddress, const std::string& name);
+   void Init(const BIEngine::SocketAddress& serverAddress, const BIEngine::String& name);
    void Terminate();
 
    int GetPlayerId() const { return m_playerId; }
@@ -47,7 +47,7 @@ private:
    BIEngine::UniquePtr<BIEngine::ObjectReplicationManagerSlave> m_pReplicationManager;
 
    int m_playerId;
-   std::string m_name;
+   BIEngine::String m_name;
 
    BIEngine::DynamicArray<BIEngine::IEventDataPtr> m_eventsToSend;
    /*

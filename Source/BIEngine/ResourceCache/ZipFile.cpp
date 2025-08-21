@@ -84,7 +84,7 @@ struct ZipFile::TZipDirFileHeader {
 #pragma pack()
 
 ZipFile::ZipFile(ZipFile&& orig) noexcept
-   : m_ResFileName(orig.m_ResFileName), m_InputFile(orig.m_ResFileName), m_pDirData(orig.m_pDirData), m_nEntries(orig.m_nEntries), m_papDir(orig.m_papDir)
+   : m_ResFileName(orig.m_ResFileName), m_InputFile(orig.m_ResFileName.CStr()), m_pDirData(orig.m_pDirData), m_nEntries(orig.m_nEntries), m_papDir(orig.m_papDir)
 {
    orig.m_pDirData = nullptr;
    orig.m_papDir = nullptr;
@@ -95,7 +95,7 @@ ZipFile& ZipFile::operator=(ZipFile&& rhs) noexcept
    if (this != &rhs) {
       End();
       m_ResFileName = rhs.m_ResFileName;
-      m_InputFile.open(rhs.m_ResFileName);
+      m_InputFile.open(rhs.m_ResFileName.CStr());
       m_pDirData = rhs.m_pDirData;
       m_nEntries = rhs.m_nEntries;
       m_papDir = rhs.m_papDir;
@@ -107,12 +107,12 @@ ZipFile& ZipFile::operator=(ZipFile&& rhs) noexcept
    return *this;
 }
 
-bool ZipFile::Init(const std::string& resFileName)
+bool ZipFile::Init(const String& resFileName)
 {
    End();
    m_ResFileName = resFileName;
 
-   m_InputFile.open(resFileName.c_str(), std::ifstream::binary);
+   m_InputFile.open(resFileName.CStr(), std::ifstream::binary);
    if (!m_InputFile.is_open())
       return false;
 
@@ -152,10 +152,10 @@ bool ZipFile::Init(const std::string& resFileName)
       else {
          pfh += sizeof(fh);
          pfh[fh.fnameLen] = 0;
-         std::string fileName(pfh);
+         String fileName(pfh);
 
          // str to lower
-         std::transform(fileName.begin(), fileName.end(), fileName.begin(), [](unsigned char c) { return std::tolower(c); });
+         std::transform(fileName.Begin(), fileName.End(), fileName.Begin(), [](unsigned char c) { return std::tolower(c); });
          m_ZipContentsMap[fileName] = i;
 
          // Skip name, extra and comment fields.
@@ -185,9 +185,9 @@ void ZipFile::End()
    m_InputFile.close();
 }
 
-std::string ZipFile::GetFilename(int i) const
+String ZipFile::GetFilename(int i) const
 {
-   std::string fileName(m_papDir[i]->GetName());
+   String fileName(m_papDir[i]->GetName());
    fileName += '\0';
    return fileName;
 }
@@ -260,10 +260,10 @@ bool ZipFile::ReadFile(int i, void* pBuf)
    return ret;
 }
 
-int ZipFile::Find(const std::string& path) const
+int ZipFile::Find(const String& path) const
 {
-   std::string lowerCasePath = path;
-   std::transform(lowerCasePath.begin(), lowerCasePath.end(), lowerCasePath.begin(), [](unsigned char c) { return std::tolower(c); });
+   String lowerCasePath = path;
+   std::transform(lowerCasePath.Begin(), lowerCasePath.End(), lowerCasePath.Begin(), [](unsigned char c) { return std::tolower(c); });
 
    auto itr = m_ZipContentsMap.Find(lowerCasePath);
    if (itr == m_ZipContentsMap.CEnd()) {

@@ -1,11 +1,11 @@
 ﻿#pragma once
 
 #include <memory>
-#include <string>
 
 #include <tinyxml2.h>
 
 #include "ActorComponent.h"
+#include "../StdLib/String.h"
 #include "../StdLib/DynamicArray.h"
 #include "../StdLib/HashMap.h"
 
@@ -60,11 +60,11 @@ public:
    Actor* GetParent() const { return m_pParent; }
 
    // Поле несет чисто косметический характер. Используется в редакторе для распознования объектов
-   const std::string& GetName() const { return m_name; }
+   const String& GetName() const { return m_name; }
 
    const DynamicArray<std::shared_ptr<Actor>>& GetChildren() const { return m_children; }
 
-   Actor* GetActorByPath(const std::string& path);
+   Actor* GetActorByPath(const String& path);
 
    // Шаблон функции для получения компонентов
    template <class ComponentType>
@@ -103,7 +103,7 @@ private:
    bool m_isLevelLoaded;
 
    // Поле несет чисто косметический характер. Используется в редакторе.
-   std::string m_name;
+   String m_name;
    ActorComponents m_components;
 
    Actor* m_pParent;

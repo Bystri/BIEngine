@@ -15,7 +15,7 @@ SkinnedMeshExtraData::~SkinnedMeshExtraData()
 {
 }
 
-void skinnedMeshLoaderSetVertexBoneData(SkinnedMesh::VertexBoneData& vertex, const std::string& boneName, const float weight)
+void skinnedMeshLoaderSetVertexBoneData(SkinnedMesh::VertexBoneData& vertex, const String& boneName, const float weight)
 {
    if (weight < std::numeric_limits<float>::epsilon()) {
       return;
@@ -100,7 +100,7 @@ bool SkinnedMeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawS
 
    for (tinyxml2::XMLElement* pBoneElement = pBoneWeightsElement->FirstChildElement(); pBoneElement; pBoneElement = pBoneElement->NextSiblingElement()) {
 
-      const std::string boneName = pBoneElement->Attribute("name");
+      const String boneName = pBoneElement->Attribute("name");
 
       for (tinyxml2::XMLElement* pVertBoneElement = pBoneElement->FirstChildElement(); pVertBoneElement; pVertBoneElement = pVertBoneElement->NextSiblingElement()) {
          const int vertIdx = pVertBoneElement->IntAttribute("vertId");

@@ -1,8 +1,7 @@
 ﻿#pragma once
 
-#include <string>
-
 #include "../StdLib/HashMap.h"
+#include "../StdLib/String.h"
 #include "../Utilities/GameTimer.h"
 
 namespace BIEngine {
@@ -43,7 +42,7 @@ class Text : public IElementUI {
    friend class UserInterface;
 
 public:
-   void SetText(const std::string& text) { m_text = text; }
+   void SetText(const String& text) { m_text = text; }
 
    virtual void OnRender(const GameTimer& gt);
 
@@ -51,7 +50,7 @@ private:
    explicit Text(int id);
 
 private:
-   std::string m_text;
+   String m_text;
 };
 
 class UserInterface {
@@ -63,7 +62,7 @@ public:
    bool Init(unsigned int width, unsigned int height);
    void Shutdown();
 
-   int CreateStatic(float x, float y, float scale, const std::string& text);
+   int CreateStatic(float x, float y, float scale, const String& text);
    Text* GetStatic(int id);
 
    void OnRender(const GameTimer& gt);

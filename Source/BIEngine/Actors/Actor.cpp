@@ -1,9 +1,9 @@
 ﻿#include "Actor.h"
 
 #include <iostream>
-#include <string>
 
 #include "../Utilities/Logger.h"
+#include "../StdLib/String.h"
 #include "../EngineCore/Assert.h"
 #include "ActorFactory.h"
 
@@ -16,7 +16,7 @@ Actor::Actor(ActorId id)
 
 Actor::~Actor()
 {
-   Logger::WriteLog(Logger::LogType::MESSAGE, "Actor: Destroying Actor " + std::to_string(m_id));
+   Logger::WriteLog(Logger::LogType::MESSAGE, "Actor: Destroying Actor " + ToString(m_id));
 }
 
 bool Actor::Init(tinyxml2::XMLElement* pData)
@@ -158,7 +158,7 @@ void Actor::Destroy()
 void Actor::AddComponent(std::shared_ptr<ActorComponent> pComponent)
 {
    auto success = m_components.Insert(pComponent->GetComponentId(), pComponent);
-   Assert(success.second, "Cant load component %s", pComponent->GetComponentId().c_str());
+   Assert(success.second, "Cant load component %s", pComponent->GetComponentId().CStr());
 }
 
 tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const
@@ -169,7 +169,7 @@ tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const
 
    // Generate actor info
    tinyxml2::XMLElement* const pActorElement = pDoc->NewElement("Actor");
-   pActorElement->SetAttribute("name", m_name.c_str());
+   pActorElement->SetAttribute("name", m_name.CStr());
 
    // Add components
    tinyxml2::XMLElement* pComponentsElement = pDoc->NewElement("Components");
@@ -191,23 +191,23 @@ tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const
    return pActorElement;
 }
 
-Actor* Actor::GetActorByPath(const std::string& path)
+Actor* Actor::GetActorByPath(const String& path)
 {
    if (path == ".") {
       return this;
    }
 
-   if (path.size() == 2 && path[0] == '.' && path[1] == '.') {
+   if (path.Size() == 2 && path[0] == '.' && path[1] == '.') {
       return m_pParent;
    }
 
-   if (path.size() > 2 && path[0] == '.' && path[1] == '.' && path[2] == '/') {
-      const std::string newPath = &path.c_str()[3];
+   if (path.Size() > 2 && path[0] == '.' && path[1] == '.' && path[2] == '/') {
+      const String newPath = &path.CStr()[3];
       return m_pParent->GetActorByPath(newPath);
    }
 
-   std::size_t delimPos = path.find('/');
-   if (delimPos == std::string::npos) {
+   std::size_t delimPos = path.Find('/');
+   if (delimPos == String::NPos) {
       for (const auto& child : m_children) {
          if (child->GetName() == path) {
             return child.get();
@@ -217,10 +217,10 @@ Actor* Actor::GetActorByPath(const std::string& path)
       return nullptr;
    }
 
-   const std::string childName = path.substr(0, delimPos);
+   const String childName = path.Substr(0, delimPos);
    for (const auto& child : m_children) {
       if (child->GetName() == childName) {
-         const std::string newPath = &path.c_str()[delimPos + 1];
+         const String newPath = &path.CStr()[delimPos + 1];
          return child->GetActorByPath(newPath);
       }
    }

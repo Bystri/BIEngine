@@ -166,13 +166,13 @@ int SocketUtil::GetLastError()
    return WSAGetLastError();
 }
 
-SocketAddressPtr SocketUtil::CreateIPv4SocketFromString(const std::string& address)
+SocketAddressPtr SocketUtil::CreateIPv4SocketFromString(const String& address)
 {
-   auto pos = address.find_last_of(':');
-   std::string host, service;
-   if (pos != std::string::npos) {
-      host = address.substr(0, pos);
-      service = address.substr(pos + 1);
+   auto pos = address.RFind(':');
+   String host, service;
+   if (pos != String::NPos) {
+      host = address.Substr(0, pos);
+      service = address.Substr(pos + 1);
    } else {
       host = address;
       // use default port...
@@ -184,7 +184,7 @@ SocketAddressPtr SocketUtil::CreateIPv4SocketFromString(const std::string& addre
    hint.ai_family = AF_INET;
 
    addrinfo* result;
-   int error = getaddrinfo(host.c_str(), service.c_str(), &hint, &result);
+   int error = getaddrinfo(host.CStr(), service.CStr(), &hint, &result);
    if (error != 0 && result != nullptr) {
       freeaddrinfo(result);
       return nullptr;
@@ -205,17 +205,17 @@ SocketAddressPtr SocketUtil::CreateIPv4SocketFromString(const std::string& addre
    return toRet;
 }
 
-SocketAddressPtr SocketUtil::CreateIPv6SocketFromString(const std::string& address)
+SocketAddressPtr SocketUtil::CreateIPv6SocketFromString(const String& address)
 {
-   auto closedbracket = address.find_last_of(']');
+   auto closedbracket = address.RFind(']');
 
-   auto pos = address.find_first_of(':', closedbracket);
-   std::string host, service;
-   if (pos != std::string::npos) {
-      host = address.substr(1, pos - 2);
-      service = address.substr(pos + 1);
+   auto pos = address.Find(':', closedbracket);
+   String host, service;
+   if (pos != String::NPos) {
+      host = address.Substr(1, pos - 2);
+      service = address.Substr(pos + 1);
    } else {
-      host = address.substr(1, address.length() - 2);
+      host = address.Substr(1, address.Size() - 2);
       // use default port...
       service = "0";
    }
@@ -225,7 +225,7 @@ SocketAddressPtr SocketUtil::CreateIPv6SocketFromString(const std::string& addre
    hint.ai_family = AF_INET6;
 
    addrinfo* result;
-   int error = getaddrinfo(host.c_str(), service.c_str(), &hint, &result);
+   int error = getaddrinfo(host.CStr(), service.CStr(), &hint, &result);
    if (error != 0 && result != nullptr) {
       freeaddrinfo(result);
       return nullptr;

@@ -19,7 +19,7 @@ public:
    virtual ~IResourceLoader() {}
 
    // Wildcard паттерн, по которому будут искаться ресурсы в архиве
-   virtual std::string GetPattern() = 0;
+   virtual String GetPattern() = 0;
    // Данный флаг сигнализирует о том, что ресурсу не нужна инициализация и он может использоваться в "сыром" виде. Если данный флаг имеет значение "true", то значение DiscardRawBufferAfterLoad() не учитвается
    virtual bool UseRawFile() = 0;
    // Удалить буфер после загрузки ресурса. Требуется делать в том случае, если на основе ресурса создается класс или куда-то копируется после инициализации, например в память видеокарты
@@ -41,59 +41,59 @@ public:
 
    virtual bool Open() = 0;
    // Получить сырой размер файла, находящегося в хранилище
-   virtual int GetRawResourceSize(const const std::string& resName) = 0;
+   virtual int GetRawResourceSize(const const String& resName) = 0;
    // Заполняет буфер неинициализированными данными ресурса
-   virtual int GetRawResource(const const std::string& resName, char* pBuffer) = 0;
+   virtual int GetRawResource(const const String& resName, char* pBuffer) = 0;
    // Общее количество ресурсов в хранилище
    virtual int GetNumResources() const = 0;
    // Получить имя ресурса, который имеет порядковый номер num, который начинается с 0
-   virtual std::string GetResourceName(int num) const = 0;
+   virtual String GetResourceName(int num) const = 0;
 };
 
 class IResourceExtraData {
 public:
    virtual ~IResourceExtraData() {}
 
-   virtual std::string ToString() = 0;
+   virtual String ToString() = 0;
 };
 
 // Zip-архив, хранящий все необходимые ресурсы для работы
 class ResourceZipFile : public IResourceFile {
 public:
-   explicit ResourceZipFile(const std::string resFileName)
+   explicit ResourceZipFile(const String resFileName)
       : m_pZipFile(nullptr), m_resFileName(resFileName) {}
 
    virtual ~ResourceZipFile();
 
    virtual bool Open();
-   virtual int GetRawResourceSize(const std::string& resName);
-   virtual int GetRawResource(const const std::string& resName, char* pBuffer);
+   virtual int GetRawResourceSize(const String& resName);
+   virtual int GetRawResource(const const String& resName, char* pBuffer);
    virtual int GetNumResources() const;
-   virtual std::string GetResourceName(int num) const;
+   virtual String GetResourceName(int num) const;
 
 private:
    ZipFile* m_pZipFile;
-   std::string m_resFileName;
+   String m_resFileName;
 };
 
 // Обычная папка, хранящая все неоходимые ресурсы для работы
 // В частности нужна во время разработки игры или для редактора
 class ResourceDirFile : public IResourceFile {
 public:
-   explicit ResourceDirFile(const std::string resFileName)
+   explicit ResourceDirFile(const String resFileName)
       : m_pDirFile(nullptr), m_resFileName(resFileName) {}
 
    virtual ~ResourceDirFile();
 
    virtual bool Open();
-   virtual int GetRawResourceSize(const std::string& resName);
-   virtual int GetRawResource(const const std::string& resName, char* pBuffer);
+   virtual int GetRawResourceSize(const String& resName);
+   virtual int GetRawResource(const const String& resName, char* pBuffer);
    virtual int GetNumResources() const;
-   virtual std::string GetResourceName(int num) const;
+   virtual String GetResourceName(int num) const;
 
 private:
    DirFile* m_pDirFile;
-   std::string m_resFileName;
+   String m_resFileName;
 };
 
 // Содержит полные данные загруженного ресурса: размер, ссылку на буфер с данными ресурса и т.п.
@@ -101,10 +101,10 @@ class ResHandle {
    friend class ResCache;
 
 public:
-   ResHandle(const std::string& resName, char* pBuffer, unsigned int size, ResCache* pResCache);
+   ResHandle(const String& resName, char* pBuffer, unsigned int size, ResCache* pResCache);
    virtual ~ResHandle();
 
-   const std::string GetName() { return m_resName; }
+   const String GetName() { return m_resName; }
 
    unsigned int Size() const { return m_size; }
 
@@ -117,7 +117,7 @@ public:
    void SetExtra(std::shared_ptr<IResourceExtraData> pExtra) { m_pExtra = pExtra; }
 
 protected:
-   const std::string m_resName;
+   const String m_resName;
 
    char* m_pBuffer;
    unsigned int m_size;
@@ -138,11 +138,11 @@ public:
    virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) { return true; }
 
    // Подходит для всех файлов
-   virtual std::string GetPattern() { return "*"; }
+   virtual String GetPattern() { return "*"; }
 };
 
 using ResHandleList = List<std::shared_ptr<ResHandle>>;
-using ResHandleMap = HashMap<std::string, std::shared_ptr<ResHandle>>;
+using ResHandleMap = HashMap<String, std::shared_ptr<ResHandle>>;
 using ResourceLoaders = List<std::shared_ptr<IResourceLoader>>;
 
 // ResCache основан на паттерне Singleton (да простят меня Боги)
@@ -167,9 +167,9 @@ public:
    void RegisterLoader(std::shared_ptr<IResourceLoader> pLoader);
 
    // Возвращает держатель ресурса со всей необходимой информацией для дальнейшей работой с данным ресурсом. Если файл не был загружен, внутри происходит неявная загрузка и, если требуется, свобождения памяти
-   std::shared_ptr<ResHandle> GetHandle(const std::string& resName);
+   std::shared_ptr<ResHandle> GetHandle(const String& resName);
    // Возвращает список файлов, чье название внутри хранилища ресурсов подходит под заданный паттерн
-   DynamicArray<std::string> Match(const std::string& pattern);
+   DynamicArray<String> Match(const String& pattern);
 
 protected:
    // Освобожает место посредством освобождения из памяти самых редкоиспользуемых ресурсов
@@ -180,9 +180,9 @@ protected:
    void Free(std::shared_ptr<ResHandle> pGonner);
 
    // Загрузка ресурса из хранилища
-   std::shared_ptr<ResHandle> Load(const std::string& resName);
+   std::shared_ptr<ResHandle> Load(const String& resName);
    // Поиск уже загруженного ресурса, находящегося в памяти
-   std::shared_ptr<ResHandle> Find(const std::string& resName);
+   std::shared_ptr<ResHandle> Find(const String& resName);
    // Выносит ресурс, к которому обратились через метод GetHandle, на первую строчку LRU кэша
    void Update(std::shared_ptr<ResHandle> pHandle);
 

@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include <string>
 #include <fstream>
 
+#include "../StdLib/String.h"
 #include "../StdLib/HashMap.h"
 
 // Загрузчик ZIP-архивов. Оригинальный код пренадлежит Javier Arevalo.
@@ -10,7 +10,7 @@
 
 namespace BIEngine {
 
-using ZipContentsMap = HashMap<std::string, int>;
+using ZipContentsMap = HashMap<String, int>;
 
 class ZipFile {
 public:
@@ -26,16 +26,16 @@ public:
    ZipFile(ZipFile&& orig) noexcept;
    ZipFile& operator=(ZipFile&& rhs) noexcept;
 
-   bool Init(const std::string& resFileName);
+   bool Init(const String& resFileName);
    void End();
 
    int GetNumFiles() const { return m_nEntries; }
 
-   std::string GetFilename(int i) const;
+   String GetFilename(int i) const;
    int GetFileLen(int i) const;
    bool ReadFile(int i, void* pBuf);
 
-   int Find(const std::string& path) const;
+   int Find(const String& path) const;
 
    ZipContentsMap m_ZipContentsMap;
 
@@ -44,7 +44,7 @@ private:
    struct TZipDirFileHeader;
    struct TZipLocalHeader;
 
-   std::string m_ResFileName;
+   String m_ResFileName;
    std::ifstream m_InputFile;
    char* m_pDirData;
    int m_nEntries;

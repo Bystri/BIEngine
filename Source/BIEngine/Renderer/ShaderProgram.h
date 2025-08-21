@@ -1,12 +1,11 @@
 ﻿#pragma once
 
-#include <string>
-
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Color.h"
+#include "../StdLib/String.h"
 
 namespace BIEngine {
 
@@ -33,21 +32,21 @@ public:
    unsigned int GetId() const { return m_id; }
 
    // Функции, позволяющие задать значения переменным внутри шейдера
-   void SetBool(const std::string& name, bool value, bool useShader = false);
-   void SetFloat(const std::string& name, float value, bool useShader = false);
-   void SetInteger(const std::string& name, int value, bool useShader = false);
-   void SetVector2f(const std::string& name, float x, float y, bool useShader = false);
-   void SetVector2f(const std::string& name, const glm::vec2& value, bool useShader = false);
-   void SetVector3f(const std::string& name, float x, float y, float z, bool useShader = false);
-   void SetVector3f(const std::string& name, const glm::vec3& value, bool useShader = false);
-   void SetVector4f(const std::string& name, float x, float y, float z, float w, bool useShader = false);
-   void SetVector4f(const std::string& name, const glm::vec4& value, bool useShader = false);
-   void SetMatrix4(const std::string& name, const glm::mat4& matrix, bool useShader = false);
-   void SetColorRgb(const std::string& name, const ColorRgb& color, bool useShader = false);
-   void SetColorRgba(const std::string& name, const ColorRgba& color, bool useShader = false);
+   void SetBool(const String& name, bool value, bool useShader = false);
+   void SetFloat(const String& name, float value, bool useShader = false);
+   void SetInteger(const String& name, int value, bool useShader = false);
+   void SetVector2f(const String& name, float x, float y, bool useShader = false);
+   void SetVector2f(const String& name, const glm::vec2& value, bool useShader = false);
+   void SetVector3f(const String& name, float x, float y, float z, bool useShader = false);
+   void SetVector3f(const String& name, const glm::vec3& value, bool useShader = false);
+   void SetVector4f(const String& name, float x, float y, float z, float w, bool useShader = false);
+   void SetVector4f(const String& name, const glm::vec4& value, bool useShader = false);
+   void SetMatrix4(const String& name, const glm::mat4& matrix, bool useShader = false);
+   void SetColorRgb(const String& name, const ColorRgb& color, bool useShader = false);
+   void SetColorRgba(const String& name, const ColorRgba& color, bool useShader = false);
 
 private:
-   void CheckCompileErrors(unsigned int object, std::string type);
+   void CheckCompileErrors(unsigned int object, const String& type);
 
 private:
    unsigned int m_id;

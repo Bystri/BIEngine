@@ -48,24 +48,24 @@ bool ResourceZipFile::Open()
 {
    m_pZipFile = new ZipFile;
    if (m_pZipFile)
-      return m_pZipFile->Init(m_resFileName.c_str());
+      return m_pZipFile->Init(m_resFileName.CStr());
 
    return false;
 }
 
-int ResourceZipFile::GetRawResourceSize(const std::string& resName)
+int ResourceZipFile::GetRawResourceSize(const String& resName)
 {
-   int resourceNum = m_pZipFile->Find(resName.c_str());
+   int resourceNum = m_pZipFile->Find(resName.CStr());
    if (resourceNum == -1)
       return -1;
 
    return m_pZipFile->GetFileLen(resourceNum);
 }
 
-int ResourceZipFile::GetRawResource(const std::string& resName, char* pBuffer)
+int ResourceZipFile::GetRawResource(const String& resName, char* pBuffer)
 {
    int size = 0;
-   int resourceNum = m_pZipFile->Find(resName.c_str());
+   int resourceNum = m_pZipFile->Find(resName.CStr());
    if (resourceNum != -1) {
       size = m_pZipFile->GetFileLen(resourceNum);
       m_pZipFile->ReadFile(resourceNum, pBuffer);
@@ -78,9 +78,9 @@ int ResourceZipFile::GetNumResources() const
    return (m_pZipFile == nullptr) ? 0 : m_pZipFile->GetNumFiles();
 }
 
-std::string ResourceZipFile::GetResourceName(int num) const
+String ResourceZipFile::GetResourceName(int num) const
 {
-   std::string resName = "";
+   String resName = "";
    if (m_pZipFile != nullptr && num >= 0 && num < m_pZipFile->GetNumFiles()) {
       resName = m_pZipFile->GetFilename(num);
    }
@@ -96,24 +96,24 @@ bool ResourceDirFile::Open()
 {
    m_pDirFile = new DirFile;
    if (m_pDirFile)
-      return m_pDirFile->Init(m_resFileName.c_str());
+      return m_pDirFile->Init(m_resFileName.CStr());
 
    return false;
 }
 
-int ResourceDirFile::GetRawResourceSize(const std::string& resName)
+int ResourceDirFile::GetRawResourceSize(const String& resName)
 {
-   int resourceNum = m_pDirFile->Find(resName.c_str());
+   int resourceNum = m_pDirFile->Find(resName.CStr());
    if (resourceNum == -1)
       return -1;
 
    return m_pDirFile->GetFileLen(resourceNum);
 }
 
-int ResourceDirFile::GetRawResource(const std::string& resName, char* pBuffer)
+int ResourceDirFile::GetRawResource(const String& resName, char* pBuffer)
 {
    int size = 0;
-   int resourceNum = m_pDirFile->Find(resName.c_str());
+   int resourceNum = m_pDirFile->Find(resName.CStr());
    if (resourceNum != -1) {
       size = m_pDirFile->GetFileLen(resourceNum);
       m_pDirFile->ReadFile(resourceNum, pBuffer);
@@ -126,9 +126,9 @@ int ResourceDirFile::GetNumResources() const
    return (m_pDirFile == nullptr) ? 0 : m_pDirFile->GetNumFiles();
 }
 
-std::string ResourceDirFile::GetResourceName(int num) const
+String ResourceDirFile::GetResourceName(int num) const
 {
-   std::string resName = "";
+   String resName = "";
    if (m_pDirFile != nullptr && num >= 0 && num < m_pDirFile->GetNumFiles()) {
       resName = m_pDirFile->GetFilename(num);
    }
@@ -136,7 +136,7 @@ std::string ResourceDirFile::GetResourceName(int num) const
 }
 
 /***ResHandle***/
-ResHandle::ResHandle(const std::string& resName, char* pBuffer, unsigned int size, ResCache* pResCache)
+ResHandle::ResHandle(const String& resName, char* pBuffer, unsigned int size, ResCache* pResCache)
    : m_resName(resName), m_pBuffer(pBuffer), m_size(size), m_pExtra(nullptr), m_pResCache(pResCache)
 {
 }
@@ -179,7 +179,7 @@ void ResCache::RegisterLoader(std::shared_ptr<IResourceLoader> pLoader)
    m_resourceLoaders.PushFront(pLoader);
 }
 
-std::shared_ptr<ResHandle> ResCache::GetHandle(const std::string& resName)
+std::shared_ptr<ResHandle> ResCache::GetHandle(const String& resName)
 {
    std::shared_ptr<ResHandle> pHandle(Find(resName));
    if (pHandle == nullptr) {
@@ -190,30 +190,30 @@ std::shared_ptr<ResHandle> ResCache::GetHandle(const std::string& resName)
    return pHandle;
 }
 
-DynamicArray<std::string> ResCache::Match(const std::string& pattern)
+DynamicArray<String> ResCache::Match(const String& pattern)
 {
-   DynamicArray<std::string> matchingNames;
+   DynamicArray<String> matchingNames;
    if (m_pFile == nullptr)
       return matchingNames;
 
    int numFiles = m_pFile->GetNumResources();
    for (int i = 0; i < numFiles; ++i) {
-      std::string name = m_pFile->GetResourceName(i);
-      std::transform(name.begin(), name.end(), name.begin(), (int (*)(int))std::tolower);
-      if (WildcardMatch(pattern.c_str(), name.c_str())) {
+      String name = m_pFile->GetResourceName(i);
+      std::transform(name.Begin(), name.End(), name.Begin(), (int (*)(int))std::tolower);
+      if (WildcardMatch(pattern.CStr(), name.CStr())) {
          matchingNames.PushBack(name);
       }
    }
    return matchingNames;
 }
 
-std::shared_ptr<ResHandle> ResCache::Load(const std::string& resName)
+std::shared_ptr<ResHandle> ResCache::Load(const String& resName)
 {
    std::shared_ptr<IResourceLoader> pLoader;
    std::shared_ptr<ResHandle> pHandle;
 
    for (auto& pTestLoader : m_resourceLoaders) {
-      if (WildcardMatch(pTestLoader->GetPattern().c_str(), resName.c_str())) {
+      if (WildcardMatch(pTestLoader->GetPattern().CStr(), resName.CStr())) {
          pLoader = pTestLoader;
          break;
       }
@@ -281,7 +281,7 @@ std::shared_ptr<ResHandle> ResCache::Load(const std::string& resName)
    return pHandle;
 }
 
-std::shared_ptr<ResHandle> ResCache::Find(const std::string& resName)
+std::shared_ptr<ResHandle> ResCache::Find(const String& resName)
 {
    auto itr = m_resources.Find(resName);
    if (itr == m_resources.End()) {

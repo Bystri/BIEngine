@@ -11,7 +11,7 @@ bool PlayerComponent::Init(tinyxml2::XMLElement* pData)
 
 tinyxml2::XMLElement* PlayerComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    return pBaseElement;
 }

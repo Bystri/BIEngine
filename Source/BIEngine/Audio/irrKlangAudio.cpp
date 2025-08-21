@@ -58,10 +58,10 @@ void irrKlangAudio::ReleaseAudioBuffer(IAudioBuffer* pSampleHandle)
 irrKlangAudioBuffer::irrKlangAudioBuffer(irrklang::ISoundEngine* pSoundEngine, std::shared_ptr<ResHandle> pResource)
    : AudioBuffer(pResource), m_pSoundEngine(pSoundEngine), m_pSound(nullptr)
 {
-   m_pSoundSource = m_pSoundEngine->getSoundSource(pResource->GetName().c_str(), false);
+   m_pSoundSource = m_pSoundEngine->getSoundSource(pResource->GetName().CStr(), false);
 
    if (!m_pSoundSource)
-      m_pSoundSource = m_pSoundEngine->addSoundSourceFromMemory(pResource->Buffer(), pResource->Size(), pResource->GetName().c_str());
+      m_pSoundSource = m_pSoundEngine->addSoundSourceFromMemory(pResource->Buffer(), pResource->Size(), pResource->GetName().CStr());
 }
 
 bool irrKlangAudioBuffer::Play(int volume, bool looping)

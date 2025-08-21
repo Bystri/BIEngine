@@ -120,7 +120,7 @@ std::shared_ptr<Actor> ActorFactory::CreateActorFromRootElement(tinyxml2::XMLEle
 std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(std::shared_ptr<Actor> pActor, tinyxml2::XMLElement* pData)
 {
    // Создаем нового актера
-   std::string name(pData->Value());
+   String name(pData->Value());
    std::shared_ptr<ActorComponent> pComponent;
    auto findIt = m_actorComponentCreators.Find(name);
    if (findIt != m_actorComponentCreators.End()) {
@@ -149,7 +149,7 @@ void ActorFactory::ModifyActor(std::shared_ptr<Actor> pActor, tinyxml2::XMLEleme
 {
    tinyxml2::XMLElement* const pComponents = overrides->FirstChildElement("Components");
    for (tinyxml2::XMLElement* pNode = pComponents->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
-      std::string name(pNode->Value());
+      String name(pNode->Value());
       auto pComponent = pActor->GetComponent<ActorComponent>(name).lock();
       if (pComponent)
          pComponent->Init(pNode);

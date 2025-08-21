@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <string>
+#include "../StdLib/String.h"
 
 namespace BIEngine {
 
@@ -24,16 +24,16 @@ public:
 };
 
 class IJoystickHandler {
-   virtual bool OnButtonDown(const std::string& buttonName, int pressure) = 0;
-   virtual bool OnButtonUp(const std::string& buttonName) = 0;
+   virtual bool OnButtonDown(const String& buttonName, int pressure) = 0;
+   virtual bool OnButtonUp(const String& buttonName) = 0;
    virtual bool OnJoystick(float x, float y) = 0;
 };
 
 class IGamepadHandler {
-   virtual bool OnTrigger(const std::string& triggerName, float pressure) = 0;
-   virtual bool OnButtonDown(const std::string& buttonName, int pressure) = 0;
-   virtual bool OnButtonUp(const std::string& buttonName) = 0;
-   virtual bool OnDirectionalPad(const std::string& direction) = 0;
-   virtual bool OnThumbstick(const std::string& stickName, float x, float y) = 0;
+   virtual bool OnTrigger(const String& triggerName, float pressure) = 0;
+   virtual bool OnButtonDown(const String& buttonName, int pressure) = 0;
+   virtual bool OnButtonUp(const String& buttonName) = 0;
+   virtual bool OnDirectionalPad(const String& direction) = 0;
+   virtual bool OnThumbstick(const String& stickName, float x, float y) = 0;
 };
 } // namespace BIEngine

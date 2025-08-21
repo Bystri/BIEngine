@@ -1,12 +1,11 @@
 ﻿#pragma once
 
-#include <string>
-
 #include <glm/glm.hpp>
 #include <pybind11/embed.h>
 #include <pybind11/operators.h>
 
 #include "../EngineCore/Assert.h"
+#include "../StdLib/String.h"
 
 namespace py = pybind11;
 
@@ -63,5 +62,30 @@ private:
 };
 
 } // namespace BIEngine
+
+namespace pybind11 {
+namespace detail {
+
+template <>
+struct type_caster<BIEngine::String> : public type_caster_base<BIEngine::String> {
+   using base = type_caster_base<BIEngine::String>;
+
+public:
+   bool load(handle src, bool convert)
+   {
+      if (py::isinstance<py::str>(src)) {
+         value = new BIEngine::String(py::cast<std::string>(src).c_str());
+         return true;
+      }
+      return false;
+   }
+
+   static handle cast(const BIEngine::String& src, return_value_policy policy, handle parent)
+   {
+      return py::cast(std::string(src.CStr()), policy, parent).release();
+   }
+};
+} // namespace detail
+} // namespace pybind11
 
 PYBIND11_DECLARE_HOLDER_TYPE(T, BIEngine::PythonStateManager::RawPtrWrapper<T>);

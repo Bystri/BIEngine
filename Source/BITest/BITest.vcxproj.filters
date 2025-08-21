@@ -55,6 +55,9 @@
     <ClCompile Include="StdLib\UniquePtr_UnitTest.cpp">
       <Filter>StdLib</Filter>
     </ClCompile>
+    <ClCompile Include="StdLib\String_UnitTest.cpp">
+      <Filter>StdLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -90,9 +93,6 @@
       <Filter>EngineSources\Math</Filter>
     </ClInclude>
     <ClInclude Include="..\BIEngine\Math\Vector.h">
-      <Filter>EngineSources\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BIEngine\Math\Trigonometry.h">
       <Filter>EngineSources\Math</Filter>
     </ClInclude>
     <ClInclude Include="..\BIEngine\Math\Math.h">
@@ -133,6 +133,15 @@
     </ClInclude>
     <ClInclude Include="..\BIEngine\StdLib\MemoryUtils.h">
       <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\StdLib\String.h">
+      <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\StdLib\Utility.h">
+      <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Math\Trigonometry.h">
+      <Filter>EngineSources\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

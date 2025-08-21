@@ -6,13 +6,14 @@
 #include <glm/gtx/matrix_decompose.hpp>
 
 #include "../../BIEngine/StdLib/HashSet.h"
+#include "../../BIEngine/StdLib/String.h"
 #include "../../BIEngine/Utilities/Logger.h"
 
-std::string gAssetPath;
-std::string gSaveFolder;
+BIEngine::String gAssetPath;
+BIEngine::String gSaveFolder;
 
-std::string pRootBoneName;
-BIEngine::HashSet<std::string> gBones;
+BIEngine::String pRootBoneName;
+BIEngine::HashSet<BIEngine::String> gBones;
 
 static inline glm::mat4 modelLoaderConvertMatrixToGLMFormat(const aiMatrix4x4& from)
 {
@@ -39,7 +40,7 @@ static inline glm::mat4 modelLoaderConvertMatrixToGLMFormat(const aiMatrix4x4& f
 
 static void modeLoaderLoadAnimation(const aiAnimation* const anim)
 {
-   BIEngine::Logger::WriteLog(BIEngine::Logger::LogType::MESSAGE, "Process animation: " + std::string(anim->mName.C_Str()));
+   BIEngine::Logger::WriteLog(BIEngine::Logger::LogType::MESSAGE, "Process animation: " + BIEngine::String(anim->mName.C_Str()));
 
    tinyxml2::XMLDocument animationXmlDoc;
    tinyxml2::XMLElement* const pAnimationElement = animationXmlDoc.NewElement("Animation");
@@ -101,8 +102,8 @@ static void modeLoaderLoadAnimation(const aiAnimation* const anim)
       }
    }
 
-   const std::string savePath = gSaveFolder + "/" + anim->mName.C_Str() + ".bi3dam";
-   animationXmlDoc.SaveFile(savePath.c_str());
+   const BIEngine::String savePath = gSaveFolder + "/" + anim->mName.C_Str() + ".bi3dam";
+   animationXmlDoc.SaveFile(savePath.CStr());
 }
 
 static void modeLoaderLoadAnimations(const aiScene* const scene)
@@ -112,10 +113,10 @@ static void modeLoaderLoadAnimations(const aiScene* const scene)
    }
 }
 
-static void modelLoaderProcessBoneInfoFromMesh(BIEngine::HashSet<std::string>& bones, aiMesh* const mesh, const aiScene* const scene)
+static void modelLoaderProcessBoneInfoFromMesh(BIEngine::HashSet<BIEngine::String>& bones, aiMesh* const mesh, const aiScene* const scene)
 {
    for (int i = 0; i < mesh->mNumBones; ++i) {
-      const std::string boneName = mesh->mBones[i]->mName.C_Str();
+      const BIEngine::String boneName = mesh->mBones[i]->mName.C_Str();
 
       if (bones.Find(boneName) != bones.End()) {
          continue;
@@ -125,7 +126,7 @@ static void modelLoaderProcessBoneInfoFromMesh(BIEngine::HashSet<std::string>& b
    }
 }
 
-static void modelLoaderLoadBonesInfoFromMeshes(BIEngine::HashSet<std::string>& bones, aiNode* node, const aiScene* scene)
+static void modelLoaderLoadBonesInfoFromMeshes(BIEngine::HashSet<BIEngine::String>& bones, aiNode* node, const aiScene* scene)
 {
    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
       aiMesh* const mesh = scene->mMeshes[node->mMeshes[i]];
@@ -137,9 +138,9 @@ static void modelLoaderLoadBonesInfoFromMeshes(BIEngine::HashSet<std::string>& b
    }
 }
 
-static bool modelLoaderExtractRootBonePath(BIEngine::HashSet<std::string>& bones, aiNode* node, const aiScene* scene, std::string& path)
+static bool modelLoaderExtractRootBonePath(BIEngine::HashSet<BIEngine::String>& bones, aiNode* node, const aiScene* scene, BIEngine::String& path)
 {
-   std::string tempPath = path + node->mName.C_Str();
+   BIEngine::String tempPath = path + node->mName.C_Str();
 
    auto boneSetItr = bones.Find(node->mName.C_Str());
    if (boneSetItr != bones.End()) {
@@ -159,7 +160,7 @@ static bool modelLoaderExtractRootBonePath(BIEngine::HashSet<std::string>& bones
    return false;
 }
 
-static std::string modelLoaderGetRootBonePath(aiNode* node, const aiScene* scene)
+static BIEngine::String modelLoaderGetRootBonePath(aiNode* node, const aiScene* scene)
 {
    modelLoaderLoadBonesInfoFromMeshes(gBones, node, scene);
 
@@ -169,7 +170,7 @@ static std::string modelLoaderGetRootBonePath(aiNode* node, const aiScene* scene
       return ".";
    }
 
-   std::string path;
+   BIEngine::String path;
    for (unsigned int i = 0; i < node->mNumChildren; i++) {
       modelLoaderExtractRootBonePath(gBones, node->mChildren[i], scene, path);
    }
@@ -183,11 +184,11 @@ static tinyxml2::XMLElement* modelLoaderExtractBoneWeightForVertices(tinyxml2::X
 {
    tinyxml2::XMLElement* const pBoneWeightsElement = pDoc->NewElement("BoneWeights");
    for (int i = 0; i < mesh->mNumBones; ++i) {
-      const std::string name = mesh->mBones[i]->mName.C_Str();
+      const BIEngine::String name = mesh->mBones[i]->mName.C_Str();
 
       tinyxml2::XMLElement* const pBoneElement = pDoc->NewElement("Bone");
       pBoneWeightsElement->LinkEndChild(pBoneElement);
-      pBoneElement->SetAttribute("name", name.c_str());
+      pBoneElement->SetAttribute("name", name.CStr());
 
       const aiVertexWeight* const pWeights = mesh->mBones[i]->mWeights;
 
@@ -209,7 +210,7 @@ static tinyxml2::XMLElement* modelLoaderExtractBoneWeightForVertices(tinyxml2::X
    return pBoneWeightsElement;
 }
 
-static std::string modelLoaderProcessTexture(const aiTexture* const pTexture)
+static BIEngine::String modelLoaderProcessTexture(const aiTexture* const pTexture)
 {
    tinyxml2::XMLDocument textureDoc;
    tinyxml2::XMLElement* const pTexutreElement = textureDoc.NewElement("Texture");
@@ -217,8 +218,8 @@ static std::string modelLoaderProcessTexture(const aiTexture* const pTexture)
 
    tinyxml2::XMLElement* const pImgDataElement = textureDoc.NewElement("ImgData");
    pTexutreElement->LinkEndChild(pImgDataElement);
-   const std::string imagePath = gAssetPath + "/" + std::string(pTexture->mFilename.C_Str()) + "." + pTexture->achFormatHint;
-   pImgDataElement->SetAttribute("path", imagePath.c_str());
+   const BIEngine::String imagePath = gAssetPath + "/" + BIEngine::String(pTexture->mFilename.C_Str()) + "." + pTexture->achFormatHint;
+   pImgDataElement->SetAttribute("path", imagePath.CStr());
 
    tinyxml2::XMLElement* const pCreationParamsElement = textureDoc.NewElement("CreationParams");
    pTexutreElement->LinkEndChild(pCreationParamsElement);
@@ -227,15 +228,15 @@ static std::string modelLoaderProcessTexture(const aiTexture* const pTexture)
    pCreationParamsElement->SetAttribute("filterMin", "Linear");
    pCreationParamsElement->SetAttribute("filterMax", "Linear");
 
-   const std::string savePath = gSaveFolder + "/" + pTexture->mFilename.C_Str() + ".bitf";
-   textureDoc.SaveFile(savePath.c_str());
+   const BIEngine::String savePath = gSaveFolder + "/" + pTexture->mFilename.C_Str() + ".bitf";
+   textureDoc.SaveFile(savePath.CStr());
 
-   const std::string assetPath = gAssetPath + "/" + pTexture->mFilename.C_Str() + ".bitf";
+   const BIEngine::String assetPath = gAssetPath + "/" + pTexture->mFilename.C_Str() + ".bitf";
 
    return assetPath;
 }
 
-static std::string modelLoadMaterial(const aiMaterial* const mat, const aiScene* const scene)
+static BIEngine::String modelLoadMaterial(const aiMaterial* const mat, const aiScene* const scene)
 {
    aiString name = mat->GetName();
 
@@ -264,7 +265,7 @@ static std::string modelLoadMaterial(const aiMaterial* const mat, const aiScene*
    tinyxml2::XMLElement* const pFloatsElement = materialXmlDoc.NewElement("Floats");
    pMaterialElement->LinkEndChild(pFloatsElement);
    for (int i = 0; i < mat->mNumProperties; ++i) {
-      if (std::string(mat->mProperties[i]->mKey.C_Str()) != "$mat.shininess") {
+      if (BIEngine::String(mat->mProperties[i]->mKey.C_Str()) != "$mat.shininess") {
          continue;
       }
 
@@ -286,8 +287,8 @@ static std::string modelLoadMaterial(const aiMaterial* const mat, const aiScene*
             pTexturesElement->LinkEndChild(pTextureElement);
             pTextureElement->SetAttribute("paramName", "material.diffuse");
             pTextureElement->SetAttribute("slot", 0);
-            const std::string texPath = modelLoaderProcessTexture(pTexture);
-            pTextureElement->SetAttribute("path", texPath.c_str());
+            const BIEngine::String texPath = modelLoaderProcessTexture(pTexture);
+            pTextureElement->SetAttribute("path", texPath.CStr());
          }
       }
    } else {
@@ -307,8 +308,8 @@ static std::string modelLoadMaterial(const aiMaterial* const mat, const aiScene*
             pTexturesElement->LinkEndChild(pTextureElement);
             pTextureElement->SetAttribute("paramName", "material.specular");
             pTextureElement->SetAttribute("slot", 1);
-            const std::string texPath = modelLoaderProcessTexture(pTexture);
-            pTextureElement->SetAttribute("path", texPath.c_str());
+            const BIEngine::String texPath = modelLoaderProcessTexture(pTexture);
+            pTextureElement->SetAttribute("path", texPath.CStr());
          }
       }
    } else {
@@ -328,8 +329,8 @@ static std::string modelLoadMaterial(const aiMaterial* const mat, const aiScene*
             pTexturesElement->LinkEndChild(pTextureElement);
             pTextureElement->SetAttribute("paramName", "material.normal");
             pTextureElement->SetAttribute("slot", 2);
-            const std::string texPath = modelLoaderProcessTexture(pTexture);
-            pTextureElement->SetAttribute("path", texPath.c_str());
+            const BIEngine::String texPath = modelLoaderProcessTexture(pTexture);
+            pTextureElement->SetAttribute("path", texPath.CStr());
          }
       }
    } else {
@@ -349,8 +350,8 @@ static std::string modelLoadMaterial(const aiMaterial* const mat, const aiScene*
             pTexturesElement->LinkEndChild(pTextureElement);
             pTextureElement->SetAttribute("paramName", "material.displacement");
             pTextureElement->SetAttribute("slot", 3);
-            const std::string texPath = modelLoaderProcessTexture(pTexture);
-            pTextureElement->SetAttribute("path", texPath.c_str());
+            const BIEngine::String texPath = modelLoaderProcessTexture(pTexture);
+            pTextureElement->SetAttribute("path", texPath.CStr());
          }
       }
    } else {
@@ -361,15 +362,15 @@ static std::string modelLoadMaterial(const aiMaterial* const mat, const aiScene*
       pTextureElement->SetAttribute("path", "textures/displacement_default.bitf");
    }
 
-   const std::string savePath = gSaveFolder + "/" + name.C_Str() + ".bimat";
-   materialXmlDoc.SaveFile(savePath.c_str());
+   const BIEngine::String savePath = gSaveFolder + "/" + name.C_Str() + ".bimat";
+   materialXmlDoc.SaveFile(savePath.CStr());
 
-   const std::string assetPath = gAssetPath + "/" + name.C_Str() + ".bimat";
+   const BIEngine::String assetPath = gAssetPath + "/" + name.C_Str() + ".bimat";
 
    return assetPath;
 }
 
-static void modelLoaderProcessSkinnedMesh(aiMesh* mesh, const aiScene* scene, std::string& meshPath, std::string& matPath)
+static void modelLoaderProcessSkinnedMesh(aiMesh* mesh, const aiScene* scene, BIEngine::String& meshPath, BIEngine::String& matPath)
 {
    tinyxml2::XMLDocument skinnedMeshXmlDoc;
 
@@ -408,16 +409,16 @@ static void modelLoaderProcessSkinnedMesh(aiMesh* mesh, const aiScene* scene, st
    // process indices
    tinyxml2::XMLElement* const pIndicesElement = skinnedMeshXmlDoc.NewElement("Indices");
    pSkinnedMeshElement->LinkEndChild(pIndicesElement);
-   std::string indicesText;
+   BIEngine::String indicesText;
    for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
       aiFace face = mesh->mFaces[i];
       for (unsigned int j = 0; j < face.mNumIndices; j++) {
-         const std::string index = std::to_string(face.mIndices[j]);
+         const BIEngine::String index = BIEngine::ToString(face.mIndices[j]);
          indicesText += index + " ";
       }
    }
-   indicesText.pop_back();
-   pIndicesElement->SetText(indicesText.c_str());
+   indicesText.PopBack();
+   pIndicesElement->SetText(indicesText.CStr());
 
    pSkinnedMeshElement->LinkEndChild(modelLoaderExtractBoneWeightForVertices(&skinnedMeshXmlDoc, mesh));
 
@@ -427,13 +428,13 @@ static void modelLoaderProcessSkinnedMesh(aiMesh* mesh, const aiScene* scene, st
       matPath = modelLoadMaterial(material, scene);
    }
 
-   const std::string savePath = gSaveFolder + "/" + mesh->mName.C_Str() + ".biskmesh";
-   skinnedMeshXmlDoc.SaveFile(savePath.c_str());
+   const BIEngine::String savePath = gSaveFolder + "/" + mesh->mName.C_Str() + ".biskmesh";
+   skinnedMeshXmlDoc.SaveFile(savePath.CStr());
 
    meshPath = gAssetPath + "/" + mesh->mName.C_Str() + ".biskmesh";
 }
 
-static void modelLoaderProcessMesh(aiMesh* mesh, const aiScene* scene, std::string& meshPath, std::string& matPath)
+static void modelLoaderProcessMesh(aiMesh* mesh, const aiScene* scene, BIEngine::String& meshPath, BIEngine::String& matPath)
 {
    tinyxml2::XMLDocument skinnedMeshXmlDoc;
 
@@ -472,16 +473,16 @@ static void modelLoaderProcessMesh(aiMesh* mesh, const aiScene* scene, std::stri
    // process indices
    tinyxml2::XMLElement* const pIndicesElement = skinnedMeshXmlDoc.NewElement("Indices");
    pSkinnedMeshElement->LinkEndChild(pIndicesElement);
-   std::string indicesText;
+   BIEngine::String indicesText;
    for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
       aiFace face = mesh->mFaces[i];
       for (unsigned int j = 0; j < face.mNumIndices; j++) {
-         const std::string index = std::to_string(face.mIndices[j]);
+         const BIEngine::String index = BIEngine::ToString(face.mIndices[j]);
          indicesText += index + " ";
       }
    }
-   indicesText.pop_back();
-   pIndicesElement->SetText(indicesText.c_str());
+   indicesText.PopBack();
+   pIndicesElement->SetText(indicesText.CStr());
 
    //  process material
    if (mesh->mMaterialIndex >= 0) {
@@ -489,8 +490,8 @@ static void modelLoaderProcessMesh(aiMesh* mesh, const aiScene* scene, std::stri
       matPath = modelLoadMaterial(material, scene);
    }
 
-   const std::string savePath = gSaveFolder + "/" + mesh->mName.C_Str() + ".bimesh";
-   skinnedMeshXmlDoc.SaveFile(savePath.c_str());
+   const BIEngine::String savePath = gSaveFolder + "/" + mesh->mName.C_Str() + ".bimesh";
+   skinnedMeshXmlDoc.SaveFile(savePath.CStr());
 
    meshPath = gAssetPath + "/" + mesh->mName.C_Str() + ".bimesh";
 }
@@ -514,55 +515,55 @@ static tinyxml2::XMLElement* modelLoaderCreateTransformComponent(tinyxml2::XMLDo
    tinyxml2::XMLElement* const pTransformComponent = pDoc->NewElement("TransformComponent");
 
    tinyxml2::XMLElement* const pPosition = pDoc->NewElement("Position");
-   pPosition->SetAttribute("x", std::to_string(localPos.x).c_str());
-   pPosition->SetAttribute("y", std::to_string(localPos.y).c_str());
-   pPosition->SetAttribute("z", std::to_string(localPos.z).c_str());
+   pPosition->SetAttribute("x", BIEngine::ToString(localPos.x).CStr());
+   pPosition->SetAttribute("y", BIEngine::ToString(localPos.y).CStr());
+   pPosition->SetAttribute("z", BIEngine::ToString(localPos.z).CStr());
    pTransformComponent->LinkEndChild(pPosition);
 
    tinyxml2::XMLElement* const pSize = pDoc->NewElement("Size");
-   pSize->SetAttribute("w", std::to_string(localSize.x).c_str());
-   pSize->SetAttribute("h", std::to_string(localSize.y).c_str());
-   pSize->SetAttribute("d", std::to_string(localSize.z).c_str());
+   pSize->SetAttribute("w", BIEngine::ToString(localSize.x).CStr());
+   pSize->SetAttribute("h", BIEngine::ToString(localSize.y).CStr());
+   pSize->SetAttribute("d", BIEngine::ToString(localSize.z).CStr());
    pTransformComponent->LinkEndChild(pSize);
 
    tinyxml2::XMLElement* const pRotation = pDoc->NewElement("Rotation");
-   pRotation->SetAttribute("x", std::to_string(localRot.x).c_str());
-   pRotation->SetAttribute("y", std::to_string(localRot.y).c_str());
-   pRotation->SetAttribute("z", std::to_string(localRot.z).c_str());
+   pRotation->SetAttribute("x", BIEngine::ToString(localRot.x).CStr());
+   pRotation->SetAttribute("y", BIEngine::ToString(localRot.y).CStr());
+   pRotation->SetAttribute("z", BIEngine::ToString(localRot.z).CStr());
    pTransformComponent->LinkEndChild(pRotation);
 
    return pTransformComponent;
 }
 
-static tinyxml2::XMLElement* modelLoaderCreateSkinnedMeshComponent(tinyxml2::XMLDocument* const pDoc, const std::string& meshPath, const std::string& matPath, const std::string& relPath)
+static tinyxml2::XMLElement* modelLoaderCreateSkinnedMeshComponent(tinyxml2::XMLDocument* const pDoc, const BIEngine::String& meshPath, const BIEngine::String& matPath, const BIEngine::String& relPath)
 {
    tinyxml2::XMLElement* const pSkinnedMeshComponent = pDoc->NewElement("SkinnedMeshComponent");
 
    tinyxml2::XMLElement* const pMeshElement = pDoc->NewElement("Mesh");
-   pMeshElement->SetAttribute("path", meshPath.c_str());
+   pMeshElement->SetAttribute("path", meshPath.CStr());
    pSkinnedMeshComponent->LinkEndChild(pMeshElement);
 
    tinyxml2::XMLElement* const pMaterialElement = pDoc->NewElement("Material");
-   pMaterialElement->SetAttribute("path", matPath.c_str());
+   pMaterialElement->SetAttribute("path", matPath.CStr());
    pSkinnedMeshComponent->LinkEndChild(pMaterialElement);
 
    tinyxml2::XMLElement* const pSkeletElement = pDoc->NewElement("Skelet");
-   pSkeletElement->SetAttribute("relPath", relPath.c_str());
+   pSkeletElement->SetAttribute("relPath", relPath.CStr());
    pSkinnedMeshComponent->LinkEndChild(pSkeletElement);
 
    return pSkinnedMeshComponent;
 }
 
-static tinyxml2::XMLElement* modelLoaderCreateMeshComponent(tinyxml2::XMLDocument* const pDoc, const std::string& meshPath, const std::string& matPath)
+static tinyxml2::XMLElement* modelLoaderCreateMeshComponent(tinyxml2::XMLDocument* const pDoc, const BIEngine::String& meshPath, const BIEngine::String& matPath)
 {
    tinyxml2::XMLElement* const pSkinnedMeshComponent = pDoc->NewElement("MeshComponent");
 
    tinyxml2::XMLElement* const pMeshElement = pDoc->NewElement("Mesh");
-   pMeshElement->SetAttribute("path", meshPath.c_str());
+   pMeshElement->SetAttribute("path", meshPath.CStr());
    pSkinnedMeshComponent->LinkEndChild(pMeshElement);
 
    tinyxml2::XMLElement* const pMaterialElement = pDoc->NewElement("Material");
-   pMaterialElement->SetAttribute("path", matPath.c_str());
+   pMaterialElement->SetAttribute("path", matPath.CStr());
    pSkinnedMeshComponent->LinkEndChild(pMaterialElement);
 
    return pSkinnedMeshComponent;
@@ -582,10 +583,10 @@ static tinyxml2::XMLElement* modelLoaderCreateBoneComponent(tinyxml2::XMLDocumen
    return pSkinnedMeshComponent;
 }
 
-static std::string modelLoaderProcessPathOneStepHeigher(const std::string& path)
+static BIEngine::String modelLoaderProcessPathOneStepHeigher(const BIEngine::String& path)
 {
-   std::string ret;
-   if (path[0] == '.' && path.size() == 1) {
+   BIEngine::String ret;
+   if (path[0] == '.' && path.Size() == 1) {
       ret = "..";
       return ret;
    }
@@ -594,9 +595,9 @@ static std::string modelLoaderProcessPathOneStepHeigher(const std::string& path)
    return ret;
 }
 
-static tinyxml2::XMLElement* modelLoaderProcessNode(tinyxml2::XMLDocument* const pDoc, aiNode* node, const aiScene* scene, const std::string& relRootPath)
+static tinyxml2::XMLElement* modelLoaderProcessNode(tinyxml2::XMLDocument* const pDoc, aiNode* node, const aiScene* scene, const BIEngine::String& relRootPath)
 {
-   const std::string nodeName = node->mName.C_Str();
+   const BIEngine::String nodeName = node->mName.C_Str();
    BIEngine::Logger::WriteLog(BIEngine::Logger::LogType::MESSAGE, "Process node: " + nodeName);
 
    if (node->mNumMeshes > 1) {
@@ -617,16 +618,16 @@ static tinyxml2::XMLElement* modelLoaderProcessNode(tinyxml2::XMLDocument* const
 
    if (node->mNumMeshes == 1 && scene->mMeshes[node->mMeshes[0]]->HasBones()) {
       aiMesh* mesh = scene->mMeshes[node->mMeshes[0]];
-      std::string meshPath;
-      std::string matPath;
+      BIEngine::String meshPath;
+      BIEngine::String matPath;
       modelLoaderProcessSkinnedMesh(mesh, scene, meshPath, matPath);
       pComponentsElement->LinkEndChild(modelLoaderCreateSkinnedMeshComponent(pDoc, meshPath, matPath, relRootPath));
    }
 
    if (node->mNumMeshes == 1 && scene->mMeshes[node->mMeshes[0]]->HasBones() == false) {
       aiMesh* mesh = scene->mMeshes[node->mMeshes[0]];
-      std::string meshPath;
-      std::string matPath;
+      BIEngine::String meshPath;
+      BIEngine::String matPath;
       modelLoaderProcessMesh(mesh, scene, meshPath, matPath);
       pComponentsElement->LinkEndChild(modelLoaderCreateMeshComponent(pDoc, meshPath, matPath));
    }
@@ -661,28 +662,28 @@ int main(int argc, char* argv[])
       return -1;
    }
 
-   const std::string modelPath = argv[1];
+   const BIEngine::String modelPath = argv[1];
    gSaveFolder = argv[2];
    gAssetPath = argv[3];
 
    Assimp::Importer importer;
-   const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
+   const aiScene* scene = importer.ReadFile(modelPath.CStr(), aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
 
    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-      BIEngine::Logger::WriteLog(BIEngine::Logger::LogType::ERROR, "Assimp error: " + std::string(importer.GetErrorString()));
+      BIEngine::Logger::WriteLog(BIEngine::Logger::LogType::ERROR, "Assimp error: " + BIEngine::String(importer.GetErrorString()));
       return -1;
    }
 
    modeLoaderLoadAnimations(scene);
 
-   const std::string relRootPath = modelLoaderGetRootBonePath(scene->mRootNode, scene);
+   const BIEngine::String relRootPath = modelLoaderGetRootBonePath(scene->mRootNode, scene);
 
    tinyxml2::XMLDocument actorXmlDoc;
    tinyxml2::XMLElement* const pActorElemetn = modelLoaderProcessNode(&actorXmlDoc, scene->mRootNode, scene, relRootPath);
    actorXmlDoc.LinkEndChild(pActorElemetn);
 
-   const std::string saveActorPath = gSaveFolder + "/ExportedActor.xml";
-   actorXmlDoc.SaveFile(saveActorPath.c_str());
+   const BIEngine::String saveActorPath = gSaveFolder + "/ExportedActor.xml";
+   actorXmlDoc.SaveFile(saveActorPath.CStr());
 
    return 0;
 }

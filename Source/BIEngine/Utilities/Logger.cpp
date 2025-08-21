@@ -7,7 +7,7 @@
 
 namespace BIEngine {
 
-void Logger::WriteLog(LogType type, const std::string& msg)
+void Logger::WriteLog(LogType type, const String& msg)
 {
    switch (type) {
       case LogType::MESSAGE:
@@ -26,67 +26,54 @@ void Logger::WriteLog(LogType type, const std::string& msg)
    }
 }
 
-void Logger::WriteLog(LogType type, const char* format, ...)
+void Logger::WriteVLog(LogType type, const char* format, va_list args)
 {
    static constexpr int MSG_SIZE = 512;
    char msg[MSG_SIZE];
-   std::va_list argList;
-   va_start(argList, format);
-   int len = vsnprintf(msg, MSG_SIZE, format, argList);
+   int len = vsnprintf(msg, MSG_SIZE, format, args);
    if (len >= MSG_SIZE) {
       len = MSG_SIZE - 1;
       msg[MSG_SIZE - 1] = '\0';
 
-      const std::string errorMessage = "Log message was truncated";
+      const String errorMessage = "Log message was truncated";
       WriteLog(LogType::ERROR, errorMessage);
    }
    msg[len] = '\0';
-   va_end(argList);
 
-   const std::string meesage(msg);
+   const String meesage(msg);
    WriteLog(type, meesage);
+}
+
+void Logger::WriteLog(LogType type, const char* format, ...)
+{
+   std::va_list argList;
+   va_start(argList, format);
+   WriteVLog(type, format, argList);
+   va_end(argList);
 }
 
 void Logger::WriteMsgLog(const char* format, ...)
 {
-   static constexpr int MSG_SIZE = 512;
-   char msg[MSG_SIZE];
    std::va_list argList;
    va_start(argList, format);
-   int len = vsnprintf(msg, MSG_SIZE, format, argList);
-   if (len >= MSG_SIZE) {
-      len = MSG_SIZE - 1;
-      msg[MSG_SIZE - 1] = '\0';
-
-      const std::string errorMessage = "Log message was truncated";
-      WriteLog(LogType::ERROR, errorMessage);
-   }
-   msg[len] = '\0';
+   WriteVLog(LogType::MESSAGE, format, argList);
    va_end(argList);
+}
 
-   const std::string meesage(msg, len + 1);
-   WriteLog(LogType::MESSAGE, meesage);
+void Logger::WriteWarningLog(const char* format, ...)
+{
+   std::va_list argList;
+   va_start(argList, format);
+   WriteVLog(LogType::WARNING, format, argList);
+   va_end(argList);
 }
 
 void Logger::WriteErrorLog(const char* format, ...)
 {
-   static constexpr int MSG_SIZE = 512;
-   char msg[MSG_SIZE];
    std::va_list argList;
    va_start(argList, format);
-   int len = vsnprintf(msg, MSG_SIZE, format, argList);
-   if (len >= MSG_SIZE) {
-      len = MSG_SIZE - 1;
-      msg[MSG_SIZE - 1] = '\0';
-
-      const std::string errorMessage = "Log message was truncated";
-      WriteLog(LogType::ERROR, errorMessage);
-   }
-   msg[len] = '\0';
+   WriteVLog(LogType::ERROR, format, argList);
    va_end(argList);
-
-   const std::string meesage(msg);
-   WriteLog(LogType::ERROR, meesage);
 }
 
 void Logger::Flush()

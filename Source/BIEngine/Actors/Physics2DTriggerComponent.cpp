@@ -46,11 +46,11 @@ void Physics2DTriggerComponent::Deactivate()
 
 tinyxml2::XMLElement* Physics2DTriggerComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    tinyxml2::XMLElement* pScale = pDoc->NewElement("Scale");
-   pScale->SetAttribute("w", std::to_string(m_dimension.x).c_str());
-   pScale->SetAttribute("h", std::to_string(m_dimension.y).c_str());
+   pScale->SetAttribute("w", ToString(m_dimension.x).CStr());
+   pScale->SetAttribute("h", ToString(m_dimension.y).CStr());
    pBaseElement->LinkEndChild(pScale);
 
    return pBaseElement;

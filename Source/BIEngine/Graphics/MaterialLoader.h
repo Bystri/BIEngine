@@ -19,7 +19,7 @@ public:
    MaterialData(const MaterialData& orig) = delete;
    MaterialData& operator=(const MaterialData& orig) = delete;
 
-   virtual std::string ToString() override { return "MaterialData"; }
+   virtual String ToString() override { return "MaterialData"; }
 
    std::shared_ptr<Material> GetMaterial() const { return m_pMaterial; }
 
@@ -37,7 +37,7 @@ public:
 
    virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
 
-   virtual std::string GetPattern() { return "*.bimat"; }
+   virtual String GetPattern() { return "*.bimat"; }
 };
 
 } // namespace BIEngine

@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "StdLib.h"
+#include "Utility.h"
 
 namespace BIEngine {
 
@@ -443,5 +444,13 @@ auto end(const List<T>& list)
 {
    return list.CEnd();
 }
+
+template <typename T>
+struct Hash<List<T>> {
+   SizeT operator()(const List<T>& val) const
+   {
+      return HashRange(val.Begin(), val.End());
+   }
+};
 
 } // namespace BIEngine

@@ -27,7 +27,7 @@ bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
    tinyxml2::XMLElement* pMaterialElement = pData->FirstChildElement("Material");
 
    if (pMaterialElement == nullptr) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading RenderComponent for Actor with id: " + std::to_string(GetOwner()->GetId()) + "; No Material was specified");
+      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading RenderComponent for Actor with id: " + ToString(GetOwner()->GetId()) + "; No Material was specified");
       return false;
    }
 
@@ -43,10 +43,10 @@ bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
 
 tinyxml2::XMLElement* MeshBaseRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    tinyxml2::XMLElement* pMaterialElement = pDoc->NewElement("Material");
-   pMaterialElement->SetAttribute("path", m_materialPath.c_str());
+   pMaterialElement->SetAttribute("path", m_materialPath.CStr());
    pBaseElement->LinkEndChild(pMaterialElement);
 
    return pBaseElement;
@@ -82,7 +82,7 @@ void MeshRenderComponent::OnRenderObject(const GameTimer& gt)
 
 bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
 {
-   static const std::string SPRITE_SHADER_PROGRAM_PATH = "Effects/sprite.bisp";
+   static const String SPRITE_SHADER_PROGRAM_PATH = "Effects/sprite.bisp";
 
    std::shared_ptr<ShaderProgramData> pShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(SPRITE_SHADER_PROGRAM_PATH)->GetExtra());
    std::shared_ptr<Material> pMaterial = std::make_shared<Material>(pShaderProgramData->GetShaderProgram());
@@ -110,7 +110,7 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
       auto spriteData = std::static_pointer_cast<TextureData>(ResCache::Get()->GetHandle(spritePath)->GetExtra());
 
       if (spriteData == nullptr) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + std::to_string(GetOwner()->GetId()));
+         Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + ToString(GetOwner()->GetId()));
          return false;
       }
 
@@ -142,17 +142,17 @@ void SpriteRenderComponent::OnRenderObject(const GameTimer& gt)
 
 tinyxml2::XMLElement* SpriteRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    tinyxml2::XMLElement* pColor = pDoc->NewElement("Color");
-   pColor->SetAttribute("r", std::to_string(m_spriteColor.r).c_str());
-   pColor->SetAttribute("g", std::to_string(m_spriteColor.g).c_str());
-   pColor->SetAttribute("b", std::to_string(m_spriteColor.b).c_str());
+   pColor->SetAttribute("r", ToString(m_spriteColor.r).CStr());
+   pColor->SetAttribute("g", ToString(m_spriteColor.g).CStr());
+   pColor->SetAttribute("b", ToString(m_spriteColor.b).CStr());
    pBaseElement->LinkEndChild(pColor);
 
 
    tinyxml2::XMLElement* pSprite = pDoc->NewElement("Sprite");
-   pSprite->SetAttribute("path", m_spritePath.c_str());
+   pSprite->SetAttribute("path", m_spritePath.CStr());
    pBaseElement->LinkEndChild(pSprite);
 
    return pBaseElement;
@@ -194,9 +194,9 @@ tinyxml2::XMLElement* BoxRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDo
    tinyxml2::XMLElement* pBaseElement = MeshRenderComponent::GenerateXml(pDoc);
 
    tinyxml2::XMLElement* pSize = pDoc->NewElement("Size");
-   pSize->SetAttribute("w", std::to_string(m_width).c_str());
-   pSize->SetAttribute("h", std::to_string(m_height).c_str());
-   pSize->SetAttribute("d", std::to_string(m_depth).c_str());
+   pSize->SetAttribute("w", ToString(m_width).CStr());
+   pSize->SetAttribute("h", ToString(m_height).CStr());
+   pSize->SetAttribute("d", ToString(m_depth).CStr());
    pBaseElement->LinkEndChild(pSize);
 
    return pBaseElement;
@@ -234,7 +234,7 @@ tinyxml2::XMLElement* SphereRenderComponent::GenerateXml(tinyxml2::XMLDocument* 
    tinyxml2::XMLElement* pBaseElement = MeshRenderComponent::GenerateXml(pDoc);
 
    tinyxml2::XMLElement* pSize = pDoc->NewElement("Size");
-   pSize->SetAttribute("r", std::to_string(m_radius).c_str());
+   pSize->SetAttribute("r", ToString(m_radius).CStr());
    pBaseElement->LinkEndChild(pSize);
 
    return pBaseElement;
@@ -248,7 +248,7 @@ bool ModelRenderComponent::Init(tinyxml2::XMLElement* pData)
 {
    tinyxml2::XMLElement* pModel = pData->FirstChildElement("Model");
    if (!pModel) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Erro while loading actor" + std::to_string(GetOwner()->GetId()) + "; ModelRenderComponent must have path for model loading;");
+      Logger::WriteLog(Logger::LogType::ERROR, "Erro while loading actor" + ToString(GetOwner()->GetId()) + "; ModelRenderComponent must have path for model loading;");
       return false;
    }
 
@@ -259,7 +259,7 @@ bool ModelRenderComponent::Init(tinyxml2::XMLElement* pData)
    auto modelData = std::static_pointer_cast<ModelData>(ResCache::Get()->GetHandle(m_modelPath)->GetExtra());
 
    if (modelData == nullptr) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading actor" + std::to_string(GetOwner()->GetId()) + "; Error while loading model in ModelRenderComponent;");
+      Logger::WriteLog(Logger::LogType::ERROR, "Error while loading actor" + ToString(GetOwner()->GetId()) + "; Error while loading model in ModelRenderComponent;");
       return false;
    }
 
@@ -270,10 +270,10 @@ bool ModelRenderComponent::Init(tinyxml2::XMLElement* pData)
 
 tinyxml2::XMLElement* ModelRenderComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
-   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().c_str());
+   tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
 
    tinyxml2::XMLElement* pMaterialElement = pDoc->NewElement("Model");
-   pMaterialElement->SetAttribute("path", m_modelPath.c_str());
+   pMaterialElement->SetAttribute("path", m_modelPath.CStr());
    pBaseElement->LinkEndChild(pMaterialElement);
 
    return pBaseElement;

@@ -29,9 +29,9 @@ public:
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
 private:
-   std::string m_meshPath;
-   std::string m_matPath;
-   std::string m_rootActorPath;
+   String m_meshPath;
+   String m_matPath;
+   String m_rootActorPath;
 
    std::shared_ptr<SkinnedMesh> m_pMesh;
    std::shared_ptr<Material> m_pMaterial;

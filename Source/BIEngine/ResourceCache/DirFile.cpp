@@ -6,12 +6,12 @@
 
 namespace BIEngine {
 
-bool DirFile::Init(const std::string& resFileName)
+bool DirFile::Init(const String& resFileName)
 {
    End();
    m_resFileName = resFileName;
 
-   const std::filesystem::path resPath{resFileName};
+   const std::filesystem::path resPath{resFileName.CStr()};
 
    if (resPath.empty())
       return false;
@@ -19,14 +19,14 @@ bool DirFile::Init(const std::string& resFileName)
    int i = 0;
 
    for (const auto& dir_entry : std::filesystem::recursive_directory_iterator(resPath)) {
-      std::string path = std::filesystem::relative(dir_entry.path(), resPath).string();
+      String path(std::filesystem::relative(dir_entry.path(), resPath).string().c_str());
 
       // Меняем разделите директорий Windows на разделители в стиле POSIX
       // Топорный метод, из-за того, что в POSIX системах символ '\' - является корретным символо в имени файла и мы, тем самым, можем его из-за этого переименовать
       // TODO: если этот проект доберется до сборки под Linux, надо ограничеть этот кусок ifdefine или чем-то похожим или молится, что в CPP2X дадут возможность выбирать стиль разделителей
-      std::replace(path.begin(), path.end(), '\\', '/');
+      std::replace(path.Begin(), path.End(), '\\', '/');
 
-      std::transform(path.begin(), path.end(), path.begin(), [](unsigned char c) { return std::tolower(c); });
+      std::transform(path.Begin(), path.End(), path.Begin(), [](unsigned char c) { return std::tolower(c); });
 
       m_fileDatas.PushBack({path, static_cast<unsigned int>(dir_entry.file_size())});
 
@@ -41,7 +41,7 @@ void DirFile::End()
    m_dirContentsMap.Clear();
 }
 
-std::string DirFile::GetFilename(int i) const
+String DirFile::GetFilename(int i) const
 {
    return m_fileDatas[i].name;
 }
@@ -57,17 +57,18 @@ bool DirFile::ReadFile(int i, void* pBuf)
       return false;
 
    // Просто читаем весь файл в буфер
-   std::ifstream inputFile(m_resFileName + "/" + m_fileDatas[i].name, std::ifstream::binary);
+   const String inputFilePath = m_resFileName + "/" + m_fileDatas[i].name;
+   std::ifstream inputFile(inputFilePath.CStr(), std::ifstream::binary);
    if (inputFile.read((char*)pBuf, m_fileDatas[i].size))
       return true;
 
    return false;
 }
 
-int DirFile::Find(const std::string& path) const
+int DirFile::Find(const String& path) const
 {
-   std::string lowerCasePath = path;
-   std::transform(lowerCasePath.begin(), lowerCasePath.end(), lowerCasePath.begin(), [](unsigned char c) { return std::tolower(c); });
+   String lowerCasePath = path;
+   std::transform(lowerCasePath.Begin(), lowerCasePath.End(), lowerCasePath.Begin(), [](unsigned char c) { return std::tolower(c); });
 
    auto itr = m_dirContentsMap.Find(lowerCasePath);
    if (itr == m_dirContentsMap.CEnd()) {

@@ -53,7 +53,7 @@ void BINetworkManagerServer::HandlePacketFromNewClient(BIEngine::InputMemoryBitS
 
    if (packetType == kHelloCC) {
       // read the name
-      std::string name;
+      BIEngine::String name;
       BIEngine::Deserialize(inputStream, name);
 
       BIEngine::PeerPtr newClient = std::make_shared<BIEngine::Peer>(nextClientId, fromAddress);

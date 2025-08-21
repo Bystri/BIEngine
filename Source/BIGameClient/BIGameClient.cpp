@@ -205,7 +205,7 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
    pShaderProgram->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
 
 
-   BIEngine::DynamicArray<std::string> faces{
+   BIEngine::DynamicArray<BIEngine::String> faces{
       "cubemapTextureRightPath",
       "cubemapTextureLeftPath",
       "cubemapTextureTopPath",
@@ -219,7 +219,7 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
 
    for (int i = 0; i < faces.Size(); ++i) {
       const char* cubemapTexturePath;
-      pSkyboxSettingsNode->QueryStringAttribute(faces[i].c_str(), &cubemapTexturePath);
+      pSkyboxSettingsNode->QueryStringAttribute(faces[i].CStr(), &cubemapTexturePath);
 
       if (strlen(cubemapTexturePath) == 0) {
          return nullptr;

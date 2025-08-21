@@ -55,7 +55,7 @@ ShaderProgram& ShaderProgram::Use()
 void ShaderProgram::Compile(unsigned int sVertex, unsigned int sFragment)
 {
    if (m_id != 0) {
-      Logger::WriteLog(Logger::LogType::WARNING, "Trying to compile already compiled shader program with index " + std::to_string(m_id));
+      Logger::WriteLog(Logger::LogType::WARNING, "Trying to compile already compiled shader program with index " + ToString(m_id));
       return;
    }
 
@@ -69,7 +69,7 @@ void ShaderProgram::Compile(unsigned int sVertex, unsigned int sFragment)
 void ShaderProgram::Compile(unsigned int sVertex, unsigned int sFragment, unsigned int sGeomtry)
 {
    if (m_id != 0) {
-      Logger::WriteLog(Logger::LogType::WARNING, "Trying to compile already compiled shader program with index " + std::to_string(m_id));
+      Logger::WriteLog(Logger::LogType::WARNING, "Trying to compile already compiled shader program with index " + ToString(m_id));
       return;
    }
 
@@ -81,116 +81,116 @@ void ShaderProgram::Compile(unsigned int sVertex, unsigned int sFragment, unsign
    CheckCompileErrors(m_id, "PROGRAM");
 }
 
-void ShaderProgram::SetBool(const std::string& name, bool value, bool useShader)
+void ShaderProgram::SetBool(const String& name, bool value, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniform1i(glGetUniformLocation(m_id, name.c_str()), (int)value);
+   glUniform1i(glGetUniformLocation(m_id, name.CStr()), (int)value);
 }
 
-void ShaderProgram::SetFloat(const std::string& name, float value, bool useShader)
+void ShaderProgram::SetFloat(const String& name, float value, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniform1f(glGetUniformLocation(m_id, name.c_str()), value);
+   glUniform1f(glGetUniformLocation(m_id, name.CStr()), value);
 }
 
-void ShaderProgram::SetInteger(const std::string& name, int value, bool useShader)
+void ShaderProgram::SetInteger(const String& name, int value, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
+   glUniform1i(glGetUniformLocation(m_id, name.CStr()), value);
 }
 
-void ShaderProgram::SetVector2f(const std::string& name, float x, float y, bool useShader)
+void ShaderProgram::SetVector2f(const String& name, float x, float y, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniform2f(glGetUniformLocation(m_id, name.c_str()), x, y);
+   glUniform2f(glGetUniformLocation(m_id, name.CStr()), x, y);
 }
 
-void ShaderProgram::SetVector2f(const std::string& name, const glm::vec2& value, bool useShader)
+void ShaderProgram::SetVector2f(const String& name, const glm::vec2& value, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniform2f(glGetUniformLocation(m_id, name.c_str()), value.x, value.y);
+   glUniform2f(glGetUniformLocation(m_id, name.CStr()), value.x, value.y);
 }
 
-void ShaderProgram::SetVector3f(const std::string& name, float x, float y, float z, bool useShader)
+void ShaderProgram::SetVector3f(const String& name, float x, float y, float z, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniform3f(glGetUniformLocation(m_id, name.c_str()), x, y, z);
+   glUniform3f(glGetUniformLocation(m_id, name.CStr()), x, y, z);
 }
 
-void ShaderProgram::SetVector3f(const std::string& name, const glm::vec3& value, bool useShader)
+void ShaderProgram::SetVector3f(const String& name, const glm::vec3& value, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniform3f(glGetUniformLocation(m_id, name.c_str()), value.x, value.y, value.z);
+   glUniform3f(glGetUniformLocation(m_id, name.CStr()), value.x, value.y, value.z);
 }
 
-void ShaderProgram::SetVector4f(const std::string& name, float x, float y, float z, float w, bool useShader)
+void ShaderProgram::SetVector4f(const String& name, float x, float y, float z, float w, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniform4f(glGetUniformLocation(m_id, name.c_str()), x, y, z, w);
+   glUniform4f(glGetUniformLocation(m_id, name.CStr()), x, y, z, w);
 }
 
-void ShaderProgram::SetVector4f(const std::string& name, const glm::vec4& value, bool useShader)
+void ShaderProgram::SetVector4f(const String& name, const glm::vec4& value, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniform4f(glGetUniformLocation(m_id, name.c_str()), value.x, value.y, value.z, value.w);
+   glUniform4f(glGetUniformLocation(m_id, name.CStr()), value.x, value.y, value.z, value.w);
 }
 
-void ShaderProgram::SetMatrix4(const std::string& name, const glm::mat4& matrix, bool useShader)
+void ShaderProgram::SetMatrix4(const String& name, const glm::mat4& matrix, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, false, glm::value_ptr(matrix));
+   glUniformMatrix4fv(glGetUniformLocation(m_id, name.CStr()), 1, false, glm::value_ptr(matrix));
 }
 
-void ShaderProgram::SetColorRgb(const std::string& name, const ColorRgb& color, bool useShader)
+void ShaderProgram::SetColorRgb(const String& name, const ColorRgb& color, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniform3f(glGetUniformLocation(m_id, name.c_str()), color.r, color.g, color.b);
+   glUniform3f(glGetUniformLocation(m_id, name.CStr()), color.r, color.g, color.b);
 }
 
-void ShaderProgram::SetColorRgba(const std::string& name, const ColorRgba& color, bool useShader)
+void ShaderProgram::SetColorRgba(const String& name, const ColorRgba& color, bool useShader)
 {
    if (useShader) {
       this->Use();
    }
 
-   glUniform4f(glGetUniformLocation(m_id, name.c_str()), color.r, color.g, color.b, color.a);
+   glUniform4f(glGetUniformLocation(m_id, name.CStr()), color.r, color.g, color.b, color.a);
 }
 
 // Проверяет и, в случае обнаружуения, выводит сообщения об ошибках во время компиляции шейдера
-void ShaderProgram::CheckCompileErrors(unsigned int object, std::string type)
+void ShaderProgram::CheckCompileErrors(unsigned int object, const String& type)
 {
    int success;
    char infoLog[1024];

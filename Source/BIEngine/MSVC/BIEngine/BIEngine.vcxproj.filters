@@ -881,6 +881,12 @@
     <ClInclude Include="..\..\StdLib\MemoryUtils.h">
       <Filter>StdLib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\StdLib\String.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\StdLib\Utility.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.clang-format" />

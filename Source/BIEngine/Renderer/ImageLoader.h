@@ -13,7 +13,7 @@ public:
    ImageExtraData();
    virtual ~ImageExtraData();
 
-   virtual std::string ToString() { return "ImageExtraData"; }
+   virtual String ToString() { return "ImageExtraData"; }
 
    int GetWidth() const { return m_width; }
 
@@ -42,12 +42,12 @@ public:
 
 class PngResourceLoader : public ImageResourceLoader {
 public:
-   virtual std::string GetPattern() { return "*.png"; }
+   virtual String GetPattern() { return "*.png"; }
 };
 
 class JpgResourceLoader : public ImageResourceLoader {
 public:
-   virtual std::string GetPattern() { return "*.jpg"; }
+   virtual String GetPattern() { return "*.jpg"; }
 };
 
 } // namespace BIEngine

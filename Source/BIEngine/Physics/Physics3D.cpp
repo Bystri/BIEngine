@@ -217,8 +217,8 @@ public:
 private:
    // Инициализация и работа с физическими материалами
    void LoadXml(tinyxml2::XMLElement* pRoot);
-   float LookupSpecificGravity(const std::string& densityStr);
-   MaterialData LookupMaterialData(const std::string& materialStr);
+   float LookupSpecificGravity(const String& densityStr);
+   MaterialData LookupMaterialData(const String& materialStr);
 
    btRigidBody* FindBulletRigidBody(ActorId const id) const;
    ActorId FindActorID(const btRigidBody* const body) const;
@@ -249,8 +249,8 @@ private:
    BulletDebugDrawer* m_pDebugDrawer;
    bool m_isRenderDebugDiagnostics = false;
 
-   using DensityTable = HashMap<std::string, float>;
-   using MaterialTable = HashMap<std::string, MaterialData>;
+   using DensityTable = HashMap<String, float>;
+   using MaterialTable = HashMap<String, MaterialData>;
    DensityTable m_densityTable;
    MaterialTable m_materialTable;
 
@@ -266,7 +266,10 @@ private:
    public:
       SizeT operator()(const CollisionPair& pair)
       {
-         return std::hash<btRigidBody const*>()(pair.first) ^ (std::hash<btRigidBody const*>()(pair.second) << 1);
+         SizeT hash = 0;
+         HashCombine(hash, pair.first);
+         HashCombine(hash, pair.second);
+         return hash;
       }
    };
 
@@ -791,7 +794,7 @@ void Physics3D::LoadXml(tinyxml2::XMLElement* pRoot)
    }
 }
 
-float Physics3D::LookupSpecificGravity(const std::string& densityStr)
+float Physics3D::LookupSpecificGravity(const String& densityStr)
 {
    float density = 0;
    auto densityIt = m_densityTable.Find(densityStr);
@@ -801,7 +804,7 @@ float Physics3D::LookupSpecificGravity(const std::string& densityStr)
    return density;
 }
 
-MaterialData Physics3D::LookupMaterialData(const std::string& materialStr)
+MaterialData Physics3D::LookupMaterialData(const String& materialStr)
 {
    auto materialIt = m_materialTable.Find(materialStr);
    if (materialIt != m_materialTable.End())

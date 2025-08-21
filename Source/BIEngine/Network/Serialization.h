@@ -3,9 +3,10 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdint>
-#include <string>
 #include <algorithm>
 #include <memory>
+
+#include "../StdLib/String.h"
 
 namespace BIEngine {
 
@@ -237,7 +238,7 @@ void Serialize(OutputMemoryBitStream& stream, T data, size_t bitCount = sizeof(T
    stream.WriteBits(&data, bitCount);
 }
 
-void Serialize(OutputMemoryBitStream& stream, const std::string& data);
+void Serialize(OutputMemoryBitStream& stream, const String& data);
 
 template <typename T>
 void Deserialize(InputMemoryBitStream& stream, T& inData, size_t bitCount = sizeof(T) * 8)
@@ -250,6 +251,6 @@ void Deserialize(InputMemoryBitStream& stream, T& inData, size_t bitCount = size
    }
 }
 
-void Deserialize(InputMemoryBitStream& stream, std::string& data);
+void Deserialize(InputMemoryBitStream& stream, String& data);
 
 } // namespace BIEngine

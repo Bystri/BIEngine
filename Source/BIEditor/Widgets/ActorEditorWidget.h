@@ -1,10 +1,9 @@
 #pragma once
 
-#include <string>
-
 #include <tinyxml2.h>
 #include <imgui.h>
 
+#include "../../BIEngine/StdLib/String.h"
 #include "../../BIEngine/StdLib/HashMap.h"
 #include "../../BIEngine/Actors/Actor.h"
 #include "../../BIEngine/EngineCore/GameApp.h"
@@ -24,5 +23,5 @@ private:
    BIEngine::ActorId m_currentActorId;
    BIEngine::DynamicArray<ActorComponentEdit*> m_actorComponentEdits;
 
-   BIEngine::HashMap<std::string, tinyxml2::XMLElement*> m_componentsSettings;
+   BIEngine::HashMap<BIEngine::String, tinyxml2::XMLElement*> m_componentsSettings;
 };

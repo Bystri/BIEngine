@@ -18,8 +18,8 @@ public:
    NavMeshManager();
    ~NavMeshManager();
 
-   void SaveNavMesh(const std::string& path);
-   void LoadNavMesh(const std::string& path);
+   void SaveNavMesh(const String& path);
+   void LoadNavMesh(const String& path);
 
    void SetBuildSettings(const NavMeshBuildSettings& settings) { m_buildSettings = settings; }
 

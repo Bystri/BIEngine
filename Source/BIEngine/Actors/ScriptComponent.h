@@ -31,16 +31,16 @@ public:
 private:
    bool m_isScriptInited;
 
-   std::string m_componentScriptPath;
-   std::string m_className;
+   String m_componentScriptPath;
+   String m_className;
 
    bool m_isExternalScriptUsed;
-   std::string m_externalScriptObjVarName;
-   std::string m_externalScriptObjPath;
-   std::string m_externalScriptObjClass;
+   String m_externalScriptObjVarName;
+   String m_externalScriptObjPath;
+   String m_externalScriptObjClass;
 
-   DynamicArray<std::pair<std::string, float>> m_numVars;
-   DynamicArray<std::pair<std::string, std::string>> m_strVars;
+   DynamicArray<std::pair<String, float>> m_numVars;
+   DynamicArray<std::pair<String, String>> m_strVars;
 
    pybind11::object m_pyObject;
 };

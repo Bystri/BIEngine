@@ -19,7 +19,7 @@ public:
    TextureData(const TextureData& orig) = delete;
    TextureData& operator=(const TextureData& orig) = delete;
 
-   virtual std::string ToString() override { return "TextureData"; }
+   virtual String ToString() override { return "TextureData"; }
 
    std::shared_ptr<Texture2D> GetTexture() const { return m_pTexture; }
 
@@ -37,7 +37,7 @@ public:
 
    virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
 
-   virtual std::string GetPattern() { return "*.bitf"; }
+   virtual String GetPattern() { return "*.bitf"; }
 };
 
 } // namespace BIEngine

@@ -31,11 +31,12 @@ NavMeshManager::~NavMeshManager()
    EventManager::Get()->RemoveListener(m_handleActorDestroyedDelegateHandler);
 }
 
-static bool SaveGeom(const std::string& filepath, std::shared_ptr<NavMeshInputGeometry> pGeom)
+static bool SaveGeom(const String& filepath, std::shared_ptr<NavMeshInputGeometry> pGeom)
 {
-   FILE* fp = fopen(filepath.c_str(), "w");
-   if (!fp)
+   FILE* fp = fopen(filepath.CStr(), "w");
+   if (!fp) {
       return false;
+   }
 
    const float* verts = pGeom->GetMesh()->GetVerts();
    for (int i = 0; i < pGeom->GetMesh()->GetVertCount(); ++i) {
@@ -65,13 +66,13 @@ struct NavMeshTileHeader {
 static const int NAVMESHSET_MAGIC = 'M' << 24 | 'S' << 16 | 'E' << 8 | 'T'; //'MSET';
 static const int NAVMESHSET_VERSION = 1;
 
-void NavMeshManager::SaveNavMesh(const std::string& path)
+void NavMeshManager::SaveNavMesh(const String& path)
 {
    if (!m_pNavMesh) {
       return;
    }
 
-   FILE* fp = fopen(path.c_str(), "wb");
+   FILE* fp = fopen(path.CStr(), "wb");
    if (!fp) {
       return;
    }
@@ -111,10 +112,10 @@ void NavMeshManager::SaveNavMesh(const std::string& path)
    fclose(fp);
 }
 
-void NavMeshManager::LoadNavMesh(const std::string& path)
+void NavMeshManager::LoadNavMesh(const String& path)
 {
 
-   FILE* fp = fopen(path.c_str(), "rb");
+   FILE* fp = fopen(path.CStr(), "rb");
    if (!fp) {
       return;
    }

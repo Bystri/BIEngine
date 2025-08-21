@@ -21,10 +21,10 @@ public:
             dt         /* Argument(s) */
          );
       } catch (std::runtime_error er) {
-         Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error: ") + er.what());
+         Logger::WriteLog(Logger::LogType::ERROR, String("Python error: ") + er.what());
          Fail();
       } catch (pybind11::error_already_set er) {
-         Logger::WriteLog(Logger::LogType::ERROR, std::string("Python error: ") + er.what());
+         Logger::WriteLog(Logger::LogType::ERROR, String("Python error: ") + er.what());
          Fail();
       }
    }

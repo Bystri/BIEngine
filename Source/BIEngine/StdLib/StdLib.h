@@ -2,6 +2,6 @@
 
 namespace BIEngine {
 
-using SizeT = unsigned int;
+using SizeT = unsigned long long;
 
 }
