@@ -10,7 +10,7 @@ class EvtData_Player_Created : public BIEngine::BaseEventData {
 public:
    static const BIEngine::EventType sk_EventType;
 
-   explicit EvtData_Player_Created(std::shared_ptr<Player> pPlayer)
+   explicit EvtData_Player_Created(BIEngine::SharedPtr<Player> pPlayer)
       : m_pPlayer(pPlayer)
    {
    }
@@ -22,7 +22,7 @@ public:
 
    virtual BIEngine::IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_Player_Created>(m_pPlayer);
+      return BIEngine::MakeShared<EvtData_Player_Created>(m_pPlayer);
    }
 
    virtual const char* GetName() const
@@ -30,10 +30,10 @@ public:
       return "EvtData_Player_Created";
    }
 
-   std::shared_ptr<Player> GetPlayer() const { return m_pPlayer; }
+   BIEngine::SharedPtr<Player> GetPlayer() const { return m_pPlayer; }
 
 private:
-   std::shared_ptr<Player> m_pPlayer;
+   BIEngine::SharedPtr<Player> m_pPlayer;
 };
 
 class EvtData_PlayerActor_Created : public BIEngine::BaseEventData {
@@ -52,7 +52,7 @@ public:
 
    virtual BIEngine::IEventDataPtr Copy(void) const
    {
-      return std::make_shared<EvtData_PlayerActor_Created>(m_playerId, m_actorId);
+      return BIEngine::MakeShared<EvtData_PlayerActor_Created>(m_playerId, m_actorId);
    }
 
    virtual const char* GetName(void) const
@@ -90,7 +90,7 @@ public:
 
    virtual BIEngine::IEventDataPtr Copy(void) const
    {
-      return std::make_shared<EvtData_Move>(m_playerId, m_desiredHorizontalAmount, m_desiredVerticalAmount);
+      return BIEngine::MakeShared<EvtData_Move>(m_playerId, m_desiredHorizontalAmount, m_desiredVerticalAmount);
    }
 
    virtual const char* GetName(void) const
@@ -143,7 +143,7 @@ public:
 
    virtual BIEngine::IEventDataPtr Copy(void) const
    {
-      return std::make_shared<EvtData_Turn>(m_playerId, m_desiredDir);
+      return BIEngine::MakeShared<EvtData_Turn>(m_playerId, m_desiredDir);
    }
 
    virtual const char* GetName(void) const

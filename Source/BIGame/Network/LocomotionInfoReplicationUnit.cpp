@@ -2,7 +2,7 @@
 
 #include "../../BIEngine/Actors/Actor.h"
 
-void LocomotionInfoReplicationUnit::Init(std::shared_ptr<BIEngine::Actor> pObject)
+void LocomotionInfoReplicationUnit::Init(BIEngine::SharedPtr<BIEngine::Actor> pObject)
 {
    m_pLocomotionInfoComponent = pObject->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).lock();
 }

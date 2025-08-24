@@ -18,7 +18,7 @@
 
 int main(int argc, char* argv[])
 {
-   std::shared_ptr<BIEditorLogic> pBIGameLogic = std::make_shared<BIEditorLogic>();
+   BIEngine::SharedPtr<BIEditorLogic> pBIGameLogic = BIEngine::MakeShared<BIEditorLogic>();
    BIEditorApp BIGameApp(pBIGameLogic);
 
    if (!BIEngine::g_pApp) {
@@ -58,8 +58,8 @@ void BIEditorApp::Close()
 
 BIEditorLogic::BIEditorLogic()
 {
-   m_pPhysics2D.reset(BIEngine::CreateNullPhysics2D());
-   m_pPhysics3D.reset(BIEngine::CreateNullPhysics3D());
+   m_pPhysics2D.Reset(BIEngine::CreateNullPhysics2D());
+   m_pPhysics3D.Reset(BIEngine::CreateNullPhysics3D());
 }
 
 bool BIEditorLogic::Init()
@@ -71,7 +71,7 @@ bool BIEditorLogic::Init()
    m_pPhysics2D->Initialize();
    m_pPhysics3D->Initialize();
 
-   std::shared_ptr<BIEditorHumanView> humanView = std::make_shared<BIEditorHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
+   BIEngine::SharedPtr<BIEditorHumanView> humanView = BIEngine::MakeShared<BIEditorHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
    AddGameView(humanView);
 
    // Загружаем стартовый мир
@@ -93,7 +93,7 @@ BIEditorHumanView::BIEditorHumanView(unsigned int screenWidth, unsigned int scre
 {
 }
 
-static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
+static BIEngine::SharedPtr<BIEngine::Skybox> humanViewCreateSkybox()
 {
    auto xmlExtraData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/scene.xml")->GetExtra());
 
@@ -117,9 +117,9 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
       return nullptr;
    }
 
-   std::shared_ptr<BIEngine::ShaderData> pVertShaderData = std::static_pointer_cast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(vertexShaderPath)->GetExtra());
-   std::shared_ptr<BIEngine::ShaderData> pFragShaderxData = std::static_pointer_cast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(fragmentShaderPath)->GetExtra());
-   std::shared_ptr<BIEngine::ShaderProgram> pShaderProgram = std::make_shared<BIEngine::ShaderProgram>();
+   BIEngine::SharedPtr<BIEngine::ShaderData> pVertShaderData = std::static_pointer_cast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(vertexShaderPath)->GetExtra());
+   BIEngine::SharedPtr<BIEngine::ShaderData> pFragShaderxData = std::static_pointer_cast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(fragmentShaderPath)->GetExtra());
+   BIEngine::SharedPtr<BIEngine::ShaderProgram> pShaderProgram = std::make_shared<BIEngine::ShaderProgram>();
    pShaderProgram->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
 
 

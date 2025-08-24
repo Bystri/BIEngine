@@ -16,7 +16,7 @@ public:
    {
    }
 
-   void SetRenderTarget(std::shared_ptr<Framebuffer> pRenderTarget) { m_pRenderTarget = pRenderTarget; }
+   void SetRenderTarget(SharedPtr<Framebuffer> pRenderTarget) { m_pRenderTarget = pRenderTarget; }
 
 protected:
    virtual bool InitInternal();
@@ -30,16 +30,16 @@ private:
    int m_screenHeight;
    const int m_msaaSamples;
 
-   std::shared_ptr<Framebuffer> m_multisamplingFramebuffer;
-   std::shared_ptr<Texture2DMultisample> m_colorMultisampleBuffer;
-   std::shared_ptr<Renderbuffer> m_depthStencilMultisampleRenderuffer;
+   SharedPtr<Framebuffer> m_multisamplingFramebuffer;
+   SharedPtr<Texture2DMultisample> m_colorMultisampleBuffer;
+   SharedPtr<Renderbuffer> m_depthStencilMultisampleRenderuffer;
 
-   std::shared_ptr<Framebuffer> m_intermediateFramebuffer;
-   std::shared_ptr<Texture2D> m_colorIntermediateBuffer;
-   std::shared_ptr<Renderbuffer> m_depthStencilIntermediateRenderuffer;
+   SharedPtr<Framebuffer> m_intermediateFramebuffer;
+   SharedPtr<Texture2D> m_colorIntermediateBuffer;
+   SharedPtr<Renderbuffer> m_depthStencilIntermediateRenderuffer;
 
-   std::shared_ptr<PostProcessor> m_pDefaultPostProcessor;
-   std::shared_ptr<Framebuffer> m_pRenderTarget;
+   SharedPtr<PostProcessor> m_pDefaultPostProcessor;
+   SharedPtr<Framebuffer> m_pRenderTarget;
 };
 
 } // namespace BIEngine

@@ -32,9 +32,9 @@ void skinnedMeshLoaderSetVertexBoneData(SkinnedMesh::VertexBoneData& vertex, con
    Assert(false, "Need more bones per vertex!");
 }
 
-bool SkinnedMeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool SkinnedMeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
-   std::shared_ptr<SkinnedMeshExtraData> pExtra = std::make_shared<SkinnedMeshExtraData>();
+   SharedPtr<SkinnedMeshExtraData> pExtra = MakeShared<SkinnedMeshExtraData>();
 
    tinyxml2::XMLDocument xmlDoc;
    tinyxml2::XMLError error = xmlDoc.Parse(pRawBuffer, rawSize);
@@ -110,7 +110,7 @@ bool SkinnedMeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawS
       }
    }
 
-   pExtra->m_pSkinnedMesh = std::make_shared<SkinnedMesh>(vertices, std::move(indices), std::move(bonesData));
+   pExtra->m_pSkinnedMesh = MakeShared<SkinnedMesh>(vertices, std::move(indices), std::move(bonesData));
    pHandle->SetExtra(pExtra);
 
    return true;

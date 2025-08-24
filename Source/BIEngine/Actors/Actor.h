@@ -1,12 +1,11 @@
 ﻿#pragma once
 
-#include <memory>
-
 #include <tinyxml2.h>
 
 #include "ActorComponent.h"
 #include "../StdLib/String.h"
 #include "../StdLib/DynamicArray.h"
+#include "../StdLib/SharedPtr.h"
 #include "../StdLib/HashMap.h"
 
 namespace BIEngine {
@@ -35,7 +34,7 @@ public:
    Actor(Actor&& orig) = default;
    Actor& operator=(Actor&& orig) = default;
 
-   void AddChild(std::shared_ptr<Actor> pChild);
+   void AddChild(SharedPtr<Actor> pChild);
    bool RemoveChild(ActorId id);
 
    void Activate();
@@ -62,7 +61,7 @@ public:
    // Поле несет чисто косметический характер. Используется в редакторе для распознования объектов
    const String& GetName() const { return m_name; }
 
-   const DynamicArray<std::shared_ptr<Actor>>& GetChildren() const { return m_children; }
+   const DynamicArray<SharedPtr<Actor>>& GetChildren() const { return m_children; }
 
    Actor* GetActorByPath(const String& path);
 
@@ -107,7 +106,7 @@ private:
    ActorComponents m_components;
 
    Actor* m_pParent;
-   DynamicArray<std::shared_ptr<Actor>> m_children;
+   DynamicArray<SharedPtr<Actor>> m_children;
 };
 
 } // namespace BIEngine

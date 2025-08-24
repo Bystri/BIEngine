@@ -55,9 +55,9 @@ private:
    void duplicateActor();
 
 private:
-   std::shared_ptr<BIEngine::Framebuffer> m_pGameRenderTarget;
-   std::shared_ptr<BIEngine::Texture2D> m_pGameRenderTargetColorBuffer;
-   std::shared_ptr<BIEngine::Renderbuffer> m_pGameRenderTargetDepthBuffer;
+   BIEngine::SharedPtr<BIEngine::Framebuffer> m_pGameRenderTarget;
+   BIEngine::SharedPtr<BIEngine::Texture2D> m_pGameRenderTargetColorBuffer;
+   BIEngine::SharedPtr<BIEngine::Renderbuffer> m_pGameRenderTargetDepthBuffer;
 
    BIFlyCameraSystem* m_pFlyCameraSystem;
 

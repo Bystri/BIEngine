@@ -11,7 +11,7 @@
 
 class BIGameClientApp : public BIEngine::GameApp {
 public:
-   explicit BIGameClientApp(std::shared_ptr<BIEngine::GameLogic> pGameLogic);
+   explicit BIGameClientApp(BIEngine::SharedPtr<BIEngine::GameLogic> pGameLogic);
    virtual ~BIGameClientApp();
 
    virtual bool Init();
@@ -30,7 +30,7 @@ public:
    virtual bool Init();
 
 private:
-   void SetController(std::shared_ptr<BIGameController> pController)
+   void SetController(BIEngine::SharedPtr<BIGameController> pController)
    {
       m_pKeyboardHandler = pController;
       m_pPointerHandler = pController;
@@ -58,7 +58,7 @@ private:
    BIEngine::UniquePtr<BICameraManager> m_pCameraManager;
 
    BIEngine::UniquePtr<BINetworkManagerClient> m_pNetworkManager;
-   std::shared_ptr<BIGameClientHumanView> m_pHumanView;
+   BIEngine::SharedPtr<BIGameClientHumanView> m_pHumanView;
 
    BIEngine::UniquePtr<BIDebugMenuController> m_pDebugMenuController;
 };

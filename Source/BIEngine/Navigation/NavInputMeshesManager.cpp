@@ -35,7 +35,7 @@ NavInputMeshesManager::~NavInputMeshesManager()
    }
 }
 
-void NavInputMeshesManager::AddMesh(const glm::mat4& transform, std::shared_ptr<Mesh> mesh)
+void NavInputMeshesManager::AddMesh(const glm::mat4& transform, SharedPtr<Mesh> mesh)
 {
    const int initialVertsSize = m_vertCount;
 

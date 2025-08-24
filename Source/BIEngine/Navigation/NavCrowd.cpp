@@ -22,7 +22,7 @@ NavCrowd::~NavCrowd()
    dtFreeCrowd(m_pCrowd);
 }
 
-bool NavCrowd::Initialize(std::shared_ptr<NavMeshManager> pNavMeshManager)
+bool NavCrowd::Initialize(SharedPtr<NavMeshManager> pNavMeshManager)
 {
    m_pNavMeshManager = pNavMeshManager;
    dtNavMesh* pNav = m_pNavMeshManager->GetNavMesh();
@@ -147,7 +147,7 @@ glm::vec3 NavCrowd::GetVelocity(NavAgentId id) const
    return glm::vec3(ag->vel[0], ag->vel[1], ag->vel[2]);
 }
 
-void NavCrowd::UpdateCrowdInfo(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap)
+void NavCrowd::UpdateCrowdInfo(const HashMap<ActorId, SharedPtr<Actor>>& actorMap)
 {
    for (auto itr = actorMap.CBegin(); itr != actorMap.CEnd(); ++itr) {
       auto agentId = m_actorToAgentMap.Find(itr->first);

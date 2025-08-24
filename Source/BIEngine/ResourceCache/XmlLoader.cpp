@@ -4,9 +4,9 @@
 
 namespace BIEngine {
 
-bool XmlResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool XmlResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
-   std::shared_ptr<XmlExtraData> pExtra = std::make_shared<XmlExtraData>();
+   SharedPtr<XmlExtraData> pExtra = MakeShared<XmlExtraData>();
    pExtra->m_xmlDoc.Parse(pRawBuffer, rawSize);
 
    pHandle->SetExtra(pExtra);

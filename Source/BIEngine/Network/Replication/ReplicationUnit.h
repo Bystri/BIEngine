@@ -9,7 +9,7 @@ class ReplicationUnit {
 public:
    virtual ~ReplicationUnit() = default;
 
-   virtual void Init(std::shared_ptr<ReplicatedObject> pReplicatedObject) {}
+   virtual void Init(SharedPtr<ReplicatedObject> pReplicatedObject) {}
 
    virtual bool IsStateChanged() = 0;
 

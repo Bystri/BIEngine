@@ -2,8 +2,6 @@
 
 #include "../ResourceCache/ResCache.h"
 
-#include <memory>
-
 namespace BIEngine {
 
 class OggResourceLoader : public IResourceLoader {
@@ -14,7 +12,7 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* rawBuffer, unsigned int rawSize) { return 0u; }
 
-   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) { return true; }
+   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle) { return true; }
 
    virtual String GetPattern() { return "*.ogg"; }
 };
@@ -27,7 +25,7 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* rawBuffer, unsigned int rawSize) { return 0u; }
 
-   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) { return true; }
+   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle) { return true; }
 
    virtual String GetPattern() { return "*.wav"; }
 };

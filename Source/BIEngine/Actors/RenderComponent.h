@@ -1,7 +1,8 @@
 ﻿#pragma once
 
-#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
+#include "../StdLib/SharedPtr.h"
+#include "../StdLib/UniquePtr.h"
 #include "../EngineCore/Assert.h"
 #include "../Graphics/Sprite.h"
 #include "../Renderer/Color.h"
@@ -26,7 +27,7 @@ protected:
    virtual bool Init(tinyxml2::XMLElement* pData);
 
 protected:
-   std::shared_ptr<Sprite> m_pSprite;
+   SharedPtr<Sprite> m_pSprite;
    String m_spritePath;
    ColorRgba m_spriteColor;
 };
@@ -47,17 +48,17 @@ private:
    String m_materialPath;
 
 protected:
-   std::shared_ptr<Material> m_pMaterial;
+   SharedPtr<Material> m_pMaterial;
 };
 
 class MeshRenderComponent : public MeshBaseRenderComponent {
 public:
-   std::shared_ptr<Model> GetModel() const { return m_pModel; }
+   SharedPtr<Model> GetModel() const { return m_pModel; }
 
    virtual void OnRenderObject(const GameTimer& gt) override;
 
 protected:
-   std::shared_ptr<Model> m_pModel;
+   SharedPtr<Model> m_pModel;
 };
 
 class ModelMesh;
@@ -121,7 +122,7 @@ public:
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
-   std::shared_ptr<Model> GetModel() const { return m_pModel; }
+   SharedPtr<Model> GetModel() const { return m_pModel; }
 
 protected:
    virtual bool Init(tinyxml2::XMLElement* pData);

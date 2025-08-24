@@ -7,18 +7,18 @@ namespace BIEngine {
 
 class ReplicationActionWriter {
 public:
-   ReplicationActionWriter(std::shared_ptr<NewtworkObjectLinkingContexts> pLinkingContext)
+   ReplicationActionWriter(SharedPtr<NewtworkObjectLinkingContexts> pLinkingContext)
       : m_pLinkingContext(pLinkingContext)
    {
    }
 
 public:
-   void ReplicateCreate(OutputMemoryBitStream& stream, std::shared_ptr<ReplicationObject> pGameObject);
-   void ReplicateUpdate(OutputMemoryBitStream& stream, std::shared_ptr<ReplicationObject> pGameObject);
-   void ReplicateDestroy(OutputMemoryBitStream& stream, std::shared_ptr<ReplicationObject> pGameObject);
+   void ReplicateCreate(OutputMemoryBitStream& stream, SharedPtr<ReplicationObject> pGameObject);
+   void ReplicateUpdate(OutputMemoryBitStream& stream, SharedPtr<ReplicationObject> pGameObject);
+   void ReplicateDestroy(OutputMemoryBitStream& stream, SharedPtr<ReplicationObject> pGameObject);
 
 private:
-   std::shared_ptr<NewtworkObjectLinkingContexts> m_pLinkingContext;
+   SharedPtr<NewtworkObjectLinkingContexts> m_pLinkingContext;
 };
 
 } // namespace BIEngine

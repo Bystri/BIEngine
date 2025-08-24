@@ -13,7 +13,7 @@ bool GraphicsRenderPass::Init()
    return InitInternal();
 }
 
-void GraphicsRenderPass::AddTechnique(std::shared_ptr<IGraphicsTechnique> pTechnique)
+void GraphicsRenderPass::AddTechnique(SharedPtr<IGraphicsTechnique> pTechnique)
 {
    m_graphicsTechniques.PushBack(pTechnique);
 }

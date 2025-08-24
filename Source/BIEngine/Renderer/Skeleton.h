@@ -1,11 +1,10 @@
 #pragma once
 
-#include <memory>
-
 #include <glm/glm.hpp>
 
 #include "../EngineCore/Assert.h"
 #include "../StdLib/HashMap.h"
+#include "../StdLib/SharedPtr.h"
 #include "../StdLib/DynamicArray.h"
 #include "../StdLib/String.h"
 
@@ -19,11 +18,11 @@ public:
       String name;
       glm::mat4 localTransform;
       glm::mat4 offset;
-      DynamicArray<std::shared_ptr<BoneInfo>> children;
+      DynamicArray<SharedPtr<BoneInfo>> children;
    };
 
 public:
-   Skeleton(std::shared_ptr<BoneInfo> pSkeletonRoot);
+   Skeleton(SharedPtr<BoneInfo> pSkeletonRoot);
 
    void Update()
    {
@@ -38,7 +37,7 @@ public:
    }
 
 private:
-   void calculateBoneTransform(std::shared_ptr<Skeleton::BoneInfo> node, glm::mat4 parentTransform)
+   void calculateBoneTransform(SharedPtr<Skeleton::BoneInfo> node, glm::mat4 parentTransform)
    {
       const glm::mat4 globalTransformation = parentTransform * node->localTransform;
 
@@ -50,7 +49,7 @@ private:
    }
 
 private:
-   std::shared_ptr<BoneInfo> m_pSkeletonRoot;
+   SharedPtr<BoneInfo> m_pSkeletonRoot;
 
    HashMap<String, glm::mat4> m_finalBoneMatrices;
 };

@@ -25,7 +25,7 @@ class IAudioBuffer {
 public:
    virtual ~IAudioBuffer() {}
 
-   virtual std::shared_ptr<ResHandle> GetResource() = 0;
+   virtual SharedPtr<ResHandle> GetResource() = 0;
    virtual bool OnRestore() = 0;
 
    virtual bool Play(int volume, bool looping) = 0;
@@ -45,14 +45,14 @@ public:
 // Реализация аудио-буфера реализаованная над системой ресурсов движка
 class AudioBuffer : public IAudioBuffer {
 public:
-   virtual std::shared_ptr<ResHandle> GetResource() { return m_pResource; }
+   virtual SharedPtr<ResHandle> GetResource() { return m_pResource; }
 
    virtual bool IsLooping() const { return m_isLooping; }
 
    virtual int GetVolume() const { return m_volume; }
 
 protected:
-   explicit AudioBuffer(std::shared_ptr<ResHandle> resource)
+   explicit AudioBuffer(SharedPtr<ResHandle> resource)
    {
       m_pResource = resource;
       m_isPaused = false;
@@ -60,7 +60,7 @@ protected:
       m_volume = 0;
    }
 
-   std::shared_ptr<ResHandle> m_pResource;
+   SharedPtr<ResHandle> m_pResource;
 
 protected:
    bool m_isPaused;
@@ -72,7 +72,7 @@ class IAudio {
 public:
    virtual bool Active() = 0;
 
-   virtual IAudioBuffer* InitAudioBuffer(std::shared_ptr<ResHandle> handle) = 0;
+   virtual IAudioBuffer* InitAudioBuffer(SharedPtr<ResHandle> handle) = 0;
    virtual void ReleaseAudioBuffer(IAudioBuffer* audioBuffer) = 0;
 
    virtual void StopAllSounds() = 0;

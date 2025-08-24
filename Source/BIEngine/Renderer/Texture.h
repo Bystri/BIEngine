@@ -1,8 +1,7 @@
 #pragma once
 
-#include <memory>
-
-#include "../../BIEngine/StdLib/Array.h"
+#include "../StdLib/SharedPtr.h"
+#include "../StdLib/Array.h"
 
 namespace BIEngine {
 
@@ -119,7 +118,7 @@ public:
       TextureFunction FilterMax = TextureFunction::LINEAR;
    };
 
-   static std::shared_ptr<Texture2D> Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, unsigned char* data, CreationParams params = CreationParams());
+   static SharedPtr<Texture2D> Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, unsigned char* data, CreationParams params = CreationParams());
 
    // Сделаеть текстуру активной
    virtual void Bind(int textureIdx) const override;
@@ -133,7 +132,7 @@ private:
 
 class Texture2DMultisample : public Texture {
 public:
-   static std::shared_ptr<Texture2DMultisample> Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, int multisamplesCount);
+   static SharedPtr<Texture2DMultisample> Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, int multisamplesCount);
 
    // Сделаеть текстуру активной
    virtual void Bind(int textureIdx) const override;
@@ -180,7 +179,7 @@ public:
       TextureFunction FilterMax = TextureFunction::LINEAR;
    };
 
-   static std::shared_ptr<CubemapTexture> Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, const Array<unsigned char*, 6>& data, CreationParams params = CreationParams());
+   static SharedPtr<CubemapTexture> Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, const Array<unsigned char*, 6>& data, CreationParams params = CreationParams());
 
    // Сделаеть текстуру активной
    virtual void Bind(int textureIdx) const override;

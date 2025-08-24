@@ -7,7 +7,7 @@
 namespace BIEngine {
 
 using NewtworkObjectLinkingContexts = LinkingContext<ReplicationObject>;
-using GameObjectCreationFunc = std::shared_ptr<ReplicationObject> (*)();
+using GameObjectCreationFunc = SharedPtr<ReplicationObject> (*)();
 
 class NetworkObjectCreationRegistry : public GenericObjectFactory<ReplicationObject, uint32_t> {
 public:

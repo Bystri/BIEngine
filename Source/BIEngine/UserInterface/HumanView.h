@@ -19,7 +19,7 @@ public:
    virtual bool Init();
    virtual void Shutdown();
 
-   std::shared_ptr<Renderer> GetRenderer() const { return m_pRenderer; }
+   SharedPtr<Renderer> GetRenderer() const { return m_pRenderer; }
 
    const UniquePtr<Scene>& GetScene() const { return m_pScene; }
 
@@ -42,7 +42,7 @@ protected:
 
    // Графическая часть
    UserInterface m_userInterface;
-   std::shared_ptr<Renderer> m_pRenderer;
+   SharedPtr<Renderer> m_pRenderer;
    UniquePtr<Scene> m_pScene;
 
    // Переменные для контроля скорости обновления кадров
@@ -51,8 +51,8 @@ protected:
    bool m_isRunFullSpeed;
 
    // Устройства ввода
-   std::shared_ptr<IPointerHandler> m_pPointerHandler;
+   SharedPtr<IPointerHandler> m_pPointerHandler;
    int m_pointerRadius;
-   std::shared_ptr<IKeyboardHandler> m_pKeyboardHandler;
+   SharedPtr<IKeyboardHandler> m_pKeyboardHandler;
 };
 } // namespace BIEngine

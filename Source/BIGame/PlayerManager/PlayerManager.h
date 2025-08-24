@@ -1,8 +1,7 @@
 #pragma once
 
-#include <memory>
-
 #include "../../BIEngine/Actors/Actor.h"
+#include "../../BIEngine/StdLib/SharedPtr.h"
 #include "../../BIEngine/EngineCore/Assert.h"
 #include "../../BIEngine/Network/Replication/ReplicationObjectActor/ReplicationObjectActor.h"
 
@@ -17,14 +16,14 @@ public:
 
    PlayerId GetId() const { return m_id; }
 
-   void SetPlayableActor(std::shared_ptr<BIEngine::Actor> pActor);
+   void SetPlayableActor(BIEngine::SharedPtr<BIEngine::Actor> pActor);
 
-   std::shared_ptr<BIEngine::Actor> GetPlayableActor() const { return m_pPlayableActor; }
+   BIEngine::SharedPtr<BIEngine::Actor> GetPlayableActor() const { return m_pPlayableActor; }
 
 private:
    PlayerId m_id;
 
-   std::shared_ptr<BIEngine::Actor> m_pPlayableActor;
+   BIEngine::SharedPtr<BIEngine::Actor> m_pPlayableActor;
 };
 
 class PlayerManager {
@@ -40,7 +39,7 @@ public:
       return s_pSingleton;
    }
 
-   std::shared_ptr<Player> CreatePlayer();
+   BIEngine::SharedPtr<Player> CreatePlayer();
 
 private:
    PlayerManager() = default;

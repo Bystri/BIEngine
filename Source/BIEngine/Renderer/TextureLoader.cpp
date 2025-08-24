@@ -59,7 +59,7 @@ Texture2D::CreationParams textureLoaderGetCreationParams(tinyxml2::XMLElement* p
    return params;
 }
 
-bool TextureResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool TextureResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
    tinyxml2::XMLDocument xmlDoc;
    tinyxml2::XMLError error = xmlDoc.Parse(rawBuffer, rawSize);
@@ -83,7 +83,7 @@ bool TextureResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, 
       return false;
    }
 
-   auto imgData = std::dynamic_pointer_cast<ImageExtraData>(ResCache::Get()->GetHandle(texturePath)->GetExtra());
+   auto imgData = StaticPointerCast<ImageExtraData>(ResCache::Get()->GetHandle(texturePath)->GetExtra());
 
    if (!imgData) {
       return false;
@@ -95,7 +95,7 @@ bool TextureResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, 
    Texture2D::SizedFormat sizedFormat = imgData->GetChannelsNum() > 3 ? Texture2D::SizedFormat::RGBA : Texture2D::SizedFormat::RGB;
    Texture2D::Format texureFormat = imgData->GetChannelsNum() > 3 ? Texture2D::Format::RGBA : Texture2D::Format::RGB;
 
-   std::shared_ptr<TextureData> pExtra = std::make_shared<TextureData>();
+   SharedPtr<TextureData> pExtra = MakeShared<TextureData>();
    pExtra->m_pTexture = Texture2D::Create(imgData->GetWidth(), imgData->GetHeight(), sizedFormat, texureFormat, imgData->GetData());
 
    pHandle->SetExtra(pExtra);

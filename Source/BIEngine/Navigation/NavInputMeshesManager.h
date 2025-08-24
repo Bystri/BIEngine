@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Renderer/Mesh.h"
+#include "../StdLib/SharedPtr.h"
 
 #include <glm/glm.hpp>
 
@@ -16,7 +17,7 @@ public:
    NavInputMeshesManager(const NavInputMeshesManager&) = delete;
    NavInputMeshesManager& operator=(const NavInputMeshesManager&) = delete;
 
-   void AddMesh(const glm::mat4& transform, std::shared_ptr<Mesh> mesh);
+   void AddMesh(const glm::mat4& transform, SharedPtr<Mesh> mesh);
 
    const float* GetVerts() const { return m_pVerts; }
 

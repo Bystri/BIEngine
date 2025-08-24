@@ -8,12 +8,12 @@ namespace BIEngine {
 bool DirLightShadowGraphicsTechnique::Init()
 {
    const String commonDirShadowShaderProgramPath = "effects/dirShadow.bisp";
-   auto dirShadowShaderProgram = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonDirShadowShaderProgramPath)->GetExtra());
+   auto dirShadowShaderProgram = StaticPointerCast<ShaderProgramData>(ResCache::Get()->GetHandle(commonDirShadowShaderProgramPath)->GetExtra());
    m_pDirLightShadowShader = dirShadowShaderProgram->GetShaderProgram();
 
    for (int i = 0; i < m_maxDirLightsNum; ++i) {
       RenderDirLightShadowInfo& dirLightShadowInfo = m_dirLightShadowInfos.EmplaceBack();
-      dirLightShadowInfo.pShadowMapBuffer = std::make_shared<Framebuffer>();
+      dirLightShadowInfo.pShadowMapBuffer = MakeShared<Framebuffer>();
 
       FramebufferDisableColor(dirLightShadowInfo.pShadowMapBuffer, FramebufferColorOperationType::ALL);
 

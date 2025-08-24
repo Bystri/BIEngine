@@ -24,7 +24,7 @@ static String shaderLoaderReadShaderCode(std::istringstream& shaderCode, const S
          }
 
          includePath = includePath.Substr(0, formatIndex + 5);
-         const std::shared_ptr<UtilityShaderData> pShaderData = std::static_pointer_cast<UtilityShaderData>(ResCache::Get()->GetHandle(includePath)->GetExtra());
+         const SharedPtr<UtilityShaderData> pShaderData = StaticPointerCast<UtilityShaderData>(ResCache::Get()->GetHandle(includePath)->GetExtra());
 
          if (!pShaderData) {
             Logger::WriteLog(Logger::LogType::ERROR, "Failed to open include file " + includePath + " in shader " + fileName);
@@ -39,9 +39,9 @@ static String shaderLoaderReadShaderCode(std::istringstream& shaderCode, const S
    return source;
 }
 
-bool UtilityShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool UtilityShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
-   std::shared_ptr<UtilityShaderData> pExtra = std::make_shared<UtilityShaderData>();
+   SharedPtr<UtilityShaderData> pExtra = MakeShared<UtilityShaderData>();
 
    const String shaderCode(rawBuffer, rawSize);
    pExtra->m_utilityShaderSource = shaderLoaderReadShaderCode(std::istringstream(shaderCode.CStr()), pHandle->GetName());
@@ -69,9 +69,9 @@ static void shaderLoaderCheckCompileErrors(unsigned int object, const String& ty
    }
 }
 
-bool VertexShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool VertexShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
-   std::shared_ptr<ShaderData> pExtra = std::make_shared<ShaderData>();
+   SharedPtr<ShaderData> pExtra = MakeShared<ShaderData>();
 
    unsigned int sVertex;
 
@@ -92,9 +92,9 @@ bool VertexShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawS
    return true;
 }
 
-bool FragmentShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool FragmentShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
-   std::shared_ptr<ShaderData> pExtra = std::make_shared<ShaderData>();
+   SharedPtr<ShaderData> pExtra = MakeShared<ShaderData>();
 
    unsigned int sFragment;
 
@@ -115,9 +115,9 @@ bool FragmentShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int ra
    return true;
 }
 
-bool GeometryShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool GeometryShaderResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
-   std::shared_ptr<ShaderData> pExtra = std::make_shared<ShaderData>();
+   SharedPtr<ShaderData> pExtra = MakeShared<ShaderData>();
 
    unsigned int sGeometry;
 
@@ -144,7 +144,7 @@ enum class ShaderType {
    GEOMETRY_SHADER
 };
 
-bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
    tinyxml2::XMLDocument xmlDoc;
    tinyxml2::XMLError error = xmlDoc.Parse(rawBuffer, rawSize);
@@ -171,7 +171,7 @@ bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int raw
       const char* shaderPath;
       pVertexShader->QueryStringAttribute("path", &shaderPath);
 
-      auto pShaderData = std::dynamic_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
+      auto pShaderData = StaticPointerCast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
 
       if (pShaderData == nullptr) {
          return false;
@@ -189,7 +189,7 @@ bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int raw
       const char* shaderPath;
       pFragmentShader->QueryStringAttribute("path", &shaderPath);
 
-      auto pShaderData = std::dynamic_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
+      auto pShaderData = StaticPointerCast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
 
       if (pShaderData == nullptr) {
          return false;
@@ -203,7 +203,7 @@ bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int raw
       const char* shaderPath;
       pGeometryShader->QueryStringAttribute("path", &shaderPath);
 
-      auto pShaderData = std::dynamic_pointer_cast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
+      auto pShaderData = StaticPointerCast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
 
       if (pShaderData == nullptr) {
          return false;
@@ -218,8 +218,8 @@ bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int raw
    }
 
 
-   std::shared_ptr<ShaderProgramData> pExtra = std::make_shared<ShaderProgramData>();
-   pExtra->m_pShaderProgram = std::make_shared<ShaderProgram>();
+   SharedPtr<ShaderProgramData> pExtra = MakeShared<ShaderProgramData>();
+   pExtra->m_pShaderProgram = MakeShared<ShaderProgram>();
 
    if (geometryShaderIdx == -1) {
       pExtra->m_pShaderProgram->Compile(vertexShaderIdx, fragmentShaderIdx);

@@ -1,10 +1,9 @@
 #pragma once
 
-#include <memory>
-
 #include <DetourNavMeshQuery.h>
 
 #include "../EventManager/Events.h"
+#include "../StdLib/SharedPtr.h"
 #include "NavMeshGenerator.h"
 
 namespace BIEngine {
@@ -37,10 +36,10 @@ private:
    void HandleActorAdded(IEventDataPtr pEventData);
    void HandleActorDestroyed(IEventDataPtr pEventData);
 
-   void TryAddActor(std::shared_ptr<Actor> pActor);
+   void TryAddActor(SharedPtr<Actor> pActor);
    void TryRemoveActor(ActorId id);
 
-   std::shared_ptr<NavMeshInputGeometry> prepareNavGeom();
+   SharedPtr<NavMeshInputGeometry> prepareNavGeom();
 
 private:
    EventManager::DelegateHandler m_handleActorAddedDelegateHandler;
@@ -48,8 +47,8 @@ private:
 
    NavMeshBuildSettings m_buildSettings;
 
-   DynamicArray<std::shared_ptr<Actor>> m_actors;
-   std::shared_ptr<NavMeshGenerator> m_pNavMeshGenerator;
+   DynamicArray<SharedPtr<Actor>> m_actors;
+   SharedPtr<NavMeshGenerator> m_pNavMeshGenerator;
    dtNavMesh* m_pNavMesh;
    dtNavMeshQuery* m_pNavQuery;
 

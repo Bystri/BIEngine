@@ -14,10 +14,10 @@ public:
 
    virtual String ToString() { return "SkinnedMeshExtraData"; }
 
-   std::shared_ptr<SkinnedMesh> GetSkinnedMesh() const { return m_pSkinnedMesh; }
+   SharedPtr<SkinnedMesh> GetSkinnedMesh() const { return m_pSkinnedMesh; }
 
 protected:
-   std::shared_ptr<SkinnedMesh> m_pSkinnedMesh;
+   SharedPtr<SkinnedMesh> m_pSkinnedMesh;
 };
 
 class SkinnedMeshResourceLoader : public IResourceLoader {
@@ -27,7 +27,7 @@ public:
    virtual bool DiscardRawBufferAfterLoad() { return true; }
 
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize);
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle);
 
    virtual String GetPattern() { return "*.biskmesh"; }
 };

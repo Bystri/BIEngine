@@ -25,14 +25,14 @@ bool SkinnedMeshComponent::Init(tinyxml2::XMLElement* pData)
       const char* meshPath;
       pMeshElement->QueryStringAttribute("path", &meshPath);
       m_meshPath = meshPath;
-      auto meshData = std::static_pointer_cast<SkinnedMeshExtraData>(ResCache::Get()->GetHandle(m_meshPath)->GetExtra());
+      auto meshData = StaticPointerCast<SkinnedMeshExtraData>(ResCache::Get()->GetHandle(m_meshPath)->GetExtra());
 
       if (meshData == nullptr) {
          Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh for Actor with id: " + ToString(GetOwner()->GetId()));
          return false;
       }
 
-      m_pMesh = std::make_shared<SkinnedMesh>(*meshData->GetSkinnedMesh());
+      m_pMesh = MakeShared<SkinnedMesh>(*meshData->GetSkinnedMesh());
    }
 
    tinyxml2::XMLElement* pMatElement = pData->FirstChildElement("Material");
@@ -40,7 +40,7 @@ bool SkinnedMeshComponent::Init(tinyxml2::XMLElement* pData)
       const char* matPath;
       pMatElement->QueryStringAttribute("path", &matPath);
       m_matPath = matPath;
-      auto matData = std::static_pointer_cast<MaterialData>(ResCache::Get()->GetHandle(m_matPath)->GetExtra());
+      auto matData = StaticPointerCast<MaterialData>(ResCache::Get()->GetHandle(m_matPath)->GetExtra());
 
       if (matData == nullptr) {
          Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh material for Actor with id: " + ToString(GetOwner()->GetId()));
@@ -68,7 +68,7 @@ void SkinnedMeshComponent::Activate()
 void SkinnedMeshComponent::OnRenderObject(const GameTimer& gt)
 {
    std::shared_ptr<SkeletonComponent> skeletonComp = m_pSkeletonRootActor->GetComponent<SkeletonComponent>(SkeletonComponent::g_CompId).lock();
-   m_pMesh->OnRender(skeletonComp->GetSkeleton().get());
+   m_pMesh->OnRender(skeletonComp->GetSkeleton().Get());
 
    RenderItemsStorage::OpaqueRenderItem opaqueRitem;
    opaqueRitem.actorId = GetOwner()->GetId();

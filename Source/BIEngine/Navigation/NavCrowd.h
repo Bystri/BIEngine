@@ -33,7 +33,7 @@ public:
    NavCrowd();
    ~NavCrowd();
 
-   bool Initialize(std::shared_ptr<NavMeshManager> pNavMeshManager);
+   bool Initialize(SharedPtr<NavMeshManager> pNavMeshManager);
 
    NavAgentId AddAgent(ActorId actorId, const glm::vec3& pos, const NavAgentParams& params);
    void RemoveAgent(NavAgentId id);
@@ -41,12 +41,12 @@ public:
    bool SetDestination(NavAgentId id, const glm::vec3& pos);
    glm::vec3 GetVelocity(NavAgentId id) const;
 
-   void UpdateCrowdInfo(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap);
+   void UpdateCrowdInfo(const HashMap<ActorId, SharedPtr<Actor>>& actorMap);
    void OnUpdate(const GameTimer& gt);
 
 private:
    dtCrowd* m_pCrowd;
-   std::shared_ptr<NavMeshManager> m_pNavMeshManager;
+   SharedPtr<NavMeshManager> m_pNavMeshManager;
    HashMap<ActorId, NavAgentId> m_actorToAgentMap;
    HashMap<NavAgentId, ActorId> m_agentToActorMap;
 };

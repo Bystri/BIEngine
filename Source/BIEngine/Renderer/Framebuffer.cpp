@@ -37,9 +37,9 @@ bool Framebuffer::Check() const
    return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
 }
 
-std::shared_ptr<Framebuffer> GetDefaultFramebuffer()
+SharedPtr<Framebuffer> GetDefaultFramebuffer()
 {
-   std::shared_ptr<Framebuffer> defFramebuffer = std::make_shared<Framebuffer>();
+   SharedPtr<Framebuffer> defFramebuffer = MakeShared<Framebuffer>();
    defFramebuffer->m_framebufferId = 0;
 
    return defFramebuffer;
@@ -61,7 +61,7 @@ static unsigned int FramebufferAttachementTypeToOpengl(FramebufferAttachementTyp
    }
 }
 
-void FramebufferEnableColor(std::shared_ptr<Framebuffer> framebuffer, FramebufferColorOperationType op)
+void FramebufferEnableColor(SharedPtr<Framebuffer> framebuffer, FramebufferColorOperationType op)
 {
    framebuffer->Bind();
 
@@ -74,7 +74,7 @@ void FramebufferEnableColor(std::shared_ptr<Framebuffer> framebuffer, Framebuffe
    }
 }
 
-void FramebufferDisableColor(std::shared_ptr<Framebuffer> framebuffer, FramebufferColorOperationType op)
+void FramebufferDisableColor(SharedPtr<Framebuffer> framebuffer, FramebufferColorOperationType op)
 {
    framebuffer->Bind();
 
@@ -87,37 +87,37 @@ void FramebufferDisableColor(std::shared_ptr<Framebuffer> framebuffer, Framebuff
    }
 }
 
-void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<Texture2D> attachement)
+void FramebufferAttach(SharedPtr<Framebuffer> framebuffer, FramebufferAttachementType type, SharedPtr<Texture2D> attachement)
 {
    framebuffer->Bind();
    glFramebufferTexture2D(GL_FRAMEBUFFER, FramebufferAttachementTypeToOpengl(type), GL_TEXTURE_2D, attachement->GetId(), 0);
 }
 
-void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<Texture2DMultisample> attachement)
+void FramebufferAttach(SharedPtr<Framebuffer> framebuffer, FramebufferAttachementType type, SharedPtr<Texture2DMultisample> attachement)
 {
    framebuffer->Bind();
    glFramebufferTexture2D(GL_FRAMEBUFFER, FramebufferAttachementTypeToOpengl(type), GL_TEXTURE_2D_MULTISAMPLE, attachement->GetId(), 0);
 }
 
-void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<CubemapTexture> attachement)
+void FramebufferAttach(SharedPtr<Framebuffer> framebuffer, FramebufferAttachementType type, SharedPtr<CubemapTexture> attachement)
 {
    framebuffer->Bind();
    glFramebufferTexture(GL_FRAMEBUFFER, FramebufferAttachementTypeToOpengl(type), attachement->GetId(), 0);
 }
 
-void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<CubemapTexture> attachement, int sideIndex)
+void FramebufferAttach(SharedPtr<Framebuffer> framebuffer, FramebufferAttachementType type, SharedPtr<CubemapTexture> attachement, int sideIndex)
 {
    framebuffer->Bind();
    glFramebufferTexture2D(GL_FRAMEBUFFER, FramebufferAttachementTypeToOpengl(type), GL_TEXTURE_CUBE_MAP_POSITIVE_X + sideIndex, attachement->GetId(), 0);
 }
 
-void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<Renderbuffer> attachement)
+void FramebufferAttach(SharedPtr<Framebuffer> framebuffer, FramebufferAttachementType type, SharedPtr<Renderbuffer> attachement)
 {
    framebuffer->Bind();
    glFramebufferRenderbuffer(GL_FRAMEBUFFER, FramebufferAttachementTypeToOpengl(type), GL_RENDERBUFFER, attachement->GetId());
 }
 
-void Blit(std::shared_ptr<Framebuffer> src, std::shared_ptr<Framebuffer> dest, int screenWidth, int screenHeight)
+void Blit(SharedPtr<Framebuffer> src, SharedPtr<Framebuffer> dest, int screenWidth, int screenHeight)
 {
    glBindFramebuffer(GL_READ_FRAMEBUFFER, src->m_framebufferId);
    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, dest->m_framebufferId);

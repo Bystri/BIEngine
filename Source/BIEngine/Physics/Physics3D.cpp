@@ -55,11 +55,11 @@ public:
 
    virtual void SetGravity(const glm::vec3& gravity) override {};
 
-   virtual void BeforeUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
+   virtual void BeforeUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override {};
 
    virtual void OnUpdate(const GameTimer& gt) override {}
 
-   virtual void AfterUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
+   virtual void AfterUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override {};
 
    virtual void DrawRenderDiagnostics() override {}
 
@@ -179,9 +179,9 @@ public:
    // Задает двумерный вектор гравитации.
    virtual void SetGravity(const glm::vec3& gravity) override;
 
-   virtual void BeforeUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override;
+   virtual void BeforeUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override;
    virtual void OnUpdate(const GameTimer& gt) override;
-   virtual void AfterUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override;
+   virtual void AfterUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override;
 
    virtual void DrawRenderDiagnostics() override;
 
@@ -328,7 +328,7 @@ Physics3D::~Physics3D()
 
 bool Physics3D::Initialize()
 {
-   auto xmlExtraData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/physics.xml")->GetExtra());
+   auto xmlExtraData = StaticPointerCast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/physics.xml")->GetExtra());
    LoadXml(xmlExtraData->GetRootElement());
 
    m_pCollisionConfiguration = new btDefaultCollisionConfiguration();
@@ -359,7 +359,7 @@ void Physics3D::SetGravity(const glm::vec3& gravity)
    m_pDynamicsWorld->setGravity(Vec3_to_btVector3(gravity));
 }
 
-void Physics3D::BeforeUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap)
+void Physics3D::BeforeUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap)
 {
    for (auto it = m_actorIdToRigidBody.CBegin(); it != m_actorIdToRigidBody.CEnd(); ++it) {
       const ActorId id = it->first;
@@ -377,7 +377,7 @@ void Physics3D::BeforeUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& act
          continue;
       }
 
-      std::shared_ptr<Actor> pGameActor = actorIt->second;
+      SharedPtr<Actor> pGameActor = actorIt->second;
       if (pGameActor && actorMotionState) {
          std::shared_ptr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
          if (pTransformComponent) {
@@ -403,7 +403,7 @@ void Physics3D::OnUpdate(const GameTimer& gt)
    m_pDynamicsWorld->stepSimulation(gt.DeltaTime(), MAX_PASSES);
 }
 
-void Physics3D::AfterUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap)
+void Physics3D::AfterUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap)
 {
    for (auto it = m_actorIdToRigidBody.CBegin(); it != m_actorIdToRigidBody.CEnd(); ++it) {
       const ActorId id = it->first;
@@ -421,7 +421,7 @@ void Physics3D::AfterUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& acto
          continue;
       }
 
-      std::shared_ptr<Actor> pGameActor = actorIt->second;
+      SharedPtr<Actor> pGameActor = actorIt->second;
       if (pGameActor && actorMotionState) {
          std::shared_ptr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
          if (pTransformComponent) {
@@ -450,7 +450,7 @@ void Physics3D::AfterUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& acto
                pTransformComponent->SetPosition(pos);
                pTransformComponent->SetRotation(rotation);
 
-               std::shared_ptr<EvtData_Move_Actor> pEvent = std::make_shared<EvtData_Move_Actor>(id, pTransformComponent->GetPosition(), pTransformComponent->GetRotation());
+               SharedPtr<EvtData_Move_Actor> pEvent = MakeShared<EvtData_Move_Actor>(id, pTransformComponent->GetPosition(), pTransformComponent->GetRotation());
                EventManager::Get()->QueueEvent(pEvent);
             }
          }
@@ -881,7 +881,7 @@ void Physics3D::SendCollisionPairAddEvent(btPersistentManifold const* manifold, 
       }
 
       const ActorId triggerId = (ActorId)triggerBody->getUserPointer();
-      std::shared_ptr<EvtData_Phys3DTrigger_Enter> pEvent = std::make_shared<EvtData_Phys3DTrigger_Enter>(triggerId, FindActorID(otherBody));
+      SharedPtr<EvtData_Phys3DTrigger_Enter> pEvent = MakeShared<EvtData_Phys3DTrigger_Enter>(triggerId, FindActorID(otherBody));
       EventManager::Get()->QueueEvent(pEvent);
    } else {
       ActorId const id0 = FindActorID(body0);
@@ -905,7 +905,7 @@ void Physics3D::SendCollisionPairAddEvent(btPersistentManifold const* manifold, 
          sumFrictionForce += btVector3_to_Vec3(point.m_combinedFriction * point.m_lateralFrictionDir1);
       }
 
-      std::shared_ptr<EvtData_Phys3DCollision> pEvent = std::make_shared<EvtData_Phys3DCollision>(id0, id1, sumNormalForce, sumFrictionForce.length(), collisionPoints);
+      SharedPtr<EvtData_Phys3DCollision> pEvent = MakeShared<EvtData_Phys3DCollision>(id0, id1, sumNormalForce, sumFrictionForce.length(), collisionPoints);
       EventManager::Get()->QueueEvent(pEvent);
    }
 }
@@ -925,7 +925,7 @@ void Physics3D::SendCollisionPairRemoveEvent(const btRigidBody* const body0, con
       }
 
       const ActorId triggerId = (ActorId)triggerBody->getUserPointer();
-      std::shared_ptr<EvtData_Phys3DTrigger_Leave> pEvent = std::make_shared<EvtData_Phys3DTrigger_Leave>(triggerId, FindActorID(otherBody));
+      SharedPtr<EvtData_Phys3DTrigger_Leave> pEvent = MakeShared<EvtData_Phys3DTrigger_Leave>(triggerId, FindActorID(otherBody));
       EventManager::Get()->QueueEvent(pEvent);
    } else {
       ActorId const id0 = FindActorID(body0);
@@ -935,7 +935,7 @@ void Physics3D::SendCollisionPairRemoveEvent(const btRigidBody* const body0, con
          return;
       }
 
-      std::shared_ptr<EvtData_Phys3DSeparation> pEvent = std::make_shared<EvtData_Phys3DSeparation>(id0, id1);
+      SharedPtr<EvtData_Phys3DSeparation> pEvent = MakeShared<EvtData_Phys3DSeparation>(id0, id1);
       EventManager::Get()->QueueEvent(pEvent);
    }
 }
@@ -995,7 +995,7 @@ void Physics3D::BulletInternalTickCallback(btDynamicsWorld* const world, const b
 
 void Physics3D::DestroyActorDelegate(IEventDataPtr pEventData)
 {
-   std::shared_ptr<EvtData_Destroy_Actor> pCastEventData = std::static_pointer_cast<EvtData_Destroy_Actor>(pEventData);
+   SharedPtr<EvtData_Destroy_Actor> pCastEventData = StaticPointerCast<EvtData_Destroy_Actor>(pEventData);
    RemoveActor(pCastEventData->GetId());
 }
 

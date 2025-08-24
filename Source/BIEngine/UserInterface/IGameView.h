@@ -1,9 +1,8 @@
 ﻿#pragma once
 
-#include <memory>
-
-#include "../Utilities/GameTimer.h"
 #include "../StdLib/List.h"
+#include "../StdLib/SharedPtr.h"
+#include "../Utilities/GameTimer.h"
 
 namespace BIEngine {
 
@@ -39,6 +38,6 @@ public:
    virtual void SetKey(int key, int scancode, bool state) = 0;
 };
 
-using GameViewList = List<std::shared_ptr<IGameView>>;
+using GameViewList = List<SharedPtr<IGameView>>;
 
 } // namespace BIEngine

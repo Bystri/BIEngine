@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include "../StdLib/SharedPtr.h"
 
 namespace BIEngine {
 
@@ -11,8 +11,8 @@ class CubemapTexture;
 class Renderbuffer;
 
 class Framebuffer {
-   friend std::shared_ptr<Framebuffer> GetDefaultFramebuffer();
-   friend void Blit(std::shared_ptr<Framebuffer>, std::shared_ptr<Framebuffer>, int, int);
+   friend SharedPtr<Framebuffer> GetDefaultFramebuffer();
+   friend void Blit(SharedPtr<Framebuffer>, SharedPtr<Framebuffer>, int, int);
 
 public:
    Framebuffer();
@@ -25,7 +25,7 @@ private:
    unsigned int m_framebufferId;
 };
 
-std::shared_ptr<Framebuffer> GetDefaultFramebuffer();
+SharedPtr<Framebuffer> GetDefaultFramebuffer();
 
 enum class FramebufferColorOperationType : unsigned char {
    NONE,
@@ -65,14 +65,14 @@ enum class FramebufferAttachementType {
    DEPTH_STENCIL
 };
 
-void FramebufferEnableColor(std::shared_ptr<Framebuffer> framebuffer, FramebufferColorOperationType op);
-void FramebufferDisableColor(std::shared_ptr<Framebuffer> framebuffer, FramebufferColorOperationType op);
-void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<Texture2D> attachement);
-void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<Texture2DMultisample> attachement);
-void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<CubemapTexture> attachement);
-void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<CubemapTexture> attachement, int sideIndex);
-void FramebufferAttach(std::shared_ptr<Framebuffer> framebuffer, FramebufferAttachementType type, std::shared_ptr<Renderbuffer> attachement);
+void FramebufferEnableColor(SharedPtr<Framebuffer> framebuffer, FramebufferColorOperationType op);
+void FramebufferDisableColor(SharedPtr<Framebuffer> framebuffer, FramebufferColorOperationType op);
+void FramebufferAttach(SharedPtr<Framebuffer> framebuffer, FramebufferAttachementType type, SharedPtr<Texture2D> attachement);
+void FramebufferAttach(SharedPtr<Framebuffer> framebuffer, FramebufferAttachementType type, SharedPtr<Texture2DMultisample> attachement);
+void FramebufferAttach(SharedPtr<Framebuffer> framebuffer, FramebufferAttachementType type, SharedPtr<CubemapTexture> attachement);
+void FramebufferAttach(SharedPtr<Framebuffer> framebuffer, FramebufferAttachementType type, SharedPtr<CubemapTexture> attachement, int sideIndex);
+void FramebufferAttach(SharedPtr<Framebuffer> framebuffer, FramebufferAttachementType type, SharedPtr<Renderbuffer> attachement);
 
-void Blit(std::shared_ptr<Framebuffer> src, std::shared_ptr<Framebuffer> dest, int screenWidth, int screenHeight);
+void Blit(SharedPtr<Framebuffer> src, SharedPtr<Framebuffer> dest, int screenWidth, int screenHeight);
 
 } // namespace BIEngine

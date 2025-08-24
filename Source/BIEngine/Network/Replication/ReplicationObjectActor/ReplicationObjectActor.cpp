@@ -5,13 +5,13 @@
 
 namespace BIEngine {
 
-std::shared_ptr<Actor> ReplicationObjectActor::ConstructReplicatedObject(bool isMaster)
+SharedPtr<Actor> ReplicationObjectActor::ConstructReplicatedObject(bool isMaster)
 {
-   std::shared_ptr<XmlExtraData> pActorData;
+   SharedPtr<XmlExtraData> pActorData;
    if (isMaster) {
-      pActorData = std::static_pointer_cast<XmlExtraData>(ResCache::Get()->GetHandle(m_masterActorFilePath)->GetExtra());
+      pActorData = StaticPointerCast<XmlExtraData>(ResCache::Get()->GetHandle(m_masterActorFilePath)->GetExtra());
    } else {
-      pActorData = std::static_pointer_cast<XmlExtraData>(ResCache::Get()->GetHandle(m_slaveActorFilePath)->GetExtra());
+      pActorData = StaticPointerCast<XmlExtraData>(ResCache::Get()->GetHandle(m_slaveActorFilePath)->GetExtra());
    }
 
    return BIEngine::g_pApp->m_pGameLogic->CreateActor(pActorData->GetRootElement());

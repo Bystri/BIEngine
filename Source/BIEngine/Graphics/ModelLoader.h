@@ -21,10 +21,10 @@ public:
 
    virtual String ToString() override { return "ModelData"; }
 
-   std::shared_ptr<Model> GetModel() const { return m_pModel; }
+   SharedPtr<Model> GetModel() const { return m_pModel; }
 
 protected:
-   std::shared_ptr<Model> m_pModel;
+   SharedPtr<Model> m_pModel;
 };
 
 class ModelResourceLoader : public IResourceLoader {
@@ -35,7 +35,7 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* rawBuffer, unsigned int rawSize) { return 0u; }
 
-   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
+   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle);
 
    virtual String GetPattern() { return "*.obj"; }
 };

@@ -1,11 +1,10 @@
 #pragma once
 
-#include <memory>
-
 #include <glm/glm.hpp>
 
 #include "../StdLib/String.h"
 #include "../StdLib/HashMap.h"
+#include "../StdLib/SharedPtr.h"
 #include "../StdLib/DynamicArray.h"
 #include "ShaderProgram.h"
 #include "Texture.h"
@@ -15,7 +14,7 @@ namespace BIEngine {
 
 class ShaderProgramState {
 public:
-   explicit ShaderProgramState(const std::shared_ptr<ShaderProgram>& pShader);
+   explicit ShaderProgramState(const SharedPtr<ShaderProgram>& pShader);
 
    void Use();
 
@@ -28,12 +27,12 @@ public:
    void SetColorRgb(const String& name, const ColorRgb& color);
    void SetColorRgba(const String& name, const ColorRgba& color);
 
-   void AddTexture(int slotId, std::shared_ptr<Texture> pTexture);
+   void AddTexture(int slotId, SharedPtr<Texture> pTexture);
 
    std::size_t GetTexturesNum() const { return m_textures.Size(); }
 
 private:
-   std::shared_ptr<ShaderProgram> m_pShaderProgram;
+   SharedPtr<ShaderProgram> m_pShaderProgram;
 
    HashMap<String, bool> m_uniformBools;
    HashMap<String, int> m_uniformInts;
@@ -43,7 +42,7 @@ private:
    HashMap<String, ColorRgb> m_uniformColorsRgb;
    HashMap<String, ColorRgba> m_uniformColorsRgba;
 
-   DynamicArray<std::pair<int, std::shared_ptr<Texture>>> m_textures;
+   DynamicArray<std::pair<int, SharedPtr<Texture>>> m_textures;
 };
 
 } // namespace BIEngine

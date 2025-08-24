@@ -9,7 +9,7 @@ public:
    LightGraphicsTechnique(const SizeT maxDirLightsNum, const SizeT maxPointLightsNum, const SizeT maxSpotLightsNum)
       : IGraphicsTechnique(),
         m_maxDirLightsNum(maxDirLightsNum), m_maxPointLightsNum(maxPointLightsNum), m_maxSpotLightsNum(maxSpotLightsNum),
-        m_lightsBufferData(), m_pLightConstantsBuffer(std::make_shared<ConstantsBuffer>())
+        m_lightsBufferData(), m_pLightConstantsBuffer(MakeShared<ConstantsBuffer>())
    {
    }
 
@@ -86,7 +86,7 @@ private:
    const SizeT m_maxSpotLightsNum;
 
    LightUniformBufferData m_lightsBufferData;
-   std::shared_ptr<ConstantsBuffer> m_pLightConstantsBuffer;
+   SharedPtr<ConstantsBuffer> m_pLightConstantsBuffer;
 };
 
 } // namespace BIEngine

@@ -1,9 +1,8 @@
 #pragma once
 
-#include <memory>
-
 #include "../Utilities/Logger.h"
 #include "../StdLib/Utility.h"
+#include "../StdLib/SharedPtr.h"
 #include "../StdLib/DynamicArray.h"
 #include "../StdLib/String.h"
 
@@ -83,7 +82,7 @@ private:
    sockaddr_storage m_sockAddr;
 };
 
-using SocketAddressPtr = std::shared_ptr<SocketAddress>;
+using SocketAddressPtr = SharedPtr<SocketAddress>;
 
 class Socket {
    friend class SocketUtil;
@@ -118,11 +117,11 @@ protected:
    }
 };
 
-using UdpSocketPtr = std::shared_ptr<UdpSocket>;
+using UdpSocketPtr = SharedPtr<UdpSocket>;
 
 class TcpSocket;
 
-using TcpSocketPtr = std::shared_ptr<TcpSocket>;
+using TcpSocketPtr = SharedPtr<TcpSocket>;
 
 class TcpSocket : public Socket {
    friend class SocketUtil;

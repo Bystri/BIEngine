@@ -135,15 +135,6 @@ struct Hash<T*> {
    }
 };
 
-template <typename T>
-struct Hash<std::shared_ptr<T>> {
-   SizeT operator()(std::shared_ptr<T> val) const
-   {
-      const T* const ptr = val.get();
-      return SizeT(uintptr_t(ptr) / sizeof(T*));
-   }
-};
-
 template <typename T, SizeT N>
 struct Hash<T[N]> {
    SizeT operator()(T val[]) const

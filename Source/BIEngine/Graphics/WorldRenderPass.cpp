@@ -10,7 +10,7 @@ bool WorldRenderPass::InitInternal()
 {
    GraphicsRenderPass::InitInternal();
 
-   m_intermediateFramebuffer = std::make_shared<Framebuffer>();
+   m_intermediateFramebuffer = MakeShared<Framebuffer>();
    m_colorIntermediateBuffer = Texture2D::Create(m_screenWidth, m_screenHeight, Texture::SizedFormat::RGB_16_F, Texture::Format::RGB, nullptr);
    m_depthStencilIntermediateRenderuffer = Renderbuffer::Create(m_screenWidth, m_screenHeight, Renderbuffer::Format::DEPTH24_STENCIL8);
    FramebufferAttach(m_intermediateFramebuffer, FramebufferAttachementType::COLOR, m_colorIntermediateBuffer);
@@ -19,7 +19,7 @@ bool WorldRenderPass::InitInternal()
       return false;
    }
 
-   m_multisamplingFramebuffer = std::make_shared<Framebuffer>();
+   m_multisamplingFramebuffer = MakeShared<Framebuffer>();
    m_colorMultisampleBuffer = Texture2DMultisample::Create(m_screenWidth, m_screenHeight, Texture::SizedFormat::RGB_16_F, m_msaaSamples);
    m_depthStencilMultisampleRenderuffer = Renderbuffer::Create(m_screenWidth, m_screenHeight, Renderbuffer::Format::DEPTH24_STENCIL8, m_msaaSamples);
    FramebufferAttach(m_multisamplingFramebuffer, FramebufferAttachementType::COLOR, m_colorMultisampleBuffer);
@@ -29,8 +29,8 @@ bool WorldRenderPass::InitInternal()
    }
 
    const String commonPostProcessingShaderProgramPath = "effects/commonPostProcessing.bisp";
-   auto shaderPgrogramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPostProcessingShaderProgramPath)->GetExtra());
-   m_pDefaultPostProcessor = std::make_shared<PostProcessor>(shaderPgrogramData->GetShaderProgram());
+   auto shaderPgrogramData = StaticPointerCast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPostProcessingShaderProgramPath)->GetExtra());
+   m_pDefaultPostProcessor = MakeShared<PostProcessor>(shaderPgrogramData->GetShaderProgram());
 
    DebugDraw::Init();
 
@@ -55,7 +55,7 @@ void WorldRenderPass::PostRender(Scene* const pScene)
    Blit(m_multisamplingFramebuffer, m_intermediateFramebuffer, pScene->GetRenderer()->GetScreenWidth(), pScene->GetRenderer()->GetScreenHeight());
 
    pScene->GetRenderer()->SetRenderTarget(m_pRenderTarget);
-   m_pDefaultPostProcessor->Use(pScene->GetRenderer().get(), m_colorIntermediateBuffer);
+   m_pDefaultPostProcessor->Use(pScene->GetRenderer().Get(), m_colorIntermediateBuffer);
 
    GraphicsRenderPass::PostRender(pScene);
 }

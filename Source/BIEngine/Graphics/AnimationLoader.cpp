@@ -64,9 +64,9 @@ static bool animationLoaderReadParams(tinyxml2::XMLElement* const pRoot, float& 
    return true;
 }
 
-bool AnimationResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool AnimationResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
-   std::shared_ptr<AnimationData> pExtra = std::make_shared<AnimationData>();
+   SharedPtr<AnimationData> pExtra = MakeShared<AnimationData>();
 
    tinyxml2::XMLDocument xmlDoc;
    tinyxml2::XMLError error = xmlDoc.Parse(rawBuffer, rawSize);
@@ -98,7 +98,7 @@ bool AnimationResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize
       boneChannels.PushBack(animationLoaderReadBoneChannel(pBoneChannel));
    }
 
-   pExtra->m_pAnimation = std::make_shared<Animation>(duration, ticlsPerSecond, std::move(boneChannels), isLooped);
+   pExtra->m_pAnimation = MakeShared<Animation>(duration, ticlsPerSecond, std::move(boneChannels), isLooped);
    pHandle->SetExtra(pExtra);
 
    return true;

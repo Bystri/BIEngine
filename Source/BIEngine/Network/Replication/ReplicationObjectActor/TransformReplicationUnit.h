@@ -7,7 +7,7 @@ namespace BIEngine {
 
 class TransformReplicationUnit : public ReplicationUnit<Actor> {
 public:
-   virtual void Init(std::shared_ptr<Actor> pActor) override;
+   virtual void Init(SharedPtr<Actor> pActor) override;
 
    virtual bool IsStateChanged() override;
 

@@ -14,7 +14,7 @@ BoneComponent::BoneComponent()
 
 bool BoneComponent::Init(tinyxml2::XMLElement* pData)
 {
-   m_pBone = std::make_shared<Skeleton::BoneInfo>();
+   m_pBone = MakeShared<Skeleton::BoneInfo>();
 
    return true;
 }

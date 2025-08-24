@@ -4,8 +4,8 @@
 
 namespace BIEngine {
 
-Scene::Scene(std::shared_ptr<Renderer> pRenderer)
-   : m_pRenderer(pRenderer), m_pConstantsBuffer(std::make_shared<ConstantsBuffer>()), m_pCamera(nullptr),
+Scene::Scene(SharedPtr<Renderer> pRenderer)
+   : m_pRenderer(pRenderer), m_pConstantsBuffer(MakeShared<ConstantsBuffer>()), m_pCamera(nullptr),
      m_graphicsRenderPasses(), m_pRenderItemsStorage(MakeUnique<RenderItemsStorage>())
 {
 }

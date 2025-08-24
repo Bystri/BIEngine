@@ -31,14 +31,14 @@ void NetworkManager::ProcessIncomingPackets()
 void NetworkManager::ReadIncomingPackets()
 {
    constexpr int packetSize = 1500;
-   std::shared_ptr<char> segment(static_cast<char*>(std::malloc(packetSize)), std::free);
+   SharedPtr<char> segment(static_cast<char*>(std::malloc(packetSize)), std::free);
    InputMemoryBitStream inputStream(segment, packetSize * 8);
    SocketAddress fromAddress;
 
    int receivedPackedCount = 0;
 
    while (receivedPackedCount < MAX_PACKETS_PER_FRAME_COUNT) {
-      int readByteCount = m_socket->ReceiveFrom(segment.get(), packetSize, fromAddress);
+      int readByteCount = m_socket->ReceiveFrom(segment.Get(), packetSize, fromAddress);
       if (readByteCount == 0) {
          // nothing to read
          break;
@@ -58,7 +58,7 @@ void NetworkManager::ReadIncomingPackets()
 
 void NetworkManager::SendPacket(const OutputMemoryBitStream& outputStream, const SocketAddress& fromAddress)
 {
-   m_socket->SendTo(outputStream.GetBufferPtr().get(), outputStream.GetByteLength(), fromAddress);
+   m_socket->SendTo(outputStream.GetBufferPtr().Get(), outputStream.GetByteLength(), fromAddress);
 
    InputMemoryBitStream inputStream(outputStream.GetBufferPtr(), outputStream.GetBitLength());
    uint32_t packetType;

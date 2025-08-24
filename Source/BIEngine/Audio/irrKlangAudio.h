@@ -8,7 +8,7 @@ namespace BIEngine {
 
 class irrKlangAudioBuffer : public AudioBuffer {
 public:
-   irrKlangAudioBuffer(irrklang::ISoundEngine* pSoundEngine, std::shared_ptr<ResHandle> pResource);
+   irrKlangAudioBuffer(irrklang::ISoundEngine* pSoundEngine, SharedPtr<ResHandle> pResource);
    virtual bool OnRestore();
 
    virtual bool Play(int volume, bool looping);
@@ -36,7 +36,7 @@ public:
 
    virtual bool Active() { return m_pSoundEngine != nullptr; }
 
-   virtual IAudioBuffer* InitAudioBuffer(std::shared_ptr<ResHandle> pHandle);
+   virtual IAudioBuffer* InitAudioBuffer(SharedPtr<ResHandle> pHandle);
    virtual void ReleaseAudioBuffer(IAudioBuffer* pAudioBuffer);
 
    virtual void Shutdown();

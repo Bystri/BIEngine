@@ -44,7 +44,7 @@ void BulletDebugDrawer::ReadOptions()
 
 void BulletDebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& lineColor)
 {
-   std::shared_ptr<HumanView> humanView = g_pApp->TryGetHumanView(0);
+   SharedPtr<HumanView> humanView = g_pApp->TryGetHumanView(0);
    if (humanView == nullptr) {
       return;
    }

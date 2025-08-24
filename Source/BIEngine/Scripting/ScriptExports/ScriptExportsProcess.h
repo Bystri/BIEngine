@@ -1,7 +1,6 @@
 #pragma once
 
-#include <memory>
-
+#include "../../StdLib/SharedPtr.h"
 #include "../../ProcessManager/ProcessManager.h"
 #include "../../ProcessManager/DelayProcess.h"
 #include "../../Utilities/Logger.h"
@@ -36,7 +35,7 @@ namespace py = pybind11;
 
 PYBIND11_EMBEDDED_MODULE(BIEProcess, m)
 {
-   py::class_<BIEngine::Process, std::shared_ptr<BIEngine::Process>>(m, "BaseProcess")
+   py::class_<BIEngine::Process, BIEngine::SharedPtr<BIEngine::Process>>(m, "BaseProcess")
       .def("Succeed", &BIEngine::Process::Succeed)
       .def("Fail", &BIEngine::Process::Fail)
       .def("Pause", &BIEngine::Process::Pause)
@@ -52,10 +51,10 @@ PYBIND11_EMBEDDED_MODULE(BIEProcess, m)
       .def("RemoveChild", &BIEngine::Process::RemoveChild)
       .def("PeekChild", &BIEngine::Process::PeekChild);
 
-   py::class_<BIEngine::DelayProcess, BIEngine::Process, std::shared_ptr<BIEngine::DelayProcess>>(m, "DelayProcess")
+   py::class_<BIEngine::DelayProcess, BIEngine::Process, BIEngine::SharedPtr<BIEngine::DelayProcess>>(m, "DelayProcess")
       .def(py::init<float>());
 
-   py::class_<BIEngine::PyProcess, BIEngine::Process, std::shared_ptr<BIEngine::PyProcess>> processPyClass(m, "Process");
+   py::class_<BIEngine::PyProcess, BIEngine::Process, BIEngine::SharedPtr<BIEngine::PyProcess>> processPyClass(m, "Process");
 
    py::enum_<BIEngine::PyProcess::State>(processPyClass, "State")
       .value("UNINITIALIZED", BIEngine::PyProcess::State::UNINITIALIZED)

@@ -21,10 +21,10 @@ public:
 
    virtual String ToString() override { return "MaterialData"; }
 
-   std::shared_ptr<Material> GetMaterial() const { return m_pMaterial; }
+   SharedPtr<Material> GetMaterial() const { return m_pMaterial; }
 
 protected:
-   std::shared_ptr<Material> m_pMaterial;
+   SharedPtr<Material> m_pMaterial;
 };
 
 class MaterialResourceLoader : public IResourceLoader {
@@ -35,7 +35,7 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* rawBuffer, unsigned int rawSize) { return 0u; }
 
-   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
+   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle);
 
    virtual String GetPattern() { return "*.bimat"; }
 };

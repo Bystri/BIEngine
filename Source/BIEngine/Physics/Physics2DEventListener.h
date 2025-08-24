@@ -35,7 +35,7 @@ public:
 
    IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_Phys2DTrigger_Enter>(m_triggerID, m_other);
+      return MakeShared<EvtData_Phys2DTrigger_Enter>(m_triggerID, m_other);
    }
 
    virtual const char* GetName() const
@@ -81,7 +81,7 @@ public:
 
    virtual IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_Phys2DTrigger_Leave>(m_triggerID, m_other);
+      return MakeShared<EvtData_Phys2DTrigger_Leave>(m_triggerID, m_other);
    }
 
    virtual const char* GetName() const
@@ -136,7 +136,7 @@ public:
 
    virtual IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_Phys2DCollision>(m_ActorA, m_ActorB, m_SumNormalForce, m_friction, m_CollisionPoints);
+      return MakeShared<EvtData_Phys2DCollision>(m_ActorA, m_ActorB, m_SumNormalForce, m_friction, m_CollisionPoints);
    }
 
    virtual const char* GetName() const
@@ -197,7 +197,7 @@ public:
 
    virtual IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_Phys2DSeparation>(m_ActorA, m_ActorB);
+      return MakeShared<EvtData_Phys2DSeparation>(m_ActorA, m_ActorB);
    }
 
    virtual const char* GetName() const

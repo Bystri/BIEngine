@@ -49,10 +49,10 @@ ActorFactory::ActorFactory()
    m_actorComponentCreators[PlayerComponent::g_CompId] = CreateBIPlayerComponent;
 }
 
-std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation, Actor* const pParent)
+SharedPtr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation, Actor* const pParent)
 {
    // Create actor
-   std::shared_ptr<Actor> pActor = CreateActorFromRootElement(pRoot, pParent);
+   SharedPtr<Actor> pActor = CreateActorFromRootElement(pRoot, pParent);
    if (pActor == nullptr) {
       return pActor;
    }
@@ -77,7 +77,7 @@ std::shared_ptr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, co
    return pActor;
 }
 
-std::shared_ptr<Actor> ActorFactory::CreateActorFromRootElement(tinyxml2::XMLElement* pRoot, Actor* const pParent)
+SharedPtr<Actor> ActorFactory::CreateActorFromRootElement(tinyxml2::XMLElement* pRoot, Actor* const pParent)
 {
    if (!pRoot) {
       Logger::WriteLog(Logger::LogType::ERROR, "Failed to create actor from null XML-element");
@@ -85,7 +85,7 @@ std::shared_ptr<Actor> ActorFactory::CreateActorFromRootElement(tinyxml2::XMLEle
    }
 
    // Create actor
-   std::shared_ptr<Actor> pActor = std::shared_ptr<Actor>(new Actor(GetNextActorId()));
+   SharedPtr<Actor> pActor = SharedPtr<Actor>(new Actor(GetNextActorId()));
 
    pActor->m_pParent = pParent;
 
@@ -110,14 +110,14 @@ std::shared_ptr<Actor> ActorFactory::CreateActorFromRootElement(tinyxml2::XMLEle
    tinyxml2::XMLElement* const pChildrenElement = pRoot->FirstChildElement("Children");
    if (pChildrenElement) {
       for (tinyxml2::XMLElement* pNode = pChildrenElement->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
-         pActor->AddChild(CreateActorFromRootElement(pNode, pActor.get()));
+         pActor->AddChild(CreateActorFromRootElement(pNode, pActor.Get()));
       }
    }
 
    return pActor;
 }
 
-std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(std::shared_ptr<Actor> pActor, tinyxml2::XMLElement* pData)
+std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(SharedPtr<Actor> pActor, tinyxml2::XMLElement* pData)
 {
    // Создаем нового актера
    String name(pData->Value());
@@ -132,7 +132,7 @@ std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(std::shared_ptr<Ac
    }
 
    // Назначаем владельца компонента
-   pComponent->SetOwner(pActor.get());
+   pComponent->SetOwner(pActor.Get());
 
    // Инициализируем компонент
    if (pComponent) {
@@ -145,7 +145,7 @@ std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(std::shared_ptr<Ac
    return pComponent;
 }
 
-void ActorFactory::ModifyActor(std::shared_ptr<Actor> pActor, tinyxml2::XMLElement* overrides)
+void ActorFactory::ModifyActor(SharedPtr<Actor> pActor, tinyxml2::XMLElement* overrides)
 {
    tinyxml2::XMLElement* const pComponents = overrides->FirstChildElement("Components");
    for (tinyxml2::XMLElement* pNode = pComponents->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {

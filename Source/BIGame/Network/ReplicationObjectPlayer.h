@@ -10,17 +10,17 @@ public:
    CLASS_IDENTIFICATION('PLYR', ReplicationObjectPlayer)
 
    ReplicationObjectPlayer()
-      : ReplicationObjectT<Player>(std::move(ReplicationUnitArray{std::make_shared<AttachedActorReplicationUnit>()}))
+      : ReplicationObjectT<Player>(std::move(ReplicationUnitArray{BIEngine::MakeShared<AttachedActorReplicationUnit>()}))
    {
    }
 
-   virtual std::shared_ptr<Player> ConstructReplicatedObject(bool isMaster) override
+   virtual BIEngine::SharedPtr<Player> ConstructReplicatedObject(bool isMaster) override
    {
       return PlayerManager::Get()->CreatePlayer();
    }
 
 private:
-   std::shared_ptr<Player> m_pPlayer;
+   BIEngine::SharedPtr<Player> m_pPlayer;
 
    bool m_isDirty = false;
    BIEngine::ActorId m_cachedActorId = BIEngine::Actor::INVALID_ACTOR_ID;

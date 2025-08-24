@@ -5,7 +5,7 @@
 
 namespace BIEngine {
 
-SoundProcess::SoundProcess(std::shared_ptr<ResHandle> pResource, int volume, bool looping)
+SoundProcess::SoundProcess(SharedPtr<ResHandle> pResource, int volume, bool looping)
    : m_pHandle(pResource), m_volume(volume), m_isLooping(looping)
 {
 }
@@ -16,7 +16,7 @@ SoundProcess::~SoundProcess()
       Stop();
 
    if (m_pAudioBuffer)
-      g_pAudio->ReleaseAudioBuffer(m_pAudioBuffer.get());
+      g_pAudio->ReleaseAudioBuffer(m_pAudioBuffer.Get());
 }
 
 int SoundProcess::GetLengthMilli()
@@ -38,7 +38,7 @@ void SoundProcess::OnInit()
       return;
    }
 
-   m_pAudioBuffer.reset(buffer);
+   m_pAudioBuffer.Reset(buffer);
 
    Play(m_volume, m_isLooping);
 }

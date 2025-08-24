@@ -21,8 +21,8 @@ public:
 
 private:
    struct RenderDirLightShadowInfo {
-      std::shared_ptr<Framebuffer> pShadowMapBuffer;
-      std::shared_ptr<Texture2D> pDepthBuffer;
+      SharedPtr<Framebuffer> pShadowMapBuffer;
+      SharedPtr<Texture2D> pDepthBuffer;
    };
 
 private:
@@ -31,7 +31,7 @@ private:
    const int SHADOW_MAP_WIDTH;
    const int SHADOW_MAP_HEIGHT;
 
-   std::shared_ptr<ShaderProgram> m_pDirLightShadowShader;
+   SharedPtr<ShaderProgram> m_pDirLightShadowShader;
    DynamicArray<RenderDirLightShadowInfo> m_dirLightShadowInfos;
 };
 

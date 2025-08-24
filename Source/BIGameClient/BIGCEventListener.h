@@ -180,7 +180,7 @@ public:
 
    virtual BIEngine::IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_OnKeyDown>(GetPlayerId(), GetKey());
+      return BIEngine::MakeShared<EvtData_OnKeyDown>(GetPlayerId(), GetKey());
    }
 
    virtual const char* GetName() const
@@ -207,7 +207,7 @@ public:
 
    virtual BIEngine::IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_OnKeyUp>(GetPlayerId(), GetKey());
+      return BIEngine::MakeShared<EvtData_OnKeyUp>(GetPlayerId(), GetKey());
    }
 
    virtual const char* GetName() const
@@ -244,7 +244,7 @@ public:
 
    virtual BIEngine::IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_OnPointerMove>(m_playerId, m_pointerPos);
+      return BIEngine::MakeShared<EvtData_OnPointerMove>(m_playerId, m_pointerPos);
    }
 
    virtual const char* GetName() const

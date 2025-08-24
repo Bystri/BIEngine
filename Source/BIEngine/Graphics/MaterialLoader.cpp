@@ -7,7 +7,7 @@
 
 namespace BIEngine {
 
-static void materialLoaderLoadColorsRgb(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+static void materialLoaderLoadColorsRgb(tinyxml2::XMLElement* pRoot, SharedPtr<Material> pMaterial)
 {
    tinyxml2::XMLElement* pColorsRgbElement = pRoot->FirstChildElement("ColorsRgb");
    if (!pColorsRgbElement) {
@@ -27,7 +27,7 @@ static void materialLoaderLoadColorsRgb(tinyxml2::XMLElement* pRoot, std::shared
    }
 }
 
-static void materialLoaderLoadColorsRgba(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+static void materialLoaderLoadColorsRgba(tinyxml2::XMLElement* pRoot, SharedPtr<Material> pMaterial)
 {
    tinyxml2::XMLElement* pColorsRgbaElement = pRoot->FirstChildElement("ColorsRgba");
    if (!pColorsRgbaElement) {
@@ -48,7 +48,7 @@ static void materialLoaderLoadColorsRgba(tinyxml2::XMLElement* pRoot, std::share
    }
 }
 
-static void materialLoaderLoadIntegers(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+static void materialLoaderLoadIntegers(tinyxml2::XMLElement* pRoot, SharedPtr<Material> pMaterial)
 {
    tinyxml2::XMLElement* pIntegersElement = pRoot->FirstChildElement("Integers");
    if (!pIntegersElement) {
@@ -66,7 +66,7 @@ static void materialLoaderLoadIntegers(tinyxml2::XMLElement* pRoot, std::shared_
    }
 }
 
-static void materialLoaderLoadFloats(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+static void materialLoaderLoadFloats(tinyxml2::XMLElement* pRoot, SharedPtr<Material> pMaterial)
 {
    tinyxml2::XMLElement* pFloatsElement = pRoot->FirstChildElement("Floats");
    if (!pFloatsElement) {
@@ -84,7 +84,7 @@ static void materialLoaderLoadFloats(tinyxml2::XMLElement* pRoot, std::shared_pt
    }
 }
 
-static void materialLoaderLoadBools(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+static void materialLoaderLoadBools(tinyxml2::XMLElement* pRoot, SharedPtr<Material> pMaterial)
 {
    tinyxml2::XMLElement* pBoolsEelemnt = pRoot->FirstChildElement("Bools");
    if (!pBoolsEelemnt) {
@@ -102,7 +102,7 @@ static void materialLoaderLoadBools(tinyxml2::XMLElement* pRoot, std::shared_ptr
    }
 }
 
-static void materialLoaderLoadTextures(tinyxml2::XMLElement* pRoot, std::shared_ptr<Material> pMaterial)
+static void materialLoaderLoadTextures(tinyxml2::XMLElement* pRoot, SharedPtr<Material> pMaterial)
 {
    tinyxml2::XMLElement* pTexuresElement = pRoot->FirstChildElement("Textures");
    if (!pTexuresElement) {
@@ -118,7 +118,7 @@ static void materialLoaderLoadTextures(tinyxml2::XMLElement* pRoot, std::shared_
       pTextureElement->QueryIntAttribute("slot", &slot);
       pTextureElement->QueryStringAttribute("path", &texturePath);
 
-      auto textureData = std::dynamic_pointer_cast<TextureData>(ResCache::Get()->GetHandle(texturePath)->GetExtra());
+      auto textureData = StaticPointerCast<TextureData>(ResCache::Get()->GetHandle(texturePath)->GetExtra());
 
       if (textureData == nullptr) {
          return;
@@ -128,7 +128,7 @@ static void materialLoaderLoadTextures(tinyxml2::XMLElement* pRoot, std::shared_
    }
 }
 
-bool MaterialResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool MaterialResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
    tinyxml2::XMLDocument xmlDoc;
    tinyxml2::XMLError error = xmlDoc.Parse(rawBuffer, rawSize);
@@ -150,13 +150,13 @@ bool MaterialResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize,
    const char* shaderProgramPath;
    pShaderProgramElement->QueryStringAttribute("path", &shaderProgramPath);
 
-   auto shaderProgramData = std::dynamic_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(shaderProgramPath)->GetExtra());
+   auto shaderProgramData = StaticPointerCast<ShaderProgramData>(ResCache::Get()->GetHandle(shaderProgramPath)->GetExtra());
 
    if (shaderProgramData == nullptr) {
       return false;
    }
 
-   std::shared_ptr<Material> pMaterial = std::make_shared<Material>(shaderProgramData->GetShaderProgram());
+   SharedPtr<Material> pMaterial = MakeShared<Material>(shaderProgramData->GetShaderProgram());
 
    tinyxml2::XMLElement* pParamsElement = pRoot->FirstChildElement("Params");
    if (!pParamsElement) {
@@ -174,7 +174,7 @@ bool MaterialResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize,
    materialLoaderLoadBools(pRoot, pMaterial);
    materialLoaderLoadTextures(pRoot, pMaterial);
 
-   std::shared_ptr<MaterialData> pExtra = std::make_shared<MaterialData>();
+   SharedPtr<MaterialData> pExtra = MakeShared<MaterialData>();
    pExtra->m_pMaterial = pMaterial;
    pHandle->SetExtra(pExtra);
 

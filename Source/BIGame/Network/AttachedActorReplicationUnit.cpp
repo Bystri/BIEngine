@@ -2,7 +2,7 @@
 
 #include "../../BIEngine/EngineCore/GameApp.h"
 
-void AttachedActorReplicationUnit::Init(std::shared_ptr<Player> pObject)
+void AttachedActorReplicationUnit::Init(BIEngine::SharedPtr<Player> pObject)
 {
    m_pPlayer = pObject;
 }

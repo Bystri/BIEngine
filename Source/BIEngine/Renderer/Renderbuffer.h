@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include "../StdLib/SharedPtr.h"
 
 namespace BIEngine {
 
@@ -23,7 +23,7 @@ public:
 
    ~Renderbuffer();
 
-   static std::shared_ptr<Renderbuffer> Create(int width, int height, Renderbuffer::Format type, unsigned int samples = 0);
+   static SharedPtr<Renderbuffer> Create(int width, int height, Renderbuffer::Format type, unsigned int samples = 0);
 
    void Bind() const;
    unsigned int GetId() const;

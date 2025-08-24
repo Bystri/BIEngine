@@ -14,10 +14,10 @@ public:
 
    virtual String ToString() { return "MeshExtraData"; }
 
-   std::shared_ptr<Mesh> GetMesh() const { return m_pMesh; }
+   SharedPtr<Mesh> GetMesh() const { return m_pMesh; }
 
 protected:
-   std::shared_ptr<Mesh> m_pMesh;
+   SharedPtr<Mesh> m_pMesh;
 };
 
 class MeshResourceLoader : public IResourceLoader {
@@ -27,7 +27,7 @@ public:
    virtual bool DiscardRawBufferAfterLoad() { return true; }
 
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize);
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle);
 
    virtual String GetPattern() { return "*.bimesh"; }
 };

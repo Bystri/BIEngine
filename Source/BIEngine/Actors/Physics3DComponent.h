@@ -53,7 +53,7 @@ protected:
    glm::vec3 m_rigidBodyScale;
    glm::vec3 m_angularFactor;
 
-   std::shared_ptr<IGamePhysics3D> m_gamePhysics;
+   SharedPtr<IGamePhysics3D> m_gamePhysics;
 };
 
 static UniquePtr<ActorComponent> CreatePhysics3DComponent()

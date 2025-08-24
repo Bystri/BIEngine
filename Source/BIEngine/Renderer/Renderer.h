@@ -1,18 +1,17 @@
 ﻿#pragma once
 
-#include <memory>
-
 #include "Mesh.h"
 #include "Color.h"
 #include "RenderState.h"
 #include "Framebuffer.h"
 #include "ShaderProgram.h"
 #include "ShaderProgramState.h"
+#include "../StdLib/SharedPtr.h"
 
 namespace BIEngine {
 
 struct RenderCommand {
-   RenderCommand(unsigned int VAO, int indicesNum, std::shared_ptr<ShaderProgram> pShader)
+   RenderCommand(unsigned int VAO, int indicesNum, SharedPtr<ShaderProgram> pShader)
       : m_VAO(VAO), m_indicesNum(indicesNum), m_pShaderProgram(pShader), m_shaderProgramState(pShader)
    {
    }
@@ -40,7 +39,7 @@ private:
    unsigned int m_VAO;
    int m_indicesNum;
 
-   std::shared_ptr<ShaderProgram> m_pShaderProgram;
+   SharedPtr<ShaderProgram> m_pShaderProgram;
    ShaderProgramState m_shaderProgramState;
 };
 
@@ -62,7 +61,7 @@ public:
 
    RenderDevice& GetRenderDevice() { return m_renderDevice; }
 
-   void SetRenderTarget(std::shared_ptr<Framebuffer> pRenderTarget)
+   void SetRenderTarget(SharedPtr<Framebuffer> pRenderTarget)
    {
       m_pRenderTarget = pRenderTarget;
       m_pRenderTarget->Bind();
@@ -77,6 +76,6 @@ public:
 
    RenderDevice m_renderDevice;
 
-   std::shared_ptr<Framebuffer> m_pRenderTarget;
+   SharedPtr<Framebuffer> m_pRenderTarget;
 };
 } // namespace BIEngine

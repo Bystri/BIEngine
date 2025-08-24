@@ -16,7 +16,7 @@ private:
    };
 
 public:
-   void Init(int playerId, std::shared_ptr<BIEngine::Camera> pCamera);
+   void Init(int playerId, BIEngine::SharedPtr<BIEngine::Camera> pCamera);
    void Term();
 
    void OnPointerMoveDelegate(BIEngine::IEventDataPtr pEventData);
@@ -32,7 +32,7 @@ private:
 
    int m_playerId;
 
-   std::shared_ptr<BIEngine::Camera> m_pCamera;
+   BIEngine::SharedPtr<BIEngine::Camera> m_pCamera;
 
    uint8_t m_currentMoveMask = 0u;
    uint8_t m_cachedMoveMask = 0u;

@@ -40,7 +40,7 @@ bool HumanView::Init()
    }
 
    // Создание отображения
-   m_pRenderer = std::make_shared<Renderer>();
+   m_pRenderer = MakeShared<Renderer>();
    if (!m_pRenderer->Init(m_screenWidth, m_screenHeight)) {
       return false;
    }
@@ -48,7 +48,7 @@ bool HumanView::Init()
    m_pScene = MakeUnique<Scene>(m_pRenderer);
    m_pScene->Init();
 
-   m_pScene->SetCamera(std::make_shared<Camera>());
+   m_pScene->SetCamera(MakeShared<Camera>());
 
    return true;
 }

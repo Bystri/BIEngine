@@ -8,7 +8,7 @@
 
 class CameraFollowProcess : public BIEngine::Process {
 public:
-   CameraFollowProcess(std::shared_ptr<BIEngine::Camera> pCamera, std::weak_ptr<BIEngine::TransformComponent> pTransform, float dist, float height)
+   CameraFollowProcess(BIEngine::SharedPtr<BIEngine::Camera> pCamera, std::weak_ptr<BIEngine::TransformComponent> pTransform, float dist, float height)
       : BIEngine::Process(), m_pTransform(pTransform), m_pCamera(pCamera), m_dist(dist), m_height(height)
    {
    }
@@ -33,7 +33,7 @@ public:
    }
 
 private:
-   std::shared_ptr<BIEngine::Camera> m_pCamera;
+   BIEngine::SharedPtr<BIEngine::Camera> m_pCamera;
    std::weak_ptr<BIEngine::TransformComponent> m_pTransform;
 
    float m_dist;
@@ -42,7 +42,7 @@ private:
 
 class StaticCameraFollowProcess : public BIEngine::Process {
 public:
-   StaticCameraFollowProcess(std::shared_ptr<BIEngine::Camera> pCamera, std::weak_ptr<BIEngine::TransformComponent> pTransform, float dist, float height)
+   StaticCameraFollowProcess(BIEngine::SharedPtr<BIEngine::Camera> pCamera, std::weak_ptr<BIEngine::TransformComponent> pTransform, float dist, float height)
       : BIEngine::Process(), m_pTransform(pTransform), m_pCamera(pCamera), m_dist(dist), m_height(height)
    {
    }
@@ -67,7 +67,7 @@ public:
    }
 
 private:
-   std::shared_ptr<BIEngine::Camera> m_pCamera;
+   BIEngine::SharedPtr<BIEngine::Camera> m_pCamera;
    std::weak_ptr<BIEngine::TransformComponent> m_pTransform;
 
    float m_dist;
@@ -79,7 +79,7 @@ void BICameraManager::Terminate()
    TryCancelCameraFollowProc();
 }
 
-void BICameraManager::FollowActor(std::shared_ptr<BIEngine::Actor> pActor)
+void BICameraManager::FollowActor(BIEngine::SharedPtr<BIEngine::Actor> pActor)
 {
    TryCancelCameraFollowProc();
 

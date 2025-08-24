@@ -37,7 +37,7 @@ public:
    virtual bool DiscardRawBufferAfterLoad() { return false; }
 
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize);
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle);
 };
 
 class PngResourceLoader : public ImageResourceLoader {

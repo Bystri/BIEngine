@@ -2,7 +2,7 @@
 
 namespace BIEngine {
 
-ShaderProgramState::ShaderProgramState(const std::shared_ptr<ShaderProgram>& pShader)
+ShaderProgramState::ShaderProgramState(const SharedPtr<ShaderProgram>& pShader)
    : m_pShaderProgram(pShader)
 {
 }
@@ -86,7 +86,7 @@ void ShaderProgramState::SetColorRgba(const String& name, const ColorRgba& color
    m_uniformColorsRgba[name] = color;
 }
 
-void ShaderProgramState::AddTexture(int slotId, std::shared_ptr<Texture> pTexture)
+void ShaderProgramState::AddTexture(int slotId, SharedPtr<Texture> pTexture)
 {
    m_textures.PushBack({slotId, pTexture});
 }

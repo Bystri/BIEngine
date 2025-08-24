@@ -11,13 +11,13 @@ namespace py = pybind11;
 
 PYBIND11_EMBEDDED_MODULE(BIGActionEvent, m)
 {
-   py::class_<EvtData_Move, BIEngine::BaseEventData, std::shared_ptr<EvtData_Move>>(m, "EvtData_Move")
+   py::class_<EvtData_Move, BIEngine::BaseEventData, BIEngine::SharedPtr<EvtData_Move>>(m, "EvtData_Move")
       .def_readonly_static("eventType", &EvtData_Move::sk_EventType)
       .def("GetPlayerId", &EvtData_Move::GetPlayerId)
       .def("GetDesiredHorizontalAmount", &EvtData_Move::GetDesiredHorizontalAmount)
       .def("GetDesiredVerticalAmount", &EvtData_Move::GetDesiredVerticalAmount);
 
-   py::class_<EvtData_Turn, BIEngine::BaseEventData, std::shared_ptr<EvtData_Turn>>(m, "EvtData_Turn")
+   py::class_<EvtData_Turn, BIEngine::BaseEventData, BIEngine::SharedPtr<EvtData_Turn>>(m, "EvtData_Turn")
       .def_readonly_static("eventType", &EvtData_Turn::sk_EventType)
       .def("GetPlayerId", &EvtData_Turn::GetPlayerId)
       .def("GetDesiredDir", &EvtData_Turn::GetDesiredDir);

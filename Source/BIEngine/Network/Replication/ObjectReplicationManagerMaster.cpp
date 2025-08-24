@@ -16,7 +16,7 @@ ObjectReplicationManagerMaster* ObjectReplicationManagerMaster::Get()
 }
 
 ObjectReplicationManagerMaster::ObjectReplicationManagerMaster()
-   : m_pLinkingContext(std::make_shared<NewtworkObjectLinkingContexts>())
+   : m_pLinkingContext(MakeShared<NewtworkObjectLinkingContexts>())
 {
    if (g_pObjectReplicationManagerMaster) {
       Logger::WriteErrorLog("Attempting to create two global event managers! The old one will be destroyed and overwritten with this one.\n");
@@ -34,16 +34,16 @@ ObjectReplicationManagerMaster::~ObjectReplicationManagerMaster()
    }
 }
 
-std::shared_ptr<ReplicationObject> ObjectReplicationCreate(uint32_t classId)
+SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t classId)
 {
-   std::shared_ptr<ReplicationObject> pObj = BIEngine::NetworkObjectCreationRegistry::Get().Create(classId);
+   SharedPtr<ReplicationObject> pObj = BIEngine::NetworkObjectCreationRegistry::Get().Create(classId);
    pObj->Init(true);
    g_pObjectReplicationManagerMaster->AddReplicationObject(pObj);
 
    return pObj;
 }
 
-void ObjectReplicationManagerMaster::AddClient(std::shared_ptr<Peer> pPeer)
+void ObjectReplicationManagerMaster::AddClient(SharedPtr<Peer> pPeer)
 {
    m_pPeers.PushBack(pPeer);
    UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
@@ -77,7 +77,7 @@ void ObjectReplicationManagerMaster::OnUpdate()
    }
 }
 
-void ObjectReplicationManagerMaster::AddReplicationObject(std::shared_ptr<ReplicationObject> pObj)
+void ObjectReplicationManagerMaster::AddReplicationObject(SharedPtr<ReplicationObject> pObj)
 {
    m_pReplicationObjects.PushBack(pObj);
 
@@ -96,7 +96,7 @@ void ObjectReplicationManagerMaster::SendStatePacketToClient(int peerIdx, Networ
 
    // WriteLastMoveTimestampIfDirty(statePacket, inClientProxy);
 
-   statePacket.WriteBits(m_replicationBuffersPerPeer[peerIdx].GetBufferPtr().get(), m_replicationBuffersPerPeer[peerIdx].GetBitLength());
+   statePacket.WriteBits(m_replicationBuffersPerPeer[peerIdx].GetBufferPtr().Get(), m_replicationBuffersPerPeer[peerIdx].GetBitLength());
    pNetworkManager->SendPacket(statePacket, m_pPeers[peerIdx]->GetSocketAddress());
 }
 

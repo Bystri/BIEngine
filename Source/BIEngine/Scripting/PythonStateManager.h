@@ -5,6 +5,7 @@
 #include <pybind11/operators.h>
 
 #include "../EngineCore/Assert.h"
+#include "../StdLib/SharedPtr.h"
 #include "../StdLib/String.h"
 
 namespace py = pybind11;
@@ -25,6 +26,20 @@ public:
 
    private:
       T* m_ptr;
+   };
+
+   template <typename T>
+   class SharedPtrWrapper {
+   public:
+      SharedPtrWrapper(T* ptr)
+         : m_ptr(SharedPtr<T>(ptr))
+      {
+      }
+
+      T* get() const { return m_ptr.Get(); }
+
+   private:
+      SharedPtr<T> m_ptr;
    };
 
 public:
@@ -89,3 +104,15 @@ public:
 } // namespace pybind11
 
 PYBIND11_DECLARE_HOLDER_TYPE(T, BIEngine::PythonStateManager::RawPtrWrapper<T>);
+PYBIND11_DECLARE_HOLDER_TYPE(T, BIEngine::SharedPtr<T>);
+
+// Only needed if the type's `.get()` goes by another name
+namespace PYBIND11_NAMESPACE {
+namespace detail {
+template <typename T>
+struct holder_helper<BIEngine::SharedPtr<T>> { // <-- specialization
+
+   static const T* get(const BIEngine::SharedPtr<T>& p) { return p.Get(); }
+};
+} // namespace detail
+} // namespace PYBIND11_NAMESPACE

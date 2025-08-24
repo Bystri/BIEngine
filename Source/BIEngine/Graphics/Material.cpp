@@ -2,7 +2,7 @@
 
 namespace BIEngine {
 
-Material::Material(std::shared_ptr<ShaderProgram> pShader)
+Material::Material(SharedPtr<ShaderProgram> pShader)
    : m_isDoubleSided(false),
      m_uniformBools(), m_uniformInts(), m_uniformFloats(), m_uniformColorsRgb(), m_textures(),
      m_renderState(), m_pShaderProgram(pShader)
@@ -34,7 +34,7 @@ void Material::SetColorRgba(const String& name, const ColorRgba& color)
    m_uniformColorsRgba[name] = color;
 }
 
-void Material::AddTexture(const String& name, int slotId, std::shared_ptr<Texture> pTexture)
+void Material::AddTexture(const String& name, int slotId, SharedPtr<Texture> pTexture)
 {
    m_uniformInts[name] = slotId;
    m_textures.PushBack({slotId, pTexture});

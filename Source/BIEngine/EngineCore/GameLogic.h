@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../StdLib/SharedPtr.h"
 #include "../Actors/ActorFactory.h"
 #include "../UserInterface/HumanView.h"
 #include "../Physics/Physics2D.h"
@@ -12,7 +13,7 @@ class GameLogic {
    friend class GameApp;
 
 public:
-   using ActorMap = HashMap<ActorId, std::shared_ptr<Actor>>;
+   using ActorMap = HashMap<ActorId, SharedPtr<Actor>>;
 
    GameLogic();
    virtual ~GameLogic();
@@ -20,9 +21,9 @@ public:
    GameLogic(const GameLogic& orig) = delete;
    GameLogic& operator=(const GameLogic& rhs) = delete;
 
-   std::shared_ptr<IGamePhysics2D> GetGamePhysics2D() const { return m_pPhysics2D; }
+   SharedPtr<IGamePhysics2D> GetGamePhysics2D() const { return m_pPhysics2D; }
 
-   std::shared_ptr<IGamePhysics3D> GetGamePhysics3D() const { return m_pPhysics3D; }
+   SharedPtr<IGamePhysics3D> GetGamePhysics3D() const { return m_pPhysics3D; }
 
    UniquePtr<NavWorld>& GetNavWorld() { return m_pNavWorld; }
 
@@ -34,21 +35,21 @@ public:
 
    bool IsLevelLoaded() const { return m_bIsLevelLoaded; };
 
-   std::shared_ptr<Actor> CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition = nullptr, const glm::vec3* const pRotation = nullptr);
+   SharedPtr<Actor> CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition = nullptr, const glm::vec3* const pRotation = nullptr);
    // Принимает на вход XML-структуру актера, компоненты в котором будут заменены или добавлены.
    void ModifyActor(ActorId actorId, tinyxml2::XMLElement* pOverrides);
    // Является ответчиком на запрос об уничтожении актера
    void RequestDestroyActorDelegate(IEventDataPtr pEventData);
    virtual void DestroyActor(const ActorId actorId);
 
-   virtual void AddGameView(std::shared_ptr<IGameView> pView);
-   virtual void RemoveGameView(std::shared_ptr<IGameView> pView);
+   virtual void AddGameView(SharedPtr<IGameView> pView);
+   virtual void RemoveGameView(SharedPtr<IGameView> pView);
 
    virtual void OnUpdate(GameTimer& gt);
    virtual void OnRender(const GameTimer& gt);
    virtual void OnRenderDebug(const GameTimer& gt);
 
-   std::shared_ptr<Actor> GetActor(ActorId id) const;
+   SharedPtr<Actor> GetActor(ActorId id) const;
 
    int GetNumActors() const { return m_actors.Size(); };
 
@@ -74,8 +75,8 @@ protected:
    ActorMap m_actors;
    ActorFactory* m_pActorFactory;
 
-   std::shared_ptr<IGamePhysics2D> m_pPhysics2D;
-   std::shared_ptr<IGamePhysics3D> m_pPhysics3D;
+   SharedPtr<IGamePhysics2D> m_pPhysics2D;
+   SharedPtr<IGamePhysics3D> m_pPhysics3D;
    UniquePtr<NavWorld> m_pNavWorld;
 };
 

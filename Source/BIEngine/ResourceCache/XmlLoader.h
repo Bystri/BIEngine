@@ -12,7 +12,7 @@ class XmlExtraData : public IResourceExtraData {
 
 public:
    XmlExtraData()
-      : m_xmlDoc(){};
+      : m_xmlDoc() {};
 
    virtual ~XmlExtraData() {}
 
@@ -34,7 +34,7 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize) { return 0; }
 
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle);
 };
 
 } // namespace BIEngine

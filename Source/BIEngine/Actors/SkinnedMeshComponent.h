@@ -2,8 +2,9 @@
 
 #include <glm/glm.hpp>
 
-#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
+#include "../StdLib/SharedPtr.h"
+#include "../StdLib/UniquePtr.h"
 #include "../Renderer/Skeleton.h"
 
 namespace BIEngine {
@@ -33,8 +34,8 @@ private:
    String m_matPath;
    String m_rootActorPath;
 
-   std::shared_ptr<SkinnedMesh> m_pMesh;
-   std::shared_ptr<Material> m_pMaterial;
+   SharedPtr<SkinnedMesh> m_pMesh;
+   SharedPtr<Material> m_pMaterial;
    Actor* m_pSkeletonRootActor;
 };
 

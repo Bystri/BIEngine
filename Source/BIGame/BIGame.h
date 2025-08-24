@@ -1,13 +1,14 @@
 ﻿#pragma once
 
 #include "../BIEngine/EngineCore/BIEngine.h"
+#include "../BIEngine/StdLib/SharedPtr.h"
 
 #include "BIScriptExports.h"
 #include "BICameraManager.h"
 
 class BIGameApp : public BIEngine::GameApp {
 public:
-   explicit BIGameApp(std::shared_ptr<BIEngine::GameLogic> pGameLogic);
+   explicit BIGameApp(BIEngine::SharedPtr<BIEngine::GameLogic> pGameLogic);
    virtual ~BIGameApp();
 
    virtual bool Init();
@@ -39,5 +40,5 @@ public:
 
 private:
    BIEngine::UniquePtr<BICameraManager> m_pCameraManager;
-   std::shared_ptr<BIGameHumanView> m_pHumanView;
+   BIEngine::SharedPtr<BIGameHumanView> m_pHumanView;
 };

@@ -9,7 +9,7 @@ namespace py = pybind11;
 
 PYBIND11_EMBEDDED_MODULE(BIEScene, m)
 {
-   py::class_<BIEngine::Camera, std::shared_ptr<BIEngine::Camera>>(m, "Camera")
+   py::class_<BIEngine::Camera, BIEngine::SharedPtr<BIEngine::Camera>>(m, "Camera")
       .def("GetPosition", &BIEngine::Camera::GetPosition)
       .def("GetForward", &BIEngine::Camera::GetForward)
       .def("GetUp", &BIEngine::Camera::GetUp)

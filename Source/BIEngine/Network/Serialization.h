@@ -4,8 +4,8 @@
 #include <cstdlib>
 #include <cstdint>
 #include <algorithm>
-#include <memory>
 
+#include "../StdLib/SharedPtr.h"
 #include "../StdLib/String.h"
 
 namespace BIEngine {
@@ -119,7 +119,7 @@ public:
    }
 
    // get a pointer to the data in the stream
-   const std::shared_ptr<char> GetBufferPtr() const { return m_pBuffer; }
+   const SharedPtr<char> GetBufferPtr() const { return m_pBuffer; }
 
    uint32_t GetLength() const { return m_head; }
 
@@ -141,14 +141,14 @@ private:
    void reallocBuffer(uint32_t newLength);
 
 private:
-   std::shared_ptr<char> m_pBuffer;
+   SharedPtr<char> m_pBuffer;
    uint32_t m_head;
    uint32_t m_capacity;
 };
 
 class InputMemoryStream {
 public:
-   InputMemoryStream(std::shared_ptr<char> pBuffer, uint32_t byteCount)
+   InputMemoryStream(SharedPtr<char> pBuffer, uint32_t byteCount)
       : m_pBuffer(pBuffer), m_head(0), m_capacity(byteCount)
    {
    }
@@ -169,7 +169,7 @@ public:
    }
 
 private:
-   std::shared_ptr<char> m_pBuffer;
+   SharedPtr<char> m_pBuffer;
    uint32_t m_head;
    uint32_t m_capacity;
 };
@@ -178,7 +178,7 @@ class OutputMemoryBitStream {
 public:
    OutputMemoryBitStream() { reallocBuffer(256); }
 
-   std::shared_ptr<char> GetBufferPtr() const { return m_pBuffer; }
+   SharedPtr<char> GetBufferPtr() const { return m_pBuffer; }
 
    uint32_t GetBitLength() const { return m_bitHead; }
 
@@ -193,21 +193,21 @@ private:
    void reallocBuffer(uint32_t newBitCapacity);
 
 private:
-   std::shared_ptr<char> m_pBuffer;
+   SharedPtr<char> m_pBuffer;
    uint32_t m_bitHead = 0u;
    uint32_t m_bitCapacity = 0u;
 };
 
 class InputMemoryBitStream {
 public:
-   InputMemoryBitStream(std::shared_ptr<char> pBuffer, uint32_t bitCount)
+   InputMemoryBitStream(SharedPtr<char> pBuffer, uint32_t bitCount)
       : m_pBuffer(pBuffer),
         m_bitCapacity(bitCount),
         m_bitHead(0)
    {
    }
 
-   const std::shared_ptr<char> GetBufferPtr() const { return m_pBuffer; }
+   const SharedPtr<char> GetBufferPtr() const { return m_pBuffer; }
 
    uint32_t GetRemainingBitCount() const { return m_bitCapacity - m_bitHead; }
 
@@ -223,7 +223,7 @@ public:
    void ReadBytes(void* outData, uint32_t byteCount) { ReadBits(outData, byteCount << 3); }
 
 private:
-   std::shared_ptr<char> m_pBuffer;
+   SharedPtr<char> m_pBuffer;
    uint32_t m_bitHead;
    uint32_t m_bitCapacity;
 };

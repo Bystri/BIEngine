@@ -18,10 +18,10 @@ ImageExtraData::~ImageExtraData()
    stbi_image_free(m_pData);
 }
 
-bool ImageResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool ImageResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
    // Создаем объект текстуры
-   std::shared_ptr<ImageExtraData> pExtra = std::make_shared<ImageExtraData>();
+   SharedPtr<ImageExtraData> pExtra = MakeShared<ImageExtraData>();
 
    // Загружаем изображение
    int width, height, nrChannels;

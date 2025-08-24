@@ -21,10 +21,10 @@ public:
 
    virtual String ToString() override { return "TextureData"; }
 
-   std::shared_ptr<Texture2D> GetTexture() const { return m_pTexture; }
+   SharedPtr<Texture2D> GetTexture() const { return m_pTexture; }
 
 protected:
-   std::shared_ptr<Texture2D> m_pTexture;
+   SharedPtr<Texture2D> m_pTexture;
 };
 
 class TextureResourceLoader : public IResourceLoader {
@@ -35,7 +35,7 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* rawBuffer, unsigned int rawSize) { return 0u; }
 
-   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
+   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle);
 
    virtual String GetPattern() { return "*.bitf"; }
 };

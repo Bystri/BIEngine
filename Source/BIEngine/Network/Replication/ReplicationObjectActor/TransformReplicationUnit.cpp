@@ -4,7 +4,7 @@
 
 namespace BIEngine {
 
-void TransformReplicationUnit::Init(std::shared_ptr<Actor> pActor)
+void TransformReplicationUnit::Init(SharedPtr<Actor> pActor)
 {
    m_pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
 }

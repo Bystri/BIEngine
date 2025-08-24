@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
+#include "../StdLib/SharedPtr.h"
+#include "../StdLib/UniquePtr.h"
 #include "../Graphics/Animator.h"
 #include "../ProcessManager/Process.h"
 
@@ -28,9 +29,9 @@ public:
    void Stop();
 
 private:
-   HashMap<String, std::shared_ptr<Animation>> m_animations;
+   HashMap<String, SharedPtr<Animation>> m_animations;
    HashMap<String, String> m_animationPaths;
-   std::shared_ptr<Animator> m_pAnimator;
+   SharedPtr<Animator> m_pAnimator;
 };
 
 static UniquePtr<ActorComponent> CreateAnimatorComponent()

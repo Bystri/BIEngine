@@ -7,7 +7,7 @@ namespace BIEngine {
 
 class SkyboxGraphicsTechnique : public IGraphicsTechnique {
 public:
-   explicit SkyboxGraphicsTechnique(std::shared_ptr<Skybox> pSkybox)
+   explicit SkyboxGraphicsTechnique(SharedPtr<Skybox> pSkybox)
       : IGraphicsTechnique(),
         m_pSkybox(pSkybox)
    {
@@ -16,7 +16,7 @@ public:
    void OnRender(Scene* const pScene, RenderItemsStorage* const pStorage) override;
 
 private:
-   std::shared_ptr<Skybox> m_pSkybox;
+   SharedPtr<Skybox> m_pSkybox;
 };
 
 } // namespace BIEngine

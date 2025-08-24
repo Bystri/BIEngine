@@ -8,7 +8,7 @@ bool BIGameController::OnPointerMove(const Point& mousePos, const int radius)
 {
    m_currentPointerPos = mousePos;
 
-   std::shared_ptr<EvtData_OnPointerMove> pEvent = std::make_shared<EvtData_OnPointerMove>(0, m_currentPointerPos);
+   BIEngine::SharedPtr<EvtData_OnPointerMove> pEvent = BIEngine::MakeShared<EvtData_OnPointerMove>(0, m_currentPointerPos);
    BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
    return true;
@@ -65,7 +65,7 @@ bool BIGameController::OnKeyDown(int key, int scancode)
    // Обновляем таблицу клавиш
    m_isKeyPressed[key] = true;
 
-   std::shared_ptr<EvtData_OnKeyDown> pEvent = std::make_shared<EvtData_OnKeyDown>(0, static_cast<EvtData_OnKeyEvent::Key>(key));
+   BIEngine::SharedPtr<EvtData_OnKeyDown> pEvent = BIEngine::MakeShared<EvtData_OnKeyDown>(0, static_cast<EvtData_OnKeyEvent::Key>(key));
    BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
    return true;
@@ -81,7 +81,7 @@ bool BIGameController::OnKeyUp(int key, int scancode)
    // Обновляем таблицу клавиш
    m_isKeyPressed[key] = false;
 
-   std::shared_ptr<EvtData_OnKeyUp> pEvent = std::make_shared<EvtData_OnKeyUp>(0, static_cast<EvtData_OnKeyEvent::Key>(key));
+   BIEngine::SharedPtr<EvtData_OnKeyUp> pEvent = BIEngine::MakeShared<EvtData_OnKeyUp>(0, static_cast<EvtData_OnKeyEvent::Key>(key));
    BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
    return true;

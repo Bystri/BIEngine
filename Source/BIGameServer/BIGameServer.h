@@ -8,7 +8,7 @@
 
 class BIGameServerApp : public BIEngine::GameApp {
 public:
-   explicit BIGameServerApp(std::shared_ptr<BIEngine::GameLogic> pGameLogic);
+   explicit BIGameServerApp(BIEngine::SharedPtr<BIEngine::GameLogic> pGameLogic);
    virtual ~BIGameServerApp();
 
    virtual bool Init();

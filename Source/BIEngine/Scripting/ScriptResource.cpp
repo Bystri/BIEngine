@@ -4,7 +4,7 @@
 
 namespace BIEngine {
 
-bool ScriptResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool ScriptResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
    if (rawSize <= 0)
       return false;

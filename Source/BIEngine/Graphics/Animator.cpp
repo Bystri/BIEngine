@@ -24,7 +24,7 @@ void Animator::Update(float dt)
    }
 }
 
-void Animator::PlayAnimation(std::shared_ptr<Animation> pAnimation)
+void Animator::PlayAnimation(SharedPtr<Animation> pAnimation)
 {
    m_pCurrentAnimation = pAnimation;
    m_currentTime = 0.0f;
@@ -41,7 +41,7 @@ void Animator::calculateActorTransform(Actor* pActor)
    }
 
    for (const auto& child : pActor->GetChildren()) {
-      calculateActorTransform(child.get());
+      calculateActorTransform(child.Get());
    }
 }
 

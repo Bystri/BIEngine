@@ -24,7 +24,7 @@ bool MeshComponent::Init(tinyxml2::XMLElement* pData)
       const char* meshPath;
       pMeshElement->QueryStringAttribute("path", &meshPath);
       m_meshPath = meshPath;
-      auto meshData = std::static_pointer_cast<MeshExtraData>(ResCache::Get()->GetHandle(m_meshPath)->GetExtra());
+      auto meshData = StaticPointerCast<MeshExtraData>(ResCache::Get()->GetHandle(m_meshPath)->GetExtra());
 
       if (meshData == nullptr) {
          Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh for Actor with id: " + ToString(GetOwner()->GetId()));
@@ -39,7 +39,7 @@ bool MeshComponent::Init(tinyxml2::XMLElement* pData)
       const char* matPath;
       pMatElement->QueryStringAttribute("path", &matPath);
       m_matPath = matPath;
-      auto matData = std::static_pointer_cast<MaterialData>(ResCache::Get()->GetHandle(m_matPath)->GetExtra());
+      auto matData = StaticPointerCast<MaterialData>(ResCache::Get()->GetHandle(m_matPath)->GetExtra());
 
       if (matData == nullptr) {
          Logger::WriteLog(Logger::LogType::ERROR, "Error while loading mesh material for Actor with id: " + ToString(GetOwner()->GetId()));
@@ -54,7 +54,7 @@ bool MeshComponent::Init(tinyxml2::XMLElement* pData)
 
 void MeshComponent::OnRenderObject(const GameTimer& gt)
 {
-   std::shared_ptr<HumanView> pHumanView = g_pApp->TryGetHumanView(0);
+   SharedPtr<HumanView> pHumanView = g_pApp->TryGetHumanView(0);
 
    if (pHumanView == nullptr) {
       return;

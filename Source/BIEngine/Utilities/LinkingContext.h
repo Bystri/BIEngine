@@ -1,7 +1,6 @@
 #pragma once
 
-#include <memory>
-
+#include "../StdLib/SharedPtr.h"
 #include "../StdLib/HashMap.h"
 
 namespace BIEngine {
@@ -10,7 +9,7 @@ template <class ObjectType>
 class LinkingContext {
 
 public:
-   using IdToObjectMap = HashMap<uint32_t, std::shared_ptr<ObjectType>>;
+   using IdToObjectMap = HashMap<uint32_t, SharedPtr<ObjectType>>;
 
 public:
    LinkingContext()
@@ -18,7 +17,7 @@ public:
    {
    }
 
-   uint32_t GetId(std::shared_ptr<ObjectType> pObject, bool shouldCreateIfNotFound)
+   uint32_t GetId(SharedPtr<ObjectType> pObject, bool shouldCreateIfNotFound)
    {
       auto it = m_objectToIdMap.Find(pObject);
       if (it != m_objectToIdMap.End()) {
@@ -34,20 +33,20 @@ public:
       return 0u;
    }
 
-   void AddObj(std::shared_ptr<ObjectType> pObject, uint32_t Id)
+   void AddObj(SharedPtr<ObjectType> pObject, uint32_t Id)
    {
       m_IdToObjectMap[Id] = pObject;
       m_objectToIdMap[pObject] = Id;
    }
 
-   void RemoveObj(std::shared_ptr<ObjectType> pObject)
+   void RemoveObj(SharedPtr<ObjectType> pObject)
    {
       uint32_t id = m_objectToIdMap[pObject];
       m_objectToIdMap.Erase(pObject);
       m_IdToObjectMap.Erase(id);
    }
 
-   std::shared_ptr<ObjectType> GetObj(uint32_t id)
+   SharedPtr<ObjectType> GetObj(uint32_t id)
    {
       auto it = m_IdToObjectMap.Find(id);
       if (it != m_IdToObjectMap.End()) {
@@ -59,7 +58,7 @@ public:
 
 private:
    IdToObjectMap m_IdToObjectMap;
-   HashMap<std::shared_ptr<ObjectType>, uint32_t> m_objectToIdMap;
+   HashMap<SharedPtr<ObjectType>, uint32_t> m_objectToIdMap;
    uint32_t m_nextId;
 };
 

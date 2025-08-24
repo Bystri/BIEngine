@@ -1,13 +1,12 @@
 ﻿#pragma once
 
-#include <memory>
-
 #include <glm/glm.hpp>
 
 #include "../Actors/Actor.h"
 #include "../Utilities/GameTimer.h"
 #include "../ResourceCache/XmlLoader.h"
 #include "../StdLib/String.h"
+#include "../StdLib/SharedPtr.h"
 
 namespace BIEngine {
 
@@ -24,7 +23,7 @@ public:
    // Служебные функции
    virtual bool Initialize() = 0;
    virtual void SetGravity(const glm::vec2& gravity) = 0;
-   virtual void SyncVisibleScene(const HashMap<ActorId, std::shared_ptr<Actor>>& pActorMap) = 0;
+   virtual void SyncVisibleScene(const HashMap<ActorId, SharedPtr<Actor>>& pActorMap) = 0;
    virtual void OnUpdate(const GameTimer& gt) = 0;
 
    // Инициализация физических объектов

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <memory>
-
 #include <DetourNavMeshQuery.h>
+
+#include "../StdLib/SharedPtr.h"
 
 class dtNavMesh;
 class dtCrowd;
@@ -59,10 +59,10 @@ public:
 
    dtNavMesh* GetNavMesh() { return m_pNavMesh; }
 
-   void SetInputGeom(std::shared_ptr<NavMeshInputGeometry> pInputGeom);
+   void SetInputGeom(SharedPtr<NavMeshInputGeometry> pInputGeom);
 
 protected:
-   std::shared_ptr<NavMeshInputGeometry> m_pGeom;
+   SharedPtr<NavMeshInputGeometry> m_pGeom;
    dtNavMesh* m_pNavMesh;
 
    unsigned char m_navMeshDrawFlags;

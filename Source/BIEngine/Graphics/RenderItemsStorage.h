@@ -1,13 +1,12 @@
 #pragma once
 
 #include <queue>
-#include <memory>
-
 #include <glm/glm.hpp>
 
 #include "Model.h"
 #include "../Actors/Actor.h"
 #include "../Renderer/Color.h"
+#include "../StdLib/SharedPtr.h"
 
 namespace BIEngine {
 
@@ -17,7 +16,7 @@ public:
       ActorId actorId;
       unsigned int VAO;
       std::size_t IndicesSize;
-      std::shared_ptr<Material> pMaterial;
+      SharedPtr<Material> pMaterial;
       glm::mat4 ModelTransform;
    };
 
@@ -28,7 +27,7 @@ public:
 
       // Shadow data
       glm::mat4 LightMatr;
-      std::shared_ptr<Texture2D> pShadowMap;
+      SharedPtr<Texture2D> pShadowMap;
    };
 
    struct PointLightItem {
@@ -37,7 +36,7 @@ public:
       ColorRgb color = ColorRgb(0.75f, 0.75f, 0.05f);
 
       // Shadow data
-      std::shared_ptr<CubemapTexture> pShadowMap;
+      SharedPtr<CubemapTexture> pShadowMap;
    };
 
    struct SpotLightItem {

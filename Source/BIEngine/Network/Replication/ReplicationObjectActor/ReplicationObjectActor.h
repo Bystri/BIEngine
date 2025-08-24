@@ -17,7 +17,7 @@ public:
    {
    }
 
-   virtual std::shared_ptr<Actor> ConstructReplicatedObject(bool isMaster) override;
+   virtual SharedPtr<Actor> ConstructReplicatedObject(bool isMaster) override;
 
 private:
    String m_masterActorFilePath;

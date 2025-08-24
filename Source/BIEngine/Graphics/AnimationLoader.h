@@ -21,10 +21,10 @@ public:
 
    virtual String ToString() override { return "AnimationData"; }
 
-   std::shared_ptr<Animation> GetAnimation() const { return m_pAnimation; }
+   SharedPtr<Animation> GetAnimation() const { return m_pAnimation; }
 
 protected:
-   std::shared_ptr<Animation> m_pAnimation;
+   SharedPtr<Animation> m_pAnimation;
 };
 
 class AnimationResourceLoader : public IResourceLoader {
@@ -35,7 +35,7 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* rawBuffer, unsigned int rawSize) { return 0u; }
 
-   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle);
+   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle);
 
    virtual String GetPattern() { return "*.bi3dam"; }
 };

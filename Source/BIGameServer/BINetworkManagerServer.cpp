@@ -56,7 +56,7 @@ void BINetworkManagerServer::HandlePacketFromNewClient(BIEngine::InputMemoryBitS
       BIEngine::String name;
       BIEngine::Deserialize(inputStream, name);
 
-      BIEngine::PeerPtr newClient = std::make_shared<BIEngine::Peer>(nextClientId, fromAddress);
+      BIEngine::PeerPtr newClient = BIEngine::MakeShared<BIEngine::Peer>(nextClientId, fromAddress);
       ++nextClientId;
 
       BIEngine::ObjectReplicationManagerMaster::Get()->AddClient(newClient);

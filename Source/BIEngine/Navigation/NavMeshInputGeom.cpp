@@ -22,7 +22,7 @@ NavMeshInputGeometry::~NavMeshInputGeometry()
    }
 }
 
-bool NavMeshInputGeometry::SetPreparedMesh(std::shared_ptr<NavInputMeshesManager> mesh)
+bool NavMeshInputGeometry::SetPreparedMesh(SharedPtr<NavInputMeshesManager> mesh)
 {
    if (m_pMesh) {
       delete m_pChunkyMesh;

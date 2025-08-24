@@ -31,7 +31,7 @@ const char* RESOURCE_CACHE_ZIP_FILE_NAME = "Assets.zip"; // Имя архива-
 
 const char* SCRIPT_PREINIT_FILE = "scripts/init.py";
 
-GameApp::GameApp(std::shared_ptr<GameLogic> pGameLogic)
+GameApp::GameApp(SharedPtr<GameLogic> pGameLogic)
    : m_pGameLogic(pGameLogic)
 {
    g_pApp = this;
@@ -44,29 +44,29 @@ GameApp::~GameApp()
 bool GameApp::Init()
 {
    // Инициализация кэша ресурсов
-   std::shared_ptr<IResourceFile> pZipFile;
+   SharedPtr<IResourceFile> pZipFile;
    if (m_options.useDevelopmentAssets)
-      pZipFile = std::make_shared<ResourceDirFile>(RESOURCE_CACHE_DIR_FILE_NAME);
+      pZipFile = MakeShared<ResourceDirFile>(RESOURCE_CACHE_DIR_FILE_NAME);
    else
-      pZipFile = std::make_shared<ResourceZipFile>(RESOURCE_CACHE_ZIP_FILE_NAME);
+      pZipFile = MakeShared<ResourceZipFile>(RESOURCE_CACHE_ZIP_FILE_NAME);
 
    ResCache::Create(RESOURCE_CACHE_SIZE_MB, pZipFile);
 
-   ResCache::Get()->RegisterLoader(std::make_shared<XmlResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<JpgResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<PngResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<VertexShaderResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<FragmentShaderResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<GeometryShaderResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<UtilityShaderResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<ShaderProgramResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<ModelResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<SkinnedMeshResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<MeshResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<AnimationResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<ScriptResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<TextureResourceLoader>());
-   ResCache::Get()->RegisterLoader(std::make_shared<MaterialResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<XmlResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<JpgResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<PngResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<VertexShaderResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<FragmentShaderResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<GeometryShaderResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<UtilityShaderResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<ShaderProgramResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<ModelResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<SkinnedMeshResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<MeshResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<AnimationResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<ScriptResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<TextureResourceLoader>());
+   ResCache::Get()->RegisterLoader(MakeShared<MaterialResourceLoader>());
    // ResCache::Get()->RegisterLoader(CreateWavResourceLoader());
 
    // Создаем экземпляр одиночки нашей системы скриптов
@@ -83,7 +83,7 @@ bool GameApp::Init()
    return true;
 }
 
-std::shared_ptr<HumanView> GameApp::TryGetHumanView(unsigned int playerId)
+SharedPtr<HumanView> GameApp::TryGetHumanView(unsigned int playerId)
 {
    unsigned int currentPlayerId = 0;
    for (GameViewList::Iterator i = m_pGameLogic->m_gameViews.Begin(); i != m_pGameLogic->m_gameViews.End(); ++i) {
@@ -93,11 +93,11 @@ std::shared_ptr<HumanView> GameApp::TryGetHumanView(unsigned int playerId)
             continue;
          }
 
-         return std::static_pointer_cast<HumanView>(*i);
+         return StaticPointerCast<HumanView>(*i);
       }
    }
 
-   return std::shared_ptr<HumanView>();
+   return SharedPtr<HumanView>();
 }
 
 void GameApp::Close()

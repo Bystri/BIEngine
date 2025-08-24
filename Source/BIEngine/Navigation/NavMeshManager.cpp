@@ -17,7 +17,7 @@ namespace BIEngine {
 NavMeshManager::NavMeshManager()
    : m_pNavMesh(nullptr), m_pNavQuery(nullptr), m_bRenderNavmesh(false)
 {
-   m_pNavMeshGenerator = std::make_shared<NavSoloMeshGenerator>();
+   m_pNavMeshGenerator = MakeShared<NavSoloMeshGenerator>();
 
    m_pNavQuery = dtAllocNavMeshQuery();
 
@@ -31,7 +31,7 @@ NavMeshManager::~NavMeshManager()
    EventManager::Get()->RemoveListener(m_handleActorDestroyedDelegateHandler);
 }
 
-static bool SaveGeom(const String& filepath, std::shared_ptr<NavMeshInputGeometry> pGeom)
+static bool SaveGeom(const String& filepath, SharedPtr<NavMeshInputGeometry> pGeom)
 {
    FILE* fp = fopen(filepath.CStr(), "w");
    if (!fp) {
@@ -316,7 +316,7 @@ dtNavMeshQuery* NavMeshManager::GetNavMeshQuery()
 
 bool NavMeshManager::generateNavmesh(const NavMeshBuildSettings& settings)
 {
-   std::shared_ptr<NavMeshInputGeometry> pGeom = prepareNavGeom();
+   SharedPtr<NavMeshInputGeometry> pGeom = prepareNavGeom();
    SaveGeom("geom.obj", pGeom);
    m_pNavMeshGenerator->SetInputGeom(pGeom);
 
@@ -332,9 +332,9 @@ bool NavMeshManager::generateNavmesh(const NavMeshBuildSettings& settings)
 
 void NavMeshManager::HandleActorAdded(IEventDataPtr pEventData)
 {
-   std::shared_ptr<EvtData_Actor_Created> pCastEventData = std::static_pointer_cast<EvtData_Actor_Created>(pEventData);
+   SharedPtr<EvtData_Actor_Created> pCastEventData = StaticPointerCast<EvtData_Actor_Created>(pEventData);
 
-   std::shared_ptr<Actor> pActor = g_pApp->m_pGameLogic->GetActor(pCastEventData->GetId());
+   SharedPtr<Actor> pActor = g_pApp->m_pGameLogic->GetActor(pCastEventData->GetId());
 
    if (!pActor) {
       return;
@@ -345,11 +345,11 @@ void NavMeshManager::HandleActorAdded(IEventDataPtr pEventData)
 
 void NavMeshManager::HandleActorDestroyed(IEventDataPtr pEventData)
 {
-   std::shared_ptr<EvtData_Destroy_Actor> pCastEventData = std::static_pointer_cast<EvtData_Destroy_Actor>(pEventData);
+   SharedPtr<EvtData_Destroy_Actor> pCastEventData = StaticPointerCast<EvtData_Destroy_Actor>(pEventData);
    TryRemoveActor(pCastEventData->GetId());
 }
 
-void NavMeshManager::TryAddActor(std::shared_ptr<Actor> pActor)
+void NavMeshManager::TryAddActor(SharedPtr<Actor> pActor)
 {
    std::shared_ptr<BoxRenderComponent> pBoxRenderComponent = pActor->GetComponent<BoxRenderComponent>(BoxRenderComponent::g_CompId).lock();
 
@@ -361,24 +361,24 @@ void NavMeshManager::TryAddActor(std::shared_ptr<Actor> pActor)
 void NavMeshManager::TryRemoveActor(ActorId id)
 {
    for (auto itr = m_actors.Begin(); itr != m_actors.End(); ++itr) {
-      if (itr->get()->GetId() == id) {
+      if (itr->Get()->GetId() == id) {
          m_actors.Erase(itr);
          return;
       }
    }
 }
 
-static void navMeshInputGeomPrepareFakeMesh(std::shared_ptr<NavInputMeshesManager> mesh)
+static void navMeshInputGeomPrepareFakeMesh(SharedPtr<NavInputMeshesManager> mesh)
 {
-   std::shared_ptr<Mesh> pMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateGrid(2.0f, 2.0f, 2, 2));
+   SharedPtr<Mesh> pMesh = MakeShared<Mesh>(MeshGeometryGenerator::CreateGrid(2.0f, 2.0f, 2, 2));
    mesh->AddMesh(glm::mat4(1.0f), pMesh);
 }
 
-std::shared_ptr<NavMeshInputGeometry> NavMeshManager::prepareNavGeom()
+SharedPtr<NavMeshInputGeometry> NavMeshManager::prepareNavGeom()
 {
-   std::shared_ptr<NavMeshInputGeometry> pGeom = std::make_shared<NavMeshInputGeometry>();
+   SharedPtr<NavMeshInputGeometry> pGeom = MakeShared<NavMeshInputGeometry>();
 
-   std::shared_ptr<NavInputMeshesManager> pMeshesManager = std::make_shared<NavInputMeshesManager>();
+   SharedPtr<NavInputMeshesManager> pMeshesManager = MakeShared<NavInputMeshesManager>();
 
    for (int i = 0; i < m_actors.Size(); ++i) {
       std::shared_ptr<TransformComponent> pTransformComponent = m_actors[i]->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
@@ -386,7 +386,7 @@ std::shared_ptr<NavMeshInputGeometry> NavMeshManager::prepareNavGeom()
       std::shared_ptr<Physics3DComponent> pPhysicsComponent = m_actors[i]->GetComponent<Physics3DComponent>(Physics3DComponent::g_CompId).lock();
 
       if (pTransformComponent && pBoxRenderComponent && pPhysicsComponent && pPhysicsComponent->GetBodyType() == IGamePhysics3D::BodyType::STATIC) {
-         const DynamicArray<std::shared_ptr<ModelMesh>>& modelMeshes = pBoxRenderComponent->GetModel()->GetMeshes();
+         const DynamicArray<SharedPtr<ModelMesh>>& modelMeshes = pBoxRenderComponent->GetModel()->GetMeshes();
          const glm::mat4 transformMatrix = pTransformComponent->GetWorldTransformMatrix();
 
          for (int j = 0; j < modelMeshes.Size(); ++j) {

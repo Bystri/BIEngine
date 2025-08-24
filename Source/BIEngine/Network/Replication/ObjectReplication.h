@@ -37,7 +37,7 @@ public:
 template <class ReplicatedObject>
 class ReplicationObjectT : public ReplicationObject {
 public:
-   using ReplicationUnitArray = DynamicArray<std::shared_ptr<ReplicationUnit<ReplicatedObject>>>;
+   using ReplicationUnitArray = DynamicArray<SharedPtr<ReplicationUnit<ReplicatedObject>>>;
 
    ReplicationObjectT(ReplicationUnitArray replicationUnits)
       : m_isDirtyMask(0u), m_replicationUnits(std::move(replicationUnits))
@@ -63,7 +63,7 @@ public:
       }
    }
 
-   std::shared_ptr<ReplicatedObject> GetReplicatedObject() const { return m_pReplicatedObject; }
+   SharedPtr<ReplicatedObject> GetReplicatedObject() const { return m_pReplicatedObject; }
 
    bool IsDirty() const { return m_isDirtyMask != 0u; }
 
@@ -97,14 +97,14 @@ public:
    }
 
 protected:
-   virtual std::shared_ptr<ReplicatedObject> ConstructReplicatedObject(bool isMaster) = 0;
+   virtual SharedPtr<ReplicatedObject> ConstructReplicatedObject(bool isMaster) = 0;
 
 private:
    uint32_t m_isDirtyMask;
 
    ReplicationUnitArray m_replicationUnits;
 
-   std::shared_ptr<ReplicatedObject> m_pReplicatedObject;
+   SharedPtr<ReplicatedObject> m_pReplicatedObject;
 };
 
 } // namespace BIEngine

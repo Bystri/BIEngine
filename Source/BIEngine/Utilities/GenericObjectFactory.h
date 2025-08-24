@@ -1,20 +1,19 @@
 #pragma once
 
-#include <memory>
-
+#include "../StdLib/SharedPtr.h"
 #include "../StdLib/HashMap.h"
 
 namespace BIEngine {
 
 template <class BaseType, class SubType>
-std::shared_ptr<BaseType> GenericObjectCreationFunction()
+SharedPtr<BaseType> GenericObjectCreationFunction()
 {
-   return std::make_shared<SubType>();
+   return MakeShared<SubType>();
 }
 
 template <class BaseClass, class IdType>
 class GenericObjectFactory {
-   using ObjectCreationFunction = std::shared_ptr<BaseClass> (*)(void);
+   using ObjectCreationFunction = SharedPtr<BaseClass> (*)(void);
 
 public:
    template <class SubClass>
@@ -29,7 +28,7 @@ public:
       return false;
    }
 
-   std::shared_ptr<BaseClass> Create(IdType id)
+   SharedPtr<BaseClass> Create(IdType id)
    {
       auto findIt = m_creationFunctions.Find(id);
       if (findIt != m_creationFunctions.End()) {

@@ -6,7 +6,7 @@
 
 PlayerManager* PlayerManager::s_pSingleton = nullptr;
 
-void Player::SetPlayableActor(std::shared_ptr<BIEngine::Actor> pActor)
+void Player::SetPlayableActor(BIEngine::SharedPtr<BIEngine::Actor> pActor)
 {
    if (m_pPlayableActor == pActor) {
       return;
@@ -15,13 +15,13 @@ void Player::SetPlayableActor(std::shared_ptr<BIEngine::Actor> pActor)
    m_pPlayableActor = pActor;
 
    if (m_pPlayableActor == nullptr) {
-       //TODO: Player actor detached; Fire event
+      // TODO: Player actor detached; Fire event
       return;
    }
 
    m_pPlayableActor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).lock()->SetPlayerId(m_id);
 
-   std::shared_ptr<EvtData_PlayerActor_Created> pEvent = std::make_shared<EvtData_PlayerActor_Created>(m_id, m_pPlayableActor->GetId());
+   BIEngine::SharedPtr<EvtData_PlayerActor_Created> pEvent = BIEngine::MakeShared<EvtData_PlayerActor_Created>(m_id, m_pPlayableActor->GetId());
    BIEngine::EventManager::Get()->QueueEvent(pEvent);
 }
 
@@ -50,11 +50,11 @@ void PlayerManager::Destroy()
    }
 }
 
-std::shared_ptr<Player> PlayerManager::CreatePlayer()
+BIEngine::SharedPtr<Player> PlayerManager::CreatePlayer()
 {
-   auto ret = std::make_shared<Player>(m_nextPlayerId++);
+   auto ret = BIEngine::MakeShared<Player>(m_nextPlayerId++);
 
-   std::shared_ptr<EvtData_Player_Created> pEvent = std::make_shared<EvtData_Player_Created>(ret);
+   BIEngine::SharedPtr<EvtData_Player_Created> pEvent = BIEngine::MakeShared<EvtData_Player_Created>(ret);
    BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
    return ret;

@@ -1,7 +1,6 @@
 #pragma once
 
-#include <memory>
-
+#include "../StdLib/SharedPtr.h"
 #include "GraphicsTechnique.h"
 #include "RenderItemsStorage.h"
 
@@ -16,7 +15,7 @@ public:
 
    bool Init();
 
-   void AddTechnique(std::shared_ptr<IGraphicsTechnique> pTechnique);
+   void AddTechnique(SharedPtr<IGraphicsTechnique> pTechnique);
 
    void OnRender(Scene* const pScene, RenderItemsStorage* const pStorage);
 
@@ -28,7 +27,7 @@ protected:
    virtual void PostRender(Scene* const pScene) {}
 
 private:
-   DynamicArray<std::shared_ptr<IGraphicsTechnique>> m_graphicsTechniques;
+   DynamicArray<SharedPtr<IGraphicsTechnique>> m_graphicsTechniques;
 };
 
 } // namespace BIEngine

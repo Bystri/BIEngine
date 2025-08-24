@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
+#include "../StdLib/SharedPtr.h"
+#include "../StdLib/UniquePtr.h"
 #include "../Renderer/Skeleton.h"
 
 namespace BIEngine {
@@ -21,10 +22,10 @@ public:
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
-   std::shared_ptr<Skeleton::BoneInfo> GetBoneInfo() const { return m_pBone; }
+   SharedPtr<Skeleton::BoneInfo> GetBoneInfo() const { return m_pBone; }
 
 private:
-   std::shared_ptr<Skeleton::BoneInfo> m_pBone;
+   SharedPtr<Skeleton::BoneInfo> m_pBone;
 };
 
 static UniquePtr<ActorComponent> CreateBoneComponent()

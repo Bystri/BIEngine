@@ -6,19 +6,19 @@
 
 class BICameraManager {
 public:
-   BICameraManager(std::shared_ptr<BIEngine::Camera> pCamera)
+   BICameraManager(BIEngine::SharedPtr<BIEngine::Camera> pCamera)
       : m_pCamera(pCamera)
    {
    }
 
    void Terminate();
 
-   void FollowActor(std::shared_ptr<BIEngine::Actor> pActor);
+   void FollowActor(BIEngine::SharedPtr<BIEngine::Actor> pActor);
 
 private:
    void TryCancelCameraFollowProc();
 
 private:
-   std::shared_ptr<BIEngine::Camera> m_pCamera;
+   BIEngine::SharedPtr<BIEngine::Camera> m_pCamera;
    std::shared_ptr<BIEngine::Process> m_pCameraFollowProc;
 };

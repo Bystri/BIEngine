@@ -11,27 +11,27 @@ namespace py = pybind11;
 
 PYBIND11_EMBEDDED_MODULE(BIEEvent, m)
 {
-   py::class_<BIEngine::BaseEventData, std::shared_ptr<BIEngine::BaseEventData>>(m, "BaseEventData")
+   py::class_<BIEngine::BaseEventData, BIEngine::SharedPtr<BIEngine::BaseEventData>>(m, "BaseEventData")
       .def(py::init<>())
       .def("GetName", &BIEngine::BaseEventData::GetName)
       .def("GetEventType", &BIEngine::BaseEventData::GetEventType);
 
-   py::class_<BIEngine::EvtData_Request_Destroy_Actor, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Request_Destroy_Actor>>(m, "EvtData_Request_Destroy_Actor")
+   py::class_<BIEngine::EvtData_Request_Destroy_Actor, BIEngine::BaseEventData, BIEngine::SharedPtr<BIEngine::EvtData_Request_Destroy_Actor>>(m, "EvtData_Request_Destroy_Actor")
       .def("GetActorId", &BIEngine::EvtData_Request_Destroy_Actor::GetActorId);
 
-   py::class_<BIEngine::EvtData_Phys2DCollision, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Phys2DCollision>>(m, "EvtData_Phys2DCollision")
+   py::class_<BIEngine::EvtData_Phys2DCollision, BIEngine::BaseEventData, BIEngine::SharedPtr<BIEngine::EvtData_Phys2DCollision>>(m, "EvtData_Phys2DCollision")
       .def("GetActorA", &BIEngine::EvtData_Phys2DCollision::GetActorA)
       .def("GetActorB", &BIEngine::EvtData_Phys2DCollision::GetActorB)
       .def("GetSumNormalForce", &BIEngine::EvtData_Phys2DCollision::GetSumNormalForce)
       .def("GetSumFrictionForce", &BIEngine::EvtData_Phys2DCollision::GetSumFrictionForce)
       .def("GetCollisionPoints", &BIEngine::EvtData_Phys2DCollision::GetCollisionPoints);
 
-   py::class_<BIEngine::EvtData_Phys3DTrigger_Enter, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Phys3DTrigger_Enter>>(m, "EvtData_Phys3DTrigger_Enter")
+   py::class_<BIEngine::EvtData_Phys3DTrigger_Enter, BIEngine::BaseEventData, BIEngine::SharedPtr<BIEngine::EvtData_Phys3DTrigger_Enter>>(m, "EvtData_Phys3DTrigger_Enter")
       .def_readonly_static("eventType", &BIEngine::EvtData_Phys3DTrigger_Enter::sk_EventType)
       .def("GetTriggerId", &BIEngine::EvtData_Phys3DTrigger_Enter::GetTriggerId)
       .def("GetOtherActor", &BIEngine::EvtData_Phys3DTrigger_Enter::GetOtherActor);
 
-   py::class_<BIEngine::EvtData_Phys3DCollision, BIEngine::BaseEventData, std::shared_ptr<BIEngine::EvtData_Phys3DCollision>>(m, "EvtData_Phys3DCollision")
+   py::class_<BIEngine::EvtData_Phys3DCollision, BIEngine::BaseEventData, BIEngine::SharedPtr<BIEngine::EvtData_Phys3DCollision>>(m, "EvtData_Phys3DCollision")
       .def("GetActorA", &BIEngine::EvtData_Phys3DCollision::GetActorA)
       .def("GetActorB", &BIEngine::EvtData_Phys3DCollision::GetActorB)
       .def("GetSumNormalForce", &BIEngine::EvtData_Phys3DCollision::GetSumNormalForce)
@@ -39,9 +39,9 @@ PYBIND11_EMBEDDED_MODULE(BIEEvent, m)
       .def("GetCollisionPoints", &BIEngine::EvtData_Phys3DCollision::GetCollisionPoints);
 
 
-   m.def("RegisterEventListener", [](BIEngine::EventType eventType, std::function<void(const std::shared_ptr<BIEngine::BaseEventData>)> callbackFunction) {
+   m.def("RegisterEventListener", [](BIEngine::EventType eventType, std::function<void(const BIEngine::SharedPtr<BIEngine::BaseEventData>)> callbackFunction) {
       auto scriptListener = [callbackFunction](BIEngine::IEventDataPtr pEvent) {
-         std::shared_ptr<BIEngine::BaseEventData> pScriptEvent = std::static_pointer_cast<BIEngine::BaseEventData>(pEvent);
+         BIEngine::SharedPtr<BIEngine::BaseEventData> pScriptEvent = BIEngine::StaticPointerCast<BIEngine::BaseEventData>(pEvent);
 
          try {
             callbackFunction(pScriptEvent);

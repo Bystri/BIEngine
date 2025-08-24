@@ -25,7 +25,7 @@ public:
    glm::vec3 GetVelocity() const;
 
 private:
-   std::shared_ptr<NavCrowd> m_pNavCrowd;
+   SharedPtr<NavCrowd> m_pNavCrowd;
    NavAgentId m_agentId;
    NavCrowd::NavAgentParams m_params;
 };

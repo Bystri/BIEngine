@@ -27,7 +27,7 @@ public:
    virtual bool Initialize() override { return true; }
 
    virtual void SetGravity(const glm::vec2& gravity) override {};
-   virtual void SyncVisibleScene(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override {};
+   virtual void SyncVisibleScene(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override {};
 
    virtual void OnUpdate(const GameTimer& gt) override {}
 
@@ -104,7 +104,7 @@ public:
    virtual void SetGravity(const glm::vec2& gravity) override;
    // Сравнивает сохраненное местоположение актеров и то местоположение, которое хранится внутри физической симуляции.
    // В случае различия, местоположение актера обновляется
-   virtual void SyncVisibleScene(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap) override;
+   virtual void SyncVisibleScene(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override;
    // Шаг симуляции
    virtual void OnUpdate(const GameTimer& gt) override;
 
@@ -190,7 +190,7 @@ Physics2D::~Physics2D()
 
 bool Physics2D::Initialize()
 {
-   auto xmlExtraData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/physics.xml")->GetExtra());
+   auto xmlExtraData = StaticPointerCast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/physics.xml")->GetExtra());
    LoadXml(xmlExtraData->GetRootElement());
 
    m_cpSpace = cpSpaceNew();
@@ -210,13 +210,13 @@ void Physics2D::SetGravity(const glm::vec2& gravity)
    cpSpaceSetGravity(m_cpSpace, grav);
 }
 
-void Physics2D::SyncVisibleScene(const HashMap<ActorId, std::shared_ptr<Actor>>& actorMap)
+void Physics2D::SyncVisibleScene(const HashMap<ActorId, SharedPtr<Actor>>& actorMap)
 {
    for (auto it = m_actorIdToRigidBody.CBegin(); it != m_actorIdToRigidBody.CEnd();
         ++it) {
       ActorId const id = it->first;
 
-      std::shared_ptr<Actor> pGameActor = actorMap.Find(id)->second;
+      SharedPtr<Actor> pGameActor = actorMap.Find(id)->second;
       if (pGameActor) {
          std::shared_ptr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
          if (pTransformComponent) {
@@ -227,7 +227,7 @@ void Physics2D::SyncVisibleScene(const HashMap<ActorId, std::shared_ptr<Actor>>&
             if (pTransformComponent->GetPosition() != pos || pTransformComponent->GetRotation().z != rot) {
                pTransformComponent->SetPosition(pos);
                pTransformComponent->SetRotation(glm::vec3(0.0f, 0.0f, rot));
-               std::shared_ptr<EvtData_Move_Actor> pEvent = std::make_shared<EvtData_Move_Actor>(id, pos, glm::vec3(0.0f, 0.0f, rot));
+               SharedPtr<EvtData_Move_Actor> pEvent = MakeShared<EvtData_Move_Actor>(id, pos, glm::vec3(0.0f, 0.0f, rot));
                EventManager::Get()->QueueEvent(pEvent);
             }
          }
@@ -594,7 +594,7 @@ void Physics2D::SendCollisionPairAddEvent(cpArbiter const* arb, cpShape const* s
          triggerBody = cpShapeGetBody(shape1);
       }
 
-      std::shared_ptr<EvtData_Phys2DTrigger_Enter> pEvent(new EvtData_Phys2DTrigger_Enter(FindActorID(triggerBody), FindActorID(otherBody)));
+      SharedPtr<EvtData_Phys2DTrigger_Enter> pEvent(new EvtData_Phys2DTrigger_Enter(FindActorID(triggerBody), FindActorID(otherBody)));
       EventManager::Get()->QueueEvent(pEvent);
    } else {
       cpBody const *body0, *body1;
@@ -620,7 +620,7 @@ void Physics2D::SendCollisionPairAddEvent(cpArbiter const* arb, cpShape const* s
          collisionPoints.EmplaceBack(pointA.x, pointA.y);
       }
 
-      IEventDataPtr pEvent = std::make_shared<EvtData_Phys2DCollision>(id0, id1, normalForce, friction, collisionPoints);
+      IEventDataPtr pEvent = MakeShared<EvtData_Phys2DCollision>(id0, id1, normalForce, friction, collisionPoints);
       EventManager::Get()->QueueEvent(pEvent);
    }
 }
@@ -639,7 +639,7 @@ void Physics2D::SendCollisionPairRemoveEvent(cpArbiter const* arb, cpShape const
          triggerBody = cpShapeGetBody(shape1);
       }
 
-      std::shared_ptr<EvtData_Phys2DTrigger_Leave> pEvent = std::make_shared<EvtData_Phys2DTrigger_Leave>(FindActorID(triggerBody), FindActorID(otherBody));
+      SharedPtr<EvtData_Phys2DTrigger_Leave> pEvent = MakeShared<EvtData_Phys2DTrigger_Leave>(FindActorID(triggerBody), FindActorID(otherBody));
       EventManager::Get()->QueueEvent(pEvent);
    } else {
       cpBody const *body0, *body1;
@@ -651,7 +651,7 @@ void Physics2D::SendCollisionPairRemoveEvent(cpArbiter const* arb, cpShape const
       if (id0 == Actor::INVALID_ACTOR_ID || id1 == Actor::INVALID_ACTOR_ID)
          return;
 
-      std::shared_ptr<EvtData_Phys2DSeparation> pEvent = std::make_shared<EvtData_Phys2DSeparation>(id0, id1);
+      SharedPtr<EvtData_Phys2DSeparation> pEvent = MakeShared<EvtData_Phys2DSeparation>(id0, id1);
       EventManager::Get()->QueueEvent(pEvent);
    }
 }
@@ -684,7 +684,7 @@ void Physics2D::ChipmunkSeparateCollisionCallback(cpArbiter* arb, cpSpace* space
 
 void Physics2D::DestroyActorDelegate(IEventDataPtr pEventData)
 {
-   std::shared_ptr<EvtData_Destroy_Actor> pCastEventData = std::static_pointer_cast<EvtData_Destroy_Actor>(pEventData);
+   SharedPtr<EvtData_Destroy_Actor> pCastEventData = StaticPointerCast<EvtData_Destroy_Actor>(pEventData);
    RemoveActor(pCastEventData->GetId());
 }
 

@@ -86,20 +86,18 @@ PYBIND11_EMBEDDED_MODULE(BIEActor, m)
       .def("GetPlayerId", &BIEngine::PlayerComponent::GetPlayerId);
 
    m.def("CreateActor", [](const char* actorArchetypeXmlPath, const glm::vec3& pos, const glm::vec3& rot) {
-      std::shared_ptr<BIEngine::XmlExtraData> pActorData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle(actorArchetypeXmlPath)->GetExtra());
-      std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->CreateActor(pActorData->GetRootElement(), &pos, &rot);
+      BIEngine::SharedPtr<BIEngine::XmlExtraData> pActorData = BIEngine::StaticPointerCast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle(actorArchetypeXmlPath)->GetExtra());
+      BIEngine::SharedPtr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->CreateActor(pActorData->GetRootElement(), &pos, &rot);
 
       if (pActor) {
-         // std::shared_ptr<EvtData_New_Actor> pNewActorEvent(GCC_NEW EvtData_New_Actor(pActor->GetId()));
-         // IEventManager::Get()->VQueueEvent(pNewActorEvent);
-         return BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::Actor>(pActor.get());
+         return BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::Actor>(pActor.Get());
       }
 
       return BIEngine::PythonStateManager::RawPtrWrapper<BIEngine::Actor>(nullptr);
    });
 
    m.def("GetActor", [](BIEngine::ActorId actorId) {
-      return BIEngine::g_pApp->m_pGameLogic->GetActor(actorId).get();
+      return BIEngine::g_pApp->m_pGameLogic->GetActor(actorId).Get();
    });
 
    m.def("DestroyActor", [](BIEngine::ActorId actorId) {

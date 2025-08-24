@@ -16,7 +16,7 @@ public:
    struct RaycastInfo {
       bool hasHit = false;
       glm::vec3 hitPosition;
-      std::shared_ptr<Actor> hitActor = nullptr;
+      SharedPtr<Actor> hitActor = nullptr;
    };
 
    enum class BodyType {
@@ -41,9 +41,9 @@ public:
    // Служебные функции
    virtual bool Initialize() = 0;
    virtual void SetGravity(const glm::vec3& gravity) = 0;
-   virtual void BeforeUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& pActorMap) = 0;
+   virtual void BeforeUpdate(const HashMap<ActorId, SharedPtr<Actor>>& pActorMap) = 0;
    virtual void OnUpdate(const GameTimer& gt) = 0;
-   virtual void AfterUpdate(const HashMap<ActorId, std::shared_ptr<Actor>>& pActorMap) = 0;
+   virtual void AfterUpdate(const HashMap<ActorId, SharedPtr<Actor>>& pActorMap) = 0;
    virtual void DrawRenderDiagnostics() = 0;
 
    // Инициализация физических объектов

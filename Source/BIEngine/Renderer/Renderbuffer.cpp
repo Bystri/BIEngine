@@ -56,11 +56,11 @@ static unsigned int renderbufferFormatTypeToOpengl(Renderbuffer::Format type)
    }
 }
 
-std::shared_ptr<Renderbuffer> Renderbuffer::Create(int width, int height, Renderbuffer::Format type, unsigned int samples)
+SharedPtr<Renderbuffer> Renderbuffer::Create(int width, int height, Renderbuffer::Format type, unsigned int samples)
 {
    struct make_shared_enabler : public Renderbuffer {};
 
-   std::shared_ptr<make_shared_enabler> renderbuffer = std::make_shared<make_shared_enabler>();
+   SharedPtr<make_shared_enabler> renderbuffer = MakeShared<make_shared_enabler>();
    renderbuffer->Bind();
    glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, renderbufferFormatTypeToOpengl(type), width, height);
 

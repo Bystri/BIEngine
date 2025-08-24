@@ -15,9 +15,9 @@ MeshExtraData::~MeshExtraData()
 {
 }
 
-bool MeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle)
+bool MeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle)
 {
-   std::shared_ptr<MeshExtraData> pExtra = std::make_shared<MeshExtraData>();
+   SharedPtr<MeshExtraData> pExtra = MakeShared<MeshExtraData>();
 
    tinyxml2::XMLDocument xmlDoc;
    tinyxml2::XMLError error = xmlDoc.Parse(pRawBuffer, rawSize);
@@ -74,7 +74,7 @@ bool MeshResourceLoader::LoadResource(char* pRawBuffer, unsigned int rawSize, st
       indices.PushBack(index);
    }
 
-   pExtra->m_pMesh = std::make_shared<Mesh>(vertices, indices);
+   pExtra->m_pMesh = MakeShared<Mesh>(vertices, indices);
    pHandle->SetExtra(pExtra);
 
    return true;

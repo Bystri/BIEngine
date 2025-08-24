@@ -3,8 +3,8 @@
 namespace BIEngine {
 
 NavWorld::NavWorld()
-   : m_pNavMeshManager(std::make_shared<NavMeshManager>()),
-     m_pNavCrowd(std::make_shared<NavCrowd>())
+   : m_pNavMeshManager(MakeShared<NavMeshManager>()),
+     m_pNavCrowd(MakeShared<NavCrowd>())
 {
 }
 

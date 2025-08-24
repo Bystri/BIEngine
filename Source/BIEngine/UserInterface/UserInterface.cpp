@@ -1,13 +1,12 @@
 ﻿#include "UserInterface.h"
 
-#include <memory>
-
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include "../StdLib/SharedPtr.h"
 #include "../Renderer/Texture.h"
 #include "../Renderer/ShaderProgram.h"
 #include "../Renderer/ShadersLoader.h"
@@ -44,8 +43,8 @@ private:
 TextRenderer::TextRenderer(unsigned int width, unsigned int height)
 {
    // Загрузка шейдеров
-   std::shared_ptr<ShaderData> vertTextShaderData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle("Effects/text_2d.vs")->GetExtra());
-   std::shared_ptr<ShaderData> fragTextShaderxData = std::static_pointer_cast<ShaderData>(ResCache::Get()->GetHandle("Effects/text_2d.frag")->GetExtra());
+   SharedPtr<ShaderData> vertTextShaderData = StaticPointerCast<ShaderData>(ResCache::Get()->GetHandle("Effects/text_2d.vs")->GetExtra());
+   SharedPtr<ShaderData> fragTextShaderxData = StaticPointerCast<ShaderData>(ResCache::Get()->GetHandle("Effects/text_2d.frag")->GetExtra());
 
    m_textShader.Compile(vertTextShaderData->GetShaderIndex(), fragTextShaderxData->GetShaderIndex());
 
@@ -73,7 +72,7 @@ void TextRenderer::Load(String font, unsigned int fontSize)
       Logger::WriteLog(Logger::LogType::ERROR, "FREETYPE: Could not init FreeType Library");
 
    FT_Face face;
-   std::shared_ptr<ResHandle> resHandle = ResCache::Get()->GetHandle("Fonts/arial.ttf");
+   SharedPtr<ResHandle> resHandle = ResCache::Get()->GetHandle("Fonts/arial.ttf");
    if (FT_New_Memory_Face(ft, (FT_Byte*)resHandle->Buffer(), resHandle->Size(), 0, &face))
       Logger::WriteLog(Logger::LogType::ERROR, "FREETYPE: Failed to load font");
 

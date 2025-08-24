@@ -5,7 +5,7 @@
 
 namespace BIEngine {
 
-Skybox::Skybox(std::shared_ptr<CubemapTexture> pCubemapTexture, std::shared_ptr<ShaderProgram> pShaderProgram)
+Skybox::Skybox(SharedPtr<CubemapTexture> pCubemapTexture, SharedPtr<ShaderProgram> pShaderProgram)
    : m_cubeMesh(MeshGeometryGenerator::CreateBox(1.0f, 1.0f, 1.0f, 0)), m_pCubemapTexture(pCubemapTexture), m_pShaderProgram(pShaderProgram)
 {
 }

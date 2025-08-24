@@ -28,7 +28,7 @@ public:
 
    virtual IEventDataPtr Copy(void) const
    {
-      return std::make_shared<EvtData_Actor_Created>(m_id);
+      return MakeShared<EvtData_Actor_Created>(m_id);
    }
 
    virtual void Write(OutputMemoryBitStream& out) const override
@@ -68,7 +68,7 @@ public:
 
    virtual IEventDataPtr Copy(void) const
    {
-      return std::make_shared<EvtData_Destroy_Actor>(m_id);
+      return MakeShared<EvtData_Destroy_Actor>(m_id);
    }
 
    virtual void Write(OutputMemoryBitStream& out) const override
@@ -127,7 +127,7 @@ public:
 
    virtual IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_Move_Actor>(m_id, m_postion, m_rotation);
+      return MakeShared<EvtData_Move_Actor>(m_id, m_postion, m_rotation);
    }
 
    virtual const char* GetName() const
@@ -181,7 +181,7 @@ public:
 
    virtual IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_Request_Destroy_Actor>(m_actorId);
+      return MakeShared<EvtData_Request_Destroy_Actor>(m_actorId);
    }
 
    virtual void Serialize(std::ostrstream& out) const

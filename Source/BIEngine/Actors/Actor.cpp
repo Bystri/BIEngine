@@ -31,7 +31,7 @@ bool Actor::Init(tinyxml2::XMLElement* pData)
    return true;
 }
 
-void Actor::AddChild(std::shared_ptr<Actor> pChild)
+void Actor::AddChild(SharedPtr<Actor> pChild)
 {
    pChild->m_pParent = this;
    m_children.PushBack(pChild);
@@ -210,7 +210,7 @@ Actor* Actor::GetActorByPath(const String& path)
    if (delimPos == String::NPos) {
       for (const auto& child : m_children) {
          if (child->GetName() == path) {
-            return child.get();
+            return child.Get();
          }
       }
 

@@ -12,7 +12,7 @@
 
 int main(int argc, char* argv[])
 {
-   std::shared_ptr<BIServerGameLogic> pBIGameLogic = std::make_shared<BIServerGameLogic>();
+   BIEngine::SharedPtr<BIServerGameLogic> pBIGameLogic = BIEngine::MakeShared<BIServerGameLogic>();
    BIGameServerApp BIGameApp(pBIGameLogic);
 
    if (!BIEngine::g_pApp) {
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
 /**********BIGameServerApp**********/
 
-BIGameServerApp::BIGameServerApp(std::shared_ptr<BIEngine::GameLogic> pGameLogic)
+BIGameServerApp::BIGameServerApp(BIEngine::SharedPtr<BIEngine::GameLogic> pGameLogic)
    : GameApp(pGameLogic)
 {
 }
@@ -72,8 +72,8 @@ BIServerGameLogic::BIServerGameLogic()
 
 bool BIServerGameLogic::Init()
 {
-   m_pPhysics2D.reset(BIEngine::CreateGamePhysics2D());
-   m_pPhysics3D.reset(BIEngine::CreateGamePhysics3D());
+   m_pPhysics2D.Reset(BIEngine::CreateGamePhysics2D());
+   m_pPhysics3D.Reset(BIEngine::CreateGamePhysics3D());
 
    m_pNavWorld = BIEngine::MakeUnique<BIEngine::NavWorld>();
 
@@ -134,8 +134,8 @@ void BIServerGameLogic::OnUpdate(BIEngine::GameTimer& gt)
 
 void BIServerGameLogic::PlayerCreatedDelegate(BIEngine::IEventDataPtr pEventData)
 {
-   std::shared_ptr<EvtData_Player_Created> pCastEventData = std::static_pointer_cast<EvtData_Player_Created>(pEventData);
+   BIEngine::SharedPtr<EvtData_Player_Created> pCastEventData = BIEngine::StaticPointerCast<EvtData_Player_Created>(pEventData);
 
-   std::shared_ptr<BIEngine::ReplicationObjectActor> pGameObject = std::static_pointer_cast<BIEngine::ReplicationObjectActor>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayerCharacter::sk_ClassType));
+   BIEngine::SharedPtr<BIEngine::ReplicationObjectActor> pGameObject = BIEngine::StaticPointerCast<BIEngine::ReplicationObjectActor>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayerCharacter::sk_ClassType));
    pCastEventData->GetPlayer()->SetPlayableActor(pGameObject->GetReplicatedObject());
 }

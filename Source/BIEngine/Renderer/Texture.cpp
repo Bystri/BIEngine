@@ -125,11 +125,11 @@ static unsigned int ConvertWrapToGl(Texture2D::TextureWrap wrap)
    }
 }
 
-std::shared_ptr<Texture2D> Texture2D::Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, unsigned char* data, CreationParams params)
+SharedPtr<Texture2D> Texture2D::Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, unsigned char* data, CreationParams params)
 {
    struct make_shared_enabler : public Texture2D {};
 
-   std::shared_ptr<Texture2D> texture = std::make_shared<make_shared_enabler>();
+   SharedPtr<Texture2D> texture = MakeShared<make_shared_enabler>();
 
    texture->m_width = width;
    texture->m_height = height;
@@ -170,11 +170,11 @@ Texture2DMultisample::Texture2DMultisample()
 {
 }
 
-std::shared_ptr<Texture2DMultisample> Texture2DMultisample::Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, int multisamplesCount)
+SharedPtr<Texture2DMultisample> Texture2DMultisample::Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, int multisamplesCount)
 {
    struct make_shared_enabler : public Texture2DMultisample {};
 
-   std::shared_ptr<Texture2DMultisample> texture = std::make_shared<make_shared_enabler>();
+   SharedPtr<Texture2DMultisample> texture = MakeShared<make_shared_enabler>();
 
    texture->m_width = width;
    texture->m_height = height;
@@ -220,11 +220,11 @@ static unsigned int ConvertWrapToGl(CubemapTexture::TextureWrap wrap)
    }
 }
 
-std::shared_ptr<CubemapTexture> CubemapTexture::Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, const Array<unsigned char*, 6>& data, CreationParams params)
+SharedPtr<CubemapTexture> CubemapTexture::Create(unsigned int width, unsigned int height, Texture::SizedFormat sizedFormat, Texture::Format internalFormat, const Array<unsigned char*, 6>& data, CreationParams params)
 {
    struct make_shared_enabler : public CubemapTexture {};
 
-   std::shared_ptr<CubemapTexture> texture = std::make_shared<make_shared_enabler>();
+   SharedPtr<CubemapTexture> texture = MakeShared<make_shared_enabler>();
 
    texture->m_width = width;
    texture->m_height = height;

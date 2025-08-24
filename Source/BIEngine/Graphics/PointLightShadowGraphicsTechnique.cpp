@@ -9,7 +9,7 @@ namespace BIEngine {
 bool PointLightShadowGraphicsTechnique::Init()
 {
    const String commonPointShadowShaderProgramPath = "effects/pointShadow.bisp";
-   auto pointShadowShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPointShadowShaderProgramPath)->GetExtra());
+   auto pointShadowShaderProgramData = StaticPointerCast<ShaderProgramData>(ResCache::Get()->GetHandle(commonPointShadowShaderProgramPath)->GetExtra());
    m_pPointLightShadowShader = pointShadowShaderProgramData->GetShaderProgram();
 
    for (int i = 0; i < m_maxPointLightsNum; ++i) {
@@ -17,7 +17,7 @@ bool PointLightShadowGraphicsTechnique::Init()
       data.Fill(nullptr);
 
       RenderPointLightShadowInfo pointLightShadowInfo;
-      pointLightShadowInfo.pShadowMapBuffer = std::make_shared<Framebuffer>();
+      pointLightShadowInfo.pShadowMapBuffer = MakeShared<Framebuffer>();
 
       {
          CubemapTexture::CreationParams params = CubemapTexture::CreationParams();

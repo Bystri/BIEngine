@@ -22,7 +22,7 @@ bool AnimationComponent::Init(tinyxml2::XMLElement* pData)
       pAnimData->QueryStringAttribute("name", &name);
       pAnimData->QueryStringAttribute("path", &animPath);
 
-      auto animationData = std::dynamic_pointer_cast<AnimationData>(ResCache::Get()->GetHandle(animPath)->GetExtra());
+      auto animationData = StaticPointerCast<AnimationData>(ResCache::Get()->GetHandle(animPath)->GetExtra());
 
       if (animationData == nullptr) {
          return false;
@@ -37,7 +37,7 @@ bool AnimationComponent::Init(tinyxml2::XMLElement* pData)
 
 void AnimationComponent::Activate()
 {
-   m_pAnimator = std::make_shared<Animator>(GetOwner());
+   m_pAnimator = MakeShared<Animator>(GetOwner());
 }
 
 void AnimationComponent::Deactivate()

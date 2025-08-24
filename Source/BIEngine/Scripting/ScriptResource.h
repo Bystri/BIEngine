@@ -15,7 +15,7 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize) { return rawSize; }
 
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pRandle);
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pRandle);
 
    virtual String GetPattern() { return "*.py"; }
 };

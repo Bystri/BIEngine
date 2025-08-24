@@ -38,7 +38,7 @@ void irrKlangAudio::Shutdown()
    }
 }
 
-IAudioBuffer* irrKlangAudio::InitAudioBuffer(std::shared_ptr<ResHandle> pResHandle)
+IAudioBuffer* irrKlangAudio::InitAudioBuffer(SharedPtr<ResHandle> pResHandle)
 {
    if (!m_pSoundEngine)
       return nullptr;
@@ -55,7 +55,7 @@ void irrKlangAudio::ReleaseAudioBuffer(IAudioBuffer* pSampleHandle)
    m_allSamples.Remove(pSampleHandle);
 }
 
-irrKlangAudioBuffer::irrKlangAudioBuffer(irrklang::ISoundEngine* pSoundEngine, std::shared_ptr<ResHandle> pResource)
+irrKlangAudioBuffer::irrKlangAudioBuffer(irrklang::ISoundEngine* pSoundEngine, SharedPtr<ResHandle> pResource)
    : AudioBuffer(pResource), m_pSoundEngine(pSoundEngine), m_pSound(nullptr)
 {
    m_pSoundSource = m_pSoundEngine->getSoundSource(pResource->GetName().CStr(), false);

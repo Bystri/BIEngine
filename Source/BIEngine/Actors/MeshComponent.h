@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
+#include "../StdLib/SharedPtr.h"
+#include "../StdLib/UniquePtr.h"
 
 namespace BIEngine {
 
@@ -27,8 +28,8 @@ private:
    String m_meshPath;
    String m_matPath;
 
-   std::shared_ptr<Mesh> m_pMesh;
-   std::shared_ptr<Material> m_pMaterial;
+   SharedPtr<Mesh> m_pMesh;
+   SharedPtr<Material> m_pMaterial;
 };
 
 static UniquePtr<ActorComponent> CreateMeshComponent()

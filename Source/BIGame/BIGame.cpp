@@ -12,7 +12,7 @@
 
 int main(int argc, char* argv[])
 {
-   std::shared_ptr<BIGameLogic> pBIGameLogic = std::make_shared<BIGameLogic>();
+   BIEngine::SharedPtr<BIGameLogic> pBIGameLogic = BIEngine::MakeShared<BIGameLogic>();
    BIGameApp BIGameApp(pBIGameLogic);
 
    if (!BIEngine::g_pApp) {
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
 /**********BIGameApp**********/
 
-BIGameApp::BIGameApp(std::shared_ptr<BIEngine::GameLogic> pGameLogic)
+BIGameApp::BIGameApp(BIEngine::SharedPtr<BIEngine::GameLogic> pGameLogic)
    : GameApp(pGameLogic)
 {
 }
@@ -66,8 +66,8 @@ BIGameLogic::BIGameLogic()
 
 bool BIGameLogic::Init()
 {
-   m_pPhysics2D.reset(BIEngine::CreateGamePhysics2D());
-   m_pPhysics3D.reset(BIEngine::CreateGamePhysics3D());
+   m_pPhysics2D.Reset(BIEngine::CreateGamePhysics2D());
+   m_pPhysics3D.Reset(BIEngine::CreateGamePhysics3D());
 
    m_pNavWorld = BIEngine::MakeUnique<BIEngine::NavWorld>();
 
@@ -78,7 +78,7 @@ bool BIGameLogic::Init()
    m_pPhysics2D->Initialize();
    m_pPhysics3D->Initialize();
 
-   m_pHumanView = std::make_shared<BIGameHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
+   m_pHumanView = BIEngine::MakeShared<BIGameHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
    m_pHumanView->Init();
    AddGameView(m_pHumanView);
 
@@ -109,9 +109,9 @@ void BIGameLogic::OnUpdate(BIEngine::GameTimer& gt)
    m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
 }
 
-static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
+static BIEngine::SharedPtr<BIEngine::Skybox> humanViewCreateSkybox()
 {
-   auto xmlExtraData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/scene.xml")->GetExtra());
+   auto xmlExtraData = BIEngine::StaticPointerCast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/scene.xml")->GetExtra());
 
    if (!xmlExtraData) {
       return nullptr;
@@ -133,9 +133,9 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
       return nullptr;
    }
 
-   std::shared_ptr<BIEngine::ShaderData> pVertShaderData = std::static_pointer_cast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(vertexShaderPath)->GetExtra());
-   std::shared_ptr<BIEngine::ShaderData> pFragShaderxData = std::static_pointer_cast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(fragmentShaderPath)->GetExtra());
-   std::shared_ptr<BIEngine::ShaderProgram> pShaderProgram = std::make_shared<BIEngine::ShaderProgram>();
+   BIEngine::SharedPtr<BIEngine::ShaderData> pVertShaderData = BIEngine::StaticPointerCast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(vertexShaderPath)->GetExtra());
+   BIEngine::SharedPtr<BIEngine::ShaderData> pFragShaderxData = BIEngine::StaticPointerCast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(fragmentShaderPath)->GetExtra());
+   BIEngine::SharedPtr<BIEngine::ShaderProgram> pShaderProgram = BIEngine::MakeShared<BIEngine::ShaderProgram>();
    pShaderProgram->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
 
 
@@ -159,7 +159,7 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
          return nullptr;
       }
 
-      auto cubemapTextureResExtraData = std::static_pointer_cast<BIEngine::ImageExtraData>(BIEngine::ResCache::Get()->GetHandle(cubemapTexturePath)->GetExtra());
+      auto cubemapTextureResExtraData = BIEngine::StaticPointerCast<BIEngine::ImageExtraData>(BIEngine::ResCache::Get()->GetHandle(cubemapTexturePath)->GetExtra());
 
       if (!cubemapTextureResExtraData) {
          return nullptr;
@@ -170,9 +170,9 @@ static std::shared_ptr<BIEngine::Skybox> humanViewCreateSkybox()
       height = cubemapTextureResExtraData->GetHeight();
    }
 
-   std::shared_ptr<BIEngine::CubemapTexture> pTexture = BIEngine::CubemapTexture::Create(width, height, BIEngine::CubemapTexture::SizedFormat::RGB, BIEngine::CubemapTexture::Format::RGB, cubemapTextureImages);
+   BIEngine::SharedPtr<BIEngine::CubemapTexture> pTexture = BIEngine::CubemapTexture::Create(width, height, BIEngine::CubemapTexture::SizedFormat::RGB, BIEngine::CubemapTexture::Format::RGB, cubemapTextureImages);
 
-   return std::make_shared<BIEngine::Skybox>(pTexture, pShaderProgram);
+   return BIEngine::MakeShared<BIEngine::Skybox>(pTexture, pShaderProgram);
 }
 
 bool BIGameHumanView::Init()
@@ -185,25 +185,25 @@ bool BIGameHumanView::Init()
    constexpr std::size_t MAX_POINT_LIGHTS_NUM = 1;
    constexpr std::size_t MAX_SPOT_LIGHTS_NUM = 2;
 
-   std::shared_ptr<BIEngine::GraphicsRenderPass> pPreWorldRenderPass = std::make_shared<BIEngine::GraphicsRenderPass>();
+   BIEngine::SharedPtr<BIEngine::GraphicsRenderPass> pPreWorldRenderPass = BIEngine::MakeShared<BIEngine::GraphicsRenderPass>();
 
-   pPreWorldRenderPass->AddTechnique(std::make_shared<BIEngine::DirLightShadowGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM));
-   pPreWorldRenderPass->AddTechnique(std::make_shared<BIEngine::PointLightShadowGraphicsTechnique>(MAX_POINT_LIGHTS_NUM));
+   pPreWorldRenderPass->AddTechnique(BIEngine::MakeShared<BIEngine::DirLightShadowGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM));
+   pPreWorldRenderPass->AddTechnique(BIEngine::MakeShared<BIEngine::PointLightShadowGraphicsTechnique>(MAX_POINT_LIGHTS_NUM));
 
    pPreWorldRenderPass->Init();
 
    m_pScene->AddRenderPass(pPreWorldRenderPass);
 
    constexpr int MsaaSamples = 4;
-   std::shared_ptr<BIEngine::WorldRenderPass> pWorldRenderPass = std::make_shared<BIEngine::WorldRenderPass>(m_screenWidth, m_screenHeight, MsaaSamples);
+   BIEngine::SharedPtr<BIEngine::WorldRenderPass> pWorldRenderPass = BIEngine::MakeShared<BIEngine::WorldRenderPass>(m_screenWidth, m_screenHeight, MsaaSamples);
 
-   std::shared_ptr<BIEngine::LightGraphicsTechnique> pLightGraphicsTechnique = std::make_shared<BIEngine::LightGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM, MAX_POINT_LIGHTS_NUM, MAX_SPOT_LIGHTS_NUM);
+   BIEngine::SharedPtr<BIEngine::LightGraphicsTechnique> pLightGraphicsTechnique = BIEngine::MakeShared<BIEngine::LightGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM, MAX_POINT_LIGHTS_NUM, MAX_SPOT_LIGHTS_NUM);
    pWorldRenderPass->AddTechnique(pLightGraphicsTechnique);
 
-   std::shared_ptr<BIEngine::OpaqueGraphicsTechnique> pOpaqueGraphicsTechnique = std::make_shared<BIEngine::OpaqueGraphicsTechnique>();
+   BIEngine::SharedPtr<BIEngine::OpaqueGraphicsTechnique> pOpaqueGraphicsTechnique = BIEngine::MakeShared<BIEngine::OpaqueGraphicsTechnique>();
    pWorldRenderPass->AddTechnique(pOpaqueGraphicsTechnique);
 
-   std::shared_ptr<BIEngine::SkyboxGraphicsTechnique> pSkyboxGraphicsTechnique = std::make_shared<BIEngine::SkyboxGraphicsTechnique>(humanViewCreateSkybox());
+   BIEngine::SharedPtr<BIEngine::SkyboxGraphicsTechnique> pSkyboxGraphicsTechnique = BIEngine::MakeShared<BIEngine::SkyboxGraphicsTechnique>(humanViewCreateSkybox());
    pWorldRenderPass->AddTechnique(pSkyboxGraphicsTechnique);
 
    pWorldRenderPass->Init();

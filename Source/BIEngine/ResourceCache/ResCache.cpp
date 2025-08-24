@@ -12,7 +12,7 @@ namespace BIEngine {
 
 ResCache* ResCache::s_pSingleton = nullptr;
 
-bool ResCache::Create(const unsigned int sizeInMb, std::shared_ptr<IResourceFile> pFile)
+bool ResCache::Create(const unsigned int sizeInMb, SharedPtr<IResourceFile> pFile)
 {
    if (s_pSingleton) {
       Logger::WriteLog(Logger::LogType::ERROR, "Overwriting ResCache singleton");
@@ -152,7 +152,7 @@ ResHandle::~ResHandle()
    m_pResCache->MemoryHasBeenFreed(m_size);
 }
 
-ResCache::ResCache(const unsigned int sizeInMb, std::shared_ptr<IResourceFile> resFile)
+ResCache::ResCache(const unsigned int sizeInMb, SharedPtr<IResourceFile> resFile)
    : m_cacheSize(sizeInMb * 1024 * 1024), m_allocated(0), m_pFile(resFile)
 {
 }
@@ -168,20 +168,20 @@ bool ResCache::Init()
 {
    bool retValue = false;
    if (m_pFile->Open()) {
-      RegisterLoader(std::make_shared<DefaultResourceLoader>());
+      RegisterLoader(MakeShared<DefaultResourceLoader>());
       retValue = true;
    }
    return retValue;
 }
 
-void ResCache::RegisterLoader(std::shared_ptr<IResourceLoader> pLoader)
+void ResCache::RegisterLoader(SharedPtr<IResourceLoader> pLoader)
 {
    m_resourceLoaders.PushFront(pLoader);
 }
 
-std::shared_ptr<ResHandle> ResCache::GetHandle(const String& resName)
+SharedPtr<ResHandle> ResCache::GetHandle(const String& resName)
 {
-   std::shared_ptr<ResHandle> pHandle(Find(resName));
+   SharedPtr<ResHandle> pHandle(Find(resName));
    if (pHandle == nullptr) {
       pHandle = Load(resName);
    } else {
@@ -207,10 +207,10 @@ DynamicArray<String> ResCache::Match(const String& pattern)
    return matchingNames;
 }
 
-std::shared_ptr<ResHandle> ResCache::Load(const String& resName)
+SharedPtr<ResHandle> ResCache::Load(const String& resName)
 {
-   std::shared_ptr<IResourceLoader> pLoader;
-   std::shared_ptr<ResHandle> pHandle;
+   SharedPtr<IResourceLoader> pLoader;
+   SharedPtr<ResHandle> pHandle;
 
    for (auto& pTestLoader : m_resourceLoaders) {
       if (WildcardMatch(pTestLoader->GetPattern().CStr(), resName.CStr())) {
@@ -246,15 +246,15 @@ std::shared_ptr<ResHandle> ResCache::Load(const String& resName)
    if (pLoader->UseRawFile()) {
       // Если мы можем использовать сырой файл как ресурс, то мы попросту создает на его основе держатель ресурса и возвращаем его
       pBuffer = pRawBuffer;
-      pHandle = std::shared_ptr<ResHandle>(new ResHandle(resName, pBuffer, rawSize, this));
+      pHandle = SharedPtr<ResHandle>(new ResHandle(resName, pBuffer, rawSize, this));
    } else {
       size = pLoader->GetLoadedResourceSize(pRawBuffer, rawSize);
       pBuffer = Allocate(size);
       if (pRawBuffer == nullptr || pBuffer == nullptr) {
          // Место под ресурс не может быть выделено!
-         return std::shared_ptr<ResHandle>();
+         return SharedPtr<ResHandle>();
       }
-      pHandle = std::shared_ptr<ResHandle>(new ResHandle(resName, pBuffer, size, this));
+      pHandle = SharedPtr<ResHandle>(new ResHandle(resName, pBuffer, size, this));
 
       // Используем ранее загруженный сырой файл, чтобы на его основе инициализировать ресурс и поместить указатель на инициализированную память в buffer
       bool success = pLoader->LoadResource(pRawBuffer, rawSize, pHandle);
@@ -268,7 +268,7 @@ std::shared_ptr<ResHandle> ResCache::Load(const String& resName)
 
       if (!success) {
          // Место под ресурс не может быть выделено!
-         return std::shared_ptr<ResHandle>();
+         return SharedPtr<ResHandle>();
       }
    }
 
@@ -281,17 +281,17 @@ std::shared_ptr<ResHandle> ResCache::Load(const String& resName)
    return pHandle;
 }
 
-std::shared_ptr<ResHandle> ResCache::Find(const String& resName)
+SharedPtr<ResHandle> ResCache::Find(const String& resName)
 {
    auto itr = m_resources.Find(resName);
    if (itr == m_resources.End()) {
-      return std::shared_ptr<ResHandle>();
+      return SharedPtr<ResHandle>();
    }
 
    return itr->second;
 }
 
-void ResCache::Update(std::shared_ptr<ResHandle> pHandle)
+void ResCache::Update(SharedPtr<ResHandle> pHandle)
 {
    m_lru.Remove(pHandle);
    m_lru.PushFront(pHandle);
@@ -336,7 +336,7 @@ bool ResCache::MakeRoom(unsigned int size)
    return true;
 }
 
-void ResCache::Free(std::shared_ptr<ResHandle> pGonner)
+void ResCache::Free(SharedPtr<ResHandle> pGonner)
 {
    m_lru.Remove(pGonner);
    m_resources.Erase(pGonner->GetName());

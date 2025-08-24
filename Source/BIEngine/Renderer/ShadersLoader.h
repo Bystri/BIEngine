@@ -39,7 +39,7 @@ public:
 
    virtual String GetPattern() override { return "*.glsl"; }
 
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle) override;
 };
 
 class ShaderData : public IResourceExtraData {
@@ -78,10 +78,10 @@ public:
 
    virtual String ToString() override { return "ShaderProgramData"; }
 
-   std::shared_ptr<ShaderProgram> GetShaderProgram() const { return m_pShaderProgram; }
+   SharedPtr<ShaderProgram> GetShaderProgram() const { return m_pShaderProgram; }
 
 protected:
-   std::shared_ptr<ShaderProgram> m_pShaderProgram;
+   SharedPtr<ShaderProgram> m_pShaderProgram;
 };
 
 class ShaderResourceLoader : public IResourceLoader {
@@ -92,28 +92,28 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize) override { return 0; }
 
-   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override = 0;
+   virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle) override = 0;
 };
 
 class VertexShaderResourceLoader : public ShaderResourceLoader {
 public:
    virtual String GetPattern() override { return "*.vs"; }
 
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle) override;
 };
 
 class FragmentShaderResourceLoader : public ShaderResourceLoader {
 public:
    virtual String GetPattern() override { return "*.frag"; }
 
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle) override;
 };
 
 class GeometryShaderResourceLoader : public ShaderResourceLoader {
 public:
    virtual String GetPattern() override { return "*.geom"; }
 
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle) override;
 };
 
 class ShaderProgramResourceLoader : public IResourceLoader {
@@ -126,7 +126,7 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize) override { return 0; }
 
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) override;
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle) override;
 };
 
 } // namespace BIEngine

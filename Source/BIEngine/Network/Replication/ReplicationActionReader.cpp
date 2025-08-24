@@ -12,7 +12,7 @@ void ReplicationActionReader::ProcessReplicationAction(InputMemoryBitStream& str
    switch (rh.GetReplicationAction()) {
       case ReplicationAction::Create:
          {
-            std::shared_ptr<ReplicationObject> go = NetworkObjectCreationRegistry::Get().Create(rh.GetClassId());
+            SharedPtr<ReplicationObject> go = NetworkObjectCreationRegistry::Get().Create(rh.GetClassId());
             m_pLinkingContext->AddObj(go, rh.GetNetworkId());
             go->Init(false);
             go->Read(stream);
@@ -20,7 +20,7 @@ void ReplicationActionReader::ProcessReplicationAction(InputMemoryBitStream& str
          }
       case ReplicationAction::Update:
          {
-            std::shared_ptr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
+            SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
             // we might have not received the create yet,
             // so serialize into a dummy to advance read head
             if (go) {
@@ -34,7 +34,7 @@ void ReplicationActionReader::ProcessReplicationAction(InputMemoryBitStream& str
          }
       case ReplicationAction::Destroy:
          {
-            std::shared_ptr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
+            SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
             m_pLinkingContext->RemoveObj(go);
             break;
          }

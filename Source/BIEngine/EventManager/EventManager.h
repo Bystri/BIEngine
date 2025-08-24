@@ -24,7 +24,7 @@ public:
    virtual const char* GetName() const = 0;
 };
 
-using IEventDataPtr = std::shared_ptr<IEventData>;
+using IEventDataPtr = SharedPtr<IEventData>;
 using EventListenerDelegate = std::function<void(IEventDataPtr)>;
 
 #define MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(func) \

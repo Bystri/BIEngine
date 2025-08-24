@@ -9,7 +9,7 @@ namespace BIEngine {
 
 class SoundProcess : public Process {
 public:
-   SoundProcess(std::shared_ptr<ResHandle> pSoundResource, int volume = 100, bool looping = false);
+   SoundProcess(SharedPtr<ResHandle> pSoundResource, int volume = 100, bool looping = false);
    virtual ~SoundProcess();
 
    void Play(const int volume, const bool looping);
@@ -37,8 +37,8 @@ protected:
    virtual void OnUpdate(const GameTimer& gt);
 
 protected:
-   std::shared_ptr<ResHandle> m_pHandle;
-   std::shared_ptr<IAudioBuffer> m_pAudioBuffer;
+   SharedPtr<ResHandle> m_pHandle;
+   SharedPtr<IAudioBuffer> m_pAudioBuffer;
 
    int m_volume;
    bool m_isLooping;

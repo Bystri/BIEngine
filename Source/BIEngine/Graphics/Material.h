@@ -7,6 +7,7 @@
 #include "../Renderer/RenderState.h"
 #include "../Renderer/ShaderProgramState.h"
 #include "../StdLib/HashMap.h"
+#include "../StdLib/SharedPtr.h"
 #include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
@@ -14,7 +15,7 @@ namespace BIEngine {
 // Материал отвечает за прозрачность и цвет спрайта
 class Material {
 public:
-   explicit Material(std::shared_ptr<ShaderProgram> pShader);
+   explicit Material(SharedPtr<ShaderProgram> pShader);
 
    void SetDoubleSided(bool enable) { m_isDoubleSided = enable; }
 
@@ -26,11 +27,11 @@ public:
    void SetColorRgb(const String& name, const ColorRgb& color);
    void SetColorRgba(const String& name, const ColorRgba& color);
 
-   void AddTexture(const String& name, int slotId, std::shared_ptr<Texture> pTexture);
+   void AddTexture(const String& name, int slotId, SharedPtr<Texture> pTexture);
 
    RenderState& GetRenderState() { return m_renderState; }
 
-   std::shared_ptr<ShaderProgram> GetShaderProgramPtr() { return m_pShaderProgram; }
+   SharedPtr<ShaderProgram> GetShaderProgramPtr() { return m_pShaderProgram; }
 
    virtual ShaderProgramState ConstructShaderProgramState() const;
 
@@ -38,10 +39,10 @@ public:
 private:
    bool m_isDoubleSided;
 
-   std::shared_ptr<Texture2D> m_diffuseMap;
+   SharedPtr<Texture2D> m_diffuseMap;
 
    RenderState m_renderState;
-   std::shared_ptr<ShaderProgram> m_pShaderProgram;
+   SharedPtr<ShaderProgram> m_pShaderProgram;
 
    HashMap<String, bool> m_uniformBools;
    HashMap<String, int> m_uniformInts;
@@ -49,7 +50,7 @@ private:
    HashMap<String, ColorRgb> m_uniformColorsRgb;
    HashMap<String, ColorRgba> m_uniformColorsRgba;
 
-   DynamicArray<std::pair<int, std::shared_ptr<Texture>>> m_textures;
+   DynamicArray<std::pair<int, SharedPtr<Texture>>> m_textures;
 };
 
 } // namespace BIEngine

@@ -42,7 +42,7 @@ bool GameLogic::LoadLevel(const String& path)
    if (!resourceHandle)
       return false;
 
-   auto levelXmlData = std::dynamic_pointer_cast<XmlExtraData>(resourceHandle->GetExtra());
+   auto levelXmlData = StaticPointerCast<XmlExtraData>(resourceHandle->GetExtra());
    Assert(levelXmlData != nullptr, "level xml data did not loaded");
 
    if (levelXmlData == nullptr) {
@@ -102,12 +102,12 @@ bool GameLogic::LoadLevel(const String& path)
    return true;
 }
 
-void GameLogic::AddGameView(std::shared_ptr<IGameView> pView)
+void GameLogic::AddGameView(SharedPtr<IGameView> pView)
 {
    m_gameViews.PushBack(pView);
 }
 
-void GameLogic::RemoveGameView(std::shared_ptr<IGameView> pView)
+void GameLogic::RemoveGameView(SharedPtr<IGameView> pView)
 {
    m_gameViews.Remove(pView);
 }
@@ -153,12 +153,12 @@ void GameLogic::OnRenderDebug(const GameTimer& gt)
 {
 }
 
-std::shared_ptr<Actor> GameLogic::GetActor(ActorId id) const
+SharedPtr<Actor> GameLogic::GetActor(ActorId id) const
 {
    auto it = m_actors.Find(id);
 
    if (it == m_actors.CEnd()) {
-      return std::shared_ptr<Actor>();
+      return SharedPtr<Actor>();
    }
 
    return it->second;
@@ -185,7 +185,7 @@ void GameLogic::SetKey(int key, int scancode, bool state)
    }
 }
 
-static void gameLogicInsertActorToMap(GameLogic::ActorMap& actors, std::shared_ptr<Actor> pActor)
+static void gameLogicInsertActorToMap(GameLogic::ActorMap& actors, SharedPtr<Actor> pActor)
 {
    actors.Insert(pActor->GetId(), pActor);
    for (const auto& child : pActor->GetChildren()) {
@@ -193,19 +193,19 @@ static void gameLogicInsertActorToMap(GameLogic::ActorMap& actors, std::shared_p
    }
 }
 
-std::shared_ptr<Actor> GameLogic::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation)
+SharedPtr<Actor> GameLogic::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation)
 {
-   std::shared_ptr<Actor> pActor = m_pActorFactory->CreateActor(pRoot, pPosition, pRotation);
+   SharedPtr<Actor> pActor = m_pActorFactory->CreateActor(pRoot, pPosition, pRotation);
    if (pActor) {
       gameLogicInsertActorToMap(m_actors, pActor);
 
-      std::shared_ptr<EvtData_Actor_Created> pEvent = std::make_shared<EvtData_Actor_Created>(pActor->GetId());
+      SharedPtr<EvtData_Actor_Created> pEvent = MakeShared<EvtData_Actor_Created>(pActor->GetId());
       EventManager::Get()->TriggerEvent(pEvent);
 
       return pActor;
    } else {
       Logger::WriteLog(Logger::LogType::ERROR, "Couldn't create actor");
-      return std::shared_ptr<Actor>();
+      return SharedPtr<Actor>();
    }
 }
 
@@ -220,7 +220,7 @@ void GameLogic::ModifyActor(ActorId actorId, tinyxml2::XMLElement* pOverrides)
 
 void GameLogic::RequestDestroyActorDelegate(IEventDataPtr pEventData)
 {
-   std::shared_ptr<EvtData_Request_Destroy_Actor> pCastEventData = std::static_pointer_cast<EvtData_Request_Destroy_Actor>(pEventData);
+   SharedPtr<EvtData_Request_Destroy_Actor> pCastEventData = StaticPointerCast<EvtData_Request_Destroy_Actor>(pEventData);
    DestroyActor(pCastEventData->GetActorId());
 }
 
@@ -243,7 +243,7 @@ static void gameLogicDestroyActorFromMap(GameLogic::ActorMap& actors, const Acto
 void GameLogic::DestroyActor(const ActorId actorId)
 {
    // TODO: нам необходимо создать и триггерить событие фактического уничтожения актера, чтобы все системы успели выполнить подготовку к уничтожению
-   std::shared_ptr<EvtData_Destroy_Actor> pEvent = std::make_shared<EvtData_Destroy_Actor>(actorId);
+   SharedPtr<EvtData_Destroy_Actor> pEvent = MakeShared<EvtData_Destroy_Actor>(actorId);
    EventManager::Get()->TriggerEvent(pEvent);
 
    gameLogicDestroyActorFromMap(m_actors, actorId);

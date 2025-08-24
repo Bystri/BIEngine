@@ -9,12 +9,12 @@
 
 namespace BIEngine {
 
-PostProcessor::PostProcessor(std::shared_ptr<ShaderProgram> pShaderProgram)
+PostProcessor::PostProcessor(SharedPtr<ShaderProgram> pShaderProgram)
    : m_screenOutputMesh(MeshGeometryGenerator::CreateGrid(2.0f, 2.0f, 2, 2)), m_pShaderProgram(pShaderProgram)
 {
 }
 
-void PostProcessor::Use(Renderer* const pRenderer, std::shared_ptr<Texture2D> pTextureToProcess)
+void PostProcessor::Use(Renderer* const pRenderer, SharedPtr<Texture2D> pTextureToProcess)
 {
    m_pShaderProgram->SetInteger("screenTexture", 0);
 

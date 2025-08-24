@@ -1,11 +1,10 @@
 ﻿#pragma once
 
-#include <memory>
-
 #include "ZipFile.h"
 #include "DirFile.h"
 #include "../EngineCore/Assert.h"
 #include "../StdLib/List.h"
+#include "../StdLib/SharedPtr.h"
 #include "../StdLib/DynamicArray.h"
 
 namespace BIEngine {
@@ -31,7 +30,7 @@ public:
    // Размер загруженного ресурса в байтах
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize) = 0;
    // Процедура загрузки ресурса
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) = 0;
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle) = 0;
 };
 
 // Описывает файл, из которого будут загружаться ресурсы. Ими могут быть, например, обычные папки или сжатые архивы
@@ -112,16 +111,16 @@ public:
 
    char* WritableBuffer() { return m_pBuffer; }
 
-   std::shared_ptr<IResourceExtraData> GetExtra() { return m_pExtra; }
+   SharedPtr<IResourceExtraData> GetExtra() { return m_pExtra; }
 
-   void SetExtra(std::shared_ptr<IResourceExtraData> pExtra) { m_pExtra = pExtra; }
+   void SetExtra(SharedPtr<IResourceExtraData> pExtra) { m_pExtra = pExtra; }
 
 protected:
    const String m_resName;
 
    char* m_pBuffer;
    unsigned int m_size;
-   std::shared_ptr<IResourceExtraData> m_pExtra; // Дополнительная информация, которая может быть уникальна для каждого типа ресурса.
+   SharedPtr<IResourceExtraData> m_pExtra; // Дополнительная информация, которая может быть уникальна для каждого типа ресурса.
    ResCache* m_pResCache;
 };
 
@@ -135,15 +134,15 @@ public:
 
    virtual unsigned int GetLoadedResourceSize(char* pRawBuffer, unsigned int rawSize) { return rawSize; }
 
-   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, std::shared_ptr<ResHandle> pHandle) { return true; }
+   virtual bool LoadResource(char* pRawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle) { return true; }
 
    // Подходит для всех файлов
    virtual String GetPattern() { return "*"; }
 };
 
-using ResHandleList = List<std::shared_ptr<ResHandle>>;
-using ResHandleMap = HashMap<String, std::shared_ptr<ResHandle>>;
-using ResourceLoaders = List<std::shared_ptr<IResourceLoader>>;
+using ResHandleList = List<SharedPtr<ResHandle>>;
+using ResHandleMap = HashMap<String, SharedPtr<ResHandle>>;
+using ResourceLoaders = List<SharedPtr<IResourceLoader>>;
 
 // ResCache основан на паттерне Singleton (да простят меня Боги)
 // Перед обращением к кэшу ресурсов его необходимо явно создать вызовом функции Create, чтобы кэш имел путь к хранилищу ресурсов и знал максимальный размер доступной для загруженных ресурсов памяти
@@ -153,7 +152,7 @@ class ResCache {
    static ResCache* s_pSingleton;
 
 public:
-   static bool Create(const unsigned int sizeInMb, std::shared_ptr<IResourceFile> pFile);
+   static bool Create(const unsigned int sizeInMb, SharedPtr<IResourceFile> pFile);
    static void Destroy();
 
    // Возвращает указетель на кэш ресурсов. Перед использованием необходимо выполнить инициализацию с помощью фукнции ResCache::Create
@@ -164,10 +163,10 @@ public:
    }
 
    bool Init();
-   void RegisterLoader(std::shared_ptr<IResourceLoader> pLoader);
+   void RegisterLoader(SharedPtr<IResourceLoader> pLoader);
 
    // Возвращает держатель ресурса со всей необходимой информацией для дальнейшей работой с данным ресурсом. Если файл не был загружен, внутри происходит неявная загрузка и, если требуется, свобождения памяти
-   std::shared_ptr<ResHandle> GetHandle(const String& resName);
+   SharedPtr<ResHandle> GetHandle(const String& resName);
    // Возвращает список файлов, чье название внутри хранилища ресурсов подходит под заданный паттерн
    DynamicArray<String> Match(const String& pattern);
 
@@ -177,14 +176,14 @@ protected:
    bool MakeRoom(unsigned int size);
    char* Allocate(unsigned int size);
    // Освобождает ресурс из памяти
-   void Free(std::shared_ptr<ResHandle> pGonner);
+   void Free(SharedPtr<ResHandle> pGonner);
 
    // Загрузка ресурса из хранилища
-   std::shared_ptr<ResHandle> Load(const String& resName);
+   SharedPtr<ResHandle> Load(const String& resName);
    // Поиск уже загруженного ресурса, находящегося в памяти
-   std::shared_ptr<ResHandle> Find(const String& resName);
+   SharedPtr<ResHandle> Find(const String& resName);
    // Выносит ресурс, к которому обратились через метод GetHandle, на первую строчку LRU кэша
-   void Update(std::shared_ptr<ResHandle> pHandle);
+   void Update(SharedPtr<ResHandle> pHandle);
 
    // Освобождает самый редкоиспользуемый ресурс
    void FreeOneResource();
@@ -192,7 +191,7 @@ protected:
    void MemoryHasBeenFreed(unsigned int size);
 
 private:
-   ResCache(const unsigned int sizeInMb, std::shared_ptr<IResourceFile> pFile);
+   ResCache(const unsigned int sizeInMb, SharedPtr<IResourceFile> pFile);
    virtual ~ResCache();
 
 private:
@@ -200,7 +199,7 @@ private:
    ResHandleMap m_resources;
    ResourceLoaders m_resourceLoaders;
 
-   std::shared_ptr<IResourceFile> m_pFile; // Указатель на файл, который является хранилищем ресурсов
+   SharedPtr<IResourceFile> m_pFile; // Указатель на файл, который является хранилищем ресурсов
 
    unsigned int m_cacheSize; // Максимальный доступный размер кэша
    unsigned int m_allocated; // Текущий размер кэша

@@ -3,8 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <memory>
-
+#include "../StdLib/SharedPtr.h"
 #include "GameLogic.h"
 
 namespace BIEngine {
@@ -32,7 +31,7 @@ struct Options {
 // Данный класс инициализирует все системы игрового движка и отвечает за взаимодейтсвие движка и ОС
 class GameApp {
 public:
-   explicit GameApp(std::shared_ptr<GameLogic> pGameLogic);
+   explicit GameApp(SharedPtr<GameLogic> pGameLogic);
    virtual ~GameApp();
 
    GameApp(const GameApp& orig) = delete;
@@ -41,7 +40,7 @@ public:
    virtual bool Init();
    virtual void Close();
 
-   std::shared_ptr<HumanView> TryGetHumanView(unsigned int playerId);
+   SharedPtr<HumanView> TryGetHumanView(unsigned int playerId);
 
    virtual const char* GetGameTitle() = 0; // Принудительный метод заставить пользователя дать явное название игре
 
@@ -55,7 +54,7 @@ public:
    void SetKey(int key, int scancode, bool pressed);
 
 public:
-   const std::shared_ptr<GameLogic> m_pGameLogic;
+   const SharedPtr<GameLogic> m_pGameLogic;
 
    Options m_options;
 };

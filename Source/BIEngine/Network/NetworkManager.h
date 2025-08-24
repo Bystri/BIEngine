@@ -4,6 +4,7 @@
 
 #include "Socket.h"
 #include "Serialization.h"
+#include "../StdLib/SharedPtr.h"
 #include "../Utilities/GameTimer.h"
 
 namespace BIEngine {
@@ -24,7 +25,7 @@ private:
    SocketAddress m_socketAddress;
 };
 
-using PeerPtr = std::shared_ptr<Peer>;
+using PeerPtr = SharedPtr<Peer>;
 
 class NetworkManager {
 public:

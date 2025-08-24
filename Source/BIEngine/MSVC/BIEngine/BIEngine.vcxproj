@@ -341,6 +341,7 @@
     <ClInclude Include="..\..\StdLib\HashSet.h" />
     <ClInclude Include="..\..\StdLib\List.h" />
     <ClInclude Include="..\..\StdLib\MemoryUtils.h" />
+    <ClInclude Include="..\..\StdLib\SharedPtr.h" />
     <ClInclude Include="..\..\StdLib\StdLib.h" />
     <ClInclude Include="..\..\StdLib\String.h" />
     <ClInclude Include="..\..\StdLib\UniquePtr.h" />

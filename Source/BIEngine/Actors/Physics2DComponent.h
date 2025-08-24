@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "../StdLib/UniquePtr.h"
 #include "ActorComponent.h"
+#include "../StdLib/UniquePtr.h"
 #include "../Physics/Physics2D.h"
 
 namespace BIEngine {
@@ -47,7 +47,7 @@ protected:
 
    glm::vec2 m_rigidBodyScale;
 
-   std::shared_ptr<IGamePhysics2D> m_gamePhysics;
+   SharedPtr<IGamePhysics2D> m_gamePhysics;
 };
 
 static UniquePtr<ActorComponent> CreatePhysics2DComponent()

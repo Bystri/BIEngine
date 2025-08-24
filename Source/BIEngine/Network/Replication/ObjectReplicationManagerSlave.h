@@ -11,14 +11,14 @@ namespace BIEngine {
 class ObjectReplicationManagerSlave {
 public:
    ObjectReplicationManagerSlave()
-      : m_pLinkingContext(std::make_shared<NewtworkObjectLinkingContexts>()), m_pReplicationActionReader(MakeUnique<ReplicationActionReader>(m_pLinkingContext))
+      : m_pLinkingContext(MakeShared<NewtworkObjectLinkingContexts>()), m_pReplicationActionReader(MakeUnique<ReplicationActionReader>(m_pLinkingContext))
    {
    }
 
    void ProcessPacket(InputMemoryBitStream& stream);
 
 private:
-   std::shared_ptr<NewtworkObjectLinkingContexts> m_pLinkingContext;
+   SharedPtr<NewtworkObjectLinkingContexts> m_pLinkingContext;
    UniquePtr<ReplicationActionReader> m_pReplicationActionReader;
 };
 

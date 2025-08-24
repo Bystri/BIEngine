@@ -12,13 +12,13 @@ class Renderer;
 
 class PostProcessor {
 public:
-   PostProcessor(std::shared_ptr<ShaderProgram> pShaderProgram);
+   PostProcessor(SharedPtr<ShaderProgram> pShaderProgram);
 
-   void Use(Renderer* const pRenderer, std::shared_ptr<Texture2D> pTextureToProcess);
+   void Use(Renderer* const pRenderer, SharedPtr<Texture2D> pTextureToProcess);
 
 private:
    const Mesh m_screenOutputMesh;
-   const std::shared_ptr<ShaderProgram> m_pShaderProgram;
+   const SharedPtr<ShaderProgram> m_pShaderProgram;
 };
 
 } // namespace BIEngine

@@ -1,7 +1,6 @@
 #pragma once
 
-#include <memory>
-
+#include "../../StdLib/SharedPtr.h"
 #include "../../StdLib/UniquePtr.h"
 #include "../../StdLib/DynamicArray.h"
 #include "ObjectReplication.h"
@@ -12,12 +11,12 @@
 namespace BIEngine {
 
 class ObjectReplicationManagerMaster {
-   friend std::shared_ptr<ReplicationObject> ObjectReplicationCreate(uint32_t);
+   friend SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t);
 
 public:
    static ObjectReplicationManagerMaster* Get();
 
-   void AddClient(std::shared_ptr<Peer> pPeer);
+   void AddClient(SharedPtr<Peer> pPeer);
 
    void SendPacket(NetworkManager* pNetworkManager);
 
@@ -27,19 +26,19 @@ private:
    ObjectReplicationManagerMaster();
    virtual ~ObjectReplicationManagerMaster();
 
-   void AddReplicationObject(std::shared_ptr<ReplicationObject> pObj);
+   void AddReplicationObject(SharedPtr<ReplicationObject> pObj);
 
    void SendStatePacketToClient(int peerIdx, NetworkManager* pNetworkManager);
 
 private:
-   std::shared_ptr<NewtworkObjectLinkingContexts> m_pLinkingContext;
+   SharedPtr<NewtworkObjectLinkingContexts> m_pLinkingContext;
 
-   DynamicArray<std::shared_ptr<Peer>> m_pPeers;
+   DynamicArray<SharedPtr<Peer>> m_pPeers;
    DynamicArray<UniquePtr<ReplicationActionWriter>> m_pReplicationManagersPerPeer;
    DynamicArray<OutputMemoryBitStream> m_replicationBuffersPerPeer;
-   DynamicArray<std::shared_ptr<ReplicationObject>> m_pReplicationObjects;
+   DynamicArray<SharedPtr<ReplicationObject>> m_pReplicationObjects;
 };
 
-std::shared_ptr<ReplicationObject> ObjectReplicationCreate(uint32_t classId);
+SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t classId);
 
 } // namespace BIEngine

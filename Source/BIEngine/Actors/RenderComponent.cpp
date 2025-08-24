@@ -35,7 +35,7 @@ bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
    pMaterialElement->QueryStringAttribute("path", &materialPath);
 
    m_materialPath = materialPath;
-   std::shared_ptr<MaterialData> pMaterialData = std::static_pointer_cast<MaterialData>(ResCache::Get()->GetHandle(m_materialPath)->GetExtra());
+   SharedPtr<MaterialData> pMaterialData = StaticPointerCast<MaterialData>(ResCache::Get()->GetHandle(m_materialPath)->GetExtra());
    m_pMaterial = pMaterialData->GetMaterial();
 
    return true;
@@ -63,7 +63,7 @@ void MeshRenderComponent::OnRenderObject(const GameTimer& gt)
       return;
    }
 
-   const DynamicArray<std::shared_ptr<ModelMesh>>& modelMeshes = m_pModel->GetMeshes();
+   const DynamicArray<SharedPtr<ModelMesh>>& modelMeshes = m_pModel->GetMeshes();
 
    for (const auto& pModelMesh : modelMeshes) {
       RenderItemsStorage::OpaqueRenderItem opaqueRitem;
@@ -84,8 +84,8 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
 {
    static const String SPRITE_SHADER_PROGRAM_PATH = "Effects/sprite.bisp";
 
-   std::shared_ptr<ShaderProgramData> pShaderProgramData = std::static_pointer_cast<ShaderProgramData>(ResCache::Get()->GetHandle(SPRITE_SHADER_PROGRAM_PATH)->GetExtra());
-   std::shared_ptr<Material> pMaterial = std::make_shared<Material>(pShaderProgramData->GetShaderProgram());
+   SharedPtr<ShaderProgramData> pShaderProgramData = StaticPointerCast<ShaderProgramData>(ResCache::Get()->GetHandle(SPRITE_SHADER_PROGRAM_PATH)->GetExtra());
+   SharedPtr<Material> pMaterial = MakeShared<Material>(pShaderProgramData->GetShaderProgram());
 
    m_spriteColor = COLOR_WHITE;
 
@@ -107,7 +107,7 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
       const char* spritePath;
       pSpriteElement->QueryStringAttribute("path", &spritePath);
       m_spritePath = spritePath;
-      auto spriteData = std::static_pointer_cast<TextureData>(ResCache::Get()->GetHandle(spritePath)->GetExtra());
+      auto spriteData = StaticPointerCast<TextureData>(ResCache::Get()->GetHandle(spritePath)->GetExtra());
 
       if (spriteData == nullptr) {
          Logger::WriteLog(Logger::LogType::ERROR, "Error while loading sprite for Actor with id: " + ToString(GetOwner()->GetId()));
@@ -116,7 +116,7 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
 
       pMaterial->AddTexture("material.sprite", 0, spriteData->GetTexture());
 
-      m_pSprite = std::make_shared<Sprite>(pMaterial);
+      m_pSprite = MakeShared<Sprite>(pMaterial);
    }
 
    return true;
@@ -180,10 +180,10 @@ bool BoxRenderComponent::Init(tinyxml2::XMLElement* pData)
       m_depth = (float)d;
    }
 
-   std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 0u));
-   std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, m_pMaterial);
+   SharedPtr<Mesh> boxMesh = MakeShared<Mesh>(MeshGeometryGenerator::CreateBox(m_width, m_height, m_depth, 0u));
+   SharedPtr<ModelMesh> pModelMesh = MakeShared<ModelMesh>(boxMesh, m_pMaterial);
 
-   m_pModel = std::make_shared<Model>();
+   m_pModel = MakeShared<Model>();
    m_pModel->AddModelMesh(pModelMesh);
 
    return true;
@@ -220,10 +220,10 @@ bool SphereRenderComponent::Init(tinyxml2::XMLElement* pData)
       m_radius = (float)r;
    }
 
-   std::shared_ptr<Mesh> boxMesh = std::make_shared<Mesh>(MeshGeometryGenerator::CreateSphere(m_radius, 16.0f, 16.0f));
-   std::shared_ptr<ModelMesh> pModelMesh = std::make_shared<ModelMesh>(boxMesh, m_pMaterial);
+   SharedPtr<Mesh> boxMesh = MakeShared<Mesh>(MeshGeometryGenerator::CreateSphere(m_radius, 16.0f, 16.0f));
+   SharedPtr<ModelMesh> pModelMesh = MakeShared<ModelMesh>(boxMesh, m_pMaterial);
 
-   m_pModel = std::make_shared<Model>();
+   m_pModel = MakeShared<Model>();
    m_pModel->AddModelMesh(pModelMesh);
 
    return true;
@@ -256,7 +256,7 @@ bool ModelRenderComponent::Init(tinyxml2::XMLElement* pData)
    pModel->QueryStringAttribute("path", &modelPath);
    m_modelPath = modelPath;
 
-   auto modelData = std::static_pointer_cast<ModelData>(ResCache::Get()->GetHandle(m_modelPath)->GetExtra());
+   auto modelData = StaticPointerCast<ModelData>(ResCache::Get()->GetHandle(m_modelPath)->GetExtra());
 
    if (modelData == nullptr) {
       Logger::WriteLog(Logger::LogType::ERROR, "Error while loading actor" + ToString(GetOwner()->GetId()) + "; Error while loading model in ModelRenderComponent;");

@@ -18,14 +18,14 @@ bool SkeletonComponent::Init(tinyxml2::XMLElement* pData)
    return true;
 }
 
-static std::shared_ptr<Skeleton::BoneInfo> skeletonComponentCalculateSkeleton(const glm::mat4& parentTransform, Actor* actor)
+static SharedPtr<Skeleton::BoneInfo> skeletonComponentCalculateSkeleton(const glm::mat4& parentTransform, Actor* actor)
 {
    std::shared_ptr<BoneComponent> pBoneComp = actor->GetComponent<BoneComponent>(BoneComponent::g_CompId).lock();
    if (pBoneComp == nullptr) {
       return nullptr;
    }
 
-   std::shared_ptr<Skeleton::BoneInfo> pBone = pBoneComp->GetBoneInfo();
+   SharedPtr<Skeleton::BoneInfo> pBone = pBoneComp->GetBoneInfo();
 
    std::shared_ptr<TransformComponent> pTransformComponent = actor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
    const glm::mat4 boneTransform = parentTransform * pTransformComponent->GetLocalTransformMatrix();
@@ -34,7 +34,7 @@ static std::shared_ptr<Skeleton::BoneInfo> skeletonComponentCalculateSkeleton(co
    pBone->localTransform = pTransformComponent->GetLocalTransformMatrix();
 
    for (const auto& child : actor->GetChildren()) {
-      std::shared_ptr<Skeleton::BoneInfo> pChildBone = skeletonComponentCalculateSkeleton(boneTransform, child.get());
+      SharedPtr<Skeleton::BoneInfo> pChildBone = skeletonComponentCalculateSkeleton(boneTransform, child.Get());
       if (pChildBone == nullptr) {
          continue;
       }
@@ -46,20 +46,20 @@ static std::shared_ptr<Skeleton::BoneInfo> skeletonComponentCalculateSkeleton(co
 
 void SkeletonComponent::Activate()
 {
-   std::shared_ptr<Skeleton::BoneInfo> pRoot = std::make_shared<Skeleton::BoneInfo>();
+   SharedPtr<Skeleton::BoneInfo> pRoot = MakeShared<Skeleton::BoneInfo>();
    pRoot->name = GetOwner()->GetName();
    pRoot->offset = glm::mat4(1.0f);
    pRoot->localTransform = glm::mat4(1.0f);
 
    for (const auto& child : GetOwner()->GetChildren()) {
-      std::shared_ptr<Skeleton::BoneInfo> pChildBone = skeletonComponentCalculateSkeleton(glm::mat4(1.0f), child.get());
+      SharedPtr<Skeleton::BoneInfo> pChildBone = skeletonComponentCalculateSkeleton(glm::mat4(1.0f), child.Get());
       if (pChildBone == nullptr) {
          continue;
       }
       pRoot->children.PushBack(pChildBone);
    }
 
-   m_pSkeleton = std::make_shared<Skeleton>(pRoot);
+   m_pSkeleton = MakeShared<Skeleton>(pRoot);
 }
 
 void SkeletonComponent::Deactivate()

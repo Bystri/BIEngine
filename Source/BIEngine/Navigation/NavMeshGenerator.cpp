@@ -24,7 +24,7 @@ NavMeshGenerator::~NavMeshGenerator()
    }
 }
 
-void NavMeshGenerator::SetInputGeom(std::shared_ptr<NavMeshInputGeometry> pInputGeom)
+void NavMeshGenerator::SetInputGeom(SharedPtr<NavMeshInputGeometry> pInputGeom)
 {
    m_pGeom = pInputGeom;
 }

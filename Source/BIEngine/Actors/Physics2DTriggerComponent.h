@@ -35,7 +35,7 @@ protected:
 protected:
    glm::vec2 m_dimension;
 
-   std::shared_ptr<IGamePhysics2D> m_gamePhysics;
+   SharedPtr<IGamePhysics2D> m_gamePhysics;
 };
 
 static UniquePtr<ActorComponent> CreatePhysics2DTriggerComponent()

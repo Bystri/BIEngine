@@ -12,6 +12,10 @@ class UniquePtr {
 public:
    UniquePtr() = default;
 
+   UniquePtr(std::nullptr_t)
+   {
+   }
+
    explicit UniquePtr(T* ptr)
       : m_ptr(ptr)
    {
@@ -98,6 +102,10 @@ template <typename T, typename Deleter>
 class UniquePtr<T[], Deleter> {
 public:
    UniquePtr() = default;
+
+   UniquePtr(std::nullptr_t)
+   {
+   }
 
    explicit UniquePtr(T* ptr)
       : m_ptr(ptr)
