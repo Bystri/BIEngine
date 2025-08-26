@@ -14,6 +14,9 @@ class SharedPtr {
    template <typename T2>
    friend class SharedPtr;
 
+   template <typename T2>
+   friend class WeakPtr;
+
 public:
    SharedPtr()
       : m_ptr(nullptr), m_pInfo(new SharedPtrInfo(0))
@@ -102,6 +105,17 @@ public:
       rhs.m_pInfo = nullptr;
    }
 
+   template <typename T2>
+   SharedPtr(const WeakPtr<T2>& rhs)
+      : m_ptr(rhs.m_ptr), m_pInfo(rhs.m_pInfo)
+   {
+      if (m_ptr == nullptr) {
+         m_pInfo = new SharedPtrInfo(0);
+         return;
+      }
+      ++m_pInfo->cnt;
+   }
+
    ~SharedPtr()
    {
       Reset();
@@ -114,6 +128,7 @@ public:
       m_pInfo = rhs.m_pInfo;
 
       if (m_ptr == nullptr) {
+         m_pInfo = new SharedPtrInfo(0);
          return *this;
       }
       ++m_pInfo->cnt;
@@ -169,6 +184,9 @@ public:
 
       if (m_pInfo->cnt == 0) {
          m_pInfo->deleter(m_ptr);
+      }
+
+      if (m_pInfo->cnt == 0 && m_pInfo->weakCnt == 0) {
          delete m_pInfo;
       }
 
@@ -199,6 +217,7 @@ private:
       }
 
       SizeT cnt = 0;
+      SizeT weakCnt = 0;
       DeleterType deleter = DefaultDeleter<T>();
    };
 
@@ -338,6 +357,103 @@ struct Hash<SharedPtr<T>> {
    {
       return Hash<T*>()(val.Get());
    }
+};
+
+template <typename T>
+class WeakPtr {
+   template <typename T2>
+   friend class SharedPtr;
+
+public:
+   WeakPtr() = default;
+
+   WeakPtr(const WeakPtr& rhs)
+      : m_ptr(rhs.m_ptr), m_pInfo(rhs.m_pInfo)
+   {
+      if (m_ptr == nullptr) {
+         m_pInfo = new typename SharedPtr<T>::SharedPtrInfo(0);
+         return;
+      }
+      ++m_pInfo->weakCnt;
+   }
+
+   template <typename T2>
+   WeakPtr(const WeakPtr<T2>& rhs)
+      : m_ptr(rhs.m_ptr), m_pInfo(reinterpret_cast<typename SharedPtr<T>::SharedPtrInfo*>(rhs.m_pInfo))
+   {
+      if (m_ptr == nullptr) {
+         m_pInfo = new typename SharedPtr<T>::SharedPtrInfo(0);
+         return;
+      }
+      ++m_pInfo->weakCnt;
+   }
+
+   template <typename T2>
+   WeakPtr(const SharedPtr<T2>& rhs)
+      : m_ptr(rhs.Get()), m_pInfo(reinterpret_cast<typename SharedPtr<T>::SharedPtrInfo*>(rhs.m_pInfo))
+   {
+      if (m_ptr == nullptr) {
+         m_pInfo = new typename SharedPtr<T>::SharedPtrInfo(0);
+         return;
+      }
+      ++m_pInfo->weakCnt;
+   }
+
+   WeakPtr(WeakPtr&& rhs)
+      : m_ptr(rhs.m_ptr), m_pInfo(rhs.m_pInfo)
+   {
+      rhs.m_ptr = nullptr;
+      rhs.m_pInfo = nullptr;
+   }
+
+   template <typename T2>
+   WeakPtr(WeakPtr<T2>&& rhs)
+      : m_ptr(rhs.m_ptr), m_pInfo(reinterpret_cast<typename SharedPtr<T>::SharedPtrInfo*>(rhs.m_pInfo))
+   {
+      rhs.m_ptr = nullptr;
+      rhs.m_pInfo = nullptr;
+   }
+
+   ~WeakPtr()
+   {
+      Reset();
+   }
+
+   void Reset()
+   {
+      if (m_pInfo == nullptr) {
+         return;
+      }
+
+      if (m_pInfo->weakCnt > 0) {
+         --m_pInfo->weakCnt;
+      }
+
+      if (m_pInfo->cnt == 0 && m_pInfo->weakCnt == 0) {
+         delete m_pInfo;
+      }
+
+      m_ptr = nullptr;
+      m_pInfo = nullptr;
+   }
+
+   SharedPtr<T> Lock() const
+   {
+      if (Expired()) {
+         return SharedPtr<T>();
+      }
+
+      return SharedPtr<T>(*this);
+   }
+
+   bool Expired() const
+   {
+      return m_pInfo == nullptr || m_pInfo->cnt == 0;
+   }
+
+private:
+   T* m_ptr = nullptr;
+   typename SharedPtr<T>::SharedPtrInfo* m_pInfo = nullptr;
 };
 
 } // namespace BIEngine

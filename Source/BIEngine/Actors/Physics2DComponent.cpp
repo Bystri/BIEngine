@@ -68,7 +68,7 @@ bool Physics2DComponent::Init(tinyxml2::XMLElement* pData)
 
 void Physics2DComponent::Activate()
 {
-   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 
    switch (m_shape) {
       case Shape2D::CIRCLE:

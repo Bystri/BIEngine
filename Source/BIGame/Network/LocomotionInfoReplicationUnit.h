@@ -12,7 +12,7 @@ public:
    virtual void Read(BIEngine::InputMemoryBitStream& stream) override;
 
 private:
-   std::shared_ptr<LocomotionInfoComponent> m_pLocomotionInfoComponent;
+   BIEngine::SharedPtr<LocomotionInfoComponent> m_pLocomotionInfoComponent;
 
    glm::vec3 m_cachedCurVel = glm::vec3(0.0f);
    glm::vec2 m_cachedCurDir = glm::vec2(0.0f);

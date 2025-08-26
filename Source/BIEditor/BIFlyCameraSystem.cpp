@@ -4,7 +4,7 @@
 
 #include "BIEventListener.h"
 
-BIFlyCameraSystem::BIFlyCameraSystem(std::shared_ptr<BIEngine::Camera> pCamera, std::shared_ptr<BIEditorController> pInputController)
+BIFlyCameraSystem::BIFlyCameraSystem(BIEngine::SharedPtr<BIEngine::Camera> pCamera, BIEngine::SharedPtr<BIEditorController> pInputController)
    : m_pCamera(pCamera), m_pInputController(pInputController),
      m_movementSpeed(10.0f), m_rotationSpeed(0.5f),
      m_up(false), m_down(false), m_left(false), m_right(false),
@@ -22,7 +22,7 @@ BIFlyCameraSystem::~BIFlyCameraSystem()
 
 void BIFlyCameraSystem::OnKeyDownCallback(BIEngine::IEventDataPtr pEventData)
 {
-   std::shared_ptr<EvtData_OnKeyDown> pCastEventData = std::static_pointer_cast<EvtData_OnKeyDown>(pEventData);
+   BIEngine::SharedPtr<EvtData_OnKeyDown> pCastEventData = BIEngine::StaticPointerCast<EvtData_OnKeyDown>(pEventData);
    const EvtData_OnKeyDown::Key key = pCastEventData->GetKey();
 
    switch (key) {
@@ -43,7 +43,7 @@ void BIFlyCameraSystem::OnKeyDownCallback(BIEngine::IEventDataPtr pEventData)
 
 void BIFlyCameraSystem::OnKeyUpCallback(BIEngine::IEventDataPtr pEventData)
 {
-   std::shared_ptr<EvtData_OnKeyUp> pCastEventData = std::static_pointer_cast<EvtData_OnKeyUp>(pEventData);
+   BIEngine::SharedPtr<EvtData_OnKeyUp> pCastEventData = BIEngine::StaticPointerCast<EvtData_OnKeyUp>(pEventData);
    const EvtData_OnKeyUp::Key key = pCastEventData->GetKey();
 
    switch (key) {

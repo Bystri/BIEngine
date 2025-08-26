@@ -143,7 +143,7 @@ void BIGameClientLogic::NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventDat
 
    BIEngine::SharedPtr<BIEngine::Actor> pActor = GetActor(pCastEventData->GetActorId());
 
-   pActor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).lock()->SetPlayerId(m_pNetworkManager->GetPlayerId());
+   pActor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->SetPlayerId(m_pNetworkManager->GetPlayerId());
 
    m_pInputActionController->Init(m_pNetworkManager->GetPlayerId(), m_pHumanView->GetScene()->GetCamera());
    m_pCameraManager->FollowActor(pActor);

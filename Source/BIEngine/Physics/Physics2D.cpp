@@ -218,7 +218,7 @@ void Physics2D::SyncVisibleScene(const HashMap<ActorId, SharedPtr<Actor>>& actor
 
       SharedPtr<Actor> pGameActor = actorMap.Find(id)->second;
       if (pGameActor) {
-         std::shared_ptr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+         SharedPtr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
          if (pTransformComponent) {
             const cpVect cpPos = cpBodyGetPosition(it->second);
             const glm::vec3 pos = glm::vec3(cpPos.x, cpPos.y, 0.0);

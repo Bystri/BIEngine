@@ -293,3 +293,22 @@ TEST(SharedPtr, DynamicPointerCastMove) {
 
 	EXPECT_TRUE(wasDeleted);
 }
+
+TEST(SharedPtr, WeakFromSharedPtrCtor) {
+	bool wasDeleted = false;
+
+	BIEngine::SharedPtr<SharedPtrTestObj> ptr(new SharedPtrTestObj(&wasDeleted));
+	BIEngine::WeakPtr<SharedPtrTestObj> weakPtr = ptr;
+
+	{
+		BIEngine::SharedPtr<SharedPtrTestObj> ptr2 = weakPtr.Lock();
+		ptr.Reset();
+		EXPECT_FALSE(wasDeleted);
+		EXPECT_FALSE(weakPtr.Expired());
+		EXPECT_FALSE(ptr);
+	}
+
+	EXPECT_TRUE(wasDeleted);
+	EXPECT_TRUE(weakPtr.Expired());
+}
+

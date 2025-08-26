@@ -58,7 +58,7 @@ SharedPtr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const gl
    }
 
    // Hack for change position before another components can read it
-   auto pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   auto pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 
    if (pPosition) {
       pTransformComponent->SetLocalPosition(*pPosition);
@@ -98,7 +98,7 @@ SharedPtr<Actor> ActorFactory::CreateActorFromRootElement(tinyxml2::XMLElement* 
    tinyxml2::XMLElement* const pComponentsElement = pRoot->FirstChildElement("Components");
    if (pComponentsElement) {
       for (tinyxml2::XMLElement* pNode = pComponentsElement->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
-         std::shared_ptr<ActorComponent> pComponent(CreateComponent(pActor, pNode));
+         SharedPtr<ActorComponent> pComponent(CreateComponent(pActor, pNode));
          if (pComponent) {
             pActor->AddComponent(pComponent);
          } else {
@@ -117,18 +117,18 @@ SharedPtr<Actor> ActorFactory::CreateActorFromRootElement(tinyxml2::XMLElement* 
    return pActor;
 }
 
-std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(SharedPtr<Actor> pActor, tinyxml2::XMLElement* pData)
+SharedPtr<ActorComponent> ActorFactory::CreateComponent(SharedPtr<Actor> pActor, tinyxml2::XMLElement* pData)
 {
    // Создаем нового актера
    String name(pData->Value());
-   std::shared_ptr<ActorComponent> pComponent;
+   SharedPtr<ActorComponent> pComponent;
    auto findIt = m_actorComponentCreators.Find(name);
    if (findIt != m_actorComponentCreators.End()) {
       ActorComponentCreator creator = findIt->second;
-      pComponent.reset(creator().Release());
+      pComponent.Reset(creator().Release());
    } else {
       Logger::WriteLog(Logger::LogType::ERROR, "Couldn’t find ActorComponent named " + name);
-      return std::shared_ptr<ActorComponent>();
+      return SharedPtr<ActorComponent>();
    }
 
    // Назначаем владельца компонента
@@ -138,7 +138,7 @@ std::shared_ptr<ActorComponent> ActorFactory::CreateComponent(SharedPtr<Actor> p
    if (pComponent) {
       if (!pComponent->Init(pData)) {
          Logger::WriteLog(Logger::LogType::ERROR, "Component failed to initialize : " + name);
-         return std::shared_ptr<ActorComponent>();
+         return SharedPtr<ActorComponent>();
       }
    }
 
@@ -150,7 +150,7 @@ void ActorFactory::ModifyActor(SharedPtr<Actor> pActor, tinyxml2::XMLElement* ov
    tinyxml2::XMLElement* const pComponents = overrides->FirstChildElement("Components");
    for (tinyxml2::XMLElement* pNode = pComponents->FirstChildElement(); pNode; pNode = pNode->NextSiblingElement()) {
       String name(pNode->Value());
-      auto pComponent = pActor->GetComponent<ActorComponent>(name).lock();
+      auto pComponent = pActor->GetComponent<ActorComponent>(name).Lock();
       if (pComponent)
          pComponent->Init(pNode);
       else {

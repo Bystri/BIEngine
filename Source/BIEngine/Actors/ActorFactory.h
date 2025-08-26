@@ -41,7 +41,7 @@ protected:
    SharedPtr<Actor> CreateActorFromRootElement(tinyxml2::XMLElement* pRoot, Actor* const pParent = nullptr);
 
    // Создает компонент на основе информации из XML-структуры. Вернет нулевой указатель, если данный компонент не может быть создан
-   virtual std::shared_ptr<ActorComponent> CreateComponent(SharedPtr<Actor> pActor, tinyxml2::XMLElement* pData);
+   virtual SharedPtr<ActorComponent> CreateComponent(SharedPtr<Actor> pActor, tinyxml2::XMLElement* pData);
 
 private:
    ActorId GetNextActorId()

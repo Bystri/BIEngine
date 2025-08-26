@@ -19,7 +19,7 @@ BIEngine::ActorId ActorPickerInfoStorage::GetActorId(const int x, const int y)
    return static_cast<BIEngine::ActorId>(info[0] - 1.0f);
 }
 
-std::weak_ptr<ActorPickerInfoStorage> ActorPickingTechnique::GetPickingInfoStorage() const
+BIEngine::WeakPtr<ActorPickerInfoStorage> ActorPickingTechnique::GetPickingInfoStorage() const
 {
    return m_pActorPickerInfoStorage;
 }
@@ -27,10 +27,10 @@ std::weak_ptr<ActorPickerInfoStorage> ActorPickingTechnique::GetPickingInfoStora
 bool ActorPickingTechnique::Init()
 {
    const BIEngine::String spPath = "effects/actorPicking.bisp";
-   auto pickingShaderProgram = std::static_pointer_cast<BIEngine::ShaderProgramData>(BIEngine::ResCache::Get()->GetHandle(spPath)->GetExtra());
+   auto pickingShaderProgram = BIEngine::StaticPointerCast<BIEngine::ShaderProgramData>(BIEngine::ResCache::Get()->GetHandle(spPath)->GetExtra());
    m_pShaderProgram = pickingShaderProgram->GetShaderProgram();
 
-   m_framebuffer = std::make_shared<BIEngine::Framebuffer>();
+   m_framebuffer = BIEngine::MakeShared<BIEngine::Framebuffer>();
 
    BIEngine::Texture2D::CreationParams params;
    params.DataType = BIEngine::Texture2D::Type::FLOAT;
@@ -47,7 +47,7 @@ bool ActorPickingTechnique::Init()
       return false;
    }
 
-   m_pActorPickerInfoStorage = std::shared_ptr<ActorPickerInfoStorage>(new ActorPickerInfoStorage(m_framebuffer));
+   m_pActorPickerInfoStorage = BIEngine::SharedPtr<ActorPickerInfoStorage>(new ActorPickerInfoStorage(m_framebuffer));
 
    return ret;
 }

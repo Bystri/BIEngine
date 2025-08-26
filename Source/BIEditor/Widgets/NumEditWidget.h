@@ -10,7 +10,7 @@ class NumEditWidget {
 public:
    NumEditWidget();
 
-   void SetEditCallback(std::shared_ptr<std::function<void(float)>> onEditCallback)
+   void SetEditCallback(BIEngine::SharedPtr<std::function<void(float)>> onEditCallback)
    {
       m_pOnEditCallback = onEditCallback;
    }
@@ -38,7 +38,7 @@ public:
    void Update();
 
 private:
-   std::shared_ptr<std::function<void(float)>> m_pOnEditCallback;
+   BIEngine::SharedPtr<std::function<void(float)>> m_pOnEditCallback;
 
    BIEngine::String m_text;
    BIEngine::ColorRgb m_textColor;

@@ -15,7 +15,7 @@ public:
    virtual void Read(InputMemoryBitStream& stream) override;
 
 private:
-   std::shared_ptr<TransformComponent> m_pTransformComponent;
+   SharedPtr<TransformComponent> m_pTransformComponent;
 
    glm::vec3 m_cachedPosition = glm::vec3(0.0f);
    glm::vec3 m_cachedRotation = glm::vec3(0.0f);

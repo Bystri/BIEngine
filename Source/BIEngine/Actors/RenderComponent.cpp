@@ -58,7 +58,7 @@ tinyxml2::XMLElement* MeshBaseRenderComponent::GenerateXml(tinyxml2::XMLDocument
 
 void MeshRenderComponent::OnRenderObject(const GameTimer& gt)
 {
-   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
    if (!pTransformComponent) {
       return;
    }
@@ -124,7 +124,7 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
 
 void SpriteRenderComponent::OnRenderObject(const GameTimer& gt)
 {
-   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
    if (!pTransformComponent) {
       return;
    }

@@ -20,14 +20,14 @@ bool SkeletonComponent::Init(tinyxml2::XMLElement* pData)
 
 static SharedPtr<Skeleton::BoneInfo> skeletonComponentCalculateSkeleton(const glm::mat4& parentTransform, Actor* actor)
 {
-   std::shared_ptr<BoneComponent> pBoneComp = actor->GetComponent<BoneComponent>(BoneComponent::g_CompId).lock();
+   SharedPtr<BoneComponent> pBoneComp = actor->GetComponent<BoneComponent>(BoneComponent::g_CompId).Lock();
    if (pBoneComp == nullptr) {
       return nullptr;
    }
 
    SharedPtr<Skeleton::BoneInfo> pBone = pBoneComp->GetBoneInfo();
 
-   std::shared_ptr<TransformComponent> pTransformComponent = actor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   SharedPtr<TransformComponent> pTransformComponent = actor->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
    const glm::mat4 boneTransform = parentTransform * pTransformComponent->GetLocalTransformMatrix();
    pBone->name = actor->GetName();
    pBone->offset = glm::inverse(boneTransform);

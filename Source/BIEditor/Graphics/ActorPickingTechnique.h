@@ -1,7 +1,6 @@
 #pragma once
 
-#include <memory>
-
+#include "../../BIEngine/StdLib/SharedPtr.h"
 #include "../../BIEngine/Renderer/Renderbuffer.h"
 #include "../../BIEngine/Renderer/Framebuffer.h"
 #include "../../BIEngine/Renderer/Texture.h"
@@ -15,13 +14,13 @@ public:
    BIEngine::ActorId GetActorId(const int x, const int y);
 
 private:
-   ActorPickerInfoStorage(std::shared_ptr<BIEngine::Framebuffer> pFramebuffer)
+   ActorPickerInfoStorage(BIEngine::SharedPtr<BIEngine::Framebuffer> pFramebuffer)
       : m_pFramebuffer(pFramebuffer)
    {
    }
 
 private:
-   std::shared_ptr<BIEngine::Framebuffer> m_pFramebuffer;
+   BIEngine::SharedPtr<BIEngine::Framebuffer> m_pFramebuffer;
 };
 
 class ActorPickingTechnique : public BIEngine::IGraphicsTechnique {
@@ -34,7 +33,7 @@ public:
    {
    }
 
-   std::weak_ptr<ActorPickerInfoStorage> GetPickingInfoStorage() const;
+   BIEngine::WeakPtr<ActorPickerInfoStorage> GetPickingInfoStorage() const;
 
    bool Init() override;
 
@@ -44,11 +43,11 @@ private:
    const int m_screenWidth;
    const int m_screenHeight;
 
-   std::shared_ptr<ActorPickerInfoStorage> m_pActorPickerInfoStorage;
+   BIEngine::SharedPtr<ActorPickerInfoStorage> m_pActorPickerInfoStorage;
 
-   std::shared_ptr<BIEngine::Framebuffer> m_framebuffer;
-   std::shared_ptr<BIEngine::Texture2D> m_pickingTexture;
-   std::shared_ptr<BIEngine::Renderbuffer> m_depthBuffer;
+   BIEngine::SharedPtr<BIEngine::Framebuffer> m_framebuffer;
+   BIEngine::SharedPtr<BIEngine::Texture2D> m_pickingTexture;
+   BIEngine::SharedPtr<BIEngine::Renderbuffer> m_depthBuffer;
 
-   std::shared_ptr<BIEngine::ShaderProgram> m_pShaderProgram;
+   BIEngine::SharedPtr<BIEngine::ShaderProgram> m_pShaderProgram;
 };

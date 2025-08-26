@@ -20,5 +20,5 @@ private:
 
 private:
    BIEngine::SharedPtr<BIEngine::Camera> m_pCamera;
-   std::shared_ptr<BIEngine::Process> m_pCameraFollowProc;
+   BIEngine::SharedPtr<BIEngine::Process> m_pCameraFollowProc;
 };

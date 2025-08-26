@@ -69,5 +69,5 @@ PYBIND11_EMBEDDED_MODULE(BIEProcess, m)
    processPyClass
       .def(py::init<>());
 
-   m.def("AttachProcess", [](const std::shared_ptr<BIEngine::Process>& pProcess) { BIEngine::ProcessManager::Get()->AttachProcess(pProcess); });
+   m.def("AttachProcess", [](const BIEngine::SharedPtr<BIEngine::Process>& pProcess) { BIEngine::ProcessManager::Get()->AttachProcess(pProcess); });
 }

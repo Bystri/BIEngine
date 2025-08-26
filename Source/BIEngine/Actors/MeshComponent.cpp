@@ -66,7 +66,7 @@ void MeshComponent::OnRenderObject(const GameTimer& gt)
    opaqueRitem.IndicesSize = m_pMesh->GetIndices().Size();
    opaqueRitem.pMaterial = m_pMaterial;
 
-   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
    opaqueRitem.ModelTransform = pTransformComponent->GetWorldTransformMatrix();
 
    pHumanView->GetScene()->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);

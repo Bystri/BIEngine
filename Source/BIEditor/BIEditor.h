@@ -8,7 +8,7 @@
 
 class BIEditorApp : public BIEngine::GameApp {
 public:
-   explicit BIEditorApp(std::shared_ptr<BIEngine::GameLogic> pGameLogic);
+   explicit BIEditorApp(BIEngine::SharedPtr<BIEngine::GameLogic> pGameLogic);
    virtual ~BIEditorApp();
 
    virtual bool Init();
@@ -39,7 +39,7 @@ public:
    virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
    virtual void OnPostRender(const BIEngine::GameTimer& gt) override;
 
-   void SetController(std::shared_ptr<BIEditorController> controller)
+   void SetController(BIEngine::SharedPtr<BIEditorController> controller)
    {
       m_pKeyboardHandler = controller;
       m_pPointerHandler = controller;
@@ -48,7 +48,7 @@ public:
 private:
    void showMenu();
    void showSceneTree();
-   void showActorTreeNode(std::shared_ptr<BIEngine::Actor> pActor);
+   void showActorTreeNode(BIEngine::SharedPtr<BIEngine::Actor> pActor);
 
    void saveWorld();
 
@@ -63,7 +63,7 @@ private:
 
    ActorEditorWidget* m_pActorEditorWidget;
 
-   std::weak_ptr<ActorPickerInfoStorage> m_pActorPickerInfoStorage;
+   BIEngine::WeakPtr<ActorPickerInfoStorage> m_pActorPickerInfoStorage;
 
    bool m_wasCtrlButtonProcessed;
    bool m_bIsWindowFocused;

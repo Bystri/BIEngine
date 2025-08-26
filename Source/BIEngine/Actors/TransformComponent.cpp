@@ -90,7 +90,7 @@ void TransformComponent::SetLocalPosition(const glm::vec3& pos)
    m_localPos = pos;
 
    if (GetOwner()->GetParent()) {
-      std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+      SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 
       if (pTransformComponent != nullptr) {
          m_worldPos = pTransformComponent->GetLocalToWorldTransformMatrix() * glm::vec4(m_localPos, 1.0f);
@@ -110,7 +110,7 @@ void TransformComponent::SetLocalRotation(const glm::vec3& rot)
    m_localRot = rot;
 
    if (GetOwner()->GetParent()) {
-      std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+      SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 
       if (pTransformComponent != nullptr) {
          m_worldRot = pTransformComponent->GetLocalToWorldTransformMatrix() * glm::vec4(m_localRot, 1.0f);
@@ -130,7 +130,7 @@ void TransformComponent::SetLocalSize(const glm::vec3& size)
    m_localSize = size;
 
    if (GetOwner()->GetParent()) {
-      std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+      SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 
       if (pTransformComponent != nullptr) {
          m_worldSize = pTransformComponent->GetLocalToWorldTransformMatrix() * glm::vec4(m_localSize, 1.0f);
@@ -178,7 +178,7 @@ void TransformComponent::SetWorldTransformMatrix(const glm::mat4& trans)
 
 
    if (GetOwner()->GetParent()) {
-      std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+      SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 
       if (pTransformComponent != nullptr) {
          m_localPos = pTransformComponent->GetWorldTransformMatrix() * glm::vec4(m_worldPos, 1.0f);
@@ -232,7 +232,7 @@ void TransformComponent::SetPosition(const glm::vec3& pos)
    m_worldPos = pos;
 
    if (GetOwner()->GetParent()) {
-      std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+      SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 
       if (pTransformComponent != nullptr) {
          m_localPos = pTransformComponent->GetWorldToLocalTransformMatrix() * glm::vec4(m_worldPos, 1.0f);
@@ -252,7 +252,7 @@ void TransformComponent::SetRotation(const glm::vec3& rot)
    m_worldRot = rot;
 
    if (GetOwner()->GetParent()) {
-      std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+      SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 
       if (pTransformComponent != nullptr) {
          m_localRot = pTransformComponent->GetWorldToLocalTransformMatrix() * glm::vec4(m_worldRot, 1.0f);
@@ -272,7 +272,7 @@ void TransformComponent::SetSize(const glm::vec3& size)
    m_worldSize = size;
 
    if (GetOwner()->GetParent()) {
-      std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+      SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 
       if (pTransformComponent != nullptr) {
          m_localSize = pTransformComponent->GetWorldToLocalTransformMatrix() * glm::vec4(m_worldSize, 1.0f);
@@ -322,7 +322,7 @@ void TransformComponent::recalculateWorldTransformMatrix()
 void TransformComponent::updateWorldTransformMatrix()
 {
    if (GetOwner()->GetParent()) {
-      std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+      SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetParent()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 
       if (pTransformComponent != nullptr) {
          m_worldTransform = pTransformComponent->GetWorldTransformMatrix() * m_localTransform;

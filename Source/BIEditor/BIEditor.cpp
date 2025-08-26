@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 
 /**********BIGameApp**********/
 
-BIEditorApp::BIEditorApp(std::shared_ptr<BIEngine::GameLogic> pGameLogic)
+BIEditorApp::BIEditorApp(BIEngine::SharedPtr<BIEngine::GameLogic> pGameLogic)
    : GameApp(pGameLogic)
 {
 }
@@ -117,9 +117,9 @@ static BIEngine::SharedPtr<BIEngine::Skybox> humanViewCreateSkybox()
       return nullptr;
    }
 
-   BIEngine::SharedPtr<BIEngine::ShaderData> pVertShaderData = std::static_pointer_cast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(vertexShaderPath)->GetExtra());
-   BIEngine::SharedPtr<BIEngine::ShaderData> pFragShaderxData = std::static_pointer_cast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(fragmentShaderPath)->GetExtra());
-   BIEngine::SharedPtr<BIEngine::ShaderProgram> pShaderProgram = std::make_shared<BIEngine::ShaderProgram>();
+   BIEngine::SharedPtr<BIEngine::ShaderData> pVertShaderData = BIEngine::StaticPointerCast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(vertexShaderPath)->GetExtra());
+   BIEngine::SharedPtr<BIEngine::ShaderData> pFragShaderxData = BIEngine::StaticPointerCast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(fragmentShaderPath)->GetExtra());
+   BIEngine::SharedPtr<BIEngine::ShaderProgram> pShaderProgram = BIEngine::MakeShared<BIEngine::ShaderProgram>();
    pShaderProgram->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
 
 
@@ -143,7 +143,7 @@ static BIEngine::SharedPtr<BIEngine::Skybox> humanViewCreateSkybox()
          return nullptr;
       }
 
-      auto cubemapTextureResExtraData = std::static_pointer_cast<BIEngine::ImageExtraData>(BIEngine::ResCache::Get()->GetHandle(cubemapTexturePath)->GetExtra());
+      auto cubemapTextureResExtraData = BIEngine::StaticPointerCast<BIEngine::ImageExtraData>(BIEngine::ResCache::Get()->GetHandle(cubemapTexturePath)->GetExtra());
 
       if (!cubemapTextureResExtraData) {
          return nullptr;
@@ -154,9 +154,9 @@ static BIEngine::SharedPtr<BIEngine::Skybox> humanViewCreateSkybox()
       height = cubemapTextureResExtraData->GetHeight();
    }
 
-   std::shared_ptr<BIEngine::CubemapTexture> pTexture = BIEngine::CubemapTexture::Create(width, height, BIEngine::CubemapTexture::SizedFormat::RGB, BIEngine::CubemapTexture::Format::RGB, cubemapTextureImages);
+   BIEngine::SharedPtr<BIEngine::CubemapTexture> pTexture = BIEngine::CubemapTexture::Create(width, height, BIEngine::CubemapTexture::SizedFormat::RGB, BIEngine::CubemapTexture::Format::RGB, cubemapTextureImages);
 
-   return std::make_shared<BIEngine::Skybox>(pTexture, pShaderProgram);
+   return BIEngine::MakeShared<BIEngine::Skybox>(pTexture, pShaderProgram);
 }
 
 bool BIEditorHumanView::Init()
@@ -174,13 +174,13 @@ bool BIEditorHumanView::Init()
    constexpr std::size_t MAX_POINT_LIGHTS_NUM = 1;
    constexpr std::size_t MAX_SPOT_LIGHTS_NUM = 2;
 
-   std::shared_ptr<BIEngine::GraphicsRenderPass> pPreWorldRenderPass = std::make_shared<BIEngine::GraphicsRenderPass>();
+   BIEngine::SharedPtr<BIEngine::GraphicsRenderPass> pPreWorldRenderPass = BIEngine::MakeShared<BIEngine::GraphicsRenderPass>();
 
-   std::shared_ptr<ActorPickingTechnique> pActorPickingTechnique = std::make_shared<ActorPickingTechnique>(m_screenWidth, m_screenHeight);
+   BIEngine::SharedPtr<ActorPickingTechnique> pActorPickingTechnique = BIEngine::MakeShared<ActorPickingTechnique>(m_screenWidth, m_screenHeight);
    pPreWorldRenderPass->AddTechnique(pActorPickingTechnique);
 
-   pPreWorldRenderPass->AddTechnique(std::make_shared<BIEngine::DirLightShadowGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM));
-   pPreWorldRenderPass->AddTechnique(std::make_shared<BIEngine::PointLightShadowGraphicsTechnique>(MAX_POINT_LIGHTS_NUM));
+   pPreWorldRenderPass->AddTechnique(BIEngine::MakeShared<BIEngine::DirLightShadowGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM));
+   pPreWorldRenderPass->AddTechnique(BIEngine::MakeShared<BIEngine::PointLightShadowGraphicsTechnique>(MAX_POINT_LIGHTS_NUM));
 
    pPreWorldRenderPass->Init();
 
@@ -188,7 +188,7 @@ bool BIEditorHumanView::Init()
 
    m_pScene->AddRenderPass(pPreWorldRenderPass);
 
-   m_pGameRenderTarget = std::make_shared<BIEngine::Framebuffer>();
+   m_pGameRenderTarget = BIEngine::MakeShared<BIEngine::Framebuffer>();
    m_pGameRenderTargetColorBuffer = BIEngine::Texture2D::Create(m_screenWidth, m_screenHeight, BIEngine::Texture::SizedFormat::RGB, BIEngine::Texture::Format::RGB, nullptr);
    m_pGameRenderTargetDepthBuffer = BIEngine::Renderbuffer::Create(m_screenWidth, m_screenHeight, BIEngine::Renderbuffer::Format::DEPTH24);
    FramebufferAttach(m_pGameRenderTarget, BIEngine::FramebufferAttachementType::COLOR, m_pGameRenderTargetColorBuffer);
@@ -198,26 +198,26 @@ bool BIEditorHumanView::Init()
    }
 
    constexpr int MsaaSamples = 4;
-   std::shared_ptr<BIEngine::WorldRenderPass> pWorldRenderPass = std::make_shared<BIEngine::WorldRenderPass>(m_screenWidth, m_screenHeight, MsaaSamples);
+   BIEngine::SharedPtr<BIEngine::WorldRenderPass> pWorldRenderPass = BIEngine::MakeShared<BIEngine::WorldRenderPass>(m_screenWidth, m_screenHeight, MsaaSamples);
    pWorldRenderPass->SetRenderTarget(m_pGameRenderTarget);
 
-   std::shared_ptr<BIEngine::LightGraphicsTechnique> pLightGraphicsTechnique = std::make_shared<BIEngine::LightGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM, MAX_POINT_LIGHTS_NUM, MAX_SPOT_LIGHTS_NUM);
+   BIEngine::SharedPtr<BIEngine::LightGraphicsTechnique> pLightGraphicsTechnique = BIEngine::MakeShared<BIEngine::LightGraphicsTechnique>(MAX_DIRECTIONAL_LIGHTS_NUM, MAX_POINT_LIGHTS_NUM, MAX_SPOT_LIGHTS_NUM);
    pWorldRenderPass->AddTechnique(pLightGraphicsTechnique);
 
-   std::shared_ptr<BIEngine::OpaqueGraphicsTechnique> pOpaqueGraphicsTechnique = std::make_shared<BIEngine::OpaqueGraphicsTechnique>();
+   BIEngine::SharedPtr<BIEngine::OpaqueGraphicsTechnique> pOpaqueGraphicsTechnique = BIEngine::MakeShared<BIEngine::OpaqueGraphicsTechnique>();
    pWorldRenderPass->AddTechnique(pOpaqueGraphicsTechnique);
 
-   std::shared_ptr<BIEngine::SkyboxGraphicsTechnique> pSkyboxGraphicsTechnique = std::make_shared<BIEngine::SkyboxGraphicsTechnique>(humanViewCreateSkybox());
+   BIEngine::SharedPtr<BIEngine::SkyboxGraphicsTechnique> pSkyboxGraphicsTechnique = BIEngine::MakeShared<BIEngine::SkyboxGraphicsTechnique>(humanViewCreateSkybox());
    pWorldRenderPass->AddTechnique(pSkyboxGraphicsTechnique);
 
-   std::shared_ptr<SelectedActorOutliner> pSelectedActorTechnique = std::make_shared<SelectedActorOutliner>(m_pActorEditorWidget);
+   BIEngine::SharedPtr<SelectedActorOutliner> pSelectedActorTechnique = BIEngine::MakeShared<SelectedActorOutliner>(m_pActorEditorWidget);
    pWorldRenderPass->AddTechnique(pSelectedActorTechnique);
 
    pWorldRenderPass->Init();
 
    m_pScene->AddRenderPass(pWorldRenderPass);
 
-   std::shared_ptr<BIEditorController> pGameController = std::make_shared<BIEditorController>();
+   BIEngine::SharedPtr<BIEditorController> pGameController = BIEngine::MakeShared<BIEditorController>();
    SetController(pGameController);
 
    m_pFlyCameraSystem = new BIFlyCameraSystem(m_pScene->GetCamera(), pGameController);
@@ -292,7 +292,7 @@ void BIEditorHumanView::OnPostRender(const BIEngine::GameTimer& gt)
          mousePos.y = screenPos.y - mousePos.y;
 
          BIEngine::ActorId selectedId = BIEngine::Actor::INVALID_ACTOR_ID;
-         if (std::shared_ptr<ActorPickerInfoStorage> spt = m_pActorPickerInfoStorage.lock()) {
+         if (BIEngine::SharedPtr<ActorPickerInfoStorage> spt = m_pActorPickerInfoStorage.lock()) {
             selectedId = spt->GetActorId(mousePos.x, mousePos.y);
          }
 
@@ -344,7 +344,7 @@ void BIEditorHumanView::showSceneTree()
    }
 }
 
-void BIEditorHumanView::showActorTreeNode(std::shared_ptr<BIEngine::Actor> pActor)
+void BIEditorHumanView::showActorTreeNode(BIEngine::SharedPtr<BIEngine::Actor> pActor)
 {
    ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_OpenOnArrow;
    const bool isSelected = pActor->GetId() == m_pActorEditorWidget->GetCurrentSelectedActorId();
@@ -443,7 +443,7 @@ static void editorHumanViewUpdateDuplicateActorName(BIEngine::String& name)
 
 void BIEditorHumanView::duplicateActor()
 {
-   const std::shared_ptr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(m_pActorEditorWidget->GetCurrentSelectedActorId());
+   const BIEngine::SharedPtr<BIEngine::Actor> pActor = BIEngine::g_pApp->m_pGameLogic->GetActor(m_pActorEditorWidget->GetCurrentSelectedActorId());
 
    tinyxml2::XMLDocument actorXmlDoc;
    tinyxml2::XMLElement* const pActorElement = pActor->ToXML(&actorXmlDoc);

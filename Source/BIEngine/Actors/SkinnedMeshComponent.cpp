@@ -67,7 +67,7 @@ void SkinnedMeshComponent::Activate()
 
 void SkinnedMeshComponent::OnRenderObject(const GameTimer& gt)
 {
-   std::shared_ptr<SkeletonComponent> skeletonComp = m_pSkeletonRootActor->GetComponent<SkeletonComponent>(SkeletonComponent::g_CompId).lock();
+   SharedPtr<SkeletonComponent> skeletonComp = m_pSkeletonRootActor->GetComponent<SkeletonComponent>(SkeletonComponent::g_CompId).Lock();
    m_pMesh->OnRender(skeletonComp->GetSkeleton().Get());
 
    RenderItemsStorage::OpaqueRenderItem opaqueRitem;
@@ -76,7 +76,7 @@ void SkinnedMeshComponent::OnRenderObject(const GameTimer& gt)
    opaqueRitem.IndicesSize = m_pMesh->GetIndices().Size();
    opaqueRitem.pMaterial = m_pMaterial;
 
-   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
    opaqueRitem.ModelTransform = pTransformComponent->GetWorldTransformMatrix();
 
    g_pApp->TryGetHumanView(0)->GetScene()->GetRenderItemsStorage()->InsertOpaqueRenderItem(opaqueRitem);

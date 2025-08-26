@@ -351,7 +351,7 @@ void NavMeshManager::HandleActorDestroyed(IEventDataPtr pEventData)
 
 void NavMeshManager::TryAddActor(SharedPtr<Actor> pActor)
 {
-   std::shared_ptr<BoxRenderComponent> pBoxRenderComponent = pActor->GetComponent<BoxRenderComponent>(BoxRenderComponent::g_CompId).lock();
+   SharedPtr<BoxRenderComponent> pBoxRenderComponent = pActor->GetComponent<BoxRenderComponent>(BoxRenderComponent::g_CompId).Lock();
 
    if (pBoxRenderComponent) {
       m_actors.PushBack(pActor);
@@ -381,9 +381,9 @@ SharedPtr<NavMeshInputGeometry> NavMeshManager::prepareNavGeom()
    SharedPtr<NavInputMeshesManager> pMeshesManager = MakeShared<NavInputMeshesManager>();
 
    for (int i = 0; i < m_actors.Size(); ++i) {
-      std::shared_ptr<TransformComponent> pTransformComponent = m_actors[i]->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
-      std::shared_ptr<BoxRenderComponent> pBoxRenderComponent = m_actors[i]->GetComponent<BoxRenderComponent>(BoxRenderComponent::g_CompId).lock();
-      std::shared_ptr<Physics3DComponent> pPhysicsComponent = m_actors[i]->GetComponent<Physics3DComponent>(Physics3DComponent::g_CompId).lock();
+      SharedPtr<TransformComponent> pTransformComponent = m_actors[i]->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
+      SharedPtr<BoxRenderComponent> pBoxRenderComponent = m_actors[i]->GetComponent<BoxRenderComponent>(BoxRenderComponent::g_CompId).Lock();
+      SharedPtr<Physics3DComponent> pPhysicsComponent = m_actors[i]->GetComponent<Physics3DComponent>(Physics3DComponent::g_CompId).Lock();
 
       if (pTransformComponent && pBoxRenderComponent && pPhysicsComponent && pPhysicsComponent->GetBodyType() == IGamePhysics3D::BodyType::STATIC) {
          const DynamicArray<SharedPtr<ModelMesh>>& modelMeshes = pBoxRenderComponent->GetModel()->GetMeshes();

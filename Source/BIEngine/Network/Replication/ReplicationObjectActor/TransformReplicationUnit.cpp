@@ -6,7 +6,7 @@ namespace BIEngine {
 
 void TransformReplicationUnit::Init(SharedPtr<Actor> pActor)
 {
-   m_pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   m_pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 }
 
 bool TransformReplicationUnit::IsStateChanged()

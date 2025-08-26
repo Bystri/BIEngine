@@ -16,7 +16,7 @@ using ActorId = unsigned long;
 class Actor {
    friend class ActorFactory;
 
-   using ActorComponents = HashMap<ComponentId, std::shared_ptr<ActorComponent>>;
+   using ActorComponents = HashMap<ComponentId, SharedPtr<ActorComponent>>;
 
 public:
    const static ActorId INVALID_ACTOR_ID = -1;
@@ -67,19 +67,19 @@ public:
 
    // Шаблон функции для получения компонентов
    template <class ComponentType>
-   std::weak_ptr<ComponentType> GetComponent(ComponentId id)
+   WeakPtr<ComponentType> GetComponent(ComponentId id)
    {
       auto findIt = m_components.Find(id);
       if (findIt != m_components.End()) {
-         std::shared_ptr<ActorComponent> pBase(findIt->second);
+         SharedPtr<ActorComponent> pBase(findIt->second);
 
          // Приведение к подклассу типа компонента
-         std::shared_ptr<ComponentType> pSub(std::static_pointer_cast<ComponentType>(pBase));
-         std::weak_ptr<ComponentType> pWeakSub(pSub); // Приведение сильного указателя к слабому
+         SharedPtr<ComponentType> pSub(StaticPointerCast<ComponentType>(pBase));
+         WeakPtr<ComponentType> pWeakSub(pSub); // Приведение сильного указателя к слабому
          return pWeakSub;
       }
 
-      return std::weak_ptr<ComponentType>();
+      return WeakPtr<ComponentType>();
    }
 
 private:
@@ -92,7 +92,7 @@ private:
    bool Init(tinyxml2::XMLElement* pData);
 
    // Данный метод может вызываться только фабрикой
-   void AddComponent(std::shared_ptr<ActorComponent> pComponent);
+   void AddComponent(SharedPtr<ActorComponent> pComponent);
 
 private:
    // Идентификатор актера, по которому к нему идет обращение из других систем

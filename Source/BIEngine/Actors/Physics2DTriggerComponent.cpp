@@ -35,7 +35,7 @@ bool Physics2DTriggerComponent::Init(tinyxml2::XMLElement* pData)
 
 void Physics2DTriggerComponent::Activate()
 {
-   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
    m_gamePhysics->CreateTrigger(GetOwner()->GetId(), pTransformComponent->GetPosition(), m_dimension);
 }
 

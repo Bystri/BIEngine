@@ -36,7 +36,7 @@ void Animator::calculateActorTransform(Actor* pActor)
 
    if (boneChannel) {
       boneChannel->Update(m_currentTime);
-      std::shared_ptr<TransformComponent> pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+      SharedPtr<TransformComponent> pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
       pTransformComponent->SetLocalTransformMatrix(boneChannel->GetLocalTransform());
    }
 

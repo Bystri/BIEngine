@@ -8,7 +8,7 @@ namespace py = pybind11;
 
 PYBIND11_EMBEDDED_MODULE(BIGInputEvent, m)
 {
-   py::class_<EvtData_OnKeyEvent, BIEngine::BaseEventData, std::shared_ptr<EvtData_OnKeyEvent>> keyEvent(m, "EvtData_OnKeyEvent");
+   py::class_<EvtData_OnKeyEvent, BIEngine::BaseEventData, BIEngine::SharedPtr<EvtData_OnKeyEvent>> keyEvent(m, "EvtData_OnKeyEvent");
 
    py::enum_<EvtData_OnKeyEvent::Key>(keyEvent, "Key")
       .value("UNKNOWN", EvtData_OnKeyEvent::Key::UNKNOWN)
@@ -135,11 +135,11 @@ PYBIND11_EMBEDDED_MODULE(BIGInputEvent, m)
 
       .export_values();
 
-   py::class_<EvtData_OnKeyDown, EvtData_OnKeyEvent, std::shared_ptr<EvtData_OnKeyDown>>(m, "EvtData_OnKeyDown")
+   py::class_<EvtData_OnKeyDown, EvtData_OnKeyEvent, BIEngine::SharedPtr<EvtData_OnKeyDown>>(m, "EvtData_OnKeyDown")
       .def_readonly_static("eventType", &EvtData_OnKeyDown::sk_EventType)
       .def("GetKey", &EvtData_OnKeyDown::GetKey);
 
-   py::class_<EvtData_OnKeyUp, EvtData_OnKeyEvent, std::shared_ptr<EvtData_OnKeyUp>>(m, "EvtData_OnKeyUp")
+   py::class_<EvtData_OnKeyUp, EvtData_OnKeyEvent, BIEngine::SharedPtr<EvtData_OnKeyUp>>(m, "EvtData_OnKeyUp")
       .def_readonly_static("eventType", &EvtData_OnKeyUp::sk_EventType)
       .def("GetKey", &EvtData_OnKeyUp::GetKey);
 }

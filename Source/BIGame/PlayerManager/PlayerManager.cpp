@@ -19,7 +19,7 @@ void Player::SetPlayableActor(BIEngine::SharedPtr<BIEngine::Actor> pActor)
       return;
    }
 
-   m_pPlayableActor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).lock()->SetPlayerId(m_id);
+   m_pPlayableActor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->SetPlayerId(m_id);
 
    BIEngine::SharedPtr<EvtData_PlayerActor_Created> pEvent = BIEngine::MakeShared<EvtData_PlayerActor_Created>(m_id, m_pPlayableActor->GetId());
    BIEngine::EventManager::Get()->QueueEvent(pEvent);

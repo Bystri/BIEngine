@@ -1,8 +1,7 @@
 #pragma once
 
-#include <memory>
-
 #include "../Widgets/ActorEditorWidget.h"
+#include "../../BIEngine/StdLib/SharedPtr.h"
 #include "../../BIEngine/Renderer/ShadersLoader.h"
 #include "../../BIEngine/Graphics/GraphicsTechnique.h"
 
@@ -20,6 +19,6 @@ public:
 private:
    ActorEditorWidget* m_pActorEditorWidget;
 
-   std::shared_ptr<BIEngine::ShaderProgram> m_pEmptyColorSp;
-   std::shared_ptr<BIEngine::ShaderProgram> m_pSolidColorSp;
+   BIEngine::SharedPtr<BIEngine::ShaderProgram> m_pEmptyColorSp;
+   BIEngine::SharedPtr<BIEngine::ShaderProgram> m_pSolidColorSp;
 };

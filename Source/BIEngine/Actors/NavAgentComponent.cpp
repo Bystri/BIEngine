@@ -98,7 +98,7 @@ void NavAgentComponent::Activate()
 
    m_pNavCrowd = g_pApp->m_pGameLogic->GetNavWorld()->GetNavCrowd();
 
-   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
    m_agentId = m_pNavCrowd->AddAgent(GetOwner()->GetId(), pTransformComponent->GetPosition(), m_params);
 }
 

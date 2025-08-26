@@ -155,7 +155,7 @@ void Actor::Destroy()
    m_components.Clear();
 }
 
-void Actor::AddComponent(std::shared_ptr<ActorComponent> pComponent)
+void Actor::AddComponent(SharedPtr<ActorComponent> pComponent)
 {
    auto success = m_components.Insert(pComponent->GetComponentId(), pComponent);
    Assert(success.second, "Cant load component %s", pComponent->GetComponentId().CStr());

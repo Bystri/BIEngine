@@ -379,7 +379,7 @@ void Physics3D::BeforeUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap)
 
       SharedPtr<Actor> pGameActor = actorIt->second;
       if (pGameActor && actorMotionState) {
-         std::shared_ptr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+         SharedPtr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
          if (pTransformComponent) {
             glm::mat4 trans = glm::mat4(1.0f);
             trans = glm::translate(trans, pTransformComponent->GetPosition());
@@ -423,7 +423,7 @@ void Physics3D::AfterUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap)
 
       SharedPtr<Actor> pGameActor = actorIt->second;
       if (pGameActor && actorMotionState) {
-         std::shared_ptr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+         SharedPtr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
          if (pTransformComponent) {
             glm::mat4 trans = glm::mat4(1.0f);
             trans = glm::translate(trans, pTransformComponent->GetPosition());

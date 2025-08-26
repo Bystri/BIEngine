@@ -21,7 +21,7 @@ bool BoneComponent::Init(tinyxml2::XMLElement* pData)
 
 void BoneComponent::OnUpdate(const GameTimer& gt)
 {
-   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
    m_pBone->localTransform = pTransformComponent->GetLocalTransformMatrix();
 }
 

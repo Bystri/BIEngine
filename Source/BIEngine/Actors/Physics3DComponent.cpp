@@ -92,7 +92,7 @@ bool Physics3DComponent::Init(tinyxml2::XMLElement* pData)
 
 void Physics3DComponent::Activate()
 {
-   std::shared_ptr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+   SharedPtr<TransformComponent> pTransformComponent = GetOwner()->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
 
    IGamePhysics3D::ShapeCreationParams creationParams;
    creationParams.actorId = GetOwner()->GetId();

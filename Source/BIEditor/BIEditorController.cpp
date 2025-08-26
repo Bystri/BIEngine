@@ -63,7 +63,7 @@ bool BIEditorController::OnKeyDown(int key, int scancode)
    // Обновляем таблицу клавиш
    m_isKeyPressed[key] = true;
 
-   std::shared_ptr<EvtData_OnKeyDown> pEvent = std::make_shared<EvtData_OnKeyDown>(static_cast<EvtData_OnKeyEvent::Key>(key));
+   BIEngine::SharedPtr<EvtData_OnKeyDown> pEvent = BIEngine::MakeShared<EvtData_OnKeyDown>(static_cast<EvtData_OnKeyEvent::Key>(key));
    BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
    return true;
@@ -79,7 +79,7 @@ bool BIEditorController::OnKeyUp(int key, int scancode)
    // Обновляем таблицу клавиш
    m_isKeyPressed[key] = false;
 
-   std::shared_ptr<EvtData_OnKeyUp> pEvent = std::make_shared<EvtData_OnKeyUp>(static_cast<EvtData_OnKeyEvent::Key>(key));
+   BIEngine::SharedPtr<EvtData_OnKeyUp> pEvent = BIEngine::MakeShared<EvtData_OnKeyUp>(static_cast<EvtData_OnKeyEvent::Key>(key));
    BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
    return true;

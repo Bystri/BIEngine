@@ -157,7 +157,7 @@ void NavCrowd::UpdateCrowdInfo(const HashMap<ActorId, SharedPtr<Actor>>& actorMa
             continue;
          }
 
-         std::shared_ptr<TransformComponent> pTransformComponent = itr->second->GetComponent<TransformComponent>(TransformComponent::g_CompId).lock();
+         SharedPtr<TransformComponent> pTransformComponent = itr->second->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
          Assert(pTransformComponent != nullptr, "Actor has not TransformComponent. Something really bad happened");
          if (!pTransformComponent) {
             continue;

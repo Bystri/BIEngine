@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include <memory>
-
+#include "../StdLib/SharedPtr.h"
 #include "../Utilities/Logger.h"
 #include "../Utilities/GameTimer.h"
 #include "../EngineCore/Assert.h"
@@ -9,8 +8,8 @@
 namespace BIEngine {
 
 class Process;
-using StrongProcessPtr = std::shared_ptr<Process>;
-using WeakProcessPtr = std::weak_ptr<Process>;
+using StrongProcessPtr = SharedPtr<Process>;
+using WeakProcessPtr = WeakPtr<Process>;
 
 class Process {
    friend class ProcessManager;

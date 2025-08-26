@@ -18,7 +18,7 @@ StrongProcessPtr Process::RemoveChild()
 {
    if (m_pChild) {
       StrongProcessPtr pChild = m_pChild;
-      m_pChild.reset();
+      m_pChild.Reset();
 
       return pChild;
    }

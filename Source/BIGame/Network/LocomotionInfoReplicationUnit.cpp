@@ -4,7 +4,7 @@
 
 void LocomotionInfoReplicationUnit::Init(BIEngine::SharedPtr<BIEngine::Actor> pObject)
 {
-   m_pLocomotionInfoComponent = pObject->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).lock();
+   m_pLocomotionInfoComponent = pObject->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
 }
 
 static bool liRepUnitIsVector2Diff(const glm::vec2& a, const glm::vec2& b)

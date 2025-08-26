@@ -9,7 +9,7 @@
 
 class BIFlyCameraSystem {
 public:
-   BIFlyCameraSystem(std::shared_ptr<BIEngine::Camera> pCamera, std::shared_ptr<BIEditorController> pInputController);
+   BIFlyCameraSystem(BIEngine::SharedPtr<BIEngine::Camera> pCamera, BIEngine::SharedPtr<BIEditorController> pInputController);
    ~BIFlyCameraSystem();
 
    float GetMovementSpeed() const { return m_movementSpeed; }
@@ -26,8 +26,8 @@ private:
    BIEngine::EventManager::DelegateHandler m_onKeyDownDelegateHandler;
    BIEngine::EventManager::DelegateHandler m_onKeyUpDelegateHandler;
 
-   std::shared_ptr<BIEngine::Camera> m_pCamera;
-   std::shared_ptr<BIEditorController> m_pInputController;
+   BIEngine::SharedPtr<BIEngine::Camera> m_pCamera;
+   BIEngine::SharedPtr<BIEditorController> m_pInputController;
 
    bool m_up;
    bool m_down;
