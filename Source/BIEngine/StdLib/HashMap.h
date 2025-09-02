@@ -12,10 +12,15 @@ template <typename Key, typename T, typename Hasher = Hash<Key>, typename KeyEqu
 class HashMap {
 public:
    using ValueType = std::pair<const Key, T>;
+   using Reference = ValueType&;
+   using Pointer = ValueType*;
+   using ConstReference = const ValueType&;
+   using ConstPointer = const ValueType*;
    using KeyType = Key;
    using MappedType = T;
    using HashType = Hasher;
    using KeyEqualType = KeyEqual;
+   using SizeType = SizeT;
 
    class Iterator {
       friend class HashMap;
@@ -75,14 +80,14 @@ public:
       }
 
    private:
-      Iterator(HashMap<Key, T>* pHashMap, SizeT bucketIdx, typename ForwardList<std::pair<const Key, T>>::Iterator listItr)
+      Iterator(HashMap<Key, T>* pHashMap, SizeType bucketIdx, typename ForwardList<std::pair<const Key, T>>::Iterator listItr)
          : m_pHashMap(pHashMap), m_bucketIdx(bucketIdx), m_listItr(listItr)
       {
       }
 
    private:
       HashMap<Key, T>* m_pHashMap;
-      SizeT m_bucketIdx;
+      SizeType m_bucketIdx;
       typename ForwardList<std::pair<const Key, T>>::Iterator m_listItr;
    };
 
@@ -144,250 +149,310 @@ public:
       }
 
    private:
-      ConstIterator(const HashMap<Key, T>* pHashMap, SizeT bucketIdx, typename ForwardList<std::pair<const Key, T>>::ConstIterator listItr)
+      ConstIterator(const HashMap<Key, T>* pHashMap, SizeType bucketIdx, typename ForwardList<std::pair<const Key, T>>::ConstIterator listItr)
          : m_pHashMap(pHashMap), m_bucketIdx(bucketIdx), m_listItr(listItr)
       {
       }
 
    private:
       const HashMap<Key, T>* m_pHashMap;
-      SizeT m_bucketIdx;
+      SizeType m_bucketIdx;
       typename ForwardList<std::pair<const Key, T>>::ConstIterator m_listItr;
    };
 
-   HashMap()
-   {
-      m_storage.Resize(8);
-   }
+   HashMap();
 
-   SizeT Size() const
-   {
-      return m_size;
-   }
+   SizeType Size() const;
+   bool Empty() const;
 
-   bool Empty() const
-   {
-      return m_size == 0;
-   }
+   Iterator Begin();
+   Iterator End();
 
-   Iterator Begin()
-   {
-      if (m_size == 0) {
-         return End();
-      }
+   ConstIterator CBegin() const;
+   ConstIterator CEnd() const;
 
-      int bucketIdx = -1;
-      while (m_storage[++bucketIdx].Empty()) {
-      }
+   MappedType& operator[](const KeyType& key);
 
-      return Iterator(this, bucketIdx, m_storage[bucketIdx].Begin());
-   }
+   Iterator Find(const KeyType& key);
+   ConstIterator Find(const KeyType& key) const;
 
-   Iterator End()
-   {
-      return Iterator(this, m_storage.Size(), m_storage[0].End());
-   }
+   void Clear();
 
-   ConstIterator CBegin() const
-   {
-      if (m_size == 0) {
-         return CEnd();
-      }
+   std::pair<Iterator, bool> Insert(const KeyType& key, const MappedType& val);
+   std::pair<Iterator, bool> Insert(const KeyType& key, MappedType&& val);
 
-      int bucketIdx = -1;
-      while (m_storage[++bucketIdx].Empty()) {
-      }
+   template <typename... U>
+   std::pair<Iterator, bool> Emplace(const KeyType& key, U&&... args);
 
-      return ConstIterator(this, bucketIdx, m_storage[bucketIdx].CBegin());
-   }
+   SizeType Erase(const KeyType& key);
+   Iterator Erase(Iterator itrToErase);
 
-   ConstIterator CEnd() const
-   {
-      return ConstIterator(this, m_storage.Size(), m_storage[0].CEnd());
-   }
+   float LoadFactor() const;
+   float MaxLoadFactor() const;
 
-   MappedType& operator[](const KeyType& key)
-   {
-      const SizeT bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
+private:
+   SizeType getBucketIdxFromKey(const KeyType& key, SizeType n) const;
 
-      for (auto itr = m_storage[bucketIdx].Begin(); itr != m_storage[bucketIdx].End(); ++itr) {
-         if (KeyEqual()(itr->first, key)) {
-            return itr->second;
-         }
-      }
+   void tryRehash();
+   void rehash(SizeType n);
 
-      return Emplace(key, MappedType{}).first->second;
-   }
+private:
+   SizeType m_size = 0;
+   DynamicArray<ForwardList<ValueType>> m_storage;
+};
 
-   Iterator Find(const KeyType& key)
-   {
-      const SizeT bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
+/*HashMap*/
 
-      for (auto itr = m_storage[bucketIdx].Begin(); itr != m_storage[bucketIdx].End(); ++itr) {
-         if (KeyEqual()(itr->first, key)) {
-            return Iterator(this, bucketIdx, itr);
-         }
-      }
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+HashMap<Key, T, Hasher, KeyEqual>::HashMap()
+{
+   m_storage.Resize(8);
+}
 
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::SizeType HashMap<Key, T, Hasher, KeyEqual>::Size() const
+{
+   return m_size;
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline bool HashMap<Key, T, Hasher, KeyEqual>::Empty() const
+{
+   return m_size == 0;
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::Iterator HashMap<Key, T, Hasher, KeyEqual>::Begin()
+{
+   if (m_size == 0) {
       return End();
    }
 
-   ConstIterator Find(const KeyType& key) const
-   {
-      const SizeT bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
+   int bucketIdx = -1;
+   while (m_storage[++bucketIdx].Empty()) {
+   }
 
-      for (auto itr = m_storage[bucketIdx].CBegin(); itr != m_storage[bucketIdx].CEnd(); ++itr) {
-         if (KeyEqual()(itr->first, key)) {
-            return ConstIterator(this, bucketIdx, itr);
-         }
-      }
+   return Iterator(this, bucketIdx, m_storage[bucketIdx].Begin());
+}
 
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::Iterator HashMap<Key, T, Hasher, KeyEqual>::End()
+{
+   return Iterator(this, m_storage.Size(), m_storage[0].End());
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::ConstIterator HashMap<Key, T, Hasher, KeyEqual>::CBegin() const
+{
+   if (m_size == 0) {
       return CEnd();
    }
 
-   void Clear()
-   {
-      for (auto itr = m_storage.Begin(); itr != m_storage.End(); ++itr) {
-         itr->Clear();
-      }
-
-      m_size = 0;
+   int bucketIdx = -1;
+   while (m_storage[++bucketIdx].Empty()) {
    }
 
-   std::pair<Iterator, bool> Insert(const KeyType& key, const MappedType& val)
-   {
-      Iterator itr = Find(key);
-      if (itr != End()) {
-         return std::pair<Iterator, bool>(itr, false);
+   return ConstIterator(this, bucketIdx, m_storage[bucketIdx].CBegin());
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::ConstIterator HashMap<Key, T, Hasher, KeyEqual>::CEnd() const
+{
+   return ConstIterator(this, m_storage.Size(), m_storage[0].CEnd());
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+typename HashMap<Key, T, Hasher, KeyEqual>::MappedType& HashMap<Key, T, Hasher, KeyEqual>::operator[](const KeyType& key)
+{
+   const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
+
+   for (auto itr = m_storage[bucketIdx].Begin(); itr != m_storage[bucketIdx].End(); ++itr) {
+      if (KeyEqual()(itr->first, key)) {
+         return itr->second;
       }
-
-      const SizeT bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
-
-      m_storage[bucketIdx].PushFront({key, val});
-      ++m_size;
-
-      tryRehash();
-
-      return std::pair<Iterator, bool>(Find(key), true);
    }
 
-   std::pair<Iterator, bool> Insert(const KeyType& key, MappedType&& val)
-   {
-      Iterator itr = Find(key);
-      if (itr != End()) {
-         return std::pair<Iterator, bool>(itr, false);
+   return Emplace(key, MappedType{}).first->second;
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::Iterator HashMap<Key, T, Hasher, KeyEqual>::Find(const KeyType& key)
+{
+   const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
+
+   for (auto itr = m_storage[bucketIdx].Begin(); itr != m_storage[bucketIdx].End(); ++itr) {
+      if (KeyEqual()(itr->first, key)) {
+         return Iterator(this, bucketIdx, itr);
       }
-
-      const SizeT bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
-
-      m_storage[bucketIdx].PushFront({key, std::forward<T>(val)});
-      ++m_size;
-
-      tryRehash();
-
-      return std::pair<Iterator, bool>(Find(key), true);
    }
 
-   template <typename... U>
-   std::pair<Iterator, bool> Emplace(const KeyType& key, U&&... args)
-   {
-      Iterator itr = Find(key);
-      if (itr != End()) {
-         return std::pair<Iterator, bool>(itr, false);
+   return End();
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::ConstIterator HashMap<Key, T, Hasher, KeyEqual>::Find(const KeyType& key) const
+{
+   const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
+
+   for (auto itr = m_storage[bucketIdx].CBegin(); itr != m_storage[bucketIdx].CEnd(); ++itr) {
+      if (KeyEqual()(itr->first, key)) {
+         return ConstIterator(this, bucketIdx, itr);
       }
-
-      const SizeT bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
-
-      m_storage[bucketIdx].EmplaceFront(key, std::forward<U>(args)...);
-      ++m_size;
-
-      tryRehash();
-
-      return std::pair<Iterator, bool>(Find(key), true);
    }
 
-   SizeT Erase(const KeyType& key)
-   {
-      SizeT retVal = 0;
-      const SizeT bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
+   return CEnd();
+}
 
-      auto itrBefore = m_storage[bucketIdx].BeforeBegin();
-
-      for (auto itr = m_storage[bucketIdx].Begin(); itr != m_storage[bucketIdx].End();) {
-         if (KeyEqual()(itr->first, key)) {
-            itr = m_storage[bucketIdx].EraseAfter(itrBefore);
-            ++retVal;
-         } else {
-            ++itr;
-            ++itrBefore;
-         }
-      }
-
-      return retVal;
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline void HashMap<Key, T, Hasher, KeyEqual>::Clear()
+{
+   for (auto itr = m_storage.Begin(); itr != m_storage.End(); ++itr) {
+      itr->Clear();
    }
 
-   Iterator Erase(Iterator itrToErase)
-   {
-      auto itrBefore = m_storage[itrToErase.m_bucketIdx].BeforeBegin();
-      auto itr = m_storage[itrToErase.m_bucketIdx].Begin();
-      while (itr != itrToErase.m_listItr) {
+   m_size = 0;
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline std::pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> HashMap<Key, T, Hasher, KeyEqual>::Insert(const KeyType& key, const MappedType& val)
+{
+   Iterator itr = Find(key);
+   if (itr != End()) {
+      return std::pair<Iterator, bool>(itr, false);
+   }
+
+   const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
+
+   m_storage[bucketIdx].PushFront({key, val});
+   ++m_size;
+
+   tryRehash();
+
+   return std::pair<Iterator, bool>(Find(key), true);
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline std::pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> HashMap<Key, T, Hasher, KeyEqual>::Insert(const KeyType& key, MappedType&& val)
+{
+   Iterator itr = Find(key);
+   if (itr != End()) {
+      return std::pair<Iterator, bool>(itr, false);
+   }
+
+   const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
+
+   m_storage[bucketIdx].PushFront({key, std::forward<T>(val)});
+   ++m_size;
+
+   tryRehash();
+
+   return std::pair<Iterator, bool>(Find(key), true);
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+template <typename... U>
+inline std::pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> HashMap<Key, T, Hasher, KeyEqual>::Emplace(const KeyType& key, U&&... args)
+{
+   Iterator itr = Find(key);
+   if (itr != End()) {
+      return std::pair<Iterator, bool>(itr, false);
+   }
+
+   const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
+
+   m_storage[bucketIdx].EmplaceFront(key, std::forward<U>(args)...);
+   ++m_size;
+
+   tryRehash();
+
+   return std::pair<Iterator, bool>(Find(key), true);
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::SizeType HashMap<Key, T, Hasher, KeyEqual>::Erase(const KeyType& key)
+{
+   SizeType retVal = 0;
+   const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
+
+   auto itrBefore = m_storage[bucketIdx].BeforeBegin();
+
+   for (auto itr = m_storage[bucketIdx].Begin(); itr != m_storage[bucketIdx].End();) {
+      if (KeyEqual()(itr->first, key)) {
+         itr = m_storage[bucketIdx].EraseAfter(itrBefore);
+         ++retVal;
+      } else {
          ++itr;
          ++itrBefore;
       }
-
-      m_storage[itrToErase.m_bucketIdx].EraseAfter(itrBefore);
-      auto retItr = Iterator(this, itrToErase.m_bucketIdx, itrBefore);
-      ++retItr;
-
-      return retItr;
    }
 
-   float LoadFactor() const
-   {
-      return static_cast<float>(Size()) / m_storage.Size();
+   return retVal;
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::Iterator HashMap<Key, T, Hasher, KeyEqual>::Erase(Iterator itrToErase)
+{
+   auto itrBefore = m_storage[itrToErase.m_bucketIdx].BeforeBegin();
+   auto itr = m_storage[itrToErase.m_bucketIdx].Begin();
+   while (itr != itrToErase.m_listItr) {
+      ++itr;
+      ++itrBefore;
    }
 
-   float MaxLoadFactor() const
-   {
-      return 0.8f;
+   m_storage[itrToErase.m_bucketIdx].EraseAfter(itrBefore);
+   auto retItr = Iterator(this, itrToErase.m_bucketIdx, itrBefore);
+   ++retItr;
+
+   return retItr;
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline float HashMap<Key, T, Hasher, KeyEqual>::LoadFactor() const
+{
+   return static_cast<float>(Size()) / m_storage.Size();
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline float HashMap<Key, T, Hasher, KeyEqual>::MaxLoadFactor() const
+{
+   return 0.8f;
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::SizeType HashMap<Key, T, Hasher, KeyEqual>::getBucketIdxFromKey(const KeyType& key, SizeType n) const
+{
+   const SizeType hash = Hasher()(key);
+   return hash & (n - 1);
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline void HashMap<Key, T, Hasher, KeyEqual>::tryRehash()
+{
+   if (MaxLoadFactor() > LoadFactor()) {
+      return;
    }
 
-private:
-   SizeT getBucketIdxFromKey(const KeyType& key, SizeT n) const
-   {
-      const SizeT hash = Hasher()(key);
-      return hash & (n - 1);
-   }
+   rehash(m_storage.Size() * 2);
+}
 
-   void tryRehash()
-   {
-      if (MaxLoadFactor() > LoadFactor()) {
-         return;
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline void HashMap<Key, T, Hasher, KeyEqual>::rehash(SizeType n)
+{
+   DynamicArray<ForwardList<ValueType>> newStorage(n);
+
+   for (int bucketIdx = 0; bucketIdx < m_storage.Size(); ++bucketIdx) {
+      for (auto itr = m_storage[bucketIdx].Begin(); itr != m_storage[bucketIdx].End();) {
+         SizeType newIdx = getBucketIdxFromKey(itr->first, newStorage.Size());
+
+         ++itr;
+         newStorage[newIdx].SpliceAfter(newStorage[newIdx].BeforeBegin(), m_storage[bucketIdx], m_storage[bucketIdx].BeforeBegin());
       }
-
-      rehash(m_storage.Size() * 2);
    }
 
-   void rehash(SizeT n)
-   {
-      DynamicArray<ForwardList<std::pair<const Key, T>>> newStorage(n);
+   m_storage = std::move(newStorage);
+}
 
-      for (int bucketIdx = 0; bucketIdx < m_storage.Size(); ++bucketIdx) {
-         for (auto itr = m_storage[bucketIdx].Begin(); itr != m_storage[bucketIdx].End();) {
-            SizeT newIdx = getBucketIdxFromKey(itr->first, newStorage.Size());
-
-            ++itr;
-            newStorage[newIdx].SpliceAfter(newStorage[newIdx].BeforeBegin(), m_storage[bucketIdx], m_storage[bucketIdx].BeforeBegin());
-         }
-      }
-
-      m_storage = std::move(newStorage);
-   }
-
-private:
-   SizeT m_size = 0;
-   DynamicArray<ForwardList<ValueType>> m_storage;
-};
+/*foreach loop helpers*/
 
 template <typename Key, typename T, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
 auto begin(HashMap<Key, T, Hasher, KeyEqual>& map)

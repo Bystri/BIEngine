@@ -16,398 +16,558 @@ template <typename CharT>
 class BasicString {
 public:
    using ValueType = CharT;
-   using Iterator = CharT*;
-   using ConstIterator = const CharT*;
+   using Reference = ValueType&;
+   using Pointer = ValueType*;
+   using ConstReference = const ValueType&;
+   using ConstPointer = const ValueType*;
+   using Iterator = ValueType*;
+   using ConstIterator = const ValueType*;
+   using SizeType = SizeT;
 
-   static const SizeT NPos = static_cast<SizeT>(-1);
+   static const SizeType NPos = static_cast<SizeType>(-1);
 
    // Stole the idea from EASTL string.h
    struct CtorSprintf {};
 
    BasicString() = default;
+   BasicString(const ValueType* str);
+   BasicString(const ValueType* str, SizeType n);
+   BasicString(SizeType n);
+   BasicString(SizeType n, const ValueType& val);
+   BasicString(std::initializer_list<ValueType> l);
+   BasicString(CtorSprintf, const ValueType* pFormat, ...);
+   BasicString(const BasicString<CharT>& rhs);
+   BasicString(BasicString<CharT>&& rhs);
 
-   BasicString(const CharT* str)
-   {
-      SizeT strSize = 0;
-      while (str[strSize++] != CharT()) {
-      }
-      --strSize;
+   ~BasicString();
 
-      Reserve(strSize);
-      for (int i = 0; i < strSize; ++i) {
-         PushBack(str[i]);
-      }
+   BasicString& operator=(const BasicString& rhs);
+   BasicString& operator=(BasicString&& rhs);
+   BasicString& operator+=(const ValueType* str);
+   BasicString& operator+=(const BasicString& str);
+   BasicString& operator+=(CharT ch);
+
+   Reference operator[](SizeType idx);
+   ConstReference operator[](SizeType idx) const;
+
+   Reference Front();
+   ConstReference Front() const;
+
+   Reference Back();
+   ConstReference Back() const;
+
+   Pointer Data();
+   Pointer Data() const;
+
+   const ValueType* CStr() const;
+
+   Iterator Begin();
+   Iterator End();
+
+   ConstIterator CBegin() const;
+   ConstIterator CEnd() const;
+
+   bool Empty() const;
+   SizeType Size() const;
+   SizeType Capacity() const;
+
+   void Reserve(SizeType newCap);
+   void Resize(SizeType num);
+   void Clear();
+
+   void PushBack(ValueType ch);
+
+   BasicString& AppendVSprintf(const ValueType* pFormat, va_list args);
+   BasicString& AppendSprintf(const ValueType* pFormat, ...);
+
+   Iterator Insert(const Iterator& pos, ValueType ch);
+
+   void PopBack();
+
+   Iterator Erase(const Iterator& pos);
+
+   SizeType Find(ValueType ch, SizeType pos = 0) const;
+   SizeType Find(const ValueType* rawStr, SizeType pos = 0) const;
+   SizeType RFind(ValueType ch, SizeType pos = NPos) const;
+
+   BasicString Substr(SizeType pos = 0, SizeType count = NPos) const;
+
+private:
+   void tryExpandDataStorage();
+   void expandDataStorage(SizeType newCapacity);
+
+private:
+   static constexpr SizeType GROW_RATIO = 2;
+
+   ValueType* m_pBegin = nullptr;
+   ValueType* m_pEnd = nullptr;
+   SizeType m_capacity = 0;
+   std::allocator<ValueType> m_allocator;
+};
+
+/*BasicString*/
+
+template <typename CharT>
+BasicString<CharT>::BasicString(const ValueType* str)
+{
+   SizeType strSize = 0;
+   while (str[strSize++] != ValueType()) {
    }
+   --strSize;
 
-   BasicString(const CharT* str, SizeT n)
-   {
-      Reserve(n);
-      for (int i = 0; i < n; ++i) {
-         PushBack(str[i]);
-      }
+   Reserve(strSize);
+   for (int i = 0; i < strSize; ++i) {
+      PushBack(str[i]);
    }
+}
 
-   explicit BasicString(SizeT n)
-   {
-      Reserve(n);
-      for (int i = 0; i < n; ++i) {
-         PushBack(CharT());
-      }
+template <typename CharT>
+BasicString<CharT>::BasicString(const ValueType* str, SizeType n)
+{
+   Reserve(n);
+   for (int i = 0; i < n; ++i) {
+      PushBack(str[i]);
    }
+}
 
-   BasicString(SizeT n, const CharT& val)
-   {
-      Reserve(n);
-      for (int i = 0; i < n; ++i) {
-         PushBack(val);
-      }
+template <typename CharT>
+BasicString<CharT>::BasicString(SizeType n)
+{
+   Reserve(n);
+   for (int i = 0; i < n; ++i) {
+      PushBack(ValueType());
    }
+}
 
-   BasicString(std::initializer_list<CharT> l)
-   {
-      Reserve(l.size());
-      for (const auto& val : l) {
-         PushBack(val);
-      }
+template <typename CharT>
+BasicString<CharT>::BasicString(SizeType n, const ValueType& val)
+{
+   Reserve(n);
+   for (int i = 0; i < n; ++i) {
+      PushBack(val);
    }
+}
 
-   BasicString(CtorSprintf, const CharT* pFormat, ...)
-   {
-      va_list args;
-      va_start(args, pFormat);
-      AppendVSprintf(pFormat, args);
-      va_end(args);
+template <typename CharT>
+BasicString<CharT>::BasicString(std::initializer_list<ValueType> l)
+{
+   Reserve(l.size());
+   for (const auto& val : l) {
+      PushBack(val);
    }
+}
 
-   BasicString(const BasicString<CharT>& rhs)
-   {
-      Reserve(rhs.Size());
-      for (int i = 0; i < rhs.Size(); ++i) {
-         PushBack(rhs[i]);
-      }
+template <typename CharT>
+BasicString<CharT>::BasicString(CtorSprintf, const ValueType* pFormat, ...)
+{
+   va_list args;
+   va_start(args, pFormat);
+   AppendVSprintf(pFormat, args);
+   va_end(args);
+}
+
+template <typename CharT>
+BasicString<CharT>::BasicString(const BasicString<CharT>& rhs)
+{
+   Reserve(rhs.Size());
+   for (int i = 0; i < rhs.Size(); ++i) {
+      PushBack(rhs[i]);
    }
+}
 
-   BasicString(BasicString<CharT>&& rhs)
-   {
-      m_capacity = rhs.m_capacity;
-      m_pBegin = rhs.m_pBegin;
-      m_pEnd = rhs.m_pEnd;
+template <typename CharT>
+BasicString<CharT>::BasicString(BasicString<CharT>&& rhs)
+{
+   m_capacity = rhs.m_capacity;
+   m_pBegin = rhs.m_pBegin;
+   m_pEnd = rhs.m_pEnd;
 
-      rhs.m_capacity = 0;
-      rhs.m_pBegin = nullptr;
-      rhs.m_pEnd = nullptr;
-   }
+   rhs.m_capacity = 0;
+   rhs.m_pBegin = nullptr;
+   rhs.m_pEnd = nullptr;
+}
 
-   BasicString& operator=(const BasicString& rhs)
-   {
-      if (&rhs == this) {
-         return *this;
-      }
+template <typename CharT>
+BasicString<CharT>::~BasicString()
+{
+   Clear();
 
-      Clear();
-      Reserve(rhs.Size());
-      for (int i = 0; i < rhs.Size(); ++i) {
-         PushBack(rhs[i]);
-      }
+   m_allocator.deallocate(m_pBegin, m_capacity);
+}
 
+template <typename CharT>
+BasicString<CharT>& BasicString<CharT>::operator=(const BasicString& rhs)
+{
+   if (&rhs == this) {
       return *this;
    }
 
-   BasicString& operator=(BasicString&& rhs)
-   {
-      if (&rhs == this) {
-         return *this;
-      }
+   Clear();
+   Reserve(rhs.Size());
+   for (int i = 0; i < rhs.Size(); ++i) {
+      PushBack(rhs[i]);
+   }
 
-      this->~BasicString();
+   return *this;
+}
 
-      m_capacity = rhs.m_capacity;
-      m_pBegin = rhs.m_pBegin;
-      m_pEnd = rhs.m_pEnd;
-
-      rhs.m_capacity = 0;
-      rhs.m_pBegin = nullptr;
-      rhs.m_pEnd = nullptr;
-
+template <typename CharT>
+BasicString<CharT>& BasicString<CharT>::operator=(BasicString&& rhs)
+{
+   if (&rhs == this) {
       return *this;
    }
 
-   BasicString& operator+=(const CharT* str)
-   {
-      SizeT strSize = 0;
-      while (str[strSize++] != CharT()) {
-      }
-      --strSize;
+   this->~BasicString();
 
-      if (Size() + strSize < m_capacity) {
-         Reserve(Size() + strSize);
-      }
+   m_capacity = rhs.m_capacity;
+   m_pBegin = rhs.m_pBegin;
+   m_pEnd = rhs.m_pEnd;
 
-      for (int i = 0; i < strSize; ++i) {
-         PushBack(str[i]);
-      }
+   rhs.m_capacity = 0;
+   rhs.m_pBegin = nullptr;
+   rhs.m_pEnd = nullptr;
 
-      return *this;
+   return *this;
+}
+
+template <typename CharT>
+BasicString<CharT>& BasicString<CharT>::operator+=(const ValueType* str)
+{
+   SizeType strSize = 0;
+   while (str[strSize++] != ValueType()) {
+   }
+   --strSize;
+
+   if (Size() + strSize < m_capacity) {
+      Reserve(Size() + strSize);
    }
 
-   BasicString& operator+=(const BasicString& str)
-   {
-      if (Size() + str.Size() < m_capacity) {
-         Reserve(Size() + str.Size());
-      }
-
-      for (int i = 0; i < str.Size(); ++i) {
-         PushBack(str[i]);
-      }
-
-      return *this;
+   for (int i = 0; i < strSize; ++i) {
+      PushBack(str[i]);
    }
 
-   BasicString& operator+=(CharT ch)
-   {
-      PushBack(ch);
+   return *this;
+}
 
-      return *this;
+template <typename CharT>
+BasicString<CharT>& BasicString<CharT>::operator+=(const BasicString& str)
+{
+   if (Size() + str.Size() < m_capacity) {
+      Reserve(Size() + str.Size());
    }
 
-   ~BasicString()
-   {
-      Clear();
-
-      m_allocator.deallocate(m_pBegin, m_capacity);
+   for (int i = 0; i < str.Size(); ++i) {
+      PushBack(str[i]);
    }
 
-   CharT& operator[](SizeT idx)
-   {
-      return *(m_pBegin + idx);
+   return *this;
+}
+
+template <typename CharT>
+BasicString<CharT>& BasicString<CharT>::operator+=(CharT ch)
+{
+   PushBack(ch);
+
+   return *this;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::Reference BasicString<CharT>::operator[](SizeType idx)
+{
+   return *(m_pBegin + idx);
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ConstReference BasicString<CharT>::operator[](SizeType idx) const
+{
+   return *(m_pBegin + idx);
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::Reference BasicString<CharT>::Front()
+{
+   return *m_pBegin;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ConstReference BasicString<CharT>::Front() const
+{
+   return *m_pBegin;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::Reference BasicString<CharT>::Back()
+{
+   return *(m_pEnd - 1);
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ConstReference BasicString<CharT>::Back() const
+{
+   return *(m_pEnd - 1);
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::Pointer BasicString<CharT>::Data()
+{
+   return m_pBegin;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::Pointer BasicString<CharT>::Data() const
+{
+   return m_pBegin;
+}
+
+template <typename CharT>
+inline const typename BasicString<CharT>::ValueType* BasicString<CharT>::CStr() const
+{
+   return m_pBegin;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::Iterator BasicString<CharT>::Begin()
+{
+   return m_pBegin;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::Iterator BasicString<CharT>::End()
+{
+   return m_pEnd;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ConstIterator BasicString<CharT>::CBegin() const
+{
+   return m_pBegin;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ConstIterator BasicString<CharT>::CEnd() const
+{
+   return m_pEnd;
+}
+
+template <typename CharT>
+inline bool BasicString<CharT>::Empty() const
+{
+   return m_pBegin == m_pEnd;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::SizeType BasicString<CharT>::Size() const
+{
+   return m_pEnd - m_pBegin;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::SizeType BasicString<CharT>::Capacity() const
+{
+   return m_capacity;
+}
+
+template <typename CharT>
+inline void BasicString<CharT>::Reserve(SizeType newCap)
+{
+   if (newCap <= m_capacity) {
+      return;
    }
 
-   const CharT& operator[](SizeT idx) const { return *(m_pBegin + idx); }
+   expandDataStorage(newCap);
+}
 
-   CharT& Front() { return *m_pBegin; }
-
-   const CharT& Front() const { return *m_pBegin; }
-
-   CharT& Back() { return *(m_pEnd - 1); }
-
-   const CharT& Back() const { return *(m_pEnd - 1); }
-
-   CharT* Data() { return m_pBegin; }
-
-   CharT* Data() const { return m_pBegin; }
-
-   const CharT* CStr() const { return m_pBegin; }
-
-   Iterator Begin() { return m_pBegin; }
-
-   Iterator End() { return m_pEnd; }
-
-   ConstIterator CBegin() const { return m_pBegin; }
-
-   ConstIterator CEnd() const { return m_pEnd; }
-
-   bool Empty() const { return m_pBegin == m_pEnd; }
-
-   SizeT Size() const
-   {
-      return m_pEnd - m_pBegin;
+template <typename CharT>
+inline void BasicString<CharT>::Resize(SizeType num)
+{
+   if (Size() == num) {
+      return;
    }
 
-   SizeT Capacity() const { return m_capacity; }
-
-   void Reserve(SizeT newCap)
-   {
-      if (newCap <= m_capacity) {
-         return;
-      }
-
-      expandDataStorage(newCap);
+   if (Size() < num) {
+      Reserve(num);
+      m_pEnd += num - Size();
+      return;
    }
 
-   void PushBack(CharT ch)
-   {
-      tryExpandDataStorage();
-
-      m_allocator.construct(m_pEnd++, ch);
-   }
-
-   BasicString& AppendVSprintf(const CharT* pFormat, va_list args)
-   {
-      int formattedStrLen = vsnprintf(nullptr, 0, pFormat, args);
-      if (formattedStrLen > 0) {
-         int oldSize = Size();
-         Resize(oldSize + formattedStrLen);
-         vsnprintf(m_pBegin + oldSize, formattedStrLen + 1, pFormat, args);
-      }
-
-      return *this;
-   }
-
-   BasicString& AppendSprintf(const CharT* pFormat, ...)
-   {
-      va_list args;
-      va_start(args, pFormat);
-      AppendVSprintf(pFormat, args);
-      va_end(args);
-
-      return *this;
-   }
-
-   void Resize(SizeT num)
-   {
-      if (Size() == num) {
-         return;
-      }
-
-      if (Size() < num) {
-         Reserve(num);
-         m_pEnd += num - Size();
-         return;
-      }
-
-      if (Size() > num) {
-         int cnt = Size() - num;
-         while (cnt--) {
-            PopBack();
-         }
-      }
-   }
-
-   void PopBack()
-   {
-      m_allocator.destroy(--m_pEnd);
-   }
-
-   void Clear()
-   {
-      while (m_pEnd != m_pBegin) {
+   if (Size() > num) {
+      int cnt = Size() - num;
+      while (cnt--) {
          PopBack();
       }
    }
+}
 
-   Iterator Insert(const Iterator& pos, CharT ch)
-   {
-      const SizeT idx = pos - m_pBegin;
+template <typename CharT>
+inline void BasicString<CharT>::Clear()
+{
+   while (m_pEnd != m_pBegin) {
+      PopBack();
+   }
+}
 
-      tryExpandDataStorage();
+template <typename CharT>
+inline void BasicString<CharT>::PushBack(ValueType ch)
+{
+   tryExpandDataStorage();
 
-      std::memmove(&m_pBegin[idx + 1], &m_pBegin[idx], (Size() - idx) * sizeof(CharT));
-      m_allocator.construct(m_pBegin + idx, ch);
+   m_allocator.construct(m_pEnd++, ch);
+}
 
-      return m_pBegin + idx;
+template <typename CharT>
+inline BasicString<CharT>& BasicString<CharT>::AppendVSprintf(const ValueType* pFormat, va_list args)
+{
+   int formattedStrLen = vsnprintf(nullptr, 0, pFormat, args);
+   if (formattedStrLen > 0) {
+      int oldSize = Size();
+      Resize(oldSize + formattedStrLen);
+      vsnprintf(m_pBegin + oldSize, formattedStrLen + 1, pFormat, args);
    }
 
-   Iterator Erase(const Iterator& pos)
-   {
-      m_allocator.destroy(pos);
+   return *this;
+}
 
-      --m_pEnd;
-      std::memmove(pos, pos + 1, (m_pEnd - pos) * sizeof(CharT));
+template <typename CharT>
+inline BasicString<CharT>& BasicString<CharT>::AppendSprintf(const ValueType* pFormat, ...)
+{
+   va_list args;
+   va_start(args, pFormat);
+   AppendVSprintf(pFormat, args);
+   va_end(args);
 
-      return pos;
-   }
+   return *this;
+}
 
-   SizeT Find(CharT ch, SizeT pos = 0) const
-   {
-      for (int i = pos; i < Size(); ++i) {
-         if (m_pBegin[i] == ch) {
-            return static_cast<SizeT>(i);
-         }
+template <typename CharT>
+inline typename BasicString<CharT>::Iterator BasicString<CharT>::Insert(const Iterator& pos, ValueType ch)
+{
+   const SizeType idx = pos - m_pBegin;
+
+   tryExpandDataStorage();
+
+   std::memmove(&m_pBegin[idx + 1], &m_pBegin[idx], (Size() - idx) * sizeof(ValueType));
+   m_allocator.construct(m_pBegin + idx, ch);
+
+   return m_pBegin + idx;
+}
+
+template <typename CharT>
+inline void BasicString<CharT>::PopBack()
+{
+   m_allocator.destroy(--m_pEnd);
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::Iterator BasicString<CharT>::Erase(const Iterator& pos)
+{
+   m_allocator.destroy(pos);
+
+   --m_pEnd;
+   std::memmove(pos, pos + 1, (m_pEnd - pos) * sizeof(ValueType));
+
+   return pos;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::SizeType BasicString<CharT>::Find(ValueType ch, SizeType pos) const
+{
+   for (int i = pos; i < Size(); ++i) {
+      if (m_pBegin[i] == ch) {
+         return static_cast<SizeType>(i);
       }
+   }
 
+   return NPos;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::SizeType BasicString<CharT>::Find(const ValueType* rawStr, SizeType pos) const
+{
+   if (rawStr[0] == '\0') {
       return NPos;
    }
 
-   SizeT Find(const CharT* rawStr, SizeT pos = 0) const
-   {
-      if (rawStr[0] == '\0') {
-         return NPos;
-      }
-
-      for (int i = pos; i < Size(); ++i) {
-         int j = 0;
-         while (true) {
-            if (rawStr[j] == '\0') {
-               return static_cast<SizeT>(i);
-            }
-
-            if (i + j >= Size()) {
-               return NPos;
-            }
-
-            if (m_pBegin[i + j] != rawStr[j]) {
-               break;
-            }
-
-            ++j;
+   for (int i = pos; i < Size(); ++i) {
+      int j = 0;
+      while (true) {
+         if (rawStr[j] == '\0') {
+            return static_cast<SizeType>(i);
          }
-      }
 
-      return NPos;
-   }
-
-   SizeT RFind(CharT ch, SizeT pos = NPos) const
-   {
-      int i = pos == NPos ? Size() - 1 : pos;
-      for (; i >= 0; --i) {
-         if (m_pBegin[i] == ch) {
-            return static_cast<SizeT>(i);
+         if (i + j >= Size()) {
+            return NPos;
          }
-      }
 
-      return NPos;
-   }
+         if (m_pBegin[i + j] != rawStr[j]) {
+            break;
+         }
 
-   BasicString Substr(SizeT pos = 0, SizeT count = NPos) const
-   {
-      BasicString str;
-
-      SizeT end = (count == NPos) ? Size() : pos + count;
-
-      if (end > Size()) {
-         end = Size();
-      }
-
-      str.Reserve(end - pos);
-
-      for (int i = pos; i < end; ++i) {
-         str += m_pBegin[i];
-      }
-
-      return str;
-   }
-
-private:
-   void tryExpandDataStorage()
-   {
-      if (Size() == m_capacity) {
-         expandDataStorage(m_capacity == 0 ? 1 : m_capacity * GROW_RATIO);
+         ++j;
       }
    }
 
-   void expandDataStorage(SizeT newCapacity)
-   {
-      CharT* newData = m_allocator.allocate(newCapacity + 1);
-      std::memset(newData + Size(), CharT(), newCapacity - Size() + 1);
-      std::memcpy(newData, m_pBegin, Size() * sizeof(CharT));
+   return NPos;
+}
 
-      if (m_capacity > 0) {
-         m_allocator.deallocate(m_pBegin, m_capacity + 1);
+template <typename CharT>
+inline typename BasicString<CharT>::SizeType BasicString<CharT>::RFind(ValueType ch, SizeType pos) const
+{
+   int i = pos == NPos ? Size() - 1 : pos;
+   for (; i >= 0; --i) {
+      if (m_pBegin[i] == ch) {
+         return static_cast<SizeType>(i);
       }
-
-      m_pEnd = newData + Size();
-      m_pBegin = newData;
-      m_capacity = newCapacity;
    }
 
-private:
-   static constexpr SizeT GROW_RATIO = 2;
+   return NPos;
+}
 
-   CharT* m_pBegin = nullptr;
-   CharT* m_pEnd = nullptr;
-   SizeT m_capacity = 0;
-   std::allocator<CharT> m_allocator;
-};
+template <typename CharT>
+inline BasicString<CharT> BasicString<CharT>::Substr(SizeType pos, SizeType count) const
+{
+   BasicString str;
+
+   SizeType end = (count == NPos) ? Size() : pos + count;
+
+   if (end > Size()) {
+      end = Size();
+   }
+
+   str.Reserve(end - pos);
+
+   for (int i = pos; i < end; ++i) {
+      str += m_pBegin[i];
+   }
+
+   return str;
+}
+
+template <typename CharT>
+void BasicString<CharT>::tryExpandDataStorage()
+{
+   if (Size() == m_capacity) {
+      expandDataStorage(m_capacity == 0 ? 1 : m_capacity * GROW_RATIO);
+   }
+}
+
+template <typename CharT>
+void BasicString<CharT>::expandDataStorage(SizeType newCapacity)
+{
+   ValueType* newData = m_allocator.allocate(newCapacity + 1);
+   std::memset(newData + Size(), ValueType(), newCapacity - Size() + 1);
+   std::memcpy(newData, m_pBegin, Size() * sizeof(ValueType));
+
+   if (m_capacity > 0) {
+      m_allocator.deallocate(m_pBegin, m_capacity + 1);
+   }
+
+   m_pEnd = newData + Size();
+   m_pBegin = newData;
+   m_capacity = newCapacity;
+}
+
+/*Global operators*/
 
 template <typename CharT>
 BasicString<CharT> operator+(const BasicString<CharT>& lhs, const BasicString<CharT>& rhs)
@@ -418,7 +578,7 @@ BasicString<CharT> operator+(const BasicString<CharT>& lhs, const BasicString<Ch
 }
 
 template <typename CharT>
-BasicString<CharT> operator+(const BasicString<CharT>& lhs, const CharT* rhs)
+BasicString<CharT> operator+(const BasicString<CharT>& lhs, const typename BasicString<CharT>::ValueType* rhs)
 {
    BasicString<CharT> ret(lhs);
    ret += rhs;
@@ -434,7 +594,7 @@ BasicString<CharT> operator+(const CharT* lhs, const BasicString<CharT>& rhs)
 }
 
 template <typename CharT>
-bool operator==(const BasicString<CharT>& lhs, const CharT* rhs)
+bool operator==(const BasicString<CharT>& lhs, const typename BasicString<CharT>::ValueType* rhs)
 {
    for (int i = 0; i < lhs.Size(); ++i) {
       if (rhs[i] == CharT() || lhs[i] != rhs[i]) {
@@ -446,19 +606,19 @@ bool operator==(const BasicString<CharT>& lhs, const CharT* rhs)
 }
 
 template <typename CharT>
-bool operator!=(const BasicString<CharT>& lhs, const CharT* rhs)
+bool operator!=(const BasicString<CharT>& lhs, const typename BasicString<CharT>::ValueType* rhs)
 {
    return !(lhs == rhs);
 }
 
 template <typename CharT>
-bool operator==(const CharT* lhs, const BasicString<CharT>& rhs)
+bool operator==(const typename BasicString<CharT>::ValueType* lhs, const BasicString<CharT>& rhs)
 {
    return rhs == lhs;
 }
 
 template <typename CharT>
-bool operator!=(const CharT* lhs, const BasicString<CharT>& rhs)
+bool operator!=(const typename BasicString<CharT>::ValueType* lhs, const BasicString<CharT>& rhs)
 {
    return rhs != lhs;
 }
@@ -484,6 +644,8 @@ bool operator!=(const BasicString<CharT>& lhs, const BasicString<CharT>& rhs)
 {
    return !(lhs == rhs);
 }
+
+/*foreach loop helpers*/
 
 template <typename CharT>
 auto begin(BasicString<CharT>& arr)
@@ -538,7 +700,7 @@ std::basic_istream<CharT>& Getline(std::basic_istream<CharT>& is, BasicString<Ch
 
    int ioState = std::ios_base::goodbit;
 
-   CharT ch;
+   typename BasicString<CharT>::ValueType ch;
    while (is.get(ch) && ch != '\0' && ch != '\n') {
       str += ch;
    }
@@ -556,8 +718,12 @@ std::basic_istream<CharT>& Getline(std::basic_istream<CharT>& is, BasicString<Ch
    return is;
 }
 
+/*Using*/
+
 using String = BasicString<char>;
 using WString = BasicString<wchar_t>;
+
+/*String global methods*/
 
 inline String ToString(int value)
 {
