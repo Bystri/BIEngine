@@ -13,6 +13,7 @@
 #include <btBulletCollisionCommon.h>
 #include <BulletCollision/NarrowPhaseCollision/btRaycastCallback.h>
 
+#include "../StdLib/Assert.h"
 #include "../StdLib/HashSet.h"
 #include "../StdLib/HashMap.h"
 #include "../EngineCore/GameApp.h"

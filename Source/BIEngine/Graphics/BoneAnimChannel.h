@@ -6,7 +6,6 @@
 
 #include "../StdLib/String.h"
 #include "../StdLib/DynamicArray.h"
-#include "../EngineCore/Assert.h"
 #include "../Math/Spline.h"
 
 namespace BIEngine {

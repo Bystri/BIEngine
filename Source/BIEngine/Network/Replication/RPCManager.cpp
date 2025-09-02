@@ -1,6 +1,6 @@
 #include "RPCManager.h"
 
-#include "../../EngineCore/Assert.h"
+#include "../../StdLib/Assert.h"
 
 namespace BIEngine {
 

@@ -4,7 +4,6 @@
 #include <pybind11/embed.h>
 #include <pybind11/operators.h>
 
-#include "../EngineCore/Assert.h"
 #include "../StdLib/SharedPtr.h"
 #include "../StdLib/String.h"
 
@@ -48,11 +47,7 @@ public:
    // Уничтожение экземпляра одиночки
    static void Destroy();
 
-   static PythonStateManager* Get()
-   {
-      Assert(s_pSingleton, "Call PythonStateManager::Create befor PythonStateManager::Get");
-      return s_pSingleton;
-   }
+   static PythonStateManager* Get();
 
    bool Init();
    // Выполняет указанный Python-скрипт

@@ -345,9 +345,6 @@
     <ClCompile Include="..\..\Graphics\MaterialLoader.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\EngineCore\Assert.cpp">
-      <Filter>EngineCore</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Graphics\Animator.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -428,6 +425,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Network\Replication\ReplicationActionWriter.cpp">
       <Filter>Network\Replication</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\StdLib\Assert.cpp">
+      <Filter>StdLib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -749,9 +749,6 @@
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsCamera.h">
       <Filter>Scripting\ScriptExports</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\EngineCore\Assert.h">
-      <Filter>EngineCore</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Graphics\Animator.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -888,6 +885,9 @@
       <Filter>StdLib</Filter>
     </ClInclude>
     <ClInclude Include="..\..\StdLib\SharedPtr.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\StdLib\Assert.h">
       <Filter>StdLib</Filter>
     </ClInclude>
   </ItemGroup>

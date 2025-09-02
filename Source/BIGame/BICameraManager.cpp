@@ -1,6 +1,6 @@
 #include "BICameraManager.h"
 
-#include "../BIEngine/EngineCore/Assert.h"
+#include "../BIEngine/StdLib/Assert.h"
 #include "../BIEngine/Actors/TransformComponent.h"
 #include "../BIEngine/Graphics/Camera.h"
 #include "../BIEngine/Math/Vector.h"

@@ -3,7 +3,7 @@
 #include <initializer_list>
 
 #include "Math.h"
-#include "../EngineCore/Assert.h"
+#include "../StdLib/Assert.h"
 #include "../StdLib/Array.h"
 
 namespace BIEngine {

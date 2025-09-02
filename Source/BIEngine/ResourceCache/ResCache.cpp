@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cctype>
 
-#include "../EngineCore/Assert.h"
+#include "../StdLib/Assert.h"
 #include "../Utilities/String.h"
 #include "../Utilities/Logger.h"
 
@@ -33,6 +33,12 @@ void ResCache::Destroy()
       delete s_pSingleton;
       s_pSingleton = nullptr;
    }
+}
+
+ResCache* ResCache::Get()
+{
+   Assert(s_pSingleton, "Call ResCache::Create before ResCache::Get!");
+   return s_pSingleton;
 }
 
 /***ResourceZipFile***/

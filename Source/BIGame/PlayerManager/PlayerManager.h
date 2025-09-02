@@ -2,7 +2,6 @@
 
 #include "../../BIEngine/Actors/Actor.h"
 #include "../../BIEngine/StdLib/SharedPtr.h"
-#include "../../BIEngine/EngineCore/Assert.h"
 #include "../../BIEngine/Network/Replication/ReplicationObjectActor/ReplicationObjectActor.h"
 
 using PlayerId = uint32_t;
@@ -33,11 +32,7 @@ public:
    static bool Create();
    static void Destroy();
 
-   static PlayerManager* Get()
-   {
-      BIEngine::Assert(s_pSingleton, "Call PlayerManager::Create before PlayerManager::Get");
-      return s_pSingleton;
-   }
+   static PlayerManager* Get();
 
    BIEngine::SharedPtr<Player> CreatePlayer();
 

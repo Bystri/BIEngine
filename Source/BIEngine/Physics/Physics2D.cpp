@@ -7,6 +7,7 @@
 
 #include <chipmunk/chipmunk.h>
 
+#include "../StdLib/Assert.h"
 #include "../StdLib/HashMap.h"
 #include "../Actors/Actor.h"
 #include "../Actors/TransformComponent.h"

@@ -4,7 +4,7 @@
 
 #include "../Utilities/Logger.h"
 #include "../StdLib/String.h"
-#include "../EngineCore/Assert.h"
+#include "../StdLib/Assert.h"
 #include "ActorFactory.h"
 
 namespace BIEngine {
@@ -158,7 +158,7 @@ void Actor::Destroy()
 void Actor::AddComponent(SharedPtr<ActorComponent> pComponent)
 {
    auto success = m_components.Insert(pComponent->GetComponentId(), pComponent);
-   Assert(success.second, "Cant load component %s", pComponent->GetComponentId().CStr());
+   Assert(success.second, "Can't load component %s", pComponent->GetComponentId().CStr());
 }
 
 tinyxml2::XMLElement* Actor::ToXML(tinyxml2::XMLDocument* pDoc) const

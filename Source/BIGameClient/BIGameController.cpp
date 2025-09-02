@@ -1,6 +1,6 @@
 ﻿#include "BIGameController.h"
 
-#include "../BIEngine/EngineCore/Assert.h"
+#include "../BIEngine/StdLib/Assert.h"
 
 #include "BIGCEventListener.h"
 

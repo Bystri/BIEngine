@@ -4,7 +4,7 @@
 
 #include <glad/glad.h>
 
-#include "../EngineCore/Assert.h"
+#include "../StdLib/Assert.h"
 
 namespace BIEngine {
 
@@ -87,7 +87,7 @@ static unsigned int ConverSizedFormatToGl(Texture2D::SizedFormat format)
          return GL_RGBA32UI;
    }
 
-   Assert(false, "Texture2D SizedFormat foesn't specified in ConverSizedFormatToGl");
+   Assert(false, "Texture2D SizedFormat doesn't specified in ConverSizedFormatToGl");
    return 0;
 }
 

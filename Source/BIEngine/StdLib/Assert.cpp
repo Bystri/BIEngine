@@ -1,6 +1,5 @@
 #include "Assert.h"
 
-#include <cassert>
 #include <cstdarg>
 
 #include "../Utilities/Logger.h"
@@ -9,11 +8,12 @@ namespace BIEngine {
 
 void Assert(const bool expr, const char* format, ...)
 {
+#ifndef _RETAIL
+
    if (expr) {
       return;
    }
 
-#ifndef _RELEASE
    static constexpr int MSG_SIZE = 512;
    char msg[MSG_SIZE];
    std::va_list argList;
@@ -33,8 +33,9 @@ void Assert(const bool expr, const char* format, ...)
 
    Logger::WriteLog(Logger::LogType::ERROR, "[ASSERT]: " + strMsg);
 
-   assert(expr);
-#endif
+   std::abort();
+
+#endif // ! _RETAIL
 }
 
 } // namespace BIEngine

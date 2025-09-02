@@ -2,7 +2,6 @@
 
 #include <glm/glm.hpp>
 
-#include "../EngineCore/Assert.h"
 #include "../StdLib/HashMap.h"
 #include "../StdLib/SharedPtr.h"
 #include "../StdLib/DynamicArray.h"
@@ -24,29 +23,12 @@ public:
 public:
    Skeleton(SharedPtr<BoneInfo> pSkeletonRoot);
 
-   void Update()
-   {
-      calculateBoneTransform(m_pSkeletonRoot, glm::mat4(1.0f));
-   }
+   void Update();
 
-   const glm::mat4& GetBoneMatrix(const String& boneName) const
-   {
-      auto itr = m_finalBoneMatrices.Find(boneName);
-      Assert(itr != m_finalBoneMatrices.CEnd(), "Cannot find bone with name %s", boneName.CStr());
-      return itr->second;
-   }
+   const glm::mat4& GetBoneMatrix(const String& boneName) const;
 
 private:
-   void calculateBoneTransform(SharedPtr<Skeleton::BoneInfo> node, glm::mat4 parentTransform)
-   {
-      const glm::mat4 globalTransformation = parentTransform * node->localTransform;
-
-      m_finalBoneMatrices[node->name] = globalTransformation * node->offset;
-
-      for (int i = 0; i < node->children.Size(); i++) {
-         calculateBoneTransform(node->children[i], globalTransformation);
-      }
-   }
+   void calculateBoneTransform(SharedPtr<Skeleton::BoneInfo> node, glm::mat4 parentTransform);
 
 private:
    SharedPtr<BoneInfo> m_pSkeletonRoot;

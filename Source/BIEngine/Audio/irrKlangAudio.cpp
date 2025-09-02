@@ -1,6 +1,7 @@
 ﻿#include "irrKlangAudio.h"
 
-#include "soundLoader.h"
+#include "SoundLoader.h"
+#include "../StdLib/Assert.h"
 
 namespace BIEngine {
 

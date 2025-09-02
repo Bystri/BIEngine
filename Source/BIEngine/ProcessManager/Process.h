@@ -1,9 +1,9 @@
 ﻿#pragma once
 
+#include "../StdLib/Assert.h"
 #include "../StdLib/SharedPtr.h"
 #include "../Utilities/Logger.h"
 #include "../Utilities/GameTimer.h"
-#include "../EngineCore/Assert.h"
 
 namespace BIEngine {
 

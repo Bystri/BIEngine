@@ -2,7 +2,6 @@
 
 #include "ZipFile.h"
 #include "DirFile.h"
-#include "../EngineCore/Assert.h"
 #include "../StdLib/List.h"
 #include "../StdLib/SharedPtr.h"
 #include "../StdLib/DynamicArray.h"
@@ -156,11 +155,7 @@ public:
    static void Destroy();
 
    // Возвращает указетель на кэш ресурсов. Перед использованием необходимо выполнить инициализацию с помощью фукнции ResCache::Create
-   static ResCache* Get()
-   {
-      Assert(s_pSingleton, "Call ResCache::Create before ResCache::Get!");
-      return s_pSingleton;
-   }
+   static ResCache* Get();
 
    bool Init();
    void RegisterLoader(SharedPtr<IResourceLoader> pLoader);

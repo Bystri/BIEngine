@@ -4,6 +4,7 @@
 
 #include <pybind11/eval.h>
 
+#include "../StdLib/Assert.h"
 #include "../Utilities/Logger.h"
 
 namespace BIEngine {
@@ -34,6 +35,12 @@ void PythonStateManager::Destroy()
       delete s_pSingleton;
       s_pSingleton = nullptr;
    }
+}
+
+PythonStateManager* PythonStateManager::Get()
+{
+   Assert(s_pSingleton, "Call PythonStateManager::Create befor PythonStateManager::Get");
+   return s_pSingleton;
 }
 
 PythonStateManager::PythonStateManager()

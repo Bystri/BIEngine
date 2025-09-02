@@ -3,7 +3,6 @@
 #include "ActorComponent.h"
 #include "../StdLib/SharedPtr.h"
 #include "../StdLib/UniquePtr.h"
-#include "../EngineCore/Assert.h"
 #include "../Graphics/Sprite.h"
 #include "../Renderer/Color.h"
 #include "../Graphics/Model.h"

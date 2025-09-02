@@ -1,5 +1,6 @@
 #include "PlayerManager.h"
 
+#include "../../BIEngine/StdLib/Assert.h"
 #include "../../BIEngine/Utilities/Logger.h"
 #include "../../BIEngine/Actors/PlayerComponent.h"
 #include "../BIEventListener.h"
@@ -48,6 +49,12 @@ void PlayerManager::Destroy()
       delete s_pSingleton;
       s_pSingleton = nullptr;
    }
+}
+
+PlayerManager* PlayerManager::Get()
+{
+   BIEngine::Assert(s_pSingleton, "Call PlayerManager::Create before PlayerManager::Get");
+   return s_pSingleton;
 }
 
 BIEngine::SharedPtr<Player> PlayerManager::CreatePlayer()

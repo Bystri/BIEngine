@@ -1,6 +1,6 @@
 #include "LocomotionInfoComponent.h"
 
-#include "../../BIEngine/EngineCore/Assert.h"
+#include "../../BIEngine/StdLib/Assert.h"
 
 const BIEngine::ComponentId LocomotionInfoComponent::g_CompId = "LocomotionInfoComponent";
 

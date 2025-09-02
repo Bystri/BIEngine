@@ -2,6 +2,7 @@
 
 #include <tinyxml2.h>
 
+#include "../StdLib/Assert.h"
 #include "../Renderer/ImageLoader.h"
 
 namespace BIEngine {
@@ -16,7 +17,7 @@ Texture2D::TextureWrap textureLoaderGetTextureWrapFromParameter(const char* para
       return Texture2D::TextureWrap::CLAMP_TO_BORDER;
    }
 
-   Assert(false, "There is a type in Wrap parameter of Texture");
+   Assert(false, "There is a wrong type in Wrap parameter of Texture");
    return Texture2D::TextureWrap::REPEAT;
 }
 
@@ -28,7 +29,7 @@ Texture2D::TextureFunction textureLoaderGetTextureFunctionFromParameter(const ch
       return Texture2D::TextureFunction::NEAREST;
    }
 
-   Assert(false, "There is a type in Function parameter of Texture");
+   Assert(false, "There is a wrong type in Function parameter of Texture");
    return Texture2D::TextureFunction::NEAREST;
 }
 
