@@ -10,7 +10,7 @@
 #include "../BIEngine/Renderer/PostProcessor.h"
 #include "../BIEngine/Renderer/Renderbuffer.h"
 #include "../BIEngine/Renderer/ImageLoader.h"
-#include "../BIEngine/EngineCore/Assert.h"
+#include "../BIEngine/StdLib/Assert.h"
 
 #include "Graphics/ActorPickingTechnique.h"
 #include "Graphics/SelectedActorOutliner.h"

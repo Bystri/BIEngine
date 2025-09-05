@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstdarg>
 
-#include "../EngineCore/Assert.h"
+#include "../StdLib/Assert.h"
 
 namespace BIEngine {
 
