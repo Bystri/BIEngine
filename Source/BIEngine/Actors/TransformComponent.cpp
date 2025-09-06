@@ -4,7 +4,7 @@
 #include <glm/gtx/euler_angles.hpp>
 
 #include "../StdLib/String.h"
-#include "../EngineCore/Assert.h"
+#include "../StdLib/Assert.h"
 #include "../Utilities/Logger.h"
 #include "../Actors/Actor.h"
 

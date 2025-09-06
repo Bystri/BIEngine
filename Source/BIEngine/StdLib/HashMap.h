@@ -2,7 +2,6 @@
 
 #include <functional>
 
-#include "../Utilities/Logger.h"
 #include "DynamicArray.h"
 #include "ForwardList.h"
 
@@ -86,12 +85,12 @@ class HashMap {
    public:
       typename IteratorTraits<HashMapIterator>::Reference operator*()
       {
-         return *m_listItr;
+         return *this->m_listItr;
       }
 
       typename IteratorTraits<HashMapIterator>::Pointer operator->()
       {
-         return m_listItr.operator->();
+         return this->m_listItr.operator->();
       }
 
    protected:

@@ -184,12 +184,12 @@ public:
 
    typename IteratorTraits<Itr>::Reference operator*()
    {
-      return *Prev(m_pos);
+      return *Prev(this->m_pos);
    }
 
    typename IteratorTraits<Itr>::Pointer operator->()
    {
-      return Prev(m_pos).operator->();
+      return Prev(this->m_pos).operator->();
    }
 };
 

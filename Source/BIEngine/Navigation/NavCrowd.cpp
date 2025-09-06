@@ -2,7 +2,7 @@
 
 #include <DetourCrowd.h>
 
-#include "../EngineCore/Assert.h"
+#include "../StdLib/Assert.h"
 #include "../Actors/TransformComponent.h"
 
 namespace BIEngine {

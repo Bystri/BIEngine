@@ -297,18 +297,6 @@ inline typename DynamicArray<T>::ConstIterator DynamicArray<T>::CEnd() const
 }
 
 template <typename T>
-inline typename DynamicArray<T>::Iterator DynamicArray<T>::Begin()
-{
-   return m_pBegin;
-}
-
-template <typename T>
-inline typename DynamicArray<T>::Iterator DynamicArray<T>::End()
-{
-   return m_pEnd;
-}
-
-template <typename T>
 inline typename DynamicArray<T>::ReverseIterator DynamicArray<T>::RBegin()
 {
    return ReverseIterator(End());

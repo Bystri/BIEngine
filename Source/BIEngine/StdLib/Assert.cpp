@@ -8,8 +8,6 @@ namespace BIEngine {
 
 void Assert(const bool expr, const char* format, ...)
 {
-#ifndef _RETAIL
-
    if (expr) {
       return;
    }
@@ -33,8 +31,8 @@ void Assert(const bool expr, const char* format, ...)
 
    Logger::WriteLog(Logger::LogType::ERROR, "[ASSERT]: " + strMsg);
 
+#ifndef _RETAIL
    std::abort();
-
 #endif // ! _RETAIL
 }
 
