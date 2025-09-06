@@ -2,6 +2,7 @@
 
 #include "StdLib.h"
 #include "Utility.h"
+#include "Iterator.h"
 
 namespace BIEngine {
 
@@ -13,9 +14,11 @@ public:
    using Pointer = ValueType*;
    using ConstPointer = const ValueType*;
    using ConstReference = const ValueType&;
+   using SizeType = SizeT;
    using Iterator = T*;
    using ConstIterator = const T*;
-   using SizeType = SizeT;
+   using ReverseIterator = ReverseIterator<Iterator>;
+   using ConstReverseIterator = ConstReverseIterator<ConstIterator>;
 
    SizeType Size() const;
    bool Empty() const;
@@ -35,8 +38,20 @@ public:
    Iterator Begin();
    Iterator End();
 
+   ConstIterator Begin() const;
+   ConstIterator End() const;
+
    ConstIterator CBegin() const;
    ConstIterator CEnd() const;
+
+   ReverseIterator RBegin();
+   ReverseIterator REnd();
+
+   ConstReverseIterator RBegin() const;
+   ConstReverseIterator REnd() const;
+
+   ConstReverseIterator CRBegin() const;
+   ConstReverseIterator CREnd() const;
 
    void Fill(const ValueType& val);
 
@@ -119,6 +134,18 @@ inline typename Array<T, N>::Iterator Array<T, N>::End()
 }
 
 template <typename T, SizeT N>
+inline typename Array<T, N>::ConstIterator Array<T, N>::Begin() const
+{
+   return &m_pData[0];
+}
+
+template <typename T, SizeT N>
+inline typename Array<T, N>::ConstIterator Array<T, N>::End() const
+{
+   return &m_pData[N];
+}
+
+template <typename T, SizeT N>
 inline typename Array<T, N>::ConstIterator Array<T, N>::CBegin() const
 {
    return &m_pData[0];
@@ -128,6 +155,42 @@ template <typename T, SizeT N>
 inline typename Array<T, N>::ConstIterator Array<T, N>::CEnd() const
 {
    return &m_pData[N];
+}
+
+template <typename T, SizeT N>
+inline typename Array<T, N>::ReverseIterator Array<T, N>::RBegin()
+{
+   return ReverseIterator(End());
+}
+
+template <typename T, SizeT N>
+inline typename Array<T, N>::ReverseIterator Array<T, N>::REnd()
+{
+   return ReverseIterator(Begin());
+}
+
+template <typename T, SizeT N>
+inline typename Array<T, N>::ConstReverseIterator Array<T, N>::RBegin() const
+{
+   return ConstReverseIterator(CEnd());
+}
+
+template <typename T, SizeT N>
+inline typename Array<T, N>::ConstReverseIterator Array<T, N>::REnd() const
+{
+   return ConstReverseIterator(CBegin());
+}
+
+template <typename T, SizeT N>
+inline typename Array<T, N>::ConstReverseIterator Array<T, N>::CRBegin() const
+{
+   return ConstReverseIterator(CEnd());
+}
+
+template <typename T, SizeT N>
+inline typename Array<T, N>::ConstReverseIterator Array<T, N>::CREnd() const
+{
+   return ConstReverseIterator(CBegin());
 }
 
 template <typename T, SizeT N>

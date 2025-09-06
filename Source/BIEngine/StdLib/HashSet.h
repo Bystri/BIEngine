@@ -9,22 +9,12 @@ namespace BIEngine {
 
 template <typename Key, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
 class HashSet {
-public:
-   using ValueType = const Key;
-   using Reference = ValueType&;
-   using Pointer = ValueType*;
-   using ConstReference = const ValueType&;
-   using ConstPointer = const ValueType*;
-   using KeyType = Key;
-   using HashType = Hasher;
-   using KeyEqualType = KeyEqual;
-   using SizeType = SizeT;
 
-   class ConstIterator {
+   class ConstHashSetIterator : public IteratorBase<ForwardIteratorTag, const Key> {
       friend class HashSet;
 
    public:
-      ConstIterator& operator=(const ConstIterator& rhs)
+      ConstHashSetIterator& operator=(const ConstHashSetIterator& rhs)
       {
          m_pHashSet = rhs.m_pHashSet;
          m_bucketIdx = rhs.m_bucketIdx;
@@ -33,7 +23,7 @@ public:
          return *this;
       }
 
-      ConstIterator& operator++()
+      ConstHashSetIterator& operator++()
       {
          ++m_listItr;
          if (m_pHashSet->m_storage[m_bucketIdx].CEnd() == m_listItr) {
@@ -50,35 +40,35 @@ public:
          return *this;
       }
 
-      ConstIterator operator++(int)
+      ConstHashSetIterator operator++(int)
       {
          Iterator old = *this;
          operator++();
          return old;
       }
 
-      ValueType& operator*() const
+      typename IteratorTraits<ConstHashSetIterator>::Reference operator*() const
       {
          return *m_listItr;
       }
 
-      ValueType* operator->() const
+      typename IteratorTraits<ConstHashSetIterator>::Pointer operator->() const
       {
          return m_listItr.operator->();
       }
 
-      friend bool operator==(const ConstIterator& lhs, const ConstIterator& rhs)
+      friend bool operator==(const ConstHashSetIterator& lhs, const ConstHashSetIterator& rhs)
       {
          return lhs.m_bucketIdx == rhs.m_bucketIdx && lhs.m_listItr == rhs.m_listItr;
       }
 
-      friend bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
+      friend bool operator!=(const ConstHashSetIterator& lhs, const ConstHashSetIterator& rhs)
       {
          return !(lhs == rhs);
       }
 
    private:
-      ConstIterator(const HashSet<Key, Hasher, KeyEqual>* pHashSet, SizeT bucketIdx, typename ForwardList<Key>::ConstIterator listItr)
+      ConstHashSetIterator(const HashSet<Key, Hasher, KeyEqual>* pHashSet, SizeT bucketIdx, typename ForwardList<Key>::ConstIterator listItr)
          : m_pHashSet(pHashSet), m_bucketIdx(bucketIdx), m_listItr(listItr)
       {
       }
@@ -89,7 +79,19 @@ public:
       typename ForwardList<Key>::ConstIterator m_listItr;
    };
 
-   using Iterator = ConstIterator;
+
+public:
+   using ValueType = const Key;
+   using Reference = ValueType&;
+   using Pointer = ValueType*;
+   using ConstReference = const ValueType&;
+   using ConstPointer = const ValueType*;
+   using KeyType = Key;
+   using HashType = Hasher;
+   using KeyEqualType = KeyEqual;
+   using SizeType = SizeT;
+   using Iterator = ConstHashSetIterator;
+   using ConstIterator = ConstHashSetIterator;
 
    HashSet();
 
@@ -98,6 +100,9 @@ public:
 
    Iterator Begin();
    Iterator End();
+
+   ConstIterator Begin() const;
+   ConstIterator End() const;
 
    ConstIterator CBegin() const;
    ConstIterator CEnd() const;
@@ -168,6 +173,26 @@ template <typename Key, typename Hasher, typename KeyEqual>
 inline typename HashSet<Key, Hasher, KeyEqual>::Iterator HashSet<Key, Hasher, KeyEqual>::End()
 {
    return Iterator(this, m_storage.Size(), m_storage[0].CEnd());
+}
+
+template <typename Key, typename Hasher, typename KeyEqual>
+inline typename HashSet<Key, Hasher, KeyEqual>::ConstIterator HashSet<Key, Hasher, KeyEqual>::Begin() const
+{
+   if (m_size == 0) {
+      return End();
+   }
+
+   int bucketIdx = -1;
+   while (m_storage[++bucketIdx].Empty()) {
+   }
+
+   return ConstIterator(this, bucketIdx, m_storage[bucketIdx].CBegin());
+}
+
+template <typename Key, typename Hasher, typename KeyEqual>
+inline typename HashSet<Key, Hasher, KeyEqual>::ConstIterator HashSet<Key, Hasher, KeyEqual>::End() const
+{
+   return ConstIterator(this, m_storage.Size(), m_storage[0].CEnd());
 }
 
 template <typename Key, typename Hasher, typename KeyEqual>

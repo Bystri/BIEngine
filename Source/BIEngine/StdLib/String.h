@@ -9,6 +9,7 @@
 
 #include "StdLib.h"
 #include "Utility.h"
+#include "Iterator.h"
 
 namespace BIEngine {
 
@@ -20,9 +21,11 @@ public:
    using Pointer = ValueType*;
    using ConstReference = const ValueType&;
    using ConstPointer = const ValueType*;
+   using SizeType = SizeT;
    using Iterator = ValueType*;
    using ConstIterator = const ValueType*;
-   using SizeType = SizeT;
+   using ReverseIterator = ReverseIterator<Iterator>;
+   using ConstReverseIterator = ConstReverseIterator<ConstIterator>;
 
    static const SizeType NPos = static_cast<SizeType>(-1);
 
@@ -64,8 +67,20 @@ public:
    Iterator Begin();
    Iterator End();
 
+   ConstIterator Begin() const;
+   ConstIterator End() const;
+
    ConstIterator CBegin() const;
    ConstIterator CEnd() const;
+
+   ReverseIterator RBegin();
+   ReverseIterator REnd();
+
+   ConstReverseIterator RBegin() const;
+   ConstReverseIterator REnd() const;
+
+   ConstReverseIterator CRBegin() const;
+   ConstReverseIterator CREnd() const;
 
    bool Empty() const;
    SizeType Size() const;
@@ -339,6 +354,18 @@ inline typename BasicString<CharT>::Iterator BasicString<CharT>::End()
 }
 
 template <typename CharT>
+inline typename BasicString<CharT>::ConstIterator BasicString<CharT>::Begin() const
+{
+   return m_pBegin;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ConstIterator BasicString<CharT>::End() const
+{
+   return m_pEnd;
+}
+
+template <typename CharT>
 inline typename BasicString<CharT>::ConstIterator BasicString<CharT>::CBegin() const
 {
    return m_pBegin;
@@ -348,6 +375,42 @@ template <typename CharT>
 inline typename BasicString<CharT>::ConstIterator BasicString<CharT>::CEnd() const
 {
    return m_pEnd;
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ReverseIterator BasicString<CharT>::RBegin()
+{
+   return ReverseIterator(End());
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ReverseIterator BasicString<CharT>::REnd()
+{
+   return ReverseIterator(Begin());
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ConstReverseIterator BasicString<CharT>::RBegin() const
+{
+   return ConstReverseIterator(CEnd());
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ConstReverseIterator BasicString<CharT>::REnd() const
+{
+   return ConstReverseIterator(CBegin());
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ConstReverseIterator BasicString<CharT>::CRBegin() const
+{
+   return ConstReverseIterator(CEnd());
+}
+
+template <typename CharT>
+inline typename BasicString<CharT>::ConstReverseIterator BasicString<CharT>::CREnd() const
+{
+   return ConstReverseIterator(CBegin());
 }
 
 template <typename CharT>

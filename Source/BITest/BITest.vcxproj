@@ -95,10 +95,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\BIEngine\EngineCore\Assert.cpp" />
     <ClCompile Include="..\BIEngine\Math\Math.cpp" />
     <ClCompile Include="..\BIEngine\Math\Transform.cpp" />
     <ClCompile Include="..\BIEngine\Math\Trigonometry.cpp" />
+    <ClCompile Include="..\BIEngine\StdLib\Assert.cpp" />
     <ClCompile Include="..\BIEngine\Utilities\Logger.cpp" />
     <ClCompile Include="Math\Spline_UnitTest.cpp" />
     <ClCompile Include="Math\Math_UnitTest.cpp" />
@@ -107,6 +107,7 @@
     <ClCompile Include="Math\Trigonometry_UnitTest.cpp" />
     <ClCompile Include="Math\Vector_UnitTest.cpp" />
     <ClCompile Include="StdLib\Array_UnitTest.cpp" />
+    <ClCompile Include="StdLib\Iterator_UnitTest.cpp" />
     <ClCompile Include="StdLib\SharedPtr_UnitTest.cpp" />
     <ClCompile Include="StdLib\String_UnitTest.cpp" />
     <ClCompile Include="StdLib\DynamicArray_UnitTest.cpp" />
@@ -120,7 +121,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\BIEngine\EngineCore\Assert.h" />
     <ClInclude Include="..\BIEngine\Math\Math.h" />
     <ClInclude Include="..\BIEngine\Math\Matrix.h" />
     <ClInclude Include="..\BIEngine\Math\Spline.h" />
@@ -128,9 +128,11 @@
     <ClInclude Include="..\BIEngine\Math\Trigonometry.h" />
     <ClInclude Include="..\BIEngine\Math\Vector.h" />
     <ClInclude Include="..\BIEngine\StdLib\Array.h" />
+    <ClInclude Include="..\BIEngine\StdLib\Assert.h" />
     <ClInclude Include="..\BIEngine\StdLib\DynamicArray.h" />
     <ClInclude Include="..\BIEngine\StdLib\ForwardList.h" />
     <ClInclude Include="..\BIEngine\StdLib\HashSet.h" />
+    <ClInclude Include="..\BIEngine\StdLib\Iterator.h" />
     <ClInclude Include="..\BIEngine\StdLib\List.h" />
     <ClInclude Include="..\BIEngine\StdLib\HashMap.h" />
     <ClInclude Include="..\BIEngine\StdLib\MemoryUtils.h" />

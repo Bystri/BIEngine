@@ -2,6 +2,7 @@
 
 #include "StdLib.h"
 #include "Utility.h"
+#include "Iterator.h"
 
 #include <cstring>
 #include <memory>
@@ -17,9 +18,11 @@ public:
    using Pointer = ValueType*;
    using ConstPointer = const ValueType*;
    using ConstReference = const ValueType&;
+   using SizeType = SizeT;
    using Iterator = ValueType*;
    using ConstIterator = const ValueType*;
-   using SizeType = SizeT;
+   using ReverseIterator = ReverseIterator<Iterator>;
+   using ConstReverseIterator = ConstReverseIterator<ConstIterator>;
 
    DynamicArray() = default;
    explicit DynamicArray(SizeType n);
@@ -52,8 +55,20 @@ public:
    Iterator Begin();
    Iterator End();
 
+   ConstIterator Begin() const;
+   ConstIterator End() const;
+
    ConstIterator CBegin() const;
    ConstIterator CEnd() const;
+
+   ReverseIterator RBegin();
+   ReverseIterator REnd();
+
+   ConstReverseIterator RBegin() const;
+   ConstReverseIterator REnd() const;
+
+   ConstReverseIterator CRBegin() const;
+   ConstReverseIterator CREnd() const;
 
    void Reserve(SizeType newCap);
    void Resize(SizeType num);
@@ -258,6 +273,18 @@ inline typename DynamicArray<T>::Iterator DynamicArray<T>::End()
 }
 
 template <typename T>
+inline typename DynamicArray<T>::ConstIterator DynamicArray<T>::Begin() const
+{
+   return m_pBegin;
+}
+
+template <typename T>
+inline typename DynamicArray<T>::ConstIterator DynamicArray<T>::End() const
+{
+   return m_pEnd;
+}
+
+template <typename T>
 inline typename DynamicArray<T>::ConstIterator DynamicArray<T>::CBegin() const
 {
    return m_pBegin;
@@ -267,6 +294,54 @@ template <typename T>
 inline typename DynamicArray<T>::ConstIterator DynamicArray<T>::CEnd() const
 {
    return m_pEnd;
+}
+
+template <typename T>
+inline typename DynamicArray<T>::Iterator DynamicArray<T>::Begin()
+{
+   return m_pBegin;
+}
+
+template <typename T>
+inline typename DynamicArray<T>::Iterator DynamicArray<T>::End()
+{
+   return m_pEnd;
+}
+
+template <typename T>
+inline typename DynamicArray<T>::ReverseIterator DynamicArray<T>::RBegin()
+{
+   return ReverseIterator(End());
+}
+
+template <typename T>
+inline typename DynamicArray<T>::ReverseIterator DynamicArray<T>::REnd()
+{
+   return ReverseIterator(Begin());
+}
+
+template <typename T>
+inline typename DynamicArray<T>::ConstReverseIterator DynamicArray<T>::RBegin() const
+{
+   return ConstReverseIterator(CEnd());
+}
+
+template <typename T>
+inline typename DynamicArray<T>::ConstReverseIterator DynamicArray<T>::REnd() const
+{
+   return ConstReverseIterator(CBegin());
+}
+
+template <typename T>
+inline typename DynamicArray<T>::ConstReverseIterator DynamicArray<T>::CRBegin() const
+{
+   return ConstReverseIterator(CEnd());
+}
+
+template <typename T>
+inline typename DynamicArray<T>::ConstReverseIterator DynamicArray<T>::CREnd() const
+{
+   return ConstReverseIterator(CBegin());
 }
 
 template <typename T>

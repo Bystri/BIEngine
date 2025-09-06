@@ -10,23 +10,12 @@ namespace BIEngine {
 
 template <typename Key, typename T, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
 class HashMap {
-public:
-   using ValueType = std::pair<const Key, T>;
-   using Reference = ValueType&;
-   using Pointer = ValueType*;
-   using ConstReference = const ValueType&;
-   using ConstPointer = const ValueType*;
-   using KeyType = Key;
-   using MappedType = T;
-   using HashType = Hasher;
-   using KeyEqualType = KeyEqual;
-   using SizeType = SizeT;
 
-   class Iterator {
+   class ConstHashMapIterator : public IteratorBase<ForwardIteratorTag, std::pair<const Key, T>> {
       friend class HashMap;
 
    public:
-      Iterator& operator=(const Iterator& rhs)
+      ConstHashMapIterator& operator=(const ConstHashMapIterator& rhs)
       {
          m_pHashMap = rhs.m_pHashMap;
          m_bucketIdx = rhs.m_bucketIdx;
@@ -35,76 +24,7 @@ public:
          return *this;
       }
 
-      Iterator& operator++()
-      {
-         ++m_listItr;
-         if (m_pHashMap->m_storage[m_bucketIdx].End() == m_listItr) {
-            while (++m_bucketIdx < m_pHashMap->m_storage.Size() && m_pHashMap->m_storage[m_bucketIdx].Empty()) {
-            }
-
-            if (m_bucketIdx >= m_pHashMap->m_storage.Size()) {
-               m_listItr = m_pHashMap->m_storage[0].End();
-            } else {
-               m_listItr = m_pHashMap->m_storage[m_bucketIdx].Begin();
-            }
-         }
-
-         return *this;
-      }
-
-      Iterator operator++(int)
-      {
-         Iterator old = *this;
-         operator++();
-         return old;
-      }
-
-      ValueType& operator*()
-      {
-         return *m_listItr;
-      }
-
-      ValueType* operator->()
-      {
-         return m_listItr.operator->();
-      }
-
-      friend bool operator==(const Iterator& lhs, const Iterator& rhs)
-      {
-         return lhs.m_bucketIdx == rhs.m_bucketIdx && lhs.m_listItr == rhs.m_listItr;
-      }
-
-      friend bool operator!=(const Iterator& lhs, const Iterator& rhs)
-      {
-         return !(lhs == rhs);
-      }
-
-   private:
-      Iterator(HashMap<Key, T>* pHashMap, SizeType bucketIdx, typename ForwardList<std::pair<const Key, T>>::Iterator listItr)
-         : m_pHashMap(pHashMap), m_bucketIdx(bucketIdx), m_listItr(listItr)
-      {
-      }
-
-   private:
-      HashMap<Key, T>* m_pHashMap;
-      SizeType m_bucketIdx;
-      typename ForwardList<std::pair<const Key, T>>::Iterator m_listItr;
-   };
-
-   class ConstIterator {
-      friend class HashMap;
-
-   public:
-      ConstIterator& operator=(const ConstIterator& rhs)
-      {
-         m_pHashMap = rhs.m_pHashMap;
-         m_bucketIdx = rhs.m_bucketIdx;
-         m_listItr = rhs.m_listItr;
-
-         return *this;
-      }
-
-      ConstIterator& operator++()
+      ConstHashMapIterator& operator++()
       {
          ++m_listItr;
          if (m_pHashMap->m_storage[m_bucketIdx].CEnd() == m_listItr) {
@@ -121,44 +41,79 @@ public:
          return *this;
       }
 
-      ConstIterator operator++(int)
+      ConstHashMapIterator operator++(int)
       {
-         ConstIterator old = *this;
+         ConstHashMapIterator old = *this;
          operator++();
          return old;
       }
 
-      const ValueType& operator*() const
+      const typename IteratorTraits<ConstHashMapIterator>::Reference operator*() const
       {
          return *m_listItr;
       }
 
-      const ValueType* operator->() const
+      const typename IteratorTraits<ConstHashMapIterator>::Pointer operator->() const
       {
          return m_listItr.operator->();
       }
 
-      friend bool operator==(const ConstIterator& lhs, const ConstIterator& rhs)
+      friend bool operator==(const ConstHashMapIterator& lhs, const ConstHashMapIterator& rhs)
       {
          return lhs.m_bucketIdx == rhs.m_bucketIdx && lhs.m_listItr == rhs.m_listItr;
       }
 
-      friend bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
+      friend bool operator!=(const ConstHashMapIterator& lhs, const ConstHashMapIterator& rhs)
       {
          return !(lhs == rhs);
       }
 
-   private:
-      ConstIterator(const HashMap<Key, T>* pHashMap, SizeType bucketIdx, typename ForwardList<std::pair<const Key, T>>::ConstIterator listItr)
+   protected:
+      ConstHashMapIterator(const HashMap<Key, T>* pHashMap, SizeT bucketIdx, typename ForwardList<std::pair<const Key, T>>::ConstIterator listItr)
          : m_pHashMap(pHashMap), m_bucketIdx(bucketIdx), m_listItr(listItr)
       {
       }
 
-   private:
+   protected:
       const HashMap<Key, T>* m_pHashMap;
-      SizeType m_bucketIdx;
+      SizeT m_bucketIdx;
       typename ForwardList<std::pair<const Key, T>>::ConstIterator m_listItr;
    };
+
+   class HashMapIterator : public ConstHashMapIterator {
+      friend class HashMap;
+
+   public:
+      typename IteratorTraits<HashMapIterator>::Reference operator*()
+      {
+         return *m_listItr;
+      }
+
+      typename IteratorTraits<HashMapIterator>::Pointer operator->()
+      {
+         return m_listItr.operator->();
+      }
+
+   protected:
+      HashMapIterator(HashMap<Key, T>* pHashMap, SizeT bucketIdx, typename ForwardList<std::pair<const Key, T>>::Iterator listItr)
+         : ConstHashMapIterator(pHashMap, bucketIdx, listItr)
+      {
+      }
+   };
+
+public:
+   using ValueType = std::pair<const Key, T>;
+   using Reference = ValueType&;
+   using Pointer = ValueType*;
+   using ConstReference = const ValueType&;
+   using ConstPointer = const ValueType*;
+   using KeyType = Key;
+   using MappedType = T;
+   using HashType = Hasher;
+   using KeyEqualType = KeyEqual;
+   using SizeType = SizeT;
+   using Iterator = HashMapIterator;
+   using ConstIterator = ConstHashMapIterator;
 
    HashMap();
 
@@ -167,6 +122,9 @@ public:
 
    Iterator Begin();
    Iterator End();
+
+   ConstIterator Begin() const;
+   ConstIterator End() const;
 
    ConstIterator CBegin() const;
    ConstIterator CEnd() const;
@@ -239,6 +197,26 @@ template <typename Key, typename T, typename Hasher, typename KeyEqual>
 inline typename HashMap<Key, T, Hasher, KeyEqual>::Iterator HashMap<Key, T, Hasher, KeyEqual>::End()
 {
    return Iterator(this, m_storage.Size(), m_storage[0].End());
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::ConstIterator HashMap<Key, T, Hasher, KeyEqual>::Begin() const
+{
+   if (m_size == 0) {
+      return End();
+   }
+
+   int bucketIdx = -1;
+   while (m_storage[++bucketIdx].Empty()) {
+   }
+
+   return ConstIterator(this, bucketIdx, m_storage[bucketIdx].Begin());
+}
+
+template <typename Key, typename T, typename Hasher, typename KeyEqual>
+inline typename HashMap<Key, T, Hasher, KeyEqual>::ConstIterator HashMap<Key, T, Hasher, KeyEqual>::End() const
+{
+   return ConstIterator(this, m_storage.Size(), m_storage[0].End());
 }
 
 template <typename Key, typename T, typename Hasher, typename KeyEqual>

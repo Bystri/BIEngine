@@ -4,6 +4,7 @@
 
 #include "StdLib.h"
 #include "Utility.h"
+#include "Iterator.h"
 
 namespace BIEngine {
 
@@ -36,60 +37,52 @@ class ForwardList {
       T val;
    };
 
-public:
-   using ValueType = T;
-   using Reference = ValueType&;
-   using Pointer = ValueType*;
-   using ConstPointer = const ValueType*;
-   using ConstReference = const ValueType&;
-   using SizeType = SizeT;
-
-   class ConstIterator {
+   class ConstForwardListIterator : public IteratorBase<ForwardIteratorTag, T> {
       friend class ForwardList;
 
    public:
-      ConstIterator& operator=(const ConstIterator& rhs)
+      ConstForwardListIterator& operator=(const ConstForwardListIterator& rhs)
       {
          m_pCurNode = rhs.m_pCurNode;
 
          return *this;
       }
 
-      ConstIterator& operator++()
+      ConstForwardListIterator& operator++()
       {
          m_pCurNode = m_pCurNode == nullptr ? nullptr : m_pCurNode->next;
          return *this;
       }
 
-      ConstIterator operator++(int)
+      ConstForwardListIterator operator++(int)
       {
          Iterator old = *this;
          operator++();
          return old;
       }
 
-      const T& operator*() const
+      const typename IteratorTraits<ConstForwardListIterator>::Reference& operator*() const
       {
          return static_cast<Node*>(m_pCurNode)->val;
       }
 
-      const T* operator->() const
+      const typename IteratorTraits<ConstForwardListIterator>::Pointer operator->() const
       {
          return &static_cast<Node*>(m_pCurNode)->val;
       }
 
-      friend bool operator==(const ConstIterator& lhs, const ConstIterator& rhs)
+      friend bool operator==(const ConstForwardListIterator& lhs, const ConstForwardListIterator& rhs)
       {
          return lhs.m_pCurNode == rhs.m_pCurNode;
       }
 
-      friend bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
+      friend bool operator!=(const ConstForwardListIterator& lhs, const ConstForwardListIterator& rhs)
       {
          return !(lhs == rhs);
       }
 
    protected:
-      ConstIterator(const NodeBase* pCur)
+      ConstForwardListIterator(const NodeBase* pCur)
          : m_pCurNode(const_cast<NodeBase*>(pCur))
       {
       }
@@ -98,26 +91,36 @@ public:
       NodeBase* m_pCurNode;
    };
 
-   class Iterator : public ConstIterator {
+   class ForwardListIterator : public ConstForwardListIterator {
       friend class ForwardList;
 
    public:
-      T& operator*()
+      typename IteratorTraits<ForwardListIterator>::Reference operator*()
       {
          return static_cast<Node*>(this->m_pCurNode)->val;
       }
 
-      T* operator->()
+      typename IteratorTraits<ForwardListIterator>::Pointer operator->()
       {
          return &static_cast<Node*>(this->m_pCurNode)->val;
       }
 
    protected:
-      Iterator(NodeBase* pCur)
-         : ConstIterator(pCur)
+      ForwardListIterator(NodeBase* pCur)
+         : ConstForwardListIterator(pCur)
       {
       }
    };
+
+public:
+   using ValueType = T;
+   using Reference = ValueType&;
+   using Pointer = ValueType*;
+   using ConstPointer = const ValueType*;
+   using ConstReference = const ValueType&;
+   using SizeType = SizeT;
+   using Iterator = ForwardListIterator;
+   using ConstIterator = ConstForwardListIterator;
 
    ForwardList() = default;
    explicit ForwardList(SizeType n);
@@ -139,6 +142,10 @@ public:
    Iterator BeforeBegin();
    Iterator Begin();
    Iterator End();
+
+   ConstIterator BeforeBegin() const;
+   ConstIterator Begin() const;
+   ConstIterator End() const;
 
    ConstIterator CBeforeBegin() const;
    ConstIterator CBegin() const;
@@ -278,6 +285,24 @@ template <typename T>
 inline typename ForwardList<T>::Iterator ForwardList<T>::End()
 {
    return Iterator(nullptr);
+}
+
+template <typename T>
+inline typename ForwardList<T>::ConstIterator ForwardList<T>::BeforeBegin() const
+{
+   return ConstIterator(&m_head);
+}
+
+template <typename T>
+inline typename ForwardList<T>::ConstIterator ForwardList<T>::Begin() const
+{
+   return ConstIterator(m_head.next);
+}
+
+template <typename T>
+inline typename ForwardList<T>::ConstIterator ForwardList<T>::End() const
+{
+   return ConstIterator(nullptr);
 }
 
 template <typename T>

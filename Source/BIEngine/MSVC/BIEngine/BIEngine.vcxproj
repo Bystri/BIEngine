@@ -377,6 +377,7 @@
     <ClInclude Include="..\..\StdLib\ForwardList.h" />
     <ClInclude Include="..\..\StdLib\HashMap.h" />
     <ClInclude Include="..\..\StdLib\HashSet.h" />
+    <ClInclude Include="..\..\StdLib\Iterator.h" />
     <ClInclude Include="..\..\StdLib\List.h" />
     <ClInclude Include="..\..\StdLib\MemoryUtils.h" />
     <ClInclude Include="..\..\StdLib\SharedPtr.h" />

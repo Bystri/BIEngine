@@ -4,6 +4,7 @@
 
 #include "StdLib.h"
 #include "Utility.h"
+#include "Iterator.h"
 
 namespace BIEngine {
 
@@ -15,19 +16,11 @@ class List {
       T val;
    };
 
-public:
-   using ValueType = T;
-   using Reference = ValueType&;
-   using Pointer = ValueType*;
-   using ConstReference = const ValueType&;
-   using ConstPointer = const ValueType*;
-   using SizeType = SizeT;
-
-   class ConstIterator {
+   class ConstListIterator : public IteratorBase<BiderectinalIteratorTag, T> {
       friend class List;
 
    public:
-      ConstIterator& operator=(const ConstIterator& rhs)
+      ConstListIterator& operator=(const ConstListIterator& rhs)
       {
          m_pList = rhs.m_pList;
          m_pCurNode = rhs.m_pCurNode;
@@ -35,54 +28,54 @@ public:
          return *this;
       }
 
-      ConstIterator& operator++()
+      ConstListIterator& operator++()
       {
          m_pCurNode = m_pCurNode == nullptr ? m_pList->m_pFirst : m_pCurNode->next;
          return *this;
       }
 
-      ConstIterator operator++(int)
+      ConstListIterator operator++(int)
       {
          Iterator old = *this;
          operator++();
          return old;
       }
 
-      ConstIterator& operator--()
+      ConstListIterator& operator--()
       {
          m_pCurNode = m_pCurNode == nullptr ? m_pList->m_pLast : m_pCurNode->prev;
          return *this;
       }
 
-      ConstIterator operator--(int)
+      ConstListIterator operator--(int)
       {
          Iterator old = *this;
          operator--();
          return old;
       }
 
-      const T& operator*() const
+      const typename IteratorTraits<ConstListIterator>::Reference operator*() const
       {
          return m_pCurNode->val;
       }
 
-      const T* operator->() const
+      const typename IteratorTraits<ConstListIterator>::Pointer operator->() const
       {
          return &m_pCurNode->val;
       }
 
-      friend bool operator==(const ConstIterator& lhs, const ConstIterator& rhs)
+      friend bool operator==(const ConstListIterator& lhs, const ConstListIterator& rhs)
       {
          return lhs.m_pCurNode == rhs.m_pCurNode;
       }
 
-      friend bool operator!=(const ConstIterator& lhs, const ConstIterator& rhs)
+      friend bool operator!=(const ConstListIterator& lhs, const ConstListIterator& rhs)
       {
          return !(lhs == rhs);
       }
 
    protected:
-      ConstIterator(const List<T>* pList, Node* pCur)
+      ConstListIterator(const List<T>* pList, Node* pCur)
          : m_pList(pList), m_pCurNode(pCur)
       {
       }
@@ -92,26 +85,39 @@ public:
       Node* m_pCurNode;
    };
 
-   class Iterator : public ConstIterator {
+   class ListIterator : public ConstListIterator {
       friend class List;
 
    public:
-      T& operator*()
+      typename IteratorTraits<ListIterator>::Reference operator*()
       {
          return this->m_pCurNode->val;
       }
 
-      T* operator->()
+      typename IteratorTraits<ListIterator>::Pointer operator->()
       {
          return &this->m_pCurNode->val;
       }
 
    protected:
-      Iterator(const List<T>* pList, Node* pCur)
-         : ConstIterator(pList, pCur)
+      ListIterator(const List<T>* pList, Node* pCur)
+         : ConstListIterator(pList, pCur)
       {
       }
    };
+
+
+public:
+   using ValueType = T;
+   using Reference = ValueType&;
+   using Pointer = ValueType*;
+   using ConstReference = const ValueType&;
+   using ConstPointer = const ValueType*;
+   using SizeType = SizeT;
+   using Iterator = ListIterator;
+   using ConstIterator = ConstListIterator;
+   using ReverseIterator = ReverseIterator<Iterator>;
+   using ConstReverseIterator = ConstReverseIterator<ConstIterator>;
 
    List() = default;
    explicit List(SizeType n);
@@ -135,8 +141,20 @@ public:
    Iterator Begin();
    Iterator End();
 
+   ConstIterator Begin() const;
+   ConstIterator End() const;
+
    ConstIterator CBegin() const;
    ConstIterator CEnd() const;
+
+   ReverseIterator RBegin();
+   ReverseIterator REnd();
+
+   ConstReverseIterator RBegin() const;
+   ConstReverseIterator REnd() const;
+
+   ConstReverseIterator CRBegin() const;
+   ConstReverseIterator CREnd() const;
 
    void Clear();
 
@@ -295,6 +313,18 @@ inline typename List<T>::Iterator List<T>::End()
 }
 
 template <typename T>
+inline typename List<T>::ConstIterator List<T>::Begin() const
+{
+   return ConstIterator(this, m_pFirst);
+}
+
+template <typename T>
+inline typename List<T>::ConstIterator List<T>::End() const
+{
+   return ConstIterator(this, nullptr);
+}
+
+template <typename T>
 inline typename List<T>::ConstIterator List<T>::CBegin() const
 {
    return ConstIterator(this, m_pFirst);
@@ -304,6 +334,42 @@ template <typename T>
 inline typename List<T>::ConstIterator List<T>::CEnd() const
 {
    return ConstIterator(this, nullptr);
+}
+
+template <typename T>
+inline typename List<T>::ReverseIterator List<T>::RBegin()
+{
+   return ReverseIterator(End());
+}
+
+template <typename T>
+inline typename List<T>::ReverseIterator List<T>::REnd()
+{
+   return ReverseIterator(Begin());
+}
+
+template <typename T>
+inline typename List<T>::ConstReverseIterator List<T>::RBegin() const
+{
+   return ConstReverseIterator(CEnd());
+}
+
+template <typename T>
+inline typename List<T>::ConstReverseIterator List<T>::REnd() const
+{
+   return ConstReverseIterator(CBegin());
+}
+
+template <typename T>
+inline typename List<T>::ConstReverseIterator List<T>::CRBegin() const
+{
+   return ConstReverseIterator(CEnd());
+}
+
+template <typename T>
+inline typename List<T>::ConstReverseIterator List<T>::CREnd() const
+{
+   return ConstReverseIterator(CBegin());
 }
 
 template <typename T>
