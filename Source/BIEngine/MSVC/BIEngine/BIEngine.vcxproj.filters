@@ -893,6 +893,9 @@
     <ClInclude Include="..\..\StdLib\Iterator.h">
       <Filter>StdLib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\StdLib\Functional.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.clang-format" />

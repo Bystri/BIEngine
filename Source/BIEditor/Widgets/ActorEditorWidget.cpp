@@ -23,7 +23,7 @@ public:
          m_editWidgets[i].SetTextColor(BIEngine::ColorRgb(0.1f + i * 0.45f, 0.1f + i * 0.35f, 0.8f));
 
          m_editWidgets[i].SetEditCallback(
-            std::make_shared<std::function<void(float)>>([actorId = m_actorId, componentName = componentName, settingName = m_settingName, parameterName](float value) { numEdited(actorId, componentName, settingName, parameterName, value); }));
+            BIEngine::MakeShared<std::function<void(float)>>([actorId = m_actorId, componentName = componentName, settingName = m_settingName, parameterName](float value) { numEdited(actorId, componentName, settingName, parameterName, value); }));
 
          ++i;
       }

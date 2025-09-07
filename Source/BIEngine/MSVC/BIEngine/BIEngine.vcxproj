@@ -375,6 +375,7 @@
     <ClInclude Include="..\..\StdLib\Assert.h" />
     <ClInclude Include="..\..\StdLib\DynamicArray.h" />
     <ClInclude Include="..\..\StdLib\ForwardList.h" />
+    <ClInclude Include="..\..\StdLib\Functional.h" />
     <ClInclude Include="..\..\StdLib\HashMap.h" />
     <ClInclude Include="..\..\StdLib\HashSet.h" />
     <ClInclude Include="..\..\StdLib\Iterator.h" />

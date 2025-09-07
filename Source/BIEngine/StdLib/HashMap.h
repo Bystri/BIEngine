@@ -1,13 +1,12 @@
 #pragma once
 
-#include <functional>
-
+#include "Functional.h"
 #include "DynamicArray.h"
 #include "ForwardList.h"
 
 namespace BIEngine {
 
-template <typename Key, typename T, typename Hasher = Hash<Key>, typename KeyEqual = std::equal_to<Key>>
+template <typename Key, typename T, typename Hasher = Hash<Key>, typename KeyEqual = EqualTo<Key>>
 class HashMap {
 
    class ConstHashMapIterator : public IteratorBase<ForwardIteratorTag, std::pair<const Key, T>> {
