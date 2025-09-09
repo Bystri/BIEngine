@@ -29,8 +29,13 @@ class PlayerActionBinderComponent():
         self.OnTurnCallback = lambda eventData : self.OnTurnDelegate(eventData)
         self.OnTurnListenerHandler = BIEEvent.RegisterEventListener(BIGActionEvent.EvtData_Turn.eventType, self.OnTurnCallback)
         
+        self.OnPrimaryAttackCallback = lambda eventData : self.OnPrimaryAttackDelegate(eventData)
+        self.OnPrimaryAttackListenerHandler = BIEEvent.RegisterEventListener(BIGActionEvent.EvtData_PrimaryAttack.eventType, self.OnPrimaryAttackCallback)
+        
     def OnDeactivate(self):  
         BIEEvent.RemoveEventListener(self.OnMoveListenerHandler)
+        BIEEvent.RemoveEventListener(self.OnTurnListenerHandler)
+        BIEEvent.RemoveEventListener(self.OnPrimaryAttackListenerHandler)
         
     def OnTerminate(self):
         pass
@@ -61,6 +66,17 @@ class PlayerActionBinderComponent():
                  
         command = TurnCommand(self.owner, onTurnData.GetDesiredDir())
         self.characterCommandMngComponent.ExecuteCommand(command)  
+        
+    def OnPrimaryAttackDelegate(self, eventData : BIEEvent.BaseEventData):
+        onPrimaryAttackData = cast(BIGActionEvent.EvtData_PrimaryAttack, eventData)
+        
+        playerId = self.owner.GetComponent("PlayerComponent").GetPlayerId()
+         
+        if onPrimaryAttackData.GetPlayerId() != playerId:
+            return
+                 
+        attackCommand = MeleeAttackCommand(self.owner)
+        self.characterCommandMngComponent.ExecuteCommand(attackCommand)
             
     def OnUpdate(self, dt):
         return

@@ -10,6 +10,10 @@
 		</AnimationComponent>
 		<LocomotionInfoComponent>
 		</LocomotionInfoComponent>
+		<CombatStateComponent>
+		</CombatStateComponent>
+		<CombatControllerComponent>
+		</CombatControllerComponent>
 		<ScriptComponent>
 			<ScriptObject modulePath="PlayerActionBinderComponent" className="PlayerActionBinderComponent"/>
 			<StringData/>
@@ -17,11 +21,6 @@
 		</ScriptComponent>
 		<ScriptComponent>
 			<ScriptObject modulePath="CharacterCommands.CharacterCommandMngComponent" className="CharacterCommandMngComponent"/>
-			<StringData/>
-			<NumberData/>
-		</ScriptComponent>
-		<ScriptComponent>
-			<ScriptObject modulePath="Combat.MeleeAttackComponent" className="MeleeAttackComponent"/>
 			<StringData/>
 			<NumberData/>
 		</ScriptComponent>

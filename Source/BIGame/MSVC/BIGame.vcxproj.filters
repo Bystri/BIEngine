@@ -14,6 +14,15 @@
     <ClCompile Include="..\Network\LocomotionInfoReplicationUnit.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\Network\CombatReplicationUnit.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Combat\CombatControllerComponent.cpp">
+      <Filter>Combat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Combat\CombatStateComponent.cpp">
+      <Filter>Combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGame.h" />
@@ -36,6 +45,15 @@
     <ClInclude Include="..\Network\LocomotionInfoReplicationUnit.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\Network\CombatReplicationUnit.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Combat\CombatControllerComponent.h">
+      <Filter>Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Combat\CombatStateComponent.h">
+      <Filter>Combat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.clang-format" />
@@ -47,6 +65,9 @@
     </Filter>
     <Filter Include="PlayerManager">
       <UniqueIdentifier>{202dd021-2f17-4688-abb1-43fd733cfce2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Combat">
+      <UniqueIdentifier>{305cb468-8bed-415e-a236-74b858185169}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

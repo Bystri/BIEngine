@@ -70,6 +70,10 @@ void BIInputActionController::OnKeyUpDelegate(BIEngine::IEventDataPtr pEventData
       case EvtData_OnKeyUp::Key::D:
          m_currentMoveMask &= 0xff ^ DirectionMask::Right;
          break;
+      case EvtData_OnKeyUp::Key::SPACE:
+         BIEngine::SharedPtr<EvtData_PrimaryAttack> pEvent = BIEngine::MakeShared<EvtData_PrimaryAttack>(m_playerId);
+         BIEngine::EventManager::Get()->QueueEvent(pEvent);
+         break;
    }
 }
 

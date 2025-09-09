@@ -6,6 +6,8 @@
 
 #include "BIEventListener.h"
 #include "Locomotion/LocomotionInfoComponent.h"
+#include "Combat/CombatStateComponent.h"
+#include "Combat/CombatControllerComponent.h"
 
 namespace py = pybind11;
 
@@ -21,6 +23,10 @@ PYBIND11_EMBEDDED_MODULE(BIGActionEvent, m)
       .def_readonly_static("eventType", &EvtData_Turn::sk_EventType)
       .def("GetPlayerId", &EvtData_Turn::GetPlayerId)
       .def("GetDesiredDir", &EvtData_Turn::GetDesiredDir);
+
+   py::class_<EvtData_PrimaryAttack, BIEngine::BaseEventData, BIEngine::SharedPtr<EvtData_PrimaryAttack>>(m, "EvtData_PrimaryAttack")
+      .def_readonly_static("eventType", &EvtData_PrimaryAttack::sk_EventType)
+      .def("GetPlayerId", &EvtData_PrimaryAttack::GetPlayerId);
 }
 
 PYBIND11_EMBEDDED_MODULE(BIGActor, m)
@@ -34,4 +40,11 @@ PYBIND11_EMBEDDED_MODULE(BIGActor, m)
       .def("GetInputDir", &LocomotionInfoComponent::GetInputDir)
       .def("SetInputVel", &LocomotionInfoComponent::SetInputVel)
       .def("GetInputVel", &LocomotionInfoComponent::GetInputVel);
+
+   py::class_<CombatStateComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<CombatStateComponent>>(m, "CombatStateComponent")
+      .def("SetIsAttackInProgress", &CombatStateComponent::SetIsAttackInProgress)
+      .def("IsAttackInProgress", &CombatStateComponent::IsAttackInProgress);
+
+   py::class_<CombatControllerComponent, BIEngine::ActorComponent, BIEngine::PythonStateManager::RawPtrWrapper<CombatControllerComponent>>(m, "CombatControllerComponent")
+      .def("RequestMeleeAttack", &CombatControllerComponent::RequestMeleeAttack);
 }

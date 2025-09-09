@@ -173,4 +173,46 @@ private:
    glm::vec2 m_desiredDir = glm::vec2(0.0f);
 };
 
+class EvtData_PrimaryAttack : public BIEngine::BaseEventData {
+public:
+   static const BIEngine::EventType sk_EventType;
+
+   EvtData_PrimaryAttack() = default;
+
+   EvtData_PrimaryAttack(PlayerId playerId)
+      : m_playerId(playerId)
+   {
+   }
+
+   virtual const BIEngine::EventType& GetEventType(void) const
+   {
+      return sk_EventType;
+   }
+
+   virtual BIEngine::IEventDataPtr Copy(void) const
+   {
+      return BIEngine::MakeShared<EvtData_PrimaryAttack>(m_playerId);
+   }
+
+   virtual const char* GetName(void) const
+   {
+      return "EvtData_PrimaryAttack";
+   }
+
+   virtual void Write(BIEngine::OutputMemoryBitStream& out) const override
+   {
+      Serialize(out, m_playerId);
+   }
+
+   virtual void Read(BIEngine::InputMemoryBitStream& in) override
+   {
+      Deserialize(in, m_playerId);
+   }
+
+   PlayerId GetPlayerId() const { return m_playerId; };
+
+private:
+   PlayerId m_playerId = PlayerManager::INVALID_PLAYER_ID;
+};
+
 void BIRegisterEvents();

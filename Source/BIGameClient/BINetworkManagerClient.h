@@ -40,6 +40,7 @@ private:
 
    BIEngine::EventManager::DelegateHandler m_storeEventMoveDelegateHandler;
    BIEngine::EventManager::DelegateHandler m_storeEventTurnDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_storeEventPrimaryAttackDelegateHandler;
 
    float m_timeOfLastHello;
    float m_timeOfLastEventPacket;

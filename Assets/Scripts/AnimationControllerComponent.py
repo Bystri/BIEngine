@@ -14,16 +14,28 @@ class AnimationControllerProcess(BIEProcess.Process):
         self.locomotionInfoComponent = cast(BIGActor.LocomotionInfoComponent, movableActor.GetComponent("LocomotionInfoComponent"))
         self.transformComponent = cast(BIEActor.TransformComponent, movableActor.GetComponent("TransformComponent"))
         self.animationComponent = cast(BIEActor.AnimationComponent, movableActor.GetComponent("AnimationComponent"))
-        self.meleeAttackComponent = movableActor.GetComponent("MeleeAttackComponent").GetObject()
+        self.combatStateComponent = movableActor.GetComponent("CombatStateComponent")
         
         self.isRunningFront = True
         self.isRunningBack = True
         self.isRunningRight = True
         self.isRunningLeft = True
+        self.isAttackInProgress = True
         
     def OnUpdate(self, dt):
+        if self.isAttackInProgress and not self.combatStateComponent.IsAttackInProgress():
+            self.isAttackInProgress = False
+            self.isRunningFront = False
+            self.isRunningBack = False
+            self.isRunningRight = False
+            self.isRunningLeft = False
+            
+        if not self.isAttackInProgress and self.combatStateComponent.IsAttackInProgress():
+            self.animationComponent.PlayAnimation("2H_Melee_Attack_Chop")
+            self.isAttackInProgress = True
+        
         currentVel2d = BIEVector.Vec2(self.locomotionInfoComponent.GetCurrentVel().x, self.locomotionInfoComponent.GetCurrentVel().z)
-        if currentVel2d.Length() > 0.001 and not self.meleeAttackComponent.IsAttackInProgress():
+        if currentVel2d.Length() > 0.001 and not self.combatStateComponent.IsAttackInProgress():
             currentVel2d = currentVel2d.Normalize()
             dirDot = BIEVector.Dot(self.locomotionInfoComponent.GetCurrentDir(), currentVel2d)
             

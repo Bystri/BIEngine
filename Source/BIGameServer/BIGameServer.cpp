@@ -6,6 +6,8 @@
 #include "../BIEngine/Network/Replication/ObjectReplicationManagerMaster.h"
 #include "../BIGame/Network/ReplicationObjectPlayer.h"
 #include "../BIGame/Network/ReplicationObjectPlayerCharacter.h"
+#include "../BIGame/Combat/CombatStateComponent.h"
+#include "../BIGame/Combat/CombatControllerComponent.h"
 
 #include "BINetworkManagerServer.h"
 #include "BIGSEventListener.h"
@@ -78,6 +80,8 @@ bool BIServerGameLogic::Init()
    m_pNavWorld = BIEngine::MakeUnique<BIEngine::NavWorld>();
 
    m_pActorFactory->AddComponentCreator(LocomotionInfoComponent::g_CompId, CreateLocomotionInfoComponent);
+   m_pActorFactory->AddComponentCreator(CombatStateComponent::g_CompId, CreateCombatStateComponent);
+   m_pActorFactory->AddComponentCreator(CombatControllerComponent::g_CompId, CreateCombatControllerComponent);
 
    if (!GameLogic::Init()) {
       return false;

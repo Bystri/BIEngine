@@ -419,6 +419,94 @@ public:
       Reset();
    }
 
+   WeakPtr& operator=(const WeakPtr& rhs)
+   {
+      WeakPtr temp(rhs);
+      Reset();
+
+      m_ptr = temp.m_ptr;
+      m_pInfo = temp.m_pInfo;
+
+      if (m_ptr == nullptr) {
+         return *this;
+      }
+
+      ++m_pInfo->weakCnt;
+
+      return *this;
+   }
+
+   template <typename T2>
+   WeakPtr& operator=(const WeakPtr<T2>& rhs)
+   {
+      WeakPtr<T2> temp(rhs);
+      Reset();
+
+      m_ptr = temp.m_ptr;
+      m_pInfo = temp.m_pInfo;
+
+      if (m_ptr == nullptr) {
+         return *this;
+      }
+
+      ++m_pInfo->weakCnt;
+
+      return *this;
+   }
+
+   template <typename T2>
+   WeakPtr& operator=(const SharedPtr<T2>& rhs)
+   {
+      WeakPtr<T2> temp(rhs);
+      Reset();
+
+      m_ptr = temp.m_ptr;
+      m_pInfo = temp.m_pInfo;
+
+      if (m_ptr == nullptr) {
+         return *this;
+      }
+
+      ++m_pInfo->weakCnt;
+
+      return *this;
+   }
+
+   WeakPtr& operator=(WeakPtr&& rhs)
+   {
+      WeakPtr temp(std::move(rhs));
+      Reset();
+
+      m_ptr = temp.m_ptr;
+      m_pInfo = temp.m_pInfo;
+
+      if (m_ptr == nullptr) {
+         return *this;
+      }
+
+      ++m_pInfo->weakCnt;
+
+      return *this;
+   }
+
+   template <typename T2>
+   WeakPtr& operator=(WeakPtr<T2>&& rhs)
+   {
+      WeakPtr<T2> temp(std::move(rhs));
+      Reset();
+
+      m_ptr = temp.m_ptr;
+      m_pInfo = temp.m_pInfo;
+
+      if (m_ptr == nullptr) {
+         return *this;
+      }
+
+      ++m_pInfo->weakCnt;
+
+      return *this;
+   }
+
    void Reset()
    {
       if (m_pInfo == nullptr) {

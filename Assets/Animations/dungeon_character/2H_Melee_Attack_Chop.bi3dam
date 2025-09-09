@@ -12,6 +12,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="1" z="1" timestamp="0"/>
+				<Scale x="1" y="1" z="1" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="wrist.l">
@@ -197,6 +198,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999994" z="0.99999994" timestamp="0"/>
+				<Scale x="1" y="0.99999994" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="spine">
@@ -492,6 +494,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="handslot.l">
@@ -505,6 +508,7 @@
             </Rotations>
             <Scales>
                 <Scale x="0.99999994" y="1" z="0.99999994" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="upperarm.r">
@@ -676,6 +680,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="wrist.r">
@@ -689,6 +694,7 @@
             </Rotations>
             <Scales>
                 <Scale x="0.99999994" y="0.99999994" z="0.99999994" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="hand.r">
@@ -750,6 +756,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999994" z="0.99999994" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="handslot.r">
@@ -983,6 +990,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999982" z="1.0000012" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="lowerleg.l">
@@ -1044,6 +1052,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="1.0000005" z="1.0000001" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="foot.l">
@@ -1105,6 +1114,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="1.0000008" z="0.99999875" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="toes.l">
@@ -1228,6 +1238,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999982" z="1.0000012" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="lowerleg.r">
@@ -1289,6 +1300,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="1.0000005" z="1.0000001" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="foot.r">
@@ -1350,6 +1362,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="1.0000008" z="0.99999875" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="toes.r">
@@ -1363,6 +1376,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999994" z="1.0000001" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="kneeIK.l">
@@ -1376,6 +1390,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999988" z="0.99999988" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="control-toe-roll.l">
@@ -1389,6 +1404,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="1.0000001" z="1.0000001" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="control-heel-roll.l">
@@ -1512,6 +1528,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999994" z="0.99999988" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="heelIK.l">
@@ -1525,6 +1542,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999994" z="1" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="IK-foot.l">
@@ -1538,6 +1556,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="1" z="0.99999994" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="IK-toe.l">
@@ -1551,6 +1570,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999994" z="1" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="kneeIK.r">
@@ -1564,6 +1584,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999988" z="0.99999988" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="control-toe-roll.r">
@@ -1749,6 +1770,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999994" z="0.99999988" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="heelIK.r">
@@ -1762,6 +1784,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999994" z="1" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="IK-foot.r">
@@ -1775,6 +1798,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="1" z="0.99999994" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="IK-toe.r">
@@ -1788,6 +1812,7 @@
             </Rotations>
             <Scales>
                 <Scale x="1" y="0.99999994" z="1" timestamp="0"/>
+				<Scale x="1.0000002" y="0.99999988" z="0.99999994" timestamp="1633.3333740234375"/>
             </Scales>
         </BoneChannel>
         <BoneChannel boneName="elbowIK.l">
