@@ -1,7 +1,5 @@
 #include "MeshGeometryGenerator.h"
 
-#include <algorithm>
-
 namespace BIEngine {
 
 Mesh MeshGeometryGenerator::CreateQuad(float width, float height)

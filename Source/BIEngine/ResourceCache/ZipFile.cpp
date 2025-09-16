@@ -1,10 +1,11 @@
 ﻿#include "ZipFile.h"
 
-#include <algorithm>
 #include <cctype>
 #include <iterator>
 
 #include <zlib.h>
+
+#include "../StdLib/Algorithm.h"
 
 // Загрузчик ZIP-архивов. Оригинальный код пренадлежит Javier Arevalo.
 // https://www.flipcode.com/archives/Zip_File_Loader.shtml
@@ -155,7 +156,7 @@ bool ZipFile::Init(const String& resFileName)
          String fileName(pfh);
 
          // str to lower
-         std::transform(fileName.Begin(), fileName.End(), fileName.Begin(), [](unsigned char c) { return std::tolower(c); });
+         Transform(fileName.Begin(), fileName.End(), fileName.Begin(), [](unsigned char c) { return std::tolower(c); });
          m_ZipContentsMap[fileName] = i;
 
          // Skip name, extra and comment fields.
@@ -263,7 +264,7 @@ bool ZipFile::ReadFile(int i, void* pBuf)
 int ZipFile::Find(const String& path) const
 {
    String lowerCasePath = path;
-   std::transform(lowerCasePath.Begin(), lowerCasePath.End(), lowerCasePath.Begin(), [](unsigned char c) { return std::tolower(c); });
+   Transform(lowerCasePath.Begin(), lowerCasePath.End(), lowerCasePath.Begin(), [](unsigned char c) { return std::tolower(c); });
 
    auto itr = m_ZipContentsMap.Find(lowerCasePath);
    if (itr == m_ZipContentsMap.CEnd()) {

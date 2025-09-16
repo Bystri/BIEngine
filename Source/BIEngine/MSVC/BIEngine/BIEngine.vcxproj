@@ -371,6 +371,7 @@
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsPhysics3D.h" />
     <ClInclude Include="..\..\Scripting\ScriptExports\ScriptExportsProcess.h" />
     <ClInclude Include="..\..\Scripting\ScriptResource.h" />
+    <ClInclude Include="..\..\StdLib\Algorithm.h" />
     <ClInclude Include="..\..\StdLib\Array.h" />
     <ClInclude Include="..\..\StdLib\Assert.h" />
     <ClInclude Include="..\..\StdLib\DynamicArray.h" />

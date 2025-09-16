@@ -1,10 +1,10 @@
 ﻿#include "ResCache.h"
 
-#include <algorithm>
 #include <iostream>
 #include <cctype>
 
 #include "../StdLib/Assert.h"
+#include "../StdLib/Algorithm.h"
 #include "../Utilities/String.h"
 #include "../Utilities/Logger.h"
 
@@ -205,7 +205,7 @@ DynamicArray<String> ResCache::Match(const String& pattern)
    int numFiles = m_pFile->GetNumResources();
    for (int i = 0; i < numFiles; ++i) {
       String name = m_pFile->GetResourceName(i);
-      std::transform(name.Begin(), name.End(), name.Begin(), (int (*)(int))std::tolower);
+      Transform(name.Begin(), name.End(), name.Begin(), (int (*)(int))std::tolower);
       if (WildcardMatch(pattern.CStr(), name.CStr())) {
          matchingNames.PushBack(name);
       }

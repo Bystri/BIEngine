@@ -3,7 +3,6 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <iterator>
-#include <algorithm>
 
 #include <imgui.h>
 #include <glm/glm.hpp>

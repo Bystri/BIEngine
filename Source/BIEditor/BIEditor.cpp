@@ -95,7 +95,7 @@ BIEditorHumanView::BIEditorHumanView(unsigned int screenWidth, unsigned int scre
 
 static BIEngine::SharedPtr<BIEngine::Skybox> humanViewCreateSkybox()
 {
-   auto xmlExtraData = std::static_pointer_cast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/scene.xml")->GetExtra());
+   auto xmlExtraData = BIEngine::StaticPointerCast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/scene.xml")->GetExtra());
 
    if (!xmlExtraData) {
       return nullptr;
@@ -292,7 +292,7 @@ void BIEditorHumanView::OnPostRender(const BIEngine::GameTimer& gt)
          mousePos.y = screenPos.y - mousePos.y;
 
          BIEngine::ActorId selectedId = BIEngine::Actor::INVALID_ACTOR_ID;
-         if (BIEngine::SharedPtr<ActorPickerInfoStorage> spt = m_pActorPickerInfoStorage.lock()) {
+         if (BIEngine::SharedPtr<ActorPickerInfoStorage> spt = m_pActorPickerInfoStorage.Lock()) {
             selectedId = spt->GetActorId(mousePos.x, mousePos.y);
          }
 
@@ -356,7 +356,7 @@ void BIEditorHumanView::showActorTreeNode(BIEngine::SharedPtr<BIEngine::Actor> p
       nodeFlags |= ImGuiTreeNodeFlags_Leaf;
    }
 
-   const bool isOpened = ImGui::TreeNodeEx((void*)pActor.get(), nodeFlags, pActor->GetName().CStr());
+   const bool isOpened = ImGui::TreeNodeEx((void*)pActor.Get(), nodeFlags, pActor->GetName().CStr());
 
    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
       m_pActorEditorWidget->SetCurrentEditableActorId(pActor->GetId());

@@ -162,7 +162,7 @@ public:
 
    virtual BIEngine::IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_OnKeyDown>(GetKey());
+      return BIEngine::MakeShared<EvtData_OnKeyDown>(GetKey());
    }
 
    virtual const char* GetName() const
@@ -187,7 +187,7 @@ public:
 
    virtual BIEngine::IEventDataPtr Copy() const
    {
-      return std::make_shared<EvtData_OnKeyUp>(GetKey());
+      return BIEngine::MakeShared<EvtData_OnKeyUp>(GetKey());
    }
 
    virtual const char* GetName() const

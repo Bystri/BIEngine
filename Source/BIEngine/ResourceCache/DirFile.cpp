@@ -1,8 +1,9 @@
 ﻿#include "DirFile.h"
 
-#include <algorithm>
 #include <filesystem>
 #include <fstream>
+
+#include "../StdLib/Algorithm.h"
 
 namespace BIEngine {
 
@@ -24,9 +25,9 @@ bool DirFile::Init(const String& resFileName)
       // Меняем разделите директорий Windows на разделители в стиле POSIX
       // Топорный метод, из-за того, что в POSIX системах символ '\' - является корретным символо в имени файла и мы, тем самым, можем его из-за этого переименовать
       // TODO: если этот проект доберется до сборки под Linux, надо ограничеть этот кусок ifdefine или чем-то похожим или молится, что в CPP2X дадут возможность выбирать стиль разделителей
-      std::replace(path.Begin(), path.End(), '\\', '/');
+      Replace(path.Begin(), path.End(), '\\', '/');
 
-      std::transform(path.Begin(), path.End(), path.Begin(), [](unsigned char c) { return std::tolower(c); });
+      Transform(path.Begin(), path.End(), path.Begin(), [](unsigned char c) { return std::tolower(c); });
 
       m_fileDatas.PushBack({path, static_cast<unsigned int>(dir_entry.file_size())});
 
@@ -68,7 +69,7 @@ bool DirFile::ReadFile(int i, void* pBuf)
 int DirFile::Find(const String& path) const
 {
    String lowerCasePath = path;
-   std::transform(lowerCasePath.Begin(), lowerCasePath.End(), lowerCasePath.Begin(), [](unsigned char c) { return std::tolower(c); });
+   Transform(lowerCasePath.Begin(), lowerCasePath.End(), lowerCasePath.Begin(), [](unsigned char c) { return std::tolower(c); });
 
    auto itr = m_dirContentsMap.Find(lowerCasePath);
    if (itr == m_dirContentsMap.CEnd()) {

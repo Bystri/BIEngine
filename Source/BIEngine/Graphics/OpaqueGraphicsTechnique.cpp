@@ -1,5 +1,7 @@
 #include "OpaqueGraphicsTechnique.h"
 
+#include "../StdLib/Algorithm.h"
+
 namespace BIEngine {
 
 void OpaqueGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* const pStorage)
@@ -8,7 +10,7 @@ void OpaqueGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* 
    const auto& dirLights = pStorage->GetDirectionalLightItems();
    const auto& pointLights = pStorage->GetPointLightItems();
 
-   std::sort(opaqueItems.Begin(), opaqueItems.End(), [](const RenderItemsStorage::OpaqueRenderItem& l, const RenderItemsStorage::OpaqueRenderItem& r) { return l.pMaterial->GetShaderProgramPtr()->GetId() < r.pMaterial->GetShaderProgramPtr()->GetId(); });
+   Sort(opaqueItems.Begin(), opaqueItems.End(), [](const RenderItemsStorage::OpaqueRenderItem& l, const RenderItemsStorage::OpaqueRenderItem& r) { return l.pMaterial->GetShaderProgramPtr()->GetId() < r.pMaterial->GetShaderProgramPtr()->GetId(); });
 
    int lastShaderId = -1;
 

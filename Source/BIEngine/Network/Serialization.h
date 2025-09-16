@@ -3,7 +3,6 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdint>
-#include <algorithm>
 
 #include "../StdLib/SharedPtr.h"
 #include "../StdLib/String.h"
