@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include <memory>
-#include <stack>
 
 #include "Skybox.h"
 #include "Camera.h"

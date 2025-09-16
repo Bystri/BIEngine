@@ -70,6 +70,9 @@
     <ClCompile Include="StdLib\Numeric_UnitTest.cpp">
       <Filter>StdLib</Filter>
     </ClCompile>
+    <ClCompile Include="StdLib\Stack_UnitTest.cpp">
+      <Filter>StdLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -162,6 +165,9 @@
       <Filter>EngineSources\StdLib</Filter>
     </ClInclude>
     <ClInclude Include="..\BIEngine\StdLib\Numeric.h">
+      <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\StdLib\Stack.h">
       <Filter>EngineSources\StdLib</Filter>
     </ClInclude>
   </ItemGroup>

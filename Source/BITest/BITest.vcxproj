@@ -111,6 +111,7 @@
     <ClCompile Include="StdLib\Iterator_UnitTest.cpp" />
     <ClCompile Include="StdLib\Numeric_UnitTest.cpp" />
     <ClCompile Include="StdLib\SharedPtr_UnitTest.cpp" />
+    <ClCompile Include="StdLib\Stack_UnitTest.cpp" />
     <ClCompile Include="StdLib\String_UnitTest.cpp" />
     <ClCompile Include="StdLib\DynamicArray_UnitTest.cpp" />
     <ClCompile Include="StdLib\ForwardList_UnitTest.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="..\BIEngine\StdLib\MemoryUtils.h" />
     <ClInclude Include="..\BIEngine\StdLib\Numeric.h" />
     <ClInclude Include="..\BIEngine\StdLib\SharedPtr.h" />
+    <ClInclude Include="..\BIEngine\StdLib\Stack.h" />
     <ClInclude Include="..\BIEngine\StdLib\StdLib.h" />
     <ClInclude Include="..\BIEngine\StdLib\String.h" />
     <ClInclude Include="..\BIEngine\StdLib\UniquePtr.h" />
