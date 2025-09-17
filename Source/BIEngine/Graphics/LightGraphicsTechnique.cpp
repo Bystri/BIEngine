@@ -1,5 +1,7 @@
 #include "LightGraphicsTechnique.h"
 
+#include "../StdLib/Algorithm.h"
+
 namespace BIEngine {
 
 LightGraphicsTechnique::~LightGraphicsTechnique()
@@ -45,17 +47,17 @@ void LightGraphicsTechnique::OnRender(Scene* const pScene, RenderItemsStorage* c
    const auto& pointLights = pStorage->GetPointLightItems();
    const auto& spotLights = pStorage->GetSpotLightItems();
 
-   m_lightsBufferData.DirectionalLightNum = std::min(m_maxDirLightsNum, dirLights.Size());
+   m_lightsBufferData.DirectionalLightNum = Min(m_maxDirLightsNum, dirLights.Size());
    for (int i = 0; i < m_lightsBufferData.DirectionalLightNum; ++i) {
       m_lightsBufferData.pDirLights[i] = LightUniformBufferData::DirectionalLightGlData(dirLights[i]);
    }
 
-   m_lightsBufferData.PointLightsNum = std::min(m_maxPointLightsNum, pointLights.Size());
+   m_lightsBufferData.PointLightsNum = Min(m_maxPointLightsNum, pointLights.Size());
    for (int i = 0; i < m_lightsBufferData.PointLightsNum; ++i) {
       m_lightsBufferData.pPointLights[i] = LightUniformBufferData::PointLightGlData(pointLights[i]);
    }
 
-   m_lightsBufferData.SpotLightsNum = std::min(m_maxSpotLightsNum, spotLights.Size());
+   m_lightsBufferData.SpotLightsNum = Min(m_maxSpotLightsNum, spotLights.Size());
    for (int i = 0; i < m_lightsBufferData.SpotLightsNum; ++i) {
       m_lightsBufferData.pSpotLights[i] = LightUniformBufferData::SpotLightGlData(spotLights[i]);
    }

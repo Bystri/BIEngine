@@ -1,5 +1,6 @@
 #include "Serialization.h"
 
+#include "../StdLib/Algorithm.h"
 #include "../Utilities/Logger.h"
 
 namespace BIEngine {
@@ -26,7 +27,7 @@ void OutputMemoryStream::Write(const void* pData, size_t byteCount)
    // make sure we have space...
    const uint32_t resultHead = m_head + static_cast<uint32_t>(byteCount);
    if (resultHead > m_capacity) {
-      reallocBuffer(std::max(m_capacity * 2, resultHead));
+      reallocBuffer(Max(m_capacity * 2, resultHead));
    }
    // copy into buffer at head
    std::memcpy(m_pBuffer.Get() + m_head, pData, byteCount);
@@ -73,7 +74,7 @@ void OutputMemoryBitStream::WriteBits(uint8_t data, size_t bitCount)
 {
    const uint32_t nextBitHead = m_bitHead + static_cast<uint32_t>(bitCount);
    if (nextBitHead > m_bitCapacity) {
-      reallocBuffer(std::max(m_bitCapacity * 2, nextBitHead));
+      reallocBuffer(Max(m_bitCapacity * 2, nextBitHead));
    }
    // calculate the byteOffset into our buffer
    // by dividing the head by 8

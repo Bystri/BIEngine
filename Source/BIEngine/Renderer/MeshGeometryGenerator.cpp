@@ -1,5 +1,7 @@
 #include "MeshGeometryGenerator.h"
 
+#include "../StdLib/Algorithm.h"
+
 namespace BIEngine {
 
 Mesh MeshGeometryGenerator::CreateQuad(float width, float height)
@@ -132,7 +134,7 @@ Mesh MeshGeometryGenerator::CreateBox(float width, float height, float depth, un
    Mesh meshData(std::move(v), std::move(i));
 
    // Ѕерем минимально возможное значени разделений
-   numSubdivisions = std::min<unsigned int>(numSubdivisions, 6u);
+   numSubdivisions = Min(numSubdivisions, 6u);
 
    for (unsigned int i = 0; i < numSubdivisions; ++i) {
       Subdivide(meshData);

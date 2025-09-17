@@ -3,6 +3,21 @@
 #include "../../BIEngine/StdLib/Algorithm.h"
 #include "../../BIEngine/StdLib/Iterator.h"
 
+TEST(Algortihm, Min) {
+	EXPECT_EQ(BIEngine::Min(3, 4), 3);
+}
+
+TEST(Algortihm, MinWithOp) {
+	EXPECT_EQ(BIEngine::Min(3, 4, BIEngine::Greater<int>()), 4);
+}
+
+TEST(Algortihm, Max) {
+	EXPECT_EQ(BIEngine::Max(3, 4), 4);
+}
+
+TEST(Algortihm, MaxWithOp) {
+	EXPECT_EQ(BIEngine::Max(3, 4, BIEngine::Greater<int>()), 3);
+}
 
 TEST(Algortihm, Count) {
 	constexpr int valToCount = 0;

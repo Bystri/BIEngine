@@ -10,6 +10,30 @@ namespace BIEngine {
 
 // Nonmodifying algorithms
 
+template <typename T, typename BinaryPred>
+const T& Min(const T& a, const T& b, BinaryPred op)
+{
+   return op(a, b) ? a : b;
+}
+
+template <typename T>
+const T& Min(const T& a, const T& b)
+{
+   return Min(a, b, Less<T>());
+}
+
+template <typename T, typename BinaryPred>
+const T& Max(const T& a, const T& b, BinaryPred op)
+{
+   return op(a, b) ? b : a;
+}
+
+template <typename T>
+const T& Max(const T& a, const T& b)
+{
+   return Max(a, b, Less<T>());
+}
+
 template <typename Itr, typename T>
 typename IteratorTraits<Itr>::DifferenceType Count(Itr begin, Itr end, const T& val)
 {
