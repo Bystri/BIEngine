@@ -1,10 +1,10 @@
 #pragma once
 
-#include "DynamicArray.h"
+#include "Deque.h"
 
 namespace BIEngine {
 
-template <typename T, typename Container = DynamicArray<T>>
+template <typename T, typename Container = Deque<T>>
 class Stack {
 public:
    using ValueType = typename Container::ValueType;

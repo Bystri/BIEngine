@@ -24,6 +24,10 @@ public:
    using ReverseIterator = ReverseIterator<Iterator>;
    using ConstReverseIterator = ConstReverseIterator<ConstIterator>;
 
+private:
+   using Allocator = std::allocator<ValueType>;
+
+public:
    DynamicArray() = default;
    explicit DynamicArray(SizeType n);
    DynamicArray(SizeType n, const ValueType& val);
@@ -91,13 +95,17 @@ private:
    void tryExpandDataStorage();
    void expandDataStorage(SizeType newCapacity);
 
+   void free();
+
+   template <typename DataType>
+   typename DynamicArray<T>::Iterator insertImpl(const Iterator& pos, DataType&& val);
+
 private:
    static constexpr SizeType GROW_RATIO = 2;
 
    ValueType* m_pBegin = nullptr;
    ValueType* m_pEnd = nullptr;
    SizeType m_capacity = 0;
-   std::allocator<ValueType> m_allocator;
 };
 
 /*DynamicArray*/
@@ -153,9 +161,7 @@ DynamicArray<T>::DynamicArray(DynamicArray<T>&& rhs)
 template <typename T>
 DynamicArray<T>::~DynamicArray()
 {
-   Clear();
-
-   m_allocator.deallocate(m_pBegin, m_capacity);
+   free();
 }
 
 template <typename T>
@@ -181,7 +187,7 @@ DynamicArray<T>& DynamicArray<T>::operator=(DynamicArray<T>&& rhs)
       return *this;
    }
 
-   this->~DynamicArray();
+   free();
 
    m_capacity = rhs.m_capacity;
    m_pBegin = rhs.m_pBegin;
@@ -357,11 +363,9 @@ inline void DynamicArray<T>::Resize(SizeType num)
       return;
    }
 
-   if (Size() > num) {
-      SizeType cnt = Size() - num;
-      while (cnt--) {
-         PopBack();
-      }
+   SizeType cnt = Size() - num;
+   while (cnt--) {
+      PopBack();
    }
 }
 
@@ -378,7 +382,7 @@ inline typename DynamicArray<T>::Reference DynamicArray<T>::PushBack(const Value
 {
    tryExpandDataStorage();
 
-   m_allocator.construct(m_pEnd++, val);
+   Allocator().construct(m_pEnd++, val);
 
    return Back();
 }
@@ -388,7 +392,7 @@ inline typename DynamicArray<T>::Reference DynamicArray<T>::PushBack(ValueType&&
 {
    tryExpandDataStorage();
 
-   m_allocator.construct(m_pEnd++, std::move(val));
+   Allocator().construct(m_pEnd++, std::move(val));
 
    return Back();
 }
@@ -399,7 +403,7 @@ inline typename DynamicArray<T>::Reference DynamicArray<T>::EmplaceBack(U&&... a
 {
    tryExpandDataStorage();
 
-   m_allocator.construct(m_pEnd++, std::forward<U>(args)...);
+   Allocator().construct(m_pEnd++, std::forward<U>(args)...);
 
    return Back();
 }
@@ -407,44 +411,45 @@ inline typename DynamicArray<T>::Reference DynamicArray<T>::EmplaceBack(U&&... a
 template <typename T>
 inline void DynamicArray<T>::PopBack()
 {
-   m_allocator.destroy(--m_pEnd);
+   Allocator().destroy(--m_pEnd);
 }
 
 template <typename T>
 inline typename DynamicArray<T>::Iterator DynamicArray<T>::Insert(const Iterator& pos, const ValueType& val)
 {
-   const SizeType idx = pos - m_pBegin;
-
-   tryExpandDataStorage();
-
-   std::memmove(&m_pBegin[idx + 1], &m_pBegin[idx], (Size() - idx) * sizeof(ValueType));
-   m_allocator.construct(m_pBegin + idx, val);
-
-   return m_pBegin + idx;
+   return insertImpl(pos, val);
 }
 
 template <typename T>
 inline typename DynamicArray<T>::Iterator DynamicArray<T>::Insert(const Iterator& pos, ValueType&& val)
 {
-   const SizeType idx = pos - m_pBegin;
-
-   tryExpandDataStorage();
-
-   std::memmove(&m_pBegin[idx + 1], &m_pBegin[idx], (Size() - idx) * sizeof(ValueType));
-   m_allocator.construct(m_pBegin + idx, std::move(val));
-
-   return m_pBegin + idx;
+   return insertImpl(pos, std::move(val));
 }
 
 template <typename T>
 inline typename DynamicArray<T>::Iterator DynamicArray<T>::Erase(const Iterator& pos)
 {
-   m_allocator.destroy(pos);
+   Allocator().destroy(pos);
 
    --m_pEnd;
    std::memmove(pos, pos + 1, (m_pEnd - pos) * sizeof(ValueType));
 
    return pos;
+}
+
+template <typename T>
+template <typename DataType>
+inline typename DynamicArray<T>::Iterator DynamicArray<T>::insertImpl(const Iterator& pos, DataType&& val)
+{
+   const SizeType idx = pos - m_pBegin;
+
+   tryExpandDataStorage();
+
+   std::memmove(&m_pBegin[idx + 1], &m_pBegin[idx], (Size() - idx) * sizeof(ValueType));
+   Allocator().construct(m_pBegin + idx, std::forward<DataType>(val));
+   ++m_pEnd;
+
+   return m_pBegin + idx;
 }
 
 template <typename T>
@@ -458,14 +463,26 @@ inline void DynamicArray<T>::tryExpandDataStorage()
 template <typename T>
 inline void DynamicArray<T>::expandDataStorage(SizeType newCapacity)
 {
-   ValueType* newData = m_allocator.allocate(newCapacity);
+   ValueType* newData = Allocator().allocate(newCapacity);
 
    std::memcpy(newData, m_pBegin, m_capacity * sizeof(T));
 
    m_pEnd = newData + Size();
-   m_allocator.deallocate(m_pBegin, m_capacity);
+   Allocator().deallocate(m_pBegin, m_capacity);
    m_pBegin = newData;
    m_capacity = newCapacity;
+}
+
+template <typename T>
+inline void DynamicArray<T>::free()
+{
+   Clear();
+
+   Allocator().deallocate(m_pBegin, m_capacity);
+
+   m_pBegin = nullptr;
+   m_pEnd = nullptr;
+   m_capacity = 0;
 }
 
 /*foreach loop helpers*/

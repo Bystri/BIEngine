@@ -899,6 +899,12 @@
     <ClInclude Include="..\..\StdLib\Algorithm.h">
       <Filter>StdLib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\StdLib\Deque.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\StdLib\Stack.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.clang-format" />

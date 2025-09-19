@@ -374,6 +374,7 @@
     <ClInclude Include="..\..\StdLib\Algorithm.h" />
     <ClInclude Include="..\..\StdLib\Array.h" />
     <ClInclude Include="..\..\StdLib\Assert.h" />
+    <ClInclude Include="..\..\StdLib\Deque.h" />
     <ClInclude Include="..\..\StdLib\DynamicArray.h" />
     <ClInclude Include="..\..\StdLib\ForwardList.h" />
     <ClInclude Include="..\..\StdLib\Functional.h" />
@@ -383,6 +384,7 @@
     <ClInclude Include="..\..\StdLib\List.h" />
     <ClInclude Include="..\..\StdLib\MemoryUtils.h" />
     <ClInclude Include="..\..\StdLib\SharedPtr.h" />
+    <ClInclude Include="..\..\StdLib\Stack.h" />
     <ClInclude Include="..\..\StdLib\StdLib.h" />
     <ClInclude Include="..\..\StdLib\String.h" />
     <ClInclude Include="..\..\StdLib\UniquePtr.h" />

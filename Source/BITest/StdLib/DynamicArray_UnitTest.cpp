@@ -6,13 +6,12 @@ TEST(DynamicArray, PushBack) {
 	constexpr int valsToAdd = 10;
 
 	BIEngine::DynamicArray<int> dynArr;
-	BIEngine::SizeT initialCapacity = dynArr.Capacity();
 
-	for (int i = 0; i <= valsToAdd; ++i) {
+	for (int i = 0; i < valsToAdd; ++i) {
 		dynArr.PushBack(i);
 	}
 
-	for (int i = 0; i <= valsToAdd; ++i) {
+	for (int i = 0; i < valsToAdd; ++i) {
 		EXPECT_EQ(dynArr[i], i);
 	}
 }
@@ -339,6 +338,7 @@ TEST(DynamicArray, Insert) {
 	dynArr.Insert(dynArr.Begin() + testIdx, InsertTestObj(testVal, &destCount));
 
 	EXPECT_EQ(destCount, 0);
+	EXPECT_EQ(dynArr.Size(), valsNum + 1);
 
 	{
 		int i = 0;

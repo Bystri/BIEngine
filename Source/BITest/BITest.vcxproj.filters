@@ -73,6 +73,9 @@
     <ClCompile Include="StdLib\Stack_UnitTest.cpp">
       <Filter>StdLib</Filter>
     </ClCompile>
+    <ClCompile Include="StdLib\Deque_UnitTest.cpp">
+      <Filter>StdLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -168,6 +171,12 @@
       <Filter>EngineSources\StdLib</Filter>
     </ClInclude>
     <ClInclude Include="..\BIEngine\StdLib\Stack.h">
+      <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\StdLib\Deque.h">
+      <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\StdLib\Functional.h">
       <Filter>EngineSources\StdLib</Filter>
     </ClInclude>
   </ItemGroup>
