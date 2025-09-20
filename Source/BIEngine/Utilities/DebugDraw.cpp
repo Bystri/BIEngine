@@ -1,6 +1,6 @@
 #include "DebugDraw.h"
 
-#include <queue>
+#include "../StdLib/Queue.h"
 
 namespace BIEngine {
 
@@ -175,7 +175,7 @@ struct LineInfo {
    ColorRgba color;
 };
 
-std::queue<LineInfo> m_drawReqQueue;
+Queue<LineInfo> m_drawReqQueue;
 
 struct PolyInfo {
    PolyInfo()
@@ -187,7 +187,7 @@ struct PolyInfo {
    ColorRgba color;
 };
 
-std::queue<PolyInfo> m_drawPolyQueue;
+Queue<PolyInfo> m_drawPolyQueue;
 
 void DebugDraw::Line(const glm::vec3& fromPoint, const glm::vec3& toPoint, const ColorRgba& color)
 {
@@ -196,7 +196,7 @@ void DebugDraw::Line(const glm::vec3& fromPoint, const glm::vec3& toPoint, const
    info.toPoint = toPoint;
    info.color = color;
 
-   m_drawReqQueue.push(info);
+   m_drawReqQueue.Push(info);
 }
 
 void DebugDraw::Poly(const DynamicArray<glm::vec3>& verts, const ColorRgba& color)
@@ -205,7 +205,7 @@ void DebugDraw::Poly(const DynamicArray<glm::vec3>& verts, const ColorRgba& colo
    poly.verts = verts;
    poly.color = color;
 
-   m_drawPolyQueue.push(poly);
+   m_drawPolyQueue.Push(poly);
 }
 
 void DebugDraw::Draw()
@@ -213,9 +213,9 @@ void DebugDraw::Draw()
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-   while (!m_drawPolyQueue.empty()) {
-      PolyInfo info = m_drawPolyQueue.front();
-      m_drawPolyQueue.pop();
+   while (!m_drawPolyQueue.Empty()) {
+      PolyInfo info = m_drawPolyQueue.Front();
+      m_drawPolyQueue.Pop();
 
       DbgPoly poly(info.verts);
 
@@ -223,9 +223,9 @@ void DebugDraw::Draw()
       poly.Draw();
    }
 
-   while (!m_drawReqQueue.empty()) {
-      LineInfo info = m_drawReqQueue.front();
-      m_drawReqQueue.pop();
+   while (!m_drawReqQueue.Empty()) {
+      LineInfo info = m_drawReqQueue.Front();
+      m_drawReqQueue.Pop();
 
       DbgLine line(info.fromPoint, info.toPoint);
 

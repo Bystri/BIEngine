@@ -1,7 +1,5 @@
 #pragma once
 
-#include <queue>
-
 #include "Socket.h"
 #include "Serialization.h"
 #include "../StdLib/SharedPtr.h"

@@ -905,6 +905,12 @@
     <ClInclude Include="..\..\StdLib\Stack.h">
       <Filter>StdLib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\StdLib\Numeric.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\StdLib\Queue.h">
+      <Filter>StdLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.clang-format" />

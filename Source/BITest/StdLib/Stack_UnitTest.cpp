@@ -46,9 +46,9 @@ TEST(Stack, Pop) {
 	EXPECT_EQ(stack.Size(), 0);
 }
 
-bool wasMoved = false;
-int cntCtor = 0;
-int cntDestr = 0;
+static bool wasMoved = false;
+static int cntCtor = 0;
+static int cntDestr = 0;
 
 static void ResetTestObjVals()
 {

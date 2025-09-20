@@ -1,6 +1,5 @@
 #pragma once
 
-#include <queue>
 #include <glm/glm.hpp>
 
 #include "Model.h"
