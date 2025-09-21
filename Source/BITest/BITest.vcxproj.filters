@@ -79,6 +79,9 @@
     <ClCompile Include="StdLib\Queue_UnitTest.cpp">
       <Filter>StdLib</Filter>
     </ClCompile>
+    <ClCompile Include="StdLib\Bitset_UnitTest.cpp">
+      <Filter>StdLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -183,6 +186,9 @@
       <Filter>EngineSources\StdLib</Filter>
     </ClInclude>
     <ClInclude Include="..\BIEngine\StdLib\Queue.h">
+      <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\StdLib\Bitset.h">
       <Filter>EngineSources\StdLib</Filter>
     </ClInclude>
   </ItemGroup>

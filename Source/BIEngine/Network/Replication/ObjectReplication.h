@@ -1,11 +1,11 @@
 #pragma once
 
-#include <unordered_set>
 #include <memory>
 
 #include "ReplicationUnit.h"
 #include "../Serialization.h"
 #include "../NetworkManager.h"
+#include "../../StdLib/Bitset.h"
 #include "../../Utilities/Logger.h"
 
 namespace BIEngine {
@@ -40,7 +40,7 @@ public:
    using ReplicationUnitArray = DynamicArray<SharedPtr<ReplicationUnit<ReplicatedObject>>>;
 
    ReplicationObjectT(ReplicationUnitArray replicationUnits)
-      : m_isDirtyMask(0u), m_replicationUnits(std::move(replicationUnits))
+      : m_isDirtyMask(), m_replicationUnits(std::move(replicationUnits))
    {
    }
 
@@ -55,30 +55,28 @@ public:
 
    void OnUpdate()
    {
-      m_isDirtyMask = 0u;
+      m_isDirtyMask.Reset();
       for (int i = 0; i < m_replicationUnits.Size(); ++i) {
          if (m_replicationUnits[i]->IsStateChanged()) {
-            m_isDirtyMask |= 1 << i;
+            m_isDirtyMask.Set(i, true);
          }
       }
    }
 
    SharedPtr<ReplicatedObject> GetReplicatedObject() const { return m_pReplicatedObject; }
 
-   bool IsDirty() const { return m_isDirtyMask != 0u; }
+   bool IsDirty() const { return m_isDirtyMask.Any(); }
 
    void Write(OutputMemoryBitStream& stream, bool ignoreDirtyFlag)
    {
-      const uint32_t dirtyMask = ignoreDirtyFlag ? 0xffffffff : m_isDirtyMask;
-
       for (int i = 0; i < m_replicationUnits.Size(); ++i) {
-         if ((dirtyMask & 1 << i) == 0) {
-            Serialize(stream, false, 1);
+         if (ignoreDirtyFlag || m_isDirtyMask[i]) {
+            Serialize(stream, true, 1);
+            m_replicationUnits[i]->Write(stream);
             continue;
          }
 
-         Serialize(stream, true, 1);
-         m_replicationUnits[i]->Write(stream);
+         Serialize(stream, false, 1);
       }
    }
 
@@ -100,7 +98,7 @@ protected:
    virtual SharedPtr<ReplicatedObject> ConstructReplicatedObject(bool isMaster) = 0;
 
 private:
-   uint32_t m_isDirtyMask;
+   Bitset<32> m_isDirtyMask;
 
    ReplicationUnitArray m_replicationUnits;
 

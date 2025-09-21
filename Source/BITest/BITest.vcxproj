@@ -108,6 +108,7 @@
     <ClCompile Include="Math\Vector_UnitTest.cpp" />
     <ClCompile Include="StdLib\Algorithm_UnitTest.cpp" />
     <ClCompile Include="StdLib\Array_UnitTest.cpp" />
+    <ClCompile Include="StdLib\Bitset_UnitTest.cpp" />
     <ClCompile Include="StdLib\Deque_UnitTest.cpp" />
     <ClCompile Include="StdLib\Iterator_UnitTest.cpp" />
     <ClCompile Include="StdLib\Numeric_UnitTest.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="..\BIEngine\StdLib\Algorithm.h" />
     <ClInclude Include="..\BIEngine\StdLib\Array.h" />
     <ClInclude Include="..\BIEngine\StdLib\Assert.h" />
+    <ClInclude Include="..\BIEngine\StdLib\Bitset.h" />
     <ClInclude Include="..\BIEngine\StdLib\Deque.h" />
     <ClInclude Include="..\BIEngine\StdLib\DynamicArray.h" />
     <ClInclude Include="..\BIEngine\StdLib\ForwardList.h" />

@@ -10,8 +10,9 @@
 namespace BIEngine {
 
 Actor::Actor(ActorId id)
-   : m_id(id), m_bIsActivated(false), m_activateFlag(true), m_isLevelLoaded(false), m_pParent(nullptr)
+   : m_id(id), m_pParent(nullptr)
 {
+   m_flags.Set(IS_ACTIVE_FLAG_IDX, true);
 }
 
 Actor::~Actor()
@@ -56,7 +57,7 @@ bool Actor::RemoveChild(ActorId id)
 
 void Actor::Activate()
 {
-   if (!m_activateFlag || m_bIsActivated) {
+   if (!m_flags.Test(IS_ACTIVE_FLAG_IDX) || m_flags.Test(IS_ACTIVATED_FLAG_IDX)) {
       return;
    }
 
@@ -68,12 +69,12 @@ void Actor::Activate()
       child->Activate();
    }
 
-   m_bIsActivated = true;
+   m_flags.Set(IS_ACTIVATED_FLAG_IDX, true);
 }
 
 void Actor::Deactivate()
 {
-   if (!m_bIsActivated) {
+   if (!m_flags.Test(IS_ACTIVATED_FLAG_IDX)) {
       return;
    }
 
@@ -85,18 +86,18 @@ void Actor::Deactivate()
       it->second->Deactivate();
    }
 
-   m_bIsActivated = false;
-   m_activateFlag = false;
+   m_flags.Set(IS_ACTIVATED_FLAG_IDX, false);
+   m_flags.Set(IS_ACTIVE_FLAG_IDX, false);
 }
 
 void Actor::SetActivate(bool value)
 {
-   m_activateFlag = value;
-   if (!m_isLevelLoaded) {
+   m_flags.Set(IS_ACTIVE_FLAG_IDX, value);
+   if (!m_flags.Test(IS_LEVEL_LOADED_FLAG_IDX)) {
       return;
    }
 
-   if (m_activateFlag) {
+   if (m_flags.Test(IS_ACTIVE_FLAG_IDX)) {
       Activate();
    } else {
       Deactivate();
@@ -105,7 +106,7 @@ void Actor::SetActivate(bool value)
 
 void Actor::OnLevelLoaded()
 {
-   m_isLevelLoaded = true;
+   m_flags.Set(IS_LEVEL_LOADED_FLAG_IDX, true);
 
    for (auto& child : m_children) {
       child->OnLevelLoaded();
@@ -114,7 +115,7 @@ void Actor::OnLevelLoaded()
 
 void Actor::OnUpdate(const GameTimer& gt)
 {
-   if (!m_bIsActivated) {
+   if (!m_flags.Test(IS_ACTIVATED_FLAG_IDX)) {
       return;
    }
 
@@ -129,7 +130,7 @@ void Actor::OnUpdate(const GameTimer& gt)
 
 void Actor::OnRenderObject(const GameTimer& gt)
 {
-   if (!m_bIsActivated) {
+   if (!m_flags.Test(IS_ACTIVATED_FLAG_IDX)) {
       return;
    }
 

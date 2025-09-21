@@ -1,7 +1,7 @@
 #include "BIEditorController.h"
 
 #include "../BIEngine/EventManager/EventManager.h"
-#include "../BIEngine/EngineCore/Assert.h"
+#include "../BIEngine/StdLib/Assert.h"
 
 #include "BIEventListener.h"
 

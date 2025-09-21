@@ -27,6 +27,10 @@ public:
    using ReverseIterator = ReverseIterator<Iterator>;
    using ConstReverseIterator = ConstReverseIterator<ConstIterator>;
 
+private:
+   using Allocator = std::allocator<ValueType>;
+
+public:
    static const SizeType NPos = static_cast<SizeType>(-1);
 
    // Stole the idea from EASTL string.h
@@ -117,7 +121,6 @@ private:
    ValueType* m_pBegin = nullptr;
    ValueType* m_pEnd = nullptr;
    SizeType m_capacity = 0;
-   std::allocator<ValueType> m_allocator;
 };
 
 /*BasicString*/
@@ -207,7 +210,7 @@ BasicString<CharT>::~BasicString()
 {
    Clear();
 
-   m_allocator.deallocate(m_pBegin, m_capacity);
+   Allocator().deallocate(m_pBegin, m_capacity);
 }
 
 template <typename CharT>
@@ -475,7 +478,7 @@ inline void BasicString<CharT>::PushBack(ValueType ch)
 {
    tryExpandDataStorage();
 
-   m_allocator.construct(m_pEnd++, ch);
+   Allocator().construct(m_pEnd++, ch);
 }
 
 template <typename CharT>
@@ -510,7 +513,7 @@ inline typename BasicString<CharT>::Iterator BasicString<CharT>::Insert(const It
    tryExpandDataStorage();
 
    std::memmove(&m_pBegin[idx + 1], &m_pBegin[idx], (Size() - idx) * sizeof(ValueType));
-   m_allocator.construct(m_pBegin + idx, ch);
+   Allocator().construct(m_pBegin + idx, ch);
 
    return m_pBegin + idx;
 }
@@ -518,13 +521,13 @@ inline typename BasicString<CharT>::Iterator BasicString<CharT>::Insert(const It
 template <typename CharT>
 inline void BasicString<CharT>::PopBack()
 {
-   m_allocator.destroy(--m_pEnd);
+   Allocator().destroy(--m_pEnd);
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::Iterator BasicString<CharT>::Erase(const Iterator& pos)
 {
-   m_allocator.destroy(pos);
+   Allocator().destroy(pos);
 
    --m_pEnd;
    std::memmove(pos, pos + 1, (m_pEnd - pos) * sizeof(ValueType));
@@ -617,12 +620,12 @@ void BasicString<CharT>::tryExpandDataStorage()
 template <typename CharT>
 void BasicString<CharT>::expandDataStorage(SizeType newCapacity)
 {
-   ValueType* newData = m_allocator.allocate(newCapacity + 1);
+   ValueType* newData = Allocator().allocate(newCapacity + 1);
    std::memset(newData + Size(), ValueType(), newCapacity - Size() + 1);
    std::memcpy(newData, m_pBegin, Size() * sizeof(ValueType));
 
    if (m_capacity > 0) {
-      m_allocator.deallocate(m_pBegin, m_capacity + 1);
+      Allocator().deallocate(m_pBegin, m_capacity + 1);
    }
 
    m_pEnd = newData + Size();

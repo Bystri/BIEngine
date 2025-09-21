@@ -4,6 +4,7 @@
 
 #include "ActorComponent.h"
 #include "../StdLib/String.h"
+#include "../StdLib/Bitset.h"
 #include "../StdLib/DynamicArray.h"
 #include "../StdLib/SharedPtr.h"
 #include "../StdLib/HashMap.h"
@@ -95,11 +96,9 @@ private:
    void AddComponent(SharedPtr<ActorComponent> pComponent);
 
 private:
-   // Идентификатор актера, по которому к нему идет обращение из других систем
-   ActorId m_id;
-   bool m_bIsActivated;
-   bool m_activateFlag;
-   bool m_isLevelLoaded;
+   static constexpr int IS_ACTIVATED_FLAG_IDX = 0;
+   static constexpr int IS_ACTIVE_FLAG_IDX = 1;
+   static constexpr int IS_LEVEL_LOADED_FLAG_IDX = 2;
 
    // Поле несет чисто косметический характер. Используется в редакторе.
    String m_name;
@@ -107,6 +106,10 @@ private:
 
    Actor* m_pParent;
    DynamicArray<SharedPtr<Actor>> m_children;
+
+   // Идентификатор актера, по которому к нему идет обращение из других систем
+   ActorId m_id;
+   Bitset<32> m_flags;
 };
 
 } // namespace BIEngine
