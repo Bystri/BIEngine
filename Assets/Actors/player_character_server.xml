@@ -25,11 +25,6 @@
 			<NumberData/>
 		</ScriptComponent>
 		<ScriptComponent>
-			<ScriptObject modulePath="AnimationControllerComponent" className="AnimationControllerComponent"/>
-			<StringData/>
-			<NumberData/>
-		</ScriptComponent>
-		<ScriptComponent>
 			<ScriptObject modulePath="Movement.CharacterMovementComponent" className="CharacterMovementComponent"/>
 			<StringData/>
 			<NumberData/>

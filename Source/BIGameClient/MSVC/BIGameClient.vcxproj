@@ -27,6 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\AnimationControllerComponent.cpp" />
     <ClCompile Include="..\BICameraManager.cpp" />
     <ClCompile Include="..\BIGCEventListener.cpp" />
     <ClCompile Include="..\BIGameClient.cpp" />
@@ -35,6 +36,7 @@
     <ClCompile Include="..\BINetworkManagerClient.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\AnimationControllerComponent.h" />
     <ClInclude Include="..\BICameraManager.h" />
     <ClInclude Include="..\BIDebugMenuController.h" />
     <ClInclude Include="..\BIGCEventListener.h" />

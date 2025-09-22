@@ -12,13 +12,10 @@
 		</LocomotionInfoComponent>
 		<CombatStateComponent>
 		</CombatStateComponent>
+		<AnimationControllerComponent>
+		</AnimationControllerComponent>
 		<ScriptComponent>
 			<ScriptObject modulePath="CharacterCommands.CharacterCommandMngComponent" className="CharacterCommandMngComponent"/>
-			<StringData/>
-			<NumberData/>
-		</ScriptComponent>
-		<ScriptComponent>
-			<ScriptObject modulePath="AnimationControllerComponent" className="AnimationControllerComponent"/>
 			<StringData/>
 			<NumberData/>
 		</ScriptComponent>
