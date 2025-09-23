@@ -2,6 +2,7 @@
 
 #include "../../BIEngine/Actors/ActorComponent.h"
 #include "../../BIEngine/ProcessManager/Process.h"
+#include "../../BIEngine/EventManager/EventManager.h"
 #include "../../BIEngine/StdLib/UniquePtr.h"
 
 #include "CombatStateComponent.h"
@@ -24,8 +25,15 @@ public:
    void RequestMeleeAttack();
 
 private:
+   void HandleOnTriggerEnter(BIEngine::IEventDataPtr pEventData);
+
+private:
+   float m_damageAmount = 10.0f;
+
    BIEngine::Actor* m_pTriggerActor = nullptr;
    BIEngine::WeakProcessPtr m_pAttackProcess;
+
+   BIEngine::EventManager::DelegateHandler m_handleCollisionDelegateHandler;
 };
 
 static BIEngine::UniquePtr<BIEngine::ActorComponent> CreateCombatControllerComponent()

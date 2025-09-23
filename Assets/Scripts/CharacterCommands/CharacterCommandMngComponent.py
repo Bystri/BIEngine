@@ -2,7 +2,7 @@ import BIEProcess
 
 class CharacterCommandMngComponent():
     def __init__(self):
-        self.currentCommand = None 
+        self.currentCommands = [] 
         
     def OnInit(self):
         pass
@@ -17,8 +17,11 @@ class CharacterCommandMngComponent():
         pass
         
     def OnUpdate(self, dt):
-        if self.currentCommand is not None and self.currentCommand.IsDead():
-            self.currentCommand = None
+        newCommandsList = []
+        for i in range(len(self.currentCommands)):
+            if not self.currentCommands[i].IsDead():
+                newCommandsList.append(self.currentCommands[i])
+        self.currentCommands = newCommandsList
         
     def ExecuteCommand(self, command):
         #if self.currentCommand is not None:
@@ -26,6 +29,5 @@ class CharacterCommandMngComponent():
         #       self.currentCommand.Fail()
         #   else:
         #       return
-            
-        self.currentCommand = command
-        BIEProcess.AttachProcess(self.currentCommand)
+        self.currentCommands.append(command)
+        BIEProcess.AttachProcess(command)

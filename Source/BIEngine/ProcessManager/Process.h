@@ -35,11 +35,10 @@ public:
    };
 
 private:
-   State m_state;
+   State m_state = State::UNINITIALIZED;
    StrongProcessPtr m_pChild;
 
 public:
-   Process();
    virtual ~Process();
 
 protected:

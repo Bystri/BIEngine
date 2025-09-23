@@ -1,73 +1,201 @@
-<Actor name="PlayerCharacterServer">
+<Actor name="AiCharacterClient">
 	<Components>
-		<LocomotionInfoComponent>
-		</LocomotionInfoComponent>
-		<CombatStateComponent>
-		</CombatStateComponent>
-		<CombatControllerComponent>
-		</CombatControllerComponent>
-		<DamagableComponent>
-	    </DamagableComponent>
-		<ScriptComponent>
-			<ScriptObject modulePath="PlayerActionBinderComponent" className="PlayerActionBinderComponent"/>
-			<StringData/>
-			<NumberData/>
-		</ScriptComponent>
-		<ScriptComponent>
-			<ScriptObject modulePath="CharacterCommands.CharacterCommandMngComponent" className="CharacterCommandMngComponent"/>
-			<StringData/>
-			<NumberData/>
-		</ScriptComponent>
-		<ScriptComponent>
-			<ScriptObject modulePath="Movement.CharacterMovementComponent" className="CharacterMovementComponent"/>
-			<StringData/>
-			<NumberData/>
-		</ScriptComponent>
-		<PlayerComponent>
-		</PlayerComponent>
-		<Physics3DComponent>
-			<Shape>Capsule</Shape>
-			<BodyType>Dynamic</BodyType>
-			<Density>lead</Density>
-			<PhysicsMaterial>Normal</PhysicsMaterial>
-			<Scale w="0.500000" h="1.500000" d="0.000000"/>
-			<AngularFactor x="0" y="0" z="0"/>
-		</Physics3DComponent>
-		<TransformComponent>
-			<Position x="3.000000" y="6.000000" z="3.000000"/>
-			<Size w="1.000000" h="1.000000" d="1.000000"/>
-			<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
-		</TransformComponent>
+	  <AnimationComponent>
+			<Animation name="idle" path="Animations/dungeon_character/skeleton_minion/Idle.bi3dam"/>
+			<Animation name="run" path="Animations/dungeon_character/skeleton_minion/Running_A.bi3dam"/>
+			<Animation name="strafe_left" path="Animations/dungeon_character/skeleton_minion/Running_Strafe_Left.bi3dam"/>
+			<Animation name="strafe_right" path="Animations/dungeon_character/skeleton_minion/Running_Strafe_Right.bi3dam"/>
+			<Animation name="walking_backwards" path="Animations/dungeon_character/skeleton_minion/Walking_Backwards.bi3dam"/>
+	  </AnimationComponent>
+	  <LocomotionInfoComponent>
+	  </LocomotionInfoComponent>
+	  <CombatStateComponent>
+	  </CombatStateComponent>
+	  <AnimationControllerComponent>
+	  </AnimationControllerComponent>
+	  <ScriptComponent>
+		  <ScriptObject modulePath="CharacterCommands.CharacterCommandMngComponent" className="CharacterCommandMngComponent"/>
+		  <StringData/>
+		  <NumberData/>
+	  </ScriptComponent>
+	  <Physics3DComponent>
+		<Shape>Capsule</Shape>
+		<BodyType>Dynamic</BodyType>
+		<Density>lead</Density>
+		<PhysicsMaterial>Normal</PhysicsMaterial>
+		<Scale w="0.500000" h="1.500000" d="0.000000"/>
+		<AngularFactor x="0" y="0" z="0"/>
+	  </Physics3DComponent>
+	  <TransformComponent>
+		<Position x="-10.000000" y="6.000000" z="0.000000"/>
+		<Size w="1.000000" h="1.000000" d="1.000000"/>
+		<Rotation x="0.000000" y="0.000000" z="0.000000"/>
+	  </TransformComponent>
 	</Components>
 	<Children>
-		<Actor name="MeleeAttackTrigger">
-			<Components>
-				<TransformComponent>
-					<Position x="1.000000" y="0.0" z="0.000000"/>
-					<Size w="1.000000" h="1.000000" d="1.000000"/>
-					<Rotation x="0.000000" y="0.000000" z="0.000000"/>
-				</TransformComponent>
-				<Physics3DComponent>
-					<Shape>Sphere</Shape>
-					<BodyType>Kinematic</BodyType>
-					<Density>lead</Density>
-					<PhysicsMaterial>Normal</PhysicsMaterial>
-					<Scale w="0.750000" h="0.000000" d="0.000000"/>
-					<AngularFactor x="0" y="0" z="0"/>
-					<Params isTrigger="true"/>
-				</Physics3DComponent>
-			</Components>
-			<Children/>
-		</Actor>
-		<Actor name="Model">
+	<Actor name="MeleeAttackTrigger">
 		<Components>
 			<TransformComponent>
-				<Position x="0.000000" y="-1.250000" z="0.000000"/>
+				<Position x="1.000000" y="0.0" z="0.000000"/>
 				<Size w="1.000000" h="1.000000" d="1.000000"/>
-				<Rotation x="0.000000" y="90.000000" z="0.000000"/>
+				<Rotation x="0.000000" y="0.000000" z="0.000000"/>
 			</TransformComponent>
+			<Physics3DComponent>
+				<Shape>Sphere</Shape>
+				<BodyType>Kinematic</BodyType>
+				<Density>lead</Density>
+				<PhysicsMaterial>Normal</PhysicsMaterial>
+				<Scale w="0.750000" h="0.000000" d="0.000000"/>
+				<AngularFactor x="0" y="0" z="0"/>
+				<Params isTrigger="true"/>
+			</Physics3DComponent>
+		</Components>
+		<Children/>
+	</Actor>
+	<Actor name="Model">
+		<Components>
+		<TransformComponent>
+			<Position x="0.000000" y="-1.250000" z="0.000000"/>
+			<Size w="1.000000" h="1.000000" d="1.000000"/>
+			<Rotation x="0.000000" y="90.000000" z="0.000000"/>
+		</TransformComponent>
 		</Components>
 		<Children>
+			<Actor name="Skeleton_Minion_ArmLeft">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<SkinnedMeshComponent>
+						<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_ArmLeft.biskmesh"/>
+						<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+						<Skelet relPath="../root"/>
+					</SkinnedMeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Skeleton_Minion_ArmRight">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<SkinnedMeshComponent>
+						<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_ArmRight.biskmesh"/>
+						<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+						<Skelet relPath="../root"/>
+					</SkinnedMeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Skeleton_Minion_Body">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<SkinnedMeshComponent>
+						<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_Body.biskmesh"/>
+						<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+						<Skelet relPath="../root"/>
+					</SkinnedMeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Skeleton_Minion_Cloak">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<SkinnedMeshComponent>
+						<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_Cloak.biskmesh"/>
+						<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+						<Skelet relPath="../root"/>
+					</SkinnedMeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Skeleton_Minion_Eyes">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<SkinnedMeshComponent>
+						<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_Eyes.biskmesh"/>
+						<Material path="Models/dungeon_characters/skeleton_minion/Glow.bimat"/>
+						<Skelet relPath="../root"/>
+					</SkinnedMeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Skeleton_Minion_Head">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<SkinnedMeshComponent>
+						<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_Head.biskmesh"/>
+						<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+						<Skelet relPath="../root"/>
+					</SkinnedMeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Skeleton_Minion_Jaw">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<SkinnedMeshComponent>
+						<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_Jaw.biskmesh"/>
+						<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+						<Skelet relPath="../root"/>
+					</SkinnedMeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Skeleton_Minion_LegLeft">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<SkinnedMeshComponent>
+						<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_LegLeft.biskmesh"/>
+						<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+						<Skelet relPath="../root"/>
+					</SkinnedMeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
+			<Actor name="Skeleton_Minion_LegRight">
+				<Components>
+					<TransformComponent>
+						<Position x="0.000000" y="0.000000" z="0.000000"/>
+						<Size w="1.000000" h="1.000000" d="1.000000"/>
+						<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
+					</TransformComponent>
+					<SkinnedMeshComponent>
+						<Mesh path="Models/dungeon_characters/skeleton_minion/Skeleton_Minion_LegRight.biskmesh"/>
+						<Material path="Models/dungeon_characters/skeleton_minion/skeleton.bimat"/>
+						<Skelet relPath="../root"/>
+					</SkinnedMeshComponent>
+				</Components>
+				<Children/>
+			</Actor>
 			<Actor name="root">
 				<Components>
 					<TransformComponent>
@@ -78,96 +206,6 @@
 					<SkeletonComponent/>
 				</Components>
 				<Children>
-					<Actor name="Barbarian_ArmLeft">
-						<Components>
-							<TransformComponent>
-								<Position x="0.000000" y="0.000000" z="0.000000"/>
-								<Size w="1.000000" h="1.000000" d="1.000000"/>
-								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
-							</TransformComponent>
-							<SkinnedMeshComponent>
-								<Mesh path="Models/dungeon_characters/barbarian/Cube.160.biskmesh"/>
-								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
-								<Skelet relPath=".."/>
-							</SkinnedMeshComponent>
-						</Components>
-						<Children/>
-					</Actor>
-					<Actor name="Barbarian_ArmRight">
-						<Components>
-							<TransformComponent>
-								<Position x="0.000000" y="0.000000" z="0.000000"/>
-								<Size w="1.000000" h="1.000000" d="1.000000"/>
-								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
-							</TransformComponent>
-							<SkinnedMeshComponent>
-								<Mesh path="Models/dungeon_characters/barbarian/Cube.161.biskmesh"/>
-								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
-								<Skelet relPath=".."/>
-							</SkinnedMeshComponent>
-						</Components>
-						<Children/>
-					</Actor>
-					<Actor name="Barbarian_Body">
-						<Components>
-							<TransformComponent>
-								<Position x="0.000000" y="0.000000" z="0.000000"/>
-								<Size w="1.000000" h="1.000000" d="1.000000"/>
-								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
-							</TransformComponent>
-							<SkinnedMeshComponent>
-								<Mesh path="Models/dungeon_characters/barbarian/PrototypePete_body.022.biskmesh"/>
-								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
-								<Skelet relPath=".."/>
-							</SkinnedMeshComponent>
-						</Components>
-						<Children/>
-					</Actor>
-					<Actor name="Barbarian_Head">
-						<Components>
-							<TransformComponent>
-								<Position x="0.000000" y="0.000000" z="0.000000"/>
-								<Size w="1.000000" h="1.000000" d="1.000000"/>
-								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
-							</TransformComponent>
-							<SkinnedMeshComponent>
-								<Mesh path="Models/dungeon_characters/barbarian/Cube.167.biskmesh"/>
-								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
-								<Skelet relPath=".."/>
-							</SkinnedMeshComponent>
-						</Components>
-						<Children/>
-					</Actor>
-					<Actor name="Barbarian_LegLeft">
-						<Components>
-							<TransformComponent>
-								<Position x="0.000000" y="0.000000" z="0.000000"/>
-								<Size w="1.000000" h="1.000000" d="1.000000"/>
-								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
-							</TransformComponent>
-							<SkinnedMeshComponent>
-								<Mesh path="Models/dungeon_characters/barbarian/Cube.165.biskmesh"/>
-								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
-								<Skelet relPath=".."/>
-							</SkinnedMeshComponent>
-						</Components>
-						<Children/>
-					</Actor>
-					<Actor name="Barbarian_LegRight">
-						<Components>
-							<TransformComponent>
-								<Position x="0.000000" y="0.000000" z="0.000000"/>
-								<Size w="1.000000" h="1.000000" d="1.000000"/>
-								<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
-							</TransformComponent>
-							<SkinnedMeshComponent>
-								<Mesh path="Models/dungeon_characters/barbarian/Cube.163.biskmesh"/>
-								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
-								<Skelet relPath=".."/>
-							</SkinnedMeshComponent>
-						</Components>
-						<Children/>
-					</Actor>
 					<Actor name="hips">
 						<Components>
 							<TransformComponent>
@@ -306,22 +344,7 @@
 																					</TransformComponent>
 																					<BoneComponent/>
 																				</Components>
-																				<Children>
-																					<Actor name="2H_Axe">
-																						<Components>
-																							<TransformComponent>
-																								<Position x="0.000000" y="0.033309" z="-0.000000"/>
-																								<Size w="1.000000" h="1.000000" d="1.000000"/>
-																								<Rotation x="-180.000000" y="-0.000001" z="179.999985"/>
-																							</TransformComponent>
-																							<MeshComponent>
-																								<Mesh path="Models/dungeon_characters/barbarian/Cube.222.bimesh"/>
-																								<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
-																							</MeshComponent>
-																						</Components>
-																						<Children/>
-																					</Actor>
-																				</Children>
+																				<Children/>
 																			</Actor>
 																		</Children>
 																	</Actor>
@@ -339,35 +362,6 @@
 														<Rotation x="0.000000" y="-0.000000" z="0.000000"/>
 													</TransformComponent>
 													<BoneComponent/>
-												</Components>
-												<Children>
-													<Actor name="Barbarian_Hat">
-														<Components>
-															<TransformComponent>
-																<Position x="0.000000" y="-0.025552" z="-0.000000"/>
-																<Size w="1.000000" h="1.000000" d="1.000000"/>
-																<Rotation x="-0.000000" y="-0.000000" z="0.000000"/>
-															</TransformComponent>
-															<MeshComponent>
-																<Mesh path="Models/dungeon_characters/barbarian/Cube.166.bimesh"/>
-																<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
-															</MeshComponent>
-														</Components>
-														<Children/>
-													</Actor>
-												</Children>
-											</Actor>
-											<Actor name="Barbarian_Cape">
-												<Components>
-													<TransformComponent>
-														<Position x="-0.000002" y="0.243245" z="-0.000000"/>
-														<Size w="1.000000" h="1.000000" d="1.000000"/>
-														<Rotation x="0.000000" y="-0.000000" z="-0.000000"/>
-													</TransformComponent>
-													<MeshComponent>
-														<Mesh path="Models/dungeon_characters/barbarian/Plane.006.bimesh"/>
-														<Material path="Models/dungeon_characters/barbarian/barbarian_texture.bimat"/>
-													</MeshComponent>
 												</Components>
 												<Children/>
 											</Actor>
@@ -409,8 +403,8 @@
 														<Components>
 															<TransformComponent>
 																<Position x="-0.000000" y="0.165650" z="0.000000"/>
-																<Size w="1.000000" h="1.000000" d="1.000000"/>
-																<Rotation x="-133.956009" y="0.000006" z="-180.000000"/>
+																<Size w="1.000000" h="0.999997" d="1.000004"/>
+																<Rotation x="-133.956055" y="0.000008" z="180.000000"/>
 															</TransformComponent>
 															<BoneComponent/>
 														</Components>
@@ -456,8 +450,8 @@
 														<Components>
 															<TransformComponent>
 																<Position x="0.000000" y="0.165650" z="0.000000"/>
-																<Size w="1.000000" h="1.000000" d="1.000000"/>
-																<Rotation x="-133.956009" y="-0.000006" z="180.000000"/>
+																<Size w="1.000000" h="0.999997" d="1.000004"/>
+																<Rotation x="-133.956055" y="0.000008" z="-180.000000"/>
 															</TransformComponent>
 															<BoneComponent/>
 														</Components>
@@ -678,6 +672,6 @@
 				</Children>
 			</Actor>
 		</Children>
-		</Actor>
+	</Actor>
 	</Children>
-</Actor>
+  </Actor>

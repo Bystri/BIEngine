@@ -6,8 +6,10 @@
 #include "../BIEngine/Network/Replication/ObjectReplicationManagerMaster.h"
 #include "../BIGame/Network/ReplicationObjectPlayer.h"
 #include "../BIGame/Network/ReplicationObjectPlayerCharacter.h"
+#include "../BIGame/Network/ReplicationObjectAiDummyCharacter.h"
 #include "../BIGame/Combat/CombatStateComponent.h"
 #include "../BIGame/Combat/CombatControllerComponent.h"
+#include "../BIGame/Combat/DamagableComponent.h"
 
 #include "BINetworkManagerServer.h"
 #include "BIGSEventListener.h"
@@ -82,6 +84,7 @@ bool BIServerGameLogic::Init()
    m_pActorFactory->AddComponentCreator(LocomotionInfoComponent::g_CompId, CreateLocomotionInfoComponent);
    m_pActorFactory->AddComponentCreator(CombatStateComponent::g_CompId, CreateCombatStateComponent);
    m_pActorFactory->AddComponentCreator(CombatControllerComponent::g_CompId, CreateCombatControllerComponent);
+   m_pActorFactory->AddComponentCreator(DamagableComponent::g_CompId, CreateDamagableComponentComponent);
 
    if (!GameLogic::Init()) {
       return false;
@@ -93,6 +96,7 @@ bool BIServerGameLogic::Init()
 
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayer>(ReplicationObjectPlayer::sk_ClassType);
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayerCharacter>(ReplicationObjectPlayerCharacter::sk_ClassType);
+   BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectAiDummyCharacter>(ReplicationObjectAiDummyCharacter::sk_ClassType);
 
    m_pNetworkManager = BIEngine::MakeUnique<BINetworkManagerServer>();
    if (!m_pNetworkManager->Init(BIEngine::g_pApp->m_options.hostPort)) {
@@ -109,6 +113,8 @@ bool BIServerGameLogic::Init()
    BIRegisterEvents();
 
    LoadLevel(BIEngine::g_pApp->m_options.mainWorldResNamePath);
+
+   BIEngine::ObjectReplicationCreate(ReplicationObjectAiDummyCharacter::sk_ClassType);
 
    return true;
 }

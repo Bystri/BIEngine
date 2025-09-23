@@ -77,38 +77,3 @@ class PlayerActionBinderComponent():
                  
         attackCommand = MeleeAttackCommand(self.owner)
         self.characterCommandMngComponent.ExecuteCommand(attackCommand)
-            
-    def OnUpdate(self, dt):
-        return
-        if self.isNeedAttack:
-            attackCommand = MeleeAttackCommand(self.owner)
-            self.characterCommandMngComponent.ExecuteCommand(attackCommand)
-            self.isNeedAttack = False
-            return
-    
-        if not self.isNeedMoving:
-            return
-    
-        vertical = 0
-        horizontal = 0
-        
-        if self.up:
-            vertical += 1.0
-            
-        if self.down:
-            vertical -= 1.0
-            
-        if self.left:
-            horizontal -= 1.0
-            
-        if self.right:
-            horizontal += 1.0
-            
-        res = BIEVector.Vec3(vertical, 0.0, horizontal)
-         
-        resLength = res.Length()
-        if resLength > 1.0:
-            res /= resLength
-            
-        command = MovementCommand(self.owner, res)
-        self.characterCommandMngComponent.ExecuteCommand(command)

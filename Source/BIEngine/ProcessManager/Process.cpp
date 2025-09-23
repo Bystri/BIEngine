@@ -2,11 +2,6 @@
 
 namespace BIEngine {
 
-Process::Process()
-   : m_state(State::UNINITIALIZED)
-{
-}
-
 Process::~Process()
 {
    if (m_pChild) {

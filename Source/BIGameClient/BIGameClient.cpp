@@ -11,6 +11,7 @@
 #include "../BIEngine/Navigation/NavMeshManager.h"
 #include "../BIEngine/Actors/TransformComponent.h"
 #include "../BIEngine/Actors/PlayerComponent.h"
+#include "../BIGame/Network/ReplicationObjectAiDummyCharacter.h"
 #include "../BIGame/Network/ReplicationObjectPlayerCharacter.h"
 #include "../BIGame/Network/ReplicationObjectPlayer.h"
 #include "../BIGame/Combat/CombatStateComponent.h"
@@ -99,6 +100,7 @@ bool BIGameClientLogic::Init()
 
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayer>(ReplicationObjectPlayer::sk_ClassType);
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayerCharacter>(ReplicationObjectPlayerCharacter::sk_ClassType);
+   BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectAiDummyCharacter>(ReplicationObjectAiDummyCharacter::sk_ClassType);
 
    m_pPhysics2D->Initialize();
    m_pPhysics3D->Initialize();

@@ -13,7 +13,6 @@ Animator::Animator(Actor* pRoot)
 void Animator::Update(float dt)
 {
    if (m_pCurrentAnimation) {
-      Logger::WriteMsgLog("Animation in progress %f/%f", m_currentTime, m_pCurrentAnimation->GetDuration());
       m_currentTime += m_pCurrentAnimation->GetTicksPerSecond() * dt;
 
       const float notClampedTime = m_currentTime;

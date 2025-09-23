@@ -38,7 +38,7 @@ SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t classId)
 {
    SharedPtr<ReplicationObject> pObj = BIEngine::NetworkObjectCreationRegistry::Get().Create(classId);
    pObj->Init(true);
-   g_pObjectReplicationManagerMaster->AddReplicationObject(pObj);
+   ObjectReplicationManagerMaster::Get()->AddReplicationObject(pObj);
 
    return pObj;
 }
