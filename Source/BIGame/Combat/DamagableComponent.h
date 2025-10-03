@@ -15,10 +15,6 @@ public:
    virtual BIEngine::ComponentId GetComponentId() const override { return DamagableComponent::g_CompId; };
 
    void TakeDamage(float damage);
-
-private:
-   bool m_isDead = false;
-   float m_health = 100.0f;
 };
 
 static BIEngine::UniquePtr<BIEngine::ActorComponent> CreateDamagableComponentComponent()

@@ -12,6 +12,8 @@
 		</LocomotionInfoComponent>
 		<CombatStateComponent>
 		</CombatStateComponent>
+		<HealthStateComponent>
+		</HealthStateComponent>
 		<AnimationControllerComponent>
 		</AnimationControllerComponent>
 		<ScriptComponent>

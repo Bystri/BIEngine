@@ -6,11 +6,14 @@
 			<Animation name="strafe_left" path="Animations/dungeon_character/skeleton_minion/Running_Strafe_Left.bi3dam"/>
 			<Animation name="strafe_right" path="Animations/dungeon_character/skeleton_minion/Running_Strafe_Right.bi3dam"/>
 			<Animation name="walking_backwards" path="Animations/dungeon_character/skeleton_minion/Walking_Backwards.bi3dam"/>
+			<Animation name="death" path="Animations/dungeon_character/skeleton_minion/Death_A.bi3dam"/>
 	  </AnimationComponent>
 	  <LocomotionInfoComponent>
 	  </LocomotionInfoComponent>
 	  <CombatStateComponent>
 	  </CombatStateComponent>
+	  <HealthStateComponent>
+	  </HealthStateComponent>
 	  <AnimationControllerComponent>
 	  </AnimationControllerComponent>
 	  <ScriptComponent>

@@ -6,6 +6,8 @@
 	  </CombatStateComponent>
 	  <CombatControllerComponent>
 	  </CombatControllerComponent>
+	  <HealthStateComponent>
+	  </HealthStateComponent>
 	  <DamagableComponent>
 	  </DamagableComponent>
 	  <ScriptComponent>

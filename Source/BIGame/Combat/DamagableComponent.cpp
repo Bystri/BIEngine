@@ -3,6 +3,7 @@
 #include "../../BIEngine/StdLib/Assert.h"
 #include "../../BIEngine/Utilities/Logger.h"
 #include "../../BIEngine/Actors/Actor.h"
+#include "HealthStateComponent.h"
 
 const BIEngine::ComponentId DamagableComponent::g_CompId = "DamagableComponent";
 
@@ -20,18 +21,20 @@ tinyxml2::XMLElement* DamagableComponent::GenerateXml(tinyxml2::XMLDocument* pDo
 
 void DamagableComponent::TakeDamage(float damage)
 {
-   if (m_isDead) {
+   BIEngine::SharedPtr<HealthStateComponent> pHealthState = GetOwner()->GetComponent<HealthStateComponent>(HealthStateComponent::g_CompId).Lock();
+   if (pHealthState->IsDead()) {
       return;
    }
 
-   m_health -= damage;
+   float health = pHealthState->GetHealth();
+   health -= damage;
 
-   BIEngine::Logger::WriteMsgLog("%s: Got %f damage! Remaining: %f.", GetOwner()->GetName().CStr(), damage, m_health);
+   BIEngine::Logger::WriteMsgLog("%s: Got %f damage! Remaining: %f.", GetOwner()->GetName().CStr(), damage, health);
 
-   if (m_health <= 0.0f) {
-      m_health = 0.0f;
-      m_isDead = true;
-
-      BIEngine::Logger::WriteMsgLog("%s: Is dead!", GetOwner()->GetName().CStr());
+   if (health <= 0.0f) {
+      health = 0.0f;
+      pHealthState->SetIsDead(true);
    }
+
+   pHealthState->SetHealth(health);
 }

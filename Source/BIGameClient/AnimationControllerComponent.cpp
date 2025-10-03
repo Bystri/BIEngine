@@ -5,6 +5,7 @@
 #include "../BIEngine/Actors/AnimationComponent.h"
 #include "../BIEngine/ProcessManager/ProcessManager.h"
 #include "../BIGame/Combat/CombatStateComponent.h"
+#include "../BIGame/Combat/HealthStateComponent.h"
 #include "../BIGame/Locomotion/LocomotionInfoComponent.h"
 
 const BIEngine::ComponentId AnimationControllerComponent::g_CompId = "AnimationControllerComponent";
@@ -18,13 +19,31 @@ public:
       m_pAnimationComponent = pAnimatedActor->GetComponent<BIEngine::AnimationComponent>(BIEngine::AnimationComponent::g_CompId);
       m_pLocomotionInfoComponent = pAnimatedActor->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId);
       m_pCombatStateComponent = pAnimatedActor->GetComponent<CombatStateComponent>(CombatStateComponent::g_CompId);
+      m_pHealthStateComponent = pAnimatedActor->GetComponent<HealthStateComponent>(HealthStateComponent::g_CompId);
    }
 
 protected:
    virtual void OnUpdate(float dt) override
    {
+      if (!m_isDead && m_pHealthStateComponent.Lock()->IsDead()) {
+         m_pAnimationComponent.Lock()->PlayAnimation("death");
+         m_isDead = true;
+      }
+
+      if (m_isDead) {
+         return;
+      }
+
+      auto pLocomotionInfoComponent = m_pLocomotionInfoComponent.Lock();
+      glm::vec2 currentVel2d = glm::vec2(pLocomotionInfoComponent->GetCurrentVel().x, pLocomotionInfoComponent->GetCurrentVel().z);
+
       if (m_isAttackInProgress && !m_pCombatStateComponent.Lock()->IsAttackInProgress()) {
          m_isAttackInProgress = false;
+
+         if (glm::length(currentVel2d) < 0.001) {
+            m_pAnimationComponent.Lock()->PlayAnimation("idle");
+            return;
+         }
       }
 
       if (!m_isAttackInProgress && m_pCombatStateComponent.Lock()->IsAttackInProgress()) {
@@ -42,8 +61,6 @@ protected:
          return;
       }
 
-      auto pLocomotionInfoComponent = m_pLocomotionInfoComponent.Lock();
-      glm::vec2 currentVel2d = glm::vec2(pLocomotionInfoComponent->GetCurrentVel().x, pLocomotionInfoComponent->GetCurrentVel().z);
       if (glm::length(currentVel2d) > 0.001 && !m_pCombatStateComponent.Lock()->IsAttackInProgress()) {
          currentVel2d = glm::normalize(currentVel2d);
          const float dirDot = glm::dot(pLocomotionInfoComponent->GetCurrentDir(), currentVel2d);
@@ -115,12 +132,14 @@ private:
    BIEngine::WeakPtr<BIEngine::AnimationComponent> m_pAnimationComponent;
    BIEngine::WeakPtr<LocomotionInfoComponent> m_pLocomotionInfoComponent;
    BIEngine::WeakPtr<CombatStateComponent> m_pCombatStateComponent;
+   BIEngine::WeakPtr<HealthStateComponent> m_pHealthStateComponent;
 
    bool m_isRunningFront = true;
    bool m_isRunningBack = true;
    bool m_isRunningRight = true;
    bool m_isRunningLeft = true;
    bool m_isAttackInProgress = true;
+   bool m_isDead = false;
 };
 
 bool AnimationControllerComponent::Init(tinyxml2::XMLElement* pData)

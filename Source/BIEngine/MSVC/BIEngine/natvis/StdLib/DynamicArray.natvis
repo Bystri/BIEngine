@@ -1,0 +1,12 @@
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+<Type Name="BIEngine::DynamicArray&lt;*&gt;">
+    <DisplayString>{{ size={m_pEnd - m_pBegin} }}</DisplayString>
+    <Expand>
+        <Item Name="[size]" ExcludeView="simple">m_pEnd - m_pBegin</Item>
+        <ArrayItems>
+            <Size>m_pEnd - m_pBegin</Size>
+            <ValuePointer>m_pBegin</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+</AutoVisualizer>

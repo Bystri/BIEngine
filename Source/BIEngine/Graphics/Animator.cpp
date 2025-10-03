@@ -15,13 +15,13 @@ void Animator::Update(float dt)
    if (m_pCurrentAnimation) {
       m_currentTime += m_pCurrentAnimation->GetTicksPerSecond() * dt;
 
-      const float notClampedTime = m_currentTime;
+      if (!m_pCurrentAnimation->IsLooped() && m_currentTime >= m_pCurrentAnimation->GetDuration()) {
+         m_pCurrentAnimation = nullptr;
+         return;
+      }
+
       m_currentTime = fmod(m_currentTime, m_pCurrentAnimation->GetDuration());
       calculateActorTransform(m_pRoot);
-
-      if (!m_pCurrentAnimation->IsLooped() && notClampedTime >= m_pCurrentAnimation->GetDuration()) {
-         m_pCurrentAnimation = nullptr;
-      }
    }
 }
 

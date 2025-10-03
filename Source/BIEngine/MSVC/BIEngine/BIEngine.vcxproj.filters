@@ -61,7 +61,7 @@
     <Filter Include="3rdParty\imgui\backend">
       <UniqueIdentifier>{b331d76d-6e3c-4f5c-b4a3-fdde51713faf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Navigation">
+	<Filter Include="Navigation">
       <UniqueIdentifier>{02f7d1f7-7045-429d-b12b-d161abf09a3b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Network">
@@ -75,6 +75,9 @@
     </Filter>
     <Filter Include="StdLib">
       <UniqueIdentifier>{927cdce1-ad87-4bad-a4eb-6d3775ca0b9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="!natvis">
+      <UniqueIdentifier>{c986a89b-3710-41ba-b857-1204d24d453e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -915,5 +918,10 @@
   <ItemGroup>
     <None Include="..\..\.clang-format" />
     <None Include="..\..\.clang-tidy" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="natvis\StdLib\DynamicArray.natvis">
+      <Filter>!natvis</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>

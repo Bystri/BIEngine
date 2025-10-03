@@ -15,6 +15,7 @@
 #include "../BIGame/Network/ReplicationObjectPlayerCharacter.h"
 #include "../BIGame/Network/ReplicationObjectPlayer.h"
 #include "../BIGame/Combat/CombatStateComponent.h"
+#include "../BIGame/Combat/HealthStateComponent.h"
 #include "AnimationControllerComponent.h"
 
 int main(int argc, char* argv[])
@@ -87,6 +88,7 @@ bool BIGameClientLogic::Init()
    m_pActorFactory->AddComponentCreator(LocomotionInfoComponent::g_CompId, CreateLocomotionInfoComponent);
    m_pActorFactory->AddComponentCreator(CombatStateComponent::g_CompId, CreateCombatStateComponent);
    m_pActorFactory->AddComponentCreator(AnimationControllerComponent::g_CompId, CreateAnimationControllerComponent);
+   m_pActorFactory->AddComponentCreator(HealthStateComponent::g_CompId, CreateHealthComponentComponent);
 
    if (!GameLogic::Init()) {
       return false;

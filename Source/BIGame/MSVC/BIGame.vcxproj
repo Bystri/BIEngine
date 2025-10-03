@@ -21,9 +21,11 @@
     <ClCompile Include="..\Combat\CombatControllerComponent.cpp" />
     <ClCompile Include="..\Combat\CombatStateComponent.cpp" />
     <ClCompile Include="..\Combat\DamagableComponent.cpp" />
+    <ClCompile Include="..\Combat\HealthStateComponent.cpp" />
     <ClCompile Include="..\Locomotion\LocomotionInfoComponent.cpp" />
     <ClCompile Include="..\Network\AttachedActorReplicationUnit.cpp" />
     <ClCompile Include="..\Network\CombatReplicationUnit.cpp" />
+    <ClCompile Include="..\Network\HealthStateReplicationUnit.cpp" />
     <ClCompile Include="..\Network\LocomotionInfoReplicationUnit.cpp" />
     <ClCompile Include="..\PlayerManager\PlayerManager.cpp" />
   </ItemGroup>
@@ -35,9 +37,11 @@
     <ClInclude Include="..\Combat\CombatControllerComponent.h" />
     <ClInclude Include="..\Combat\CombatStateComponent.h" />
     <ClInclude Include="..\Combat\DamagableComponent.h" />
+    <ClInclude Include="..\Combat\HealthStateComponent.h" />
     <ClInclude Include="..\Locomotion\LocomotionInfoComponent.h" />
     <ClInclude Include="..\Network\AttachedActorReplicationUnit.h" />
     <ClInclude Include="..\Network\CombatReplicationUnit.h" />
+    <ClInclude Include="..\Network\HealthStateReplicationUnit.h" />
     <ClInclude Include="..\Network\LocomotionInfoReplicationUnit.h" />
     <ClInclude Include="..\Network\ReplicationObjectAiDummyCharacter.h" />
     <ClInclude Include="..\Network\ReplicationObjectPlayer.h" />

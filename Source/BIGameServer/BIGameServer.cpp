@@ -85,6 +85,7 @@ bool BIServerGameLogic::Init()
    m_pActorFactory->AddComponentCreator(CombatStateComponent::g_CompId, CreateCombatStateComponent);
    m_pActorFactory->AddComponentCreator(CombatControllerComponent::g_CompId, CreateCombatControllerComponent);
    m_pActorFactory->AddComponentCreator(DamagableComponent::g_CompId, CreateDamagableComponentComponent);
+   m_pActorFactory->AddComponentCreator(HealthStateComponent::g_CompId, CreateHealthComponentComponent);
 
    if (!GameLogic::Init()) {
       return false;

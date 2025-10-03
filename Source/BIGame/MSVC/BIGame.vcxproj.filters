@@ -26,6 +26,12 @@
     <ClCompile Include="..\Combat\DamagableComponent.cpp">
       <Filter>Combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\Network\HealthStateReplicationUnit.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Combat\HealthStateComponent.cpp">
+      <Filter>Combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGame.h" />
@@ -61,6 +67,12 @@
       <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="..\Combat\DamagableComponent.h">
+      <Filter>Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Network\HealthStateReplicationUnit.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Combat\HealthStateComponent.h">
       <Filter>Combat</Filter>
     </ClInclude>
   </ItemGroup>
