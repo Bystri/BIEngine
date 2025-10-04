@@ -186,7 +186,6 @@ public:
 private:
    void free();
 
-   SizeType chunkSize() const;
    SizeType getMapIdxFromDequeIdx(SizeType idx) const;
    SizeType getBlockIdxFromDequeIdx(SizeType idx) const;
 
@@ -203,6 +202,8 @@ private:
    void pushFrontImpl(DataType&& val);
 
 private:
+   static constexpr SizeType CHUNK_SIZE = 16;
+
    SizeType m_firstIdx;
    SizeType m_size = 0;
    DynamicArray<ValueType*> m_chunkMap;
@@ -487,7 +488,7 @@ inline void Deque<T>::PopBack()
    --m_size;
 
    if (blockIdx == 0) {
-      DataAllocator().deallocate(m_chunkMap[mapIdx], chunkSize());
+      DataAllocator().deallocate(m_chunkMap[mapIdx], CHUNK_SIZE);
    }
 }
 
@@ -501,8 +502,8 @@ inline void Deque<T>::PopFront()
    ++m_firstIdx;
    --m_size;
 
-   if (blockIdx == chunkSize() - 1) {
-      DataAllocator().deallocate(m_chunkMap[mapIdx], chunkSize());
+   if (blockIdx == CHUNK_SIZE - 1) {
+      DataAllocator().deallocate(m_chunkMap[mapIdx], CHUNK_SIZE);
    }
 }
 
@@ -534,38 +535,32 @@ inline void Deque<T>::free()
    Clear();
 
    if (m_chunkMap.Size() > 0) {
-      DataAllocator().deallocate(m_chunkMap[currentFirstChunkIdx], chunkSize());
+      DataAllocator().deallocate(m_chunkMap[currentFirstChunkIdx], CHUNK_SIZE);
    }
-}
-
-template <typename T>
-inline typename Deque<T>::SizeType Deque<T>::chunkSize() const
-{
-   return 16;
 }
 
 template <typename T>
 inline typename Deque<T>::SizeType Deque<T>::getMapIdxFromDequeIdx(SizeType idx) const
 {
-   return idx / chunkSize();
+   return idx / CHUNK_SIZE;
 }
 
 template <typename T>
 inline typename Deque<T>::SizeType Deque<T>::getBlockIdxFromDequeIdx(SizeType idx) const
 {
-   return idx - getMapIdxFromDequeIdx(idx) * chunkSize();
+   return idx - getMapIdxFromDequeIdx(idx) * CHUNK_SIZE;
 }
 
 template <typename T>
 inline void Deque<T>::createInitialMap(SizeType n)
 {
-   SizeType numNodes = n / chunkSize() + 1;
+   SizeType numNodes = n / CHUNK_SIZE + 1;
 
    SizeType mapSize = Max(static_cast<SizeType>(8), numNodes + 2);
    m_chunkMap.Resize(mapSize);
 
-   m_chunkMap[mapSize / 2] = DataAllocator().allocate(chunkSize());
-   m_firstIdx = mapSize / 2 * chunkSize();
+   m_chunkMap[mapSize / 2] = DataAllocator().allocate(CHUNK_SIZE);
+   m_firstIdx = mapSize / 2 * CHUNK_SIZE;
 }
 
 template <typename T>
@@ -586,7 +581,7 @@ inline void Deque<T>::expandChunkMap(SizeType chunksNum)
 
    m_chunkMap = newChunkMap;
 
-   m_firstIdx = newFirstChunckIdx * chunkSize() + firstBlockIdx;
+   m_firstIdx = newFirstChunckIdx * CHUNK_SIZE + firstBlockIdx;
 }
 
 template <typename T>
@@ -599,32 +594,32 @@ inline void Deque<T>::tryGrowFront()
 
    const SizeType mapIdx = getMapIdxFromDequeIdx(m_firstIdx);
    if (mapIdx > 0) {
-      m_chunkMap[mapIdx - 1] = DataAllocator().allocate(chunkSize());
+      m_chunkMap[mapIdx - 1] = DataAllocator().allocate(CHUNK_SIZE);
       return;
    }
 
    expandChunkMap(m_chunkMap.Size() * 2);
    const SizeType newMapIdx = getMapIdxFromDequeIdx(m_firstIdx);
-   m_chunkMap[newMapIdx - 1] = DataAllocator().allocate(chunkSize());
+   m_chunkMap[newMapIdx - 1] = DataAllocator().allocate(CHUNK_SIZE);
 }
 
 template <typename T>
 inline void Deque<T>::tryGrowBack()
 {
    const SizeType blockIdx = getBlockIdxFromDequeIdx(m_firstIdx + m_size);
-   if (blockIdx < chunkSize() - 1) {
+   if (blockIdx < CHUNK_SIZE - 1) {
       return;
    }
 
    const SizeType mapIdx = getMapIdxFromDequeIdx(m_firstIdx + m_size);
    if (mapIdx < m_chunkMap.Size() - 1) {
-      m_chunkMap[mapIdx + 1] = DataAllocator().allocate(chunkSize());
+      m_chunkMap[mapIdx + 1] = DataAllocator().allocate(CHUNK_SIZE);
       return;
    }
 
    expandChunkMap(m_chunkMap.Size() * 2);
    const SizeType newMapIdx = getMapIdxFromDequeIdx(m_firstIdx + m_size);
-   m_chunkMap[newMapIdx + 1] = DataAllocator().allocate(chunkSize());
+   m_chunkMap[newMapIdx + 1] = DataAllocator().allocate(CHUNK_SIZE);
 }
 
 template <typename T>

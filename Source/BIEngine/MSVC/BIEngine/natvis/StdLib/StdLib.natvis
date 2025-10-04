@@ -1,0 +1,146 @@
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  
+  <Type Name="BIEngine::Array&lt;*,*&gt;">
+    <DisplayString>{{ size={$T2} }}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>$T2</Size>
+        <ValuePointer>m_pData</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="BIEngine::Bitset&lt;*&gt;">
+    <DisplayString>{{ size={$T1} }}</DisplayString>
+    <Expand>
+      <IndexListItems>
+        <Size>$T1</Size>
+        <ValueNode>(m_chunkMap[$i / BITS_IN_ONE_CHUNK_COUNT] &gt;&gt; ($i % BITS_IN_ONE_CHUNK_COUNT)) &amp; 1</ValueNode>
+      </IndexListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="BIEngine::Deque&lt;*&gt;">
+    <DisplayString>{{ size={m_size} }}</DisplayString>
+    <Expand>
+      <IndexListItems>
+        <Size>m_size</Size>
+        <ValueNode>m_chunkMap[(m_firstIdx + $i) / CHUNK_SIZE][(m_firstIdx + $i) - (m_firstIdx + $i) / CHUNK_SIZE * CHUNK_SIZE]</ValueNode>
+      </IndexListItems>
+    </Expand>
+  </Type>
+  
+  <Type Name="BIEngine::DynamicArray&lt;*&gt;">
+      <DisplayString>{{ size={m_pEnd - m_pBegin} }}</DisplayString>
+      <Expand>
+          <Item Name="[size]" ExcludeView="simple">m_pEnd - m_pBegin</Item>
+          <ArrayItems>
+              <Size>m_pEnd - m_pBegin</Size>
+              <ValuePointer>m_pBegin</ValuePointer>
+          </ArrayItems>
+      </Expand>
+  </Type>
+
+  <Type Name="BIEngine::ForwardList&lt;*&gt;">
+    <DisplayString Condition="m_head.next == 0">empty</DisplayString>
+    <DisplayString Condition="m_head.next != 0">non-empty</DisplayString>
+    <Expand>
+      <LinkedListItems>
+        <HeadPointer>static_cast&lt;Node*&gt;(m_head.next)</HeadPointer>
+        <NextPointer>static_cast&lt;Node*&gt;(next)</NextPointer>
+        <ValueNode>val</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="BIEngine::HashMap&lt;*,*&gt;">
+    <DisplayString>{{ size={m_size} }}</DisplayString>
+    <Expand>
+      <ExpandedItem>m_storage,view(MapHelper)</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <!-- Alternate view of BIEngine::DynamicArray for internal list contained within an BIEngine::HashMap.-->
+  <Type Name="BIEngine::DynamicArray&lt;*&gt;" IncludeView="MapHelper">
+    <DisplayString>{{ size={m_pEnd - m_pBegin} }}</DisplayString>
+    <Expand>
+      <CustomListItems>
+        <Variable Name="val" InitialValue="m_pBegin" />
+        <Loop>
+          <Break Condition="val == m_pEnd"/>
+          <Item Condition="val->m_head.next != 0">*val,view(MapHelper)</Item>
+          <Exec>++val</Exec>
+        </Loop>
+      </CustomListItems>
+    </Expand>
+  </Type>
+
+  <!-- Alternate view of BIEngine::ForwardList for internal list contained within an BIEngine::HashMap.-->
+  <Type Name="BIEngine::ForwardList&lt;std::pair&lt;*,*&gt;&gt;" IncludeView="MapHelper">
+    <Expand>
+      <LinkedListItems>
+        <HeadPointer>static_cast&lt;Node*&gt;(m_head.next)</HeadPointer>
+        <NextPointer>static_cast&lt;Node*&gt;(next)</NextPointer>
+        <ValueNode Name="[{val.first}]">val</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="BIEngine::HashSet&lt;*,*&gt;">
+    <DisplayString>{{ size={m_size} }}</DisplayString>
+    <Expand>
+      <ExpandedItem>m_storage,view(SetHelper)</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <!-- Alternate view of BIEngine::DynamicArray for internal list contained within an BIEngine::HashSet.-->
+  <Type Name="BIEngine::DynamicArray&lt;*&gt;" IncludeView="SetHelper">
+    <DisplayString>{{ size={m_pEnd - m_pBegin} }}</DisplayString>
+    <Expand>
+      <CustomListItems>
+        <Variable Name="val" InitialValue="m_pBegin" />
+        <Loop>
+          <Break Condition="val == m_pEnd"/>
+          <Item Condition="val->m_head.next != 0">*val,view(simple)</Item>
+          <Exec>++val</Exec>
+        </Loop>
+      </CustomListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="BIEngine::List&lt;*&gt;">
+    <DisplayString>{{ size={m_size} }}</DisplayString>
+    <Expand>
+      <LinkedListItems>
+        <Size>m_size</Size>
+        <HeadPointer>m_pFirst</HeadPointer>
+        <NextPointer>next</NextPointer>
+        <ValueNode>val</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="BIEngine::Queue&lt;*&gt;">
+    <AlternativeType Name="BIEngine::Stack&lt;*&gt;" />
+    <DisplayString>{m_data}</DisplayString>
+    <Expand>
+      <Item Name="c">m_data</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="BIEngine::BasicString&lt;*&gt;">
+    <Intrinsic Name="size" Expression="m_pEnd - m_pBegin" />
+    <Intrinsic Name="capacity" Expression="m_capacity" />
+    <DisplayString>{m_pBegin,na}</DisplayString>
+    <StringView>m_pBegin,na</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>m_pBegin</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+</AutoVisualizer>

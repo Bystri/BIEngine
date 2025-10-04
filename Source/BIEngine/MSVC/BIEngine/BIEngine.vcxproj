@@ -407,7 +407,7 @@
     <None Include="..\..\.clang-tidy" />
   </ItemGroup>
   <ItemGroup>
-    <Natvis Include="natvis\StdLib\DynamicArray.natvis" />
+    <Natvis Include="natvis\StdLib\StdLib.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
