@@ -108,7 +108,7 @@ private:
    template <typename CharT>
    void fillDataFromRawStr(const CharT* str, SizeT strLen, CharT zero, CharT one);
 
-   std::pair<SizeT, SizeT> getChunkAndBitIdx(SizeT idx) const;
+   Pair<SizeT, SizeT> getChunkAndBitIdx(SizeT idx) const;
 
 private:
    static constexpr SizeT BITS_IN_ONE_CHUNK_COUNT = sizeof(DataStorageType) * 8;
@@ -420,11 +420,11 @@ inline void Bitset<N>::fillDataFromRawStr(const CharT* str, SizeT strLen, CharT 
 }
 
 template <SizeT N>
-inline std::pair<SizeT, SizeT> Bitset<N>::getChunkAndBitIdx(SizeT idx) const
+inline Pair<SizeT, SizeT> Bitset<N>::getChunkAndBitIdx(SizeT idx) const
 {
    const SizeT chunkIdx = idx / BITS_IN_ONE_CHUNK_COUNT;
    const SizeT bitIdx = idx - chunkIdx * BITS_IN_ONE_CHUNK_COUNT;
-   return std::make_pair(chunkIdx, bitIdx);
+   return MakePair(chunkIdx, bitIdx);
 }
 
 /*Global operators*/

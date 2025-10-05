@@ -111,11 +111,11 @@ public:
 
    void Clear();
 
-   std::pair<Iterator, bool> Insert(const KeyType& key);
-   std::pair<Iterator, bool> Insert(KeyType&& key);
+   Pair<Iterator, bool> Insert(const KeyType& key);
+   Pair<Iterator, bool> Insert(KeyType&& key);
 
    template <typename... U>
-   std::pair<Iterator, bool> Emplace(U&&... args);
+   Pair<Iterator, bool> Emplace(U&&... args);
 
    SizeType Erase(const KeyType& key);
    Iterator Erase(Iterator itrToErase);
@@ -253,11 +253,11 @@ inline void HashSet<Key, Hasher, KeyEqual>::Clear()
 }
 
 template <typename Key, typename Hasher, typename KeyEqual>
-inline std::pair<typename HashSet<Key, Hasher, KeyEqual>::Iterator, bool> HashSet<Key, Hasher, KeyEqual>::Insert(const KeyType& key)
+inline Pair<typename HashSet<Key, Hasher, KeyEqual>::Iterator, bool> HashSet<Key, Hasher, KeyEqual>::Insert(const KeyType& key)
 {
    Iterator itr = Find(key);
    if (itr != End()) {
-      return std::pair<Iterator, bool>(itr, false);
+      return Pair<Iterator, bool>(itr, false);
    }
 
    const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
@@ -267,15 +267,15 @@ inline std::pair<typename HashSet<Key, Hasher, KeyEqual>::Iterator, bool> HashSe
 
    tryRehash();
 
-   return std::pair<Iterator, bool>(Find(key), true);
+   return Pair<Iterator, bool>(Find(key), true);
 }
 
 template <typename Key, typename Hasher, typename KeyEqual>
-inline std::pair<typename HashSet<Key, Hasher, KeyEqual>::Iterator, bool> HashSet<Key, Hasher, KeyEqual>::Insert(KeyType&& key)
+inline Pair<typename HashSet<Key, Hasher, KeyEqual>::Iterator, bool> HashSet<Key, Hasher, KeyEqual>::Insert(KeyType&& key)
 {
    Iterator itr = Find(key);
    if (itr != End()) {
-      return std::pair<Iterator, bool>(itr, false);
+      return Pair<Iterator, bool>(itr, false);
    }
 
    SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
@@ -285,12 +285,12 @@ inline std::pair<typename HashSet<Key, Hasher, KeyEqual>::Iterator, bool> HashSe
 
    tryRehash();
 
-   return std::pair<Iterator, bool>(Find(key), true);
+   return Pair<Iterator, bool>(Find(key), true);
 }
 
 template <typename Key, typename Hasher, typename KeyEqual>
 template <typename... U>
-inline std::pair<typename HashSet<Key, Hasher, KeyEqual>::Iterator, bool> HashSet<Key, Hasher, KeyEqual>::Emplace(U&&... args)
+inline Pair<typename HashSet<Key, Hasher, KeyEqual>::Iterator, bool> HashSet<Key, Hasher, KeyEqual>::Emplace(U&&... args)
 {
    ForwardList<Key> temp;
    temp.EmplaceFront(std::forward<U>(args)...);
@@ -298,7 +298,7 @@ inline std::pair<typename HashSet<Key, Hasher, KeyEqual>::Iterator, bool> HashSe
 
    Iterator itr = Find(key);
    if (itr != End()) {
-      return std::pair<Iterator, bool>(itr, false);
+      return Pair<Iterator, bool>(itr, false);
    }
 
    const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
@@ -308,7 +308,7 @@ inline std::pair<typename HashSet<Key, Hasher, KeyEqual>::Iterator, bool> HashSe
 
    tryRehash();
 
-   return std::pair<Iterator, bool>(Find(key), true);
+   return Pair<Iterator, bool>(Find(key), true);
 }
 
 template <typename Key, typename Hasher, typename KeyEqual>

@@ -50,7 +50,7 @@ private:
    HashMap<String, ColorRgb> m_uniformColorsRgb;
    HashMap<String, ColorRgba> m_uniformColorsRgba;
 
-   DynamicArray<std::pair<int, SharedPtr<Texture>>> m_textures;
+   DynamicArray<Pair<int, SharedPtr<Texture>>> m_textures;
 };
 
 } // namespace BIEngine

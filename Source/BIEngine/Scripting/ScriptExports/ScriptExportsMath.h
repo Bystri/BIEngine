@@ -23,6 +23,6 @@ PYBIND11_EMBEDDED_MODULE(BIEMath, m)
    m.def("MoveTowards", &BIEngine::MoveTowards<float>);
    m.def("SmoothDamp", [](float from, float to, float currentVelocity, float smoothTime, float deltaTime, float maxSpeed) {
       float ret = BIEngine::SmoothDamp(from, to, currentVelocity, smoothTime, deltaTime, maxSpeed);
-      return std::pair<float, float>(ret, currentVelocity);
+      return std::tuple<float, float>(ret, currentVelocity);
    });
 }

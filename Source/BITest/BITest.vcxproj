@@ -122,6 +122,7 @@
     <ClCompile Include="StdLib\List_UnitTest.cpp" />
     <ClCompile Include="StdLib\HashMap_UnitTest.cpp" />
     <ClCompile Include="StdLib\UniquePtr_UnitTest.cpp" />
+    <ClCompile Include="StdLib\Utility_UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

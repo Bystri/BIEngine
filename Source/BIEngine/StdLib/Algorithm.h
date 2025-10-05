@@ -3,6 +3,7 @@
 #include <utility>
 #include <random>
 
+#include "Utility.h"
 #include "Iterator.h"
 #include "Functional.h"
 
@@ -109,13 +110,13 @@ Itr MaxElement(Itr begin, Itr end)
 }
 
 template <typename Itr, typename CompOp>
-std::pair<Itr, Itr> MinMaxElement(Itr begin, Itr end, CompOp op)
+Pair<Itr, Itr> MinMaxElement(Itr begin, Itr end, CompOp op)
 {
    Itr min = begin;
    Itr max = begin;
 
    if (begin == end || ++begin == end) {
-      return std::make_pair(min, max);
+      return MakePair(min, max);
    }
 
    if (op(*begin, *min)) {
@@ -155,11 +156,11 @@ std::pair<Itr, Itr> MinMaxElement(Itr begin, Itr end, CompOp op)
       }
    }
 
-   return std::make_pair(min, max);
+   return MakePair(min, max);
 }
 
 template <typename Itr>
-std::pair<Itr, Itr> MinMaxElement(Itr begin, Itr end)
+Pair<Itr, Itr> MinMaxElement(Itr begin, Itr end)
 {
    using ValueType = typename IteratorTraits<Itr>::ValueType;
    return MinMaxElement(begin, end, Less<ValueType>());
@@ -650,13 +651,13 @@ Itr UpperBound(Itr begin, Itr end, const T& val)
 }
 
 template <typename Itr, typename T, typename BinaryPred>
-std::pair<Itr, Itr> EqualRange(Itr begin, Itr end, const T& val, BinaryPred op)
+Pair<Itr, Itr> EqualRange(Itr begin, Itr end, const T& val, BinaryPred op)
 {
-   return std::make_pair(LowerBound(begin, end, val, op), UpperBound(begin, end, val, op));
+   return MakePair(LowerBound(begin, end, val, op), UpperBound(begin, end, val, op));
 }
 
 template <typename Itr, typename T>
-std::pair<Itr, Itr> EqualRange(Itr begin, Itr end, const T& val)
+Pair<Itr, Itr> EqualRange(Itr begin, Itr end, const T& val)
 {
    return EqualRange(begin, end, val, Less<typename IteratorTraits<Itr>::ValueType>());
 }

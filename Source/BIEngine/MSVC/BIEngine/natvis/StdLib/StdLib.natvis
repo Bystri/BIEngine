@@ -76,7 +76,7 @@
   </Type>
 
   <!-- Alternate view of BIEngine::ForwardList for internal list contained within an BIEngine::HashMap.-->
-  <Type Name="BIEngine::ForwardList&lt;std::pair&lt;*,*&gt;&gt;" IncludeView="MapHelper">
+  <Type Name="BIEngine::ForwardList&lt;Pair&lt;*,*&gt;&gt;" IncludeView="MapHelper">
     <Expand>
       <LinkedListItems>
         <HeadPointer>static_cast&lt;Node*&gt;(m_head.next)</HeadPointer>

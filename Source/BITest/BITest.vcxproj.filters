@@ -82,6 +82,9 @@
     <ClCompile Include="StdLib\Bitset_UnitTest.cpp">
       <Filter>StdLib</Filter>
     </ClCompile>
+    <ClCompile Include="StdLib\Utility_UnitTest.cpp">
+      <Filter>StdLib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

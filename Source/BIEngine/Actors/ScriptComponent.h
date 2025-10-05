@@ -39,8 +39,8 @@ private:
    String m_externalScriptObjPath;
    String m_externalScriptObjClass;
 
-   DynamicArray<std::pair<String, float>> m_numVars;
-   DynamicArray<std::pair<String, String>> m_strVars;
+   DynamicArray<Pair<String, float>> m_numVars;
+   DynamicArray<Pair<String, String>> m_strVars;
 
    pybind11::object m_pyObject;
 };

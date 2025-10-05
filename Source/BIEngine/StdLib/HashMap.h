@@ -9,7 +9,7 @@ namespace BIEngine {
 template <typename Key, typename T, typename Hasher = Hash<Key>, typename KeyEqual = EqualTo<Key>>
 class HashMap {
 
-   class ConstHashMapIterator : public IteratorBase<ForwardIteratorTag, std::pair<const Key, T>> {
+   class ConstHashMapIterator : public IteratorBase<ForwardIteratorTag, Pair<const Key, T>> {
       friend class HashMap;
 
    public:
@@ -67,7 +67,7 @@ class HashMap {
       }
 
    protected:
-      ConstHashMapIterator(const HashMap<Key, T>* pHashMap, SizeT bucketIdx, typename ForwardList<std::pair<const Key, T>>::ConstIterator listItr)
+      ConstHashMapIterator(const HashMap<Key, T>* pHashMap, SizeT bucketIdx, typename ForwardList<Pair<const Key, T>>::ConstIterator listItr)
          : m_pHashMap(pHashMap), m_bucketIdx(bucketIdx), m_listItr(listItr)
       {
       }
@@ -75,7 +75,7 @@ class HashMap {
    protected:
       const HashMap<Key, T>* m_pHashMap;
       SizeT m_bucketIdx;
-      typename ForwardList<std::pair<const Key, T>>::ConstIterator m_listItr;
+      typename ForwardList<Pair<const Key, T>>::ConstIterator m_listItr;
    };
 
    class HashMapIterator : public ConstHashMapIterator {
@@ -93,14 +93,14 @@ class HashMap {
       }
 
    protected:
-      HashMapIterator(HashMap<Key, T>* pHashMap, SizeT bucketIdx, typename ForwardList<std::pair<const Key, T>>::Iterator listItr)
+      HashMapIterator(HashMap<Key, T>* pHashMap, SizeT bucketIdx, typename ForwardList<Pair<const Key, T>>::Iterator listItr)
          : ConstHashMapIterator(pHashMap, bucketIdx, listItr)
       {
       }
    };
 
 public:
-   using ValueType = std::pair<const Key, T>;
+   using ValueType = Pair<const Key, T>;
    using Reference = ValueType&;
    using Pointer = ValueType*;
    using ConstReference = const ValueType&;
@@ -134,11 +134,11 @@ public:
 
    void Clear();
 
-   std::pair<Iterator, bool> Insert(const KeyType& key, const MappedType& val);
-   std::pair<Iterator, bool> Insert(const KeyType& key, MappedType&& val);
+   Pair<Iterator, bool> Insert(const KeyType& key, const MappedType& val);
+   Pair<Iterator, bool> Insert(const KeyType& key, MappedType&& val);
 
    template <typename... U>
-   std::pair<Iterator, bool> Emplace(const KeyType& key, U&&... args);
+   Pair<Iterator, bool> Emplace(const KeyType& key, U&&... args);
 
    SizeType Erase(const KeyType& key);
    Iterator Erase(Iterator itrToErase);
@@ -290,11 +290,11 @@ inline void HashMap<Key, T, Hasher, KeyEqual>::Clear()
 }
 
 template <typename Key, typename T, typename Hasher, typename KeyEqual>
-inline std::pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> HashMap<Key, T, Hasher, KeyEqual>::Insert(const KeyType& key, const MappedType& val)
+inline Pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> HashMap<Key, T, Hasher, KeyEqual>::Insert(const KeyType& key, const MappedType& val)
 {
    Iterator itr = Find(key);
    if (itr != End()) {
-      return std::pair<Iterator, bool>(itr, false);
+      return Pair<Iterator, bool>(itr, false);
    }
 
    const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
@@ -304,15 +304,15 @@ inline std::pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> Has
 
    tryRehash();
 
-   return std::pair<Iterator, bool>(Find(key), true);
+   return Pair<Iterator, bool>(Find(key), true);
 }
 
 template <typename Key, typename T, typename Hasher, typename KeyEqual>
-inline std::pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> HashMap<Key, T, Hasher, KeyEqual>::Insert(const KeyType& key, MappedType&& val)
+inline Pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> HashMap<Key, T, Hasher, KeyEqual>::Insert(const KeyType& key, MappedType&& val)
 {
    Iterator itr = Find(key);
    if (itr != End()) {
-      return std::pair<Iterator, bool>(itr, false);
+      return Pair<Iterator, bool>(itr, false);
    }
 
    const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
@@ -322,16 +322,16 @@ inline std::pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> Has
 
    tryRehash();
 
-   return std::pair<Iterator, bool>(Find(key), true);
+   return Pair<Iterator, bool>(Find(key), true);
 }
 
 template <typename Key, typename T, typename Hasher, typename KeyEqual>
 template <typename... U>
-inline std::pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> HashMap<Key, T, Hasher, KeyEqual>::Emplace(const KeyType& key, U&&... args)
+inline Pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> HashMap<Key, T, Hasher, KeyEqual>::Emplace(const KeyType& key, U&&... args)
 {
    Iterator itr = Find(key);
    if (itr != End()) {
-      return std::pair<Iterator, bool>(itr, false);
+      return Pair<Iterator, bool>(itr, false);
    }
 
    const SizeType bucketIdx = getBucketIdxFromKey(key, m_storage.Size());
@@ -341,7 +341,7 @@ inline std::pair<typename HashMap<Key, T, Hasher, KeyEqual>::Iterator, bool> Has
 
    tryRehash();
 
-   return std::pair<Iterator, bool>(Find(key), true);
+   return Pair<Iterator, bool>(Find(key), true);
 }
 
 template <typename Key, typename T, typename Hasher, typename KeyEqual>

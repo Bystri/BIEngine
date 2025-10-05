@@ -12,7 +12,7 @@ TEST(HashMap, Insert) {
 TEST(HashMap, Clear) {
 	BIEngine::HashMap<int, int> map;
 
-	const std::pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
+	const BIEngine::Pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
 
 	for (const auto& keyAndVal : keysAndVals) {
 		map.Insert(keyAndVal.first, keyAndVal.second);
@@ -33,7 +33,7 @@ TEST(HashMap, Clear) {
 TEST(HashMap, Iterator_Iteration) {
 	BIEngine::HashMap<int, int> map;
 
-	const std::pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
+	const BIEngine::Pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
 
 	for (const auto& keyAndVal : keysAndVals) {
 		map.Insert(keyAndVal.first, keyAndVal.second);
@@ -61,7 +61,7 @@ TEST(HashMap, Iterator_Iteration) {
 TEST(HashMap, Iterator_ChangeVal) {
 	BIEngine::HashMap<int, int> map;
 
-	const std::pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
+	const BIEngine::Pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
 
 	for (const auto& keyAndVal : keysAndVals) {
 		map.Insert(keyAndVal.first, keyAndVal.second);
@@ -86,7 +86,7 @@ TEST(HashMap, Iterator_ChangeVal) {
 TEST(HashMap, ConstIterator) {
 	BIEngine::HashMap<int, int> map;
 
-	const std::pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
+	const BIEngine::Pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
 
 	for (const auto& keyAndVal : keysAndVals) {
 		map.Insert(keyAndVal.first, keyAndVal.second);
@@ -157,7 +157,7 @@ TEST(HashMap, Emplace) {
 	{
 		BIEngine::HashMap<int, HashMapTestObj> map;
 
-		const std::pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
+		const BIEngine::Pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
 
 		for (const auto& keyAndVal : keysAndVals) {
 			map.Emplace(keyAndVal.first, keyAndVal.second);
@@ -190,7 +190,7 @@ TEST(HashMap, Emplace) {
 TEST(HashMap, EraseWithKey) {
 	BIEngine::HashMap<int, int> map;
 
-	const std::pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
+	const BIEngine::Pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
 	constexpr int idxKeyToDelete = 1;
 
 	for (const auto& keyAndVal : keysAndVals) {
@@ -226,7 +226,7 @@ TEST(HashMap, EraseWithKey) {
 TEST(HashMap, EraseWithItr) {
 	BIEngine::HashMap<int, int> map;
 
-	const std::pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
+	const BIEngine::Pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
 	constexpr int idxKeyToDelete = 1;
 
 	for (const auto& keyAndVal : keysAndVals) {
@@ -270,7 +270,7 @@ TEST(HashMap, EraseWithItr) {
 TEST(HashMap, InsertViaBracketOperator) {
 	BIEngine::HashMap<int, int> map;
 
-	const std::pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
+	const BIEngine::Pair<int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
 
 	for (const auto& keyAndVal : keysAndVals) {
 		map[keyAndVal.first] = keyAndVal.second;
@@ -298,7 +298,7 @@ TEST(HashMap, InsertViaBracketOperator) {
 TEST(HashMap, Rehashing) {
 	BIEngine::HashMap<int, int> map;
 
-	const std::pair<int, int> keysAndVals[] = { {10, 2}, {102, 8}, {25, 11}, {24, 8}, {111, 25}, {32521, 86}, {100, 254}, {37, 12}, {1000, 24} };
+	const BIEngine::Pair<int, int> keysAndVals[] = { {10, 2}, {102, 8}, {25, 11}, {24, 8}, {111, 25}, {32521, 86}, {100, 254}, {37, 12}, {1000, 24} };
 
 	bool wasRehashed = false;
 	float prevLoadFactor = 0.0f;
@@ -336,7 +336,7 @@ TEST(HashMap, Rehashing) {
 TEST(HashMap, Find) {
 	BIEngine::HashMap<int, int> map;
 
-	std::pair<const int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
+	BIEngine::Pair<const int, int> keysAndVals[] = { {10, 2}, {100, 8}, {25, 11} };
 	constexpr int idxKeyToFindAndChange = 1;
 	constexpr int newVal = 2222;
 

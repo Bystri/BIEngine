@@ -260,7 +260,7 @@ private:
    using BulletRigidBodyToActorIDMap = HashMap<btRigidBody const*, ActorId>;
    BulletRigidBodyToActorIDMap m_rigidBodyToActorId;
 
-   using CollisionPair = std::pair<btRigidBody const*, btRigidBody const*>;
+   using CollisionPair = Pair<btRigidBody const*, btRigidBody const*>;
 
    class HashCollisionPair {
    public:
@@ -974,7 +974,7 @@ void Physics3D::BulletInternalTickCallback(btDynamicsWorld* const world, const b
       const btRigidBody* const sortedBodyA = swapped ? body1 : body0;
       const btRigidBody* const sortedBodyB = swapped ? body0 : body1;
 
-      CollisionPair const thisPair = std::make_pair(sortedBodyA, sortedBodyB);
+      CollisionPair const thisPair = MakePair(sortedBodyA, sortedBodyB);
       currentTickCollisionPairs.Insert(thisPair);
 
       if (bulletPhysics->m_previousTickCollisionPairs.Find(thisPair) == bulletPhysics->m_previousTickCollisionPairs.End()) {
