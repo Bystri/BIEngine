@@ -129,16 +129,22 @@
   </Type>
 
   <Type Name="BIEngine::BasicString&lt;*&gt;">
-    <Intrinsic Name="size" Expression="m_pEnd - m_pBegin" />
-    <Intrinsic Name="capacity" Expression="m_capacity" />
-    <DisplayString>{m_pBegin,na}</DisplayString>
-    <StringView>m_pBegin,na</StringView>
+    <Intrinsic Name="shortStringSize" Expression="m_layout.m_ssoLayout.bufferSize &gt;&gt; 1" />
+    <Intrinsic Name="longStringSize" Expression="m_layout.m_heapLayout.pEnd - m_layout.m_heapLayout.pBegin" />
+    <Intrinsic Name="isShortString" Expression="(m_layout.m_ctrlLayout.ctrl &amp; 1) == 0" />
+    <Intrinsic Name="isLongString" Expression="(m_layout.m_ctrlLayout.ctrl &amp; 1) == 1" />
+    <DisplayString Condition="isShortString()">{m_layout.m_ssoLayout.buffer,na}"</DisplayString>
+    <DisplayString Condition="isLongString()">{m_layout.m_heapLayout.pBegin,na}"</DisplayString>
+    <DisplayString Condition="isShortString()">m_layout.m_ssoLayout.buffer,na"</DisplayString>
+    <DisplayString Condition="isLongString()">m_layout.m_heapLayout.pBegin,na"</DisplayString>
     <Expand>
-      <Item Name="[size]" ExcludeView="simple">size()</Item>
-      <Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+      <Item Condition="isShortString()" Name="[size]" ExcludeView="simple">shortStringSize()</Item>
+      <Item Condition="isLongString()" Name="[size]" ExcludeView="simple">longStringSize()</Item>
       <ArrayItems>
-        <Size>size()</Size>
-        <ValuePointer>m_pBegin</ValuePointer>
+        <Size Condition="isShortString()">shortStringSize()</Size>
+        <Size Condition="isLongString()">longStringSize()</Size>
+        <ValuePointer Condition="isShortString()">m_layout.m_ssoLayout.buffer</ValuePointer>
+        <ValuePointer Condition="isLongString()">m_layout.m_heapLayout.pBegin</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>

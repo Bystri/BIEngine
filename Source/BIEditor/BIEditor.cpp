@@ -433,7 +433,7 @@ static void editorHumanViewUpdateDuplicateActorName(BIEngine::String& name)
       return;
    }
 
-   int num = std::atoi(numStr.CStr());
+   int num = BIEngine::Stoi(numStr.CStr());
 
    ++num;
 

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <iostream>
 
+#include "Assert.h"
 #include "StdLib.h"
 #include "Utility.h"
 #include "Iterator.h"
@@ -15,6 +16,156 @@ namespace BIEngine {
 
 template <typename CharT>
 class BasicString {
+   static constexpr SizeT DISABLED_SSO_BIT = 1;
+
+   struct HeapLayout {
+      CharT* pBegin = nullptr;
+      CharT* pEnd = nullptr;
+      SizeT capacity;
+   };
+
+   struct SsoLayout {
+      static constexpr SizeT CAPACITY = (sizeof(HeapLayout) - sizeof(unsigned char)) / sizeof(CharT);
+      CharT buffer[CAPACITY];
+      char bufferSize;
+   };
+
+   struct CtrlLayout {
+      char _pad[sizeof(HeapLayout) - sizeof(unsigned char)];
+      unsigned char ctrl;
+   };
+
+   struct Rawlayout {
+      char rawBuffer[sizeof(HeapLayout)];
+   };
+
+   static_assert(sizeof(HeapLayout) >= sizeof(SsoLayout), "heap layout structure must be the greater or same size than sso layout");
+   static_assert(sizeof(HeapLayout) == sizeof(CtrlLayout), "heap and ctrl layout structures must be the same size");
+   static_assert(sizeof(HeapLayout) == sizeof(Rawlayout), "heap and raw layout structures must be the same size");
+
+   class Layout {
+   public:
+      Layout()
+      {
+         std::memset(m_rawLayout.rawBuffer, 0, sizeof(Rawlayout));
+      }
+
+      Layout(Layout&& other)
+      {
+         std::memcpy(m_rawLayout.rawBuffer, other.m_rawLayout.rawBuffer, sizeof(Rawlayout));
+         std::memset(other.m_rawLayout.rawBuffer, 0, sizeof(Rawlayout));
+      }
+
+      Layout& operator=(Layout&& other)
+      {
+         if (this == &other) {
+            return *this;
+         }
+
+         std::memcpy(m_rawLayout.rawBuffer, other.m_rawLayout.rawBuffer, sizeof(Rawlayout));
+         std::memset(other.m_rawLayout.rawBuffer, 0, sizeof(Rawlayout));
+
+         return *this;
+      }
+
+      CharT* GetBeginPtr()
+      {
+         return IsHeap() ? m_heapLayout.pBegin : m_ssoLayout.buffer;
+      }
+
+      const CharT* GetBeginPtr() const
+      {
+         return IsHeap() ? m_heapLayout.pBegin : m_ssoLayout.buffer;
+      }
+
+      CharT* GetEndPtr()
+      {
+         return IsHeap() ? m_heapLayout.pEnd : m_ssoLayout.buffer + GetSsoSize();
+      }
+
+      const CharT* GetEndPtr() const
+      {
+         return IsHeap() ? m_heapLayout.pEnd : m_ssoLayout.buffer + GetSsoSize();
+      }
+
+      SizeT GetSize() const
+      {
+         return IsHeap() ? m_heapLayout.pEnd - m_heapLayout.pBegin : GetSsoSize();
+      }
+
+      SizeT GetCapacity() const
+      {
+         return IsHeap() ? GetClassicCapacity() : m_ssoLayout.CAPACITY - 1;
+      }
+
+      void IncrementSize(SizeT n = 1)
+      {
+         if (IsHeap()) {
+            m_heapLayout.pEnd += n;
+         } else {
+            m_ssoLayout.bufferSize += (n << 1);
+         }
+      }
+
+      void DecrementSize(SizeT n = 1)
+      {
+         if (IsHeap()) {
+            m_heapLayout.pEnd -= n;
+         } else {
+            m_ssoLayout.bufferSize -= (n << 1);
+         }
+      }
+
+      bool IsHeap() const
+      {
+         return m_ctrlLayout.ctrl & DISABLED_SSO_BIT;
+      }
+
+      void ExpandDataStorage(SizeT newCapacity)
+      {
+         ValueType* newData = Allocator().allocate(newCapacity + 1);
+         const SizeType size = GetSize();
+         std::memset(newData + size, ValueType(), newCapacity - size + 1);
+
+         if (IsHeap()) {
+            std::memcpy(newData, m_heapLayout.pBegin, size * sizeof(ValueType));
+         } else {
+            std::memcpy(newData, m_ssoLayout.buffer, size * sizeof(ValueType));
+         }
+
+         if (GetCapacity() > SsoLayout::CAPACITY) {
+            Allocator().deallocate(m_heapLayout.pBegin, GetCapacity() + 1);
+         }
+
+         m_heapLayout.pEnd = newData + size;
+         m_heapLayout.pBegin = newData;
+         m_heapLayout.capacity = (newCapacity << 1);
+         m_ctrlLayout.ctrl |= DISABLED_SSO_BIT;
+      }
+
+   private:
+      SizeT GetSsoSize() const
+      {
+         return (m_ssoLayout.bufferSize >> 1);
+      }
+
+      SizeT GetClassicCapacity() const
+      {
+         SizeT capacity = m_heapLayout.capacity;
+         capacity <<= 8;
+         capacity >>= 9;
+         return capacity;
+      }
+
+   private:
+      union {
+         HeapLayout m_heapLayout;
+         SsoLayout m_ssoLayout;
+         CtrlLayout m_ctrlLayout;
+         Rawlayout m_rawLayout;
+      };
+   };
+
 public:
    using ValueType = CharT;
    using Reference = ValueType&;
@@ -64,7 +215,7 @@ public:
    ConstReference Back() const;
 
    Pointer Data();
-   Pointer Data() const;
+   ConstPointer Data() const;
 
    const ValueType* CStr() const;
 
@@ -112,15 +263,22 @@ public:
    BasicString Substr(SizeType pos = 0, SizeType count = NPos) const;
 
 private:
+   void free()
+   {
+      Clear();
+
+      if (m_layout.IsHeap()) {
+         Allocator().deallocate(m_layout.GetBeginPtr(), m_layout.GetCapacity());
+      }
+   }
+
    void tryExpandDataStorage();
    void expandDataStorage(SizeType newCapacity);
 
 private:
    static constexpr SizeType GROW_RATIO = 2;
 
-   ValueType* m_pBegin = nullptr;
-   ValueType* m_pEnd = nullptr;
-   SizeType m_capacity = 0;
+   Layout m_layout;
 };
 
 /*BasicString*/
@@ -195,22 +353,14 @@ BasicString<CharT>::BasicString(const BasicString<CharT>& rhs)
 
 template <typename CharT>
 BasicString<CharT>::BasicString(BasicString<CharT>&& rhs)
+   : m_layout(std::move(rhs.m_layout))
 {
-   m_capacity = rhs.m_capacity;
-   m_pBegin = rhs.m_pBegin;
-   m_pEnd = rhs.m_pEnd;
-
-   rhs.m_capacity = 0;
-   rhs.m_pBegin = nullptr;
-   rhs.m_pEnd = nullptr;
 }
 
 template <typename CharT>
 BasicString<CharT>::~BasicString()
 {
-   Clear();
-
-   Allocator().deallocate(m_pBegin, m_capacity);
+   free();
 }
 
 template <typename CharT>
@@ -236,15 +386,9 @@ BasicString<CharT>& BasicString<CharT>::operator=(BasicString&& rhs)
       return *this;
    }
 
-   this->~BasicString();
+   free();
 
-   m_capacity = rhs.m_capacity;
-   m_pBegin = rhs.m_pBegin;
-   m_pEnd = rhs.m_pEnd;
-
-   rhs.m_capacity = 0;
-   rhs.m_pBegin = nullptr;
-   rhs.m_pEnd = nullptr;
+   m_layout = std::move(rhs.m_layout);
 
    return *this;
 }
@@ -257,7 +401,7 @@ BasicString<CharT>& BasicString<CharT>::operator+=(const ValueType* str)
    }
    --strSize;
 
-   if (Size() + strSize < m_capacity) {
+   if (Size() + strSize < m_layout.GetCapacity()) {
       Reserve(Size() + strSize);
    }
 
@@ -271,7 +415,7 @@ BasicString<CharT>& BasicString<CharT>::operator+=(const ValueType* str)
 template <typename CharT>
 BasicString<CharT>& BasicString<CharT>::operator+=(const BasicString& str)
 {
-   if (Size() + str.Size() < m_capacity) {
+   if (Size() + str.Size() < m_layout.GetCapacity()) {
       Reserve(Size() + str.Size());
    }
 
@@ -293,91 +437,91 @@ BasicString<CharT>& BasicString<CharT>::operator+=(CharT ch)
 template <typename CharT>
 inline typename BasicString<CharT>::Reference BasicString<CharT>::operator[](SizeType idx)
 {
-   return *(m_pBegin + idx);
+   return *(m_layout.GetBeginPtr() + idx);
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::ConstReference BasicString<CharT>::operator[](SizeType idx) const
 {
-   return *(m_pBegin + idx);
+   return *(m_layout.GetBeginPtr() + idx);
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::Reference BasicString<CharT>::Front()
 {
-   return *m_pBegin;
+   return *m_layout.GetBeginPtr();
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::ConstReference BasicString<CharT>::Front() const
 {
-   return *m_pBegin;
+   return *m_layout.GetBeginPtr();
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::Reference BasicString<CharT>::Back()
 {
-   return *(m_pEnd - 1);
+   return *(m_layout.GetEndPtr() - 1);
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::ConstReference BasicString<CharT>::Back() const
 {
-   return *(m_pEnd - 1);
+   return *(m_layout.GetEndPtr() - 1);
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::Pointer BasicString<CharT>::Data()
 {
-   return m_pBegin;
+   return m_layout.GetBeginPtr();
 }
 
 template <typename CharT>
-inline typename BasicString<CharT>::Pointer BasicString<CharT>::Data() const
+inline typename BasicString<CharT>::ConstPointer BasicString<CharT>::Data() const
 {
-   return m_pBegin;
+   return m_layout.GetBeginPtr();
 }
 
 template <typename CharT>
 inline const typename BasicString<CharT>::ValueType* BasicString<CharT>::CStr() const
 {
-   return m_pBegin;
+   return m_layout.GetBeginPtr();
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::Iterator BasicString<CharT>::Begin()
 {
-   return m_pBegin;
+   return m_layout.GetBeginPtr();
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::Iterator BasicString<CharT>::End()
 {
-   return m_pEnd;
+   return m_layout.GetEndPtr();
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::ConstIterator BasicString<CharT>::Begin() const
 {
-   return m_pBegin;
+   return m_layout.GetBeginPtr();
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::ConstIterator BasicString<CharT>::End() const
 {
-   return m_pEnd;
+   return m_layout.GetEndPtr();
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::ConstIterator BasicString<CharT>::CBegin() const
 {
-   return m_pBegin;
+   return m_layout.GetBeginPtr();
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::ConstIterator BasicString<CharT>::CEnd() const
 {
-   return m_pEnd;
+   return m_layout.GetEndPtr();
 }
 
 template <typename CharT>
@@ -419,25 +563,25 @@ inline typename BasicString<CharT>::ConstReverseIterator BasicString<CharT>::CRE
 template <typename CharT>
 inline bool BasicString<CharT>::Empty() const
 {
-   return m_pBegin == m_pEnd;
+   return m_layout.GetSize() == 0;
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::SizeType BasicString<CharT>::Size() const
 {
-   return m_pEnd - m_pBegin;
+   return m_layout.GetSize();
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::SizeType BasicString<CharT>::Capacity() const
 {
-   return m_capacity;
+   return m_layout.GetCapacity();
 }
 
 template <typename CharT>
 inline void BasicString<CharT>::Reserve(SizeType newCap)
 {
-   if (newCap <= m_capacity) {
+   if (newCap <= m_layout.GetCapacity()) {
       return;
    }
 
@@ -453,7 +597,7 @@ inline void BasicString<CharT>::Resize(SizeType num)
 
    if (Size() < num) {
       Reserve(num);
-      m_pEnd += num - Size();
+      m_layout.IncrementSize(num - Size());
       return;
    }
 
@@ -468,7 +612,7 @@ inline void BasicString<CharT>::Resize(SizeType num)
 template <typename CharT>
 inline void BasicString<CharT>::Clear()
 {
-   while (m_pEnd != m_pBegin) {
+   while (Size() > 0) {
       PopBack();
    }
 }
@@ -478,7 +622,8 @@ inline void BasicString<CharT>::PushBack(ValueType ch)
 {
    tryExpandDataStorage();
 
-   Allocator().construct(m_pEnd++, ch);
+   *(m_layout.GetEndPtr()) = ch;
+   m_layout.IncrementSize();
 }
 
 template <typename CharT>
@@ -488,7 +633,7 @@ inline BasicString<CharT>& BasicString<CharT>::AppendVSprintf(const ValueType* p
    if (formattedStrLen > 0) {
       int oldSize = Size();
       Resize(oldSize + formattedStrLen);
-      vsnprintf(m_pBegin + oldSize, formattedStrLen + 1, pFormat, args);
+      vsnprintf(m_layout.GetBeginPtr() + oldSize, formattedStrLen + 1, pFormat, args);
    }
 
    return *this;
@@ -508,29 +653,27 @@ inline BasicString<CharT>& BasicString<CharT>::AppendSprintf(const ValueType* pF
 template <typename CharT>
 inline typename BasicString<CharT>::Iterator BasicString<CharT>::Insert(const Iterator& pos, ValueType ch)
 {
-   const SizeType idx = pos - m_pBegin;
+   const SizeType idx = pos - m_layout.GetBeginPtr();
 
    tryExpandDataStorage();
 
-   std::memmove(&m_pBegin[idx + 1], &m_pBegin[idx], (Size() - idx) * sizeof(ValueType));
-   Allocator().construct(m_pBegin + idx, ch);
+   std::memmove(&m_layout.GetBeginPtr()[idx + 1], &m_layout.GetBeginPtr()[idx], (Size() - idx) * sizeof(ValueType));
+   m_layout.GetBeginPtr()[idx] = ch;
 
-   return m_pBegin + idx;
+   return m_layout.GetBeginPtr() + idx;
 }
 
 template <typename CharT>
 inline void BasicString<CharT>::PopBack()
 {
-   Allocator().destroy(--m_pEnd);
+   m_layout.DecrementSize();
 }
 
 template <typename CharT>
 inline typename BasicString<CharT>::Iterator BasicString<CharT>::Erase(const Iterator& pos)
 {
-   Allocator().destroy(pos);
-
-   --m_pEnd;
-   std::memmove(pos, pos + 1, (m_pEnd - pos) * sizeof(ValueType));
+   m_layout.DecrementSize();
+   std::memmove(pos, pos + 1, (m_layout.GetEndPtr() - pos) * sizeof(ValueType));
 
    return pos;
 }
@@ -539,7 +682,7 @@ template <typename CharT>
 inline typename BasicString<CharT>::SizeType BasicString<CharT>::Find(ValueType ch, SizeType pos) const
 {
    for (int i = pos; i < Size(); ++i) {
-      if (m_pBegin[i] == ch) {
+      if (*(m_layout.GetBeginPtr() + i) == ch) {
          return static_cast<SizeType>(i);
       }
    }
@@ -565,7 +708,7 @@ inline typename BasicString<CharT>::SizeType BasicString<CharT>::Find(const Valu
             return NPos;
          }
 
-         if (m_pBegin[i + j] != rawStr[j]) {
+         if (m_layout.GetBeginPtr()[i + j] != rawStr[j]) {
             break;
          }
 
@@ -581,7 +724,7 @@ inline typename BasicString<CharT>::SizeType BasicString<CharT>::RFind(ValueType
 {
    int i = pos == NPos ? Size() - 1 : pos;
    for (; i >= 0; --i) {
-      if (m_pBegin[i] == ch) {
+      if (m_layout.GetBeginPtr()[i] == ch) {
          return static_cast<SizeType>(i);
       }
    }
@@ -603,7 +746,7 @@ inline BasicString<CharT> BasicString<CharT>::Substr(SizeType pos, SizeType coun
    str.Reserve(end - pos);
 
    for (int i = pos; i < end; ++i) {
-      str += m_pBegin[i];
+      str += m_layout.GetBeginPtr()[i];
    }
 
    return str;
@@ -612,25 +755,15 @@ inline BasicString<CharT> BasicString<CharT>::Substr(SizeType pos, SizeType coun
 template <typename CharT>
 void BasicString<CharT>::tryExpandDataStorage()
 {
-   if (Size() == m_capacity) {
-      expandDataStorage(m_capacity == 0 ? 1 : m_capacity * GROW_RATIO);
+   if (Size() == m_layout.GetCapacity()) {
+      expandDataStorage(m_layout.GetCapacity() * GROW_RATIO);
    }
 }
 
 template <typename CharT>
 void BasicString<CharT>::expandDataStorage(SizeType newCapacity)
 {
-   ValueType* newData = Allocator().allocate(newCapacity + 1);
-   std::memset(newData + Size(), ValueType(), newCapacity - Size() + 1);
-   std::memcpy(newData, m_pBegin, Size() * sizeof(ValueType));
-
-   if (m_capacity > 0) {
-      Allocator().deallocate(m_pBegin, m_capacity + 1);
-   }
-
-   m_pEnd = newData + Size();
-   m_pBegin = newData;
-   m_capacity = newCapacity;
+   m_layout.ExpandDataStorage(newCapacity);
 }
 
 /*Global operators*/
@@ -788,6 +921,72 @@ std::basic_istream<CharT>& Getline(std::basic_istream<CharT>& is, BasicString<Ch
 
 using String = BasicString<char>;
 using WString = BasicString<wchar_t>;
+
+/*Number conversations*/
+
+inline int Stoi(const String& str)
+{
+   int num = 0;
+   const int retCode = sscanf_s(str.CStr(), "%d", &num);
+   Assert(retCode > 0, "Error occurred while getting number from str: [%s]", str.CStr());
+   return num;
+}
+
+inline long Stol(const String& str)
+{
+   long num = 0;
+   const int retCode = sscanf_s(str.CStr(), "%ld", &num);
+   Assert(retCode > 0, "Error occurred while getting number from str: [%s]", str.CStr());
+   return num;
+}
+
+inline long long Stoll(const String& str)
+{
+   long long num = 0;
+   const int retCode = sscanf_s(str.CStr(), "%lld", &num);
+   Assert(retCode > 0, "Error occurred while getting number from str: [%s]", str.CStr());
+   return num;
+}
+
+inline unsigned long Stoul(const String& str)
+{
+   unsigned long num = 0;
+   const int retCode = sscanf_s(str.CStr(), "%lu", &num);
+   Assert(retCode > 0, "Error occurred while getting number from str: [%s]", str.CStr());
+   return num;
+}
+
+inline unsigned long long Stoull(const String& str)
+{
+   unsigned long long num = 0;
+   const int retCode = sscanf_s(str.CStr(), "%llu", &num);
+   Assert(retCode > 0, "Error occurred while getting number from str: [%s]", str.CStr());
+   return num;
+}
+
+inline float Stof(const String& str)
+{
+   float num = 0;
+   const int retCode = sscanf_s(str.CStr(), "%f", &num);
+   Assert(retCode > 0, "Error occurred while getting number from str: [%s]", str.CStr());
+   return num;
+}
+
+inline double Stod(const String& str)
+{
+   double num = 0;
+   const int retCode = sscanf_s(str.CStr(), "%lf", &num);
+   Assert(retCode > 0, "Error occurred while getting number from str: [%s]", str.CStr());
+   return num;
+}
+
+inline long double Stold(const String& str)
+{
+   long double num = 0;
+   const int retCode = sscanf_s(str.CStr(), "%Lf", &num);
+   Assert(retCode > 0, "Error occurred while getting number from str: [%s]", str.CStr());
+   return num;
+}
 
 /*String global methods*/
 

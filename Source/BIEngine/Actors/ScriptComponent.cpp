@@ -70,7 +70,7 @@ bool ScriptComponent::Init(tinyxml2::XMLElement* pData)
    tinyxml2::XMLElement* pNumberDataElement = pData->FirstChildElement("NumberData");
    if (pNumberDataElement) {
       for (const tinyxml2::XMLAttribute* pAttribute = pNumberDataElement->FirstAttribute(); pAttribute != nullptr; pAttribute = pAttribute->Next()) {
-         float val = std::atof(pAttribute->Value());
+         const float val = Stof(pAttribute->Value());
          m_numVars.PushBack(Pair<String, float>(pAttribute->Name(), val));
          m_pyObject.attr(pAttribute->Name()) = val;
       }

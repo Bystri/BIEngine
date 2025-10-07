@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
          BIEngine::g_pApp->m_options.hostAddress = argv[i + 1];
       }
       if (std::memcmp(argv[i], "-hp", 3) == 0) {
-         BIEngine::g_pApp->m_options.hostPort = std::atoi(argv[i + 1]);
+         BIEngine::g_pApp->m_options.hostPort = BIEngine::Stoi(argv[i + 1]);
       }
    }
 

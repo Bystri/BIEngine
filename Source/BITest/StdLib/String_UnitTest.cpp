@@ -3,7 +3,7 @@
 #include "../../BIEngine/StdLib/String.h"
 
 TEST(String, PushBack) {
-	constexpr int valsToAdd = 10;
+	constexpr int valsToAdd = 30;
 
 	BIEngine::String str;
 
@@ -23,7 +23,7 @@ TEST(String, PushBack) {
 }
 
 TEST(String, Reserve) {
-	constexpr int valsToAdd = 10;
+	constexpr int valsToAdd = 30;
 
 	BIEngine::String str;
 	str.Reserve(valsToAdd);
@@ -41,7 +41,7 @@ TEST(String, Reserve) {
 }
 
 TEST(String, ModifyElement) {
-	constexpr int valsToAdd = 10;
+	constexpr int valsToAdd = 30;
 	constexpr char testVal = 'a';
 
 	BIEngine::String str;
@@ -59,7 +59,7 @@ TEST(String, ModifyElement) {
 }
 
 TEST(String, CapacityChanging) {
-	constexpr int valsToAdd = 10;
+	constexpr int valsToAdd = 30;
 
 	BIEngine::String str;
 	const BIEngine::SizeT initialCapacity = str.Capacity();
@@ -75,7 +75,7 @@ TEST(String, CapacityChanging) {
 }
 
 TEST(String, CopyCtor) {
-	constexpr int valsNum = 10;
+	constexpr int valsNum = 30;
 
 	BIEngine::String str1;
 	
@@ -97,7 +97,7 @@ TEST(String, CopyCtor) {
 }
 
 TEST(String, CopyAssignment) {
-	constexpr int valsNum = 10;
+	constexpr int valsNum = 30;
 
 	BIEngine::String str1;
 
@@ -119,8 +119,7 @@ TEST(String, CopyAssignment) {
 }
 
 TEST(String, MoveCtor) {
-	constexpr int valsNum = 10;
-
+	constexpr int valsNum = 30;
 	BIEngine::String str1;
 
 	{
@@ -141,7 +140,7 @@ TEST(String, MoveCtor) {
 }
 
 TEST(String, MoveAssignment) {
-	constexpr int valsNum = 10;
+	constexpr int valsNum = 30;
 
 	BIEngine::String str2;
 
@@ -167,7 +166,7 @@ TEST(String, MoveAssignment) {
 }
 
 TEST(String, NCtor) {
-	constexpr int valsToAdd = 10;
+	constexpr int valsToAdd = 30;
 
 	BIEngine::String str(valsToAdd);
 
@@ -179,7 +178,7 @@ TEST(String, NCtor) {
 }
 
 TEST(String, NCopyCtor) {
-	constexpr int numVals = 10;
+	constexpr int numVals = 30;
 	constexpr char valToAdd = 'b';
 
 	BIEngine::String str(numVals, valToAdd);
@@ -192,7 +191,7 @@ TEST(String, NCopyCtor) {
 }
 
 TEST(String, CtorCStr) {
-	const char* rawStr = "test string for string";
+	const char* rawStr = "long test string for string";
 	int rawStrSize = 0;
 	while (rawStr[rawStrSize++] != '\0')
 	{
@@ -210,7 +209,7 @@ TEST(String, CtorCStr) {
 }
 
 TEST(String, NCtorCStr) {
-	const char* rawStr = "test string for string";
+	const char* rawStr = "long test string for string";
 	constexpr int nToAdd = 11;
 
 	BIEngine::String str(rawStr, nToAdd);
@@ -289,7 +288,7 @@ TEST(String, InitializerList) {
 }
 
 TEST(String, Iterators) {
-	constexpr int valsNum = 10;
+	constexpr int valsNum = 30;
 
 	BIEngine::String str;
 
@@ -323,7 +322,7 @@ TEST(String, Iterators) {
 }
 
 TEST(String, PopBack) {
-	constexpr int valsNum = 10;
+	constexpr int valsNum = 30;
 
 	BIEngine::String str;
 
@@ -347,7 +346,7 @@ TEST(String, PopBack) {
 }
 
 TEST(String, Insert) {
-	constexpr int valsNum = 10;
+	constexpr int valsNum = 30;
 
 	BIEngine::String str;
 
@@ -391,7 +390,7 @@ TEST(String, AppendVSprintf) {
 }
 
 TEST(String, Erase) {
-	constexpr int valsNum = 10;
+	constexpr int valsNum = 30;
 
 	BIEngine::String str;
 
@@ -420,7 +419,7 @@ TEST(String, Erase) {
 
 TEST(String, ResizeGrow) {
 	constexpr int valsNum = 10;
-	constexpr int valsAfterResizeNum = 20;
+	constexpr int valsAfterResizeNum = 30;
 
 	BIEngine::String str;
 
@@ -643,4 +642,68 @@ TEST(String, Getline) {
 
 	EXPECT_STREQ(str1.CStr(), "abc");
 	EXPECT_STREQ(str2.CStr(), "123");
+}
+
+TEST(String, Stoi) {
+	BIEngine::String str("-12345");
+
+	const int num = BIEngine::Stoi(str);
+
+	EXPECT_EQ(num, -12345);
+}
+
+TEST(String, Stol) {
+	BIEngine::String str("-12345");
+
+	const long num = BIEngine::Stoi(str);
+
+	EXPECT_EQ(num, -12345);
+}
+
+TEST(String, Stoll) {
+	BIEngine::String str("-12345");
+
+	const long long num = BIEngine::Stoi(str);
+
+	EXPECT_EQ(num, -12345);
+}
+
+TEST(String, Stoul) {
+	BIEngine::String str("12345");
+
+	const unsigned long num = BIEngine::Stoi(str);
+
+	EXPECT_EQ(num, 12345);
+}
+
+TEST(String, Stoull) {
+	BIEngine::String str("12345");
+
+	const unsigned long long num = BIEngine::Stoi(str);
+
+	EXPECT_EQ(num, 12345);
+}
+
+TEST(String, Stof) {
+	BIEngine::String str("123.456");
+
+	const float num = BIEngine::Stof(str);
+
+	EXPECT_FLOAT_EQ(num, 123.456f);
+}
+
+TEST(String, Stod) {
+	BIEngine::String str("123.456");
+
+	const double num = BIEngine::Stod(str);
+
+	EXPECT_EQ(num, 123.456);
+}
+
+TEST(String, Stold) {
+	BIEngine::String str("123.456");
+
+	long double num = BIEngine::Stold(str);
+
+	EXPECT_EQ(num, 123.456);
 }
