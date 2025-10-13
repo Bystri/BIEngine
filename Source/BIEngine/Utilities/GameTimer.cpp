@@ -57,7 +57,7 @@ void GameTimer::Stop()
 void GameTimer::Tick()
 {
    if (m_stopped) {
-      m_deltaTime = 0.0;
+      m_deltaTime = 0.0f;
       return;
    }
 
@@ -67,8 +67,14 @@ void GameTimer::Tick()
    m_deltaTime = (m_currTime - m_prevTime);
    m_prevTime = m_currTime;
 
-   if (m_deltaTime < 0.0) {
-      m_deltaTime = 0.0;
+   if (m_deltaTime < 0.0f) {
+      m_deltaTime = 0.0f;
+   }
+
+   constexpr float MAX_DELTA_TIME = 0.05f;
+
+   if (m_deltaTime > MAX_DELTA_TIME) {
+      m_deltaTime = MAX_DELTA_TIME;
    }
 }
 

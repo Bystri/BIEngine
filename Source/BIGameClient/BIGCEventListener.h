@@ -6,6 +6,7 @@
 #include "../BIEngine/EventManager/EventManager.h"
 #include "../BIEngine/Actors/Actor.h"
 #include "../BIGame/BIEventListener.h"
+#include "BIGameController.h"
 
 class EvtData_OnKeyEvent : public BIEngine::BaseEventData {
 public:
@@ -255,6 +256,100 @@ public:
 private:
    uint32_t m_playerId = -1;
    BIEngine::IPointerHandler::Point m_pointerPos = BIEngine::IPointerHandler::Point{0.0f, 0.0f};
+};
+
+class EvtData_OnPointerButtonDown : public BIEngine::BaseEventData {
+public:
+   static const BIEngine::EventType sk_EventType;
+
+   virtual const BIEngine::EventType& GetEventType() const
+   {
+      return sk_EventType;
+   }
+
+   EvtData_OnPointerButtonDown() = default;
+
+   EvtData_OnPointerButtonDown(uint32_t playerId, const BIEngine::IPointerHandler::Point& pointerPos, const BIGameController::MouseButton mouseButton)
+      : m_playerId(playerId), m_pointerPos(pointerPos), m_mouseButton(mouseButton)
+   {
+   }
+
+   uint32_t GetPlayerId() const
+   {
+      return m_playerId;
+   }
+
+   const BIEngine::IPointerHandler::Point& GetPointerPos() const
+   {
+      return m_pointerPos;
+   }
+
+   BIGameController::MouseButton GetMouseButton() const
+   {
+      return m_mouseButton;
+   }
+
+   virtual BIEngine::IEventDataPtr Copy() const
+   {
+      return BIEngine::MakeShared<EvtData_OnPointerButtonDown>(m_playerId, m_pointerPos, m_mouseButton);
+   }
+
+   virtual const char* GetName() const
+   {
+      return "EvtData_OnPointerButtonDown";
+   }
+
+private:
+   uint32_t m_playerId = -1;
+   BIEngine::IPointerHandler::Point m_pointerPos = BIEngine::IPointerHandler::Point{0.0f, 0.0f};
+   BIGameController::MouseButton m_mouseButton;
+};
+
+class EvtData_OnPointerButtonUp : public BIEngine::BaseEventData {
+public:
+   static const BIEngine::EventType sk_EventType;
+
+   virtual const BIEngine::EventType& GetEventType() const
+   {
+      return sk_EventType;
+   }
+
+   EvtData_OnPointerButtonUp() = default;
+
+   EvtData_OnPointerButtonUp(uint32_t playerId, const BIEngine::IPointerHandler::Point& pointerPos, const BIGameController::MouseButton mouseButton)
+      : m_playerId(playerId), m_pointerPos(pointerPos), m_mouseButton(mouseButton)
+   {
+   }
+
+   uint32_t GetPlayerId() const
+   {
+      return m_playerId;
+   }
+
+   const BIEngine::IPointerHandler::Point& GetPointerPos() const
+   {
+      return m_pointerPos;
+   }
+
+   BIGameController::MouseButton GetMouseButton() const
+   {
+      return m_mouseButton;
+   }
+
+   virtual BIEngine::IEventDataPtr Copy() const
+   {
+      return BIEngine::MakeShared<EvtData_OnPointerButtonUp>(m_playerId, m_pointerPos, m_mouseButton);
+   }
+
+   virtual const char* GetName() const
+   {
+      return "EvtData_OnPointerButtonUp";
+   }
+
+private:
+   uint32_t m_playerId = -1;
+   BIEngine::IPointerHandler::Point m_pointerPos = BIEngine::IPointerHandler::Point{0.0f, 0.0f};
+   BIGameController::MouseButton m_mouseButton;
 };
 
 void BIGCRegisterEvents();

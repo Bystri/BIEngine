@@ -37,9 +37,9 @@ bool WorldRenderPass::InitInternal()
    return true;
 }
 
-void WorldRenderPass::PreRender(Scene* const pScene)
+void WorldRenderPass::PreRender(Scene* const pScene, const GameTimer& gt)
 {
-   GraphicsRenderPass::PreRender(pScene);
+   GraphicsRenderPass::PreRender(pScene, gt);
 
    pScene->GetRenderer()->SetRenderTarget(m_multisamplingFramebuffer);
 
@@ -48,16 +48,18 @@ void WorldRenderPass::PreRender(Scene* const pScene)
    pScene->GetRenderer()->Clear(RenderDevice::ClearFlag::COLOR | RenderDevice::ClearFlag::DEPTH | RenderDevice::ClearFlag::STENCIL, CLEAR_COLOR);
 }
 
-void WorldRenderPass::PostRender(Scene* const pScene)
+void WorldRenderPass::PostRender(Scene* const pScene, const GameTimer& gt)
 {
-   DebugDraw::Draw();
+#ifndef _RETAIL
+   DebugDraw::Draw(gt);
+#endif
 
    Blit(m_multisamplingFramebuffer, m_intermediateFramebuffer, pScene->GetRenderer()->GetScreenWidth(), pScene->GetRenderer()->GetScreenHeight());
 
    pScene->GetRenderer()->SetRenderTarget(m_pRenderTarget);
    m_pDefaultPostProcessor->Use(pScene->GetRenderer().Get(), m_colorIntermediateBuffer);
 
-   GraphicsRenderPass::PostRender(pScene);
+   GraphicsRenderPass::PostRender(pScene, gt);
 }
 
 } // namespace BIEngine

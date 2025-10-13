@@ -20,6 +20,7 @@ public:
    void Term();
 
    void OnPointerMoveDelegate(BIEngine::IEventDataPtr pEventData);
+   void OnPointerButtonUpDelegate(BIEngine::IEventDataPtr pEventData);
    void OnKeyDownDelegate(BIEngine::IEventDataPtr pEventData);
    void OnKeyUpDelegate(BIEngine::IEventDataPtr pEventData);
 
@@ -27,6 +28,7 @@ public:
 
 private:
    BIEngine::EventManager::DelegateHandler m_onPointerMoveDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_onPointerButtonUpDelegateHandler;
    BIEngine::EventManager::DelegateHandler m_onKeyDownDelegateHandler;
    BIEngine::EventManager::DelegateHandler m_onKeyUpDelegateHandler;
 

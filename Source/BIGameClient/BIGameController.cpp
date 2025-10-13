@@ -28,14 +28,24 @@ static void gameControllerClearMouseButtonStatus(unsigned char& statuses, BIGame
 
 bool BIGameController::OnPointerButtonDown(const Point& mousePos, const int radius, int buttonCode)
 {
-   gameControllerSetMouseButtonStatus(m_mouseButtonsStatus, static_cast<BIGameController::MouseButton>(buttonCode));
+   BIGameController::MouseButton button = static_cast<BIGameController::MouseButton>(buttonCode);
+
+   gameControllerSetMouseButtonStatus(m_mouseButtonsStatus, button);
+
+   BIEngine::SharedPtr<EvtData_OnPointerButtonDown> pEvent = BIEngine::MakeShared<EvtData_OnPointerButtonDown>(0, m_currentPointerPos, button);
+   BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
    return true;
 }
 
 bool BIGameController::OnPointerButtonUp(const Point& mousePos, const int radius, int buttonCode)
 {
-   gameControllerClearMouseButtonStatus(m_mouseButtonsStatus, static_cast<BIGameController::MouseButton>(buttonCode));
+   BIGameController::MouseButton button = static_cast<BIGameController::MouseButton>(buttonCode);
+
+   gameControllerClearMouseButtonStatus(m_mouseButtonsStatus, button);
+
+   BIEngine::SharedPtr<EvtData_OnPointerButtonUp> pEvent = BIEngine::MakeShared<EvtData_OnPointerButtonUp>(0, m_currentPointerPos, button);
+   BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
    return true;
 }

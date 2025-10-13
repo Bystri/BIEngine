@@ -1,6 +1,7 @@
 #include "DebugDraw.h"
 
 #include "../StdLib/Queue.h"
+#include "../Renderer/MeshGeometryGenerator.h"
 
 namespace BIEngine {
 
@@ -49,17 +50,14 @@ class DbgLine {
    DynamicArray<float> vertices;
    glm::vec3 startPoint;
    glm::vec3 endPoint;
-   glm::mat4 MVP;
    ColorRgba lineColor;
 
 public:
    DbgLine(const glm::vec3& start, const glm::vec3& end)
    {
-
       startPoint = start;
       endPoint = end;
       lineColor = COLOR_WHITE;
-      MVP = glm::mat4(1.0f);
 
       vertices = {
          start.x,
@@ -110,13 +108,12 @@ public:
 class DbgPoly {
    unsigned int VBO, VAO;
    DynamicArray<glm::vec3> m_vertices;
-   glm::mat4 m_MVP;
    ColorRgba m_color;
 
 public:
    DbgPoly(const DynamicArray<glm::vec3>& verts)
    {
-      m_vertices = verts;
+      m_vertices.Reserve(verts.Size() * 3);
 
       for (int i = 1; i < verts.Size() - 1; ++i) {
          m_vertices.PushBack(verts[0]);
@@ -125,7 +122,6 @@ public:
       }
 
       m_color = COLOR_WHITE;
-      m_MVP = glm::mat4(1.0f);
 
       glGenVertexArrays(1, &VAO);
       glGenBuffers(1, &VBO);
@@ -164,73 +160,174 @@ public:
    }
 };
 
-struct LineInfo {
-   LineInfo()
-      : fromPoint(), toPoint(), color()
+class DbgSphere {
+   unsigned int VBO, EBO, VAO;
+   DynamicArray<glm::vec3> m_vertices;
+   DynamicArray<unsigned int> m_indices;
+   ColorRgba m_color;
+
+public:
+   DbgSphere(const glm::vec3 center, const float radius)
    {
+      const Mesh sphereMesh = MeshGeometryGenerator::CreateSphere(radius, 8.0f, 8.0f);
+
+      const DynamicArray<Vertex>& sphereVerts = sphereMesh.GetVertices();
+      for (int i = 0; i < sphereVerts.Size(); ++i) {
+         m_vertices.PushBack(sphereVerts[i].Position + center);
+      }
+
+      const DynamicArray<unsigned int>& sphereIndices = sphereMesh.GetIndices();
+      for (int i = 0; i < sphereIndices.Size(); ++i) {
+         m_indices.PushBack(sphereIndices[i]);
+      }
+
+      m_color = COLOR_WHITE;
+
+      glGenVertexArrays(1, &VAO);
+      glGenBuffers(1, &VBO);
+      glGenBuffers(1, &EBO);
+      glBindVertexArray(VAO);
+
+      glBindBuffer(GL_ARRAY_BUFFER, VBO);
+      glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * m_vertices.Size(), m_vertices.Data(), GL_STATIC_DRAW);
+
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * m_indices.Size(), m_indices.Data(), GL_STATIC_DRAW);
+
+      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+      glEnableVertexAttribArray(0);
+
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+      glBindVertexArray(0);
    }
 
+   ~DbgSphere()
+   {
+      glDeleteBuffers(1, &EBO);
+      glDeleteBuffers(1, &VBO);
+      glDeleteVertexArrays(1, &VAO);
+   }
+
+   int SetColor(const ColorRgba& color)
+   {
+      m_color = color;
+      return 1;
+   }
+
+   int Draw()
+   {
+      g_pDebugShader->Use();
+      g_pDebugShader->SetColorRgba("color", m_color, false);
+
+      glBindVertexArray(VAO);
+      glDrawElements(GL_TRIANGLES, m_indices.Size(), GL_UNSIGNED_INT, 0);
+      return 1;
+   }
+};
+
+struct LineInfo {
    glm::vec3 fromPoint;
    glm::vec3 toPoint;
    ColorRgba color;
+   float time = 0.0f;
 };
 
-Queue<LineInfo> m_drawReqQueue;
+DynamicArray<LineInfo> m_drawReqQueue;
 
 struct PolyInfo {
-   PolyInfo()
-      : verts(), color()
-   {
-   }
-
    DynamicArray<glm::vec3> verts;
    ColorRgba color;
+   float time = 0.0f;
 };
 
-Queue<PolyInfo> m_drawPolyQueue;
+DynamicArray<PolyInfo> m_drawPolyQueue;
 
-void DebugDraw::Line(const glm::vec3& fromPoint, const glm::vec3& toPoint, const ColorRgba& color)
+struct SphereInfo {
+   glm::vec3 center;
+   float radius = 0.0f;
+   ColorRgba color;
+   float time = 0.0f;
+};
+
+DynamicArray<SphereInfo> m_drawSphereQueue;
+
+void DebugDraw::Sphere(const glm::vec3& center, const float radius, const ColorRgba& color, float time)
+{
+   SphereInfo info;
+   info.center = center;
+   info.radius = radius;
+   info.color = color;
+   info.time = time;
+
+   m_drawSphereQueue.PushBack(info);
+}
+
+void DebugDraw::Line(const glm::vec3& fromPoint, const glm::vec3& toPoint, const ColorRgba& color, float time)
 {
    LineInfo info;
    info.fromPoint = fromPoint;
    info.toPoint = toPoint;
    info.color = color;
+   info.time = time;
 
-   m_drawReqQueue.Push(info);
+   m_drawReqQueue.PushBack(info);
 }
 
-void DebugDraw::Poly(const DynamicArray<glm::vec3>& verts, const ColorRgba& color)
+void DebugDraw::Poly(const DynamicArray<glm::vec3>& verts, const ColorRgba& color, float time)
 {
    PolyInfo poly;
    poly.verts = verts;
    poly.color = color;
+   poly.time = time;
 
-   m_drawPolyQueue.Push(poly);
+   m_drawPolyQueue.PushBack(poly);
 }
 
-void DebugDraw::Draw()
+void DebugDraw::Draw(const GameTimer& gt)
 {
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-   while (!m_drawPolyQueue.Empty()) {
-      PolyInfo info = m_drawPolyQueue.Front();
-      m_drawPolyQueue.Pop();
+   for (int i = m_drawSphereQueue.Size() - 1; i >= 0; --i) {
+      SphereInfo& info = m_drawSphereQueue[i];
+
+      DbgSphere sphere(info.center, info.radius);
+
+      sphere.SetColor(info.color);
+      sphere.Draw();
+
+      info.time -= gt.DeltaTime();
+      if (info.time <= 0.0f) {
+         m_drawSphereQueue.Erase(m_drawSphereQueue.Begin() + i);
+      }
+   }
+
+   for (int i = m_drawPolyQueue.Size() - 1; i >= 0; --i) {
+      PolyInfo& info = m_drawPolyQueue.Front();
 
       DbgPoly poly(info.verts);
 
       poly.SetColor(info.color);
       poly.Draw();
+
+      info.time -= gt.DeltaTime();
+      if (info.time <= 0.0f) {
+         m_drawPolyQueue.Erase(m_drawPolyQueue.Begin() + i);
+      }
    }
 
-   while (!m_drawReqQueue.Empty()) {
-      LineInfo info = m_drawReqQueue.Front();
-      m_drawReqQueue.Pop();
+   for (int i = m_drawReqQueue.Size() - 1; i >= 0; --i) {
+      LineInfo& info = m_drawReqQueue.Front();
 
       DbgLine line(info.fromPoint, info.toPoint);
 
       line.SetColor(info.color);
       line.Draw();
+
+      info.time -= gt.DeltaTime();
+      if (info.time <= 0.0f) {
+         m_drawReqQueue.Erase(m_drawReqQueue.Begin() + i);
+      }
    }
 
    glDisable(GL_BLEND);

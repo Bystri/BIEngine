@@ -17,14 +17,14 @@ public:
 
    void AddTechnique(SharedPtr<IGraphicsTechnique> pTechnique);
 
-   void OnRender(Scene* const pScene, RenderItemsStorage* const pStorage);
+   void OnRender(Scene* const pScene, const GameTimer& gt, RenderItemsStorage* const pStorage);
 
 protected:
    virtual bool InitInternal() { return true; }
 
-   virtual void PreRender(Scene* const pScene) {}
+   virtual void PreRender(Scene* const pScene, const GameTimer& gt) {}
 
-   virtual void PostRender(Scene* const pScene) {}
+   virtual void PostRender(Scene* const pScene, const GameTimer& gt) {}
 
 private:
    DynamicArray<SharedPtr<IGraphicsTechnique>> m_graphicsTechniques;

@@ -21,9 +21,9 @@ public:
 protected:
    virtual bool InitInternal();
 
-   virtual void PreRender(Scene* const pScene) override;
+   virtual void PreRender(Scene* const pScene, const GameTimer& gt) override;
 
-   virtual void PostRender(Scene* const pScene) override;
+   virtual void PostRender(Scene* const pScene, const GameTimer& gt) override;
 
 private:
    int m_screenWidth;
