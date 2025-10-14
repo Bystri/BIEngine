@@ -215,4 +215,59 @@ private:
    PlayerId m_playerId = PlayerManager::INVALID_PLAYER_ID;
 };
 
+class EvtData_PlayerCommandMoveTo : public BIEngine::BaseEventData {
+public:
+   static const BIEngine::EventType sk_EventType;
+
+   EvtData_PlayerCommandMoveTo()
+      : m_playerId(PlayerManager::INVALID_PLAYER_ID), m_pos()
+   {
+   }
+
+   EvtData_PlayerCommandMoveTo(PlayerId playerId, const glm::vec3& pos)
+      : m_playerId(playerId), m_pos(pos)
+   {
+   }
+
+   virtual const BIEngine::EventType& GetEventType(void) const
+   {
+      return sk_EventType;
+   }
+
+   virtual BIEngine::IEventDataPtr Copy(void) const
+   {
+      return BIEngine::MakeShared<EvtData_PlayerCommandMoveTo>(m_playerId, m_pos);
+   }
+
+   virtual const char* GetName(void) const
+   {
+      return "EvtData_PlayerCommandMoveTo";
+   }
+
+   virtual void Write(BIEngine::OutputMemoryBitStream& out) const override
+   {
+      Serialize(out, m_playerId);
+      Serialize(out, m_pos.x);
+      Serialize(out, m_pos.y);
+      Serialize(out, m_pos.z);
+   }
+
+   virtual void Read(BIEngine::InputMemoryBitStream& in) override
+   {
+      Deserialize(in, m_playerId);
+      Deserialize(in, m_pos.x);
+      Deserialize(in, m_pos.y);
+      Deserialize(in, m_pos.z);
+   }
+
+   PlayerId GetPlayerId() const { return m_playerId; };
+
+   const glm::vec3& GetPosToMove() const { return m_pos; }
+
+private:
+   PlayerId m_playerId;
+
+   glm::vec3 m_pos;
+};
+
 void BIRegisterEvents();

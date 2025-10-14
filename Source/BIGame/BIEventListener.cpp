@@ -5,10 +5,12 @@ const BIEngine::EventType EvtData_PlayerActor_Created::sk_EventType(0x526c7bc2);
 const BIEngine::EventType EvtData_Move::sk_EventType(0xa29da161);
 const BIEngine::EventType EvtData_Turn::sk_EventType(0x23dfd957);
 const BIEngine::EventType EvtData_PrimaryAttack::sk_EventType(0x5e84fca9);
+const BIEngine::EventType EvtData_PlayerCommandMoveTo::sk_EventType(0x72e6f4b9);
 
 void BIRegisterEvents()
 {
    BIEngine::g_eventFactory.Register<EvtData_Move>(EvtData_Move::sk_EventType);
    BIEngine::g_eventFactory.Register<EvtData_Turn>(EvtData_Turn::sk_EventType);
    BIEngine::g_eventFactory.Register<EvtData_PrimaryAttack>(EvtData_PrimaryAttack::sk_EventType);
+   BIEngine::g_eventFactory.Register<EvtData_PlayerCommandMoveTo>(EvtData_PlayerCommandMoveTo::sk_EventType);
 }

@@ -8,11 +8,13 @@
     <ClCompile Include="..\BIGameServer.cpp" />
     <ClCompile Include="..\BINetworkManagerServer.cpp" />
     <ClCompile Include="..\BIGSEventListener.cpp" />
+    <ClCompile Include="..\PlayerCommandBinderComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGameServer.h" />
     <ClInclude Include="..\BINetworkManagerServer.h" />
     <ClInclude Include="..\BIGSEventListener.h" />
     <ClInclude Include="..\BIGSScriptExports.h" />
+    <ClInclude Include="..\PlayerCommandBinderComponent.h" />
   </ItemGroup>
 </Project>

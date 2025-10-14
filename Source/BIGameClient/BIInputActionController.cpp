@@ -53,6 +53,8 @@ void BIInputActionController::OnPointerButtonUpDelegate(BIEngine::IEventDataPtr 
    const auto raycastInfo = BIEngine::g_pApp->m_pGameLogic->GetGamePhysics3D()->Raycast(m_pCamera->GetPosition(), m_pCamera->GetPosition() + raycastDir * RAYCAST_LENGTH);
    if (raycastInfo.hasHit) {
       BIEngine::DebugDraw::Sphere(raycastInfo.hitPosition, 0.5f, BIEngine::COLOR_GREEN, 5.0f);
+      BIEngine::SharedPtr<EvtData_PlayerCommandMoveTo> pEvent = BIEngine::MakeShared<EvtData_PlayerCommandMoveTo>(m_playerId, raycastInfo.hitPosition);
+      BIEngine::EventManager::Get()->QueueEvent(pEvent);
    }
 }
 

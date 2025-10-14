@@ -8,6 +8,8 @@
 		</CombatControllerComponent>
 		<DamagableComponent>
 	    </DamagableComponent>
+		<PlayerCommandBinderComponent>
+	    </PlayerCommandBinderComponent>
 		<ScriptComponent>
 			<ScriptObject modulePath="PlayerActionBinderComponent" className="PlayerActionBinderComponent"/>
 			<StringData/>
