@@ -218,6 +218,7 @@
     <ClCompile Include="..\BIGSEventListener.cpp" />
     <ClCompile Include="..\BIGameServer.cpp" />
     <ClCompile Include="..\BINetworkManagerServer.cpp" />
+    <ClCompile Include="..\CharacterMovementComponent.cpp" />
     <ClCompile Include="..\PlayerCommandBinderComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -225,6 +226,7 @@
     <ClInclude Include="..\BIGameServer.h" />
     <ClInclude Include="..\BINetworkManagerServer.h" />
     <ClInclude Include="..\BIGSScriptExports.h" />
+    <ClInclude Include="..\CharacterMovementComponent.h" />
     <ClInclude Include="..\PlayerCommandBinderComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

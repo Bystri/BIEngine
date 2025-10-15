@@ -10,6 +10,8 @@
 	    </DamagableComponent>
 		<PlayerCommandBinderComponent>
 	    </PlayerCommandBinderComponent>
+		<CharacterMovementComponent>
+		</CharacterMovementComponent>
 		<ScriptComponent>
 			<ScriptObject modulePath="PlayerActionBinderComponent" className="PlayerActionBinderComponent"/>
 			<StringData/>
@@ -17,11 +19,6 @@
 		</ScriptComponent>
 		<ScriptComponent>
 			<ScriptObject modulePath="CharacterCommands.CharacterCommandMngComponent" className="CharacterCommandMngComponent"/>
-			<StringData/>
-			<NumberData/>
-		</ScriptComponent>
-		<ScriptComponent>
-			<ScriptObject modulePath="Movement.CharacterMovementComponent" className="CharacterMovementComponent"/>
 			<StringData/>
 			<NumberData/>
 		</ScriptComponent>

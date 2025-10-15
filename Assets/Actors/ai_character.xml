@@ -6,6 +6,8 @@
 			  </AnimationComponent>
 			  <LocomotionInfoComponent>
 			  </LocomotionInfoComponent>
+			  <CharacterMovementComponent>
+			  </CharacterMovementComponent>
 			  <ScriptComponent>
 					<ScriptObject modulePath="AiBrainComponent" className="AiBrainComponent"/>
 					<StringData/>
@@ -26,11 +28,6 @@
 					<StringData/>
 					<NumberData/>
 				</ScriptComponent>
-              <ScriptComponent>
-                <ScriptObject modulePath="Movement.CharacterMovementComponent" className="CharacterMovementComponent"/>
-                <StringData/>
-                <NumberData/>
-              </ScriptComponent>
               <NavAgentComponent>
                 <Common radius="0.5" height="1" maxSpeed="3.5" maxAcceleration="8"/>
                 <Steering anticipateTurns="true"/>

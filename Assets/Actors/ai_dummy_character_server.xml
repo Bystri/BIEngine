@@ -9,16 +9,13 @@
 	  <HealthStateComponent>
 	  </HealthStateComponent>
 	  <DamagableComponent>
-	  </DamagableComponent>
+	  </DamagableComponent>'
+	  <CharacterMovementComponent>
+	  </CharacterMovementComponent>
 	  <ScriptComponent>
 		  <ScriptObject modulePath="CharacterCommands.CharacterCommandMngComponent" className="CharacterCommandMngComponent"/>
 		  <StringData/>
 		  <NumberData/>
-	  </ScriptComponent>
-	  <ScriptComponent>
-		<ScriptObject modulePath="Movement.CharacterMovementComponent" className="CharacterMovementComponent"/>
-		<StringData/>
-		<NumberData/>
 	  </ScriptComponent>
 	  <NavAgentComponent>
 		<Common radius="0.5" height="1" maxSpeed="3.5" maxAcceleration="8"/>

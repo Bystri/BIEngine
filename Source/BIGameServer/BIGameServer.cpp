@@ -14,6 +14,7 @@
 #include "BINetworkManagerServer.h"
 #include "BIGSEventListener.h"
 #include "PlayerCommandBinderComponent.h"
+#include "CharacterMovementComponent.h"
 
 int main(int argc, char* argv[])
 {
@@ -88,6 +89,7 @@ bool BIServerGameLogic::Init()
    m_pActorFactory->AddComponentCreator(DamagableComponent::g_CompId, CreateDamagableComponentComponent);
    m_pActorFactory->AddComponentCreator(HealthStateComponent::g_CompId, CreateHealthComponentComponent);
    m_pActorFactory->AddComponentCreator(PlayerCommandBinderComponent::g_CompId, CreatePlayerCommandBinderComponent);
+   m_pActorFactory->AddComponentCreator(CharacterMovementComponent::g_CompId, CreateCharacterMovementComponent);
 
    if (!GameLogic::Init()) {
       return false;
