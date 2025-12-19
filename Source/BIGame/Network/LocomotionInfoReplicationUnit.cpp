@@ -9,13 +9,13 @@ void LocomotionInfoReplicationUnit::Init(BIEngine::SharedPtr<BIEngine::Actor> pO
 
 static bool liRepUnitIsVector2Diff(const glm::vec2& a, const glm::vec2& b)
 {
-   constexpr float EPS = 0.01f;
+   constexpr float EPS = 0.001f;
    return glm::abs(a.x - b.x) > EPS || glm::abs(a.y - b.y) > EPS;
 }
 
 static bool liRepUnitIsVector3Diff(const glm::vec3& a, const glm::vec3& b)
 {
-   constexpr float EPS = 0.01f;
+   constexpr float EPS = 0.001f;
    return glm::abs(a.x - b.x) > EPS || glm::abs(a.y - b.y) > EPS || glm::abs(a.z - b.z) > EPS;
 }
 

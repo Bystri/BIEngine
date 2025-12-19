@@ -12,11 +12,9 @@
 	    </PlayerCommandBinderComponent>
 		<CharacterMovementComponent>
 		</CharacterMovementComponent>
-		<ScriptComponent>
-			<ScriptObject modulePath="PlayerActionBinderComponent" className="PlayerActionBinderComponent"/>
-			<StringData/>
-			<NumberData/>
-		</ScriptComponent>
+		<NavAgentComponent>
+			<Common maxSpeed="5.0"/>
+		</NavAgentComponent>
 		<ScriptComponent>
 			<ScriptObject modulePath="CharacterCommands.CharacterCommandMngComponent" className="CharacterCommandMngComponent"/>
 			<StringData/>

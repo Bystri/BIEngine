@@ -18,11 +18,7 @@
 		  <NumberData/>
 	  </ScriptComponent>
 	  <NavAgentComponent>
-		<Common radius="0.5" height="1" maxSpeed="3.5" maxAcceleration="8"/>
-		<Steering anticipateTurns="true"/>
-		<Separation enable="true" separationWeight="5"/>
-		<ObstacleAvoidance enable="true" collisionQueryRange="5"/>
-		<PathOptimizations optimizeVis="true" pathOptimizationRange="15" optimizeTopo="true"/>
+		<Common maxSpeed="3.5"/>
 	  </NavAgentComponent>
 	  <Physics3DComponent>
 		<Shape>Capsule</Shape>

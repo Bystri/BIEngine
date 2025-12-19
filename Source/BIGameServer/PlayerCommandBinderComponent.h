@@ -13,6 +13,8 @@ public:
    virtual void Activate() override;
    virtual void Deactivate() override;
 
+   virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
+
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
    virtual BIEngine::ComponentId GetComponentId() const override { return PlayerCommandBinderComponent::g_CompId; };

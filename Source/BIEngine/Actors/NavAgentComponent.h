@@ -14,15 +14,16 @@ public:
 
 public:
    NavAgentComponent();
-   virtual ~NavAgentComponent();
 
    virtual bool Init(tinyxml2::XMLElement* pData) override;
    virtual void Activate() override;
+   virtual void Deactivate() override;
 
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
    bool SetDestination(const glm::vec3& pos);
    glm::vec3 GetVelocity() const;
+   glm::vec3 GetDesiredInput() const;
 
 private:
    SharedPtr<NavCrowd> m_pNavCrowd;

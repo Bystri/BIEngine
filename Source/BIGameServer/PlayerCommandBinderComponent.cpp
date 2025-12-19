@@ -1,6 +1,8 @@
 #include "PlayerCommandBinderComponent.h"
 
 #include "../BIGame/BIEventListener.h"
+#include "../BIGame/Locomotion/LocomotionInfoComponent.h"
+#include "../BIEngine/Actors/NavAgentComponent.h"
 #include "../BIEngine/Actors/PlayerComponent.h"
 
 const BIEngine::ComponentId PlayerCommandBinderComponent::g_CompId = "PlayerCommandBinderComponent";
@@ -29,6 +31,17 @@ void PlayerCommandBinderComponent::Deactivate()
    BIEngine::EventManager::Get()->RemoveListener(m_onCommandMoveToHandler);
 }
 
+void PlayerCommandBinderComponent::OnUpdate(const BIEngine::GameTimer& gt)
+{
+   auto pNavAgentComponent = GetOwner()->GetComponent<BIEngine::NavAgentComponent>(BIEngine::NavAgentComponent::g_CompId).Lock();
+   const glm::vec3 desiredInput = pNavAgentComponent->GetDesiredInput();
+   const glm::vec2 desiredDir = glm::normalize(glm::vec2(desiredInput.x, desiredInput.z));
+
+   auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
+   pLocomotionInfoComponent->SetInputDir(desiredDir);
+   pLocomotionInfoComponent->SetInputVel(desiredInput);
+}
+
 void PlayerCommandBinderComponent::HandleOnCommandMoveTo(BIEngine::IEventDataPtr pEventData)
 {
    BIEngine::SharedPtr<EvtData_PlayerCommandMoveTo> pCastEventData = BIEngine::StaticPointerCast<EvtData_PlayerCommandMoveTo>(pEventData);
@@ -38,5 +51,9 @@ void PlayerCommandBinderComponent::HandleOnCommandMoveTo(BIEngine::IEventDataPtr
       return;
    }
 
-   BIEngine::Logger::WriteMsgLog("player %d got move to command to %f %f %f", playerId, pCastEventData->GetPosToMove().x, pCastEventData->GetPosToMove().y, pCastEventData->GetPosToMove().z);
+   const glm::vec3 targetPos = pCastEventData->GetPosToMove();
+   BIEngine::Logger::WriteMsgLog("player %d got move to command to %f %f %f", playerId, targetPos.x, targetPos.y, targetPos.z);
+
+   auto pNavAgentComponent = GetOwner()->GetComponent<BIEngine::NavAgentComponent>(BIEngine::NavAgentComponent::g_CompId).Lock();
+   pNavAgentComponent->SetDestination(targetPos);
 }

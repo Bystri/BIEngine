@@ -1,106 +1,104 @@
 #include "NavCrowd.h"
 
-#include <DetourCrowd.h>
-
 #include "../StdLib/Assert.h"
 #include "../Actors/TransformComponent.h"
 
 namespace BIEngine {
 
 static const int MAX_AGENTS = 128;
-static const float MAX_HEIGHT = 1.0f;
-static const float MAX_RADIUS = 5.0f;
 
-NavCrowd::NavCrowd()
-   : m_pCrowd(nullptr), m_pNavMeshManager(nullptr)
-{
-   m_pCrowd = dtAllocCrowd();
-}
 
-NavCrowd::~NavCrowd()
-{
-   dtFreeCrowd(m_pCrowd);
-}
+struct NavSteeringBehaviourSeek {
+   glm::vec3 charPos;
+   glm::vec3 targetPos;
+
+   float maxSpeed = 0.0f;
+
+   glm::vec3 GetSteering()
+   {
+      glm::vec3 desiredVel = glm::normalize(targetPos - charPos);
+      desiredVel *= maxSpeed;
+
+      return desiredVel;
+   }
+};
+
+struct NavSteeringBehaviourFlee {
+   glm::vec3 charPos;
+   glm::vec3 targetPos;
+
+   float maxSpeed = 0.0f;
+
+   glm::vec3 GetSteering()
+   {
+      glm::vec3 desiredVel = glm::normalize(charPos - targetPos);
+      desiredVel *= maxSpeed;
+
+      return desiredVel;
+   }
+};
+
+struct NavSteeringBehaviourArrive {
+   glm::vec3 charPos;
+   glm::vec3 targetPos;
+
+   float maxSpeed = 0.0f;
+
+   float targetRadius = 1.0f;
+   float slowdownRadius = 2.0f;
+
+   glm::vec3 GetSteering()
+   {
+      const glm::vec3 vecToTarget = targetPos - charPos;
+      const float distToTarget = glm::length(vecToTarget);
+
+      if (distToTarget < targetRadius) {
+         return glm::vec3(0.0f);
+      }
+
+      float targetSpeed = 0.0f;
+      if (distToTarget > slowdownRadius) {
+         targetSpeed = maxSpeed;
+      } else {
+         targetSpeed = maxSpeed * distToTarget / slowdownRadius;
+      }
+
+      if (targetSpeed > maxSpeed) {
+         targetSpeed = maxSpeed;
+      }
+
+      return glm::normalize(vecToTarget) * targetSpeed;
+   }
+};
 
 bool NavCrowd::Initialize(SharedPtr<NavMeshManager> pNavMeshManager)
 {
    m_pNavMeshManager = pNavMeshManager;
-   dtNavMesh* pNav = m_pNavMeshManager->GetNavMesh();
-
-   m_pCrowd->init(MAX_AGENTS, MAX_RADIUS, pNav);
-
-   // Setup local avoidance params to different qualities.
-   dtObstacleAvoidanceParams params;
-   // Use mostly default settings, copy from dtCrowd.
-   std::memcpy(&params, m_pCrowd->getObstacleAvoidanceParams(0), sizeof(dtObstacleAvoidanceParams));
-
-   // Low (11)
-   params.velBias = 0.5f;
-   params.adaptiveDivs = 5;
-   params.adaptiveRings = 2;
-   params.adaptiveDepth = 1;
-   m_pCrowd->setObstacleAvoidanceParams(0, &params);
-
-   // Medium (22)
-   params.velBias = 0.5f;
-   params.adaptiveDivs = 5;
-   params.adaptiveRings = 2;
-   params.adaptiveDepth = 2;
-   m_pCrowd->setObstacleAvoidanceParams(1, &params);
-
-   // Good (45)
-   params.velBias = 0.5f;
-   params.adaptiveDivs = 7;
-   params.adaptiveRings = 2;
-   params.adaptiveDepth = 3;
-   m_pCrowd->setObstacleAvoidanceParams(2, &params);
-
-   // High (66)
-   params.velBias = 0.5f;
-   params.adaptiveDivs = 7;
-   params.adaptiveRings = 3;
-   params.adaptiveDepth = 3;
-
-   m_pCrowd->setObstacleAvoidanceParams(3, &params);
+   m_navAgents.Resize(MAX_AGENTS);
 
    return true;
 }
 
 NavAgentId NavCrowd::AddAgent(ActorId actorId, const glm::vec3& pos, const NavAgentParams& params)
 {
-   dtCrowdAgentParams ap;
-   memset(&ap, 0, sizeof(ap));
-   ap.radius = params.Radius;
-   ap.height = params.Height;
-   ap.maxAcceleration = params.MaxAcceleration;
-   ap.maxSpeed = params.MaxSpeed;
-   ap.collisionQueryRange = params.CollisionQueryRange;
-   ap.pathOptimizationRange = params.PathOptimizationRange;
-   ap.updateFlags = 0;
-
-   if (params.AnticipateTurns) {
-      ap.updateFlags |= DT_CROWD_ANTICIPATE_TURNS;
-   }
-   if (params.OptimizeVis) {
-      ap.updateFlags |= DT_CROWD_OPTIMIZE_VIS;
-   }
-   if (params.OptimizeTopo) {
-      ap.updateFlags |= DT_CROWD_OPTIMIZE_TOPO;
-   }
-   if (params.ObstacleAvoidance) {
-      ap.updateFlags |= DT_CROWD_OBSTACLE_AVOIDANCE;
-   }
-   if (params.Separation) {
-      ap.updateFlags |= DT_CROWD_SEPARATION;
+   NavAgentId agentId = -1;
+   for (int i = 0; i < m_navAgents.Size(); ++i) {
+      if (!m_navAgents[i].isActive) {
+         agentId = i;
+         break;
+      }
    }
 
-   ap.obstacleAvoidanceType = 2;
-   ap.separationWeight = params.SeparationWeight;
-
-   NavAgentId agentId = m_pCrowd->addAgent(&pos[0], &ap);
    if (agentId == -1) {
+      Logger::WriteErrorLog("Max number of available nav agents is reached. Cur max is %d", MAX_AGENTS);
       return -1;
    }
+
+   m_navAgents[agentId] = NavAgent();
+   m_navAgents[agentId].isActive = true;
+   m_navAgents[agentId].maxSpeed = params.MaxSpeed;
+   m_navAgents[agentId].pos = pos;
+   m_navAgents[agentId].state = NavAgent::State::IDLE;
 
    m_actorToAgentMap[actorId] = agentId;
    m_agentToActorMap[agentId] = actorId;
@@ -110,7 +108,7 @@ NavAgentId NavCrowd::AddAgent(ActorId actorId, const glm::vec3& pos, const NavAg
 
 void NavCrowd::RemoveAgent(NavAgentId id)
 {
-   m_pCrowd->removeAgent(id);
+   m_navAgents[id].isActive = false;
 
    ActorId actorId = m_agentToActorMap[id];
 
@@ -120,31 +118,39 @@ void NavCrowd::RemoveAgent(NavAgentId id)
 
 bool NavCrowd::SetDestination(NavAgentId id, const glm::vec3& pos)
 {
-   const dtCrowdAgent* ag = m_pCrowd->getAgent(id);
-   if (!ag->active) {
+   NavAgent* const ag = &m_navAgents[id];
+   if (!ag->isActive) {
       return false;
    }
 
-   dtNavMeshQuery* navquery = m_pNavMeshManager->GetNavMeshQuery();
-   const dtQueryFilter* filter = m_pCrowd->getFilter(0);
-   const float* halfExtents = m_pCrowd->getQueryExtents();
+   ag->state = NavAgent::State::WALKING;
+   ag->targetPos = pos;
 
-   float m_targetPos[3];
-   dtPolyRef m_targetRef;
-
-   navquery->findNearestPoly(&pos[0], halfExtents, filter, &m_targetRef, m_targetPos);
-
-   return m_pCrowd->requestMoveTarget(id, m_targetRef, m_targetPos);
+   return true;
 }
 
 glm::vec3 NavCrowd::GetVelocity(NavAgentId id) const
 {
-   const dtCrowdAgent* ag = m_pCrowd->getAgent(id);
-   if (!ag->active) {
+   if (!m_navAgents[id].isActive || m_navAgents[id].state != NavAgent::State::WALKING) {
       return glm::vec3(0.0f);
    }
 
-   return glm::vec3(ag->vel[0], ag->vel[1], ag->vel[2]);
+   NavSteeringBehaviourArrive arrive;
+   arrive.charPos = m_navAgents[id].pos;
+   arrive.targetPos = m_navAgents[id].targetPos;
+   arrive.maxSpeed = m_navAgents[id].maxSpeed;
+
+   return arrive.GetSteering();
+}
+
+glm::vec3 NavCrowd::GetDesiredInput(NavAgentId id) const
+{
+   const NavAgent* const ag = &m_navAgents[id];
+   if (!ag->isActive || ag->maxSpeed < std::numeric_limits<decltype(ag->maxSpeed)>::epsilon()) {
+      return glm::vec3(0.0f);
+   }
+
+   return GetVelocity(id) / ag->maxSpeed;
 }
 
 void NavCrowd::UpdateCrowdInfo(const HashMap<ActorId, SharedPtr<Actor>>& actorMap)
@@ -152,8 +158,8 @@ void NavCrowd::UpdateCrowdInfo(const HashMap<ActorId, SharedPtr<Actor>>& actorMa
    for (auto itr = actorMap.CBegin(); itr != actorMap.CEnd(); ++itr) {
       auto agentId = m_actorToAgentMap.Find(itr->first);
       if (agentId != m_actorToAgentMap.End()) {
-         dtCrowdAgent* ag = m_pCrowd->getEditableAgent(agentId->second);
-         if (!ag->active) {
+         NavAgent* const ag = &m_navAgents[agentId->second];
+         if (!ag->isActive) {
             continue;
          }
 
@@ -163,17 +169,13 @@ void NavCrowd::UpdateCrowdInfo(const HashMap<ActorId, SharedPtr<Actor>>& actorMa
             continue;
          }
 
-         const glm::vec3 pos = pTransformComponent->GetPosition();
-         ag->npos[0] = pos.x;
-         ag->npos[1] = pos.y;
-         ag->npos[2] = pos.z;
+         ag->pos = pTransformComponent->GetPosition();
       }
    }
 }
 
 void NavCrowd::OnUpdate(const GameTimer& gt)
 {
-   m_pCrowd->update(gt.DeltaTime(), nullptr);
 }
 
 } // namespace BIEngine

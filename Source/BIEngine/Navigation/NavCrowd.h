@@ -2,8 +2,6 @@
 
 #include "NavMeshManager.h"
 
-class dtCrowd;
-
 namespace BIEngine {
 
 using NavAgentId = int;
@@ -11,28 +9,25 @@ using NavAgentId = int;
 class NavCrowd {
 public:
    struct NavAgentParams {
-      float Radius = 0.5f;
-      float Height = 1.8f;
-      float MaxAcceleration = 8.0f;
       float MaxSpeed = 3.5f;
+   };
 
-      bool AnticipateTurns = false;
+private:
+   struct NavAgent {
+      enum class State : char {
+         IDLE,
+         WALKING
+      };
 
-      bool OptimizeVis = false;
-      float PathOptimizationRange = 15.0f;
-      bool OptimizeTopo = false;
-
-      float CollisionQueryRange = 6.0f;
-      bool ObstacleAvoidance = false;
-
-      bool Separation = false;
-      float SeparationWeight = 5.0f;
+      glm::vec3 pos;
+      glm::vec3 curVel;
+      glm::vec3 targetPos;
+      float maxSpeed = 0.0f;
+      bool isActive = false;
+      State state = State::IDLE;
    };
 
 public:
-   NavCrowd();
-   ~NavCrowd();
-
    bool Initialize(SharedPtr<NavMeshManager> pNavMeshManager);
 
    NavAgentId AddAgent(ActorId actorId, const glm::vec3& pos, const NavAgentParams& params);
@@ -40,15 +35,16 @@ public:
 
    bool SetDestination(NavAgentId id, const glm::vec3& pos);
    glm::vec3 GetVelocity(NavAgentId id) const;
+   glm::vec3 GetDesiredInput(NavAgentId id) const;
 
    void UpdateCrowdInfo(const HashMap<ActorId, SharedPtr<Actor>>& actorMap);
    void OnUpdate(const GameTimer& gt);
 
 private:
-   dtCrowd* m_pCrowd;
-   SharedPtr<NavMeshManager> m_pNavMeshManager;
    HashMap<ActorId, NavAgentId> m_actorToAgentMap;
    HashMap<NavAgentId, ActorId> m_agentToActorMap;
+   SharedPtr<NavMeshManager> m_pNavMeshManager;
+   DynamicArray<NavAgent> m_navAgents;
 };
 
 } // namespace BIEngine
