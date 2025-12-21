@@ -178,6 +178,8 @@
     <ClCompile Include="..\..\Math\Math.cpp" />
     <ClCompile Include="..\..\Math\Transform.cpp" />
     <ClCompile Include="..\..\Math\Trigonometry.cpp" />
+    <ClCompile Include="..\..\Navigation\AiCrowdTargeter.cpp" />
+    <ClCompile Include="..\..\Navigation\AiCrowdTargeterRecast.cpp" />
     <ClCompile Include="..\..\Navigation\NavChunkyTriMesh.cpp" />
     <ClCompile Include="..\..\Navigation\NavCrowd.cpp" />
     <ClCompile Include="..\..\Navigation\NavInputMeshesManager.cpp" />
@@ -306,6 +308,8 @@
     <ClInclude Include="..\..\Math\Transform.h" />
     <ClInclude Include="..\..\Math\Trigonometry.h" />
     <ClInclude Include="..\..\Math\Vector.h" />
+    <ClInclude Include="..\..\Navigation\AiCrowdTargeter.h" />
+    <ClInclude Include="..\..\Navigation\AiCrowdTargeterRecast.h" />
     <ClInclude Include="..\..\Navigation\NavChunkyTriMesh.h" />
     <ClInclude Include="..\..\Navigation\NavCrowd.h" />
     <ClInclude Include="..\..\Navigation\NavInputMeshesManager.h" />

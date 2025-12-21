@@ -1,6 +1,7 @@
 #pragma once
 
 #include "NavMeshManager.h"
+#include "AiCrowdTargeter.h"
 
 namespace BIEngine {
 
@@ -21,7 +22,6 @@ private:
 
       glm::vec3 pos;
       glm::vec3 curVel;
-      glm::vec3 targetPos;
       float maxSpeed = 0.0f;
       bool isActive = false;
       State state = State::IDLE;
@@ -43,8 +43,9 @@ public:
 private:
    HashMap<ActorId, NavAgentId> m_actorToAgentMap;
    HashMap<NavAgentId, ActorId> m_agentToActorMap;
-   SharedPtr<NavMeshManager> m_pNavMeshManager;
    DynamicArray<NavAgent> m_navAgents;
+
+   SharedPtr<AiCrowdTargeter> m_pTargeter;
 };
 
 } // namespace BIEngine

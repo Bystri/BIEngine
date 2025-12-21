@@ -172,8 +172,9 @@ struct Vector<T, 3> {
    }
 
    explicit Vector(const T& value)
-      : data(value)
+      : data()
    {
+      data.Fill(value);
    }
 
    Vector(const Vector<T, 2>& vec, const T& z)

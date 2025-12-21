@@ -432,6 +432,12 @@
     <ClCompile Include="..\..\StdLib\Assert.cpp">
       <Filter>StdLib</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Navigation\AiCrowdTargeter.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Navigation\AiCrowdTargeterRecast.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -913,6 +919,12 @@
     </ClInclude>
     <ClInclude Include="..\..\StdLib\Queue.h">
       <Filter>StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Navigation\AiCrowdTargeter.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Navigation\AiCrowdTargeterRecast.h">
+      <Filter>Navigation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,12 @@
 #include "NavCrowd.h"
 
+#include "AiCrowdTargeterRecast.h"
 #include "../StdLib/Assert.h"
 #include "../Actors/TransformComponent.h"
 
 namespace BIEngine {
 
 static const int MAX_AGENTS = 128;
-
 
 struct NavSteeringBehaviourSeek {
    glm::vec3 charPos;
@@ -73,8 +73,13 @@ struct NavSteeringBehaviourArrive {
 
 bool NavCrowd::Initialize(SharedPtr<NavMeshManager> pNavMeshManager)
 {
-   m_pNavMeshManager = pNavMeshManager;
+   m_pTargeter = CreateAiCrowdTargeterRecast();
+
    m_navAgents.Resize(MAX_AGENTS);
+
+   if (!m_pTargeter->Init(MAX_AGENTS, pNavMeshManager)) {
+      return false;
+   }
 
    return true;
 }
@@ -123,8 +128,9 @@ bool NavCrowd::SetDestination(NavAgentId id, const glm::vec3& pos)
       return false;
    }
 
+   m_pTargeter->SetDestination(id, Vector3(pos.x, pos.y, pos.z));
+
    ag->state = NavAgent::State::WALKING;
-   ag->targetPos = pos;
 
    return true;
 }
@@ -137,7 +143,8 @@ glm::vec3 NavCrowd::GetVelocity(NavAgentId id) const
 
    NavSteeringBehaviourArrive arrive;
    arrive.charPos = m_navAgents[id].pos;
-   arrive.targetPos = m_navAgents[id].targetPos;
+   Vector3 target = m_pTargeter->GetTarget(id);
+   arrive.targetPos = glm::vec3(target.x, target.y, target.z);
    arrive.maxSpeed = m_navAgents[id].maxSpeed;
 
    return arrive.GetSteering();
@@ -170,12 +177,15 @@ void NavCrowd::UpdateCrowdInfo(const HashMap<ActorId, SharedPtr<Actor>>& actorMa
          }
 
          ag->pos = pTransformComponent->GetPosition();
+
+         m_pTargeter->UpdateAgentPos(ag - m_navAgents.Data(), Vector3(ag->pos.x, ag->pos.y, ag->pos.z));
       }
    }
 }
 
 void NavCrowd::OnUpdate(const GameTimer& gt)
 {
+   m_pTargeter->Update(gt);
 }
 
 } // namespace BIEngine
