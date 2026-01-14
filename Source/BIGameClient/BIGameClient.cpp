@@ -1,5 +1,6 @@
 ﻿#include "BIGameClient.h"
 
+#include "../BIEngine/Network/Replication/NetworkObjectCreationRegistry.h"
 #include "../BIEngine/Graphics/WorldRenderPass.h"
 #include "../BIEngine/Graphics/DirLightShadowGraphicsTechnique.h"
 #include "../BIEngine/Graphics/PointLightShadowGraphicsTechnique.h"

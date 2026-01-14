@@ -56,13 +56,14 @@ void NetworkManager::ReadIncomingPackets()
    }
 }
 
-void NetworkManager::SendPacket(const OutputMemoryBitStream& outputStream, const SocketAddress& fromAddress)
+void NetworkManager::SendNetworkMessage(const Peer& peer, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream)
 {
-   m_socket->SendTo(outputStream.GetBufferPtr().Get(), outputStream.GetByteLength(), fromAddress);
+   OutputMemoryBitStream packet;
+   BIEngine::Serialize(packet, protocolType);
 
-   InputMemoryBitStream inputStream(outputStream.GetBufferPtr(), outputStream.GetBitLength());
-   uint32_t packetType;
-   BIEngine::Deserialize(inputStream, packetType);
+   packet.WriteBits(outputStream.GetBufferPtr().Get(), outputStream.GetBitLength());
+
+   m_socket->SendTo(packet.GetBufferPtr().Get(), packet.GetByteLength(), peer.GetSocketAddress());
 }
 
 } // namespace BIEngine

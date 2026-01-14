@@ -405,10 +405,7 @@
     <ClCompile Include="..\..\Network\NetworkManager.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Network\Replication\ObjectReplicationManagerMaster.cpp">
-      <Filter>Network\Replication</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Network\Replication\ObjectReplicationManagerSlave.cpp">
+    <ClCompile Include="..\..\Network\Replication\ObjectReplicationProtocol.cpp">
       <Filter>Network\Replication</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Network\Replication\ReplicationHeader.cpp">
@@ -437,6 +434,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Navigation\AiCrowdTargeterRecast.cpp">
       <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\NetworkProtocol.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\NetworkProtocolsManager.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -833,10 +836,7 @@
     <ClInclude Include="..\..\Network\Replication\ObjectReplication.h">
       <Filter>Network\Replication</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Network\Replication\ObjectReplicationManagerMaster.h">
-      <Filter>Network\Replication</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Network\Replication\ObjectReplicationManagerSlave.h">
+    <ClInclude Include="..\..\Network\Replication\ObjectReplicationProtocol.h">
       <Filter>Network\Replication</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Network\Replication\ReplicationActionReader.h">
@@ -925,6 +925,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Navigation\AiCrowdTargeterRecast.h">
       <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\NetworkMessage.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\NetworkProtocol.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\NetworkProtocolsManager.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\Peer.h">
+      <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,13 +20,6 @@ protected:
    virtual void HandleConnectionReset(const SocketAddress& inFromAddress) override;
 
    void CheckForDisconnects();
-
-   inline GameObjectPtr RegisterAndReturn(GameObject* inGameObject);
-   void UnregisterGameObject(GameObject* inGameObject);
-   void SetStateDirty(int inNetworkId, uint32_t inDirtyState);
-
-   void RespawnCats();
-
    ClientProxyPtr GetClientProxy(int inPlayerId) const;
    */
 
@@ -35,8 +28,6 @@ private:
    void ProcessPacket(BIEngine::PeerPtr clientProxy, BIEngine::InputMemoryBitStream& inputStream);
 
    void SendWelcomePacket(BIEngine::PeerPtr clientProxy);
-
-   void HandleEventPacket(BIEngine::PeerPtr pClientProxy, BIEngine::InputMemoryBitStream& inputStream);
 
 private:
    AddressToClientMap m_addressToClientMap;
@@ -54,12 +45,3 @@ private:
    float mClientDisconnectTimeout;
    */
 };
-
-/*
- inline GameObjectPtr NetworkManagerServer::RegisterAndReturn(GameObject* inGameObject)
-{
-   GameObjectPtr toRet(inGameObject);
-   RegisterGameObject(toRet);
-   return toRet;
-}
-*/

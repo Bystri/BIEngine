@@ -2,7 +2,6 @@
 
 #include "../BIEngine/StdLib/DynamicArray.h"
 #include "../BIEngine/Network/NetworkManager.h"
-#include "../BIEngine/Network/Replication/ObjectReplicationManagerSlave.h"
 #include "../BIEngine/EventManager/EventManager.h"
 
 class BINetworkManagerClient : public BIEngine::NetworkManager {
@@ -28,30 +27,16 @@ private:
    void SendHelloPacket();
 
    void HandleWelcomePacket(BIEngine::InputMemoryBitStream& inputStream);
-   void HandleStatePacket(BIEngine::InputMemoryBitStream& inputStream);
-
-   void StoreEventToForwardDelegate(BIEngine::IEventDataPtr pEventData);
-   void UpdateSendingEventPacket(const BIEngine::GameTimer& gt);
-   void SendEventPacket();
 
 private:
-   BIEngine::SocketAddress m_serverAddress;
+   BIEngine::PeerPtr m_pServerPeer;
    NetworkClientState m_state = NetworkClientState::Uninitialized;
-
-   BIEngine::EventManager::DelegateHandler m_storeEventMoveDelegateHandler;
-   BIEngine::EventManager::DelegateHandler m_storeEventTurnDelegateHandler;
-   BIEngine::EventManager::DelegateHandler m_storeEventPrimaryAttackDelegateHandler;
-   BIEngine::EventManager::DelegateHandler m_storeEventCommandMoveToDelegateHandler;
 
    float m_timeOfLastHello;
    float m_timeOfLastEventPacket;
 
-   BIEngine::UniquePtr<BIEngine::ObjectReplicationManagerSlave> m_pReplicationManager;
-
    int m_playerId;
    BIEngine::String m_name;
-
-   BIEngine::DynamicArray<BIEngine::IEventDataPtr> m_eventsToSend;
    /*
 
 public:

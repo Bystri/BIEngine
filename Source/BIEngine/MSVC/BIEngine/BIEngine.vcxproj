@@ -189,8 +189,9 @@
     <ClCompile Include="..\..\Navigation\NavSoloMeshGenerator.cpp" />
     <ClCompile Include="..\..\Navigation\NavWorld.cpp" />
     <ClCompile Include="..\..\Network\NetworkManager.cpp" />
-    <ClCompile Include="..\..\Network\Replication\ObjectReplicationManagerMaster.cpp" />
-    <ClCompile Include="..\..\Network\Replication\ObjectReplicationManagerSlave.cpp" />
+    <ClCompile Include="..\..\Network\NetworkProtocol.cpp" />
+    <ClCompile Include="..\..\Network\NetworkProtocolsManager.cpp" />
+    <ClCompile Include="..\..\Network\Replication\ObjectReplicationProtocol.cpp" />
     <ClCompile Include="..\..\Network\Replication\ReplicationActionReader.cpp" />
     <ClCompile Include="..\..\Network\Replication\ReplicationActionWriter.cpp" />
     <ClCompile Include="..\..\Network\Replication\ReplicationHeader.cpp" />
@@ -319,10 +320,13 @@
     <ClInclude Include="..\..\Navigation\NavSoloMeshGenerator.h" />
     <ClInclude Include="..\..\Navigation\NavWorld.h" />
     <ClInclude Include="..\..\Network\NetworkManager.h" />
+    <ClInclude Include="..\..\Network\NetworkMessage.h" />
+    <ClInclude Include="..\..\Network\NetworkProtocol.h" />
+    <ClInclude Include="..\..\Network\NetworkProtocolsManager.h" />
+    <ClInclude Include="..\..\Network\Peer.h" />
     <ClInclude Include="..\..\Network\Replication\NetworkObjectCreationRegistry.h" />
     <ClInclude Include="..\..\Network\Replication\ObjectReplication.h" />
-    <ClInclude Include="..\..\Network\Replication\ObjectReplicationManagerMaster.h" />
-    <ClInclude Include="..\..\Network\Replication\ObjectReplicationManagerSlave.h" />
+    <ClInclude Include="..\..\Network\Replication\ObjectReplicationProtocol.h" />
     <ClInclude Include="..\..\Network\Replication\ReplicationActionReader.h" />
     <ClInclude Include="..\..\Network\Replication\ReplicationActionWriter.h" />
     <ClInclude Include="..\..\Network\Replication\ReplicationHeader.h" />

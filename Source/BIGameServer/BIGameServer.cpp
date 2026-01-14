@@ -3,7 +3,7 @@
 #include "../BIEngine/Navigation/NavMeshManager.h"
 #include "../BIEngine/Actors/PlayerComponent.h"
 #include "../BIEngine/Actors/TransformComponent.h"
-#include "../BIEngine/Network/Replication/ObjectReplicationManagerMaster.h"
+#include "../BIEngine/Network/Replication/ObjectReplicationProtocol.h"
 #include "../BIGame/Network/ReplicationObjectPlayer.h"
 #include "../BIGame/Network/ReplicationObjectPlayerCharacter.h"
 #include "../BIGame/Network/ReplicationObjectAiDummyCharacter.h"
@@ -143,7 +143,7 @@ void BIServerGameLogic::OnUpdate(BIEngine::GameTimer& gt)
    m_pNavWorld->GetNavCrowd()->UpdateCrowdInfo(m_actors);
    m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
 
-   BIEngine::ObjectReplicationManagerMaster::Get()->OnUpdate();
+   BIEngine::ObjectReplicationProtocolWriter::Get()->OnUpdate();
    m_pNetworkManager->SendOutgoingPackets();
 }
 

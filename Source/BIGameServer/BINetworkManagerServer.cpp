@@ -1,12 +1,15 @@
 #include "BINetworkManagerServer.h"
 
-#include "../BIEngine/Network/Replication/ObjectReplicationManagerMaster.h"
+#include "../BIEngine/Network/Replication/ObjectReplicationProtocol.h"
 #include "../BIGame/Network/ReplicationObjectPlayer.h"
+#include "../BIGame/Network/EventNetworkProtocol.h"
 
 #include "BIGSEventListener.h"
 
 bool BINetworkManagerServer::Init(uint16_t port)
 {
+   m_protocolsManager.AddProtocolWriter(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolWriter>());
+   m_protocolsManager.AddProtocolReader(BIEngine::MakeShared<EventProtocolReader>());
    return NetworkManager::InitInternal(port);
 }
 
@@ -30,19 +33,15 @@ void BINetworkManagerServer::ProcessPacket(BIEngine::PeerPtr clientProxy, BIEngi
 
    uint32_t packetType;
    BIEngine::Deserialize(inputStream, packetType);
-   switch (packetType) {
-      case kHelloCC:
-         // need to resend welcome. to be extra safe we should check the name is the one we expect from this address,
-         // otherwise something weird is going on...
-         SendWelcomePacket(clientProxy);
-         break;
-      case kEventCC:
-         HandleEventPacket(clientProxy, inputStream);
-         break;
-      default:
-         BIEngine::Logger::WriteErrorLog("Unknown packet type received");
-         break;
+
+   if (packetType == kHelloCC) {
+      // need to resend welcome. to be extra safe we should check the name is the one we expect from this address,
+      // otherwise something weird is going on...
+      SendWelcomePacket(clientProxy);
+      return;
    }
+
+   m_protocolsManager.ReceiveMeessage(packetType, inputStream);
 }
 
 void BINetworkManagerServer::HandlePacketFromNewClient(BIEngine::InputMemoryBitStream& inputStream, const BIEngine::SocketAddress& fromAddress)
@@ -59,7 +58,7 @@ void BINetworkManagerServer::HandlePacketFromNewClient(BIEngine::InputMemoryBitS
       BIEngine::PeerPtr newClient = BIEngine::MakeShared<BIEngine::Peer>(nextClientId, fromAddress);
       ++nextClientId;
 
-      BIEngine::ObjectReplicationManagerMaster::Get()->AddClient(newClient);
+      m_protocolsManager.RegisterPeer(newClient);
       BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType);
 
       m_addressToClientMap[fromAddress] = newClient;
@@ -75,35 +74,16 @@ void BINetworkManagerServer::HandlePacketFromNewClient(BIEngine::InputMemoryBitS
 
 void BINetworkManagerServer::SendWelcomePacket(BIEngine::PeerPtr clientProxy)
 {
-   BIEngine::OutputMemoryBitStream welcomePacket;
+   BIEngine::OutputMemoryBitStream welcomeMessage;
 
-   BIEngine::Serialize(welcomePacket, kWelcomeCC);
-   BIEngine::Serialize(welcomePacket, clientProxy->GetId());
+   BIEngine::Serialize(welcomeMessage, clientProxy->GetId());
 
    BIEngine::Logger::WriteMsgLog("Server Welcoming, new client with id %d", clientProxy->GetId());
 
-   SendPacket(welcomePacket, clientProxy->GetSocketAddress());
+   SendNetworkMessage(*clientProxy, kWelcomeCC, welcomeMessage);
 }
 
 void BINetworkManagerServer::SendOutgoingPackets()
 {
-   BIEngine::ObjectReplicationManagerMaster::Get()->SendPacket(this);
-}
-
-void BINetworkManagerServer::HandleEventPacket(BIEngine::PeerPtr pClientProxy, BIEngine::InputMemoryBitStream& inputStream)
-{
-   uint8_t eventCount = 0;
-   BIEngine::Deserialize(inputStream, eventCount);
-
-   while (eventCount > 0) {
-      BIEngine::EventType eventType;
-      BIEngine::Deserialize(inputStream, eventType);
-
-      BIEngine::IEventDataPtr pEvent = BIEngine::g_eventFactory.Create(eventType);
-      pEvent->Read(inputStream);
-
-      BIEngine::EventManager::Get()->QueueEvent(pEvent);
-
-      --eventCount;
-   }
+   m_protocolsManager.OnBeforePacketsSend(this);
 }
