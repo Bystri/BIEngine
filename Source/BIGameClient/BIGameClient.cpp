@@ -114,7 +114,10 @@ bool BIGameClientLogic::Init()
 
    m_pInputActionController = BIEngine::MakeUnique<BIInputActionController>();
    m_pCameraManager = BIEngine::MakeUnique<BICameraManager>(m_pHumanView->GetScene()->GetCamera());
+
+#ifndef _RETAIL
    m_pDebugMenuController = BIEngine::MakeUnique<BIDebugMenuController>();
+#endif
 
    BIRegisterEvents();
 
@@ -172,6 +175,7 @@ void BIGameClientLogic::OnUpdate(BIEngine::GameTimer& gt)
 
 void BIGameClientLogic::OnRenderDebug(const BIEngine::GameTimer& gt)
 {
+#ifndef _RETAIL
    BIEngine::GameLogic::OnRenderDebug(gt);
    m_pDebugMenuController->OnUpdate();
 
@@ -182,7 +186,10 @@ void BIGameClientLogic::OnRenderDebug(const BIEngine::GameTimer& gt)
    if (m_pDebugMenuController->IsShowPhysics3dWindow()) {
       m_pPhysics3D->DrawRenderDiagnostics();
    }
+#endif
 }
+
+/**********BIGameClientHumanView**********/
 
 static BIEngine::SharedPtr<BIEngine::Skybox> humanViewCreateSkybox()
 {

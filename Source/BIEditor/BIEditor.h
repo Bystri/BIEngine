@@ -2,8 +2,9 @@
 
 #include "../BIEngine/EngineCore/BIEngine.h"
 
+#include "../BIGame/BIFlyCameraSystem.h"
+
 #include "BIEditorController.h"
-#include "BIFlyCameraSystem.h"
 #include "BIScriptExports.h"
 
 class BIEditorApp : public BIEngine::GameApp {

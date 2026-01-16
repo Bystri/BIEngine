@@ -4,7 +4,7 @@
 
 #include "BIEventListener.h"
 
-BIFlyCameraSystem::BIFlyCameraSystem(BIEngine::SharedPtr<BIEngine::Camera> pCamera, BIEngine::SharedPtr<BIEditorController> pInputController)
+BIFlyCameraSystem::BIFlyCameraSystem(BIEngine::SharedPtr<BIEngine::Camera> pCamera, BIEngine::SharedPtr<BIGameController> pInputController)
    : m_pCamera(pCamera), m_pInputController(pInputController),
      m_movementSpeed(10.0f), m_rotationSpeed(0.5f),
      m_up(false), m_down(false), m_left(false), m_right(false),
@@ -88,7 +88,7 @@ void BIFlyCameraSystem::OnUpdate(const BIEngine::GameTimer& gt)
    m_lastPointerX = m_pInputController->GetCurrentPointerPos().x;
    m_lastPointerY = m_pInputController->GetCurrentPointerPos().y;
 
-   if (!m_pInputController->IsMouseButtonPressed(static_cast<int>(BIEditorController::MouseButton::RIGHT))) {
+   if (!m_pInputController->IsMouseButtonPressed(static_cast<int>(BIGameController::MouseButton::RIGHT))) {
       return;
    }
 

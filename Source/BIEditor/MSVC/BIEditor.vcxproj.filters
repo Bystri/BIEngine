@@ -7,7 +7,6 @@
   <ItemGroup>
     <ClCompile Include="..\BIEditor.cpp" />
     <ClCompile Include="..\BIEditorController.cpp" />
-    <ClCompile Include="..\BIFlyCameraSystem.cpp" />
     <ClCompile Include="..\BIEventListener.cpp" />
     <ClCompile Include="..\Widgets\ActorEditorWidget.cpp">
       <Filter>Widgets</Filter>
@@ -25,7 +24,6 @@
   <ItemGroup>
     <ClInclude Include="..\BIEditor.h" />
     <ClInclude Include="..\BIEditorController.h" />
-    <ClInclude Include="..\BIFlyCameraSystem.h" />
     <ClInclude Include="..\BIEventListener.h" />
     <ClInclude Include="..\Widgets\ActorEditorWidget.h">
       <Filter>Widgets</Filter>

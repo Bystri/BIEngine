@@ -2,12 +2,13 @@
 
 #include "../BIEngine/EngineCore/BIEngine.h"
 
+#include "../BIGame/BIDebugMenuController.h"
+#include "../BIGame/BIGameController.h"
+
 #include "BINetworkManagerClient.h"
-#include "BIGameController.h"
 #include "BIGCScriptExports.h"
 #include "BICameraManager.h"
 #include "BIInputActiorController.h"
-#include "BIDebugMenuController.h"
 
 class BIGameClientApp : public BIEngine::GameApp {
 public:
@@ -60,5 +61,7 @@ private:
    BIEngine::UniquePtr<BINetworkManagerClient> m_pNetworkManager;
    BIEngine::SharedPtr<BIGameClientHumanView> m_pHumanView;
 
+#ifndef _RETAIL
    BIEngine::UniquePtr<BIDebugMenuController> m_pDebugMenuController;
+#endif
 };

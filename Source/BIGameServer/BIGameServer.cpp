@@ -3,6 +3,10 @@
 #include "../BIEngine/Navigation/NavMeshManager.h"
 #include "../BIEngine/Actors/PlayerComponent.h"
 #include "../BIEngine/Actors/TransformComponent.h"
+#include "../BIEngine/Graphics/WorldRenderPass.h"
+#include "../BIEngine/Graphics/SkyboxGraphicsTechnique.h"
+#include "../BIEngine/Renderer/ShadersLoader.h"
+#include "../BIEngine/Renderer/ImageLoader.h"
 #include "../BIEngine/Network/Replication/ObjectReplicationProtocol.h"
 #include "../BIGame/Network/ReplicationObjectPlayer.h"
 #include "../BIGame/Network/ReplicationObjectPlayerCharacter.h"
@@ -111,9 +115,13 @@ bool BIServerGameLogic::Init()
    m_pPhysics2D->Initialize();
    m_pPhysics3D->Initialize();
 
-   // m_pHumanView = std::make_shared<BIGameHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
-   // m_pHumanView->Init();
-   // AddGameView(m_pHumanView);
+#ifndef _RETAIL
+   m_pDebugMenuController = BIEngine::MakeUnique<BIDebugMenuController>();
+
+   m_pDbgHumanView = BIEngine::MakeShared<BIServerDbgHumanView>(BIEngine::g_pApp->m_options.screenWidth, BIEngine::g_pApp->m_options.screenHeight);
+   m_pDbgHumanView->Init();
+   AddGameView(m_pDbgHumanView);
+#endif
 
    BIRegisterEvents();
 
@@ -147,10 +155,125 @@ void BIServerGameLogic::OnUpdate(BIEngine::GameTimer& gt)
    m_pNetworkManager->SendOutgoingPackets();
 }
 
+void BIServerGameLogic::OnRenderDebug(const BIEngine::GameTimer& gt)
+{
+#ifndef _RETAIL
+   BIEngine::GameLogic::OnRenderDebug(gt);
+   m_pDebugMenuController->OnUpdate();
+
+   if (m_pDebugMenuController->IsShowNavMeshWindow()) {
+      m_pNavWorld->GetNavMeshManager()->DrawRenderDiagnostics();
+   }
+
+   if (m_pDebugMenuController->IsShowPhysics3dWindow()) {
+      m_pPhysics3D->DrawRenderDiagnostics();
+   }
+#endif
+}
+
 void BIServerGameLogic::PlayerCreatedDelegate(BIEngine::IEventDataPtr pEventData)
 {
    BIEngine::SharedPtr<EvtData_Player_Created> pCastEventData = BIEngine::StaticPointerCast<EvtData_Player_Created>(pEventData);
 
    BIEngine::SharedPtr<BIEngine::ReplicationObjectActor> pGameObject = BIEngine::StaticPointerCast<BIEngine::ReplicationObjectActor>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayerCharacter::sk_ClassType));
    pCastEventData->GetPlayer()->SetPlayableActor(pGameObject->GetReplicatedObject());
+}
+
+/**********BIServerDbgHumanView**********/
+
+static BIEngine::SharedPtr<BIEngine::Skybox> humanViewCreateSkybox()
+{
+   auto xmlExtraData = BIEngine::StaticPointerCast<BIEngine::XmlExtraData>(BIEngine::ResCache::Get()->GetHandle("config/scene.xml")->GetExtra());
+
+   if (!xmlExtraData) {
+      return nullptr;
+   }
+
+   tinyxml2::XMLElement* pSkyboxSettingsNode = xmlExtraData->GetRootElement()->FirstChildElement("Skybox");
+   BIEngine::Assert(pSkyboxSettingsNode, "Skybox settings did not loaded");
+
+   if (!pSkyboxSettingsNode) {
+      return nullptr;
+   }
+
+   const char* vertexShaderPath;
+   const char* fragmentShaderPath;
+   pSkyboxSettingsNode->QueryStringAttribute("vertexShaderPath", &vertexShaderPath);
+   pSkyboxSettingsNode->QueryStringAttribute("fragmentShaderPath", &fragmentShaderPath);
+
+   if (strlen(vertexShaderPath) == 0 || strlen(fragmentShaderPath) == 0) {
+      return nullptr;
+   }
+
+   BIEngine::SharedPtr<BIEngine::ShaderData> pVertShaderData = BIEngine::StaticPointerCast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(vertexShaderPath)->GetExtra());
+   BIEngine::SharedPtr<BIEngine::ShaderData> pFragShaderxData = BIEngine::StaticPointerCast<BIEngine::ShaderData>(BIEngine::ResCache::Get()->GetHandle(fragmentShaderPath)->GetExtra());
+   BIEngine::SharedPtr<BIEngine::ShaderProgram> pShaderProgram = BIEngine::MakeShared<BIEngine::ShaderProgram>();
+   pShaderProgram->Compile(pVertShaderData->GetShaderIndex(), pFragShaderxData->GetShaderIndex());
+
+
+   BIEngine::DynamicArray<BIEngine::String> faces{
+      "cubemapTextureRightPath",
+      "cubemapTextureLeftPath",
+      "cubemapTextureTopPath",
+      "cubemapTextureBottomPath",
+      "cubemapTextureFrontPath",
+      "cubemapTextureBackPath"};
+
+   BIEngine::Array<unsigned char*, 6> cubemapTextureImages;
+   int width = -1;
+   int height = -1;
+
+   for (int i = 0; i < faces.Size(); ++i) {
+      const char* cubemapTexturePath;
+      pSkyboxSettingsNode->QueryStringAttribute(faces[i].CStr(), &cubemapTexturePath);
+
+      if (strlen(cubemapTexturePath) == 0) {
+         return nullptr;
+      }
+
+      auto cubemapTextureResExtraData = BIEngine::StaticPointerCast<BIEngine::ImageExtraData>(BIEngine::ResCache::Get()->GetHandle(cubemapTexturePath)->GetExtra());
+
+      if (!cubemapTextureResExtraData) {
+         return nullptr;
+      }
+
+      cubemapTextureImages[i] = cubemapTextureResExtraData->GetData();
+      width = cubemapTextureResExtraData->GetWidth();
+      height = cubemapTextureResExtraData->GetHeight();
+   }
+
+   BIEngine::SharedPtr<BIEngine::CubemapTexture> pTexture = BIEngine::CubemapTexture::Create(width, height, BIEngine::CubemapTexture::SizedFormat::RGB, BIEngine::CubemapTexture::Format::RGB, cubemapTextureImages);
+
+   return BIEngine::MakeShared<BIEngine::Skybox>(pTexture, pShaderProgram);
+}
+
+bool BIServerDbgHumanView::Init()
+{
+   if (!BIEngine::HumanView::Init()) {
+      return false;
+   }
+
+   constexpr int MsaaSamples = 4;
+   BIEngine::SharedPtr<BIEngine::WorldRenderPass> pWorldRenderPass = BIEngine::MakeShared<BIEngine::WorldRenderPass>(m_screenWidth, m_screenHeight, MsaaSamples);
+
+   BIEngine::SharedPtr<BIEngine::SkyboxGraphicsTechnique> pSkyboxGraphicsTechnique = BIEngine::MakeShared<BIEngine::SkyboxGraphicsTechnique>(humanViewCreateSkybox());
+   pWorldRenderPass->AddTechnique(pSkyboxGraphicsTechnique);
+
+   pWorldRenderPass->Init();
+
+   m_pScene->AddRenderPass(pWorldRenderPass);
+
+   BIEngine::SharedPtr<BIGameController> pGameController = BIEngine::MakeShared<BIGameController>();
+   SetController(pGameController);
+
+   m_pScene->GetCamera()->MoveTo(glm::vec3(3.0f, 6.0f, 3.0f));
+
+   m_pFlyCameraSystem = BIEngine::MakeUnique<BIFlyCameraSystem>(m_pScene->GetCamera(), pGameController);
+}
+
+void BIServerDbgHumanView::OnUpdate(const BIEngine::GameTimer& gt)
+{
+   BIEngine::HumanView::OnUpdate(gt);
+
+   m_pFlyCameraSystem->OnUpdate(gt);
 }

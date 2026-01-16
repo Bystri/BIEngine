@@ -1,15 +1,14 @@
 #pragma once
 
-#include <memory>
-
-#include "BIEditorController.h"
 #include "../BIEngine/Graphics/Camera.h"
 #include "../BIEngine/Utilities/GameTimer.h"
 #include "../BIEngine/EventManager/EventManager.h"
 
+#include "BIGameController.h"
+
 class BIFlyCameraSystem {
 public:
-   BIFlyCameraSystem(BIEngine::SharedPtr<BIEngine::Camera> pCamera, BIEngine::SharedPtr<BIEditorController> pInputController);
+   BIFlyCameraSystem(BIEngine::SharedPtr<BIEngine::Camera> pCamera, BIEngine::SharedPtr<BIGameController> pInputController);
    ~BIFlyCameraSystem();
 
    float GetMovementSpeed() const { return m_movementSpeed; }
@@ -27,7 +26,7 @@ private:
    BIEngine::EventManager::DelegateHandler m_onKeyUpDelegateHandler;
 
    BIEngine::SharedPtr<BIEngine::Camera> m_pCamera;
-   BIEngine::SharedPtr<BIEditorController> m_pInputController;
+   BIEngine::SharedPtr<BIGameController> m_pInputController;
 
    bool m_up;
    bool m_down;

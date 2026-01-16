@@ -2,7 +2,7 @@
 
 #include "../BIEngine/StdLib/Assert.h"
 
-#include "BIGCEventListener.h"
+#include "BIEventListener.h"
 
 bool BIGameController::OnPointerMove(const Point& mousePos, const int radius)
 {

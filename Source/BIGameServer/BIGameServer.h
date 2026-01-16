@@ -3,6 +3,9 @@
 #include "../BIEngine/EngineCore/BIEngine.h"
 #include "../BIEngine/Utilities/GenericObjectFactory.h"
 
+#include "../BIGame/BIDebugMenuController.h"
+#include "../BIGame/BIFlyCameraSystem.h"
+
 #include "BIGSScriptExports.h"
 #include "BINetworkManagerServer.h"
 
@@ -17,15 +20,33 @@ public:
    virtual const char* GetGameTitle() override { return "BIGameServer"; }
 };
 
-class BIClientView : public BIEngine::HumanView {
+#ifndef _RETAIL
+
+class BIServerDbgHumanView : public BIEngine::HumanView {
 public:
-   BIClientView()
-      : BIEngine::HumanView(0.0f, 0.0f)
+   BIServerDbgHumanView(unsigned int screenWidth, unsigned int screenHeight)
+      : BIEngine::HumanView(screenWidth, screenHeight)
    {
    }
 
-   virtual bool Init();
+   virtual bool Init() override;
+
+   virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
+
+private:
+   void SetController(BIEngine::SharedPtr<BIGameController> pController)
+   {
+      m_pKeyboardHandler = pController;
+      m_pPointerHandler = pController;
+   }
+
+private:
+#ifndef _RETAIL
+   BIEngine::UniquePtr<BIFlyCameraSystem> m_pFlyCameraSystem;
+#endif
 };
+
+#endif
 
 class BIServerGameLogic : public BIEngine::GameLogic {
 public:
@@ -37,8 +58,7 @@ public:
    virtual bool LoadLevelDelegate(tinyxml2::XMLElement* pRoot) override;
 
    virtual void OnUpdate(BIEngine::GameTimer& gt) override;
-
-   virtual void OnRender(const BIEngine::GameTimer& gt) override {}
+   virtual void OnRenderDebug(const BIEngine::GameTimer& gt) override;
 
    void PlayerCreatedDelegate(BIEngine::IEventDataPtr pEventData);
 
@@ -46,4 +66,9 @@ private:
    BIEngine::EventManager::DelegateHandler m_playerCreatedDelegateHandler;
 
    BIEngine::UniquePtr<BINetworkManagerServer> m_pNetworkManager;
+
+#ifndef _RETAIL
+   BIEngine::SharedPtr<BIServerDbgHumanView> m_pDbgHumanView;
+   BIEngine::UniquePtr<BIDebugMenuController> m_pDebugMenuController;
+#endif
 };
