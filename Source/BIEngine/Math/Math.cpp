@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "../StdLib/Algorithm.h"
+
 namespace BIEngine {
 
 template <typename T>
@@ -26,32 +28,6 @@ double Sqrt(const double val)
 {
    return std::sqrt(val);
 }
-
-template <typename T>
-extern T Min(const T& a, const T& b)
-{
-   return a < b ? a : b;
-}
-
-template char Min<char>(const char& a, const char& b);
-template int Min<int>(const int& a, const int& b);
-template long Min<long>(const long& a, const long& b);
-template long long Min<long long>(const long long& a, const long long& b);
-template float Min<float>(const float& a, const float& b);
-template double Min<double>(const double& a, const double& b);
-
-template <typename T>
-extern T Max(const T& a, const T& b)
-{
-   return a > b ? a : b;
-}
-
-template char Max<char>(const char& a, const char& b);
-template int Max<int>(const int& a, const int& b);
-template long Max<long>(const long& a, const long& b);
-template long long Max<long long>(const long long& a, const long long& b);
-template float Max<float>(const float& a, const float& b);
-template double Max<double>(const double& a, const double& b);
 
 template <typename T>
 T Clamp(const T& value, const T& min, const T& max)

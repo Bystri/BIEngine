@@ -9,12 +9,6 @@ float Sqrt(const float val);
 double Sqrt(const double val);
 
 template <typename T>
-extern T Min(const T& a, const T& b);
-
-template <typename T>
-extern T Max(const T& a, const T& b);
-
-template <typename T>
 extern T Clamp(const T& value, const T& min, const T& max);
 
 template <typename T>

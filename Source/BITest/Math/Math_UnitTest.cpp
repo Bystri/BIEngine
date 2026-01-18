@@ -16,22 +16,6 @@ TEST(Math, Sqrt) {
 	EXPECT_FLOAT_EQ(BIEngine::Sqrt(val), 2.0f);
 }
 
-TEST(Math, Min) {
-	const float min = -10.0f;
-	const float max = 100.0f;
-
-	EXPECT_FLOAT_EQ(BIEngine::Min(min, max), min);
-	EXPECT_FLOAT_EQ(BIEngine::Min(min, min), min);
-}
-
-TEST(Math, Max) {
-	const float min = -10.0f;
-	const float max = 100.0f;
-
-	EXPECT_FLOAT_EQ(BIEngine::Max(min, max), max);
-	EXPECT_FLOAT_EQ(BIEngine::Max(max, max), max);
-}
-
 TEST(Math, Clamp) {
 	const float min = -10.0f;
 	const float mid = 2.0f;

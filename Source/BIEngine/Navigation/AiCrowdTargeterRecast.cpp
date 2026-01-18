@@ -3,6 +3,8 @@
 #include <DetourPathCorridor.h>
 #include <DetourPathQueue.h>
 
+#include "../StdLib/Algorithm.h"
+
 namespace BIEngine {
 
 /// The maximum number of corners a crowd agent will look ahead in the path.
