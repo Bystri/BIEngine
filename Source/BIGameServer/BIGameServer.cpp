@@ -152,7 +152,7 @@ void BIServerGameLogic::OnUpdate(BIEngine::GameTimer& gt)
    m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
 
    BIEngine::ObjectReplicationProtocolWriter::Get()->OnUpdate();
-   m_pNetworkManager->SendOutgoingPackets();
+   m_pNetworkManager->SendOutgoingPackets(gt);
 }
 
 void BIServerGameLogic::OnRenderDebug(const BIEngine::GameTimer& gt)

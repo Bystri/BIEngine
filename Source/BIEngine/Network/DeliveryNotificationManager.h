@@ -85,14 +85,19 @@ using TransmissionDataPtr = SharedPtr<TransmissionData>;
 
 class InFlightPacket {
 public:
-   InFlightPacket(PacketSequenceNumber sequenceNumber)
-      : m_sequenceNumber(sequenceNumber)
+   InFlightPacket(PacketSequenceNumber sequenceNumber, float timeDispatched)
+      : m_sequenceNumber(sequenceNumber), m_timeDispatched(timeDispatched)
    {
    }
 
    PacketSequenceNumber GetSequenceNumber() const
    {
       return m_sequenceNumber;
+   }
+
+   float GetTimeDispatched() const
+   {
+      return m_timeDispatched;
    }
 
    void SetTransmissionData(int key, TransmissionDataPtr pTransmissionData)
@@ -133,9 +138,9 @@ public:
       return m_inFlightPackets;
    }
 
-   inline InFlightPacket* WriteState(OutputMemoryBitStream& outputStream)
+   inline InFlightPacket* WriteState(OutputMemoryBitStream& outputStream, const GameTimer& gt)
    {
-      InFlightPacket* toRet = WriteSequenceNumber(outputStream);
+      InFlightPacket* toRet = WriteSequenceNumber(outputStream, gt);
       WritePendingAcks(outputStream);
 
       return toRet;
@@ -149,14 +154,31 @@ public:
       return toRet;
    }
 
+   void ProcessTimedOutPackets(const GameTimer& gt)
+   {
+      const float ACK_TIMEOUT = 30.0f;
+
+      float timeoutTime = gt.TotalTime() - ACK_TIMEOUT;
+      while (!m_inFlightPackets.Empty()) {
+         // packets are sorted, so all timed out packets must be at front
+         const auto& nextInFlightPacket = m_inFlightPackets.Front();
+         if (nextInFlightPacket.GetTimeDispatched() < timeoutTime) {
+            HandlePacketDeliveryFailure(nextInFlightPacket);
+            m_inFlightPackets.PopFront();
+         } else {
+            // no packets beyond could be timed out
+            break;
+         }
+      }
+   }
 
 private:
-   InFlightPacket* WriteSequenceNumber(OutputMemoryBitStream& packet)
+   InFlightPacket* WriteSequenceNumber(OutputMemoryBitStream& packet, const GameTimer& gt)
    {
       const PacketSequenceNumber sequenceNumber = m_nextOutgoingSequenceNumber++;
       Serialize(packet, sequenceNumber);
 
-      m_inFlightPackets.EmplaceBack(sequenceNumber);
+      m_inFlightPackets.EmplaceBack(sequenceNumber, gt.TotalTime());
       return &m_inFlightPackets.Back();
    }
 
@@ -239,26 +261,6 @@ private:
          }
       }
    }
-
-   /*
-   void DeliveryNotificationManager::ProcessTimedOutPackets(const GameTimer& gt)
-   {
-      const float ACK_TIMEOUT = 30.0f;
-
-      float timeoutTime = gt.TotalTime() - ACK_TIMEOUT;
-      while (!m_inFlightPackets.Empty()) {
-         // packets are sorted, so all timed out packets must be at front
-         const auto& nextInFlightPacket = m_inFlightPackets.Front();
-         if (nextInFlightPacket.GetTimeDispatched() < timeoutTime) {
-            HandlePacketDeliveryFailure(nextInFlightPacket);
-            m_inFlightPackets.PopFront();
-         } else {
-            // no packets beyond could be timed out
-            break;
-         }
-      }
-   }
-   */
 
    void HandlePacketDeliveryFailure(const InFlightPacket& flightPacket)
    {

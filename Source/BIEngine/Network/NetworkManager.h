@@ -96,8 +96,13 @@ protected:
    };
 
    class NetworkTransmissionData : public TransmissionData {
-      NetworkTransmissionData(PeerPtr peerPtr, MessageToSend&& msg, NetworkManager* pNetworkServer)
-         : m_pPeer(peerPtr), m_msg(std::move(msg)), m_pNetworkServer(pNetworkServer)
+   public:
+      NetworkTransmissionData(PeerPtr pPeer, const MessageToSend& msg, NetworkManager* pNetworkServer)
+         : m_pPeer(pPeer), m_msg(msg), m_pNetworkServer(pNetworkServer)
+      {
+      }
+
+      virtual void HandleDeliverySuccess(DeliveryNotificationManager* pDeliveryNotificationManager) const override
       {
       }
 
@@ -135,7 +140,7 @@ protected:
 
    virtual void HandleConnectionReset(const SocketAddress& fromAddress) {}
 
-   void SendMessagesFromQueue();
+   void SendMessagesFromQueue(const GameTimer& gt);
 
 private:
    void ResendNetworkMessage(const Peer& peer, const MessageToSend& msg)
@@ -148,6 +153,7 @@ private:
 
       PeerInfo& peerInfo = peerInfoPtr->second;
 
+      Logger::WriteMsgLog("Resend msg with id %u", msg.GetId());
       peerInfo.messageQueueToSend.Push(msg);
    }
 
@@ -157,6 +163,8 @@ protected:
    NetworkProtocolsManager m_protocolsManager;
 
    HashMap<uint32_t, PeerInfo> m_peerInfoMap;
+
+   Deque<int> m_processedMessagesIds;
 
 private:
    UdpSocketPtr m_socket;

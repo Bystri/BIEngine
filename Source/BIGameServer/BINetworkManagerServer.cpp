@@ -97,8 +97,8 @@ void BINetworkManagerServer::SendWelcomePacket(BIEngine::PeerPtr clientProxy)
    SendNetworkMessage(*clientProxy, kWelcomeCC, welcomeMessage);
 }
 
-void BINetworkManagerServer::SendOutgoingPackets()
+void BINetworkManagerServer::SendOutgoingPackets(const BIEngine::GameTimer& gt)
 {
    m_protocolsManager.OnBeforePacketsSend(this);
-   SendMessagesFromQueue();
+   SendMessagesFromQueue(gt);
 }

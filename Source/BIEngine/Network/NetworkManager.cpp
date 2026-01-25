@@ -32,9 +32,16 @@ void NetworkManager::ProcessIncomingPackets()
    for (auto& peerInfo : m_peerInfoMap) {
       while (!peerInfo.second.messageQueueToRead.Empty()) {
          MessageToRead& msg = peerInfo.second.messageQueueToRead[0];
-         if (peerInfo.second.expectedMessageId != msg.GetId()) {
+         if (msg.GetId() < peerInfo.second.expectedMessageId) {
+            peerInfo.second.messageQueueToRead.Erase(peerInfo.second.messageQueueToRead.Begin());
+            continue;
+         }
+
+         if (msg.GetId() > peerInfo.second.expectedMessageId) {
             break;
          }
+
+         m_processedMessagesIds.PushBack(msg.GetId());
 
          ++peerInfo.second.expectedMessageId;
 
@@ -94,19 +101,26 @@ void NetworkManager::SendNetworkMessage(const Peer& peer, NetworkProtocolType pr
    peerInfo.messageQueueToSend.Push(std::move(msg));
 }
 
-void NetworkManager::SendMessagesFromQueue()
+void NetworkManager::SendMessagesFromQueue(const GameTimer& gt)
 {
    for (auto& peerInfo : m_peerInfoMap) {
       PeerInfo& info = peerInfo.second;
 
+      info.deliveryNotificationManager.ProcessTimedOutPackets(gt);
+
       OutputMemoryBitStream packet;
 
-      InFlightPacket* inFlightPacket = peerInfo.second.deliveryNotificationManager.WriteState(packet);
+      InFlightPacket* inFlightPacket = peerInfo.second.deliveryNotificationManager.WriteState(packet, gt);
+
+      int keyOfTransitionData = 0;
 
       while (!info.messageQueueToSend.Empty()) {
          const MessageToSend& msg = info.messageQueueToSend.Front();
 
          msg.Write(packet);
+
+         TransmissionDataPtr pData = MakeShared<NetworkTransmissionData>(info.pPeer, msg, this);
+         inFlightPacket->SetTransmissionData(keyOfTransitionData++, pData);
 
          info.messageQueueToSend.Pop();
       }
@@ -128,8 +142,25 @@ void NetworkManager::DrawDbgDiagnostics()
    for (auto& peerInfo : m_peerInfoMap) {
       static ImGuiTableFlags flags = ImGuiTableFlags_Hideable | ImGuiTableFlags_Borders;
 
-      bool open = ImGui::CollapsingHeader("Queue messages to read", ImGuiTreeNodeFlags_DefaultOpen);
-      if (open && ImGui::BeginTable("Table msg to read queue", 3, flags, ImVec2(0.0f, ImGui::GetTextLineHeightWithSpacing() * 5))) {
+      const bool openInFLightPackets = ImGui::CollapsingHeader("In flight packets", ImGuiTreeNodeFlags_DefaultOpen);
+      if (openInFLightPackets && ImGui::BeginTable("In flight packets", 2, flags, ImVec2(0.0f, ImGui::GetTextLineHeightWithSpacing() * 5))) {
+         ImGui::TableSetupColumn("Seq num");
+         ImGui::TableSetupColumn("Time dispatched");
+         ImGui::TableHeadersRow();
+
+         for (int i = 0; i < peerInfo.second.deliveryNotificationManager.GetInFlightPackets().Size(); ++i) {
+            ImGui::TableNextColumn();
+            ImGui::Text("%d", peerInfo.second.deliveryNotificationManager.GetInFlightPackets()[i].GetSequenceNumber());
+
+            ImGui::TableNextColumn();
+            ImGui::Text("%f", peerInfo.second.deliveryNotificationManager.GetInFlightPackets()[i].GetTimeDispatched());
+         }
+
+         ImGui::EndTable();
+      }
+
+      const bool openQueueMessagesToRead = ImGui::CollapsingHeader("Queue messages to read", ImGuiTreeNodeFlags_DefaultOpen);
+      if (openQueueMessagesToRead && ImGui::BeginTable("Table msg to read queue", 2, flags, ImVec2(0.0f, ImGui::GetTextLineHeightWithSpacing() * 5))) {
          ImGui::TableSetupColumn("Seq num");
          ImGui::TableSetupColumn("Expected seq num");
          ImGui::TableHeadersRow();
@@ -140,6 +171,19 @@ void NetworkManager::DrawDbgDiagnostics()
 
             ImGui::TableNextColumn();
             ImGui::Text("%d", peerInfo.second.expectedMessageId);
+         }
+
+         ImGui::EndTable();
+      }
+
+      const bool openProcessedMessages = ImGui::CollapsingHeader("Processed messages", ImGuiTreeNodeFlags_DefaultOpen);
+      if (openProcessedMessages && ImGui::BeginTable("Table processed messages", 1, flags, ImVec2(0.0f, ImGui::GetTextLineHeightWithSpacing() * 5))) {
+         ImGui::TableSetupColumn("Seq num");
+         ImGui::TableHeadersRow();
+
+         for (int i = 0; i < m_processedMessagesIds.Size(); ++i) {
+            ImGui::TableNextColumn();
+            ImGui::Text("%d", m_processedMessagesIds[i]);
          }
 
          ImGui::EndTable();

@@ -11,7 +11,7 @@ class BINetworkManagerServer : public BIEngine::NetworkManager {
 public:
    bool Init(uint16_t port);
 
-   void SendOutgoingPackets();
+   void SendOutgoingPackets(const BIEngine::GameTimer& gt);
 
 protected:
    virtual void ProcessPacket(BIEngine::InputMemoryBitStream& inputStream, const BIEngine::SocketAddress& fromAddress) override;

@@ -68,7 +68,6 @@ void ObjectReplicationProtocolWriter::AddReplicationObject(SharedPtr<Replication
 
 void ObjectReplicationProtocolWriter::SendStateMsgToClient(int peerIdx, NetworkManager* pNetworkManager)
 {
-   // WriteLastMoveTimestampIfDirty(statePacket, inClientProxy);
    OutputMemoryBitStream msg;
    m_pReplicationManagersPerPeer[peerIdx]->Write(msg);
    pNetworkManager->SendNetworkMessage(*m_pPeers[peerIdx], GetType(), msg);

@@ -31,12 +31,12 @@ void BINetworkManagerClient::SendOutgoingPackets(const BIEngine::GameTimer& gt)
 {
    if (m_state == NetworkClientState::SayingHello) {
       UpdateSayingHello(gt);
-      SendMessagesFromQueue();
+      SendMessagesFromQueue(gt);
       return;
    }
 
    m_protocolsManager.OnBeforePacketsSend(this);
-   SendMessagesFromQueue();
+   SendMessagesFromQueue(gt);
 }
 
 void BINetworkManagerClient::UpdateSayingHello(const BIEngine::GameTimer& gt)
