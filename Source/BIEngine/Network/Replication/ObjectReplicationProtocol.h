@@ -35,14 +35,13 @@ protected:
 private:
    void AddReplicationObject(SharedPtr<ReplicationObject> pObj);
 
-   void SendStatePacketToClient(int peerIdx, NetworkManager* pNetworkManager);
+   void SendStateMsgToClient(int peerIdx, NetworkManager* pNetworkManager);
 
 private:
    SharedPtr<NewtworkObjectLinkingContexts> m_pLinkingContext;
 
    DynamicArray<PeerPtr> m_pPeers;
    DynamicArray<UniquePtr<ReplicationActionWriter>> m_pReplicationManagersPerPeer;
-   DynamicArray<OutputMemoryBitStream> m_replicationBuffersPerPeer;
    DynamicArray<SharedPtr<ReplicationObject>> m_pReplicationObjects;
 };
 

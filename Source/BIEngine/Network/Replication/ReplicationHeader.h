@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Serialization.h"
+#include "ObjectReplication.h"
 
 namespace BIEngine {
 
@@ -15,15 +16,15 @@ class ReplicationHeader {
 public:
    ReplicationHeader()
       : m_replicationAction(ReplicationAction::Create),
-        m_networkId(0),
-        m_classId(0)
+        m_networkId(0)
    {
    }
 
-   ReplicationHeader(ReplicationAction ra, uint32_t networkId, uint32_t classId = 0)
+   ReplicationHeader(ReplicationAction ra, uint32_t networkId, SharedPtr<ReplicationObject> pReplicationObject = nullptr)
       : m_replicationAction(ra),
         m_networkId(networkId),
-        m_classId(classId)
+        m_pReplicationObject(pReplicationObject),
+        m_classId(pReplicationObject->GetClassType())
    {
    }
 
@@ -37,6 +38,7 @@ public:
    void Read(InputMemoryBitStream& stream);
 
 public:
+   SharedPtr<ReplicationObject> m_pReplicationObject;
    ReplicationAction m_replicationAction;
    uint32_t m_networkId;
    uint32_t m_classId;

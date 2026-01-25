@@ -31,17 +31,14 @@
     <ClCompile Include="..\BICameraManager.cpp" />
     <ClCompile Include="..\BIGCEventListener.cpp" />
     <ClCompile Include="..\BIGameClient.cpp" />
-    <ClCompile Include="..\BIGameController.cpp" />
     <ClCompile Include="..\BIInputActionController.cpp" />
     <ClCompile Include="..\BINetworkManagerClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\AnimationControllerComponent.h" />
     <ClInclude Include="..\BICameraManager.h" />
-    <ClInclude Include="..\BIDebugMenuController.h" />
     <ClInclude Include="..\BIGCEventListener.h" />
     <ClInclude Include="..\BIGameClient.h" />
-    <ClInclude Include="..\BIGameController.h" />
     <ClInclude Include="..\BIInputActiorController.h" />
     <ClInclude Include="..\BINetworkManagerClient.h" />
     <ClInclude Include="..\BIGCScriptExports.h" />

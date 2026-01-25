@@ -31,7 +31,7 @@ private:
 
 private:
    AddressToClientMap m_addressToClientMap;
-   uint32_t nextClientId = 0u;
+   uint32_t m_nextClientId = 0u;
 
    /*
    void AddWorldStateToPacket(OutputMemoryBitStream& inOutputStream);

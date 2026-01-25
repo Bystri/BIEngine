@@ -35,6 +35,8 @@
     <ClCompile Include="..\Network\EventNetworkProtocol.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\BIFlyCameraSystem.cpp" />
+    <ClCompile Include="..\BIGameController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGame.h" />
@@ -81,6 +83,9 @@
     <ClInclude Include="..\Network\EventNetworkProtocol.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\BIDebugMenuController.h" />
+    <ClInclude Include="..\BIFlyCameraSystem.h" />
+    <ClInclude Include="..\BIGameController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.clang-format" />

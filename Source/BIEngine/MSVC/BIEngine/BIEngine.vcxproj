@@ -188,6 +188,7 @@
     <ClCompile Include="..\..\Navigation\NavMeshManager.cpp" />
     <ClCompile Include="..\..\Navigation\NavSoloMeshGenerator.cpp" />
     <ClCompile Include="..\..\Navigation\NavWorld.cpp" />
+    <ClCompile Include="..\..\Network\DeliveryNotificationManager.cpp" />
     <ClCompile Include="..\..\Network\NetworkManager.cpp" />
     <ClCompile Include="..\..\Network\NetworkProtocol.cpp" />
     <ClCompile Include="..\..\Network\NetworkProtocolsManager.cpp" />
@@ -319,8 +320,8 @@
     <ClInclude Include="..\..\Navigation\NavMeshManager.h" />
     <ClInclude Include="..\..\Navigation\NavSoloMeshGenerator.h" />
     <ClInclude Include="..\..\Navigation\NavWorld.h" />
+    <ClInclude Include="..\..\Network\DeliveryNotificationManager.h" />
     <ClInclude Include="..\..\Network\NetworkManager.h" />
-    <ClInclude Include="..\..\Network\NetworkMessage.h" />
     <ClInclude Include="..\..\Network\NetworkProtocol.h" />
     <ClInclude Include="..\..\Network\NetworkProtocolsManager.h" />
     <ClInclude Include="..\..\Network\Peer.h" />

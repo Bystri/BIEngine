@@ -441,6 +441,9 @@
     <ClCompile Include="..\..\Network\NetworkProtocolsManager.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Network\DeliveryNotificationManager.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -926,9 +929,6 @@
     <ClInclude Include="..\..\Navigation\AiCrowdTargeterRecast.h">
       <Filter>Navigation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Network\NetworkMessage.h">
-      <Filter>Network</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Network\NetworkProtocol.h">
       <Filter>Network</Filter>
     </ClInclude>
@@ -936,6 +936,9 @@
       <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Network\Peer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\DeliveryNotificationManager.h">
       <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,6 +15,8 @@ void BINetworkManagerClient::Init(const BIEngine::SocketAddress& serverAddress, 
    m_protocolsManager.AddProtocolWriter(BIEngine::MakeShared<EventProtocolWriter>());
 
    m_pServerPeer = BIEngine::MakeShared<BIEngine::Peer>(0, serverAddress);
+   m_peerInfoMap.Emplace(m_pServerPeer->GetId(), m_pServerPeer);
+
    m_state = NetworkClientState::SayingHello;
    m_timeOfLastHello = 0.0f;
    m_timeOfLastEventPacket = 0.0f;
@@ -29,14 +31,12 @@ void BINetworkManagerClient::SendOutgoingPackets(const BIEngine::GameTimer& gt)
 {
    if (m_state == NetworkClientState::SayingHello) {
       UpdateSayingHello(gt);
-      return;
-   }
-
-   if (m_state != NetworkClientState::Welcomed) {
+      SendMessagesFromQueue();
       return;
    }
 
    m_protocolsManager.OnBeforePacketsSend(this);
+   SendMessagesFromQueue();
 }
 
 void BINetworkManagerClient::UpdateSayingHello(const BIEngine::GameTimer& gt)
@@ -61,19 +61,37 @@ void BINetworkManagerClient::SendHelloPacket()
 
 void BINetworkManagerClient::ProcessPacket(BIEngine::InputMemoryBitStream& inputStream, const BIEngine::SocketAddress& fromAddress)
 {
-   uint32_t packetType;
-   BIEngine::Deserialize(inputStream, packetType);
+   auto infoItr = m_peerInfoMap.Find(m_pServerPeer->GetId());
+   BIEngine::Assert(infoItr != m_peerInfoMap.End(), "Try to process packet from an unknown peer");
 
-   if (packetType == kWelcomeCC) {
-      HandleWelcomePacket(inputStream);
+   if (infoItr == m_peerInfoMap.End()) {
       return;
    }
 
-   if (m_state == NetworkClientState::Welcomed) {
-      //  ReadLastMoveProcessedOnServerTimestamp(inInputStream);
+   infoItr->second.deliveryNotificationManager.ReadAndProcessState(inputStream);
 
-      m_protocolsManager.ReceiveMeessage(packetType, inputStream);
+   if (m_state == NetworkClientState::SayingHello) {
+      MessageToRead msg;
+      msg.Read(inputStream);
+
+      if (msg.GetId() != 0) {
+         return;
+      }
+
+      uint32_t packetType;
+      BIEngine::Deserialize(msg.GetBuffer(), packetType);
+
+      if (packetType == kWelcomeCC) {
+         HandleWelcomePacket(msg.GetBuffer());
+      }
    }
+
+   while (inputStream.GetRemainingBitCount() > 32) {
+      MessageToRead& msg = infoItr->second.messageQueueToRead.EmplaceBack();
+      msg.Read(inputStream);
+   }
+
+   Sort(infoItr->second.messageQueueToRead.Begin(), infoItr->second.messageQueueToRead.End());
 }
 
 void BINetworkManagerClient::HandleWelcomePacket(BIEngine::InputMemoryBitStream& inputStream)

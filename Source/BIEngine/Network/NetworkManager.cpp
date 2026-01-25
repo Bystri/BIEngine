@@ -1,5 +1,7 @@
 #include "NetworkManager.h"
 
+#include <imgui.h>
+
 #include "../Utilities/Logger.h"
 
 namespace BIEngine {
@@ -26,6 +28,24 @@ bool NetworkManager::InitInternal(uint16_t port)
 void NetworkManager::ProcessIncomingPackets()
 {
    ReadIncomingPackets();
+
+   for (auto& peerInfo : m_peerInfoMap) {
+      while (!peerInfo.second.messageQueueToRead.Empty()) {
+         MessageToRead& msg = peerInfo.second.messageQueueToRead[0];
+         if (peerInfo.second.expectedMessageId != msg.GetId()) {
+            break;
+         }
+
+         ++peerInfo.second.expectedMessageId;
+
+         uint32_t packetType;
+         Deserialize(msg.GetBuffer(), packetType);
+
+         m_protocolsManager.ReceiveMeessage(packetType, msg.GetBuffer());
+
+         peerInfo.second.messageQueueToRead.Erase(peerInfo.second.messageQueueToRead.Begin());
+      }
+   }
 }
 
 void NetworkManager::ReadIncomingPackets()
@@ -58,12 +78,76 @@ void NetworkManager::ReadIncomingPackets()
 
 void NetworkManager::SendNetworkMessage(const Peer& peer, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream)
 {
-   OutputMemoryBitStream packet;
-   BIEngine::Serialize(packet, protocolType);
+   auto peerInfoPtr = m_peerInfoMap.Find(peer.GetId());
+   if (peerInfoPtr == m_peerInfoMap.End()) {
+      Assert(false, "You are trying to send message to an unconnected peer");
+      return;
+   }
 
-   packet.WriteBits(outputStream.GetBufferPtr().Get(), outputStream.GetBitLength());
+   PeerInfo& peerInfo = peerInfoPtr->second;
 
-   m_socket->SendTo(packet.GetBufferPtr().Get(), packet.GetByteLength(), peer.GetSocketAddress());
+   MessageToSend msg(peerInfo.messageId++);
+
+   BIEngine::Serialize(msg.GetBuffer(), protocolType);
+   msg.GetBuffer().WriteBits(outputStream.GetBufferPtr().Get(), outputStream.GetBitLength());
+
+   peerInfo.messageQueueToSend.Push(std::move(msg));
 }
+
+void NetworkManager::SendMessagesFromQueue()
+{
+   for (auto& peerInfo : m_peerInfoMap) {
+      PeerInfo& info = peerInfo.second;
+
+      OutputMemoryBitStream packet;
+
+      InFlightPacket* inFlightPacket = peerInfo.second.deliveryNotificationManager.WriteState(packet);
+
+      while (!info.messageQueueToSend.Empty()) {
+         const MessageToSend& msg = info.messageQueueToSend.Front();
+
+         msg.Write(packet);
+
+         info.messageQueueToSend.Pop();
+      }
+
+      m_socket->SendTo(packet.GetBufferPtr().Get(), packet.GetByteLength(), info.pPeer->GetSocketAddress());
+   }
+}
+
+#ifndef _RETAIL
+void NetworkManager::DrawDbgDiagnostics()
+{
+   ImGui::SetNextWindowSize(ImVec2(550, 650), ImGuiCond_Always);
+
+   if (!ImGui::Begin("Network info")) {
+      ImGui::End();
+      return;
+   }
+
+   for (auto& peerInfo : m_peerInfoMap) {
+      static ImGuiTableFlags flags = ImGuiTableFlags_Hideable | ImGuiTableFlags_Borders;
+
+      bool open = ImGui::CollapsingHeader("Queue messages to read", ImGuiTreeNodeFlags_DefaultOpen);
+      if (open && ImGui::BeginTable("Table msg to read queue", 3, flags, ImVec2(0.0f, ImGui::GetTextLineHeightWithSpacing() * 5))) {
+         ImGui::TableSetupColumn("Seq num");
+         ImGui::TableSetupColumn("Expected seq num");
+         ImGui::TableHeadersRow();
+
+         for (int i = 0; i < peerInfo.second.messageQueueToRead.Size(); ++i) {
+            ImGui::TableNextColumn();
+            ImGui::Text("%d", peerInfo.second.messageQueueToRead[i].GetId());
+
+            ImGui::TableNextColumn();
+            ImGui::Text("%d", peerInfo.second.expectedMessageId);
+         }
+
+         ImGui::EndTable();
+      }
+   }
+
+   ImGui::End();
+}
+#endif
 
 } // namespace BIEngine

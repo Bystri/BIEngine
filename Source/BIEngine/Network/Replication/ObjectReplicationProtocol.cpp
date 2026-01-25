@@ -51,7 +51,7 @@ void ObjectReplicationProtocolWriter::OnUpdate()
 
       if (obj->IsDirty()) {
          for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-            m_pReplicationManagersPerPeer[i]->ReplicateUpdate(m_replicationBuffersPerPeer[i], obj);
+            m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
          }
       }
    }
@@ -62,24 +62,25 @@ void ObjectReplicationProtocolWriter::AddReplicationObject(SharedPtr<Replication
    m_pReplicationObjects.PushBack(pObj);
 
    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-      m_pReplicationManagersPerPeer[i]->ReplicateCreate(m_replicationBuffersPerPeer[i], pObj);
+      m_pReplicationManagersPerPeer[i]->ReplicateCreate(pObj);
    }
 }
 
-void ObjectReplicationProtocolWriter::SendStatePacketToClient(int peerIdx, NetworkManager* pNetworkManager)
+void ObjectReplicationProtocolWriter::SendStateMsgToClient(int peerIdx, NetworkManager* pNetworkManager)
 {
    // WriteLastMoveTimestampIfDirty(statePacket, inClientProxy);
-   pNetworkManager->SendNetworkMessage(*m_pPeers[peerIdx], GetType(), m_replicationBuffersPerPeer[peerIdx]);
+   OutputMemoryBitStream msg;
+   m_pReplicationManagersPerPeer[peerIdx]->Write(msg);
+   pNetworkManager->SendNetworkMessage(*m_pPeers[peerIdx], GetType(), msg);
 }
 
 void ObjectReplicationProtocolWriter::RegisterPeer(PeerPtr pPeer)
 {
    m_pPeers.PushBack(pPeer);
    UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
-   OutputMemoryBitStream& replicationBuffer = m_replicationBuffersPerPeer.EmplaceBack(OutputMemoryBitStream());
 
    for (const auto& pObj : m_pReplicationObjects) {
-      pReplicationManager->ReplicateCreate(replicationBuffer, pObj);
+      pReplicationManager->ReplicateCreate(pObj);
    }
 }
 
@@ -89,7 +90,6 @@ void ObjectReplicationProtocolWriter::UnregisterPeer(PeerPtr pPeer)
       if (m_pPeers[i] == pPeer) {
          m_pPeers.Erase(m_pPeers.Begin() + i);
          m_pReplicationManagersPerPeer.Erase(m_pReplicationManagersPerPeer.Begin() + i);
-         m_replicationBuffersPerPeer.Erase(m_replicationBuffersPerPeer.Begin() + i);
 
          return;
       }
@@ -98,10 +98,9 @@ void ObjectReplicationProtocolWriter::UnregisterPeer(PeerPtr pPeer)
 
 void ObjectReplicationProtocolWriter::OnBeforePacketsSend(NetworkManager* pNetworkManager)
 {
-   for (int i = 0; i < m_replicationBuffersPerPeer.Size(); ++i) {
-      if (m_replicationBuffersPerPeer[i].GetBitLength() > 0) {
-         SendStatePacketToClient(i, pNetworkManager);
-         m_replicationBuffersPerPeer[i] = OutputMemoryBitStream();
+   for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
+      if (m_pReplicationManagersPerPeer[i]->GetNumOfCachedHeaders() > 0) {
+         SendStateMsgToClient(i, pNetworkManager);
       }
    }
 }
@@ -110,9 +109,7 @@ void ObjectReplicationProtocolWriter::OnBeforePacketsSend(NetworkManager* pNetwo
 
 void ObjectReplicationProtocolReader::ReceiveMessage(InputMemoryBitStream& stream)
 {
-   while (stream.GetRemainingBitCount() >= 32) {
-      m_pReplicationActionReader->ProcessReplicationAction(stream);
-   }
+   m_pReplicationActionReader->ProcessReplicationActions(stream);
 }
 
 } // namespace BIEngine

@@ -13,10 +13,6 @@ PYBIND11_EMBEDDED_MODULE(BIEMath, m)
 
    m.def("Sqrt", [](float val) { return BIEngine::Sqrt(val); });
 
-   m.def("Min", &BIEngine::Min<float>);
-   m.def("Min", &BIEngine::Min<int>);
-   m.def("Max", &BIEngine::Max<float>);
-   m.def("Max", &BIEngine::Max<int>);
    m.def("Clamp", &BIEngine::Clamp<float>);
    m.def("Clamp", &BIEngine::Clamp<int>);
 

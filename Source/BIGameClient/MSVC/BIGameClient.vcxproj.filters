@@ -4,7 +4,6 @@
     <ClCompile Include="..\BICameraManager.cpp" />
     <ClCompile Include="..\BIGCEventListener.cpp" />
     <ClCompile Include="..\BIGameClient.cpp" />
-    <ClCompile Include="..\BIGameController.cpp" />
     <ClCompile Include="..\BIInputActionController.cpp" />
     <ClCompile Include="..\BINetworkManagerClient.cpp" />
     <ClCompile Include="..\AnimationControllerComponent.cpp" />
@@ -13,11 +12,9 @@
     <ClInclude Include="..\BICameraManager.h" />
     <ClInclude Include="..\BIGCEventListener.h" />
     <ClInclude Include="..\BIGameClient.h" />
-    <ClInclude Include="..\BIGameController.h" />
     <ClInclude Include="..\BIInputActiorController.h" />
     <ClInclude Include="..\BINetworkManagerClient.h" />
     <ClInclude Include="..\BIGCScriptExports.h" />
-    <ClInclude Include="..\BIDebugMenuController.h" />
     <ClInclude Include="..\AnimationControllerComponent.h" />
   </ItemGroup>
 </Project>

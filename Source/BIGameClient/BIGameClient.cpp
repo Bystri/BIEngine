@@ -186,6 +186,10 @@ void BIGameClientLogic::OnRenderDebug(const BIEngine::GameTimer& gt)
    if (m_pDebugMenuController->IsShowPhysics3dWindow()) {
       m_pPhysics3D->DrawRenderDiagnostics();
    }
+
+   if (m_pDebugMenuController->IsNetworkWindow()) {
+      m_pNetworkManager->DrawDbgDiagnostics();
+   }
 #endif
 }
 

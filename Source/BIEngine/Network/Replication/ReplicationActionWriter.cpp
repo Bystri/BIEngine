@@ -1,27 +1,20 @@
 #include "ReplicationActionWriter.h"
 
-#include "ReplicationHeader.h"
-
 namespace BIEngine {
 
-void ReplicationActionWriter::ReplicateCreate(OutputMemoryBitStream& stream, SharedPtr<ReplicationObject> pGameObject)
+void ReplicationActionWriter::ReplicateCreate(SharedPtr<ReplicationObject> pGameObject)
 {
-   ReplicationHeader rh(ReplicationAction::Create, m_pLinkingContext->GetId(pGameObject, true), pGameObject->GetClassType());
-   rh.Write(stream);
-   pGameObject->Write(stream, true);
+   m_replicationHeadersBuffer.Emplace(ReplicationAction::Create, m_pLinkingContext->GetId(pGameObject, true), pGameObject);
 }
 
-void ReplicationActionWriter::ReplicateUpdate(OutputMemoryBitStream& stream, SharedPtr<ReplicationObject> pGameObject)
+void ReplicationActionWriter::ReplicateUpdate(SharedPtr<ReplicationObject> pGameObject)
 {
-   ReplicationHeader rh(ReplicationAction::Update, m_pLinkingContext->GetId(pGameObject, false), pGameObject->GetClassType());
-   rh.Write(stream);
-   pGameObject->Write(stream, false);
+   m_replicationHeadersBuffer.Emplace(ReplicationAction::Update, m_pLinkingContext->GetId(pGameObject, false), pGameObject);
 }
 
-void ReplicationActionWriter::ReplicateDestroy(OutputMemoryBitStream& stream, SharedPtr<ReplicationObject> pGameObject)
+void ReplicationActionWriter::ReplicateDestroy(SharedPtr<ReplicationObject> pGameObject)
 {
-   ReplicationHeader rh(ReplicationAction::Destroy, m_pLinkingContext->GetId(pGameObject, false));
-   rh.Write(stream);
+   m_replicationHeadersBuffer.Emplace(ReplicationAction::Destroy, m_pLinkingContext->GetId(pGameObject, false));
 }
 
 } // namespace BIEngine

@@ -31,34 +31,48 @@ void BINetworkManagerServer::ProcessPacket(BIEngine::PeerPtr clientProxy, BIEngi
    // remember we got a packet so we know not to disconnect for a bit
    // inClientProxy->UpdateLastPacketTime();
 
-   uint32_t packetType;
-   BIEngine::Deserialize(inputStream, packetType);
+   auto infoItr = m_peerInfoMap.Find(clientProxy->GetId());
+   BIEngine::Assert(infoItr != m_peerInfoMap.End(), "Try to process packet from an unknown peer");
 
-   if (packetType == kHelloCC) {
-      // need to resend welcome. to be extra safe we should check the name is the one we expect from this address,
-      // otherwise something weird is going on...
-      SendWelcomePacket(clientProxy);
+   if (infoItr == m_peerInfoMap.End()) {
       return;
    }
 
-   m_protocolsManager.ReceiveMeessage(packetType, inputStream);
+   infoItr->second.deliveryNotificationManager.ReadAndProcessState(inputStream);
+
+   while (inputStream.GetRemainingBitCount() > 32) {
+      MessageToRead& msg = infoItr->second.messageQueueToRead.EmplaceBack();
+      msg.Read(inputStream);
+   }
+
+   Sort(infoItr->second.messageQueueToRead.Begin(), infoItr->second.messageQueueToRead.End());
 }
 
 void BINetworkManagerServer::HandlePacketFromNewClient(BIEngine::InputMemoryBitStream& inputStream, const BIEngine::SocketAddress& fromAddress)
 {
    // read the beginning- is it a hello?
+
+   BIEngine::PeerPtr newClient = BIEngine::MakeShared<BIEngine::Peer>(m_nextClientId, fromAddress);
+   ++m_nextClientId;
+
+   auto itr = m_peerInfoMap.Emplace(newClient->GetId(), newClient);
+
+   itr.first->second.deliveryNotificationManager.ReadAndProcessState(inputStream);
+
+   MessageToRead msg;
+   msg.Read(inputStream);
+   BIEngine::Assert(msg.GetId() == 0, "First msg id expected to be 0");
+
    uint32_t packetType;
-   BIEngine::Deserialize(inputStream, packetType);
+   BIEngine::Deserialize(msg.GetBuffer(), packetType);
 
    if (packetType == kHelloCC) {
       // read the name
       BIEngine::String name;
-      BIEngine::Deserialize(inputStream, name);
-
-      BIEngine::PeerPtr newClient = BIEngine::MakeShared<BIEngine::Peer>(nextClientId, fromAddress);
-      ++nextClientId;
+      BIEngine::Deserialize(msg.GetBuffer(), name);
 
       m_protocolsManager.RegisterPeer(newClient);
+
       BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType);
 
       m_addressToClientMap[fromAddress] = newClient;
@@ -86,4 +100,5 @@ void BINetworkManagerServer::SendWelcomePacket(BIEngine::PeerPtr clientProxy)
 void BINetworkManagerServer::SendOutgoingPackets()
 {
    m_protocolsManager.OnBeforePacketsSend(this);
+   SendMessagesFromQueue();
 }

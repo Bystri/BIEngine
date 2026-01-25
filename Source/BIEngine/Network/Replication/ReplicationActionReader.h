@@ -12,7 +12,10 @@ public:
    }
 
 public:
-   void ProcessReplicationAction(InputMemoryBitStream& stream);
+   void ProcessReplicationActions(InputMemoryBitStream& stream);
+
+private:
+   void ProcessReplicationHeader(InputMemoryBitStream& stream);
 
 private:
    SharedPtr<NewtworkObjectLinkingContexts> m_pLinkingContext;

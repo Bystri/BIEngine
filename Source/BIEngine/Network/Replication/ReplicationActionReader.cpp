@@ -5,7 +5,17 @@
 
 namespace BIEngine {
 
-void ReplicationActionReader::ProcessReplicationAction(InputMemoryBitStream& stream)
+void ReplicationActionReader::ProcessReplicationActions(InputMemoryBitStream& stream)
+{
+   uint32_t numOfHeaders;
+   Deserialize(stream, numOfHeaders);
+
+   for (int i = 0; i < numOfHeaders; ++i) {
+      ProcessReplicationHeader(stream);
+   }
+}
+
+void ReplicationActionReader::ProcessReplicationHeader(InputMemoryBitStream& stream)
 {
    ReplicationHeader rh;
    rh.Read(stream);
