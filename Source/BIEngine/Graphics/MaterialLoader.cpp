@@ -15,7 +15,7 @@ static void materialLoaderLoadColorsRgb(tinyxml2::XMLElement* pRoot, SharedPtr<M
    }
 
    for (tinyxml2::XMLElement* pColorElement = pColorsRgbElement->FirstChildElement(); pColorElement; pColorElement = pColorElement->NextSiblingElement()) {
-      const char* paramName;
+      const char* paramName = nullptr;
       ColorRgb color;
 
       pColorElement->QueryStringAttribute("paramName", &paramName);
@@ -35,7 +35,7 @@ static void materialLoaderLoadColorsRgba(tinyxml2::XMLElement* pRoot, SharedPtr<
    }
 
    for (tinyxml2::XMLElement* pColorElement = pColorsRgbaElement->FirstChildElement(); pColorElement; pColorElement = pColorElement->NextSiblingElement()) {
-      const char* paramName;
+      const char* paramName = nullptr;
       ColorRgba color;
 
       pColorElement->QueryStringAttribute("paramName", &paramName);
@@ -56,7 +56,7 @@ static void materialLoaderLoadIntegers(tinyxml2::XMLElement* pRoot, SharedPtr<Ma
    }
 
    for (tinyxml2::XMLElement* pIntegerElement = pIntegersElement->FirstChildElement(); pIntegerElement; pIntegerElement = pIntegerElement->NextSiblingElement()) {
-      const char* paramName;
+      const char* paramName = nullptr;
       int val;
 
       pIntegerElement->QueryStringAttribute("paramName", &paramName);
@@ -74,7 +74,7 @@ static void materialLoaderLoadFloats(tinyxml2::XMLElement* pRoot, SharedPtr<Mate
    }
 
    for (tinyxml2::XMLElement* pFloatElement = pFloatsElement->FirstChildElement(); pFloatElement; pFloatElement = pFloatElement->NextSiblingElement()) {
-      const char* paramName;
+      const char* paramName = nullptr;
       float val;
 
       pFloatElement->QueryStringAttribute("paramName", &paramName);
@@ -92,7 +92,7 @@ static void materialLoaderLoadBools(tinyxml2::XMLElement* pRoot, SharedPtr<Mater
    }
 
    for (tinyxml2::XMLElement* pBoolElement = pBoolsEelemnt->FirstChildElement(); pBoolElement; pBoolElement = pBoolElement->NextSiblingElement()) {
-      const char* paramName;
+      const char* paramName = nullptr;
       bool val;
 
       pBoolElement->QueryStringAttribute("paramName", &paramName);
@@ -110,9 +110,9 @@ static void materialLoaderLoadTextures(tinyxml2::XMLElement* pRoot, SharedPtr<Ma
    }
 
    for (tinyxml2::XMLElement* pTextureElement = pTexuresElement->FirstChildElement(); pTextureElement; pTextureElement = pTextureElement->NextSiblingElement()) {
-      const char* paramName;
+      const char* paramName = nullptr;
       int slot;
-      const char* texturePath;
+      const char* texturePath = nullptr;
 
       pTextureElement->QueryStringAttribute("paramName", &paramName);
       pTextureElement->QueryIntAttribute("slot", &slot);
@@ -147,7 +147,7 @@ bool MaterialResourceLoader::LoadResource(char* rawBuffer, unsigned int rawSize,
       return false;
    }
 
-   const char* shaderProgramPath;
+   const char* shaderProgramPath = nullptr;
    pShaderProgramElement->QueryStringAttribute("path", &shaderProgramPath);
 
    auto shaderProgramData = StaticPointerCast<ShaderProgramData>(ResCache::Get()->GetHandle(shaderProgramPath)->GetExtra());

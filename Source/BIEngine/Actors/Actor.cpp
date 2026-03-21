@@ -25,7 +25,7 @@ bool Actor::Init(tinyxml2::XMLElement* pData)
    if (!pData)
       return false;
 
-   const char* actorName;
+   const char* actorName = nullptr;
    pData->QueryStringAttribute("name", &actorName);
    m_name = actorName;
 

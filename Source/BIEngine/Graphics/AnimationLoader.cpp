@@ -6,7 +6,7 @@ namespace BIEngine {
 
 static BoneAnimChannel animationLoaderReadBoneChannel(tinyxml2::XMLElement* const pChannelElement)
 {
-   const char* boneName;
+   const char* boneName = nullptr;
    pChannelElement->QueryStringAttribute("boneName", &boneName);
 
    DynamicArray<BoneAnimChannel::KeyPosition> positions;

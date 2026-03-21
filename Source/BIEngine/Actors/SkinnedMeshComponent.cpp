@@ -22,7 +22,7 @@ bool SkinnedMeshComponent::Init(tinyxml2::XMLElement* pData)
 {
    tinyxml2::XMLElement* pMeshElement = pData->FirstChildElement("Mesh");
    if (pMeshElement) {
-      const char* meshPath;
+      const char* meshPath = nullptr;
       pMeshElement->QueryStringAttribute("path", &meshPath);
       m_meshPath = meshPath;
       auto meshData = StaticPointerCast<SkinnedMeshExtraData>(ResCache::Get()->GetHandle(m_meshPath)->GetExtra());
@@ -37,7 +37,7 @@ bool SkinnedMeshComponent::Init(tinyxml2::XMLElement* pData)
 
    tinyxml2::XMLElement* pMatElement = pData->FirstChildElement("Material");
    if (pMatElement) {
-      const char* matPath;
+      const char* matPath = nullptr;
       pMatElement->QueryStringAttribute("path", &matPath);
       m_matPath = matPath;
       auto matData = StaticPointerCast<MaterialData>(ResCache::Get()->GetHandle(m_matPath)->GetExtra());
@@ -52,7 +52,7 @@ bool SkinnedMeshComponent::Init(tinyxml2::XMLElement* pData)
 
    tinyxml2::XMLElement* pSkeletElement = pData->FirstChildElement("Skelet");
    if (pSkeletElement) {
-      const char* skeletPath;
+      const char* skeletPath = nullptr;
       pSkeletElement->QueryStringAttribute("relPath", &skeletPath);
       m_rootActorPath = skeletPath;
    }

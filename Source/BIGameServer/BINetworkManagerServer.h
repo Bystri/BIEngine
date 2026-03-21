@@ -1,47 +1,17 @@
 #pragma once
 
 #include "../BIEngine/StdLib/HashMap.h"
+#include "../BIEngine/Network/NetworkServer.h"
 #include "../BIEngine/Network/NetworkManager.h"
-#include "../BIEngine/Network/Replication/ObjectReplication.h"
 
 class BINetworkManagerServer : public BIEngine::NetworkManager {
-   using AddressToClientMap = BIEngine::HashMap<BIEngine::SocketAddress, BIEngine::PeerPtr>;
-   using IntToClientMap = BIEngine::HashMap<int, BIEngine::PeerPtr>;
-
 public:
    bool Init(uint16_t port);
 
+   virtual void Update(const BIEngine::GameTimer& gt) override;
    void SendOutgoingPackets(const BIEngine::GameTimer& gt);
 
-protected:
-   virtual void ProcessPacket(BIEngine::InputMemoryBitStream& inputStream, const BIEngine::SocketAddress& fromAddress) override;
-
-   /*
-   virtual void HandleConnectionReset(const SocketAddress& inFromAddress) override;
-
-   void CheckForDisconnects();
-   ClientProxyPtr GetClientProxy(int inPlayerId) const;
-   */
-
 private:
-   void HandlePacketFromNewClient(BIEngine::InputMemoryBitStream& inputStream, const BIEngine::SocketAddress& fromAddress);
-   void ProcessPacket(BIEngine::PeerPtr clientProxy, BIEngine::InputMemoryBitStream& inputStream);
-
-   void SendWelcomePacket(BIEngine::PeerPtr clientProxy);
-
-private:
-   AddressToClientMap m_addressToClientMap;
+   BIEngine::NetworkServer m_networkServer;
    uint32_t m_nextClientId = 0u;
-
-   /*
-   void AddWorldStateToPacket(OutputMemoryBitStream& inOutputStream);
-
-   void WriteLastMoveTimestampIfDirty(OutputMemoryBitStream& inOutputStream, ClientProxyPtr inClientProxy);
-
-   void HandleClientDisconnected(ClientProxyPtr inClientProxy);
-
-   float mTimeOfLastSatePacket;
-   float mTimeBetweenStatePackets;
-   float mClientDisconnectTimeout;
-   */
 };

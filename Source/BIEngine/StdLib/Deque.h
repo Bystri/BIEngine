@@ -8,6 +8,8 @@
 
 namespace BIEngine {
 
+    #pragma optimize("",off)
+
 template <class T>
 class Deque {
    class ConstDequeIterator : public IteratorBase<BiderectinalIteratorTag, T> {

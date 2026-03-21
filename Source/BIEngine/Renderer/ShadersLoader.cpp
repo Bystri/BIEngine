@@ -168,7 +168,7 @@ bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int raw
    }
 
    {
-      const char* shaderPath;
+      const char* shaderPath = nullptr;
       pVertexShader->QueryStringAttribute("path", &shaderPath);
 
       auto pShaderData = StaticPointerCast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
@@ -186,7 +186,7 @@ bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int raw
    }
 
    {
-      const char* shaderPath;
+      const char* shaderPath = nullptr;
       pFragmentShader->QueryStringAttribute("path", &shaderPath);
 
       auto pShaderData = StaticPointerCast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());
@@ -200,7 +200,7 @@ bool ShaderProgramResourceLoader::LoadResource(char* rawBuffer, unsigned int raw
 
    tinyxml2::XMLElement* pGeometryShader = pRoot->FirstChildElement("Geometry");
    if (pGeometryShader) {
-      const char* shaderPath;
+      const char* shaderPath = nullptr;
       pGeometryShader->QueryStringAttribute("path", &shaderPath);
 
       auto pShaderData = StaticPointerCast<ShaderData>(ResCache::Get()->GetHandle(shaderPath)->GetExtra());

@@ -4,6 +4,8 @@
 
 namespace BIEngine {
 
+    #pragma optimize("",off)
+
 const NetworkProtocolType ObjectReplicationProtocolWriter::sk_ProtocolType(0x23d7aeaa);
 const NetworkProtocolType ObjectReplicationProtocolReader::sk_ProtocolType(0x23d7aeaa);
 
@@ -66,16 +68,16 @@ void ObjectReplicationProtocolWriter::AddReplicationObject(SharedPtr<Replication
    }
 }
 
-void ObjectReplicationProtocolWriter::SendStateMsgToClient(int peerIdx, NetworkManager* pNetworkManager)
+void ObjectReplicationProtocolWriter::SendStateMsgToClient(uint32_t peerId, NetworkMessagesManager* pNetworkMessagesManager)
 {
    OutputMemoryBitStream msg;
-   m_pReplicationManagersPerPeer[peerIdx]->Write(msg);
-   pNetworkManager->SendNetworkMessage(*m_pPeers[peerIdx], GetType(), msg);
+   m_pReplicationManagersPerPeer[peerId]->Write(msg);
+   pNetworkMessagesManager->SendNetworkMessage(peerId, GetType(), msg);
 }
 
-void ObjectReplicationProtocolWriter::RegisterPeer(PeerPtr pPeer)
+void ObjectReplicationProtocolWriter::RegisterPeer(uint32_t peerId)
 {
-   m_pPeers.PushBack(pPeer);
+   m_pPeers.PushBack(peerId);
    UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
 
    for (const auto& pObj : m_pReplicationObjects) {
@@ -83,10 +85,10 @@ void ObjectReplicationProtocolWriter::RegisterPeer(PeerPtr pPeer)
    }
 }
 
-void ObjectReplicationProtocolWriter::UnregisterPeer(PeerPtr pPeer)
+void ObjectReplicationProtocolWriter::UnregisterPeer(uint32_t peerId)
 {
    for (int i = 0; i < m_pPeers.Size(); ++i) {
-      if (m_pPeers[i] == pPeer) {
+      if (m_pPeers[i] == peerId) {
          m_pPeers.Erase(m_pPeers.Begin() + i);
          m_pReplicationManagersPerPeer.Erase(m_pReplicationManagersPerPeer.Begin() + i);
 
@@ -95,11 +97,11 @@ void ObjectReplicationProtocolWriter::UnregisterPeer(PeerPtr pPeer)
    }
 }
 
-void ObjectReplicationProtocolWriter::OnBeforePacketsSend(NetworkManager* pNetworkManager)
+void ObjectReplicationProtocolWriter::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager)
 {
    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
       if (m_pReplicationManagersPerPeer[i]->GetNumOfCachedHeaders() > 0) {
-         SendStateMsgToClient(i, pNetworkManager);
+         SendStateMsgToClient(i, pNetworkMessagesManager);
       }
    }
 }

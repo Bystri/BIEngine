@@ -1,10 +1,10 @@
 #include "NetworkProtocolsManager.h"
 
-#pragma once
-
 #include "NetworkProtocol.h"
 
 namespace BIEngine {
+
+#pragma optimize("",off)
 
 void NetworkProtocolsManager::AddProtocolReader(SharedPtr<NetworkProtocolReader> pNetworkProtocolReader)
 {
@@ -36,25 +36,25 @@ void NetworkProtocolsManager::AddProtocolWriter(SharedPtr<NetworkProtocolWriter>
    m_networkProtocolWriters.PushBack(pNetworkProtocolWriter);
 }
 
-void NetworkProtocolsManager::RegisterPeer(PeerPtr pPeer)
+void NetworkProtocolsManager::RegisterPeer(uint32_t peerId)
 {
    for (auto& protocol : m_networkProtocolWriters) {
-      protocol->RegisterPeer(pPeer);
+      protocol->RegisterPeer(peerId);
    }
 
    for (auto& protocol : m_networkProtocolReaders) {
-      protocol->RegisterPeer(pPeer);
+      protocol->RegisterPeer(peerId);
    }
 }
 
-void NetworkProtocolsManager::UnregisterPeer(PeerPtr pPeer)
+void NetworkProtocolsManager::UnregisterPeer(uint32_t peerId)
 {
    for (auto& protocol : m_networkProtocolWriters) {
-      protocol->UnregisterPeer(pPeer);
+      protocol->UnregisterPeer(peerId);
    }
 
    for (auto& protocol : m_networkProtocolReaders) {
-      protocol->UnregisterPeer(pPeer);
+      protocol->UnregisterPeer(peerId);
    }
 }
 
@@ -72,10 +72,10 @@ void NetworkProtocolsManager::ReceiveMeessage(NetworkProtocolType type, InputMem
    Assert(false, "Got message for unknown protocol's type");
 }
 
-void NetworkProtocolsManager::OnBeforePacketsSend(NetworkManager* pNetworkManager)
+void NetworkProtocolsManager::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager)
 {
    for (auto& protocol : m_networkProtocolWriters) {
-      protocol->OnBeforePacketsSend(pNetworkManager);
+      protocol->OnBeforePacketsSend(pNetworkMessagesManager);
    }
 }
 

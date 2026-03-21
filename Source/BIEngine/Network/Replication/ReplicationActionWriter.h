@@ -30,6 +30,7 @@ public:
 
       while (!m_replicationHeadersBuffer.Empty()) {
          ReplicationHeader& header = m_replicationHeadersBuffer.Front();
+         Logger::WriteMsgLog("Write info about network id %d", (int)header.GetNetworkId());
          header.Write(stream);
          m_replicationHeadersBuffer.Pop();
       }

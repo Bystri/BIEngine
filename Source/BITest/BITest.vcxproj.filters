@@ -85,6 +85,36 @@
     <ClCompile Include="StdLib\Utility_UnitTest.cpp">
       <Filter>StdLib</Filter>
     </ClCompile>
+    <ClCompile Include="Network\NetworkClient_NetworkServer_UnitTest.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\Network\NetworkClient.cpp">
+      <Filter>EngineSources\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\Network\NetworkServer.cpp">
+      <Filter>EngineSources\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\Network\Serialization.cpp">
+      <Filter>EngineSources\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\Network\Socket.cpp">
+      <Filter>EngineSources\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\3rdParty\imgui\imgui.cpp">
+      <Filter>EngineSources\3rdParty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\3rdParty\imgui\imgui_demo.cpp">
+      <Filter>EngineSources\3rdParty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\3rdParty\imgui\imgui_draw.cpp">
+      <Filter>EngineSources\3rdParty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\3rdParty\imgui\imgui_tables.cpp">
+      <Filter>EngineSources\3rdParty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BIEngine\3rdParty\imgui\imgui_widgets.cpp">
+      <Filter>EngineSources\3rdParty\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -104,6 +134,18 @@
     </Filter>
     <Filter Include="EngineSources\StdLib">
       <UniqueIdentifier>{3f68a34d-83eb-43fc-8a09-24e9fd2b4c88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{ec3cdf21-1206-4c06-bf59-7bdc8936efa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineSources\Network">
+      <UniqueIdentifier>{719b7509-5606-4945-92c9-833f3d3db85d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineSources\3rdParty">
+      <UniqueIdentifier>{b0a86de2-8bf3-4053-878e-b9b9ec7a94cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineSources\3rdParty\imgui">
+      <UniqueIdentifier>{9be2d0ff-7b2d-43ce-99fd-5c49740f280d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +235,33 @@
     </ClInclude>
     <ClInclude Include="..\BIEngine\StdLib\Bitset.h">
       <Filter>EngineSources\StdLib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Network\NetworkClient.h">
+      <Filter>EngineSources\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Network\NetworkServer.h">
+      <Filter>EngineSources\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Network\Serialization.h">
+      <Filter>EngineSources\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\Network\Socket.h">
+      <Filter>EngineSources\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\3rdParty\imgui\imgui.h">
+      <Filter>EngineSources\3rdParty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\3rdParty\imgui\imgui_internal.h">
+      <Filter>EngineSources\3rdParty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\3rdParty\imgui\imstb_rectpack.h">
+      <Filter>EngineSources\3rdParty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\3rdParty\imgui\imstb_textedit.h">
+      <Filter>EngineSources\3rdParty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BIEngine\3rdParty\imgui\imstb_truetype.h">
+      <Filter>EngineSources\3rdParty\imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

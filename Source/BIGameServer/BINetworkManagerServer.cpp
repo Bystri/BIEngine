@@ -8,97 +8,41 @@
 
 bool BINetworkManagerServer::Init(uint16_t port)
 {
-   m_protocolsManager.AddProtocolWriter(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolWriter>());
-   m_protocolsManager.AddProtocolReader(BIEngine::MakeShared<EventProtocolReader>());
-   return NetworkManager::InitInternal(port);
+   m_networkMessagesManager.AddProtocolWriter(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolWriter>());
+   m_networkMessagesManager.AddProtocolReader(BIEngine::MakeShared<EventProtocolReader>());
+   return m_networkServer.Init(port);
 }
 
-void BINetworkManagerServer::ProcessPacket(BIEngine::InputMemoryBitStream& inputStream, const BIEngine::SocketAddress& fromAddress)
+void BINetworkManagerServer::Update(const BIEngine::GameTimer& gt)
 {
-   // try to get the client proxy for this address
-   // pass this to the client proxy to process
-   auto it = m_addressToClientMap.Find(fromAddress);
-   if (it == m_addressToClientMap.End()) {
-      // didn't find one? it's a new cilent..is the a HELO? if so, create a client proxy...
-      HandlePacketFromNewClient(inputStream, fromAddress);
-   } else {
-      ProcessPacket((*it).second, inputStream);
+   m_networkServer.Update();
+
+   for (int i = 0; i < m_networkServer.GetConnectedClients(); ++i) {
+      while (true) {
+         auto infoItr = m_peerInfoMap.Find(i);
+
+         // TODO: Replace
+         if (infoItr == m_peerInfoMap.End()) {
+            BIEngine::SocketAddress address;
+            auto peer = BIEngine::MakeShared<BIEngine::Peer>(i, address);
+            m_peerInfoMap.Emplace(i, peer);
+            m_networkMessagesManager.RegisterPeer(i,
+                std::bind(&BIEngine::NetworkServer::SendPacket, m_networkServer, i, std::placeholders::_1));
+            BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType);
+         }
+
+         // We can have client with different id by this idx
+         BIEngine::UniquePtr<BIEngine::InputMemoryBitStream> pPacketData = m_networkServer.ReceivePacket(i);
+         if (pPacketData == nullptr) {
+            break;
+         }
+
+         m_networkMessagesManager.ProcessPacket(i, *pPacketData);
+      }
    }
-}
-
-void BINetworkManagerServer::ProcessPacket(BIEngine::PeerPtr clientProxy, BIEngine::InputMemoryBitStream& inputStream)
-{
-   // remember we got a packet so we know not to disconnect for a bit
-   // inClientProxy->UpdateLastPacketTime();
-
-   auto infoItr = m_peerInfoMap.Find(clientProxy->GetId());
-   BIEngine::Assert(infoItr != m_peerInfoMap.End(), "Try to process packet from an unknown peer");
-
-   if (infoItr == m_peerInfoMap.End()) {
-      return;
-   }
-
-   infoItr->second.deliveryNotificationManager.ReadAndProcessState(inputStream);
-
-   while (inputStream.GetRemainingBitCount() > 32) {
-      MessageToRead& msg = infoItr->second.messageQueueToRead.EmplaceBack();
-      msg.Read(inputStream);
-   }
-
-   Sort(infoItr->second.messageQueueToRead.Begin(), infoItr->second.messageQueueToRead.End());
-}
-
-void BINetworkManagerServer::HandlePacketFromNewClient(BIEngine::InputMemoryBitStream& inputStream, const BIEngine::SocketAddress& fromAddress)
-{
-   // read the beginning- is it a hello?
-
-   BIEngine::PeerPtr newClient = BIEngine::MakeShared<BIEngine::Peer>(m_nextClientId, fromAddress);
-   ++m_nextClientId;
-
-   auto itr = m_peerInfoMap.Emplace(newClient->GetId(), newClient);
-
-   itr.first->second.deliveryNotificationManager.ReadAndProcessState(inputStream);
-
-   MessageToRead msg;
-   msg.Read(inputStream);
-   BIEngine::Assert(msg.GetId() == 0, "First msg id expected to be 0");
-
-   uint32_t packetType;
-   BIEngine::Deserialize(msg.GetBuffer(), packetType);
-
-   if (packetType == kHelloCC) {
-      // read the name
-      BIEngine::String name;
-      BIEngine::Deserialize(msg.GetBuffer(), name);
-
-      m_protocolsManager.RegisterPeer(newClient);
-
-      BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType);
-
-      m_addressToClientMap[fromAddress] = newClient;
-
-      // and welcome the client...
-      SendWelcomePacket(newClient);
-
-   } else {
-      // bad incoming packet from unknown client- we're under attack!!
-      BIEngine::Logger::WriteErrorLog("Bad incoming packet from unknown client");
-   }
-}
-
-void BINetworkManagerServer::SendWelcomePacket(BIEngine::PeerPtr clientProxy)
-{
-   BIEngine::OutputMemoryBitStream welcomeMessage;
-
-   BIEngine::Serialize(welcomeMessage, clientProxy->GetId());
-
-   BIEngine::Logger::WriteMsgLog("Server Welcoming, new client with id %d", clientProxy->GetId());
-
-   SendNetworkMessage(*clientProxy, kWelcomeCC, welcomeMessage);
 }
 
 void BINetworkManagerServer::SendOutgoingPackets(const BIEngine::GameTimer& gt)
 {
-   m_protocolsManager.OnBeforePacketsSend(this);
-   SendMessagesFromQueue(gt);
+   m_networkMessagesManager.SendOutgoingPackets(gt);
 }

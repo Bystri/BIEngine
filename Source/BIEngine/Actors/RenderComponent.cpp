@@ -31,7 +31,7 @@ bool MeshBaseRenderComponent::Init(tinyxml2::XMLElement* pData)
       return false;
    }
 
-   const char* materialPath;
+   const char* materialPath = nullptr;
    pMaterialElement->QueryStringAttribute("path", &materialPath);
 
    m_materialPath = materialPath;
@@ -104,7 +104,7 @@ bool SpriteRenderComponent::Init(tinyxml2::XMLElement* pData)
 
    tinyxml2::XMLElement* pSpriteElement = pData->FirstChildElement("Sprite");
    if (pSpriteElement) {
-      const char* spritePath;
+      const char* spritePath = nullptr;
       pSpriteElement->QueryStringAttribute("path", &spritePath);
       m_spritePath = spritePath;
       auto spriteData = StaticPointerCast<TextureData>(ResCache::Get()->GetHandle(spritePath)->GetExtra());
@@ -252,7 +252,7 @@ bool ModelRenderComponent::Init(tinyxml2::XMLElement* pData)
       return false;
    }
 
-   const char* modelPath;
+   const char* modelPath = nullptr;
    pModel->QueryStringAttribute("path", &modelPath);
    m_modelPath = modelPath;
 

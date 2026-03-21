@@ -14,21 +14,18 @@ public:
 protected:
    virtual const BIEngine::NetworkProtocolType& GetType() const override { return sk_ProtocolType; }
 
-   virtual void RegisterPeer(BIEngine::PeerPtr pPeer) override;
-   virtual void UnregisterPeer(BIEngine::PeerPtr pPeer) override;
+   virtual void RegisterPeer(uint32_t peerId) override;
+   virtual void UnregisterPeer(uint32_t peerId) override;
 
-   virtual void OnBeforePacketsSend(BIEngine::NetworkManager* pNetworkManager) override;
+   virtual void OnBeforePacketsSend(BIEngine::NetworkMessagesManager* pNetworkMessagesManager) override;
 
 private:
    void StoreEventToForwardDelegate(BIEngine::IEventDataPtr pEventData);
 
 private:
    BIEngine::DynamicArray<BIEngine::IEventDataPtr> m_eventsToSend;
-   BIEngine::DynamicArray<BIEngine::PeerPtr> m_peersToSend;
+   BIEngine::DynamicArray<uint32_t> m_peersToSend;
 
-   BIEngine::EventManager::DelegateHandler m_storeEventMoveDelegateHandler;
-   BIEngine::EventManager::DelegateHandler m_storeEventTurnDelegateHandler;
-   BIEngine::EventManager::DelegateHandler m_storeEventPrimaryAttackDelegateHandler;
    BIEngine::EventManager::DelegateHandler m_storeEventCommandMoveToDelegateHandler;
 };
 

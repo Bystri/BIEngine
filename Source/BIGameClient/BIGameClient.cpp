@@ -165,6 +165,7 @@ void BIGameClientLogic::OnUpdate(BIEngine::GameTimer& gt)
 {
    m_pInputActionController->OnUpdate();
 
+   m_pNetworkManager->Update(gt);
    m_pNetworkManager->ProcessIncomingPackets();
    m_pNetworkManager->SendOutgoingPackets(gt);
 
@@ -210,8 +211,8 @@ static BIEngine::SharedPtr<BIEngine::Skybox> humanViewCreateSkybox()
       return nullptr;
    }
 
-   const char* vertexShaderPath;
-   const char* fragmentShaderPath;
+   const char* vertexShaderPath = nullptr;
+   const char* fragmentShaderPath = nullptr;
    pSkyboxSettingsNode->QueryStringAttribute("vertexShaderPath", &vertexShaderPath);
    pSkyboxSettingsNode->QueryStringAttribute("fragmentShaderPath", &fragmentShaderPath);
 
@@ -238,7 +239,7 @@ static BIEngine::SharedPtr<BIEngine::Skybox> humanViewCreateSkybox()
    int height = -1;
 
    for (int i = 0; i < faces.Size(); ++i) {
-      const char* cubemapTexturePath;
+      const char* cubemapTexturePath = nullptr;
       pSkyboxSettingsNode->QueryStringAttribute(faces[i].CStr(), &cubemapTexturePath);
 
       if (strlen(cubemapTexturePath) == 0) {

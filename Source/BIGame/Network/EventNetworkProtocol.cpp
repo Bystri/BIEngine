@@ -7,28 +7,22 @@ const BIEngine::NetworkProtocolType EventProtocolReader::sk_ProtocolType('EVNT')
 
 EventProtocolWriter::EventProtocolWriter()
 {
-   m_storeEventMoveDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_Move::sk_EventType);
-   m_storeEventTurnDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_Turn::sk_EventType);
-   m_storeEventPrimaryAttackDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_PrimaryAttack::sk_EventType);
    m_storeEventCommandMoveToDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_PlayerCommandMoveTo::sk_EventType);
 }
 
 EventProtocolWriter::~EventProtocolWriter()
 {
-   BIEngine::EventManager::Get()->RemoveListener(m_storeEventMoveDelegateHandler);
-   BIEngine::EventManager::Get()->RemoveListener(m_storeEventTurnDelegateHandler);
-   BIEngine::EventManager::Get()->RemoveListener(m_storeEventPrimaryAttackDelegateHandler);
    BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandMoveToDelegateHandler);
 }
 
-void EventProtocolWriter::RegisterPeer(BIEngine::PeerPtr pPeer)
+void EventProtocolWriter::RegisterPeer(uint32_t peerId)
 {
-   m_peersToSend.PushBack(pPeer);
+   m_peersToSend.PushBack(peerId);
 }
 
-void EventProtocolWriter::UnregisterPeer(BIEngine::PeerPtr pPeer)
+void EventProtocolWriter::UnregisterPeer(uint32_t peerId)
 {
-   const auto itr = BIEngine::Find(m_peersToSend.Begin(), m_peersToSend.End(), pPeer);
+   const auto itr = BIEngine::Find(m_peersToSend.Begin(), m_peersToSend.End(), peerId);
    if (itr == m_peersToSend.End()) {
       return;
    }
@@ -36,7 +30,7 @@ void EventProtocolWriter::UnregisterPeer(BIEngine::PeerPtr pPeer)
    m_peersToSend.Erase(itr);
 }
 
-void EventProtocolWriter::OnBeforePacketsSend(BIEngine::NetworkManager* pNetworkManager)
+void EventProtocolWriter::OnBeforePacketsSend(BIEngine::NetworkMessagesManager* pNetworkMessagesManager)
 {
    if (m_eventsToSend.Empty()) {
       return;
@@ -52,7 +46,7 @@ void EventProtocolWriter::OnBeforePacketsSend(BIEngine::NetworkManager* pNetwork
    }
 
    for (auto& pPeer : m_peersToSend) {
-      pNetworkManager->SendNetworkMessage(*pPeer, GetType(), eventPacket);
+      pNetworkMessagesManager->SendNetworkMessage(pPeer, GetType(), eventPacket);
    }
 
    m_eventsToSend.Clear();

@@ -8,6 +8,7 @@ namespace BIEngine {
 using NetworkProtocolType = uint32_t;
 
 class NetworkManager;
+class NetworkMessagesManager;
 
 class NetworkProtocol {
 public:
@@ -16,9 +17,9 @@ public:
    virtual ~NetworkProtocol() = default;
 
 protected:
-   virtual void RegisterPeer(PeerPtr pPeer) {}
+   virtual void RegisterPeer(uint32_t peerId) {}
 
-   virtual void UnregisterPeer(PeerPtr pPeer) {}
+   virtual void UnregisterPeer(uint32_t peerId) {}
 
    virtual const NetworkProtocolType& GetType() const { return sk_ProtocolType; }
 };
@@ -34,7 +35,7 @@ class NetworkProtocolWriter : public NetworkProtocol {
    friend class NetworkProtocolsManager;
 
 protected:
-   virtual void OnBeforePacketsSend(NetworkManager* pNetworkManager) = 0;
+   virtual void OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager) = 0;
 };
 
 } // namespace BIEngine

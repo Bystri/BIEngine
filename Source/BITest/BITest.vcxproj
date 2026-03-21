@@ -19,7 +19,7 @@
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -31,14 +31,17 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\Test\$(ProjectName)$(Platform)$(Configuration)\</OutDir>
     <IntDir>..\Temp\$(ProjectName)$(Platform)$(Configuration)\</IntDir>
+    <IncludePath>..\BIEngine\3rdParty\imgui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\Test\$(ProjectName)$(Platform)$(Configuration)\</OutDir>
     <IntDir>..\Temp\$(ProjectName)$(Platform)$(Configuration)\</IntDir>
+    <IncludePath>..\BIEngine\3rdParty\imgui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Retail|x64'">
     <OutDir>..\..\Test\$(ProjectName)$(Platform)$(Configuration)\</OutDir>
     <IntDir>..\Temp\$(ProjectName)$(Platform)$(Configuration)\</IntDir>
+    <IncludePath>..\BIEngine\3rdParty\imgui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -56,6 +59,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -74,6 +78,7 @@
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Retail|x64'">
@@ -92,12 +97,22 @@
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\BIEngine\3rdParty\imgui\imgui.cpp" />
+    <ClCompile Include="..\BIEngine\3rdParty\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\BIEngine\3rdParty\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\BIEngine\3rdParty\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\BIEngine\3rdParty\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\BIEngine\Math\Math.cpp" />
     <ClCompile Include="..\BIEngine\Math\Transform.cpp" />
     <ClCompile Include="..\BIEngine\Math\Trigonometry.cpp" />
+    <ClCompile Include="..\BIEngine\Network\NetworkClient.cpp" />
+    <ClCompile Include="..\BIEngine\Network\NetworkServer.cpp" />
+    <ClCompile Include="..\BIEngine\Network\Serialization.cpp" />
+    <ClCompile Include="..\BIEngine\Network\Socket.cpp" />
     <ClCompile Include="..\BIEngine\StdLib\Assert.cpp" />
     <ClCompile Include="..\BIEngine\Utilities\Logger.cpp" />
     <ClCompile Include="Math\Spline_UnitTest.cpp" />
@@ -106,6 +121,7 @@
     <ClCompile Include="Math\Transform_UnitTest.cpp" />
     <ClCompile Include="Math\Trigonometry_UnitTest.cpp" />
     <ClCompile Include="Math\Vector_UnitTest.cpp" />
+    <ClCompile Include="Network\NetworkClient_NetworkServer_UnitTest.cpp" />
     <ClCompile Include="StdLib\Algorithm_UnitTest.cpp" />
     <ClCompile Include="StdLib\Array_UnitTest.cpp" />
     <ClCompile Include="StdLib\Bitset_UnitTest.cpp" />
@@ -128,12 +144,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\BIEngine\3rdParty\imgui\imgui.h" />
+    <ClInclude Include="..\BIEngine\3rdParty\imgui\imgui_internal.h" />
+    <ClInclude Include="..\BIEngine\3rdParty\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\BIEngine\3rdParty\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\BIEngine\3rdParty\imgui\imstb_truetype.h" />
     <ClInclude Include="..\BIEngine\Math\Math.h" />
     <ClInclude Include="..\BIEngine\Math\Matrix.h" />
     <ClInclude Include="..\BIEngine\Math\Spline.h" />
     <ClInclude Include="..\BIEngine\Math\Transform.h" />
     <ClInclude Include="..\BIEngine\Math\Trigonometry.h" />
     <ClInclude Include="..\BIEngine\Math\Vector.h" />
+    <ClInclude Include="..\BIEngine\Network\NetworkClient.h" />
+    <ClInclude Include="..\BIEngine\Network\NetworkServer.h" />
+    <ClInclude Include="..\BIEngine\Network\Serialization.h" />
+    <ClInclude Include="..\BIEngine\Network\Socket.h" />
     <ClInclude Include="..\BIEngine\StdLib\Algorithm.h" />
     <ClInclude Include="..\BIEngine\StdLib\Array.h" />
     <ClInclude Include="..\BIEngine\StdLib\Assert.h" />

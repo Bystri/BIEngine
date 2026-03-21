@@ -16,8 +16,8 @@ AnimationComponent::AnimationComponent()
 bool AnimationComponent::Init(tinyxml2::XMLElement* pData)
 {
    for (tinyxml2::XMLElement* pAnimData = pData->FirstChildElement(); pAnimData; pAnimData = pAnimData->NextSiblingElement()) {
-      const char* name;
-      const char* animPath;
+      const char* name = nullptr;
+      const char* animPath = nullptr;
 
       pAnimData->QueryStringAttribute("name", &name);
       pAnimData->QueryStringAttribute("path", &animPath);

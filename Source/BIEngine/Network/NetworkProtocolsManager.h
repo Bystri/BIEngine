@@ -9,11 +9,11 @@ public:
    void AddProtocolReader(SharedPtr<NetworkProtocolReader> pNetworkProtocolReader);
    void AddProtocolWriter(SharedPtr<NetworkProtocolWriter> pNetworkProtocolWriter);
 
-   void RegisterPeer(PeerPtr pPeer);
-   void UnregisterPeer(PeerPtr pPeer);
+   void RegisterPeer(uint32_t peerId);
+   void UnregisterPeer(uint32_t peerId);
 
    void ReceiveMeessage(NetworkProtocolType type, InputMemoryBitStream& stream);
-   void OnBeforePacketsSend(NetworkManager* pNetworkManager);
+   void OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager);
 
 private:
    DynamicArray<SharedPtr<NetworkProtocolReader>> m_networkProtocolReaders;

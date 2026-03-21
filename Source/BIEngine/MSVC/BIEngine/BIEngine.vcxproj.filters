@@ -444,6 +444,15 @@
     <ClCompile Include="..\..\Network\DeliveryNotificationManager.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Network\NetworkClient.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\NetworkServer.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Network\NetworkMessagesManager.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -939,6 +948,15 @@
       <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Network\DeliveryNotificationManager.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\NetworkClient.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\NetworkServer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Network\NetworkMessagesManager.h">
       <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>

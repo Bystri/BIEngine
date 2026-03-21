@@ -23,20 +23,20 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Retail|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -189,9 +189,12 @@
     <ClCompile Include="..\..\Navigation\NavSoloMeshGenerator.cpp" />
     <ClCompile Include="..\..\Navigation\NavWorld.cpp" />
     <ClCompile Include="..\..\Network\DeliveryNotificationManager.cpp" />
+    <ClCompile Include="..\..\Network\NetworkClient.cpp" />
     <ClCompile Include="..\..\Network\NetworkManager.cpp" />
+    <ClCompile Include="..\..\Network\NetworkMessagesManager.cpp" />
     <ClCompile Include="..\..\Network\NetworkProtocol.cpp" />
     <ClCompile Include="..\..\Network\NetworkProtocolsManager.cpp" />
+    <ClCompile Include="..\..\Network\NetworkServer.cpp" />
     <ClCompile Include="..\..\Network\Replication\ObjectReplicationProtocol.cpp" />
     <ClCompile Include="..\..\Network\Replication\ReplicationActionReader.cpp" />
     <ClCompile Include="..\..\Network\Replication\ReplicationActionWriter.cpp" />
@@ -321,9 +324,12 @@
     <ClInclude Include="..\..\Navigation\NavSoloMeshGenerator.h" />
     <ClInclude Include="..\..\Navigation\NavWorld.h" />
     <ClInclude Include="..\..\Network\DeliveryNotificationManager.h" />
+    <ClInclude Include="..\..\Network\NetworkClient.h" />
     <ClInclude Include="..\..\Network\NetworkManager.h" />
+    <ClInclude Include="..\..\Network\NetworkMessagesManager.h" />
     <ClInclude Include="..\..\Network\NetworkProtocol.h" />
     <ClInclude Include="..\..\Network\NetworkProtocolsManager.h" />
+    <ClInclude Include="..\..\Network\NetworkServer.h" />
     <ClInclude Include="..\..\Network\Peer.h" />
     <ClInclude Include="..\..\Network\Replication\NetworkObjectCreationRegistry.h" />
     <ClInclude Include="..\..\Network\Replication\ObjectReplication.h" />
