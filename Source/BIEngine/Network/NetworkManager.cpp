@@ -30,7 +30,7 @@ void NetworkManager::SendMessagesFromQueue(const GameTimer& gt)
 #ifndef _RETAIL
 void NetworkManager::DrawDbgDiagnostics()
 {
-
+   m_networkMessagesManager.DrawDbgDiagnostics();
 }
 #endif
 

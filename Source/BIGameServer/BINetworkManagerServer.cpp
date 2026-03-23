@@ -26,7 +26,7 @@ void BINetworkManagerServer::Update(const BIEngine::GameTimer& gt)
             BIEngine::SocketAddress address;
             auto peer = BIEngine::MakeShared<BIEngine::Peer>(i, address);
             m_peerInfoMap.Emplace(i, peer);
-            m_networkMessagesManager.RegisterPeer(i,
+            m_networkMessagesManager.RegisterPeer(i, gt,
                 std::bind(&BIEngine::NetworkServer::SendPacket, m_networkServer, i, std::placeholders::_1));
             BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType);
          }
@@ -37,7 +37,7 @@ void BINetworkManagerServer::Update(const BIEngine::GameTimer& gt)
             break;
          }
 
-         m_networkMessagesManager.ProcessPacket(i, *pPacketData);
+         m_networkMessagesManager.ProcessPacket(i, *pPacketData, gt);
       }
    }
 }

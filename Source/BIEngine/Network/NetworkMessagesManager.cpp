@@ -1,10 +1,12 @@
 #include "NetworkMessagesManager.h"
 
+#include <imgui.h>
+
 namespace BIEngine {
 
-   void NetworkMessagesManager::RegisterPeer(uint32_t peerId, const std::function<void(const OutputMemoryBitStream&)>& sendFunc)
+   void NetworkMessagesManager::RegisterPeer(uint32_t peerId, const GameTimer& gt, const std::function<void(const OutputMemoryBitStream&)>& sendFunc)
    {
-      PeerInfo info;
+      PeerInfo info(gt);
       info.peerId = peerId;
       info.sendFunc = sendFunc;
 
@@ -36,7 +38,7 @@ namespace BIEngine {
       peerInfo.messageQueueToSend.Push(std::move(msg));
    }
 
-   void NetworkMessagesManager::ProcessPacket(uint32_t peerId, InputMemoryBitStream& inputStream)
+   void NetworkMessagesManager::ProcessPacket(uint32_t peerId, InputMemoryBitStream& inputStream, const GameTimer& gt)
    {
       auto infoItr = m_peerInfoMap.Find(peerId);
 
@@ -45,6 +47,21 @@ namespace BIEngine {
       if (infoItr == m_peerInfoMap.End()) {
          return;
       }
+
+      uint32_t numberOfTimes;
+      Deserialize(inputStream, numberOfTimes);
+      for (int i = 0; i < numberOfTimes; ++i)
+      {
+         float timePacketWasSendByThisPeer;
+         // TODO: Quant
+         Deserialize(inputStream, timePacketWasSendByThisPeer);
+         infoItr->second.m_weightedRtt.Update(gt, gt.TotalTime() - timePacketWasSendByThisPeer);
+      }
+
+      float timePacketWasSend;
+      // TODO: Quant
+      Deserialize(inputStream, timePacketWasSend);
+      infoItr->second.m_timesOfGotPackets.PushBack(timePacketWasSend);
 
       if (!infoItr->second.deliveryNotificationManager.ReadAndProcessState(inputStream)) {
           return;
@@ -70,18 +87,23 @@ namespace BIEngine {
 
          info.deliveryNotificationManager.ProcessTimedOutPackets(gt);
 
-         if (info.messageQueueToSend.Empty()) {
-            continue;
+         OutputMemoryBitStream packet;
+         const uint32_t timesOfGotPacketsSize = info.m_timesOfGotPackets.Size();
+         Serialize(packet, timesOfGotPacketsSize);
+         for (int i = 0; i < timesOfGotPacketsSize; ++i) {
+            // TODO: Quant
+            Serialize(packet, info.m_timesOfGotPackets[i]);
          }
 
-         OutputMemoryBitStream packet;
+         info.m_timesOfGotPackets.Clear();
+
+         // TODO: Quant
+         Serialize(packet, gt.TotalTime());
 
          InFlightPacket* inFlightPacket = peerInfo.second.deliveryNotificationManager.WriteState(packet, gt);
 
          const uint32_t messagesCnt = info.messageQueueToSend.Size();
          Serialize(packet, messagesCnt);
-
-         //Logger::WriteMsgLog("Prepare to send %d messages", (int)messagesCnt);
 
          while (!info.messageQueueToSend.Empty()) {
             const MessageToSend& msg = info.messageQueueToSend.Front();
@@ -143,5 +165,23 @@ namespace BIEngine {
       PeerInfo& peerInfo = peerInfoPtr->second;
       peerInfo.messageQueueToSend.Push(msg);
    }
+
+#ifndef _RETAIL
+   void NetworkMessagesManager::DrawDbgDiagnostics()
+   {
+      ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiCond_Always);
+
+      if (!ImGui::Begin("Network info")) {
+         ImGui::End();
+         return;
+      }
+
+      for (auto& peerInfo : m_peerInfoMap) {
+         ImGui::Text("Peer: [%d]; Rtt %f", peerInfo.first, peerInfo.second.m_weightedRtt.GetValue());
+      }
+
+      ImGui::End();
+   }
+#endif
 
 } // namespace BIEngine

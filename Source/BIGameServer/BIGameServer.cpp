@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
       }
    }
 
-   return BIEngine::Run(argc, argv);
+   return BIEngine::Run(argc, argv, 15);
 }
 
 /**********BIGameServerApp**********/

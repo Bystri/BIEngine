@@ -20,7 +20,6 @@ void ReplicationActionReader::ProcessReplicationHeader(InputMemoryBitStream& str
    ReplicationHeader rh;
    rh.Read(stream);
 
-   Logger::WriteMsgLog("Read info about network id %d", (int)rh.GetNetworkId());
    switch (rh.GetReplicationAction()) {
       case ReplicationAction::Create:
          {

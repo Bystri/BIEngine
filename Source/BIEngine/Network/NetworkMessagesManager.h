@@ -5,6 +5,7 @@
 #include "NetworkProtocolsManager.h"
 #include "../StdLib/Queue.h"
 #include "../StdLib/HashMap.h"
+#include "../Utilities/TimeWeightedAverage.h"
 
 namespace BIEngine {
 
@@ -90,6 +91,11 @@ private:
    };
 
    struct PeerInfo {
+      PeerInfo(const GameTimer& gt)
+         : m_weightedRtt(gt)
+      {
+      }
+
       uint32_t peerId;
 
       uint32_t messageId = 0u;
@@ -98,25 +104,28 @@ private:
       DynamicArray<MessageToRead> messageQueueToRead;
       DeliveryNotificationManager deliveryNotificationManager;
 
+      DynamicArray<float> m_timesOfGotPackets;
+      TimeWeightedAverage m_weightedRtt;
+
       std::function<void(const OutputMemoryBitStream&)> sendFunc;
    };
 
 public:
-    NetworkMessagesManager()
-    {
-    }
+   NetworkMessagesManager()
+   {
+   }
 
-    void AddProtocolReader(SharedPtr<NetworkProtocolReader> pNetworkProtocolReader)
-    {
-       m_protocolsManager.AddProtocolReader(pNetworkProtocolReader);
-    }
+   void AddProtocolReader(SharedPtr<NetworkProtocolReader> pNetworkProtocolReader)
+   {
+      m_protocolsManager.AddProtocolReader(pNetworkProtocolReader);
+   }
 
-    void AddProtocolWriter(SharedPtr<NetworkProtocolWriter> pNetworkProtocolWriter)
-    {
-       m_protocolsManager.AddProtocolWriter(pNetworkProtocolWriter);
-    }
+   void AddProtocolWriter(SharedPtr<NetworkProtocolWriter> pNetworkProtocolWriter)
+   {
+      m_protocolsManager.AddProtocolWriter(pNetworkProtocolWriter);
+   }
 
-   void RegisterPeer(uint32_t peerId, const std::function<void(const OutputMemoryBitStream&)>& sendFunc);
+   void RegisterPeer(uint32_t peerId, const GameTimer& gt, const std::function<void(const OutputMemoryBitStream&)>& sendFunc);
    void UnregisterPeer(uint32_t peerId);
 
    bool IsPeerRegistered(uint32_t peerId) const
@@ -126,10 +135,14 @@ public:
 
    void SendNetworkMessage(uint32_t peerId, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream);
 
-   void ProcessPacket(uint32_t peerId, InputMemoryBitStream& inputStream);
+   void ProcessPacket(uint32_t peerId, InputMemoryBitStream& inputStream, const GameTimer& gt);
    void SendOutgoingPackets(const GameTimer& gt);
    void ProcessMessages();
    void ResendNetworkMessage(uint32_t peerId, const MessageToSend& msg);
+
+#ifndef _RETAIL
+   void DrawDbgDiagnostics();
+#endif
 
 private:
    NetworkProtocolsManager m_protocolsManager;

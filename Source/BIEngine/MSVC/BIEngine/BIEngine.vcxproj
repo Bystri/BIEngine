@@ -246,6 +246,7 @@
     <ClCompile Include="..\..\Utilities\GameTimer.cpp" />
     <ClCompile Include="..\..\Utilities\Logger.cpp" />
     <ClCompile Include="..\..\Utilities\String.cpp" />
+    <ClCompile Include="..\..\Utilities\TimeWeightedAverage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3rdParty\glad\include\glad\glad.h" />
@@ -416,6 +417,7 @@
     <ClInclude Include="..\..\Utilities\LinkingContext.h" />
     <ClInclude Include="..\..\Utilities\Logger.h" />
     <ClInclude Include="..\..\Utilities\String.h" />
+    <ClInclude Include="..\..\Utilities\TimeWeightedAverage.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.clang-format" />

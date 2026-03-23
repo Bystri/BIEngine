@@ -31,6 +31,7 @@ void BINetworkManagerClient::Update(const BIEngine::GameTimer& gt)
          m_peerInfoMap.Emplace(m_pServerPeer->GetId(), m_pServerPeer);
          m_networkMessagesManager.RegisterPeer(
             m_pServerPeer->GetId(), 
+             gt, 
              std::bind(&BIEngine::NetworkClient::SendPacket, m_networkClient, std::placeholders::_1));
       }
    }
@@ -41,7 +42,7 @@ void BINetworkManagerClient::Update(const BIEngine::GameTimer& gt)
          break;
       }
 
-      m_networkMessagesManager.ProcessPacket(m_pServerPeer->GetId(), *pPacketData);
+      m_networkMessagesManager.ProcessPacket(m_pServerPeer->GetId(), *pPacketData, gt);
    }
 }
 

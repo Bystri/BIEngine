@@ -453,6 +453,9 @@
     <ClCompile Include="..\..\Network\NetworkMessagesManager.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Utilities\TimeWeightedAverage.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -958,6 +961,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Network\NetworkMessagesManager.h">
       <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Utilities\TimeWeightedAverage.h">
+      <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
