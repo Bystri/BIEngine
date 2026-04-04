@@ -113,7 +113,7 @@ class DbgPoly {
 public:
    DbgPoly(const DynamicArray<glm::vec3>& verts)
    {
-      m_vertices.Reserve(verts.Size() * 3);
+      m_vertices.Reserve(verts.Size());
 
       for (int i = 1; i < verts.Size() - 1; ++i) {
          m_vertices.PushBack(verts[0]);
@@ -174,7 +174,7 @@ public:
       const DynamicArray<Vertex>& sphereVerts = sphereMesh.GetVertices();
       for (int i = 0; i < sphereVerts.Size(); ++i) {
          m_vertices.PushBack(sphereVerts[i].Position + center);
-      }
+   }
 
       const DynamicArray<unsigned int>& sphereIndices = sphereMesh.GetIndices();
       for (int i = 0; i < sphereIndices.Size(); ++i) {
@@ -303,7 +303,7 @@ void DebugDraw::Draw(const GameTimer& gt)
    }
 
    for (int i = m_drawPolyQueue.Size() - 1; i >= 0; --i) {
-      PolyInfo& info = m_drawPolyQueue.Front();
+      PolyInfo& info = m_drawPolyQueue[i];
 
       DbgPoly poly(info.verts);
 
@@ -317,7 +317,7 @@ void DebugDraw::Draw(const GameTimer& gt)
    }
 
    for (int i = m_drawReqQueue.Size() - 1; i >= 0; --i) {
-      LineInfo& info = m_drawReqQueue.Front();
+      LineInfo& info = m_drawReqQueue[i];
 
       DbgLine line(info.fromPoint, info.toPoint);
 
