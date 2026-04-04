@@ -65,8 +65,6 @@ public:
 private:
    BIEngine::EventManager::DelegateHandler m_playerCreatedDelegateHandler;
 
-   BIEngine::UniquePtr<BINetworkManagerServer> m_pNetworkManager;
-
 #ifndef _RETAIL
    BIEngine::SharedPtr<BIServerDbgHumanView> m_pDbgHumanView;
    BIEngine::UniquePtr<BIDebugMenuController> m_pDebugMenuController;

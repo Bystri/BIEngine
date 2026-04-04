@@ -25,7 +25,7 @@ void ReplicationActionReader::ProcessReplicationHeader(InputMemoryBitStream& str
          {
             SharedPtr<ReplicationObject> go = NetworkObjectCreationRegistry::Get().Create(rh.GetClassId());
             m_pLinkingContext->AddObj(go, rh.GetNetworkId());
-            go->Init(false);
+            go->Init(rh.GetMasterPeerId());
             go->Read(stream);
             break;
          }

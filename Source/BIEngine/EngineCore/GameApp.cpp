@@ -78,6 +78,8 @@ bool GameApp::Init()
    // Загружаем скрипт инициализации Python системы. Скрипт будет выполнен во время самой загрузки ресурса, поэтомы мы игнорируем возвращаемый хэндлер.
    ResCache::Get()->GetHandle(SCRIPT_PREINIT_FILE);
 
+   m_gt.Start();
+
    m_pGameLogic->Init();
 
    return true;
@@ -128,6 +130,17 @@ void GameApp::OnRender(const GameTimer& gt)
 
    ImGui::Render();
    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void GameApp::Process()
+{
+   m_gt.Tick();
+
+   ProcessInput(m_gt);
+   // Обновление логики
+   OnUpdate(m_gt);
+   // Отрисовка
+   OnRender(m_gt);
 }
 
 void GameApp::OnPointerMove(float xpos, float ypos)

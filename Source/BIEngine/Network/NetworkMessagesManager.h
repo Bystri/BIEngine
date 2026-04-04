@@ -133,6 +133,8 @@ public:
       return m_peerInfoMap.Find(peerId) != m_peerInfoMap.End();
    }
 
+   float GetRttForPeer(uint32_t peerId) const;
+
    void SendNetworkMessage(uint32_t peerId, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream);
 
    void ProcessPacket(uint32_t peerId, InputMemoryBitStream& inputStream, const GameTimer& gt);

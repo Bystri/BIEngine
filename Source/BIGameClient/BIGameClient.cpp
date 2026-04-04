@@ -98,8 +98,11 @@ bool BIGameClientLogic::Init()
    PlayerManager::Create();
 
    BIEngine::SocketAddressPtr sockAddr = BIEngine::SocketUtil::CreateIPv4SocketFromString(BIEngine::g_pApp->m_options.hostAddress);
-   m_pNetworkManager = BIEngine::MakeUnique<BINetworkManagerClient>();
-   m_pNetworkManager->Init(*sockAddr, BIEngine::g_pApp->m_options.playerName);
+   {
+      BIEngine::UniquePtr<BINetworkManagerClient> pNetworkManager = BIEngine::MakeUnique<BINetworkManagerClient>();
+      pNetworkManager->Init(*sockAddr, BIEngine::g_pApp->m_options.playerName);
+      m_pNetworkManager = std::move(pNetworkManager);
+   }
 
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayer>(ReplicationObjectPlayer::sk_ClassType);
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayerCharacter>(ReplicationObjectPlayerCharacter::sk_ClassType);
@@ -130,8 +133,6 @@ bool BIGameClientLogic::Init()
 
 void BIGameClientLogic::Terminate()
 {
-   m_pNetworkManager->Terminate();
-
    BIEngine::EventManager::Get()->RemoveListener(m_newPlayerActorDelegateHandler);
 
    m_pCameraManager->Terminate();
@@ -149,15 +150,15 @@ void BIGameClientLogic::NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventDat
    BIEngine::SharedPtr<EvtData_PlayerActor_Created> pCastEventData = BIEngine::StaticPointerCast<EvtData_PlayerActor_Created>(pEventData);
 
    BIEngine::Logger::WriteMsgLog("Got NewPlayerActorDelegate for player: %d", pCastEventData->GetPlayerId());
-   if (pCastEventData->GetPlayerId() != m_pNetworkManager->GetPlayerId()) {
+   if (pCastEventData->GetPlayerId() != m_pNetworkManager->GetPeerId()) {
       return;
    }
 
    BIEngine::SharedPtr<BIEngine::Actor> pActor = GetActor(pCastEventData->GetActorId());
 
-   pActor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->SetPlayerId(m_pNetworkManager->GetPlayerId());
+   pActor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->SetPlayerId(m_pNetworkManager->GetPeerId());
 
-   m_pInputActionController->Init(m_pNetworkManager->GetPlayerId(), m_pHumanView->GetScene()->GetCamera());
+   m_pInputActionController->Init(m_pNetworkManager->GetPeerId(), m_pHumanView->GetScene()->GetCamera());
    m_pCameraManager->FollowActor(pActor);
 }
 

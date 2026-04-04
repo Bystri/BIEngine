@@ -4,7 +4,7 @@
 
 namespace BIEngine {
 
-    #pragma optimize("",off)
+#pragma optimize("", off)
 
 const NetworkProtocolType ObjectReplicationProtocolWriter::sk_ProtocolType(0x23d7aeaa);
 const NetworkProtocolType ObjectReplicationProtocolReader::sk_ProtocolType(0x23d7aeaa);
@@ -40,7 +40,7 @@ ObjectReplicationProtocolWriter::~ObjectReplicationProtocolWriter()
 SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t classId)
 {
    SharedPtr<ReplicationObject> pObj = BIEngine::NetworkObjectCreationRegistry::Get().Create(classId);
-   pObj->Init(true);
+   pObj->Init(g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId());
    ObjectReplicationProtocolWriter::Get()->AddReplicationObject(pObj);
 
    return pObj;
@@ -71,8 +71,19 @@ void ObjectReplicationProtocolWriter::AddReplicationObject(SharedPtr<Replication
 void ObjectReplicationProtocolWriter::SendStateMsgToClient(uint32_t peerId, NetworkMessagesManager* pNetworkMessagesManager)
 {
    OutputMemoryBitStream msg;
-   m_pReplicationManagersPerPeer[peerId]->Write(msg);
-   pNetworkMessagesManager->SendNetworkMessage(peerId, GetType(), msg);
+
+   for (int i = 0; i < m_pPeers.Size(); ++i) {
+      if (m_pPeers[i] != peerId) {
+         continue;
+      }
+
+      m_pReplicationManagersPerPeer[i]->Write(msg);
+      pNetworkMessagesManager->SendNetworkMessage(peerId, GetType(), msg);
+
+      return;
+   }
+
+   Logger::WriteErrorLog("Trying to send ObjectReplication info to unknown peerid [%u]", peerId);
 }
 
 void ObjectReplicationProtocolWriter::RegisterPeer(uint32_t peerId)
@@ -101,7 +112,7 @@ void ObjectReplicationProtocolWriter::OnBeforePacketsSend(NetworkMessagesManager
 {
    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
       if (m_pReplicationManagersPerPeer[i]->GetNumOfCachedHeaders() > 0) {
-         SendStateMsgToClient(i, pNetworkMessagesManager);
+         SendStateMsgToClient(m_pPeers[i], pNetworkMessagesManager);
       }
    }
 }

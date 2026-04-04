@@ -2,8 +2,9 @@
 
 #include "../../BIEngine/Actors/Actor.h"
 
-void CombatReplicationUnit::Init(BIEngine::SharedPtr<BIEngine::Actor> pObject)
+void CombatReplicationUnit::Init(BIEngine::ReplicationObject* pRelicationObject, BIEngine::SharedPtr<BIEngine::Actor> pObject)
 {
+   ReplicationUnit::Init(pRelicationObject, pObject);
    m_pCombatStateComponent = pObject->GetComponent<CombatStateComponent>(CombatStateComponent::g_CompId).Lock();
 }
 

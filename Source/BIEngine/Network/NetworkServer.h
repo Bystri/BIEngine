@@ -50,7 +50,7 @@ private:
    IntToClientMap m_clientIdxToAddressMap;
    IntToQueueMap m_clintIdxToPayloadPacketQueueMap;
    DynamicArray<int32_t> m_clientIds;
-   uint32_t m_nextClientId = 0u;
+   uint32_t m_nextClientId = 1u;
 };
 
 } // namespace BIEngine

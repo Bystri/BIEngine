@@ -4,184 +4,194 @@
 
 namespace BIEngine {
 
-   void NetworkMessagesManager::RegisterPeer(uint32_t peerId, const GameTimer& gt, const std::function<void(const OutputMemoryBitStream&)>& sendFunc)
-   {
-      PeerInfo info(gt);
-      info.peerId = peerId;
-      info.sendFunc = sendFunc;
+void NetworkMessagesManager::RegisterPeer(uint32_t peerId, const GameTimer& gt, const std::function<void(const OutputMemoryBitStream&)>& sendFunc)
+{
+   PeerInfo info(gt);
+   info.peerId = peerId;
+   info.sendFunc = sendFunc;
 
-      m_peerInfoMap.Insert(peerId, std::move(info));
-      m_protocolsManager.RegisterPeer(peerId);
+   m_peerInfoMap.Insert(peerId, std::move(info));
+   m_protocolsManager.RegisterPeer(peerId);
+}
+
+void NetworkMessagesManager::UnregisterPeer(uint32_t peerId)
+{
+   m_protocolsManager.UnregisterPeer(peerId);
+   m_peerInfoMap.Erase(peerId);
+}
+
+float NetworkMessagesManager::GetRttForPeer(uint32_t peerId) const
+{
+   auto itr = m_peerInfoMap.Find(peerId);
+   if (itr == m_peerInfoMap.End()) {
+      Assert(false, "Trying to get RTT for unknown peerId [%u]", peerId);
+      return 0.0f;
    }
 
-   void NetworkMessagesManager::UnregisterPeer(uint32_t peerId)
-   {
-      m_protocolsManager.UnregisterPeer(peerId);
-      m_peerInfoMap.Erase(peerId);
+   return itr->second.m_weightedRtt.GetValue();
+}
+
+void NetworkMessagesManager::SendNetworkMessage(uint32_t peerId, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream)
+{
+   auto peerInfoPtr = m_peerInfoMap.Find(peerId);
+   if (peerInfoPtr == m_peerInfoMap.End()) {
+      Assert(false, "You are trying to send message to an unconnected peer");
+      return;
    }
 
-   void NetworkMessagesManager::SendNetworkMessage(uint32_t peerId, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream)
-   {
-      auto peerInfoPtr = m_peerInfoMap.Find(peerId);
-      if (peerInfoPtr == m_peerInfoMap.End()) {
-         Assert(false, "You are trying to send message to an unconnected peer");
-         return;
-      }
+   PeerInfo& peerInfo = peerInfoPtr->second;
 
-      PeerInfo& peerInfo = peerInfoPtr->second;
+   MessageToSend msg(peerInfo.messageId++);
 
-      MessageToSend msg(peerInfo.messageId++);
+   BIEngine::Serialize(msg.GetBuffer(), protocolType);
+   msg.GetBuffer().WriteBits(outputStream.GetBufferPtr().Get(), outputStream.GetBitLength());
 
-      BIEngine::Serialize(msg.GetBuffer(), protocolType);
-      msg.GetBuffer().WriteBits(outputStream.GetBufferPtr().Get(), outputStream.GetBitLength());
+   peerInfo.messageQueueToSend.Push(std::move(msg));
+}
 
-      peerInfo.messageQueueToSend.Push(std::move(msg));
+void NetworkMessagesManager::ProcessPacket(uint32_t peerId, InputMemoryBitStream& inputStream, const GameTimer& gt)
+{
+   auto infoItr = m_peerInfoMap.Find(peerId);
+
+   Assert(infoItr != m_peerInfoMap.End(), "Try to process packet from an unknown peer");
+
+   if (infoItr == m_peerInfoMap.End()) {
+      return;
    }
 
-   void NetworkMessagesManager::ProcessPacket(uint32_t peerId, InputMemoryBitStream& inputStream, const GameTimer& gt)
-   {
-      auto infoItr = m_peerInfoMap.Find(peerId);
-
-      Assert(infoItr != m_peerInfoMap.End(), "Try to process packet from an unknown peer");
-
-      if (infoItr == m_peerInfoMap.End()) {
-         return;
-      }
-
-      uint32_t numberOfTimes;
-      Deserialize(inputStream, numberOfTimes);
-      for (int i = 0; i < numberOfTimes; ++i)
-      {
-         float timePacketWasSendByThisPeer;
-         // TODO: Quant
-         Deserialize(inputStream, timePacketWasSendByThisPeer);
-         infoItr->second.m_weightedRtt.Update(gt, gt.TotalTime() - timePacketWasSendByThisPeer);
-      }
-
-      float timePacketWasSend;
+   uint32_t numberOfTimes;
+   Deserialize(inputStream, numberOfTimes);
+   for (int i = 0; i < numberOfTimes; ++i) {
+      float timePacketWasSendByThisPeer;
       // TODO: Quant
-      Deserialize(inputStream, timePacketWasSend);
-      infoItr->second.m_timesOfGotPackets.PushBack(timePacketWasSend);
-
-      if (!infoItr->second.deliveryNotificationManager.ReadAndProcessState(inputStream)) {
-          return;
-      }
-
-      uint32_t messagesCnt;
-      Deserialize(inputStream, messagesCnt);
-
-      while (messagesCnt--) {
-         MessageToRead& msg = infoItr->second.messageQueueToRead.EmplaceBack();
-         msg.Read(inputStream);
-      }
-
-      Sort(infoItr->second.messageQueueToRead.Begin(), infoItr->second.messageQueueToRead.End());
+      Deserialize(inputStream, timePacketWasSendByThisPeer);
+      infoItr->second.m_weightedRtt.Update(gt, gt.TotalTime() - timePacketWasSendByThisPeer);
    }
 
-   void NetworkMessagesManager::SendOutgoingPackets(const GameTimer& gt)
-   {
-      m_protocolsManager.OnBeforePacketsSend(this);
+   float timePacketWasSend;
+   // TODO: Quant
+   Deserialize(inputStream, timePacketWasSend);
+   infoItr->second.m_timesOfGotPackets.PushBack(timePacketWasSend);
 
-      for (auto& peerInfo : m_peerInfoMap) {
-         PeerInfo& info = peerInfo.second;
+   if (!infoItr->second.deliveryNotificationManager.ReadAndProcessState(inputStream)) {
+      return;
+   }
 
-         info.deliveryNotificationManager.ProcessTimedOutPackets(gt);
+   uint32_t messagesCnt;
+   Deserialize(inputStream, messagesCnt);
 
-         OutputMemoryBitStream packet;
-         const uint32_t timesOfGotPacketsSize = info.m_timesOfGotPackets.Size();
-         Serialize(packet, timesOfGotPacketsSize);
-         for (int i = 0; i < timesOfGotPacketsSize; ++i) {
-            // TODO: Quant
-            Serialize(packet, info.m_timesOfGotPackets[i]);
-         }
+   while (messagesCnt--) {
+      MessageToRead& msg = infoItr->second.messageQueueToRead.EmplaceBack();
+      msg.Read(inputStream);
+   }
 
-         info.m_timesOfGotPackets.Clear();
+   Sort(infoItr->second.messageQueueToRead.Begin(), infoItr->second.messageQueueToRead.End());
+}
 
+void NetworkMessagesManager::SendOutgoingPackets(const GameTimer& gt)
+{
+   m_protocolsManager.OnBeforePacketsSend(this);
+
+   for (auto& peerInfo : m_peerInfoMap) {
+      PeerInfo& info = peerInfo.second;
+
+      info.deliveryNotificationManager.ProcessTimedOutPackets(gt);
+
+      OutputMemoryBitStream packet;
+      const uint32_t timesOfGotPacketsSize = info.m_timesOfGotPackets.Size();
+      Serialize(packet, timesOfGotPacketsSize);
+      for (int i = 0; i < timesOfGotPacketsSize; ++i) {
          // TODO: Quant
-         Serialize(packet, gt.TotalTime());
-
-         InFlightPacket* inFlightPacket = peerInfo.second.deliveryNotificationManager.WriteState(packet, gt);
-
-         const uint32_t messagesCnt = info.messageQueueToSend.Size();
-         Serialize(packet, messagesCnt);
-
-         while (!info.messageQueueToSend.Empty()) {
-            const MessageToSend& msg = info.messageQueueToSend.Front();
-
-            msg.Write(packet);
-
-            TransmissionDataPtr pData = MakeShared<NetworkTransmissionData>(info.peerId, msg, this);
-            inFlightPacket->SetTransmissionData(pData);
-
-            info.messageQueueToSend.Pop();
-         }
-
-         info.sendFunc(packet);
+         Serialize(packet, info.m_timesOfGotPackets[i]);
       }
+
+      info.m_timesOfGotPackets.Clear();
+
+      // TODO: Quant
+      Serialize(packet, gt.TotalTime());
+
+      InFlightPacket* inFlightPacket = peerInfo.second.deliveryNotificationManager.WriteState(packet, gt);
+
+      const uint32_t messagesCnt = info.messageQueueToSend.Size();
+      Serialize(packet, messagesCnt);
+
+      while (!info.messageQueueToSend.Empty()) {
+         const MessageToSend& msg = info.messageQueueToSend.Front();
+
+         msg.Write(packet);
+
+         TransmissionDataPtr pData = MakeShared<NetworkTransmissionData>(info.peerId, msg, this);
+         inFlightPacket->SetTransmissionData(pData);
+
+         info.messageQueueToSend.Pop();
+      }
+
+      info.sendFunc(packet);
    }
+}
 
-   void NetworkMessagesManager::ProcessMessages()
-   {
-      for (auto& peerInfo : m_peerInfoMap) {
-         while (!peerInfo.second.messageQueueToRead.Empty()) {
-            MessageToRead& msg = peerInfo.second.messageQueueToRead[0];
+void NetworkMessagesManager::ProcessMessages()
+{
+   for (auto& peerInfo : m_peerInfoMap) {
+      while (!peerInfo.second.messageQueueToRead.Empty()) {
+         MessageToRead& msg = peerInfo.second.messageQueueToRead[0];
 
-            static bool dbgBool = false;
+         static bool dbgBool = false;
 
-            if (msg.GetId() < peerInfo.second.expectedMessageId) {
-               peerInfo.second.messageQueueToRead.Erase(peerInfo.second.messageQueueToRead.Begin());
-               continue;
-            }
-
-            if (msg.GetId() > peerInfo.second.expectedMessageId && !dbgBool) {
-               dbgBool = true;
-               break;
-            }
-
-            dbgBool = true;
-
-            m_processedMessagesIds.PushBack(msg.GetId());
-
-            ++peerInfo.second.expectedMessageId;
-
-            uint32_t packetType;
-            Deserialize(msg.GetBuffer(), packetType);
-
-            m_protocolsManager.ReceiveMeessage(packetType, msg.GetBuffer());
-
+         if (msg.GetId() < peerInfo.second.expectedMessageId) {
             peerInfo.second.messageQueueToRead.Erase(peerInfo.second.messageQueueToRead.Begin());
+            continue;
          }
+
+         if (msg.GetId() > peerInfo.second.expectedMessageId && !dbgBool) {
+            dbgBool = true;
+            break;
+         }
+
+         dbgBool = true;
+
+         m_processedMessagesIds.PushBack(msg.GetId());
+
+         ++peerInfo.second.expectedMessageId;
+
+         uint32_t packetType;
+         Deserialize(msg.GetBuffer(), packetType);
+
+         m_protocolsManager.ReceiveMeessage(packetType, msg.GetBuffer());
+
+         peerInfo.second.messageQueueToRead.Erase(peerInfo.second.messageQueueToRead.Begin());
       }
    }
+}
 
-   void NetworkMessagesManager::ResendNetworkMessage(uint32_t peerId, const MessageToSend& msg)
-   {
-      auto peerInfoPtr = m_peerInfoMap.Find(peerId);
-      if (peerInfoPtr == m_peerInfoMap.End()) {
-         Assert(false, "You are trying to send message to an unconnected peer");
-         return;
-      }
-
-      PeerInfo& peerInfo = peerInfoPtr->second;
-      peerInfo.messageQueueToSend.Push(msg);
+void NetworkMessagesManager::ResendNetworkMessage(uint32_t peerId, const MessageToSend& msg)
+{
+   auto peerInfoPtr = m_peerInfoMap.Find(peerId);
+   if (peerInfoPtr == m_peerInfoMap.End()) {
+      Assert(false, "You are trying to send message to an unconnected peer");
+      return;
    }
+
+   PeerInfo& peerInfo = peerInfoPtr->second;
+   peerInfo.messageQueueToSend.Push(msg);
+}
 
 #ifndef _RETAIL
-   void NetworkMessagesManager::DrawDbgDiagnostics()
-   {
-      ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiCond_Always);
+void NetworkMessagesManager::DrawDbgDiagnostics()
+{
+   ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiCond_Always);
 
-      if (!ImGui::Begin("Network info")) {
-         ImGui::End();
-         return;
-      }
-
-      for (auto& peerInfo : m_peerInfoMap) {
-         ImGui::Text("Peer: [%d]; Rtt %f", peerInfo.first, peerInfo.second.m_weightedRtt.GetValue());
-      }
-
+   if (!ImGui::Begin("Network info")) {
       ImGui::End();
+      return;
    }
+
+   for (auto& peerInfo : m_peerInfoMap) {
+      ImGui::Text("Peer: [%d]; Rtt %f", peerInfo.first, peerInfo.second.m_weightedRtt.GetValue());
+   }
+
+   ImGui::End();
+}
 #endif
 
 } // namespace BIEngine

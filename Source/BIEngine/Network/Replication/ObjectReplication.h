@@ -7,6 +7,7 @@
 #include "../NetworkManager.h"
 #include "../../StdLib/Bitset.h"
 #include "../../Utilities/Logger.h"
+#include "../../EngineCore/GameApp.h"
 
 namespace BIEngine {
 
@@ -23,7 +24,14 @@ public:
 
    virtual ~ReplicationObject() = default;
 
-   virtual void Init(bool isMaster) {}
+   virtual void Init(uint32_t masterPeerId) {
+      m_masterPeerId = masterPeerId;
+   }
+
+   uint32_t GetMasterPeerId() const
+   {
+      return m_masterPeerId;
+   }
 
    virtual bool IsDirty() const { return true; }
 
@@ -32,6 +40,9 @@ public:
    virtual void Write(OutputMemoryBitStream& stream, bool ignoreDirtyFlag) {}
 
    virtual void Read(InputMemoryBitStream& stream) {}
+
+private:
+   uint32_t m_masterPeerId = -1;
 };
 
 template <class ReplicatedObject>
@@ -44,16 +55,18 @@ public:
    {
    }
 
-   void Init(bool isMaster)
+   virtual void Init(uint32_t masterPeerId) override
    {
-      m_pReplicatedObject = ConstructReplicatedObject(isMaster);
+      ReplicationObject::Init(masterPeerId);
+
+      m_pReplicatedObject = ConstructReplicatedObject(masterPeerId == g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId());
 
       for (int i = 0; i < m_replicationUnits.Size(); ++i) {
-         m_replicationUnits[i]->Init(m_pReplicatedObject);
+         m_replicationUnits[i]->Init(this, m_pReplicatedObject);
       }
    }
 
-   void OnUpdate()
+   virtual void OnUpdate() override
    {
       m_isDirtyMask.Reset();
       for (int i = 0; i < m_replicationUnits.Size(); ++i) {
@@ -65,9 +78,9 @@ public:
 
    SharedPtr<ReplicatedObject> GetReplicatedObject() const { return m_pReplicatedObject; }
 
-   bool IsDirty() const { return m_isDirtyMask.Any(); }
+   virtual bool IsDirty() const override { return m_isDirtyMask.Any(); }
 
-   void Write(OutputMemoryBitStream& stream, bool ignoreDirtyFlag)
+   virtual void Write(OutputMemoryBitStream& stream, bool ignoreDirtyFlag) override
    {
       for (int i = 0; i < m_replicationUnits.Size(); ++i) {
          if (ignoreDirtyFlag || m_isDirtyMask[i]) {
@@ -80,7 +93,7 @@ public:
       }
    }
 
-   void Read(InputMemoryBitStream& stream)
+   virtual void Read(InputMemoryBitStream& stream) override
    {
       unsigned char dirtyFlag;
       for (int i = 0; i < m_replicationUnits.Size(); ++i) {

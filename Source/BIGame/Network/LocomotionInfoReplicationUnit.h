@@ -5,7 +5,7 @@
 
 class LocomotionInfoReplicationUnit : public BIEngine::ReplicationUnit<BIEngine::Actor> {
 public:
-   virtual void Init(BIEngine::SharedPtr<BIEngine::Actor> pObject) override;
+   virtual void Init(BIEngine::ReplicationObject* pRelicationObject, BIEngine::SharedPtr<BIEngine::Actor> pObject) override;
    virtual bool IsStateChanged() override;
 
    virtual void Write(BIEngine::OutputMemoryBitStream& stream) override;

@@ -77,8 +77,6 @@ int Run(int argc, char* argv[], int maxFps)
    const double fpsLimit = 1.0 / maxFps;
    double lastFrameTime = 0.0;
 
-   GameTimer gt;
-   gt.Start();
    // Основной цикл
    while (!glfwWindowShouldClose(window)) {
       const double now = glfwGetTime();
@@ -91,14 +89,7 @@ int Run(int argc, char* argv[], int maxFps)
 
       glfwPollEvents();
 
-      gt.Tick();
-
-      g_pApp->ProcessInput(gt);
-      // Обновление логики
-      g_pApp->OnUpdate(gt);
-
-      // Отрисовка
-      g_pApp->OnRender(gt);
+      g_pApp->Process();
 
       glfwSwapBuffers(window);
    }

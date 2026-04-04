@@ -8,12 +8,10 @@
 class BINetworkManagerClient : public BIEngine::NetworkManager {
 public:
    bool Init(const BIEngine::SocketAddress& serverAddress, const BIEngine::String& name);
-   void Terminate();
 
-   int GetPlayerId() const { return m_networkClient.GetClientId(); }
+   uint32_t GetPeerId() const override { return m_networkClient.GetClientId(); }
 
    virtual void Update(const BIEngine::GameTimer& gt) override;
-   void SendOutgoingPackets(const BIEngine::GameTimer& gt);
 
 private:
    BIEngine::NetworkClient m_networkClient;

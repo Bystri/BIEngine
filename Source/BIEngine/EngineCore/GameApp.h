@@ -44,19 +44,25 @@ public:
 
    virtual const char* GetGameTitle() = 0; // Принудительный метод заставить пользователя дать явное название игре
 
-   void ProcessInput(const GameTimer& gt);
-   void OnUpdate(GameTimer& gt);
-   void OnRender(const GameTimer& gt);
+   void Process();
 
    // Обработчик событий устройств ввода
    void OnPointerMove(float xpos, float ypos);
    void SetPointerButton(int button, bool state);
    void SetKey(int key, int scancode, bool pressed);
 
+private:
+   void ProcessInput(const GameTimer& gt);
+   void OnUpdate(GameTimer& gt);
+   void OnRender(const GameTimer& gt);
+
 public:
    const SharedPtr<GameLogic> m_pGameLogic;
 
    Options m_options;
+
+private:
+   GameTimer m_gt;
 };
 
 extern GameApp* g_pApp;

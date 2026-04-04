@@ -41,5 +41,5 @@ private:
 
 private:
    static PlayerManager* s_pSingleton;
-   PlayerId m_nextPlayerId = 0;
+   PlayerId m_nextPlayerId = 1;
 };

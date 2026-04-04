@@ -107,9 +107,12 @@ bool BIServerGameLogic::Init()
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayerCharacter>(ReplicationObjectPlayerCharacter::sk_ClassType);
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectAiDummyCharacter>(ReplicationObjectAiDummyCharacter::sk_ClassType);
 
-   m_pNetworkManager = BIEngine::MakeUnique<BINetworkManagerServer>();
-   if (!m_pNetworkManager->Init(BIEngine::g_pApp->m_options.hostPort)) {
-      return false;
+   {
+      BIEngine::UniquePtr<BINetworkManagerServer> pNetworkManager = BIEngine::MakeUnique<BINetworkManagerServer>();
+      if (!pNetworkManager->Init(BIEngine::g_pApp->m_options.hostPort)) {
+         return false;
+      }
+      m_pNetworkManager = std::move(pNetworkManager);
    }
 
    m_pPhysics2D->Initialize();

@@ -9,6 +9,8 @@
 
 namespace BIEngine {
 
+class NetworkManager;
+
 class GameLogic {
    friend class GameApp;
 
@@ -26,6 +28,8 @@ public:
    SharedPtr<IGamePhysics3D> GetGamePhysics3D() const { return m_pPhysics3D; }
 
    UniquePtr<NavWorld>& GetNavWorld() { return m_pNavWorld; }
+
+   UniquePtr<NetworkManager>& GetNetworkManager();
 
    virtual bool Init();
 
@@ -77,6 +81,7 @@ protected:
 
    SharedPtr<IGamePhysics2D> m_pPhysics2D;
    SharedPtr<IGamePhysics3D> m_pPhysics3D;
+   UniquePtr<NetworkManager> m_pNetworkManager;
    UniquePtr<NavWorld> m_pNavWorld;
 };
 

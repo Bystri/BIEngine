@@ -57,6 +57,7 @@ bool NetworkServer::SendPacket(uint32_t clientId, const OutputMemoryBitStream& o
    // SEE NetworkClient
    auto itr = m_clientIdxToAddressMap.Find(clientId);
    if (itr == m_clientIdxToAddressMap.End()) {
+      Logger::WriteErrorLog("You are trying to send packet to unknown client with id [%u]", clientId);
       return false;
    }
 

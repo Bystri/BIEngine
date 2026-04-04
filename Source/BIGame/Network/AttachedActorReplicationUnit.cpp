@@ -2,8 +2,9 @@
 
 #include "../../BIEngine/EngineCore/GameApp.h"
 
-void AttachedActorReplicationUnit::Init(BIEngine::SharedPtr<Player> pObject)
+void AttachedActorReplicationUnit::Init(BIEngine::ReplicationObject* pRelicationObject, BIEngine::SharedPtr<Player> pObject)
 {
+   ReplicationUnit::Init(pRelicationObject, pObject);
    m_pPlayer = pObject;
 }
 

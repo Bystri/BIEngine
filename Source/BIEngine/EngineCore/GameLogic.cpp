@@ -2,6 +2,7 @@
 
 #include "../Utilities/Logger.h"
 #include "../ProcessManager/ProcessManager.h"
+#include "../Network/NetworkManager.h"
 
 namespace BIEngine {
 
@@ -17,6 +18,11 @@ GameLogic::~GameLogic()
       delete m_pActorFactory;
       m_pActorFactory = nullptr;
    }
+}
+
+UniquePtr<NetworkManager>& GameLogic::GetNetworkManager()
+{
+   return m_pNetworkManager;
 }
 
 bool GameLogic::Init()
@@ -204,7 +210,7 @@ SharedPtr<Actor> GameLogic::CreateActor(tinyxml2::XMLElement* pRoot, const glm::
 
       return pActor;
    } else {
-      Logger::WriteLog(Logger::LogType::ERROR, "Couldn't create actor");
+      Logger::WriteErrorLog("Couldn't create actor");
       return SharedPtr<Actor>();
    }
 }
@@ -215,7 +221,7 @@ void GameLogic::ModifyActor(ActorId actorId, tinyxml2::XMLElement* pOverrides)
    if (itr != m_actors.End())
       m_pActorFactory->ModifyActor(itr->second, pOverrides);
    else
-      Logger::WriteLog(Logger::LogType::ERROR, "Attempt to change a non-existent actor");
+      Logger::WriteErrorLog("Attempt to change a non-existent actor");
 }
 
 void GameLogic::RequestDestroyActorDelegate(IEventDataPtr pEventData)

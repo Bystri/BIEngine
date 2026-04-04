@@ -17,10 +17,6 @@ bool BINetworkManagerClient::Init(const BIEngine::SocketAddress& serverAddress, 
    return m_networkClient.Init(serverAddress);
 }
 
-void BINetworkManagerClient::Terminate()
-{
-}
-
 void BINetworkManagerClient::Update(const BIEngine::GameTimer& gt)
 {
    m_networkClient.Update(gt.TotalTime());
@@ -44,13 +40,4 @@ void BINetworkManagerClient::Update(const BIEngine::GameTimer& gt)
 
       m_networkMessagesManager.ProcessPacket(m_pServerPeer->GetId(), *pPacketData, gt);
    }
-}
-
-void BINetworkManagerClient::SendOutgoingPackets(const BIEngine::GameTimer& gt)
-{
-   if (m_networkClient.GetState() != BIEngine::NetworkClient::State::Welcomed) {
-      return;
-   }
-
-   m_networkMessagesManager.SendOutgoingPackets(gt);
 }

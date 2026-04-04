@@ -5,7 +5,7 @@
 
 class AttachedActorReplicationUnit : public BIEngine::ReplicationUnit<Player> {
 public:
-   virtual void Init(BIEngine::SharedPtr<Player> pObject) override;
+   virtual void Init(BIEngine::ReplicationObject* pRelicationObject, BIEngine::SharedPtr<Player> pObject) override;
    virtual bool IsStateChanged() override;
 
    virtual void Write(BIEngine::OutputMemoryBitStream& stream) override;

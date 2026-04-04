@@ -32,10 +32,15 @@ public:
 
    virtual ~NetworkManager() {};
 
+   virtual uint32_t GetPeerId() const = 0;
+
    virtual void Update(const GameTimer& gt) = 0;
    void ProcessIncomingPackets();
+   void SendOutgoingPackets(const BIEngine::GameTimer& gt);
 
    void SendNetworkMessage(uint32_t peedId, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream);
+
+   float GetRttForPeer(uint32_t peerId) const { return m_networkMessagesManager.GetRttForPeer(peerId); }
 
 #ifndef _RETAIL
    void DrawDbgDiagnostics();

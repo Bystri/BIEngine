@@ -58,7 +58,6 @@ private:
    BIEngine::UniquePtr<BIInputActionController> m_pInputActionController;
    BIEngine::UniquePtr<BICameraManager> m_pCameraManager;
 
-   BIEngine::UniquePtr<BINetworkManagerClient> m_pNetworkManager;
    BIEngine::SharedPtr<BIGameClientHumanView> m_pHumanView;
 
 #ifndef _RETAIL
