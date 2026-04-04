@@ -327,7 +327,7 @@ bool NavMeshManager::generateNavmesh(const NavMeshBuildSettings& settings)
       return true;
    }
 
-   return true;
+   return false;
 }
 
 void NavMeshManager::HandleActorAdded(IEventDataPtr pEventData)
