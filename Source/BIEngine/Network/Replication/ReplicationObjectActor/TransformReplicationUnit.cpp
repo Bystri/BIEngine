@@ -100,7 +100,7 @@ void TransformReplicationUnit::Read(InputMemoryBitStream& stream)
        MakeShared<InterpolationProcess>(
            WeakPtr<TransformComponent>(m_pTransformComponent), 
            pos, 
-           g_pApp->m_pGameLogic->GetNetworkManager()->GetRttForPeer(GetOwner()->GetMasterPeerId())
+           g_pApp->m_pGameLogic->GetNetworkManager()->GetRttForPeer(GetOwner()->GetMasterPeerId()/2.0f)
        ));
 
    glm::vec3 rot;
