@@ -192,6 +192,10 @@ void BIGameClientLogic::OnRenderDebug(const BIEngine::GameTimer& gt)
    if (m_pDebugMenuController->IsNetworkWindow()) {
       m_pNetworkManager->DrawDbgDiagnostics();
    }
+
+   if (m_pDebugMenuController->IsNavCrowdWindow()) {
+      m_pNavWorld->GetNavCrowd()->DrawDebug();
+   }
 #endif
 }
 

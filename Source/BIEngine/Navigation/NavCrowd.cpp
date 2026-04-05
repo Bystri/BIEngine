@@ -1,5 +1,7 @@
 #include "NavCrowd.h"
 
+#include <imgui.h>
+
 #include "AiCrowdTargeterRecast.h"
 #include "../StdLib/Assert.h"
 #include "../Actors/TransformComponent.h"
@@ -187,5 +189,21 @@ void NavCrowd::OnUpdate(const GameTimer& gt)
 {
    m_pTargeter->Update(gt);
 }
+
+#ifndef _RETAIL
+void NavCrowd::DrawDebug()
+{
+   ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiCond_Always);
+
+   if (!ImGui::Begin("NavCrowd")) {
+      ImGui::End();
+      return;
+   }
+
+   m_pTargeter->DrawDebug();
+
+   ImGui::End();
+}
+#endif
 
 } // namespace BIEngine

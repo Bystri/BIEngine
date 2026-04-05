@@ -40,6 +40,10 @@ public:
    void UpdateCrowdInfo(const HashMap<ActorId, SharedPtr<Actor>>& actorMap);
    void OnUpdate(const GameTimer& gt);
 
+#ifndef _RETAIL
+   void DrawDebug();
+#endif
+
 private:
    HashMap<ActorId, NavAgentId> m_actorToAgentMap;
    HashMap<NavAgentId, ActorId> m_agentToActorMap;

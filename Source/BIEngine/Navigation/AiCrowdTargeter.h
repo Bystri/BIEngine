@@ -16,6 +16,11 @@ public:
 
    virtual void UpdateAgentPos(const int idx, const Vector3& pos) = 0;
    virtual void Update(const GameTimer& gt) = 0;
+
+#ifndef _RETAIL
+   virtual void DrawDebug() {};
+#endif
+
 };
 
 } // namespace BIEngine

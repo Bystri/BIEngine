@@ -1,9 +1,12 @@
 #include "AiCrowdTargeterRecast.h"
 
+#include <imgui.h>
+
 #include <DetourPathCorridor.h>
 #include <DetourPathQueue.h>
 
 #include "../StdLib/Algorithm.h"
+#include "../Utilities/DebugDraw.h"
 
 namespace BIEngine {
 
@@ -54,6 +57,10 @@ public:
    virtual void UpdateAgentPos(const int idx, const Vector3& pos) override;
    virtual void Update(const GameTimer& gt) override;
 
+#ifndef _RETAIL
+   virtual void DrawDebug() override;
+#endif
+
 private:
    bool requestMoveTarget(const int idx, dtPolyRef ref, const Vector3& pos);
    bool requestMoveTargetReplan(const int idx, dtPolyRef ref, const Vector3& pos);
@@ -75,6 +82,10 @@ private:
    SharedPtr<NavMeshManager> m_pNavMeshManager;
    dtNavMeshQuery* m_pNavQuery;
    dtPolyRef* m_pPathResult;
+
+#ifndef _RETAIL
+   bool m_dbgDrawPath = false;
+#endif
 };
 
 static void aiCrowdFloatsToVec(BIEngine::Vector3& toVec, float* fromVec)
@@ -181,6 +192,39 @@ void AiCrowdTargeterRecast::Update(const GameTimer& gt)
    updateMoveRequest();
    findNextCornerToSteerTo();
 }
+
+#ifndef _RETAIL
+void AiCrowdTargeterRecast::DrawDebug()
+{
+   ImGui::Checkbox("Draw path", &m_dbgDrawPath);
+
+   if (!m_dbgDrawPath) {
+      return;
+   }
+
+   for (int i = 0; i < m_agents.Size(); ++i) {
+      AgentContext& ag = m_agents[i];
+
+      if (ag.targetState == TargetState::NONE) {
+         continue;
+      }
+
+      glm::vec3 prevCorner;
+      for (int j = 0; j < ag.cornersNum; ++j)
+      {
+         const float* target = &ag.cornerVerts[j * 3];
+         const glm::vec3 corner = glm::vec3(target[0], target[1] + 0.1f, target[2]);
+         DebugDraw::Sphere(corner, 0.2f, COLOR_BLUE);
+
+         if (j > 0) {
+            DebugDraw::Line(prevCorner, corner, COLOR_BLUE);
+         }
+
+         prevCorner = corner;
+      }
+   }
+}
+#endif
 
 int AiCrowdTargeterRecast::addToPathQueue(AgentContext* newag, AgentContext** agents, const int nagents, const int maxAgents)
 {
