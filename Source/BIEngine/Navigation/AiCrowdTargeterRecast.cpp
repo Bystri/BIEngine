@@ -209,16 +209,13 @@ void AiCrowdTargeterRecast::DrawDebug()
          continue;
       }
 
-      glm::vec3 prevCorner;
+      glm::vec3 prevCorner = glm::vec3(m_agents[i].fromPos.x, m_agents[i].fromPos.y, m_agents[i].fromPos.z);
       for (int j = 0; j < ag.cornersNum; ++j)
       {
          const float* target = &ag.cornerVerts[j * 3];
          const glm::vec3 corner = glm::vec3(target[0], target[1] + 0.1f, target[2]);
          DebugDraw::Sphere(corner, 0.2f, COLOR_BLUE);
-
-         if (j > 0) {
-            DebugDraw::Line(prevCorner, corner, COLOR_BLUE);
-         }
+         DebugDraw::Line(prevCorner, corner, COLOR_BLUE);
 
          prevCorner = corner;
       }
