@@ -51,6 +51,11 @@ public:
    void SetPointerButton(int button, bool state);
    void SetKey(int key, int scancode, bool pressed);
 
+   const GameTimer& GetGameTimer() const
+   {
+      return m_gt;
+   }
+
 private:
    void ProcessInput(const GameTimer& gt);
    void OnUpdate(GameTimer& gt);
