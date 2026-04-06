@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Peer.h"
 #include "Socket.h"
 #include "Serialization.h"
 #include "../StdLib/Queue.h"
@@ -9,9 +10,9 @@
 namespace BIEngine {
 
 class NetworkServer {
-   using AddressToClientMap = HashMap<SocketAddress, uint32_t>;
-   using IntToClientMap = HashMap<uint32_t, SocketAddress>;
-   using IntToQueueMap = HashMap<uint32_t, Queue<InputMemoryBitStream>>;
+   using AddressToClientMap = HashMap<SocketAddress, PeerId>;
+   using IntToClientMap = HashMap<PeerId, SocketAddress>;
+   using IntToQueueMap = HashMap<PeerId, Queue<InputMemoryBitStream>>;
 
    static const uint32_t kHelloCC = 'HELO';
    static const uint32_t kWelcomeCC = 'WLCM';
@@ -21,27 +22,26 @@ class NetworkServer {
 public:
    bool Init(uint16_t port);
 
-   uint32_t GetClientId(int clientIdx);
-   bool IsClientConnected(uint32_t clientId) const;
+   PeerId GetClientId(int clientIdx);
+   bool IsClientConnected(PeerId clientId) const;
 
    int GetConnectedClients() const { return m_addressToClientMap.Size(); }
 
    void Update();
 
-   UniquePtr<InputMemoryBitStream> ReceivePacket(uint32_t clientId);
-   bool SendPacket(uint32_t clientId, const OutputMemoryBitStream& outputStream);
+   UniquePtr<InputMemoryBitStream> ReceivePacket(PeerId clientId);
+   bool SendPacket(PeerId clientId, const OutputMemoryBitStream& outputStream);
 
 private:
    void ReadIncomingPackets();
 
    void ProcessPacket(InputMemoryBitStream& inputStream, const SocketAddress& fromAddress);
-   void ProcessPacket(uint32_t clientId, InputMemoryBitStream& inputStream);
+   void ProcessPacket(PeerId clientId, InputMemoryBitStream& inputStream);
    void SendPacketInternal(const OutputMemoryBitStream& outputStream, const SocketAddress& fromAddress);
 
-   void SendWelcomePacket(uint32_t clientId);
+   void SendWelcomePacket(PeerId clientId);
 
    void HandlePacketFromNewClient(InputMemoryBitStream& inputStream, const SocketAddress& fromAddress);
-   void HandleWelcomePacket(InputMemoryBitStream& inputStream);
    void HandleConnectionReset(const SocketAddress& fromAddress);
 
 private:
@@ -49,8 +49,8 @@ private:
    AddressToClientMap m_addressToClientMap;
    IntToClientMap m_clientIdxToAddressMap;
    IntToQueueMap m_clintIdxToPayloadPacketQueueMap;
-   DynamicArray<int32_t> m_clientIds;
-   uint32_t m_nextClientId = 1u;
+   DynamicArray<PeerId> m_clientIds;
+   PeerId m_nextClientId = 1u;
 };
 
 } // namespace BIEngine

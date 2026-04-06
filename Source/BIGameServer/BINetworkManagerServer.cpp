@@ -18,7 +18,7 @@ void BINetworkManagerServer::Update(const BIEngine::GameTimer& gt)
    m_networkServer.Update();
 
    for (int i = 0; i < m_networkServer.GetConnectedClients(); ++i) {
-      const uint32_t peerId = m_networkServer.GetClientId(i);
+      const BIEngine::PeerId peerId = m_networkServer.GetClientId(i);
 
       auto infoItr = m_peerInfoMap.Find(peerId);
 

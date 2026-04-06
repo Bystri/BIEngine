@@ -21,12 +21,12 @@ bool NetworkServer::Init(uint16_t port)
    return true;
 }
 
-uint32_t NetworkServer::GetClientId(int clientIdx)
+PeerId NetworkServer::GetClientId(int clientIdx)
 {
    return m_clientIds[clientIdx];
 }
 
-bool NetworkServer::IsClientConnected(uint32_t clientId) const
+bool NetworkServer::IsClientConnected(PeerId clientId) const
 {
    return m_clientIdxToAddressMap.Find(clientId) != m_clientIdxToAddressMap.End();
 }
@@ -36,7 +36,7 @@ void NetworkServer::Update()
    ReadIncomingPackets();
 }
 
-UniquePtr<InputMemoryBitStream> NetworkServer::ReceivePacket(uint32_t clientId)
+UniquePtr<InputMemoryBitStream> NetworkServer::ReceivePacket(PeerId clientId)
 {
    if (!IsClientConnected(clientId)) {
       return nullptr;
@@ -52,7 +52,7 @@ UniquePtr<InputMemoryBitStream> NetworkServer::ReceivePacket(uint32_t clientId)
    return ret;
 }
 
-bool NetworkServer::SendPacket(uint32_t clientId, const OutputMemoryBitStream& outputStream)
+bool NetworkServer::SendPacket(PeerId clientId, const OutputMemoryBitStream& outputStream)
 {
    // SEE NetworkClient
    auto itr = m_clientIdxToAddressMap.Find(clientId);
@@ -118,7 +118,7 @@ void NetworkServer::ProcessPacket(InputMemoryBitStream& inputStream, const Socke
    }
 }
 
-void NetworkServer::ProcessPacket(uint32_t clientId, InputMemoryBitStream& inputStream)
+void NetworkServer::ProcessPacket(PeerId clientId, InputMemoryBitStream& inputStream)
 {
    uint32_t packetType;
    BIEngine::Deserialize(inputStream, packetType);
@@ -137,7 +137,7 @@ void NetworkServer::ProcessPacket(uint32_t clientId, InputMemoryBitStream& input
    }
 }
 
-void NetworkServer::SendWelcomePacket(uint32_t clientId)
+void NetworkServer::SendWelcomePacket(PeerId clientId)
 {
    OutputMemoryBitStream welcomePacket;
 
@@ -173,7 +173,7 @@ void NetworkServer::HandlePacketFromNewClient(InputMemoryBitStream& inputStream,
 
 void NetworkServer::HandleConnectionReset(const SocketAddress& fromAddress)
 {
-   const uint32_t disconnectedClient = m_addressToClientMap[fromAddress];
+   const PeerId disconnectedClient = m_addressToClientMap[fromAddress];
 
    m_addressToClientMap.Erase(fromAddress);
    m_clientIdxToAddressMap.Erase(disconnectedClient);

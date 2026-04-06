@@ -21,7 +21,7 @@ void NetworkManager::SendOutgoingPackets(const BIEngine::GameTimer& gt)
    m_networkMessagesManager.SendOutgoingPackets(gt);
 }
 
-void NetworkManager::SendNetworkMessage(uint32_t peedId, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream)
+void NetworkManager::SendNetworkMessage(PeerId peedId, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream)
 {
    m_networkMessagesManager.SendNetworkMessage(peedId, protocolType, outputStream);
 }

@@ -17,9 +17,9 @@ public:
    virtual ~NetworkProtocol() = default;
 
 protected:
-   virtual void RegisterPeer(uint32_t peerId) {}
+   virtual void RegisterPeer(PeerId peerId) {}
 
-   virtual void UnregisterPeer(uint32_t peerId) {}
+   virtual void UnregisterPeer(PeerId peerId) {}
 
    virtual const NetworkProtocolType& GetType() const { return sk_ProtocolType; }
 };

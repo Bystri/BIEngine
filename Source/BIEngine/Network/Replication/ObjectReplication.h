@@ -24,11 +24,12 @@ public:
 
    virtual ~ReplicationObject() = default;
 
-   virtual void Init(uint32_t masterPeerId) {
+   virtual void Init(PeerId masterPeerId)
+   {
       m_masterPeerId = masterPeerId;
    }
 
-   uint32_t GetMasterPeerId() const
+   PeerId GetMasterPeerId() const
    {
       return m_masterPeerId;
    }
@@ -42,7 +43,7 @@ public:
    virtual void Read(InputMemoryBitStream& stream) {}
 
 private:
-   uint32_t m_masterPeerId = -1;
+   PeerId m_masterPeerId = -1;
 };
 
 template <class ReplicatedObject>
@@ -55,7 +56,7 @@ public:
    {
    }
 
-   virtual void Init(uint32_t masterPeerId) override
+   virtual void Init(PeerId masterPeerId) override
    {
       ReplicationObject::Init(masterPeerId);
 

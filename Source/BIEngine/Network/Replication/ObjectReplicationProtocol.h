@@ -27,20 +27,20 @@ public:
    void OnUpdate();
 
 protected:
-   virtual void RegisterPeer(uint32_t peerId) override;
-   virtual void UnregisterPeer(uint32_t peerId) override;
+   virtual void RegisterPeer(PeerId peerId) override;
+   virtual void UnregisterPeer(PeerId peerId) override;
 
    virtual void OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager) override;
 
 private:
    void AddReplicationObject(SharedPtr<ReplicationObject> pObj);
 
-   void SendStateMsgToClient(uint32_t peerId, NetworkMessagesManager* pNetworkMessagesManager);
+   void SendStateMsgToClient(PeerId peerId, NetworkMessagesManager* pNetworkMessagesManager);
 
 private:
    SharedPtr<NewtworkObjectLinkingContexts> m_pLinkingContext;
 
-   DynamicArray<uint32_t> m_pPeers;
+   DynamicArray<PeerId> m_pPeers;
    DynamicArray<UniquePtr<ReplicationActionWriter>> m_pReplicationManagersPerPeer;
    DynamicArray<SharedPtr<ReplicationObject>> m_pReplicationObjects;
 };

@@ -74,7 +74,7 @@ private:
 
    class NetworkTransmissionData : public TransmissionData {
    public:
-      NetworkTransmissionData(uint32_t peerId, const MessageToSend& msg, NetworkMessagesManager* pMsgMessager)
+      NetworkTransmissionData(PeerId peerId, const MessageToSend& msg, NetworkMessagesManager* pMsgMessager)
          : m_peerId(peerId), m_msg(msg), m_pMsgMessager(pMsgMessager)
       {
       }
@@ -85,7 +85,7 @@ private:
       }
 
    private:
-      uint32_t m_peerId;
+      PeerId m_peerId;
       MessageToSend m_msg;
       NetworkMessagesManager* m_pMsgMessager;
    };
@@ -96,7 +96,7 @@ private:
       {
       }
 
-      uint32_t peerId;
+      PeerId peerId;
 
       uint32_t messageId = 0u;
       uint32_t expectedMessageId = 0u;
@@ -125,22 +125,22 @@ public:
       m_protocolsManager.AddProtocolWriter(pNetworkProtocolWriter);
    }
 
-   void RegisterPeer(uint32_t peerId, const GameTimer& gt, const std::function<void(const OutputMemoryBitStream&)>& sendFunc);
-   void UnregisterPeer(uint32_t peerId);
+   void RegisterPeer(PeerId peerId, const GameTimer& gt, const std::function<void(const OutputMemoryBitStream&)>& sendFunc);
+   void UnregisterPeer(PeerId peerId);
 
-   bool IsPeerRegistered(uint32_t peerId) const
+   bool IsPeerRegistered(PeerId peerId) const
    {
       return m_peerInfoMap.Find(peerId) != m_peerInfoMap.End();
    }
 
-   float GetRttForPeer(uint32_t peerId) const;
+   float GetRttForPeer(PeerId peerId) const;
 
-   void SendNetworkMessage(uint32_t peerId, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream);
+   void SendNetworkMessage(PeerId peerId, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream);
 
-   void ProcessPacket(uint32_t peerId, InputMemoryBitStream& inputStream, const GameTimer& gt);
+   void ProcessPacket(PeerId peerId, InputMemoryBitStream& inputStream, const GameTimer& gt);
    void SendOutgoingPackets(const GameTimer& gt);
    void ProcessMessages();
-   void ResendNetworkMessage(uint32_t peerId, const MessageToSend& msg);
+   void ResendNetworkMessage(PeerId peerId, const MessageToSend& msg);
 
 #ifndef _RETAIL
    void DrawDbgDiagnostics();
@@ -149,7 +149,7 @@ public:
 private:
    NetworkProtocolsManager m_protocolsManager;
 
-   HashMap<uint32_t, PeerInfo> m_peerInfoMap;
+   HashMap<PeerId, PeerInfo> m_peerInfoMap;
 
    Deque<int> m_processedMessagesIds;
 };

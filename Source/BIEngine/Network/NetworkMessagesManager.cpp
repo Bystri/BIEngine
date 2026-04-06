@@ -4,7 +4,7 @@
 
 namespace BIEngine {
 
-void NetworkMessagesManager::RegisterPeer(uint32_t peerId, const GameTimer& gt, const std::function<void(const OutputMemoryBitStream&)>& sendFunc)
+void NetworkMessagesManager::RegisterPeer(PeerId peerId, const GameTimer& gt, const std::function<void(const OutputMemoryBitStream&)>& sendFunc)
 {
    PeerInfo info(gt);
    info.peerId = peerId;
@@ -14,13 +14,13 @@ void NetworkMessagesManager::RegisterPeer(uint32_t peerId, const GameTimer& gt, 
    m_protocolsManager.RegisterPeer(peerId);
 }
 
-void NetworkMessagesManager::UnregisterPeer(uint32_t peerId)
+void NetworkMessagesManager::UnregisterPeer(PeerId peerId)
 {
    m_protocolsManager.UnregisterPeer(peerId);
    m_peerInfoMap.Erase(peerId);
 }
 
-float NetworkMessagesManager::GetRttForPeer(uint32_t peerId) const
+float NetworkMessagesManager::GetRttForPeer(PeerId peerId) const
 {
    auto itr = m_peerInfoMap.Find(peerId);
    if (itr == m_peerInfoMap.End()) {
@@ -31,7 +31,7 @@ float NetworkMessagesManager::GetRttForPeer(uint32_t peerId) const
    return itr->second.m_weightedRtt.GetValue();
 }
 
-void NetworkMessagesManager::SendNetworkMessage(uint32_t peerId, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream)
+void NetworkMessagesManager::SendNetworkMessage(PeerId peerId, NetworkProtocolType protocolType, const OutputMemoryBitStream& outputStream)
 {
    auto peerInfoPtr = m_peerInfoMap.Find(peerId);
    if (peerInfoPtr == m_peerInfoMap.End()) {
@@ -49,7 +49,7 @@ void NetworkMessagesManager::SendNetworkMessage(uint32_t peerId, NetworkProtocol
    peerInfo.messageQueueToSend.Push(std::move(msg));
 }
 
-void NetworkMessagesManager::ProcessPacket(uint32_t peerId, InputMemoryBitStream& inputStream, const GameTimer& gt)
+void NetworkMessagesManager::ProcessPacket(PeerId peerId, InputMemoryBitStream& inputStream, const GameTimer& gt)
 {
    auto infoItr = m_peerInfoMap.Find(peerId);
 
@@ -164,7 +164,7 @@ void NetworkMessagesManager::ProcessMessages()
    }
 }
 
-void NetworkMessagesManager::ResendNetworkMessage(uint32_t peerId, const MessageToSend& msg)
+void NetworkMessagesManager::ResendNetworkMessage(PeerId peerId, const MessageToSend& msg)
 {
    auto peerInfoPtr = m_peerInfoMap.Find(peerId);
    if (peerInfoPtr == m_peerInfoMap.End()) {

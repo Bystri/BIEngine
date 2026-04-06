@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Peer.h"
 #include "Socket.h"
 #include "Serialization.h"
 #include "../StdLib/Queue.h"
@@ -24,7 +25,7 @@ public:
 public:
    bool Init(const SocketAddress& serverAddress);
 
-   int32_t GetClientId() const { return m_clientId; }
+   PeerId GetClientId() const { return m_clientId; }
 
    State GetState() const { return m_state; }
 
@@ -50,7 +51,7 @@ private:
    Queue<InputMemoryBitStream> m_payloadPacketsToProcess;
 
    State m_state;
-   int32_t m_clientId;
+   PeerId m_clientId;
 
    float m_timeOfLastHello;
 };

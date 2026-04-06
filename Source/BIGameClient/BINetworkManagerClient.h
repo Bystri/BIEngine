@@ -9,7 +9,7 @@ class BINetworkManagerClient : public BIEngine::NetworkManager {
 public:
    bool Init(const BIEngine::SocketAddress& serverAddress, const BIEngine::String& name);
 
-   uint32_t GetPeerId() const override { return m_networkClient.GetClientId(); }
+   BIEngine::PeerId GetPeerId() const override { return m_networkClient.GetClientId(); }
 
    virtual void Update(const BIEngine::GameTimer& gt) override;
 

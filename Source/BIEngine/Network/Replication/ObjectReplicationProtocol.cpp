@@ -68,7 +68,7 @@ void ObjectReplicationProtocolWriter::AddReplicationObject(SharedPtr<Replication
    }
 }
 
-void ObjectReplicationProtocolWriter::SendStateMsgToClient(uint32_t peerId, NetworkMessagesManager* pNetworkMessagesManager)
+void ObjectReplicationProtocolWriter::SendStateMsgToClient(PeerId peerId, NetworkMessagesManager* pNetworkMessagesManager)
 {
    OutputMemoryBitStream msg;
 
@@ -86,7 +86,7 @@ void ObjectReplicationProtocolWriter::SendStateMsgToClient(uint32_t peerId, Netw
    Logger::WriteErrorLog("Trying to send ObjectReplication info to unknown peerid [%u]", peerId);
 }
 
-void ObjectReplicationProtocolWriter::RegisterPeer(uint32_t peerId)
+void ObjectReplicationProtocolWriter::RegisterPeer(PeerId peerId)
 {
    m_pPeers.PushBack(peerId);
    UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
@@ -96,7 +96,7 @@ void ObjectReplicationProtocolWriter::RegisterPeer(uint32_t peerId)
    }
 }
 
-void ObjectReplicationProtocolWriter::UnregisterPeer(uint32_t peerId)
+void ObjectReplicationProtocolWriter::UnregisterPeer(PeerId peerId)
 {
    for (int i = 0; i < m_pPeers.Size(); ++i) {
       if (m_pPeers[i] == peerId) {
