@@ -108,8 +108,9 @@ bool BIServerGameLogic::Init()
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectAiDummyCharacter>(ReplicationObjectAiDummyCharacter::sk_ClassType);
 
    {
+      constexpr int MAX_CLIENTS = 20;
       BIEngine::UniquePtr<BINetworkManagerServer> pNetworkManager = BIEngine::MakeUnique<BINetworkManagerServer>();
-      if (!pNetworkManager->Init(BIEngine::g_pApp->m_options.hostPort)) {
+      if (!pNetworkManager->Init(BIEngine::g_pApp->m_options.hostPort, MAX_CLIENTS)) {
          return false;
       }
       m_pNetworkManager = std::move(pNetworkManager);

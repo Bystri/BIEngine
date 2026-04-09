@@ -20,12 +20,9 @@ class NetworkServer {
    static constexpr int MAX_PACKETS_PER_FRAME_COUNT = 10;
 
 public:
-   bool Init(uint16_t port);
-
-   PeerId GetClientId(int clientIdx);
+   bool Init(uint16_t port, std::function<void(PeerId)>&& peerConnectedCb, std::function<void(PeerId)>&& peerDisconnectedCb);
    bool IsClientConnected(PeerId clientId) const;
-
-   int GetConnectedClients() const { return m_addressToClientMap.Size(); }
+   int GetConnectedClientsNum() const { return m_addressToClientMap.Size(); }
 
    void Update();
 
@@ -51,6 +48,9 @@ private:
    IntToQueueMap m_clintIdxToPayloadPacketQueueMap;
    DynamicArray<PeerId> m_clientIds;
    PeerId m_nextClientId = 1u;
+
+   std::function<void(PeerId)> m_peerConnectedCb;
+   std::function<void(PeerId)> m_peerDisconnectedCb;
 };
 
 } // namespace BIEngine

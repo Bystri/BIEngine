@@ -2,7 +2,7 @@
 
 namespace BIEngine {
 
-bool NetworkServer::Init(uint16_t port)
+bool NetworkServer::Init(uint16_t port, std::function<void(PeerId)>&& peerConnectedCb, std::function<void(PeerId)>&& peerDisconnectedCb)
 {
    m_socket = SocketUtil::CreateUdpSocket(SocketAddressFamily::INET);
    const SocketAddress ownAddress(INADDR_ANY, port);
@@ -16,14 +16,12 @@ bool NetworkServer::Init(uint16_t port)
       return false;
    }
 
+   m_peerConnectedCb = std::move(peerConnectedCb);
+   m_peerDisconnectedCb = std::move(peerDisconnectedCb);
+
    Logger::WriteMsgLog("NetworkServer inited");
 
    return true;
-}
-
-PeerId NetworkServer::GetClientId(int clientIdx)
-{
-   return m_clientIds[clientIdx];
 }
 
 bool NetworkServer::IsClientConnected(PeerId clientId) const
@@ -163,6 +161,8 @@ void NetworkServer::HandlePacketFromNewClient(InputMemoryBitStream& inputStream,
       // and welcome the client...
       SendWelcomePacket(m_nextClientId);
 
+      m_peerConnectedCb(m_nextClientId);
+
       ++m_nextClientId;
 
    } else {
@@ -179,6 +179,8 @@ void NetworkServer::HandleConnectionReset(const SocketAddress& fromAddress)
    m_clientIdxToAddressMap.Erase(disconnectedClient);
    m_clintIdxToPayloadPacketQueueMap.Erase(disconnectedClient);
    m_clientIds.Erase(Find(m_clientIds.Begin(), m_clientIds.End(), disconnectedClient));
+
+   m_peerDisconnectedCb(disconnectedClient);
 }
 
 } // namespace BIEngine

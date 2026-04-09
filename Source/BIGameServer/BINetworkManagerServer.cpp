@@ -6,39 +6,64 @@
 
 #include "BIGSEventListener.h"
 
-bool BINetworkManagerServer::Init(uint16_t port)
+bool BINetworkManagerServer::Init(uint16_t port, int maxClients)
 {
    m_networkMessagesManager.AddProtocolWriter(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolWriter>());
    m_networkMessagesManager.AddProtocolReader(BIEngine::MakeShared<EventProtocolReader>());
-   return m_networkServer.Init(port);
+
+   m_clients = BIEngine::DynamicArray<BIEngine::PeerId>(maxClients, BIEngine::INVALID_PEER_ID);
+
+   return m_networkServer.Init(port, [this](BIEngine::PeerId id) { OnClientConnected(id); }, [this](BIEngine::PeerId id) { OnClientDisconnected(id); });
 }
 
 void BINetworkManagerServer::Update(const BIEngine::GameTimer& gt)
 {
    m_networkServer.Update();
 
-   for (int i = 0; i < m_networkServer.GetConnectedClients(); ++i) {
-      const BIEngine::PeerId peerId = m_networkServer.GetClientId(i);
-
-      auto infoItr = m_peerInfoMap.Find(peerId);
-
-      // TODO: Replace
-      if (infoItr == m_peerInfoMap.End()) {
-         BIEngine::SocketAddress address;
-         auto peer = BIEngine::MakeShared<BIEngine::Peer>(peerId, address);
-         m_peerInfoMap.Emplace(peerId, peer);
-         m_networkMessagesManager.RegisterPeer(peerId, gt, std::bind(&BIEngine::NetworkServer::SendPacket, m_networkServer, peerId, std::placeholders::_1));
-         BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType);
+   for (int i = 0; i < m_clients.Size(); ++i) {
+      if (m_clients[i] == BIEngine::INVALID_PEER_ID) {
+         continue;
       }
 
       while (true) {
          // We can have client with different id by this idx
-         BIEngine::UniquePtr<BIEngine::InputMemoryBitStream> pPacketData = m_networkServer.ReceivePacket(peerId);
+         BIEngine::UniquePtr<BIEngine::InputMemoryBitStream> pPacketData = m_networkServer.ReceivePacket(m_clients[i]);
          if (pPacketData == nullptr) {
             break;
          }
 
-         m_networkMessagesManager.ProcessPacket(peerId, *pPacketData, gt);
+         m_networkMessagesManager.ProcessPacket(m_clients[i], *pPacketData, gt);
       }
+   }
+}
+
+void BINetworkManagerServer::OnClientConnected(BIEngine::PeerId clientId)
+{
+   BIEngine::Assert(clientId != BIEngine::INVALID_PEER_ID, "Got invalid clientId");
+
+   for (int i = 0; i < m_clients.Size(); ++i) {
+      if (m_clients[i] != BIEngine::INVALID_PEER_ID) {
+         continue;
+      }
+
+      m_clients[i] = clientId;
+      m_networkMessagesManager.RegisterPeer(clientId, BIEngine::g_pApp->GetGameTimer(), std::bind(&BIEngine::NetworkServer::SendPacket, m_networkServer, clientId, std::placeholders::_1));
+      BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType);
+
+      return;
+   }
+}
+
+void BINetworkManagerServer::OnClientDisconnected(BIEngine::PeerId clientId)
+{
+   for (int i = 0; i < m_clients.Size(); ++i) {
+      if (m_clients[i] != clientId) {
+         continue;
+      }
+
+      m_clients[i] = BIEngine::INVALID_PEER_ID;
+      m_networkMessagesManager.UnregisterPeer(clientId);
+
+      // Delete player
    }
 }
