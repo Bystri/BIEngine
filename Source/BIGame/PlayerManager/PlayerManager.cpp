@@ -61,8 +61,18 @@ BIEngine::SharedPtr<Player> PlayerManager::CreatePlayer()
 {
    auto ret = BIEngine::MakeShared<Player>(m_nextPlayerId++);
 
+   m_players[ret->GetId()] = ret;
+
    BIEngine::SharedPtr<EvtData_Player_Created> pEvent = BIEngine::MakeShared<EvtData_Player_Created>(ret);
    BIEngine::EventManager::Get()->QueueEvent(pEvent);
 
    return ret;
+}
+
+void PlayerManager::DestroyPlayer(PlayerId id)
+{
+   BIEngine::SharedPtr<EvtData_Player_BeforeDestroyed> pEvent = BIEngine::MakeShared<EvtData_Player_BeforeDestroyed>(m_players[id]);
+   BIEngine::EventManager::Get()->QueueEvent(pEvent);
+
+   m_players.Erase(id);
 }

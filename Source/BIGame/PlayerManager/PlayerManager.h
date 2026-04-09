@@ -35,6 +35,7 @@ public:
    static PlayerManager* Get();
 
    BIEngine::SharedPtr<Player> CreatePlayer();
+   void DestroyPlayer(PlayerId id);
 
 private:
    PlayerManager() = default;
@@ -42,4 +43,5 @@ private:
 private:
    static PlayerManager* s_pSingleton;
    PlayerId m_nextPlayerId = 1;
+   BIEngine::HashMap<PlayerId, BIEngine::SharedPtr<Player>> m_players;
 };

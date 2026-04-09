@@ -382,6 +382,36 @@ private:
    BIEngine::SharedPtr<Player> m_pPlayer;
 };
 
+class EvtData_Player_BeforeDestroyed : public BIEngine::BaseEventData {
+public:
+   static const BIEngine::EventType sk_EventType;
+
+   explicit EvtData_Player_BeforeDestroyed(BIEngine::SharedPtr<Player> pPlayer)
+      : m_pPlayer(pPlayer)
+   {
+   }
+
+   virtual const BIEngine::EventType& GetEventType() const
+   {
+      return sk_EventType;
+   }
+
+   virtual BIEngine::IEventDataPtr Copy() const
+   {
+      return BIEngine::MakeShared<EvtData_Player_BeforeDestroyed>(m_pPlayer);
+   }
+
+   virtual const char* GetName() const
+   {
+      return "EvtData_Player_BeforeDestroyed";
+   }
+
+   BIEngine::SharedPtr<Player> GetPlayer() const { return m_pPlayer; }
+
+private:
+   BIEngine::SharedPtr<Player> m_pPlayer;
+};
+
 class EvtData_PlayerActor_Created : public BIEngine::BaseEventData {
 public:
    static const BIEngine::EventType sk_EventType;

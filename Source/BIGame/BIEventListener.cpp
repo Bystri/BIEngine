@@ -7,6 +7,7 @@ const BIEngine::EventType EvtData_OnPointerButtonDown::sk_EventType(0x47059a9);
 const BIEngine::EventType EvtData_OnPointerButtonUp::sk_EventType(0xcac3f1c1);
 
 const BIEngine::EventType EvtData_Player_Created::sk_EventType(0x2fd2626a);
+const BIEngine::EventType EvtData_Player_BeforeDestroyed::sk_EventType(0x54504efb);
 const BIEngine::EventType EvtData_PlayerActor_Created::sk_EventType(0x526c7bc2);
 const BIEngine::EventType EvtData_Move::sk_EventType(0xa29da161);
 const BIEngine::EventType EvtData_Turn::sk_EventType(0x23dfd957);
