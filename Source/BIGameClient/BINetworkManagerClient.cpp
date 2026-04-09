@@ -11,26 +11,14 @@ bool BINetworkManagerClient::Init(const BIEngine::SocketAddress& serverAddress, 
 {
    m_networkMessagesManager.AddProtocolReader(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolReader>());
    m_networkMessagesManager.AddProtocolWriter(BIEngine::MakeShared<EventProtocolWriter>());
-   m_pServerPeer = BIEngine::MakeShared<BIEngine::Peer>(0, serverAddress);
    m_name = name;
 
-   return m_networkClient.Init(serverAddress);
+   return m_networkClient.Init(serverAddress, [this]() { OnWelcomed(); }, [this]() { OnDisconnected(); });
 }
 
 void BINetworkManagerClient::Update(const BIEngine::GameTimer& gt)
 {
    m_networkClient.Update(gt.TotalTime());
-
-   if (m_networkClient.GetState() == BIEngine::NetworkClient::State::Welcomed) {
-      // TODO: Temp
-      if (m_peerInfoMap.Empty()) {
-         m_peerInfoMap.Emplace(m_pServerPeer->GetId(), m_pServerPeer);
-         m_networkMessagesManager.RegisterPeer(
-            m_pServerPeer->GetId(), 
-             gt, 
-             std::bind(&BIEngine::NetworkClient::SendPacket, m_networkClient, std::placeholders::_1));
-      }
-   }
 
    while (true) {
       BIEngine::UniquePtr<BIEngine::InputMemoryBitStream> pPacketData = m_networkClient.ReceivePacket();
@@ -38,6 +26,19 @@ void BINetworkManagerClient::Update(const BIEngine::GameTimer& gt)
          break;
       }
 
-      m_networkMessagesManager.ProcessPacket(m_pServerPeer->GetId(), *pPacketData, gt);
+      m_networkMessagesManager.ProcessPacket(m_serverPeer, *pPacketData, gt);
    }
+}
+
+void BINetworkManagerClient::OnWelcomed()
+{
+   m_networkMessagesManager.RegisterPeer(
+      m_serverPeer,
+      BIEngine::g_pApp->GetGameTimer(),
+      std::bind(&BIEngine::NetworkClient::SendPacket, m_networkClient, std::placeholders::_1));
+}
+
+void BINetworkManagerClient::OnDisconnected()
+{
+   m_networkMessagesManager.UnregisterPeer(m_serverPeer);
 }

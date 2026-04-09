@@ -4,7 +4,7 @@ namespace BIEngine {
 
 static constexpr float TIME_BETWEEN_HELLOS = 2.f;
 
-bool NetworkClient::Init(const BIEngine::SocketAddress& serverAddress)
+bool NetworkClient::Init(const BIEngine::SocketAddress& serverAddress, std::function<void()>&& serverWelcomedClientCb, std::function<void()>&& serverDisconnectedCb)
 {
    m_socket = SocketUtil::CreateUdpSocket(SocketAddressFamily::INET);
    const SocketAddress ownAddress(INADDR_ANY, 0);
@@ -17,6 +17,9 @@ bool NetworkClient::Init(const BIEngine::SocketAddress& serverAddress)
    if (m_socket->SetNonBlockingMode(true) != NO_ERROR) {
       return false;
    }
+
+   m_serverWelcomedClientCb = serverWelcomedClientCb;
+   m_serverDisconnectedCb = m_serverDisconnectedCb;
 
    m_serverAddress = serverAddress;
 
@@ -99,6 +102,9 @@ void NetworkClient::ReadIncomingPackets()
          break;
       } else if (readByteCount == -WSAECONNRESET) {
          // port closed on other end, so DC this person immediately
+         if (m_state != State::Welcomed) {
+            continue;
+         }
          HandleConnectionReset();
       } else if (readByteCount > 0) {
          inputStream.ResetToCapacity(readByteCount);
@@ -149,12 +155,15 @@ void NetworkClient::HandleWelcomePacket(BIEngine::InputMemoryBitStream& inputStr
    if (m_state == State::SayingHello) {
       BIEngine::Deserialize(inputStream, m_clientId);
       m_state = State::Welcomed;
+      m_serverWelcomedClientCb();
+
       BIEngine::Logger::WriteMsgLog("Client was welcomed on Server as player %d", m_clientId);
    }
 }
 
 void NetworkClient::HandleConnectionReset()
 {
+   m_serverDisconnectedCb();
    m_state = State::Disconnected;
 }
 

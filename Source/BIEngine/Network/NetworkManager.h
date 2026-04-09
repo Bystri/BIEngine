@@ -14,16 +14,6 @@
 namespace BIEngine {
 
 class NetworkManager {
-protected:
-   struct PeerInfo {
-      PeerInfo(const PeerPtr& peer)
-         : pPeer(peer)
-      {
-      }
-
-      PeerPtr pPeer;
-   };
-
 public:
    static const uint32_t kHelloCC = 'HELO';
    static const uint32_t kWelcomeCC = 'WLCM';
@@ -55,9 +45,6 @@ protected:
 
 protected:
    NetworkMessagesManager m_networkMessagesManager;
-
-   HashMap<PeerId, PeerInfo> m_peerInfoMap;
-
    Deque<int> m_processedMessagesIds;
 };
 

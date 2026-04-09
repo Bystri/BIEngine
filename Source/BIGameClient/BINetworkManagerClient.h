@@ -14,8 +14,12 @@ public:
    virtual void Update(const BIEngine::GameTimer& gt) override;
 
 private:
+   void OnWelcomed();
+   void OnDisconnected();
+
+private:
    BIEngine::NetworkClient m_networkClient;
-   BIEngine::PeerPtr m_pServerPeer;
+   BIEngine::PeerId m_serverPeer;
 
    BIEngine::String m_name;
    int m_playerId;

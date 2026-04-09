@@ -23,7 +23,7 @@ public:
    };
 
 public:
-   bool Init(const SocketAddress& serverAddress);
+   bool Init(const SocketAddress& serverAddress, std::function<void()>&& serverWelcomedClientCb, std::function<void()>&& serverDisconnectedCb);
 
    PeerId GetClientId() const { return m_clientId; }
 
@@ -54,6 +54,9 @@ private:
    PeerId m_clientId;
 
    float m_timeOfLastHello;
+
+   std::function<void()> m_serverWelcomedClientCb;
+   std::function<void()> m_serverDisconnectedCb;
 };
 
 } // namespace BIEngine
