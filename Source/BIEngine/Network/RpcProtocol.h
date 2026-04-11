@@ -1,11 +1,13 @@
 #pragma once
 
+#include "../StdLib/HashMap.h"
 #include "NetworkProtocol.h"
-#include "Replication/RPCManager.h"
 
 namespace BIEngine {
 
 using RpcId = uint32_t;
+
+using RPCUnwrapFunc = void (*)(InputMemoryBitStream&);
 
 class RpcProtocolWriter : public NetworkProtocolWriter {
 public:
@@ -46,16 +48,16 @@ public:
    RpcProtocolReader();
    virtual ~RpcProtocolReader();
 
-   RPCManager& GetRpcManager()
-   {
-      return m_rpcManager;
-   }
+   void RegisterUnwrapFunction(RpcId id, RPCUnwrapFunc func);
 
 protected:
    virtual void ReceiveMessage(BIEngine::InputMemoryBitStream& inputStream) override;
 
 private:
-   RPCManager m_rpcManager;
+   void ProcessRPC(InputMemoryBitStream& stream);
+
+private:
+   HashMap<RpcId, RPCUnwrapFunc> m_nameToRPCTable;
 };
 
 } // namespace BIEngine

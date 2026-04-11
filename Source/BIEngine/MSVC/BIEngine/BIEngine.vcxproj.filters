@@ -411,9 +411,6 @@
     <ClCompile Include="..\..\Network\Replication\ReplicationHeader.cpp">
       <Filter>Network\Replication</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Network\Replication\RPCManager.cpp">
-      <Filter>Network\Replication</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Network\Replication\ReplicationObjectActor\ReplicationObjectActor.cpp">
       <Filter>Network\Replication\ReplicationObjectActor</Filter>
     </ClCompile>
@@ -867,9 +864,6 @@
       <Filter>Network\Replication</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Network\Replication\ReplicationUnit.h">
-      <Filter>Network\Replication</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Network\Replication\RPCManager.h">
       <Filter>Network\Replication</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Network\Replication\ReplicationObjectActor\ReplicationObjectActor.h">

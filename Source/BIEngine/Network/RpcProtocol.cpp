@@ -111,6 +111,19 @@ RpcProtocolReader::~RpcProtocolReader()
    }
 }
 
+void RpcProtocolReader::RegisterUnwrapFunction(RpcId id, RPCUnwrapFunc func)
+{
+   Assert(m_nameToRPCTable.Find(id) == m_nameToRPCTable.End(), "RPC function with id %u already registered in RPCManager", id);
+   m_nameToRPCTable[id] = func;
+}
+
+void RpcProtocolReader::ProcessRPC(InputMemoryBitStream& stream)
+{
+   RpcId id;
+   Deserialize(stream, id);
+   m_nameToRPCTable[id](stream);
+}
+
 void RpcProtocolReader::ReceiveMessage(BIEngine::InputMemoryBitStream& inputStream)
 {
    uint32_t cnt;
@@ -118,7 +131,7 @@ void RpcProtocolReader::ReceiveMessage(BIEngine::InputMemoryBitStream& inputStre
 
    for (int i = 0; i < cnt; ++i)
    {
-      m_rpcManager.ProcessRPC(inputStream);
+      ProcessRPC(inputStream);
    }
 }
 
