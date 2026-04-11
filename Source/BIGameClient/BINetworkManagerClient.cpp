@@ -1,6 +1,8 @@
 #include "BINetworkManagerClient.h"
 
-#include "../../../BIEngine/Network/Replication/ObjectReplicationProtocol.h"
+#include "../BIEngine/Network/Replication/ObjectReplicationProtocol.h"
+#include "../BIEngine/Network/RpcProtocol.h"
+#include "../BIGame/Network/BINetworkRPCs.h"
 #include "../BIGame/Network/EventNetworkProtocol.h"
 
 static constexpr float TIME_BETWEEN_HELLOS = 2.f;
@@ -11,6 +13,9 @@ bool BINetworkManagerClient::Init(const BIEngine::SocketAddress& serverAddress, 
 {
    m_networkMessagesManager.AddProtocolReader(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolReader>());
    m_networkMessagesManager.AddProtocolWriter(BIEngine::MakeShared<EventProtocolWriter>());
+   m_networkMessagesManager.AddProtocolReader(BIEngine::MakeShared<BIEngine::RpcProtocolReader>());
+   RpcInit();
+
    m_name = name;
 
    return m_networkClient.Init(serverAddress, [this]() { OnWelcomed(); }, [this]() { OnDisconnected(); });

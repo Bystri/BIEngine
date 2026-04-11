@@ -1,14 +1,17 @@
 #include "BINetworkManagerServer.h"
 
 #include "../BIEngine/Network/Replication/ObjectReplicationProtocol.h"
+#include "../BIEngine/Network/RpcProtocol.h"
 #include "../BIGame/Network/ReplicationObjectPlayer.h"
 #include "../BIGame/Network/EventNetworkProtocol.h"
+#include "../BIGame/Network/BINetworkRPCs.h"
 
 #include "BIGSEventListener.h"
 
 bool BINetworkManagerServer::Init(uint16_t port, int maxClients)
 {
    m_networkMessagesManager.AddProtocolWriter(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolWriter>());
+   m_networkMessagesManager.AddProtocolWriter(BIEngine::MakeShared<BIEngine::RpcProtocolWriter>());
    m_networkMessagesManager.AddProtocolReader(BIEngine::MakeShared<EventProtocolReader>());
 
    m_clients = BIEngine::DynamicArray<BIEngine::PeerId>(maxClients, BIEngine::INVALID_PEER_ID);
@@ -49,7 +52,7 @@ void BINetworkManagerServer::OnClientConnected(BIEngine::PeerId clientId)
       m_clients[i] = clientId;
       m_networkMessagesManager.RegisterPeer(clientId, BIEngine::g_pApp->GetGameTimer(), std::bind(&BIEngine::NetworkServer::SendPacket, m_networkServer, clientId, std::placeholders::_1));
       BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType);
-
+      RpcWriteSetPlayer(clientId, 123);
       return;
    }
 }

@@ -12,9 +12,9 @@ void RPCManager::RegisterUnwrapFunction(uint32_t id, RPCUnwrapFunc func)
 
 void RPCManager::ProcessRPC(InputMemoryBitStream& stream)
 {
-   uint32_t name;
-   Deserialize(stream, name);
-   m_nameToRPCTable[name](stream);
+   uint32_t id;
+   Deserialize(stream, id);
+   m_nameToRPCTable[id](stream);
 }
 
 } // namespace BIEngine

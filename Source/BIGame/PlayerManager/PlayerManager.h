@@ -37,11 +37,22 @@ public:
    BIEngine::SharedPtr<Player> CreatePlayer();
    void DestroyPlayer(PlayerId id);
 
+   void SetLocalPlayer(PlayerId id)
+   {
+      m_localPlayer = id;
+   }
+
+   PlayerId GetLocalPlayerId() const
+   {
+      return m_localPlayer;
+   }
+
 private:
    PlayerManager() = default;
 
 private:
    static PlayerManager* s_pSingleton;
+   PlayerId m_localPlayer = INVALID_PLAYER_ID;
    PlayerId m_nextPlayerId = 1;
    BIEngine::HashMap<PlayerId, BIEngine::SharedPtr<Player>> m_players;
 };

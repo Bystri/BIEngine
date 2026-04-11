@@ -26,6 +26,7 @@
     <ClCompile Include="..\Combat\HealthStateComponent.cpp" />
     <ClCompile Include="..\Locomotion\LocomotionInfoComponent.cpp" />
     <ClCompile Include="..\Network\AttachedActorReplicationUnit.cpp" />
+    <ClCompile Include="..\Network\BINetworkRPCs.cpp" />
     <ClCompile Include="..\Network\CombatReplicationUnit.cpp" />
     <ClCompile Include="..\Network\EventNetworkProtocol.cpp" />
     <ClCompile Include="..\Network\HealthStateReplicationUnit.cpp" />
@@ -46,6 +47,7 @@
     <ClInclude Include="..\Combat\HealthStateComponent.h" />
     <ClInclude Include="..\Locomotion\LocomotionInfoComponent.h" />
     <ClInclude Include="..\Network\AttachedActorReplicationUnit.h" />
+    <ClInclude Include="..\Network\BINetworkRPCs.h" />
     <ClInclude Include="..\Network\CombatReplicationUnit.h" />
     <ClInclude Include="..\Network\EventNetworkProtocol.h" />
     <ClInclude Include="..\Network\HealthStateReplicationUnit.h" />
