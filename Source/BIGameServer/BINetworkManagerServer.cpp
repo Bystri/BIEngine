@@ -51,8 +51,8 @@ void BINetworkManagerServer::OnClientConnected(BIEngine::PeerId clientId)
 
       m_clients[i] = clientId;
       m_networkMessagesManager.RegisterPeer(clientId, BIEngine::g_pApp->GetGameTimer(), std::bind(&BIEngine::NetworkServer::SendPacket, m_networkServer, clientId, std::placeholders::_1));
-      BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType);
-      RpcWriteSetPlayer(clientId, 123);
+      BIEngine::SharedPtr<ReplicationObjectPlayer> pReplicatedPlayer = BIEngine::StaticPointerCast<ReplicationObjectPlayer>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType));
+      RpcWriteSetPlayer(clientId, pReplicatedPlayer->GetReplicatedObject()->GetId());
       return;
    }
 }

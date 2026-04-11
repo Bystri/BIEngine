@@ -53,6 +53,6 @@ private:
 private:
    static PlayerManager* s_pSingleton;
    PlayerId m_localPlayer = INVALID_PLAYER_ID;
-   PlayerId m_nextPlayerId = 1;
+   PlayerId m_nextPlayerId = 0;
    BIEngine::HashMap<PlayerId, BIEngine::SharedPtr<Player>> m_players;
 };

@@ -150,15 +150,15 @@ void BIGameClientLogic::NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventDat
    BIEngine::SharedPtr<EvtData_PlayerActor_Created> pCastEventData = BIEngine::StaticPointerCast<EvtData_PlayerActor_Created>(pEventData);
 
    BIEngine::Logger::WriteMsgLog("Got NewPlayerActorDelegate for player: %d", pCastEventData->GetPlayerId());
-   if (pCastEventData->GetPlayerId() != m_pNetworkManager->GetPeerId()) {
+   if (pCastEventData->GetPlayerId() != PlayerManager::Get()->GetLocalPlayerId()) {
       return;
    }
 
    BIEngine::SharedPtr<BIEngine::Actor> pActor = GetActor(pCastEventData->GetActorId());
 
-   pActor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->SetPlayerId(m_pNetworkManager->GetPeerId());
+   pActor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->SetPlayerId(PlayerManager::Get()->GetLocalPlayerId());
 
-   m_pInputActionController->Init(m_pNetworkManager->GetPeerId(), m_pHumanView->GetScene()->GetCamera());
+   m_pInputActionController->Init(PlayerManager::Get()->GetLocalPlayerId(), m_pHumanView->GetScene()->GetCamera());
    m_pCameraManager->FollowActor(pActor);
 }
 
