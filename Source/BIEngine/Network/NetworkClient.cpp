@@ -19,7 +19,7 @@ bool NetworkClient::Init(const BIEngine::SocketAddress& serverAddress, std::func
    }
 
    m_serverWelcomedClientCb = serverWelcomedClientCb;
-   m_serverDisconnectedCb = m_serverDisconnectedCb;
+   m_serverDisconnectedCb = serverDisconnectedCb;
 
    m_serverAddress = serverAddress;
 
