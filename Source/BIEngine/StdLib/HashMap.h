@@ -356,6 +356,7 @@ inline typename HashMap<Key, T, Hasher, KeyEqual>::SizeType HashMap<Key, T, Hash
       if (KeyEqual()(itr->first, key)) {
          itr = m_storage[bucketIdx].EraseAfter(itrBefore);
          ++retVal;
+         --m_size;
       } else {
          ++itr;
          ++itrBefore;
