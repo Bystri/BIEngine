@@ -197,7 +197,11 @@ TEST(HashMap, EraseWithKey) {
 		map.Insert(keyAndVal.first, keyAndVal.second);
 	}
 
+	EXPECT_EQ(map.Size(), 3);
+
 	map.Erase(keysAndVals[idxKeyToDelete].first);
+
+	EXPECT_EQ(map.Size(), 2);
 
 	bool hitTable[3];
 	for (int i = 0; i < 3; ++i) {
