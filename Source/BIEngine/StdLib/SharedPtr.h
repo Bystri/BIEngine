@@ -10,6 +10,9 @@
 namespace BIEngine {
 
 template <typename T>
+class EnableSharedFromThis;
+
+template <typename T>
 class SharedPtr {
    template <typename T2>
    friend class SharedPtr;
@@ -31,12 +34,15 @@ public:
          m_pInfo = new SharedPtrInfo(0);
          return;
       }
+
+      DoEnableSharedFromThis(m_pInfo, ptr, ptr);
    }
 
    template <typename T2, typename Deleter>
    SharedPtr(T2* ptr, Deleter deleter)
       : m_ptr(ptr), m_pInfo(new SharedPtrInfo(1, deleter))
    {
+      DoEnableSharedFromThis(m_pInfo, ptr, ptr);
    }
 
    SharedPtr(std::nullptr_t)
@@ -172,18 +178,23 @@ public:
       return m_ptr;
    }
 
+   SizeT UseCount() const
+   {
+      return m_pInfo->cnt;
+   }
+
    void Reset()
    {
       if (m_pInfo == nullptr) {
          return;
       }
 
-      if (m_pInfo->cnt > 0) {
-         --m_pInfo->cnt;
+      if (m_pInfo->cnt == 1) {
+         m_pInfo->deleter(m_ptr);
       }
 
-      if (m_pInfo->cnt == 0) {
-         m_pInfo->deleter(m_ptr);
+      if (m_pInfo->cnt > 0) {
+         --m_pInfo->cnt;
       }
 
       if (m_pInfo->cnt == 0 && m_pInfo->weakCnt == 0) {
@@ -221,8 +232,58 @@ private:
       DeleterType deleter = DefaultDeleter<T>();
    };
 
+private:
+   template <typename U>
+   void DoEnableSharedFromThis(const SharedPtrInfo* info, const EnableSharedFromThis<T>* pEnableSharedFromThis, const U* pValue);
+
+   inline void DoEnableSharedFromThis(const SharedPtrInfo*, ...) {}
+
+private:
    T* m_ptr = nullptr;
    SharedPtrInfo* m_pInfo = nullptr;
+};
+
+template <typename T>
+class EnableSharedFromThis {
+public:
+   SharedPtr<T> SharedFromThis()
+   {
+      return SharedPtr<T>(m_weakPtr);
+   }
+
+   SharedPtr<const T> SharedFromThis() const
+   {
+      return SharedPtr<const T>(m_weakPtr);
+   }
+
+   WeakPtr<T> WeakFromThis()
+   {
+      return m_weakPtr;
+   }
+
+   WeakPtr<const T> WeakFromThis() const
+   {
+      return m_weakPtr;
+   }
+
+protected:
+   template <typename U>
+   friend class SharedPtr;
+
+   EnableSharedFromThis() = default;
+   ~EnableSharedFromThis() = default;
+
+   EnableSharedFromThis(const EnableSharedFromThis&)
+   {
+   }
+
+   EnableSharedFromThis& operator=(const EnableSharedFromThis&)
+   {
+      return *this;
+   }
+
+protected:
+   mutable WeakPtr<T> m_weakPtr;
 };
 
 template <typename T, typename... Args>
@@ -543,5 +604,14 @@ private:
    T* m_ptr = nullptr;
    typename SharedPtr<T>::SharedPtrInfo* m_pInfo = nullptr;
 };
+
+template <typename T>
+template <typename U>
+void typename SharedPtr<T>::DoEnableSharedFromThis(const typename SharedPtr<T>::SharedPtrInfo* info, const typename EnableSharedFromThis<T>* pEnableSharedFromThis, const U* pValue)
+{
+   if (pEnableSharedFromThis) {
+      pEnableSharedFromThis->m_weakPtr = *this;
+   }
+}
 
 } // namespace BIEngine

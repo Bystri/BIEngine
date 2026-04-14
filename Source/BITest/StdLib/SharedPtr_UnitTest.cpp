@@ -312,3 +312,51 @@ TEST(SharedPtr, WeakFromSharedPtrCtor) {
 	EXPECT_TRUE(weakPtr.Expired());
 }
 
+struct EnableSharedTest : public BIEngine::EnableSharedFromThis<EnableSharedTest>
+{
+	int val;
+};
+
+TEST(SharedPtr, EnableSharedFromThisShared) {
+	BIEngine::SharedPtr<EnableSharedTest> ptr(new EnableSharedTest());
+
+	EXPECT_EQ(ptr.UseCount(), 1);
+
+	constexpr int testVal = 10;
+	ptr->val = testVal;
+
+	{
+		BIEngine::SharedPtr<EnableSharedTest> ptr2 = ptr->SharedFromThis();
+		EXPECT_EQ(ptr2->val, testVal);
+		EXPECT_EQ(ptr.UseCount(), 2);
+
+		constexpr int varForReplace = 12;
+		ptr2->val = varForReplace;
+
+		EXPECT_EQ(ptr->val, varForReplace);
+	}
+
+	EXPECT_EQ(ptr.UseCount(), 1);
+}
+
+TEST(SharedPtr, EnableSharedFromThisWeak) {
+	BIEngine::SharedPtr<EnableSharedTest> ptr(new EnableSharedTest());
+
+	EXPECT_EQ(ptr.UseCount(), 1);
+
+	constexpr int testVal = 10;
+	ptr->val = testVal;
+
+	BIEngine::WeakPtr<EnableSharedTest> weak = ptr->WeakFromThis();
+	EXPECT_EQ(ptr.UseCount(), 1);
+
+	BIEngine::SharedPtr<EnableSharedTest> ptr2 = weak.Lock();
+	EXPECT_EQ(ptr.UseCount(), 2);
+	EXPECT_EQ(ptr2->val, testVal);
+	EXPECT_FALSE(weak.Expired());
+
+	ptr2.Reset();
+	ptr.Reset();
+
+	EXPECT_TRUE(weak.Expired());
+}
