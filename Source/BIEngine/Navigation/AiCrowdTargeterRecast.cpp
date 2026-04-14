@@ -47,6 +47,12 @@ private:
    };
 
 public:
+   AiCrowdTargeterRecast() = default;
+   virtual ~AiCrowdTargeterRecast() override;
+
+   AiCrowdTargeterRecast(const AiCrowdTargeterRecast&) = delete;
+   AiCrowdTargeterRecast(AiCrowdTargeterRecast&&) = delete;
+
    virtual bool Init(const int maxAgents, SharedPtr<NavMeshManager> pNavMeshManager) override;
 
    virtual bool SetDestination(const int idx, const Vector3& toPos) override;
@@ -75,7 +81,8 @@ private:
    dtPathQueue m_pathQueue;
    dtQueryFilter m_dummyFilter;
 
-   DynamicArray<AgentContext> m_agents;
+   AgentContext* m_pAgents = nullptr;
+   int m_maxAgents = 0;
 
    Vector3 m_agentPlacementHalfExtents;
 
@@ -102,16 +109,26 @@ static void aiCrowdVecToFloats(float* toVec, const BIEngine::Vector3& fromVec)
    toVec[2] = fromVec.z;
 }
 
+AiCrowdTargeterRecast::~AiCrowdTargeterRecast()
+{
+   if (m_pAgents) {
+      delete[] m_pAgents;
+      m_pAgents = nullptr;
+   }
+}
+
 bool AiCrowdTargeterRecast::Init(const int maxAgents, SharedPtr<NavMeshManager> pNavMeshManager)
 {
+   m_maxAgents = maxAgents;
+
    m_pNavMeshManager = pNavMeshManager;
 
    m_agentPlacementHalfExtents = {1.0f, 1.0f, 1.0f};
 
-   m_agents.Resize(maxAgents);
+   m_pAgents = new AgentContext[m_maxAgents];
 
-   for (int i = 0; i < maxAgents; ++i) {
-      if (!m_agents[i].corridor.init(AI_CROWD_MAX_PATH_RESULTS)) {
+   for (int i = 0; i < m_maxAgents; ++i) {
+      if (!m_pAgents[i].corridor.init(AI_CROWD_MAX_PATH_RESULTS)) {
          return false;
       }
    }
@@ -130,7 +147,7 @@ bool AiCrowdTargeterRecast::Init(const int maxAgents, SharedPtr<NavMeshManager> 
 
 bool AiCrowdTargeterRecast::SetDestination(const int idx, const Vector3& toPos)
 {
-   if (idx < 0 || idx >= m_agents.Size()) {
+   if (idx < 0 || idx >= m_maxAgents) {
       return false;
    }
 
@@ -144,11 +161,11 @@ bool AiCrowdTargeterRecast::SetDestination(const int idx, const Vector3& toPos)
 
 bool AiCrowdTargeterRecast::ResetDestination(const int idx)
 {
-   if (idx < 0 || idx >= m_agents.Size()) {
+   if (idx < 0 || idx >= m_maxAgents) {
       return false;
    }
 
-   AgentContext& ag = m_agents[idx];
+   AgentContext& ag = m_pAgents[idx];
 
    // Initialize request.
    ag.targetRef = 0;
@@ -162,11 +179,11 @@ bool AiCrowdTargeterRecast::ResetDestination(const int idx)
 
 Vector3 AiCrowdTargeterRecast::GetTarget(const int idx) const
 {
-   if (idx < 0 || idx >= m_agents.Size()) {
+   if (idx < 0 || idx >= m_maxAgents) {
       return Vector3(0.0f);
    }
 
-   const AgentContext& ag = m_agents[idx];
+   const AgentContext& ag = m_pAgents[idx];
 
    if (ag.targetState == TargetState::NONE) {
       return Vector3(0.0f);
@@ -179,11 +196,11 @@ Vector3 AiCrowdTargeterRecast::GetTarget(const int idx) const
 
 void AiCrowdTargeterRecast::UpdateAgentPos(const int idx, const Vector3& pos)
 {
-   if (idx < 0 || idx >= m_agents.Size()) {
+   if (idx < 0 || idx >= m_maxAgents) {
       return;
    }
 
-   m_agents[idx].fromPos = pos;
+   m_pAgents[idx].fromPos = pos;
 }
 
 void AiCrowdTargeterRecast::Update(const GameTimer& gt)
@@ -202,14 +219,14 @@ void AiCrowdTargeterRecast::DrawDebug()
       return;
    }
 
-   for (int i = 0; i < m_agents.Size(); ++i) {
-      AgentContext& ag = m_agents[i];
+   for (int i = 0; i < m_maxAgents; ++i) {
+      AgentContext& ag = m_pAgents[i];
 
       if (ag.targetState == TargetState::NONE) {
          continue;
       }
 
-      glm::vec3 prevCorner = glm::vec3(m_agents[i].fromPos.x, m_agents[i].fromPos.y, m_agents[i].fromPos.z);
+      glm::vec3 prevCorner = glm::vec3(m_pAgents[i].fromPos.x, m_pAgents[i].fromPos.y, m_pAgents[i].fromPos.z);
       for (int j = 0; j < ag.cornersNum; ++j)
       {
          const float* target = &ag.cornerVerts[j * 3];
@@ -260,7 +277,7 @@ int AiCrowdTargeterRecast::addToPathQueue(AgentContext* newag, AgentContext** ag
 
 bool AiCrowdTargeterRecast::requestMoveTarget(const int idx, dtPolyRef ref, const BIEngine::Vector3& toPos)
 {
-   if (idx < 0 || idx >= m_agents.Size()) {
+   if (idx < 0 || idx >= m_maxAgents) {
       return false;
    }
 
@@ -268,7 +285,7 @@ bool AiCrowdTargeterRecast::requestMoveTarget(const int idx, dtPolyRef ref, cons
       return false;
    }
 
-   AgentContext& ag = m_agents[idx];
+   AgentContext& ag = m_pAgents[idx];
 
    // Initialize request.
    ag.targetRef = ref;
@@ -286,7 +303,7 @@ bool AiCrowdTargeterRecast::requestMoveTarget(const int idx, dtPolyRef ref, cons
 
 bool AiCrowdTargeterRecast::requestMoveTargetReplan(const int idx, dtPolyRef ref, const Vector3& toPos)
 {
-   if (idx < 0 || idx >= m_agents.Size()) {
+   if (idx < 0 || idx >= m_maxAgents) {
       return false;
    }
 
@@ -294,7 +311,7 @@ bool AiCrowdTargeterRecast::requestMoveTargetReplan(const int idx, dtPolyRef ref
       return false;
    }
 
-   AgentContext& ag = m_agents[idx];
+   AgentContext& ag = m_pAgents[idx];
 
    // Initialize request.
    ag.targetRef = ref;
@@ -315,8 +332,8 @@ void AiCrowdTargeterRecast::checkPathValidity(const float dt)
    static const int CHECK_LOOKAHEAD = 10;
    static const float TARGET_REPLAN_DELAY = 1.0; // seconds
 
-   for (int i = 0; i < m_agents.Size(); ++i) {
-      AgentContext& ag = m_agents[i];
+   for (int i = 0; i < m_maxAgents; ++i) {
+      AgentContext& ag = m_pAgents[i];
 
       if (ag.targetState == TargetState::NONE) {
          continue;
@@ -418,8 +435,8 @@ void AiCrowdTargeterRecast::updateMoveRequest()
    int nqueue = 0;
 
    // Fire off new requests.
-   for (int i = 0; i < m_agents.Size(); ++i) {
-      AgentContext& ag = m_agents[i];
+   for (int i = 0; i < m_maxAgents; ++i) {
+      AgentContext& ag = m_pAgents[i];
 
       if (ag.targetState == TargetState::NONE) {
          continue;
@@ -503,8 +520,8 @@ void AiCrowdTargeterRecast::updateMoveRequest()
    dtStatus status;
 
    // Process path results.
-   for (int i = 0; i < m_agents.Size(); ++i) {
-      AgentContext& ag = m_agents[i];
+   for (int i = 0; i < m_maxAgents; ++i) {
+      AgentContext& ag = m_pAgents[i];
 
       if (ag.targetState == TargetState::NONE) {
          continue;
@@ -609,8 +626,8 @@ void AiCrowdTargeterRecast::updateMoveRequest()
 
 void AiCrowdTargeterRecast::findNextCornerToSteerTo()
 {
-   for (int i = 0; i < m_agents.Size(); ++i) {
-      AgentContext& ag = m_agents[i];
+   for (int i = 0; i < m_maxAgents; ++i) {
+      AgentContext& ag = m_pAgents[i];
 
       if (ag.targetState == TargetState::NONE) {
          continue;

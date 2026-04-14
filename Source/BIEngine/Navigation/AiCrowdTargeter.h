@@ -7,6 +7,8 @@ namespace BIEngine {
 
 class AiCrowdTargeter {
 public:
+   virtual ~AiCrowdTargeter() = default;
+
    virtual bool Init(int maxAgents, SharedPtr<NavMeshManager> pNavMeshManager) = 0;
 
    virtual bool SetDestination(int agentId, const Vector3& toPos) = 0;

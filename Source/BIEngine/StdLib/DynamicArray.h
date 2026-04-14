@@ -431,8 +431,8 @@ inline typename DynamicArray<T>::Iterator DynamicArray<T>::Erase(const Iterator&
 {
    Allocator().destroy(pos);
 
+   std::move(pos + 1, m_pEnd, pos);
    --m_pEnd;
-   std::memmove(pos, pos + 1, (m_pEnd - pos) * sizeof(ValueType));
 
    return pos;
 }
@@ -445,7 +445,7 @@ inline typename DynamicArray<T>::Iterator DynamicArray<T>::insertImpl(const Iter
 
    tryExpandDataStorage();
 
-   std::memmove(&m_pBegin[idx + 1], &m_pBegin[idx], (Size() - idx) * sizeof(ValueType));
+   std::move(&m_pBegin[idx], m_pEnd, &m_pBegin[idx + 1]);
    Allocator().construct(m_pBegin + idx, std::forward<DataType>(val));
    ++m_pEnd;
 
@@ -465,10 +465,17 @@ inline void DynamicArray<T>::expandDataStorage(SizeType newCapacity)
 {
    ValueType* newData = Allocator().allocate(newCapacity);
 
-   std::memcpy(newData, m_pBegin, m_capacity * sizeof(T));
+   if (Size() > 0) {
+      std::uninitialized_move_n(m_pBegin, Size(), newData);
+
+      for (int i = 0; i < Size(); ++i) {
+         Allocator().destroy(m_pBegin + i);
+      }
+   }
+
+   Allocator().deallocate(m_pBegin, m_capacity);
 
    m_pEnd = newData + Size();
-   Allocator().deallocate(m_pBegin, m_capacity);
    m_pBegin = newData;
    m_capacity = newCapacity;
 }

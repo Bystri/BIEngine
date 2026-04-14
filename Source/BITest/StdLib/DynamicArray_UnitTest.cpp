@@ -115,21 +115,9 @@ TEST(DynamicArray, DefaultConstruction) {
 	EXPECT_TRUE(true);
 }
 
-TEST(DynamicArray, RawMemoryExpansion) {
-	constexpr int valsToAdd = 10;
-
-	BIEngine::DynamicArray<TestObject> dynArr;
-	const BIEngine::SizeT initialCapacity = dynArr.Capacity();
-
-	for (int i = 0; i < valsToAdd; ++i) {
-		TestObject obj;
-		dynArr.PushBack(obj);
-	}
-
-	EXPECT_TRUE(testCnt < dynArr.Capacity() && testCnt == dynArr.Size());
-}
 
 TEST(DynamicArray, HoldedObjectsDestruction) {
+	testCnt = 0;
 	{
 		constexpr int valsToAdd = 10;
 
@@ -220,6 +208,8 @@ TEST(DynamicArray, NCtor) {
 
 	BIEngine::DynamicArray<TestObject> dynArr(valsToAdd);
 
+	EXPECT_TRUE(valsToAdd == dynArr.Size());
+
 	EXPECT_TRUE(testCnt == dynArr.Capacity() && testCnt == dynArr.Size());
 }
 
@@ -308,7 +298,10 @@ TEST(DynamicArray, Insert) {
 	public:
 		InsertTestObj(int val, int* pCnt) : x(val), cnt(pCnt) {}
 
+		InsertTestObj(const InsertTestObj& rhs) = default;
 		InsertTestObj(InsertTestObj&& rhs) : x(rhs.x), cnt(rhs.cnt){rhs.cnt = nullptr;}
+
+		InsertTestObj& operator=(const InsertTestObj& rhs) = default;
 
 		~InsertTestObj()
 		{
