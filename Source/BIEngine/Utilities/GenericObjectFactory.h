@@ -8,7 +8,7 @@ namespace BIEngine {
 template <class BaseType, class SubType>
 SharedPtr<BaseType> GenericObjectCreationFunction()
 {
-   return MakeShared<SubType>();
+   return SharedPtr<BaseType>(new SubType());
 }
 
 template <class BaseClass, class IdType>

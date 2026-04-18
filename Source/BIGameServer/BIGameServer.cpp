@@ -102,6 +102,7 @@ bool BIServerGameLogic::Init()
    PlayerManager::Create();
 
    m_playerCreatedDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIServerGameLogic::PlayerCreatedDelegate), EvtData_Player_Created::sk_EventType);
+   m_beforePlayerDestroyedDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIServerGameLogic::BeforePlayerDestroyedDelegate), EvtData_Player_BeforeDestroyed::sk_EventType);
 
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayer>(ReplicationObjectPlayer::sk_ClassType);
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayerCharacter>(ReplicationObjectPlayerCharacter::sk_ClassType);
@@ -139,6 +140,7 @@ bool BIServerGameLogic::Init()
 void BIServerGameLogic::Terminate()
 {
    BIEngine::EventManager::Get()->RemoveListener(m_playerCreatedDelegateHandler);
+   BIEngine::EventManager::Get()->RemoveListener(m_beforePlayerDestroyedDelegateHandler);
 }
 
 bool BIServerGameLogic::LoadLevelDelegate(tinyxml2::XMLElement* pRoot)
@@ -186,6 +188,12 @@ void BIServerGameLogic::PlayerCreatedDelegate(BIEngine::IEventDataPtr pEventData
 
    BIEngine::SharedPtr<BIEngine::ReplicationObjectActor> pGameObject = BIEngine::StaticPointerCast<BIEngine::ReplicationObjectActor>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayerCharacter::sk_ClassType));
    pCastEventData->GetPlayer()->SetPlayableActor(pGameObject->GetReplicatedObject());
+}
+
+void BIServerGameLogic::BeforePlayerDestroyedDelegate(BIEngine::IEventDataPtr pEventData)
+{
+   BIEngine::SharedPtr<EvtData_Player_BeforeDestroyed> pCastEventData = BIEngine::StaticPointerCast<EvtData_Player_BeforeDestroyed>(pEventData);
+   DestroyActor(pCastEventData->GetPlayer()->GetPlayableActor()->GetId());
 }
 
 /**********BIServerDbgHumanView**********/

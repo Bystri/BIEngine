@@ -15,6 +15,7 @@ bool BINetworkManagerServer::Init(uint16_t port, int maxClients)
    m_networkMessagesManager.AddProtocolReader(BIEngine::MakeShared<EventProtocolReader>());
 
    m_clients = BIEngine::DynamicArray<BIEngine::PeerId>(maxClients, BIEngine::INVALID_PEER_ID);
+   m_players = BIEngine::DynamicArray<BIEngine::SharedPtr<ReplicationObjectPlayer>>(maxClients);
 
    return m_networkServer.Init(port, [this](BIEngine::PeerId id) { OnClientConnected(id); }, [this](BIEngine::PeerId id) { OnClientDisconnected(id); });
 }
@@ -51,8 +52,9 @@ void BINetworkManagerServer::OnClientConnected(BIEngine::PeerId clientId)
 
       m_clients[i] = clientId;
       m_networkMessagesManager.RegisterPeer(clientId, BIEngine::g_pApp->GetGameTimer(), std::bind(&BIEngine::NetworkServer::SendPacket, m_networkServer, clientId, std::placeholders::_1));
-      BIEngine::SharedPtr<ReplicationObjectPlayer> pReplicatedPlayer = BIEngine::StaticPointerCast<ReplicationObjectPlayer>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType));
-      RpcWriteSetPlayer(clientId, pReplicatedPlayer->GetReplicatedObject()->GetId());
+      m_players[i] = BIEngine::StaticPointerCast<ReplicationObjectPlayer>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType));
+      RpcWriteSetPlayer(clientId, m_players[i]->GetReplicatedObject()->GetId());
+
       return;
    }
 }
@@ -67,6 +69,9 @@ void BINetworkManagerServer::OnClientDisconnected(BIEngine::PeerId clientId)
       m_clients[i] = BIEngine::INVALID_PEER_ID;
       m_networkMessagesManager.UnregisterPeer(clientId);
 
-      // Delete player
+      BIEngine::ObjectReplicationDestroy(m_players[i]);
+      m_players[i].Reset();
+
+      return;
    }
 }

@@ -456,6 +456,9 @@
     <ClCompile Include="..\..\Network\RpcProtocol.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Actors\NetworkReplicatedComponent.cpp">
+      <Filter>Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -964,6 +967,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Network\RpcProtocol.h">
       <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Actors\NetworkReplicatedComponent.h">
+      <Filter>Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

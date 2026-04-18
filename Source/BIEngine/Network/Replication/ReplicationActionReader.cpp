@@ -46,6 +46,7 @@ void ReplicationActionReader::ProcessReplicationHeader(InputMemoryBitStream& str
       case ReplicationAction::Destroy:
          {
             SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
+            go->Term();
             m_pLinkingContext->RemoveObj(go);
             break;
          }

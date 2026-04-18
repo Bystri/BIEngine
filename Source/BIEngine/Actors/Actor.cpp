@@ -150,6 +150,7 @@ void Actor::Destroy()
    }
 
    for (auto it = m_components.Begin(); it != m_components.End(); ++it) {
+      it->second->Deactivate();
       it->second->Terminate();
    }
 

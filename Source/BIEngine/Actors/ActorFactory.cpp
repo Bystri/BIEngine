@@ -18,6 +18,7 @@
 #include "SkeletonComponent.h"
 #include "BoneComponent.h"
 #include "PlayerComponent.h"
+#include "NetworkReplicatedComponent.h"
 #include "../Utilities/Logger.h"
 #include "../EngineCore/GameApp.h"
 
@@ -47,6 +48,7 @@ ActorFactory::ActorFactory()
    m_actorComponentCreators[SkeletonComponent::g_CompId] = CreateSkeletonComponent;
    m_actorComponentCreators[BoneComponent::g_CompId] = CreateBoneComponent;
    m_actorComponentCreators[PlayerComponent::g_CompId] = CreateBIPlayerComponent;
+   m_actorComponentCreators[NetworkReplicatedComponent::g_CompId] = CreateNetworkReplicationComponent;
 }
 
 SharedPtr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const glm::vec3* const pPosition, const glm::vec3* const pRotation, Actor* const pParent)
@@ -80,7 +82,7 @@ SharedPtr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const gl
 SharedPtr<Actor> ActorFactory::CreateActorFromRootElement(tinyxml2::XMLElement* pRoot, Actor* const pParent)
 {
    if (!pRoot) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Failed to create actor from null XML-element");
+      Logger::WriteErrorLog("Failed to create actor from null XML-element");
       return nullptr;
    }
 
@@ -90,7 +92,7 @@ SharedPtr<Actor> ActorFactory::CreateActorFromRootElement(tinyxml2::XMLElement* 
    pActor->m_pParent = pParent;
 
    if (!pActor->Init(pRoot)) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Failed to initialize actor from XML");
+      Logger::WriteErrorLog("Failed to initialize actor from XML");
       return nullptr;
    }
 
@@ -127,7 +129,7 @@ SharedPtr<ActorComponent> ActorFactory::CreateComponent(SharedPtr<Actor> pActor,
       ActorComponentCreator creator = findIt->second;
       pComponent.Reset(creator().Release());
    } else {
-      Logger::WriteLog(Logger::LogType::ERROR, "Couldn’t find ActorComponent named " + name);
+      Logger::WriteErrorLog("Couldn’t find ActorComponent named %s", name.CStr());
       return SharedPtr<ActorComponent>();
    }
 
@@ -137,7 +139,7 @@ SharedPtr<ActorComponent> ActorFactory::CreateComponent(SharedPtr<Actor> pActor,
    // Инициализируем компонент
    if (pComponent) {
       if (!pComponent->Init(pData)) {
-         Logger::WriteLog(Logger::LogType::ERROR, "Component failed to initialize : " + name);
+         Logger::WriteErrorLog("Component failed to initialize : %s", name.CStr());
          return SharedPtr<ActorComponent>();
       }
    }

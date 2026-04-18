@@ -248,6 +248,12 @@ static void gameLogicDestroyActorFromMap(GameLogic::ActorMap& actors, const Acto
 
 void GameLogic::DestroyActor(const ActorId actorId)
 {
+   auto findIt = m_actors.Find(actorId);
+
+   if (findIt == m_actors.End()) {
+      return;
+   }
+
    // TODO: нам необходимо создать и триггерить событие фактического уничтожения актера, чтобы все системы успели выполнить подготовку к уничтожению
    SharedPtr<EvtData_Destroy_Actor> pEvent = MakeShared<EvtData_Destroy_Actor>(actorId);
    EventManager::Get()->TriggerEvent(pEvent);

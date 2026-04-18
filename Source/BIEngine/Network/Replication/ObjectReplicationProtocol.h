@@ -13,6 +13,7 @@ namespace BIEngine {
 
 class ObjectReplicationProtocolWriter : public NetworkProtocolWriter {
    friend SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t);
+   friend void ObjectReplicationDestroy(SharedPtr<ReplicationObject>);
 
 public:
    static const NetworkProtocolType sk_ProtocolType;
@@ -34,6 +35,7 @@ protected:
 
 private:
    void AddReplicationObject(SharedPtr<ReplicationObject> pObj);
+   void DestroyReplicationObject(SharedPtr<ReplicationObject> pObj);
 
    void SendStateMsgToClient(PeerId peerId, NetworkMessagesManager* pNetworkMessagesManager);
 
@@ -46,6 +48,7 @@ private:
 };
 
 SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t classId);
+void ObjectReplicationDestroy(SharedPtr<ReplicationObject> pGameObject);
 
 class ObjectReplicationProtocolReader : public NetworkProtocolReader {
 public:

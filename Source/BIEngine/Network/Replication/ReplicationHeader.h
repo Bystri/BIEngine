@@ -25,7 +25,7 @@ public:
         m_masterPeerId(masterPeerId),
         m_networkId(networkId),
         m_pReplicationObject(pReplicationObject),
-        m_classId(pReplicationObject->GetClassType())
+        m_classId(pReplicationObject ? pReplicationObject->GetClassType() : 0)
    {
    }
 

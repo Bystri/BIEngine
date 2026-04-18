@@ -9,7 +9,9 @@
 	  <HealthStateComponent>
 	  </HealthStateComponent>
 	  <DamagableComponent>
-	  </DamagableComponent>'
+	  </DamagableComponent>
+	  <NetworkReplicatedComponent>
+	  </NetworkReplicatedComponent>
 	  <CharacterMovementComponent>
 	  </CharacterMovementComponent>
 	  <ScriptComponent>

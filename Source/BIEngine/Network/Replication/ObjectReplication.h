@@ -18,7 +18,7 @@ namespace BIEngine {
       return sk_ClassType;               \
    }
 
-class ReplicationObject {
+class ReplicationObject : public EnableSharedFromThis<ReplicationObject> {
 public:
    CLASS_IDENTIFICATION('GOBJ')
 
@@ -28,6 +28,8 @@ public:
    {
       m_masterPeerId = masterPeerId;
    }
+
+   virtual void Term() {}
 
    PeerId GetMasterPeerId() const
    {
@@ -65,6 +67,13 @@ public:
       for (int i = 0; i < m_replicationUnits.Size(); ++i) {
          m_replicationUnits[i]->Init(this, m_pReplicatedObject);
       }
+   }
+
+   virtual void Term() override
+   {
+      ReplicationObject::Term();
+
+      DestructReplicationObject(GetMasterPeerId() == g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId());
    }
 
    virtual void OnUpdate() override
@@ -110,6 +119,7 @@ public:
 
 protected:
    virtual SharedPtr<ReplicatedObject> ConstructReplicatedObject(bool isMaster) = 0;
+   virtual void DestructReplicationObject(bool isMaster) = 0;
 
 private:
    Bitset<32> m_isDirtyMask;

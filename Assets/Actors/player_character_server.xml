@@ -12,6 +12,8 @@
 	    </PlayerCommandBinderComponent>
 		<CharacterMovementComponent>
 		</CharacterMovementComponent>
+		<NetworkReplicatedComponent>
+	    </NetworkReplicatedComponent>
 		<NavAgentComponent>
 			<Common maxSpeed="5.0"/>
 		</NavAgentComponent>

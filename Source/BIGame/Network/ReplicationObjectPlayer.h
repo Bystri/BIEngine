@@ -19,9 +19,12 @@ public:
       return PlayerManager::Get()->CreatePlayer();
    }
 
-private:
-   BIEngine::SharedPtr<Player> m_pPlayer;
+   virtual void DestructReplicationObject(bool isMaster) override
+   {
+      PlayerManager::Get()->DestroyPlayer(GetReplicatedObject()->GetId());
+   }
 
+private:
    bool m_isDirty = false;
    BIEngine::ActorId m_cachedActorId = BIEngine::Actor::INVALID_ACTOR_ID;
 };

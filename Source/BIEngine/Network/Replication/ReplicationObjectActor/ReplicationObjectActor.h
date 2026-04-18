@@ -18,6 +18,7 @@ public:
    }
 
    virtual SharedPtr<Actor> ConstructReplicatedObject(bool isMaster) override;
+   virtual void DestructReplicationObject(bool isMaster) override;
 
 private:
    String m_masterActorFilePath;

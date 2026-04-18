@@ -138,6 +138,7 @@
     <ClCompile Include="..\..\Actors\LightComponent.cpp" />
     <ClCompile Include="..\..\Actors\MeshComponent.cpp" />
     <ClCompile Include="..\..\Actors\NavAgentComponent.cpp" />
+    <ClCompile Include="..\..\Actors\NetworkReplicatedComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics3DComponent.cpp" />
     <ClCompile Include="..\..\Actors\Physics2DTriggerComponent.cpp" />
@@ -269,6 +270,7 @@
     <ClInclude Include="..\..\Actors\LightComponent.h" />
     <ClInclude Include="..\..\Actors\MeshComponent.h" />
     <ClInclude Include="..\..\Actors\NavAgentComponent.h" />
+    <ClInclude Include="..\..\Actors\NetworkReplicatedComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics3DComponent.h" />
     <ClInclude Include="..\..\Actors\Physics2DTriggerComponent.h" />

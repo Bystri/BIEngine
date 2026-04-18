@@ -4,7 +4,6 @@
 
 namespace BIEngine {
 
-#pragma optimize("", off)
 
 const NetworkProtocolType ObjectReplicationProtocolWriter::sk_ProtocolType(0x23d7aeaa);
 const NetworkProtocolType ObjectReplicationProtocolReader::sk_ProtocolType(0x23d7aeaa);
@@ -46,6 +45,12 @@ SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t classId)
    return pObj;
 }
 
+void ObjectReplicationDestroy(SharedPtr<ReplicationObject> pGameObject)
+{
+   pGameObject->Term();
+   ObjectReplicationProtocolWriter::Get()->DestroyReplicationObject(pGameObject);
+}
+
 void ObjectReplicationProtocolWriter::OnUpdate()
 {
    for (auto& obj : m_pReplicationObjects) {
@@ -65,6 +70,20 @@ void ObjectReplicationProtocolWriter::AddReplicationObject(SharedPtr<Replication
 
    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
       m_pReplicationManagersPerPeer[i]->ReplicateCreate(pObj);
+   }
+}
+
+void ObjectReplicationProtocolWriter::DestroyReplicationObject(SharedPtr<ReplicationObject> pObj)
+{
+   for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
+      m_pReplicationManagersPerPeer[i]->ReplicateDestroy(pObj);
+   }
+
+   for (int i = 0; i < m_pReplicationObjects.Size(); ++i) {
+      if (m_pReplicationObjects[i].Get() == pObj.Get()) {
+         m_pReplicationObjects.Erase(m_pReplicationObjects.Begin() + i);
+         return;
+      }
    }
 }
 

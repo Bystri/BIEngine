@@ -377,6 +377,7 @@ inline typename HashMap<Key, T, Hasher, KeyEqual>::Iterator HashMap<Key, T, Hash
    }
 
    m_storage[itrToErase.m_bucketIdx].EraseAfter(itrBefore);
+   --m_size;
    auto retItr = Iterator(this, itrToErase.m_bucketIdx, itrBefore);
    ++retItr;
 

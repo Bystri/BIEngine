@@ -61,9 +61,11 @@ public:
    virtual void OnRenderDebug(const BIEngine::GameTimer& gt) override;
 
    void PlayerCreatedDelegate(BIEngine::IEventDataPtr pEventData);
+   void BeforePlayerDestroyedDelegate(BIEngine::IEventDataPtr pEventData);
 
 private:
    BIEngine::EventManager::DelegateHandler m_playerCreatedDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_beforePlayerDestroyedDelegateHandler;
 
 #ifndef _RETAIL
    BIEngine::SharedPtr<BIServerDbgHumanView> m_pDbgHumanView;
