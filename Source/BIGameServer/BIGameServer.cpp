@@ -14,6 +14,7 @@
 #include "../BIGame/Combat/CombatStateComponent.h"
 #include "../BIGame/Combat/CombatControllerComponent.h"
 #include "../BIGame/Combat/DamagableComponent.h"
+#include "../BIGame/Network/BINetworkRPCs.h"
 
 #include "BINetworkManagerServer.h"
 #include "BIGSEventListener.h"
@@ -101,8 +102,8 @@ bool BIServerGameLogic::Init()
 
    PlayerManager::Create();
 
-   m_playerCreatedDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIServerGameLogic::PlayerCreatedDelegate), EvtData_Player_Created::sk_EventType);
-   m_beforePlayerDestroyedDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIServerGameLogic::BeforePlayerDestroyedDelegate), EvtData_Player_BeforeDestroyed::sk_EventType);
+   m_netPeerConnectedDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIServerGameLogic::OnNetPeerConnectedDelegate), EvtData_NetPeer_Connected::sk_EventType);
+   m_netPeerDisonnectedDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIServerGameLogic::OnNetPeerDisonnectedDelegate), EvtData_NetPeer_Disonnected::sk_EventType);
 
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayer>(ReplicationObjectPlayer::sk_ClassType);
    BIEngine::NetworkObjectCreationRegistry::Get().Register<ReplicationObjectPlayerCharacter>(ReplicationObjectPlayerCharacter::sk_ClassType);
@@ -128,7 +129,7 @@ bool BIServerGameLogic::Init()
    AddGameView(m_pDbgHumanView);
 #endif
 
-   BIRegisterEvents();
+   BIRegisterServerEvents();
 
    LoadLevel(BIEngine::g_pApp->m_options.mainWorldResNamePath);
 
@@ -139,8 +140,8 @@ bool BIServerGameLogic::Init()
 
 void BIServerGameLogic::Terminate()
 {
-   BIEngine::EventManager::Get()->RemoveListener(m_playerCreatedDelegateHandler);
-   BIEngine::EventManager::Get()->RemoveListener(m_beforePlayerDestroyedDelegateHandler);
+   BIEngine::EventManager::Get()->RemoveListener(m_netPeerConnectedDelegateHandler);
+   BIEngine::EventManager::Get()->RemoveListener(m_netPeerDisonnectedDelegateHandler);
 }
 
 bool BIServerGameLogic::LoadLevelDelegate(tinyxml2::XMLElement* pRoot)
@@ -182,18 +183,26 @@ void BIServerGameLogic::OnRenderDebug(const BIEngine::GameTimer& gt)
 #endif
 }
 
-void BIServerGameLogic::PlayerCreatedDelegate(BIEngine::IEventDataPtr pEventData)
+void BIServerGameLogic::OnNetPeerConnectedDelegate(BIEngine::IEventDataPtr pEventData)
 {
-   BIEngine::SharedPtr<EvtData_Player_Created> pCastEventData = BIEngine::StaticPointerCast<EvtData_Player_Created>(pEventData);
+   BIEngine::SharedPtr<EvtData_NetPeer_Connected> pCastEventData = BIEngine::StaticPointerCast<EvtData_NetPeer_Connected>(pEventData);
+
+   BIEngine::SharedPtr<ReplicationObjectPlayer> pReplicatedPlayer = BIEngine::StaticPointerCast<ReplicationObjectPlayer>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType));
+   m_peerIdToPlayerMap.Insert(pCastEventData->GetPeerId(), pReplicatedPlayer);
+   RpcWriteSetPlayer(pCastEventData->GetPeerId(), pReplicatedPlayer->GetReplicatedObject()->GetId());
 
    BIEngine::SharedPtr<BIEngine::ReplicationObjectActor> pGameObject = BIEngine::StaticPointerCast<BIEngine::ReplicationObjectActor>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayerCharacter::sk_ClassType));
-   pCastEventData->GetPlayer()->SetPlayableActor(pGameObject->GetReplicatedObject());
+   pReplicatedPlayer->GetReplicatedObject()->SetPlayableActor(pGameObject->GetReplicatedObject());
 }
 
-void BIServerGameLogic::BeforePlayerDestroyedDelegate(BIEngine::IEventDataPtr pEventData)
+void BIServerGameLogic::OnNetPeerDisonnectedDelegate(BIEngine::IEventDataPtr pEventData)
 {
-   BIEngine::SharedPtr<EvtData_Player_BeforeDestroyed> pCastEventData = BIEngine::StaticPointerCast<EvtData_Player_BeforeDestroyed>(pEventData);
-   DestroyActor(pCastEventData->GetPlayer()->GetPlayableActor()->GetId());
+   BIEngine::SharedPtr<EvtData_NetPeer_Disonnected> pCastEventData = BIEngine::StaticPointerCast<EvtData_NetPeer_Disonnected>(pEventData);
+   DestroyActor(m_peerIdToPlayerMap[pCastEventData->GetPeerId()]->GetReplicatedObject()->GetPlayableActor()->GetId());
+
+   BIEngine::ObjectReplicationDestroy(m_peerIdToPlayerMap[pCastEventData->GetPeerId()]);
+
+   m_peerIdToPlayerMap.Erase(pCastEventData->GetPeerId());
 }
 
 /**********BIServerDbgHumanView**********/

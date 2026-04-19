@@ -60,12 +60,14 @@ public:
    virtual void OnUpdate(BIEngine::GameTimer& gt) override;
    virtual void OnRenderDebug(const BIEngine::GameTimer& gt) override;
 
-   void PlayerCreatedDelegate(BIEngine::IEventDataPtr pEventData);
-   void BeforePlayerDestroyedDelegate(BIEngine::IEventDataPtr pEventData);
+   void OnNetPeerConnectedDelegate(BIEngine::IEventDataPtr pEventData);
+   void OnNetPeerDisonnectedDelegate(BIEngine::IEventDataPtr pEventData);
 
 private:
-   BIEngine::EventManager::DelegateHandler m_playerCreatedDelegateHandler;
-   BIEngine::EventManager::DelegateHandler m_beforePlayerDestroyedDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_netPeerConnectedDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_netPeerDisonnectedDelegateHandler;
+
+   BIEngine::HashMap<BIEngine::PeerId, BIEngine::SharedPtr<ReplicationObjectPlayer>> m_peerIdToPlayerMap;
 
 #ifndef _RETAIL
    BIEngine::SharedPtr<BIServerDbgHumanView> m_pDbgHumanView;

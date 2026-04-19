@@ -20,5 +20,4 @@ private:
 private:
    BIEngine::NetworkServer m_networkServer;
    BIEngine::DynamicArray<BIEngine::PeerId> m_clients;
-   BIEngine::DynamicArray<BIEngine::SharedPtr<ReplicationObjectPlayer>> m_players;
 };
