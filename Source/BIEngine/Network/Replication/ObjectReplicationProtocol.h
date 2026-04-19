@@ -25,7 +25,14 @@ public:
 
    virtual const NetworkProtocolType& GetType() const override { return sk_ProtocolType; }
 
+   void AddObjectReplicationPOI(PeerId peerId, SharedPtr<Actor> pActorPOI, float softRadius, float hardRadius);
+   void RemoveObjectReplicationPOI(PeerId peerId);
+
    void OnUpdate();
+
+#ifndef _RETAIL
+   void DrawDbgDiagnostics() const;
+#endif
 
 protected:
    virtual void RegisterPeer(PeerId peerId) override;
@@ -40,11 +47,18 @@ private:
    void SendStateMsgToClient(PeerId peerId, NetworkMessagesManager* pNetworkMessagesManager);
 
 private:
+   struct ReplicationRelevancyInfo {
+      SharedPtr<Actor> pActorPOI;
+      float softRadius;
+      float hardRadius;
+   };
+
    SharedPtr<NewtworkObjectLinkingContexts> m_pLinkingContext;
 
    DynamicArray<PeerId> m_pPeers;
    DynamicArray<UniquePtr<ReplicationActionWriter>> m_pReplicationManagersPerPeer;
    DynamicArray<SharedPtr<ReplicationObject>> m_pReplicationObjects;
+   HashMap<PeerId, ReplicationRelevancyInfo> m_relevancyInfo;
 };
 
 SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t classId);

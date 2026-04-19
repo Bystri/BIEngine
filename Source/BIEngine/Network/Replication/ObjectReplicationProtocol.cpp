@@ -1,6 +1,10 @@
 #include "ObjectReplicationProtocol.h"
 
+#include <imgui.h>
+
 #include "../../Utilities/Logger.h"
+#include "../../Utilities/DebugDraw.h"
+#include "../../Actors/TransformComponent.h"
 
 namespace BIEngine {
 
@@ -51,6 +55,19 @@ void ObjectReplicationDestroy(SharedPtr<ReplicationObject> pGameObject)
    ObjectReplicationProtocolWriter::Get()->DestroyReplicationObject(pGameObject);
 }
 
+void ObjectReplicationProtocolWriter::AddObjectReplicationPOI(PeerId peerId, SharedPtr<Actor> pActorPOI, float softRadius, float hardRadius)
+{
+   ReplicationRelevancyInfo& info = m_relevancyInfo[peerId];
+   info.pActorPOI = pActorPOI;
+   info.softRadius = softRadius;
+   info.hardRadius = hardRadius;
+}
+
+void ObjectReplicationProtocolWriter::RemoveObjectReplicationPOI(PeerId peerId)
+{
+   m_relevancyInfo.Erase(peerId);
+}
+
 void ObjectReplicationProtocolWriter::OnUpdate()
 {
    for (auto& obj : m_pReplicationObjects) {
@@ -63,6 +80,33 @@ void ObjectReplicationProtocolWriter::OnUpdate()
       }
    }
 }
+
+#ifndef _RETAIL
+void ObjectReplicationProtocolWriter::DrawDbgDiagnostics() const
+{
+   ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiCond_Always);
+
+   if (!ImGui::Begin("Replication info")) {
+      ImGui::End();
+      return;
+   }
+
+   for (const auto& info : m_relevancyInfo) {
+      const glm::vec3& pos = info.second.pActorPOI->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).Lock()->GetPosition();
+      BIEngine::DebugDraw::Sphere(
+         pos,
+         info.second.softRadius,
+         BIEngine::COLOR_GREEN, 0.0f, false);
+
+      BIEngine::DebugDraw::Sphere(
+         pos,
+         info.second.hardRadius,
+         BIEngine::COLOR_RED, 0.0f, false);
+   }
+
+   ImGui::End();
+}
+#endif
 
 void ObjectReplicationProtocolWriter::AddReplicationObject(SharedPtr<ReplicationObject> pObj)
 {

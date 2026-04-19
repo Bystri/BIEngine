@@ -173,12 +173,20 @@ void BIServerGameLogic::OnRenderDebug(const BIEngine::GameTimer& gt)
       m_pNavWorld->GetNavMeshManager()->DrawRenderDiagnostics();
    }
 
+   if (m_pDebugMenuController->IsNavCrowdWindow()) {
+      m_pNavWorld->GetNavCrowd()->DrawDebug();
+   }
+
    if (m_pDebugMenuController->IsShowPhysics3dWindow()) {
       m_pPhysics3D->DrawRenderDiagnostics();
    }
 
    if (m_pDebugMenuController->IsNetworkWindow()) {
       m_pNetworkManager->DrawDbgDiagnostics();
+   }
+
+   if (m_pDebugMenuController->IsReplicationWindow()) {
+      BIEngine::ObjectReplicationProtocolWriter::Get()->DrawDbgDiagnostics();
    }
 #endif
 }
@@ -187,22 +195,32 @@ void BIServerGameLogic::OnNetPeerConnectedDelegate(BIEngine::IEventDataPtr pEven
 {
    BIEngine::SharedPtr<EvtData_NetPeer_Connected> pCastEventData = BIEngine::StaticPointerCast<EvtData_NetPeer_Connected>(pEventData);
 
-   BIEngine::SharedPtr<ReplicationObjectPlayer> pReplicatedPlayer = BIEngine::StaticPointerCast<ReplicationObjectPlayer>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType));
-   m_peerIdToPlayerMap.Insert(pCastEventData->GetPeerId(), pReplicatedPlayer);
-   RpcWriteSetPlayer(pCastEventData->GetPeerId(), pReplicatedPlayer->GetReplicatedObject()->GetId());
+   const BIEngine::PeerId connectedPeerId = pCastEventData->GetPeerId();
 
-   BIEngine::SharedPtr<BIEngine::ReplicationObjectActor> pGameObject = BIEngine::StaticPointerCast<BIEngine::ReplicationObjectActor>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayerCharacter::sk_ClassType));
-   pReplicatedPlayer->GetReplicatedObject()->SetPlayableActor(pGameObject->GetReplicatedObject());
+   BIEngine::SharedPtr<ReplicationObjectPlayer> pReplicatedPlayer = BIEngine::StaticPointerCast<ReplicationObjectPlayer>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayer::sk_ClassType));
+   m_peerIdToPlayerMap.Insert(connectedPeerId, pReplicatedPlayer);
+   RpcWriteSetPlayer(connectedPeerId, pReplicatedPlayer->GetReplicatedObject()->GetId());
+
+   BIEngine::SharedPtr<BIEngine::ReplicationObjectActor> pPlayerActor = BIEngine::StaticPointerCast<BIEngine::ReplicationObjectActor>(BIEngine::ObjectReplicationCreate(ReplicationObjectPlayerCharacter::sk_ClassType));
+   pReplicatedPlayer->GetReplicatedObject()->SetPlayableActor(pPlayerActor->GetReplicatedObject());
+
+   constexpr float softReplicationRelevancyRadius = 30.0f;
+   constexpr float hardReplicationRelevancyRadius = 40.0f;
+   BIEngine::ObjectReplicationProtocolWriter::Get()->AddObjectReplicationPOI(connectedPeerId, pPlayerActor->GetReplicatedObject(), softReplicationRelevancyRadius, hardReplicationRelevancyRadius);
 }
 
 void BIServerGameLogic::OnNetPeerDisonnectedDelegate(BIEngine::IEventDataPtr pEventData)
 {
    BIEngine::SharedPtr<EvtData_NetPeer_Disonnected> pCastEventData = BIEngine::StaticPointerCast<EvtData_NetPeer_Disonnected>(pEventData);
-   DestroyActor(m_peerIdToPlayerMap[pCastEventData->GetPeerId()]->GetReplicatedObject()->GetPlayableActor()->GetId());
+   
+   const BIEngine::PeerId disconnectedPeerId = pCastEventData->GetPeerId();
+   BIEngine::ObjectReplicationProtocolWriter::Get()->RemoveObjectReplicationPOI(disconnectedPeerId);
 
-   BIEngine::ObjectReplicationDestroy(m_peerIdToPlayerMap[pCastEventData->GetPeerId()]);
+   DestroyActor(m_peerIdToPlayerMap[disconnectedPeerId]->GetReplicatedObject()->GetPlayableActor()->GetId());
 
-   m_peerIdToPlayerMap.Erase(pCastEventData->GetPeerId());
+   BIEngine::ObjectReplicationDestroy(m_peerIdToPlayerMap[disconnectedPeerId]);
+
+   m_peerIdToPlayerMap.Erase(disconnectedPeerId);
 }
 
 /**********BIServerDbgHumanView**********/

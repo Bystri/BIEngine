@@ -165,9 +165,10 @@ class DbgSphere {
    DynamicArray<glm::vec3> m_vertices;
    DynamicArray<unsigned int> m_indices;
    ColorRgba m_color;
+   bool m_isLit;
 
 public:
-   DbgSphere(const glm::vec3 center, const float radius)
+   DbgSphere(const glm::vec3 center, const float radius, const bool isLit)
    {
       const Mesh sphereMesh = MeshGeometryGenerator::CreateSphere(radius, 8.0f, 8.0f);
 
@@ -182,6 +183,8 @@ public:
       }
 
       m_color = COLOR_WHITE;
+
+      m_isLit = isLit;
 
       glGenVertexArrays(1, &VAO);
       glGenBuffers(1, &VBO);
@@ -220,7 +223,16 @@ public:
       g_pDebugShader->SetColorRgba("color", m_color, false);
 
       glBindVertexArray(VAO);
+      if (!m_isLit) {
+         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      }
+
       glDrawElements(GL_TRIANGLES, m_indices.Size(), GL_UNSIGNED_INT, 0);
+
+      if (!m_isLit) {
+         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+      }
+
       return 1;
    }
 };
@@ -246,18 +258,20 @@ struct SphereInfo {
    glm::vec3 center;
    float radius = 0.0f;
    ColorRgba color;
+   bool isLit = false;
    float time = 0.0f;
 };
 
 DynamicArray<SphereInfo> m_drawSphereQueue;
 
-void DebugDraw::Sphere(const glm::vec3& center, const float radius, const ColorRgba& color, float time)
+void DebugDraw::Sphere(const glm::vec3& center, const float radius, const ColorRgba& color, float time, bool isLit)
 {
    SphereInfo info;
    info.center = center;
    info.radius = radius;
    info.color = color;
    info.time = time;
+   info.isLit = isLit;
 
    m_drawSphereQueue.PushBack(info);
 }
@@ -291,7 +305,7 @@ void DebugDraw::Draw(const GameTimer& gt)
    for (int i = m_drawSphereQueue.Size() - 1; i >= 0; --i) {
       SphereInfo& info = m_drawSphereQueue[i];
 
-      DbgSphere sphere(info.center, info.radius);
+      DbgSphere sphere(info.center, info.radius, info.isLit);
 
       sphere.SetColor(info.color);
       sphere.Draw();
