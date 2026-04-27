@@ -44,6 +44,10 @@ public:
 
    virtual void Read(InputMemoryBitStream& stream) {}
 
+   virtual bool IsUseRelevancy() const { return false; }
+
+   virtual glm::vec3 GetPosition() const { return glm::vec3(0.0f); }
+
 private:
    PeerId m_masterPeerId = -1;
 };

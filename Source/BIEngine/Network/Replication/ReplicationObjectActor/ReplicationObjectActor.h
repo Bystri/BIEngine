@@ -20,6 +20,10 @@ public:
    virtual SharedPtr<Actor> ConstructReplicatedObject(bool isMaster) override;
    virtual void DestructReplicationObject(bool isMaster) override;
 
+   virtual bool IsUseRelevancy() const override { return true; }
+
+   virtual glm::vec3 GetPosition() const override;
+
 private:
    String m_masterActorFilePath;
    String m_slaveActorFilePath;

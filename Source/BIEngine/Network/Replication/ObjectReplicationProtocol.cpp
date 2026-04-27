@@ -75,7 +75,12 @@ void ObjectReplicationProtocolWriter::OnUpdate()
 
       if (obj->IsDirty()) {
          for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-            m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
+            const glm::vec3& poiPos = m_relevancyInfo[m_pPeers[i]].pActorPOI->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock()->GetPosition();
+            const float dist = glm::length((poiPos - obj->GetPosition())); //TODO: lengthSqr
+            if (dist < m_relevancyInfo[m_pPeers[i]].hardRadius)
+            {
+               m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
+            }
          }
       }
    }

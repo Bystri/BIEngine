@@ -3,6 +3,7 @@
 #include "../../EngineCore/GameApp.h"
 #include "../../ResourceCache/XmlLoader.h"
 #include "../../Actors/NetworkReplicatedComponent.h"
+#include "../../Actors/TransformComponent.h"
 
 namespace BIEngine {
 
@@ -30,6 +31,11 @@ void ReplicationObjectActor::DestructReplicationObject(bool isMaster)
    if (!isMaster) {
       BIEngine::g_pApp->m_pGameLogic->DestroyActor(GetReplicatedObject()->GetId());
    }
+}
+
+glm::vec3 ReplicationObjectActor::GetPosition() const
+{
+   return GetReplicatedObject()->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).Lock()->GetPosition();
 }
 
 } // namespace BIEngine
