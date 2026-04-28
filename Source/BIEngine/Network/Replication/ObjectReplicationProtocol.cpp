@@ -8,6 +8,7 @@
 
 namespace BIEngine {
 
+#pragma optimize("", off)
 
 const NetworkProtocolType ObjectReplicationProtocolWriter::sk_ProtocolType(0x23d7aeaa);
 const NetworkProtocolType ObjectReplicationProtocolReader::sk_ProtocolType(0x23d7aeaa);
@@ -73,14 +74,26 @@ void ObjectReplicationProtocolWriter::OnUpdate()
    for (auto& obj : m_pReplicationObjects) {
       obj->OnUpdate();
 
-      if (obj->IsDirty()) {
-         for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-            const glm::vec3& poiPos = m_relevancyInfo[m_pPeers[i]].pActorPOI->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock()->GetPosition();
-            const float dist = glm::length((poiPos - obj->GetPosition())); //TODO: lengthSqr
-            if (dist < m_relevancyInfo[m_pPeers[i]].hardRadius)
-            {
-               m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
+      for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
+         const glm::vec3& poiPos = m_relevancyInfo[m_pPeers[i]].pActorPOI->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock()->GetPosition();
+         const float dist = glm::length(poiPos - obj->GetPosition()); // TODO: lengthSqr
+
+         const uint32_t objId = m_pLinkingContext->GetId(obj, false);
+
+         const bool isObjReplicatedToPoi = m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Find(objId) != m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.End();
+
+         if (dist < m_relevancyInfo[m_pPeers[i]].hardRadius) {
+            if (!isObjReplicatedToPoi) {
+               m_pReplicationManagersPerPeer[i]->ReplicateCreate(obj);
+               m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
+            } else {
+               if (obj->IsDirty()) {
+                  m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
+               }
             }
+         } else if (isObjReplicatedToPoi) {
+            m_pReplicationManagersPerPeer[i]->ReplicateDestroy(obj);
+            m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Erase(objId);
          }
       }
    }
@@ -119,13 +132,23 @@ void ObjectReplicationProtocolWriter::AddReplicationObject(SharedPtr<Replication
 
    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
       m_pReplicationManagersPerPeer[i]->ReplicateCreate(pObj);
+      const uint32_t objId = m_pLinkingContext->GetId(pObj, false);
+
+      m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
    }
 }
 
 void ObjectReplicationProtocolWriter::DestroyReplicationObject(SharedPtr<ReplicationObject> pObj)
 {
    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-      m_pReplicationManagersPerPeer[i]->ReplicateDestroy(pObj);
+      const uint32_t objId = m_pLinkingContext->GetId(pObj, false);
+
+      const bool isObjReplicatedToPoi = m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Find(objId) != m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.End();
+
+      if (isObjReplicatedToPoi) {
+         m_pReplicationManagersPerPeer[i]->ReplicateDestroy(pObj);
+         m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Erase(objId);
+      }
    }
 
    for (int i = 0; i < m_pReplicationObjects.Size(); ++i) {
@@ -161,6 +184,10 @@ void ObjectReplicationProtocolWriter::RegisterPeer(PeerId peerId)
 
    for (const auto& pObj : m_pReplicationObjects) {
       pReplicationManager->ReplicateCreate(pObj);
+
+      const uint32_t objId = m_pLinkingContext->GetId(pObj, false);
+
+      m_relevancyInfo[peerId].replicatedObjsSet.Insert(objId);
    }
 }
 

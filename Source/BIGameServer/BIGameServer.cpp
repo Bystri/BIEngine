@@ -205,7 +205,7 @@ void BIServerGameLogic::OnNetPeerConnectedDelegate(BIEngine::IEventDataPtr pEven
    pReplicatedPlayer->GetReplicatedObject()->SetPlayableActor(pPlayerActor->GetReplicatedObject());
 
    constexpr float softReplicationRelevancyRadius = 20.0f;
-   constexpr float hardReplicationRelevancyRadius = 30.0f;
+   constexpr float hardReplicationRelevancyRadius = 20.0f;
    BIEngine::ObjectReplicationProtocolWriter::Get()->AddObjectReplicationPOI(connectedPeerId, pPlayerActor->GetReplicatedObject(), softReplicationRelevancyRadius, hardReplicationRelevancyRadius);
 }
 

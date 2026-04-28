@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../StdLib/HashSet.h"
 #include "../../StdLib/SharedPtr.h"
 #include "../../StdLib/UniquePtr.h"
 #include "../../StdLib/DynamicArray.h"
@@ -48,6 +49,7 @@ private:
 
 private:
    struct ReplicationRelevancyInfo {
+      HashSet<uint32_t> replicatedObjsSet;
       SharedPtr<Actor> pActorPOI;
       float softRadius;
       float hardRadius;
