@@ -253,6 +253,7 @@ void GameLogic::DestroyActor(const ActorId actorId)
    if (findIt == m_actors.End()) {
       return;
    }
+   Logger::WriteLog(Logger::LogType::MESSAGE, "Destroying root Actor " + ToString(actorId));
 
    // TODO: нам необходимо создать и триггерить событие фактического уничтожения актера, чтобы все системы успели выполнить подготовку к уничтожению
    SharedPtr<EvtData_Destroy_Actor> pEvent = MakeShared<EvtData_Destroy_Actor>(actorId);

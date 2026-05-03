@@ -55,6 +55,7 @@ SharedPtr<Actor> ActorFactory::CreateActor(tinyxml2::XMLElement* pRoot, const gl
 {
    // Create actor
    SharedPtr<Actor> pActor = CreateActorFromRootElement(pRoot, pParent);
+   Logger::WriteMsgLog("Create root actor with id %u", pActor->GetId());
    if (pActor == nullptr) {
       return pActor;
    }

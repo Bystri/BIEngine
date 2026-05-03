@@ -17,7 +17,7 @@ Actor::Actor(ActorId id)
 
 Actor::~Actor()
 {
-   Logger::WriteLog(Logger::LogType::MESSAGE, "Actor: Destroying Actor " + ToString(m_id));
+   
 }
 
 bool Actor::Init(tinyxml2::XMLElement* pData)
