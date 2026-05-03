@@ -87,22 +87,6 @@ void ObjectReplicationProtocolWriter::OnUpdate()
          const bool isObjReplicatedToPoi = m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Find(objId) != m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.End();
 
          if (relInfo.pActorPOI == nullptr || !obj->IsUseRelevancy()) {
-             if (!isObjReplicatedToPoi) {
-               m_pReplicationManagersPerPeer[i]->ReplicateCreate(obj);
-               m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
-             } else {
-                if (obj->IsDirty()) {
-                   m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
-                }
-             }
-
-             continue;
-         }
-
-         const glm::vec3& poiPos = m_relevancyInfo[m_pPeers[i]].pActorPOI->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock()->GetPosition();
-         const float dist = glm::length(poiPos - obj->GetPosition()); // TODO: lengthSqr
-
-         if (dist < m_relevancyInfo[m_pPeers[i]].hardRadius) {
             if (!isObjReplicatedToPoi) {
                m_pReplicationManagersPerPeer[i]->ReplicateCreate(obj);
                m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
@@ -111,9 +95,27 @@ void ObjectReplicationProtocolWriter::OnUpdate()
                   m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
                }
             }
-         } else if (isObjReplicatedToPoi) {
-            m_pReplicationManagersPerPeer[i]->ReplicateDestroy(obj);
-            m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Erase(objId);
+
+            continue;
+         }
+
+         const glm::vec3& poiPos = m_relevancyInfo[m_pPeers[i]].pActorPOI->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock()->GetPosition();
+         const float dist = glm::length(poiPos - obj->GetPosition()); // TODO: lengthSqr
+
+         if (!isObjReplicatedToPoi) {
+            if (dist < m_relevancyInfo[m_pPeers[i]].softRadius) {
+               m_pReplicationManagersPerPeer[i]->ReplicateCreate(obj);
+               m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
+            }
+         } else {
+            if (dist < m_relevancyInfo[m_pPeers[i]].hardRadius) {
+               if (obj->IsDirty()) {
+                  m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
+               }
+            } else {
+               m_pReplicationManagersPerPeer[i]->ReplicateDestroy(obj);
+               m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Erase(objId);
+            }
          }
       }
    }
