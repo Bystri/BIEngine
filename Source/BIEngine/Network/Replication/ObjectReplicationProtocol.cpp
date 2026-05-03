@@ -58,7 +58,9 @@ void ObjectReplicationDestroy(SharedPtr<ReplicationObject> pGameObject)
 
 void ObjectReplicationProtocolWriter::AddObjectReplicationPOI(PeerId peerId, SharedPtr<Actor> pActorPOI, float softRadius, float hardRadius)
 {
-   ReplicationRelevancyInfo& info = m_relevancyInfo[peerId];
+   auto itr = m_relevancyInfo.Find(peerId);
+
+   ReplicationRelevancyInfo& info = itr->second;
    info.pActorPOI = pActorPOI;
    info.softRadius = softRadius;
    info.hardRadius = hardRadius;
@@ -66,6 +68,8 @@ void ObjectReplicationProtocolWriter::AddObjectReplicationPOI(PeerId peerId, Sha
 
 void ObjectReplicationProtocolWriter::RemoveObjectReplicationPOI(PeerId peerId)
 {
+   auto itr = m_relevancyInfo.Find(peerId);
+   Assert(itr != m_relevancyInfo.End(), "You are trying to delete unregistered POI");
    m_relevancyInfo.Erase(peerId);
 }
 
@@ -75,12 +79,28 @@ void ObjectReplicationProtocolWriter::OnUpdate()
       obj->OnUpdate();
 
       for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-         const glm::vec3& poiPos = m_relevancyInfo[m_pPeers[i]].pActorPOI->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock()->GetPosition();
-         const float dist = glm::length(poiPos - obj->GetPosition()); // TODO: lengthSqr
+         auto itr = m_relevancyInfo.Find(m_pPeers[i]);
+         ReplicationRelevancyInfo& relInfo = itr->second;
 
          const uint32_t objId = m_pLinkingContext->GetId(obj, false);
 
          const bool isObjReplicatedToPoi = m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Find(objId) != m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.End();
+
+         if (relInfo.pActorPOI == nullptr || !obj->IsUseRelevancy()) {
+             if (!isObjReplicatedToPoi) {
+               m_pReplicationManagersPerPeer[i]->ReplicateCreate(obj);
+               m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
+             } else {
+                if (obj->IsDirty()) {
+                   m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
+                }
+             }
+
+             continue;
+         }
+
+         const glm::vec3& poiPos = m_relevancyInfo[m_pPeers[i]].pActorPOI->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock()->GetPosition();
+         const float dist = glm::length(poiPos - obj->GetPosition()); // TODO: lengthSqr
 
          if (dist < m_relevancyInfo[m_pPeers[i]].hardRadius) {
             if (!isObjReplicatedToPoi) {
@@ -128,14 +148,8 @@ void ObjectReplicationProtocolWriter::DrawDbgDiagnostics() const
 
 void ObjectReplicationProtocolWriter::AddReplicationObject(SharedPtr<ReplicationObject> pObj)
 {
+   const uint32_t objId = m_pLinkingContext->GetId(pObj, true);
    m_pReplicationObjects.PushBack(pObj);
-
-   for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-      m_pReplicationManagersPerPeer[i]->ReplicateCreate(pObj);
-      const uint32_t objId = m_pLinkingContext->GetId(pObj, false);
-
-      m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
-   }
 }
 
 void ObjectReplicationProtocolWriter::DestroyReplicationObject(SharedPtr<ReplicationObject> pObj)
@@ -181,14 +195,7 @@ void ObjectReplicationProtocolWriter::RegisterPeer(PeerId peerId)
 {
    m_pPeers.PushBack(peerId);
    UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
-
-   for (const auto& pObj : m_pReplicationObjects) {
-      pReplicationManager->ReplicateCreate(pObj);
-
-      const uint32_t objId = m_pLinkingContext->GetId(pObj, false);
-
-      m_relevancyInfo[peerId].replicatedObjsSet.Insert(objId);
-   }
+   m_relevancyInfo.Emplace(peerId, ReplicationRelevancyInfo());
 }
 
 void ObjectReplicationProtocolWriter::UnregisterPeer(PeerId peerId)
@@ -197,7 +204,7 @@ void ObjectReplicationProtocolWriter::UnregisterPeer(PeerId peerId)
       if (m_pPeers[i] == peerId) {
          m_pPeers.Erase(m_pPeers.Begin() + i);
          m_pReplicationManagersPerPeer.Erase(m_pReplicationManagersPerPeer.Begin() + i);
-
+         m_relevancyInfo.Erase(peerId);
          return;
       }
    }

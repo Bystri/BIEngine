@@ -23,6 +23,9 @@ void ReplicationActionReader::ProcessReplicationHeader(InputMemoryBitStream& str
    switch (rh.GetReplicationAction()) {
       case ReplicationAction::Create:
          {
+            const uint32_t id = ByteSwap(rh.GetClassId());
+            Logger::WriteMsgLog("Create replicated object [ClassId: %.4s] - [NetworkID: %u]", reinterpret_cast<const char*>(&id), rh.GetNetworkId());
+            
             SharedPtr<ReplicationObject> go = NetworkObjectCreationRegistry::Get().Create(rh.GetClassId());
             m_pLinkingContext->AddObj(go, rh.GetNetworkId());
             go->Init(rh.GetMasterPeerId());
@@ -45,6 +48,9 @@ void ReplicationActionReader::ProcessReplicationHeader(InputMemoryBitStream& str
          }
       case ReplicationAction::Destroy:
          {
+            const uint32_t id = ByteSwap(rh.GetClassId());
+            Logger::WriteMsgLog("Delete replicated object [ClassId: %.4s] - [NetworkID: %u]", reinterpret_cast<const char*>(&id), rh.GetNetworkId());
+            
             SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
             go->Term();
             m_pLinkingContext->RemoveObj(go);

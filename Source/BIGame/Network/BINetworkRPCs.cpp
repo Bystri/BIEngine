@@ -8,7 +8,7 @@ enum class RPCs : BIEngine::RpcId {
 
 void RpcInit()
 {
-      BIEngine::RpcProtocolReader::Get()->RegisterUnwrapFunction(static_cast<BIEngine::RpcId>(RPCs::SET_PLAYER_FOR_CLIENT), RpcReadSetPlyaer);
+   BIEngine::RpcProtocolReader::Get()->RegisterUnwrapFunction(static_cast<BIEngine::RpcId>(RPCs::SET_PLAYER_FOR_CLIENT), RpcReadSetPlyaer);
 }
 
 void RpcWriteSetPlayer(BIEngine::PeerId peerId, PlayerId id)
