@@ -43,6 +43,8 @@ GameApp::~GameApp()
 
 bool GameApp::Init()
 {
+   Logger::SetFrameNum(m_frameNum);
+
    // Инициализация кэша ресурсов
    SharedPtr<IResourceFile> pZipFile;
    if (m_options.useDevelopmentAssets)
@@ -134,6 +136,7 @@ void GameApp::OnRender(const GameTimer& gt)
 
 void GameApp::Process()
 {
+   Logger::SetFrameNum(m_frameNum);
    m_gt.Tick();
 
    ProcessInput(m_gt);
@@ -141,6 +144,8 @@ void GameApp::Process()
    OnUpdate(m_gt);
    // Отрисовка
    OnRender(m_gt);
+
+   ++m_frameNum;
 }
 
 void GameApp::OnPointerMove(float xpos, float ypos)

@@ -68,6 +68,7 @@ public:
 
 private:
    GameTimer m_gt;
+   uint32_t m_frameNum = 0;
 };
 
 extern GameApp* g_pApp;

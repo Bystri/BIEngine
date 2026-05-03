@@ -14,6 +14,8 @@ public:
       ERROR
    };
 
+   static void SetFrameNum(uint32_t num);
+
    static void WriteLog(LogType type, const String& msg);
    static void WriteLog(LogType type, const char* format, ...);
    static void WriteVLog(LogType type, const char* format, va_list args);
@@ -23,6 +25,9 @@ public:
    static void WriteErrorLog(const char* format, ...);
 
    static void Flush();
+
+private:
+   static uint32_t m_frameNum;
 };
 
 } // namespace BIEngine

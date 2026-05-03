@@ -7,8 +7,17 @@
 
 namespace BIEngine {
 
+uint32_t Logger::m_frameNum = -1;
+
+void Logger::SetFrameNum(uint32_t num)
+{
+   m_frameNum = num;
+}
+
 void Logger::WriteLog(LogType type, const String& msg)
 {
+   std::cout << "[Frame:" << m_frameNum << "]";
+
    switch (type) {
       case LogType::MESSAGE:
          std::cout << "[MESSAGE]: " << msg << "\n";
