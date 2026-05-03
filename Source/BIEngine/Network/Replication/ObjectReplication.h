@@ -22,6 +22,10 @@ class ReplicationObject : public EnableSharedFromThis<ReplicationObject> {
 public:
    CLASS_IDENTIFICATION('GOBJ')
 
+   ReplicationObject()
+   {   
+   }
+
    virtual ~ReplicationObject() = default;
 
    virtual void Init(PeerId masterPeerId)
@@ -30,6 +34,16 @@ public:
    }
 
    virtual void Term() {}
+
+   void SetNetworkId(uint32_t networkId)
+   {
+      m_networkId = networkId;
+   }
+
+   uint32_t GetNetworkId() const
+   {
+      return m_networkId;
+   }
 
    PeerId GetMasterPeerId() const
    {
@@ -49,6 +63,7 @@ public:
    virtual glm::vec3 GetPosition() const { return glm::vec3(0.0f); }
 
 private:
+   uint32_t m_networkId;
    PeerId m_masterPeerId = -1;
 };
 

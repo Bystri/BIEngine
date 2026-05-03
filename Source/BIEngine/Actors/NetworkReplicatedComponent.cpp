@@ -20,7 +20,9 @@ tinyxml2::XMLElement* NetworkReplicatedComponent::GenerateXml(tinyxml2::XMLDocum
 
 void NetworkReplicatedComponent::Terminate()
 {
-   ObjectReplicationDestroy(m_pReplicationObject);
+   if (m_pReplicationObject->GetMasterPeerId() == g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId()) {
+      ObjectReplicationDestroy(m_pReplicationObject);
+   }
 }
 
 } // namespace BIEngine

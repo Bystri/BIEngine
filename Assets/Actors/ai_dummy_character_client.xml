@@ -16,6 +16,8 @@
 	  </HealthStateComponent>
 	  <AnimationControllerComponent>
 	  </AnimationControllerComponent>
+	  <NetworkReplicatedComponent>
+	  </NetworkReplicatedComponent>
 	  <ScriptComponent>
 		  <ScriptObject modulePath="CharacterCommands.CharacterCommandMngComponent" className="CharacterCommandMngComponent"/>
 		  <StringData/>

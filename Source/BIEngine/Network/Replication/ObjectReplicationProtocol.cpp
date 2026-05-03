@@ -44,8 +44,8 @@ ObjectReplicationProtocolWriter::~ObjectReplicationProtocolWriter()
 SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t classId)
 {
    SharedPtr<ReplicationObject> pObj = BIEngine::NetworkObjectCreationRegistry::Get().Create(classId);
-   pObj->Init(g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId());
    ObjectReplicationProtocolWriter::Get()->AddReplicationObject(pObj);
+   pObj->Init(g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId());
 
    return pObj;
 }
@@ -88,6 +88,8 @@ void ObjectReplicationProtocolWriter::OnUpdate()
 
          if (relInfo.pActorPOI == nullptr || !obj->IsUseRelevancy()) {
             if (!isObjReplicatedToPoi) {
+               Logger::WriteMsgLog("Send replication action create of NON RELEVANCE object [NetworkId:%u] to peer [PeerId:%u]", objId, m_pPeers[i]);
+               
                m_pReplicationManagersPerPeer[i]->ReplicateCreate(obj);
                m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
             } else {
@@ -104,6 +106,7 @@ void ObjectReplicationProtocolWriter::OnUpdate()
 
          if (!isObjReplicatedToPoi) {
             if (dist < m_relevancyInfo[m_pPeers[i]].softRadius) {
+               Logger::WriteMsgLog("Send replication action create of object [NetworkId:%u] to peer [PeerId:%u]", objId, m_pPeers[i]);
                m_pReplicationManagersPerPeer[i]->ReplicateCreate(obj);
                m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
             }
@@ -151,6 +154,7 @@ void ObjectReplicationProtocolWriter::DrawDbgDiagnostics() const
 void ObjectReplicationProtocolWriter::AddReplicationObject(SharedPtr<ReplicationObject> pObj)
 {
    const uint32_t objId = m_pLinkingContext->GetId(pObj, true);
+   pObj->SetNetworkId(objId);
    m_pReplicationObjects.PushBack(pObj);
 }
 
@@ -222,6 +226,32 @@ void ObjectReplicationProtocolWriter::OnBeforePacketsSend(NetworkMessagesManager
 }
 
 /***ObjectReplicationProtocolReader***/
+
+static ObjectReplicationProtocolReader* g_pObjectReplicationReaderProtocol;
+
+ObjectReplicationProtocolReader* ObjectReplicationProtocolReader::Get()
+{
+   Assert(g_pObjectReplicationReaderProtocol != nullptr, "You are trying to get ObjectReplicationProtocolReader before it creation");
+
+   return g_pObjectReplicationReaderProtocol;
+}
+
+ObjectReplicationProtocolReader::ObjectReplicationProtocolReader()
+   : m_pLinkingContext(MakeShared<NewtworkObjectLinkingContexts>()), m_pReplicationActionReader(MakeUnique<ReplicationActionReader>(m_pLinkingContext))
+{
+   if (g_pObjectReplicationReaderProtocol) {
+      Logger::WriteErrorLog("Attempting to create two global ObjectReplicationProtocolReaders! The old one will be destroyed and overwritten with this one.\n");
+   }
+
+   g_pObjectReplicationReaderProtocol = this;
+}
+
+ObjectReplicationProtocolReader::~ObjectReplicationProtocolReader()
+{
+   if (g_pObjectReplicationReaderProtocol == this) {
+      g_pObjectReplicationReaderProtocol = nullptr;
+   }
+}
 
 void ObjectReplicationProtocolReader::ReceiveMessage(InputMemoryBitStream& stream)
 {

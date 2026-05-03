@@ -29,6 +29,11 @@ public:
    void AddObjectReplicationPOI(PeerId peerId, SharedPtr<Actor> pActorPOI, float softRadius, float hardRadius);
    void RemoveObjectReplicationPOI(PeerId peerId);
 
+   SharedPtr<ReplicationObject> GetReplicationObject(uint32_t networkId)
+   {
+      return m_pLinkingContext->GetObj(networkId);
+   }
+
    void OnUpdate();
 
 #ifndef _RETAIL
@@ -70,9 +75,14 @@ class ObjectReplicationProtocolReader : public NetworkProtocolReader {
 public:
    static const NetworkProtocolType sk_ProtocolType;
 
-   ObjectReplicationProtocolReader()
-      : m_pLinkingContext(MakeShared<NewtworkObjectLinkingContexts>()), m_pReplicationActionReader(MakeUnique<ReplicationActionReader>(m_pLinkingContext))
+   static ObjectReplicationProtocolReader* Get();
+
+   ObjectReplicationProtocolReader();
+   virtual ~ObjectReplicationProtocolReader();
+
+   SharedPtr<ReplicationObject> GetReplicationObject(uint32_t networkId)
    {
+      return m_pLinkingContext->GetObj(networkId);
    }
 
    virtual const NetworkProtocolType& GetType() const override { return sk_ProtocolType; }

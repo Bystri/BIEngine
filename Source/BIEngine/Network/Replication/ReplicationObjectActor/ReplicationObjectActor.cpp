@@ -18,10 +18,8 @@ SharedPtr<Actor> ReplicationObjectActor::ConstructReplicatedObject(bool isMaster
 
    SharedPtr<Actor> pCreatedActor = BIEngine::g_pApp->m_pGameLogic->CreateActor(pActorData->GetRootElement());
 
-   if (isMaster) {
-      SharedPtr<ReplicationObject> pSharedThis = SharedFromThis();
-      pCreatedActor->GetComponent<NetworkReplicatedComponent>(NetworkReplicatedComponent::g_CompId).Lock()->SetReplicationObject(pSharedThis);
-   }
+   SharedPtr<ReplicationObject> pSharedThis = SharedFromThis();
+   pCreatedActor->GetComponent<NetworkReplicatedComponent>(NetworkReplicatedComponent::g_CompId).Lock()->SetReplicationObject(pSharedThis);
 
    return pCreatedActor;
 }

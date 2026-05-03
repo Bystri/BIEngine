@@ -24,6 +24,11 @@ public:
        m_pReplicationObject = pReplicationObject; 
    }
 
+   SharedPtr<ReplicationObject> GetReplicationObject()
+   {
+      return m_pReplicationObject;
+   }
+
 private:
    SharedPtr<ReplicationObject> m_pReplicationObject;
 };
