@@ -23,9 +23,11 @@ public:
 
 private:
    void HandleOnCommandMoveTo(BIEngine::IEventDataPtr pEventData);
+   void HandleOnCommandMove(BIEngine::IEventDataPtr pEventData);
 
 private:
    BIEngine::EventManager::DelegateHandler m_onCommandMoveToHandler;
+   BIEngine::EventManager::DelegateHandler m_onCommandMove;
 };
 
 static BIEngine::UniquePtr<BIEngine::ActorComponent> CreatePlayerCommandBinderComponent()

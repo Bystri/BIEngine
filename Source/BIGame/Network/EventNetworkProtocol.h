@@ -27,6 +27,7 @@ private:
    BIEngine::DynamicArray<uint32_t> m_peersToSend;
 
    BIEngine::EventManager::DelegateHandler m_storeEventCommandMoveToDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_storeEventCommandMoveDelegateHandler;
 };
 
 class EventProtocolReader : public BIEngine::NetworkProtocolReader {

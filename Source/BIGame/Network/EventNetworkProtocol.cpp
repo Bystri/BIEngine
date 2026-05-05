@@ -8,11 +8,13 @@ const BIEngine::NetworkProtocolType EventProtocolReader::sk_ProtocolType('EVNT')
 EventProtocolWriter::EventProtocolWriter()
 {
    m_storeEventCommandMoveToDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_PlayerCommandMoveTo::sk_EventType);
+   m_storeEventCommandMoveDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_Move::sk_EventType);
 }
 
 EventProtocolWriter::~EventProtocolWriter()
 {
    BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandMoveToDelegateHandler);
+   BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandMoveDelegateHandler);
 }
 
 void EventProtocolWriter::RegisterPeer(uint32_t peerId)

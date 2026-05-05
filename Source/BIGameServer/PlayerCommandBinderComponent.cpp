@@ -24,6 +24,10 @@ void PlayerCommandBinderComponent::Activate()
    m_onCommandMoveToHandler = BIEngine::EventManager::Get()->AddListener(
       MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(PlayerCommandBinderComponent::HandleOnCommandMoveTo),
       EvtData_PlayerCommandMoveTo::sk_EventType);
+
+   m_onCommandMove = BIEngine::EventManager::Get()->AddListener(
+      MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(PlayerCommandBinderComponent::HandleOnCommandMove),
+      EvtData_Move::sk_EventType);
 }
 
 void PlayerCommandBinderComponent::Deactivate()
@@ -33,13 +37,14 @@ void PlayerCommandBinderComponent::Deactivate()
 
 void PlayerCommandBinderComponent::OnUpdate(const BIEngine::GameTimer& gt)
 {
+   /*
    auto pNavAgentComponent = GetOwner()->GetComponent<BIEngine::NavAgentComponent>(BIEngine::NavAgentComponent::g_CompId).Lock();
    const glm::vec3 desiredInput = pNavAgentComponent->GetDesiredInput();
    const glm::vec2 desiredDir = glm::normalize(glm::vec2(desiredInput.x, desiredInput.z));
 
    auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
    pLocomotionInfoComponent->SetInputDir(desiredDir);
-   pLocomotionInfoComponent->SetInputVel(desiredInput);
+   pLocomotionInfoComponent->SetInputVel(desiredInput);*/
 }
 
 void PlayerCommandBinderComponent::HandleOnCommandMoveTo(BIEngine::IEventDataPtr pEventData)
@@ -56,4 +61,17 @@ void PlayerCommandBinderComponent::HandleOnCommandMoveTo(BIEngine::IEventDataPtr
 
    auto pNavAgentComponent = GetOwner()->GetComponent<BIEngine::NavAgentComponent>(BIEngine::NavAgentComponent::g_CompId).Lock();
    pNavAgentComponent->SetDestination(targetPos);
+}
+
+void PlayerCommandBinderComponent::HandleOnCommandMove(BIEngine::IEventDataPtr pEventData)
+{
+   BIEngine::SharedPtr<EvtData_Move> pCastEventData = BIEngine::StaticPointerCast<EvtData_Move>(pEventData);
+
+   const glm::vec3 desiredVel = glm::vec3(pCastEventData->GetDesiredHorizontalAmount(), 0.0f, pCastEventData->GetDesiredVerticalAmount());
+   const float desiredVelLength = glm::length(desiredVel);
+   const glm::vec2 desiredDir = glm::normalize(glm::vec2(desiredVel.x, desiredVel.z));
+
+   auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
+   pLocomotionInfoComponent->SetInputDir(desiredDir);
+   pLocomotionInfoComponent->SetInputVel(desiredVel);
 }
