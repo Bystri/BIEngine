@@ -28,11 +28,17 @@ void PlayerCommandBinderComponent::Activate()
    m_onCommandMove = BIEngine::EventManager::Get()->AddListener(
       MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(PlayerCommandBinderComponent::HandleOnCommandMove),
       EvtData_Move::sk_EventType);
+
+   m_onCommandTurn = BIEngine::EventManager::Get()->AddListener(
+      MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(PlayerCommandBinderComponent::HandleOnCommandTurn),
+      EvtData_Turn::sk_EventType);
 }
 
 void PlayerCommandBinderComponent::Deactivate()
 {
    BIEngine::EventManager::Get()->RemoveListener(m_onCommandMoveToHandler);
+   BIEngine::EventManager::Get()->RemoveListener(m_onCommandMove);
+   BIEngine::EventManager::Get()->RemoveListener(m_onCommandTurn);
 }
 
 void PlayerCommandBinderComponent::OnUpdate(const BIEngine::GameTimer& gt)
@@ -49,6 +55,7 @@ void PlayerCommandBinderComponent::OnUpdate(const BIEngine::GameTimer& gt)
 
 void PlayerCommandBinderComponent::HandleOnCommandMoveTo(BIEngine::IEventDataPtr pEventData)
 {
+   /*
    BIEngine::SharedPtr<EvtData_PlayerCommandMoveTo> pCastEventData = BIEngine::StaticPointerCast<EvtData_PlayerCommandMoveTo>(pEventData);
 
    const uint32_t playerId = GetOwner()->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->GetPlayerId();
@@ -61,17 +68,35 @@ void PlayerCommandBinderComponent::HandleOnCommandMoveTo(BIEngine::IEventDataPtr
 
    auto pNavAgentComponent = GetOwner()->GetComponent<BIEngine::NavAgentComponent>(BIEngine::NavAgentComponent::g_CompId).Lock();
    pNavAgentComponent->SetDestination(targetPos);
+   */
 }
 
 void PlayerCommandBinderComponent::HandleOnCommandMove(BIEngine::IEventDataPtr pEventData)
 {
    BIEngine::SharedPtr<EvtData_Move> pCastEventData = BIEngine::StaticPointerCast<EvtData_Move>(pEventData);
 
+   const uint32_t playerId = GetOwner()->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->GetPlayerId();
+   if (playerId != pCastEventData->GetPlayerId()) {
+      return;
+   }
+
    const glm::vec3 desiredVel = glm::vec3(pCastEventData->GetDesiredHorizontalAmount(), 0.0f, pCastEventData->GetDesiredVerticalAmount());
    const float desiredVelLength = glm::length(desiredVel);
    const glm::vec2 desiredDir = glm::normalize(glm::vec2(desiredVel.x, desiredVel.z));
 
    auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
-   pLocomotionInfoComponent->SetInputDir(desiredDir);
    pLocomotionInfoComponent->SetInputVel(desiredVel);
+}
+
+void PlayerCommandBinderComponent::HandleOnCommandTurn(BIEngine::IEventDataPtr pEventData)
+{
+   BIEngine::SharedPtr<EvtData_Turn> pCastEventData = BIEngine::StaticPointerCast<EvtData_Turn>(pEventData);
+
+   const uint32_t playerId = GetOwner()->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->GetPlayerId();
+   if (playerId != pCastEventData->GetPlayerId()) {
+      return;
+   }
+
+   auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
+   pLocomotionInfoComponent->SetInputDir(pCastEventData->GetDesiredDir());
 }

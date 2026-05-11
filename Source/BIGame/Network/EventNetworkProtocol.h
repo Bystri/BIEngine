@@ -28,6 +28,7 @@ private:
 
    BIEngine::EventManager::DelegateHandler m_storeEventCommandMoveToDelegateHandler;
    BIEngine::EventManager::DelegateHandler m_storeEventCommandMoveDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_storeEventCommandTurnDelegateHandler;
 };
 
 class EventProtocolReader : public BIEngine::NetworkProtocolReader {

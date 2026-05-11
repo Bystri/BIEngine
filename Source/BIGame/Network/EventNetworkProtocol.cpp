@@ -9,12 +9,14 @@ EventProtocolWriter::EventProtocolWriter()
 {
    m_storeEventCommandMoveToDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_PlayerCommandMoveTo::sk_EventType);
    m_storeEventCommandMoveDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_Move::sk_EventType);
+   m_storeEventCommandTurnDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_Turn::sk_EventType);
 }
 
 EventProtocolWriter::~EventProtocolWriter()
 {
    BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandMoveToDelegateHandler);
    BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandMoveDelegateHandler);
+   BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandTurnDelegateHandler);
 }
 
 void EventProtocolWriter::RegisterPeer(uint32_t peerId)
