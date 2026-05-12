@@ -10,6 +10,37 @@
 
 namespace BIEngine {
 
+class BoneAnimTranformInfo {
+   friend class BoneAnimChannel;
+
+public:
+   const glm::vec3& GetPos() const
+   {
+      return m_position;
+   }
+
+   const glm::quat GetOrientation() const
+   {
+      return m_orientation;
+   }
+
+   const glm::vec3 GetScale() const
+   {
+      return m_scale;
+   }
+
+private:
+   BoneAnimTranformInfo(const glm::vec3& position, const glm::quat& orientation, const glm::vec3& scale)
+      : m_position(position), m_orientation(orientation), m_scale(scale)
+   {
+   }
+
+private:
+   glm::vec3 m_position;
+   glm::quat m_orientation;
+   glm::vec3 m_scale;
+};
+
 class BoneAnimChannel {
 public:
    struct KeyPosition {
@@ -29,7 +60,7 @@ public:
 
 public:
    BoneAnimChannel(const String& boneName, const DynamicArray<KeyPosition>& positions, const DynamicArray<KeyRotation>& rotations, const DynamicArray<KeyScale>& scales)
-      : m_boneName(boneName), m_localTransform(1.0f),
+      : m_boneName(boneName),
         m_positionCurve(constructPositionCurve(positions)),
         m_rotationCurve(constructRotationCurve(rotations)),
         m_scaleCurve(constructScaleCurve(scales))
@@ -53,9 +84,7 @@ public:
       }
    }
 
-   void Update(float animationTime);
-
-   glm::mat4 GetLocalTransform() { return m_localTransform; }
+   BoneAnimTranformInfo GetTransformAtTime(float animationTime);
 
    const String& GetBoneName() const { return m_boneName; }
 
@@ -73,7 +102,6 @@ private:
    DynamicArray<float> m_rotationFramesTimes;
    DynamicArray<float> m_scaleFramesTimes;
 
-   glm::mat4 m_localTransform;
    String m_boneName;
 };
 

@@ -14,25 +14,14 @@ static float getCurveU(const DynamicArray<float>& framesTimes, const float anima
    return -1;
 }
 
-void BoneAnimChannel::Update(float animationTime)
+BoneAnimTranformInfo BoneAnimChannel::GetTransformAtTime(float animationTime)
 {
-   {
-      const float u = getCurveU(m_positionFramesTimes, animationTime);
-      const Vector3 val = m_positionCurve.GetPointByU(u);
-      m_localTransform = glm::translate(glm::mat4(1.0f), glm::vec3(val.x, val.y, val.z));
-   }
 
-   {
-      const float u = getCurveU(m_rotationFramesTimes, animationTime);
-      const Vector4 val = m_rotationCurve.GetPointByU(u);
-      m_localTransform *= glm::mat4(glm::normalize(glm::quat(val.x, val.y, val.z, val.w)));
-   }
+   const Vector3 pos = m_positionCurve.GetPointByU(getCurveU(m_positionFramesTimes, animationTime));
+   const Vector4 quat = m_rotationCurve.GetPointByU(getCurveU(m_rotationFramesTimes, animationTime));
+   const Vector3 scale = m_scaleCurve.GetPointByU(getCurveU(m_scaleFramesTimes, animationTime));
 
-   {
-      const float u = getCurveU(m_scaleFramesTimes, animationTime);
-      const Vector3 val = m_scaleCurve.GetPointByU(u);
-      m_localTransform *= glm::scale(glm::mat4(1.0f), glm::vec3(val.x, val.y, val.z));
-   }
+   return BoneAnimTranformInfo(glm::vec3(pos.x, pos.y, pos.z), glm::quat(quat.x, quat.y, quat.z, quat.w), glm::vec3(scale.x, scale.y, scale.z));
 }
 
 CatmullRomSpline BoneAnimChannel::constructPositionCurve(const DynamicArray<KeyPosition>& positions)

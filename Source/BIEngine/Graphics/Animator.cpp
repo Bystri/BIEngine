@@ -36,9 +36,14 @@ void Animator::calculateActorTransform(Actor* pActor)
    BoneAnimChannel* const boneChannel = m_pCurrentAnimation->FindBoneChannel(pActor->GetName());
 
    if (boneChannel) {
-      boneChannel->Update(m_currentTime);
+      BoneAnimTranformInfo boneTransformInfo = boneChannel->GetTransformAtTime(m_currentTime);
       SharedPtr<TransformComponent> pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
-      pTransformComponent->SetLocalTransformMatrix(boneChannel->GetLocalTransform());
+      
+      glm::mat4 blendedTransform = glm::translate(glm::mat4(1.0f), boneTransformInfo.GetPos());
+      blendedTransform *= glm::mat4(glm::normalize(boneTransformInfo.GetOrientation()));
+      blendedTransform *= glm::scale(glm::mat4(1.0f), boneTransformInfo.GetScale());
+
+      pTransformComponent->SetLocalTransformMatrix(blendedTransform);
    }
 
    for (const auto& child : pActor->GetChildren()) {
