@@ -1,5 +1,6 @@
 #include "Animator.h"
 
+#include "AnimationPose.h"
 #include "../Actors/TransformComponent.h"
 #include "../Utilities/Logger.h"
 
@@ -21,7 +22,10 @@ void Animator::Update(float dt)
       }
 
       m_currentTime = fmod(m_currentTime, m_pCurrentAnimation->GetDuration());
-      calculateActorTransform(m_pRoot);
+
+      AnimationPose pose;
+      CalculateAnimationPose(pose, m_pRoot);
+      CalculateActorTransform(pose, m_pRoot);
    }
 }
 
@@ -31,23 +35,39 @@ void Animator::PlayAnimation(SharedPtr<Animation> pAnimation)
    m_currentTime = 0.0f;
 }
 
-void Animator::calculateActorTransform(Actor* pActor)
+void Animator::CalculateAnimationPose(AnimationPose& pose, Actor* pActor)
 {
    BoneAnimChannel* const boneChannel = m_pCurrentAnimation->FindBoneChannel(pActor->GetName());
 
    if (boneChannel) {
-      BoneAnimTranformInfo boneTransformInfo = boneChannel->GetTransformAtTime(m_currentTime);
+      const BoneAnimTranformInfo boneTransformInfo = boneChannel->GetTransformAtTime(m_currentTime);
+
+      pose.SetBonePosition(pActor->GetName(), boneTransformInfo.GetPos());
+      pose.SetBoneOrientation(pActor->GetName(), boneTransformInfo.GetOrientation());
+      pose.SetBoneScale(pActor->GetName(), boneTransformInfo.GetScale());
+   }
+   
+   for (const auto& child : pActor->GetChildren()) {
+      CalculateAnimationPose(pose, child.Get());
+   }
+}
+
+void Animator::CalculateActorTransform(const AnimationPose& pose, Actor* pActor)
+{
+   const AnimationPoseBoneTranformInfo* const boneTransformInfo = pose.GetBoneTranfromInfo(pActor->GetName());
+
+   if (boneTransformInfo) {
       SharedPtr<TransformComponent> pTransformComponent = pActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
       
-      glm::mat4 blendedTransform = glm::translate(glm::mat4(1.0f), boneTransformInfo.GetPos());
-      blendedTransform *= glm::mat4(glm::normalize(boneTransformInfo.GetOrientation()));
-      blendedTransform *= glm::scale(glm::mat4(1.0f), boneTransformInfo.GetScale());
+      glm::mat4 blendedTransform = glm::translate(glm::mat4(1.0f), boneTransformInfo->GetPos());
+      blendedTransform *= glm::mat4(glm::normalize(boneTransformInfo->GetOrientation()));
+      blendedTransform *= glm::scale(glm::mat4(1.0f), boneTransformInfo->GetScale());
 
       pTransformComponent->SetLocalTransformMatrix(blendedTransform);
    }
 
    for (const auto& child : pActor->GetChildren()) {
-      calculateActorTransform(child.Get());
+      CalculateActorTransform(pose, child.Get());
    }
 }
 

@@ -483,6 +483,9 @@
     <ClCompile Include="..\..\Audio\fmod\fmodAudioGroupManager.cpp">
       <Filter>Audio\fmod</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Graphics\AnimationPose.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -1021,6 +1024,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Audio\fmod\fmodAudioGroupManager.h">
       <Filter>Audio\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\AnimationPose.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
