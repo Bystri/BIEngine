@@ -21,10 +21,12 @@ private:
    void CalculateActorTransform(const AnimationPose& pose, Actor* pActor);
 
 private:
-   Actor* m_pRoot;
+   Actor* m_pRoot = nullptr;
 
-   SharedPtr<AnimationSampler> m_pAnimationSampler;
-   float m_currentTime;
+   SharedPtr<AnimationSampler> m_pMainSampler = nullptr;
+   SharedPtr<AnimationSampler> m_pSecondarySampler = nullptr;
+
+   float m_blendWeight = 0.0f;
 };
 
 } // namespace BIEngine

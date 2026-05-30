@@ -164,6 +164,7 @@
     <ClCompile Include="..\..\EventManager\EventManager.cpp" />
     <ClCompile Include="..\..\EventManager\Events.cpp" />
     <ClCompile Include="..\..\Graphics\Animation.cpp" />
+    <ClCompile Include="..\..\Graphics\AnimationBlender.cpp" />
     <ClCompile Include="..\..\Graphics\AnimationLoader.cpp" />
     <ClCompile Include="..\..\Graphics\AnimationPose.cpp" />
     <ClCompile Include="..\..\Graphics\AnimationSampler.cpp" />
@@ -308,6 +309,7 @@
     <ClInclude Include="..\..\EventManager\EventManager.h" />
     <ClInclude Include="..\..\EventManager\Events.h" />
     <ClInclude Include="..\..\Graphics\Animation.h" />
+    <ClInclude Include="..\..\Graphics\AnimationBlender.h" />
     <ClInclude Include="..\..\Graphics\AnimationLoader.h" />
     <ClInclude Include="..\..\Graphics\AnimationPose.h" />
     <ClInclude Include="..\..\Graphics\AnimationSampler.h" />

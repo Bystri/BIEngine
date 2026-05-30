@@ -489,6 +489,9 @@
     <ClCompile Include="..\..\Graphics\AnimationSampler.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Graphics\AnimationBlender.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -1032,6 +1035,9 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Graphics\AnimationSampler.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Graphics\AnimationBlender.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
