@@ -8,6 +8,7 @@ namespace BIEngine {
 
 class SkeletalModel;
 class AnimationPose;
+class AnimationSampler;
 
 class Animator {
 public:
@@ -17,13 +18,12 @@ public:
    void PlayAnimation(SharedPtr<Animation> pAnimation);
 
 private:
-   void CalculateAnimationPose(AnimationPose& pose, Actor* pActor);
    void CalculateActorTransform(const AnimationPose& pose, Actor* pActor);
 
 private:
    Actor* m_pRoot;
 
-   SharedPtr<Animation> m_pCurrentAnimation;
+   SharedPtr<AnimationSampler> m_pAnimationSampler;
    float m_currentTime;
 };
 

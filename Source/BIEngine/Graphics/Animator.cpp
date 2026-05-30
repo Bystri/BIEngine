@@ -1,55 +1,30 @@
 #include "Animator.h"
 
 #include "AnimationPose.h"
+#include "AnimationSampler.h"
 #include "../Actors/TransformComponent.h"
 #include "../Utilities/Logger.h"
 
 namespace BIEngine {
 
 Animator::Animator(Actor* pRoot)
-   : m_pRoot(pRoot), m_pCurrentAnimation(nullptr), m_currentTime(0.0f)
+   : m_pRoot(pRoot), m_pAnimationSampler(nullptr), m_currentTime(0.0f)
 {
 }
 
 void Animator::Update(float dt)
 {
-   if (m_pCurrentAnimation) {
-      m_currentTime += m_pCurrentAnimation->GetTicksPerSecond() * dt;
-
-      if (!m_pCurrentAnimation->IsLooped() && m_currentTime >= m_pCurrentAnimation->GetDuration()) {
-         m_pCurrentAnimation = nullptr;
-         return;
-      }
-
-      m_currentTime = fmod(m_currentTime, m_pCurrentAnimation->GetDuration());
-
+   if (m_pAnimationSampler) {
       AnimationPose pose;
-      CalculateAnimationPose(pose, m_pRoot);
+      m_pAnimationSampler->CalculatePoseForActor(m_pRoot, pose, dt);
       CalculateActorTransform(pose, m_pRoot);
    }
 }
 
 void Animator::PlayAnimation(SharedPtr<Animation> pAnimation)
 {
-   m_pCurrentAnimation = pAnimation;
+   m_pAnimationSampler = MakeShared<AnimationSampler>(pAnimation);
    m_currentTime = 0.0f;
-}
-
-void Animator::CalculateAnimationPose(AnimationPose& pose, Actor* pActor)
-{
-   BoneAnimChannel* const boneChannel = m_pCurrentAnimation->FindBoneChannel(pActor->GetName());
-
-   if (boneChannel) {
-      const BoneAnimTranformInfo boneTransformInfo = boneChannel->GetTransformAtTime(m_currentTime);
-
-      pose.SetBonePosition(pActor->GetName(), boneTransformInfo.GetPos());
-      pose.SetBoneOrientation(pActor->GetName(), boneTransformInfo.GetOrientation());
-      pose.SetBoneScale(pActor->GetName(), boneTransformInfo.GetScale());
-   }
-   
-   for (const auto& child : pActor->GetChildren()) {
-      CalculateAnimationPose(pose, child.Get());
-   }
 }
 
 void Animator::CalculateActorTransform(const AnimationPose& pose, Actor* pActor)
