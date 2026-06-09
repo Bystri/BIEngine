@@ -249,23 +249,6 @@ ObjectReplicationProtocolFollower::ObjectReplicationProtocolFollower()
     g_pObjectReplicationReaderProtocol = this;
 }
 
-void ObjectReplicationProtocolFollower::RegisterPeer(PeerId peerId)
-{
-    m_pPeers.PushBack(peerId);
-    UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
-}
-
-void ObjectReplicationProtocolFollower::UnregisterPeer(PeerId peerId)
-{
-    for (int i = 0; i < m_pPeers.Size(); ++i) {
-        if (m_pPeers[i] == peerId) {
-            m_pPeers.Erase(m_pPeers.Begin() + i);
-            m_pReplicationManagersPerPeer.Erase(m_pReplicationManagersPerPeer.Begin() + i);
-            return;
-        }
-    }
-}
-
 ObjectReplicationProtocolFollower::~ObjectReplicationProtocolFollower()
 {
     if (g_pObjectReplicationReaderProtocol == this) {
@@ -283,34 +266,16 @@ void ObjectReplicationProtocolFollower::ReceiveMessage(InputMemoryBitStream& str
     }
 }
 
-void ObjectReplicationProtocolFollower::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager)
-{
-    for (auto& obj : m_pReplicationObjects) {
-        if (obj->GetMasterPeerId() != g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId())
-        {
-            continue;
-        }
-
-        obj->OnUpdate();
-
-        for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-            if (obj->IsDirty()) {
-                m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
-            }
-        }
-    }
-
-    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-        if (m_pReplicationManagersPerPeer[i]->GetNumOfCachedHeaders() > 0) {
-            SendStateMsgToClient(m_pPeers[i], pNetworkMessagesManager);
-        }
-    }
-}
-
 void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitStream& stream)
 {
     ReplicationHeader rh;
     rh.Read(stream);
+
+    if (rh.GetMasterPeerId() == g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId())
+    {
+        Logger::WriteErrorLog("ObjectReplicationProtocolFollower got update for owned entity with newtworkId %d. Update skipped.", rh.GetNetworkId());
+        return;
+    }
 
     switch (rh.GetReplicationAction()) {
     case ReplicationAction::Create:
@@ -324,19 +289,11 @@ void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
         go->Init(rh.GetMasterPeerId());
         go->Read(stream);
 
-        m_pReplicationObjects.PushBack(go);
-
         break;
     }
     case ReplicationAction::Update:
     {
         SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
-
-        if (go->GetMasterPeerId() == g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId())
-        {
-            Logger::WriteErrorLog("ObjectReplicationProtocolFollower for update for owned entity with newtworkId %d. Update skipped.", go->GetNetworkId());
-            return;
-        }
 
         // we might have not received the create yet,
         // so serialize into a dummy to advance read head
@@ -358,13 +315,6 @@ void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
         go->Term();
         m_pLinkingContext->RemoveObj(go);
 
-        for (int i = 0; i < m_pReplicationObjects.Size(); ++i) {
-            if (m_pReplicationObjects[i].Get() == go.Get()) {
-                m_pReplicationObjects.Erase(m_pReplicationObjects.Begin() + i);
-                break;
-            }
-        }
-
         break;
     }
     default:
@@ -372,24 +322,5 @@ void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
         break;
     }
 }
-
-void ObjectReplicationProtocolFollower::SendStateMsgToClient(PeerId peerId, NetworkMessagesManager* pNetworkMessagesManager)
-{
-    OutputMemoryBitStream msg;
-
-    for (int i = 0; i < m_pPeers.Size(); ++i) {
-        if (m_pPeers[i] != peerId) {
-            continue;
-        }
-
-        m_pReplicationManagersPerPeer[i]->Write(msg);
-        pNetworkMessagesManager->SendNetworkMessage(peerId, GetType(), msg);
-
-        return;
-    }
-
-    Logger::WriteErrorLog("Trying to send ObjectReplication info to unknown peerid [%u]", peerId);
-}
-
 
 } // namespace BIEngine

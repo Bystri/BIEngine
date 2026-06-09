@@ -87,21 +87,13 @@ public:
    virtual const NetworkProtocolType& GetType() const override { return sk_ProtocolType; }
 
 protected:
-    virtual void RegisterPeer(PeerId peerId) override;
-    virtual void UnregisterPeer(PeerId peerId) override;
-
     virtual void ReceiveMessage(InputMemoryBitStream& stream) override;
-    virtual void OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager) override;
 
 private:
    void ProcessReplicationHeader(InputMemoryBitStream& stream);
-   void SendStateMsgToClient(PeerId peerId, NetworkMessagesManager* pNetworkMessagesManager);
 
 private:
    SharedPtr<NewtworkObjectLinkingContexts> m_pLinkingContext;
-   DynamicArray<PeerId> m_pPeers;
-   DynamicArray<UniquePtr<ReplicationActionWriter>> m_pReplicationManagersPerPeer;
-   DynamicArray<SharedPtr<ReplicationObject>> m_pReplicationObjects;
 };
 
 } // namespace BIEngine
