@@ -74,6 +74,11 @@ void ObjectReplicationProtocolLeader::RemoveObjectReplicationPOI(PeerId peerId)
 void ObjectReplicationProtocolLeader::OnUpdate()
 {
    for (auto& obj : m_pReplicationObjects) {
+       if (obj->GetMasterPeerId() != g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId())
+       {
+           continue;
+       }
+
       obj->OnUpdate();
 
       for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
@@ -172,7 +177,7 @@ void ObjectReplicationProtocolLeader::DestroyReplicationObject(SharedPtr<Replica
    for (int i = 0; i < m_pReplicationObjects.Size(); ++i) {
       if (m_pReplicationObjects[i].Get() == pObj.Get()) {
          m_pReplicationObjects.Erase(m_pReplicationObjects.Begin() + i);
-         return;
+         break;
       }
    }
 }
@@ -183,7 +188,7 @@ void ObjectReplicationProtocolLeader::SendStateMsgToClient(PeerId peerId, Networ
 
    for (int i = 0; i < m_pPeers.Size(); ++i) {
       if (m_pPeers[i] != peerId) {
-         continue;
+          continue;
       }
 
       m_pReplicationManagersPerPeer[i]->Write(msg);
@@ -197,30 +202,30 @@ void ObjectReplicationProtocolLeader::SendStateMsgToClient(PeerId peerId, Networ
 
 void ObjectReplicationProtocolLeader::RegisterPeer(PeerId peerId)
 {
-   m_pPeers.PushBack(peerId);
-   UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
-   m_relevancyInfo.Emplace(peerId, ReplicationRelevancyInfo());
+    m_pPeers.PushBack(peerId);
+    UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
+    m_relevancyInfo.Emplace(peerId, ReplicationRelevancyInfo());
 }
 
 void ObjectReplicationProtocolLeader::UnregisterPeer(PeerId peerId)
 {
-   for (int i = 0; i < m_pPeers.Size(); ++i) {
-      if (m_pPeers[i] == peerId) {
-         m_pPeers.Erase(m_pPeers.Begin() + i);
-         m_pReplicationManagersPerPeer.Erase(m_pReplicationManagersPerPeer.Begin() + i);
-         m_relevancyInfo.Erase(peerId);
-         return;
-      }
-   }
+    for (int i = 0; i < m_pPeers.Size(); ++i) {
+        if (m_pPeers[i] == peerId) {
+            m_pPeers.Erase(m_pPeers.Begin() + i);
+            m_pReplicationManagersPerPeer.Erase(m_pReplicationManagersPerPeer.Begin() + i);
+            m_relevancyInfo.Erase(peerId);
+            return;
+        }
+    }
 }
 
 void ObjectReplicationProtocolLeader::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager)
 {
-   for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-      if (m_pReplicationManagersPerPeer[i]->GetNumOfCachedHeaders() > 0) {
-         SendStateMsgToClient(m_pPeers[i], pNetworkMessagesManager);
-      }
-   }
+    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
+        if (m_pReplicationManagersPerPeer[i]->GetNumOfCachedHeaders() > 0) {
+            SendStateMsgToClient(m_pPeers[i], pNetworkMessagesManager);
+        }
+    }
 }
 
 /***ObjectReplicationProtocolReader***/
@@ -229,19 +234,19 @@ static ObjectReplicationProtocolFollower* g_pObjectReplicationReaderProtocol;
 
 ObjectReplicationProtocolFollower* ObjectReplicationProtocolFollower::Get()
 {
-   Assert(g_pObjectReplicationReaderProtocol != nullptr, "You are trying to get ObjectReplicationProtocolReader before it creation");
+    Assert(g_pObjectReplicationReaderProtocol != nullptr, "You are trying to get ObjectReplicationProtocolReader before it creation");
 
-   return g_pObjectReplicationReaderProtocol;
+    return g_pObjectReplicationReaderProtocol;
 }
 
 ObjectReplicationProtocolFollower::ObjectReplicationProtocolFollower()
-   : m_pLinkingContext(MakeShared<NewtworkObjectLinkingContexts>())
+    : m_pLinkingContext(MakeShared<NewtworkObjectLinkingContexts>())
 {
-   if (g_pObjectReplicationReaderProtocol) {
-      Logger::WriteErrorLog("Attempting to create two global ObjectReplicationProtocolReaders! The old one will be destroyed and overwritten with this one.\n");
-   }
+    if (g_pObjectReplicationReaderProtocol) {
+        Logger::WriteErrorLog("Attempting to create two global ObjectReplicationProtocolReaders! The old one will be destroyed and overwritten with this one.\n");
+    }
 
-   g_pObjectReplicationReaderProtocol = this;
+    g_pObjectReplicationReaderProtocol = this;
 }
 
 void ObjectReplicationProtocolFollower::RegisterPeer(PeerId peerId)
@@ -263,9 +268,9 @@ void ObjectReplicationProtocolFollower::UnregisterPeer(PeerId peerId)
 
 ObjectReplicationProtocolFollower::~ObjectReplicationProtocolFollower()
 {
-   if (g_pObjectReplicationReaderProtocol == this) {
-      g_pObjectReplicationReaderProtocol = nullptr;
-   }
+    if (g_pObjectReplicationReaderProtocol == this) {
+        g_pObjectReplicationReaderProtocol = nullptr;
+    }
 }
 
 void ObjectReplicationProtocolFollower::ReceiveMessage(InputMemoryBitStream& stream)
@@ -275,6 +280,30 @@ void ObjectReplicationProtocolFollower::ReceiveMessage(InputMemoryBitStream& str
 
     for (int i = 0; i < numOfHeaders; ++i) {
         ProcessReplicationHeader(stream);
+    }
+}
+
+void ObjectReplicationProtocolFollower::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager)
+{
+    for (auto& obj : m_pReplicationObjects) {
+        if (obj->GetMasterPeerId() != g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId())
+        {
+            continue;
+        }
+
+        obj->OnUpdate();
+
+        for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
+            if (obj->IsDirty()) {
+                m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
+            }
+        }
+    }
+
+    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
+        if (m_pReplicationManagersPerPeer[i]->GetNumOfCachedHeaders() > 0) {
+            SendStateMsgToClient(m_pPeers[i], pNetworkMessagesManager);
+        }
     }
 }
 
@@ -294,11 +323,21 @@ void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
         go->SetNetworkId(rh.GetNetworkId());
         go->Init(rh.GetMasterPeerId());
         go->Read(stream);
+
+        m_pReplicationObjects.PushBack(go);
+
         break;
     }
     case ReplicationAction::Update:
     {
         SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
+
+        if (go->GetMasterPeerId() == g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId())
+        {
+            Logger::WriteErrorLog("ObjectReplicationProtocolFollower for update for owned entity with newtworkId %d. Update skipped.", go->GetNetworkId());
+            return;
+        }
+
         // we might have not received the create yet,
         // so serialize into a dummy to advance read head
         if (go) {
@@ -318,6 +357,14 @@ void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
         SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
         go->Term();
         m_pLinkingContext->RemoveObj(go);
+
+        for (int i = 0; i < m_pReplicationObjects.Size(); ++i) {
+            if (m_pReplicationObjects[i].Get() == go.Get()) {
+                m_pReplicationObjects.Erase(m_pReplicationObjects.Begin() + i);
+                break;
+            }
+        }
+
         break;
     }
     default:
@@ -325,5 +372,24 @@ void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
         break;
     }
 }
+
+void ObjectReplicationProtocolFollower::SendStateMsgToClient(PeerId peerId, NetworkMessagesManager* pNetworkMessagesManager)
+{
+    OutputMemoryBitStream msg;
+
+    for (int i = 0; i < m_pPeers.Size(); ++i) {
+        if (m_pPeers[i] != peerId) {
+            continue;
+        }
+
+        m_pReplicationManagersPerPeer[i]->Write(msg);
+        pNetworkMessagesManager->SendNetworkMessage(peerId, GetType(), msg);
+
+        return;
+    }
+
+    Logger::WriteErrorLog("Trying to send ObjectReplication info to unknown peerid [%u]", peerId);
+}
+
 
 } // namespace BIEngine

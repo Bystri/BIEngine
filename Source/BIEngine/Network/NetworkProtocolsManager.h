@@ -6,8 +6,7 @@ namespace BIEngine {
 
 class NetworkProtocolsManager {
 public:
-   void AddProtocolLeader(SharedPtr<NetworkProtocol> pNetworkProtocolLeader);
-   void AddProtocolFollower(SharedPtr<NetworkProtocol> pNetworkProtocolFollower);
+   void AddProtocol(SharedPtr<NetworkProtocol> pNetworkProtocol);
 
    void RegisterPeer(uint32_t peerId);
    void UnregisterPeer(uint32_t peerId);
@@ -16,8 +15,7 @@ public:
    void OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager);
 
 private:
-   DynamicArray<SharedPtr<NetworkProtocol>> m_networkProtocolLeaders;
-   DynamicArray<SharedPtr<NetworkProtocol>> m_networkProtocolFollowers;
+   DynamicArray<SharedPtr<NetworkProtocol>> m_networkProtocols;
 };
 
 } // namespace BIEngine

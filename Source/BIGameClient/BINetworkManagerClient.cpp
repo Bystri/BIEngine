@@ -7,9 +7,9 @@
 
 bool BINetworkManagerClient::Init(const BIEngine::SocketAddress& serverAddress, const BIEngine::String& name)
 {
-   m_networkMessagesManager.AddProtocolFollower(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolFollower>());
-   m_networkMessagesManager.AddProtocolLeader(BIEngine::MakeShared<EventProtocolLeader>());
-   m_networkMessagesManager.AddProtocolFollower(BIEngine::MakeShared<BIEngine::RpcProtocolFollower>());
+   m_networkMessagesManager.AddProtocol(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolFollower>());
+   m_networkMessagesManager.AddProtocol(BIEngine::MakeShared<EventProtocolLeader>());
+   m_networkMessagesManager.AddProtocol(BIEngine::MakeShared<BIEngine::RpcProtocolFollower>());
    RpcInit();
 
    m_name = name;
