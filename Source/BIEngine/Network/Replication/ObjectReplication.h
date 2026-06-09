@@ -81,7 +81,8 @@ public:
    {
       ReplicationObject::Init(masterPeerId);
 
-      m_pReplicatedObject = ConstructReplicatedObject(masterPeerId == g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId());
+      const bool isCurrentPeerMaster = masterPeerId == g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId();
+      m_pReplicatedObject = ConstructReplicatedObject(isCurrentPeerMaster);
 
       for (int i = 0; i < m_replicationUnits.Size(); ++i) {
          m_replicationUnits[i]->Init(this, m_pReplicatedObject);
@@ -141,7 +142,9 @@ protected:
    virtual void DestructReplicationObject(bool isMaster) = 0;
 
 private:
-   Bitset<32> m_isDirtyMask;
+   static constexpr int MAX_REPLICATION_UNITS = 32;
+
+   Bitset<MAX_REPLICATION_UNITS> m_isDirtyMask;
 
    ReplicationUnitArray m_replicationUnits;
 

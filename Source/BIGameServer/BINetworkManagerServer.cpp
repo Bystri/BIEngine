@@ -9,9 +9,9 @@
 
 bool BINetworkManagerServer::Init(uint16_t port, int maxClients)
 {
-   m_networkMessagesManager.AddProtocolWriter(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolWriter>());
-   m_networkMessagesManager.AddProtocolWriter(BIEngine::MakeShared<BIEngine::RpcProtocolWriter>());
-   m_networkMessagesManager.AddProtocolReader(BIEngine::MakeShared<EventProtocolReader>());
+   m_networkMessagesManager.AddProtocolLeader(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolLeader>());
+   m_networkMessagesManager.AddProtocolLeader(BIEngine::MakeShared<BIEngine::RpcProtocolLeader>());
+   m_networkMessagesManager.AddProtocolFollower(BIEngine::MakeShared<EventProtocolFollower>());
 
    m_clients = BIEngine::DynamicArray<BIEngine::PeerId>(maxClients, BIEngine::INVALID_PEER_ID);
 

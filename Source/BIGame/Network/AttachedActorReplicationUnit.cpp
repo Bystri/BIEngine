@@ -33,7 +33,7 @@ void AttachedActorReplicationUnit::Read(BIEngine::InputMemoryBitStream& stream)
 {
    uint32_t networkId;
    BIEngine::Deserialize(stream, networkId);
-   BIEngine::SharedPtr<BIEngine::ReplicationObjectActor> pObject = BIEngine::StaticPointerCast<BIEngine::ReplicationObjectActor>(BIEngine::ObjectReplicationProtocolReader::Get()->GetReplicationObject(networkId));
+   BIEngine::SharedPtr<BIEngine::ReplicationObjectActor> pObject = BIEngine::StaticPointerCast<BIEngine::ReplicationObjectActor>(BIEngine::ObjectReplicationProtocolFollower::Get()->GetReplicationObject(networkId));
    if (pObject == nullptr) {
       BIEngine::Logger::WriteErrorLog("Attempt to add unexisted replicated actor [NetworkID:%u]", networkId);
       return;

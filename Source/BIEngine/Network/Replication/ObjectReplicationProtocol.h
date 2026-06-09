@@ -7,22 +7,21 @@
 #include "../NetworkProtocol.h"
 #include "ObjectReplication.h"
 #include "ReplicationActionWriter.h"
-#include "ReplicationActionReader.h"
 #include "NetworkObjectCreationRegistry.h"
 
 namespace BIEngine {
 
-class ObjectReplicationProtocolWriter : public NetworkProtocolWriter {
+class ObjectReplicationProtocolLeader : public NetworkProtocol {
    friend SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t);
    friend void ObjectReplicationDestroy(SharedPtr<ReplicationObject>);
 
 public:
    static const NetworkProtocolType sk_ProtocolType;
 
-   static ObjectReplicationProtocolWriter* Get();
+   static ObjectReplicationProtocolLeader* Get();
 
-   ObjectReplicationProtocolWriter();
-   virtual ~ObjectReplicationProtocolWriter();
+   ObjectReplicationProtocolLeader();
+   virtual ~ObjectReplicationProtocolLeader();
 
    virtual const NetworkProtocolType& GetType() const override { return sk_ProtocolType; }
 
@@ -71,14 +70,14 @@ private:
 SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t classId);
 void ObjectReplicationDestroy(SharedPtr<ReplicationObject> pGameObject);
 
-class ObjectReplicationProtocolReader : public NetworkProtocolReader {
+class ObjectReplicationProtocolFollower : public NetworkProtocol {
 public:
    static const NetworkProtocolType sk_ProtocolType;
 
-   static ObjectReplicationProtocolReader* Get();
+   static ObjectReplicationProtocolFollower* Get();
 
-   ObjectReplicationProtocolReader();
-   virtual ~ObjectReplicationProtocolReader();
+   ObjectReplicationProtocolFollower();
+   virtual ~ObjectReplicationProtocolFollower();
 
    SharedPtr<ReplicationObject> GetReplicationObject(uint32_t networkId)
    {
@@ -89,9 +88,18 @@ public:
 
    virtual void ReceiveMessage(InputMemoryBitStream& stream) override;
 
+protected:
+    virtual void RegisterPeer(PeerId peerId) override;
+    virtual void UnregisterPeer(PeerId peerId) override;
+
+private:
+   void ProcessReplicationHeader(InputMemoryBitStream& stream);
+
 private:
    SharedPtr<NewtworkObjectLinkingContexts> m_pLinkingContext;
-   UniquePtr<ReplicationActionReader> m_pReplicationActionReader;
+   DynamicArray<PeerId> m_pPeers;
+   DynamicArray<UniquePtr<ReplicationActionWriter>> m_pReplicationManagersPerPeer;
+   DynamicArray<SharedPtr<ReplicationObject>> m_pReplicationObjects;
 };
 
 } // namespace BIEngine

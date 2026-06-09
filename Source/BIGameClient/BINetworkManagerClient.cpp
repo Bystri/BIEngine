@@ -5,15 +5,11 @@
 #include "../BIGame/Network/BINetworkRPCs.h"
 #include "../BIGame/Network/EventNetworkProtocol.h"
 
-static constexpr float TIME_BETWEEN_HELLOS = 2.f;
-
-static constexpr float TIME_BETWEEN_EVENT_PACKETS = 0.033f;
-
 bool BINetworkManagerClient::Init(const BIEngine::SocketAddress& serverAddress, const BIEngine::String& name)
 {
-   m_networkMessagesManager.AddProtocolReader(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolReader>());
-   m_networkMessagesManager.AddProtocolWriter(BIEngine::MakeShared<EventProtocolWriter>());
-   m_networkMessagesManager.AddProtocolReader(BIEngine::MakeShared<BIEngine::RpcProtocolReader>());
+   m_networkMessagesManager.AddProtocolFollower(BIEngine::MakeShared<BIEngine::ObjectReplicationProtocolFollower>());
+   m_networkMessagesManager.AddProtocolLeader(BIEngine::MakeShared<EventProtocolLeader>());
+   m_networkMessagesManager.AddProtocolFollower(BIEngine::MakeShared<BIEngine::RpcProtocolFollower>());
    RpcInit();
 
    m_name = name;

@@ -9,14 +9,14 @@ using RpcId = uint32_t;
 
 using RPCUnwrapFunc = void (*)(InputMemoryBitStream&);
 
-class RpcProtocolWriter : public NetworkProtocolWriter {
+class RpcProtocolLeader : public NetworkProtocol {
 public:
    static const NetworkProtocolType sk_ProtocolType;
 
-   static RpcProtocolWriter* Get();
+   static RpcProtocolLeader* Get();
 
-   RpcProtocolWriter();
-   virtual ~RpcProtocolWriter();
+   RpcProtocolLeader();
+   virtual ~RpcProtocolLeader();
 
    void SendRpc(PeerId peerId, RpcId rpcId, const OutputMemoryBitStream& rpcData);
 
@@ -37,16 +37,16 @@ private:
    DynamicArray<PeerInfo> m_peerInfos;
 };
 
-class RpcProtocolReader : public NetworkProtocolReader {
+class RpcProtocolFollower : public NetworkProtocol {
 public:
    static const NetworkProtocolType sk_ProtocolType;
 
    virtual const NetworkProtocolType& GetType() const override { return sk_ProtocolType; }
 
-   static RpcProtocolReader* Get();
+   static RpcProtocolFollower* Get();
 
-   RpcProtocolReader();
-   virtual ~RpcProtocolReader();
+   RpcProtocolFollower();
+   virtual ~RpcProtocolFollower();
 
    void RegisterUnwrapFunction(RpcId id, RPCUnwrapFunc func);
 

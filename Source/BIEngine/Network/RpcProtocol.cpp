@@ -4,19 +4,19 @@
 
 namespace BIEngine {
 
-const NetworkProtocolType RpcProtocolWriter::sk_ProtocolType('RPC0');
-const NetworkProtocolType RpcProtocolReader::sk_ProtocolType('RPC0');
+const NetworkProtocolType RpcProtocolLeader::sk_ProtocolType('RPC0');
+const NetworkProtocolType RpcProtocolFollower::sk_ProtocolType('RPC0');
 
-static RpcProtocolWriter* g_pRpcProtocolWriter;
+static RpcProtocolLeader* g_pRpcProtocolWriter;
 
-RpcProtocolWriter* RpcProtocolWriter::Get()
+RpcProtocolLeader* RpcProtocolLeader::Get()
 {
    Assert(g_pRpcProtocolWriter != nullptr, "You are trying to get RpcProtocolWriter before it was created");
 
    return g_pRpcProtocolWriter;
 }
 
-RpcProtocolWriter::RpcProtocolWriter()
+RpcProtocolLeader::RpcProtocolLeader()
 {
    if (g_pRpcProtocolWriter) {
       Logger::WriteErrorLog("Attempting to create two global RpcProtocolWriters managers! The old one will be destroyed and overwritten with this one.\n");
@@ -25,14 +25,14 @@ RpcProtocolWriter::RpcProtocolWriter()
    g_pRpcProtocolWriter = this;
 }
 
-RpcProtocolWriter::~RpcProtocolWriter()
+RpcProtocolLeader::~RpcProtocolLeader()
 {
    if (g_pRpcProtocolWriter == this) {
       g_pRpcProtocolWriter = nullptr;
    }
 }
 
-void RpcProtocolWriter::SendRpc(PeerId peerId, RpcId rpcId, const OutputMemoryBitStream& rpcData)
+void RpcProtocolLeader::SendRpc(PeerId peerId, RpcId rpcId, const OutputMemoryBitStream& rpcData)
 {
    for (int i = 0; i < m_peerInfos.Size(); ++i) {
       if (m_peerInfos[i].id == peerId) {
@@ -46,13 +46,13 @@ void RpcProtocolWriter::SendRpc(PeerId peerId, RpcId rpcId, const OutputMemoryBi
    Assert(false, "You are trying to send RPC to unregistered peer [id:%u]", peerId);
 }
 
-void RpcProtocolWriter::RegisterPeer(PeerId peerId)
+void RpcProtocolLeader::RegisterPeer(PeerId peerId)
 {
    PeerInfo& info = m_peerInfos.EmplaceBack();
    info.id = peerId;
 }
 
-void RpcProtocolWriter::UnregisterPeer(PeerId peerId)
+void RpcProtocolLeader::UnregisterPeer(PeerId peerId)
 {
    for (int i = 0; i < m_peerInfos.Size(); ++i) {
       if (m_peerInfos[i].id == peerId) {
@@ -64,7 +64,7 @@ void RpcProtocolWriter::UnregisterPeer(PeerId peerId)
    Assert(false, "You are trying to delete unregistered peer [id:%u] from RpcProtocolWriter", peerId);
 }
 
-void RpcProtocolWriter::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager)
+void RpcProtocolLeader::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager)
 {
    for (auto& pPeer : m_peerInfos) {
       if (pPeer.m_rpcToSend.Empty()) {
@@ -86,16 +86,16 @@ void RpcProtocolWriter::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMess
    }
 }
 
-static RpcProtocolReader* g_pRpcProtocolReader;
+static RpcProtocolFollower* g_pRpcProtocolReader;
 
-RpcProtocolReader* RpcProtocolReader::Get()
+RpcProtocolFollower* RpcProtocolFollower::Get()
 {
    Assert(g_pRpcProtocolReader != nullptr, "You are trying to get RpcProtocolWriter before it was created");
 
    return g_pRpcProtocolReader;
 }
 
-RpcProtocolReader::RpcProtocolReader()
+RpcProtocolFollower::RpcProtocolFollower()
 {
    if (g_pRpcProtocolReader) {
       Logger::WriteErrorLog("Attempting to create two global RpcProtocolReader managers! The old one will be destroyed and overwritten with this one.\n");
@@ -104,27 +104,27 @@ RpcProtocolReader::RpcProtocolReader()
    g_pRpcProtocolReader = this;
 }
 
-RpcProtocolReader::~RpcProtocolReader()
+RpcProtocolFollower::~RpcProtocolFollower()
 {
    if (g_pRpcProtocolReader == this) {
       g_pRpcProtocolReader = nullptr;
    }
 }
 
-void RpcProtocolReader::RegisterUnwrapFunction(RpcId id, RPCUnwrapFunc func)
+void RpcProtocolFollower::RegisterUnwrapFunction(RpcId id, RPCUnwrapFunc func)
 {
    Assert(m_nameToRPCTable.Find(id) == m_nameToRPCTable.End(), "RPC function with id %u already registered in RPCManager", id);
    m_nameToRPCTable[id] = func;
 }
 
-void RpcProtocolReader::ProcessRPC(InputMemoryBitStream& stream)
+void RpcProtocolFollower::ProcessRPC(InputMemoryBitStream& stream)
 {
    RpcId id;
    Deserialize(stream, id);
    m_nameToRPCTable[id](stream);
 }
 
-void RpcProtocolReader::ReceiveMessage(BIEngine::InputMemoryBitStream& inputStream)
+void RpcProtocolFollower::ReceiveMessage(BIEngine::InputMemoryBitStream& inputStream)
 {
    uint32_t cnt;
    Deserialize(inputStream, cnt);

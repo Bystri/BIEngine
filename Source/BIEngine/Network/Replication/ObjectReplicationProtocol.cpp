@@ -8,23 +8,21 @@
 
 namespace BIEngine {
 
-#pragma optimize("", off)
-
-const NetworkProtocolType ObjectReplicationProtocolWriter::sk_ProtocolType(0x23d7aeaa);
-const NetworkProtocolType ObjectReplicationProtocolReader::sk_ProtocolType(0x23d7aeaa);
+const NetworkProtocolType ObjectReplicationProtocolLeader::sk_ProtocolType(0x23d7aeaa);
+const NetworkProtocolType ObjectReplicationProtocolFollower::sk_ProtocolType(0x23d7aeaa);
 
 /***ObjectReplicationProtocolWriter***/
 
-static ObjectReplicationProtocolWriter* g_pObjectReplicationProtocol;
+static ObjectReplicationProtocolLeader* g_pObjectReplicationProtocol;
 
-ObjectReplicationProtocolWriter* ObjectReplicationProtocolWriter::Get()
+ObjectReplicationProtocolLeader* ObjectReplicationProtocolLeader::Get()
 {
    Assert(g_pObjectReplicationProtocol != nullptr, "You are trying to get ObjectReplicationProtocolWriter before it creation");
 
    return g_pObjectReplicationProtocol;
 }
 
-ObjectReplicationProtocolWriter::ObjectReplicationProtocolWriter()
+ObjectReplicationProtocolLeader::ObjectReplicationProtocolLeader()
    : m_pLinkingContext(MakeShared<NewtworkObjectLinkingContexts>())
 {
    if (g_pObjectReplicationProtocol) {
@@ -34,7 +32,7 @@ ObjectReplicationProtocolWriter::ObjectReplicationProtocolWriter()
    g_pObjectReplicationProtocol = this;
 }
 
-ObjectReplicationProtocolWriter::~ObjectReplicationProtocolWriter()
+ObjectReplicationProtocolLeader::~ObjectReplicationProtocolLeader()
 {
    if (g_pObjectReplicationProtocol == this) {
       g_pObjectReplicationProtocol = nullptr;
@@ -44,7 +42,7 @@ ObjectReplicationProtocolWriter::~ObjectReplicationProtocolWriter()
 SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t classId)
 {
    SharedPtr<ReplicationObject> pObj = BIEngine::NetworkObjectCreationRegistry::Get().Create(classId);
-   ObjectReplicationProtocolWriter::Get()->AddReplicationObject(pObj);
+   ObjectReplicationProtocolLeader::Get()->AddReplicationObject(pObj);
    pObj->Init(g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId());
 
    return pObj;
@@ -53,10 +51,10 @@ SharedPtr<ReplicationObject> ObjectReplicationCreate(uint32_t classId)
 void ObjectReplicationDestroy(SharedPtr<ReplicationObject> pGameObject)
 {
    pGameObject->Term();
-   ObjectReplicationProtocolWriter::Get()->DestroyReplicationObject(pGameObject);
+   ObjectReplicationProtocolLeader::Get()->DestroyReplicationObject(pGameObject);
 }
 
-void ObjectReplicationProtocolWriter::AddObjectReplicationPOI(PeerId peerId, SharedPtr<Actor> pActorPOI, float softRadius, float hardRadius)
+void ObjectReplicationProtocolLeader::AddObjectReplicationPOI(PeerId peerId, SharedPtr<Actor> pActorPOI, float softRadius, float hardRadius)
 {
    auto itr = m_relevancyInfo.Find(peerId);
 
@@ -66,14 +64,14 @@ void ObjectReplicationProtocolWriter::AddObjectReplicationPOI(PeerId peerId, Sha
    info.hardRadius = hardRadius;
 }
 
-void ObjectReplicationProtocolWriter::RemoveObjectReplicationPOI(PeerId peerId)
+void ObjectReplicationProtocolLeader::RemoveObjectReplicationPOI(PeerId peerId)
 {
    auto itr = m_relevancyInfo.Find(peerId);
    Assert(itr != m_relevancyInfo.End(), "You are trying to delete unregistered POI");
    m_relevancyInfo.Erase(peerId);
 }
 
-void ObjectReplicationProtocolWriter::OnUpdate()
+void ObjectReplicationProtocolLeader::OnUpdate()
 {
    for (auto& obj : m_pReplicationObjects) {
       obj->OnUpdate();
@@ -125,7 +123,7 @@ void ObjectReplicationProtocolWriter::OnUpdate()
 }
 
 #ifndef _RETAIL
-void ObjectReplicationProtocolWriter::DrawDbgDiagnostics() const
+void ObjectReplicationProtocolLeader::DrawDbgDiagnostics() const
 {
    ImGui::SetNextWindowSize(ImVec2(250, 250), ImGuiCond_Always);
 
@@ -151,14 +149,14 @@ void ObjectReplicationProtocolWriter::DrawDbgDiagnostics() const
 }
 #endif
 
-void ObjectReplicationProtocolWriter::AddReplicationObject(SharedPtr<ReplicationObject> pObj)
+void ObjectReplicationProtocolLeader::AddReplicationObject(SharedPtr<ReplicationObject> pObj)
 {
    const uint32_t objId = m_pLinkingContext->GetId(pObj, true);
    pObj->SetNetworkId(objId);
    m_pReplicationObjects.PushBack(pObj);
 }
 
-void ObjectReplicationProtocolWriter::DestroyReplicationObject(SharedPtr<ReplicationObject> pObj)
+void ObjectReplicationProtocolLeader::DestroyReplicationObject(SharedPtr<ReplicationObject> pObj)
 {
    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
       const uint32_t objId = m_pLinkingContext->GetId(pObj, false);
@@ -179,7 +177,7 @@ void ObjectReplicationProtocolWriter::DestroyReplicationObject(SharedPtr<Replica
    }
 }
 
-void ObjectReplicationProtocolWriter::SendStateMsgToClient(PeerId peerId, NetworkMessagesManager* pNetworkMessagesManager)
+void ObjectReplicationProtocolLeader::SendStateMsgToClient(PeerId peerId, NetworkMessagesManager* pNetworkMessagesManager)
 {
    OutputMemoryBitStream msg;
 
@@ -197,14 +195,14 @@ void ObjectReplicationProtocolWriter::SendStateMsgToClient(PeerId peerId, Networ
    Logger::WriteErrorLog("Trying to send ObjectReplication info to unknown peerid [%u]", peerId);
 }
 
-void ObjectReplicationProtocolWriter::RegisterPeer(PeerId peerId)
+void ObjectReplicationProtocolLeader::RegisterPeer(PeerId peerId)
 {
    m_pPeers.PushBack(peerId);
    UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
    m_relevancyInfo.Emplace(peerId, ReplicationRelevancyInfo());
 }
 
-void ObjectReplicationProtocolWriter::UnregisterPeer(PeerId peerId)
+void ObjectReplicationProtocolLeader::UnregisterPeer(PeerId peerId)
 {
    for (int i = 0; i < m_pPeers.Size(); ++i) {
       if (m_pPeers[i] == peerId) {
@@ -216,7 +214,7 @@ void ObjectReplicationProtocolWriter::UnregisterPeer(PeerId peerId)
    }
 }
 
-void ObjectReplicationProtocolWriter::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager)
+void ObjectReplicationProtocolLeader::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager)
 {
    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
       if (m_pReplicationManagersPerPeer[i]->GetNumOfCachedHeaders() > 0) {
@@ -227,17 +225,17 @@ void ObjectReplicationProtocolWriter::OnBeforePacketsSend(NetworkMessagesManager
 
 /***ObjectReplicationProtocolReader***/
 
-static ObjectReplicationProtocolReader* g_pObjectReplicationReaderProtocol;
+static ObjectReplicationProtocolFollower* g_pObjectReplicationReaderProtocol;
 
-ObjectReplicationProtocolReader* ObjectReplicationProtocolReader::Get()
+ObjectReplicationProtocolFollower* ObjectReplicationProtocolFollower::Get()
 {
    Assert(g_pObjectReplicationReaderProtocol != nullptr, "You are trying to get ObjectReplicationProtocolReader before it creation");
 
    return g_pObjectReplicationReaderProtocol;
 }
 
-ObjectReplicationProtocolReader::ObjectReplicationProtocolReader()
-   : m_pLinkingContext(MakeShared<NewtworkObjectLinkingContexts>()), m_pReplicationActionReader(MakeUnique<ReplicationActionReader>(m_pLinkingContext))
+ObjectReplicationProtocolFollower::ObjectReplicationProtocolFollower()
+   : m_pLinkingContext(MakeShared<NewtworkObjectLinkingContexts>())
 {
    if (g_pObjectReplicationReaderProtocol) {
       Logger::WriteErrorLog("Attempting to create two global ObjectReplicationProtocolReaders! The old one will be destroyed and overwritten with this one.\n");
@@ -246,16 +244,86 @@ ObjectReplicationProtocolReader::ObjectReplicationProtocolReader()
    g_pObjectReplicationReaderProtocol = this;
 }
 
-ObjectReplicationProtocolReader::~ObjectReplicationProtocolReader()
+void ObjectReplicationProtocolFollower::RegisterPeer(PeerId peerId)
+{
+    m_pPeers.PushBack(peerId);
+    UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
+}
+
+void ObjectReplicationProtocolFollower::UnregisterPeer(PeerId peerId)
+{
+    for (int i = 0; i < m_pPeers.Size(); ++i) {
+        if (m_pPeers[i] == peerId) {
+            m_pPeers.Erase(m_pPeers.Begin() + i);
+            m_pReplicationManagersPerPeer.Erase(m_pReplicationManagersPerPeer.Begin() + i);
+            return;
+        }
+    }
+}
+
+ObjectReplicationProtocolFollower::~ObjectReplicationProtocolFollower()
 {
    if (g_pObjectReplicationReaderProtocol == this) {
       g_pObjectReplicationReaderProtocol = nullptr;
    }
 }
 
-void ObjectReplicationProtocolReader::ReceiveMessage(InputMemoryBitStream& stream)
+void ObjectReplicationProtocolFollower::ReceiveMessage(InputMemoryBitStream& stream)
 {
-   m_pReplicationActionReader->ProcessReplicationActions(stream);
+    uint32_t numOfHeaders;
+    Deserialize(stream, numOfHeaders);
+
+    for (int i = 0; i < numOfHeaders; ++i) {
+        ProcessReplicationHeader(stream);
+    }
+}
+
+void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitStream& stream)
+{
+    ReplicationHeader rh;
+    rh.Read(stream);
+
+    switch (rh.GetReplicationAction()) {
+    case ReplicationAction::Create:
+    {
+        const uint32_t id = ByteSwap(rh.GetClassId());
+        Logger::WriteMsgLog("Create replicated object [ClassId: %.4s] - [NetworkID: %u]", reinterpret_cast<const char*>(&id), rh.GetNetworkId());
+
+        SharedPtr<ReplicationObject> go = NetworkObjectCreationRegistry::Get().Create(rh.GetClassId());
+        m_pLinkingContext->AddObj(go, rh.GetNetworkId());
+        go->SetNetworkId(rh.GetNetworkId());
+        go->Init(rh.GetMasterPeerId());
+        go->Read(stream);
+        break;
+    }
+    case ReplicationAction::Update:
+    {
+        SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
+        // we might have not received the create yet,
+        // so serialize into a dummy to advance read head
+        if (go) {
+            go->Read(stream);
+        }
+        else {
+            uint32_t classId = rh.GetClassId();
+            go = NetworkObjectCreationRegistry::Get().Create(classId);
+            go->Read(stream);
+        }
+        break;
+    }
+    case ReplicationAction::Destroy:
+    {
+        Logger::WriteMsgLog("Delete replicated object [NetworkID: %u]", rh.GetNetworkId());
+
+        SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
+        go->Term();
+        m_pLinkingContext->RemoveObj(go);
+        break;
+    }
+    default:
+        // not handled by us
+        break;
+    }
 }
 
 } // namespace BIEngine

@@ -207,7 +207,6 @@
     <ClCompile Include="..\..\Network\NetworkProtocolsManager.cpp" />
     <ClCompile Include="..\..\Network\NetworkServer.cpp" />
     <ClCompile Include="..\..\Network\Replication\ObjectReplicationProtocol.cpp" />
-    <ClCompile Include="..\..\Network\Replication\ReplicationActionReader.cpp" />
     <ClCompile Include="..\..\Network\Replication\ReplicationActionWriter.cpp" />
     <ClCompile Include="..\..\Network\Replication\ReplicationHeader.cpp" />
     <ClCompile Include="..\..\Network\Replication\ReplicationObjectActor\ReplicationObjectActor.cpp" />
@@ -359,7 +358,6 @@
     <ClInclude Include="..\..\Network\Replication\NetworkObjectCreationRegistry.h" />
     <ClInclude Include="..\..\Network\Replication\ObjectReplication.h" />
     <ClInclude Include="..\..\Network\Replication\ObjectReplicationProtocol.h" />
-    <ClInclude Include="..\..\Network\Replication\ReplicationActionReader.h" />
     <ClInclude Include="..\..\Network\Replication\ReplicationActionWriter.h" />
     <ClInclude Include="..\..\Network\Replication\ReplicationHeader.h" />
     <ClInclude Include="..\..\Network\Replication\ReplicationObjectActor\ReplicationObjectActor.h" />

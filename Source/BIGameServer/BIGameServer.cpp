@@ -159,7 +159,7 @@ void BIServerGameLogic::OnUpdate(BIEngine::GameTimer& gt)
    m_pNavWorld->GetNavCrowd()->UpdateCrowdInfo(m_actors);
    m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
 
-   BIEngine::ObjectReplicationProtocolWriter::Get()->OnUpdate();
+   BIEngine::ObjectReplicationProtocolLeader::Get()->OnUpdate();
    m_pNetworkManager->SendOutgoingPackets(gt);
 }
 
@@ -186,7 +186,7 @@ void BIServerGameLogic::OnRenderDebug(const BIEngine::GameTimer& gt)
    }
 
    if (m_pDebugMenuController->IsReplicationWindow()) {
-      BIEngine::ObjectReplicationProtocolWriter::Get()->DrawDbgDiagnostics();
+      BIEngine::ObjectReplicationProtocolLeader::Get()->DrawDbgDiagnostics();
    }
 #endif
 }
@@ -207,7 +207,7 @@ void BIServerGameLogic::OnNetPeerConnectedDelegate(BIEngine::IEventDataPtr pEven
 
    constexpr float softReplicationRelevancyRadius = 30.0f;
    constexpr float hardReplicationRelevancyRadius = 40.0f;
-   BIEngine::ObjectReplicationProtocolWriter::Get()->AddObjectReplicationPOI(connectedPeerId, pPlayerActor->GetReplicatedObject(), softReplicationRelevancyRadius, hardReplicationRelevancyRadius);
+   BIEngine::ObjectReplicationProtocolLeader::Get()->AddObjectReplicationPOI(connectedPeerId, pPlayerActor->GetReplicatedObject(), softReplicationRelevancyRadius, hardReplicationRelevancyRadius);
 }
 
 void BIServerGameLogic::OnNetPeerDisonnectedDelegate(BIEngine::IEventDataPtr pEventData)
@@ -215,7 +215,7 @@ void BIServerGameLogic::OnNetPeerDisonnectedDelegate(BIEngine::IEventDataPtr pEv
    BIEngine::SharedPtr<EvtData_NetPeer_Disonnected> pCastEventData = BIEngine::StaticPointerCast<EvtData_NetPeer_Disonnected>(pEventData);
    
    const BIEngine::PeerId disconnectedPeerId = pCastEventData->GetPeerId();
-   BIEngine::ObjectReplicationProtocolWriter::Get()->RemoveObjectReplicationPOI(disconnectedPeerId);
+   BIEngine::ObjectReplicationProtocolLeader::Get()->RemoveObjectReplicationPOI(disconnectedPeerId);
 
    DestroyActor(m_peerIdToPlayerMap[disconnectedPeerId]->GetReplicatedObject()->GetPlayableActor()->GetId());
 

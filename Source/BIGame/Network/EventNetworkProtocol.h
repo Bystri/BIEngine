@@ -4,12 +4,12 @@
 #include "../../../BIEngine/StdLib/Algorithm.h"
 #include "../BIEventListener.h"
 
-class EventProtocolWriter : public BIEngine::NetworkProtocolWriter {
+class EventProtocolLeader : public BIEngine::NetworkProtocol {
 public:
    static const BIEngine::NetworkProtocolType sk_ProtocolType;
 
-   EventProtocolWriter();
-   virtual ~EventProtocolWriter();
+   EventProtocolLeader();
+   virtual ~EventProtocolLeader();
 
 protected:
    virtual const BIEngine::NetworkProtocolType& GetType() const override { return sk_ProtocolType; }
@@ -31,7 +31,7 @@ private:
    BIEngine::EventManager::DelegateHandler m_storeEventCommandTurnDelegateHandler;
 };
 
-class EventProtocolReader : public BIEngine::NetworkProtocolReader {
+class EventProtocolFollower : public BIEngine::NetworkProtocol {
 public:
    static const BIEngine::NetworkProtocolType sk_ProtocolType;
 

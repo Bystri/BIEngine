@@ -115,14 +115,14 @@ public:
    {
    }
 
-   void AddProtocolReader(SharedPtr<NetworkProtocolReader> pNetworkProtocolReader)
+   void AddProtocolLeader(SharedPtr<NetworkProtocol> pNetworkProtocolLeader)
    {
-      m_protocolsManager.AddProtocolReader(pNetworkProtocolReader);
+      m_protocolsManager.AddProtocolLeader(pNetworkProtocolLeader);
    }
 
-   void AddProtocolWriter(SharedPtr<NetworkProtocolWriter> pNetworkProtocolWriter)
+   void AddProtocolFollower(SharedPtr<NetworkProtocol> pNetworkProtocolFollower)
    {
-      m_protocolsManager.AddProtocolWriter(pNetworkProtocolWriter);
+      m_protocolsManager.AddProtocolFollower(pNetworkProtocolFollower);
    }
 
    void RegisterPeer(PeerId peerId, const GameTimer& gt, const std::function<void(const OutputMemoryBitStream&)>& sendFunc);

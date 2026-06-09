@@ -6,61 +6,59 @@ namespace BIEngine {
 
 #pragma optimize("",off)
 
-void NetworkProtocolsManager::AddProtocolReader(SharedPtr<NetworkProtocolReader> pNetworkProtocolReader)
+void NetworkProtocolsManager::AddProtocolLeader(SharedPtr<NetworkProtocol> pNetworkProtocolLeader)
 {
 #ifndef _RETIAL
-   for (auto& protocol : m_networkProtocolReaders) {
-      if (protocol->GetType() == pNetworkProtocolReader->GetType()) {
-         Assert(false, "You are trying to add second NetworkProtocolReader with the same type");
+   for (auto& protocol : m_networkProtocolLeaders) {
+      if (protocol->GetType() == pNetworkProtocolLeader->GetType()) {
+         Assert(false, "You are trying to add second NetworkProtocol leader with the same type");
          return;
       }
    }
 #endif // !_RETIAL
 
-   m_networkProtocolReaders.PushBack(pNetworkProtocolReader);
+   m_networkProtocolLeaders.PushBack(pNetworkProtocolLeader);
 }
 
-void NetworkProtocolsManager::AddProtocolWriter(SharedPtr<NetworkProtocolWriter> pNetworkProtocolWriter)
+void NetworkProtocolsManager::AddProtocolFollower(SharedPtr<NetworkProtocol> pNetworkProtocolFollower)
 {
 #ifndef _RETIAL
-   for (auto& protocol : m_networkProtocolWriters) {
-      uint32_t a = protocol->GetType();
-      uint32_t b = pNetworkProtocolWriter->GetType();
-      if (protocol->GetType() == pNetworkProtocolWriter->GetType()) {
-         Assert(false, "You are trying to add second NetworkProtocolWriter with the same type");
+   for (auto& protocol : m_networkProtocolFollowers) {
+      if (protocol->GetType() == pNetworkProtocolFollower->GetType()) {
+         Assert(false, "You are trying to add second NetworkProtocol follower with the same type");
          return;
       }
    }
 #endif // !_RETIAL
 
-   m_networkProtocolWriters.PushBack(pNetworkProtocolWriter);
+   m_networkProtocolFollowers.PushBack(pNetworkProtocolFollower);
 }
 
 void NetworkProtocolsManager::RegisterPeer(uint32_t peerId)
 {
-   for (auto& protocol : m_networkProtocolWriters) {
+   for (auto& protocol : m_networkProtocolLeaders) {
       protocol->RegisterPeer(peerId);
    }
 
-   for (auto& protocol : m_networkProtocolReaders) {
+   for (auto& protocol : m_networkProtocolFollowers) {
       protocol->RegisterPeer(peerId);
    }
 }
 
 void NetworkProtocolsManager::UnregisterPeer(uint32_t peerId)
 {
-   for (auto& protocol : m_networkProtocolWriters) {
+   for (auto& protocol : m_networkProtocolLeaders) {
       protocol->UnregisterPeer(peerId);
    }
 
-   for (auto& protocol : m_networkProtocolReaders) {
+   for (auto& protocol : m_networkProtocolFollowers) {
       protocol->UnregisterPeer(peerId);
    }
 }
 
 void NetworkProtocolsManager::ReceiveMeessage(NetworkProtocolType type, InputMemoryBitStream& stream)
 {
-   for (auto& protocol : m_networkProtocolReaders) {
+   for (auto& protocol : m_networkProtocolFollowers) {
       if (protocol->GetType() != type) {
          continue;
       }
@@ -74,7 +72,7 @@ void NetworkProtocolsManager::ReceiveMeessage(NetworkProtocolType type, InputMem
 
 void NetworkProtocolsManager::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager)
 {
-   for (auto& protocol : m_networkProtocolWriters) {
+   for (auto& protocol : m_networkProtocolLeaders) {
       protocol->OnBeforePacketsSend(pNetworkMessagesManager);
    }
 }

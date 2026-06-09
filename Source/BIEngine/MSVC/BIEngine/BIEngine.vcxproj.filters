@@ -417,9 +417,6 @@
     <ClCompile Include="..\..\Network\Replication\ReplicationObjectActor\TransformReplicationUnit.cpp">
       <Filter>Network\Replication\ReplicationObjectActor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Network\Replication\ReplicationActionReader.cpp">
-      <Filter>Network\Replication</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Network\Replication\ReplicationActionWriter.cpp">
       <Filter>Network\Replication</Filter>
     </ClCompile>
@@ -885,9 +882,6 @@
       <Filter>Network\Replication</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Network\Replication\ObjectReplicationProtocol.h">
-      <Filter>Network\Replication</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Network\Replication\ReplicationActionReader.h">
       <Filter>Network\Replication</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Network\Replication\ReplicationActionWriter.h">

@@ -11,6 +11,8 @@ class NetworkManager;
 class NetworkMessagesManager;
 
 class NetworkProtocol {
+    friend class NetworkProtocolsManager;
+
 public:
    static const NetworkProtocolType sk_ProtocolType;
 
@@ -21,21 +23,10 @@ protected:
 
    virtual void UnregisterPeer(PeerId peerId) {}
 
+   virtual void ReceiveMessage(InputMemoryBitStream& stream) {}
+   virtual void OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager) {}
+
    virtual const NetworkProtocolType& GetType() const { return sk_ProtocolType; }
-};
-
-class NetworkProtocolReader : public NetworkProtocol {
-   friend class NetworkProtocolsManager;
-
-protected:
-   virtual void ReceiveMessage(InputMemoryBitStream& stream) = 0;
-};
-
-class NetworkProtocolWriter : public NetworkProtocol {
-   friend class NetworkProtocolsManager;
-
-protected:
-   virtual void OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager) = 0;
 };
 
 } // namespace BIEngine

@@ -1,30 +1,30 @@
 #include "EventNetworkProtocol.h"
 
-const BIEngine::NetworkProtocolType EventProtocolWriter::sk_ProtocolType('EVNT');
-const BIEngine::NetworkProtocolType EventProtocolReader::sk_ProtocolType('EVNT');
+const BIEngine::NetworkProtocolType EventProtocolLeader::sk_ProtocolType('EVNT');
+const BIEngine::NetworkProtocolType EventProtocolFollower::sk_ProtocolType('EVNT');
 
 /***EventProtocolWriter***/
 
-EventProtocolWriter::EventProtocolWriter()
+EventProtocolLeader::EventProtocolLeader()
 {
-   m_storeEventCommandMoveToDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_PlayerCommandMoveTo::sk_EventType);
-   m_storeEventCommandMoveDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_Move::sk_EventType);
-   m_storeEventCommandTurnDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolWriter::StoreEventToForwardDelegate), EvtData_Turn::sk_EventType);
+   m_storeEventCommandMoveToDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolLeader::StoreEventToForwardDelegate), EvtData_PlayerCommandMoveTo::sk_EventType);
+   m_storeEventCommandMoveDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolLeader::StoreEventToForwardDelegate), EvtData_Move::sk_EventType);
+   m_storeEventCommandTurnDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolLeader::StoreEventToForwardDelegate), EvtData_Turn::sk_EventType);
 }
 
-EventProtocolWriter::~EventProtocolWriter()
+EventProtocolLeader::~EventProtocolLeader()
 {
    BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandMoveToDelegateHandler);
    BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandMoveDelegateHandler);
    BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandTurnDelegateHandler);
 }
 
-void EventProtocolWriter::RegisterPeer(uint32_t peerId)
+void EventProtocolLeader::RegisterPeer(uint32_t peerId)
 {
    m_peersToSend.PushBack(peerId);
 }
 
-void EventProtocolWriter::UnregisterPeer(uint32_t peerId)
+void EventProtocolLeader::UnregisterPeer(uint32_t peerId)
 {
    const auto itr = BIEngine::Find(m_peersToSend.Begin(), m_peersToSend.End(), peerId);
    if (itr == m_peersToSend.End()) {
@@ -34,7 +34,7 @@ void EventProtocolWriter::UnregisterPeer(uint32_t peerId)
    m_peersToSend.Erase(itr);
 }
 
-void EventProtocolWriter::OnBeforePacketsSend(BIEngine::NetworkMessagesManager* pNetworkMessagesManager)
+void EventProtocolLeader::OnBeforePacketsSend(BIEngine::NetworkMessagesManager* pNetworkMessagesManager)
 {
    if (m_eventsToSend.Empty()) {
       return;
@@ -56,14 +56,14 @@ void EventProtocolWriter::OnBeforePacketsSend(BIEngine::NetworkMessagesManager* 
    m_eventsToSend.Clear();
 }
 
-void EventProtocolWriter::StoreEventToForwardDelegate(BIEngine::IEventDataPtr pEventData)
+void EventProtocolLeader::StoreEventToForwardDelegate(BIEngine::IEventDataPtr pEventData)
 {
    m_eventsToSend.PushBack(pEventData);
 }
 
 /***EventProtocolReader***/
 
-void EventProtocolReader::ReceiveMessage(BIEngine::InputMemoryBitStream& inputStream)
+void EventProtocolFollower::ReceiveMessage(BIEngine::InputMemoryBitStream& inputStream)
 {
    uint8_t eventCount = 0;
    BIEngine::Deserialize(inputStream, eventCount);
