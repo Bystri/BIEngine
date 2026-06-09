@@ -40,6 +40,8 @@
     <ClCompile Include="..\Network\BINetworkRPCs.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\CharacterMovementComponent.cpp" />
+    <ClCompile Include="..\PlayerCommandBinderComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGame.h" />
@@ -92,6 +94,8 @@
     <ClInclude Include="..\Network\BINetworkRPCs.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\CharacterMovementComponent.h" />
+    <ClInclude Include="..\PlayerCommandBinderComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.clang-format" />

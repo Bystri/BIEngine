@@ -2,18 +2,18 @@
 	<Components>
 		<LocomotionInfoComponent>
 		</LocomotionInfoComponent>
+		<PlayerCommandBinderComponent>
+		</PlayerCommandBinderComponent>
+		<CharacterMovementComponent>
+		</CharacterMovementComponent>
 		<CombatStateComponent>
 		</CombatStateComponent>
 		<CombatControllerComponent>
 		</CombatControllerComponent>
 		<DamagableComponent>
-	    </DamagableComponent>
-		<PlayerCommandBinderComponent>
-	    </PlayerCommandBinderComponent>
-		<CharacterMovementComponent>
-		</CharacterMovementComponent>
+		</DamagableComponent>
 		<NetworkReplicatedComponent>
-	    </NetworkReplicatedComponent>
+		</NetworkReplicatedComponent>
 		<NavAgentComponent>
 			<Common maxSpeed="5.0"/>
 		</NavAgentComponent>

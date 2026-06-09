@@ -10,6 +10,10 @@
 		</AnimationComponent>
 		<LocomotionInfoComponent>
 		</LocomotionInfoComponent>
+		<PlayerCommandBinderComponent>
+		</PlayerCommandBinderComponent>
+		<CharacterMovementComponent>
+		</CharacterMovementComponent>
 		<CombatStateComponent>
 		</CombatStateComponent>
 		<HealthStateComponent>

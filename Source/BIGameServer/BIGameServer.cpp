@@ -15,11 +15,11 @@
 #include "../BIGame/Combat/CombatControllerComponent.h"
 #include "../BIGame/Combat/DamagableComponent.h"
 #include "../BIGame/Network/BINetworkRPCs.h"
+#include "../BIGame/PlayerCommandBinderComponent.h"
+#include "../BIGame/CharacterMovementComponent.h"
 
 #include "BINetworkManagerServer.h"
 #include "BIGSEventListener.h"
-#include "PlayerCommandBinderComponent.h"
-#include "CharacterMovementComponent.h"
 
 int main(int argc, char* argv[])
 {

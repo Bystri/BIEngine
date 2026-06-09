@@ -20,6 +20,7 @@
     <ClCompile Include="..\BIFlyCameraSystem.cpp" />
     <ClCompile Include="..\BIGame.cpp" />
     <ClCompile Include="..\BIGameController.cpp" />
+    <ClCompile Include="..\CharacterMovementComponent.cpp" />
     <ClCompile Include="..\Combat\CombatControllerComponent.cpp" />
     <ClCompile Include="..\Combat\CombatStateComponent.cpp" />
     <ClCompile Include="..\Combat\DamagableComponent.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="..\Network\EventNetworkProtocol.cpp" />
     <ClCompile Include="..\Network\HealthStateReplicationUnit.cpp" />
     <ClCompile Include="..\Network\LocomotionInfoReplicationUnit.cpp" />
+    <ClCompile Include="..\PlayerCommandBinderComponent.cpp" />
     <ClCompile Include="..\PlayerManager\PlayerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +43,7 @@
     <ClInclude Include="..\BIGame.h" />
     <ClInclude Include="..\BIGameController.h" />
     <ClInclude Include="..\BIScriptExports.h" />
+    <ClInclude Include="..\CharacterMovementComponent.h" />
     <ClInclude Include="..\Combat\CombatControllerComponent.h" />
     <ClInclude Include="..\Combat\CombatStateComponent.h" />
     <ClInclude Include="..\Combat\DamagableComponent.h" />
@@ -55,6 +58,7 @@
     <ClInclude Include="..\Network\ReplicationObjectAiDummyCharacter.h" />
     <ClInclude Include="..\Network\ReplicationObjectPlayer.h" />
     <ClInclude Include="..\Network\ReplicationObjectPlayerCharacter.h" />
+    <ClInclude Include="..\PlayerCommandBinderComponent.h" />
     <ClInclude Include="..\PlayerManager\PlayerManager.h" />
   </ItemGroup>
   <ItemGroup>

@@ -12,8 +12,6 @@
 	  </DamagableComponent>
 	  <NetworkReplicatedComponent>
 	  </NetworkReplicatedComponent>
-	  <CharacterMovementComponent>
-	  </CharacterMovementComponent>
 	  <ScriptComponent>
 		  <ScriptObject modulePath="CharacterCommands.CharacterCommandMngComponent" className="CharacterCommandMngComponent"/>
 		  <StringData/>
