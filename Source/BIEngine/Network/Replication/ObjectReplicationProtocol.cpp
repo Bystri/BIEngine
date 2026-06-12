@@ -71,62 +71,6 @@ void ObjectReplicationProtocolLeader::RemoveObjectReplicationPOI(PeerId peerId)
    m_relevancyInfo.Erase(peerId);
 }
 
-void ObjectReplicationProtocolLeader::OnUpdate()
-{
-   for (auto& obj : m_pReplicationObjects) {
-       if (obj->GetMasterPeerId() != g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId())
-       {
-           continue;
-       }
-
-      obj->OnUpdate();
-
-      for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-         auto itr = m_relevancyInfo.Find(m_pPeers[i]);
-         ReplicationRelevancyInfo& relInfo = itr->second;
-
-         const uint32_t objId = m_pLinkingContext->GetId(obj, false);
-
-         const bool isObjReplicatedToPoi = m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Find(objId) != m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.End();
-
-         if (relInfo.pActorPOI == nullptr || !obj->IsUseRelevancy()) {
-            if (!isObjReplicatedToPoi) {
-               Logger::WriteMsgLog("Send replication action create of NON RELEVANCE object [NetworkId:%u] to peer [PeerId:%u]", objId, m_pPeers[i]);
-               
-               m_pReplicationManagersPerPeer[i]->ReplicateCreate(obj);
-               m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
-            } else {
-               if (obj->IsDirty()) {
-                  m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
-               }
-            }
-
-            continue;
-         }
-
-         const glm::vec3& poiPos = m_relevancyInfo[m_pPeers[i]].pActorPOI->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock()->GetPosition();
-         const float dist = glm::length(poiPos - obj->GetPosition()); // TODO: lengthSqr
-
-         if (!isObjReplicatedToPoi) {
-            if (dist < m_relevancyInfo[m_pPeers[i]].softRadius) {
-               Logger::WriteMsgLog("Send replication action create of object [NetworkId:%u] to peer [PeerId:%u]", objId, m_pPeers[i]);
-               m_pReplicationManagersPerPeer[i]->ReplicateCreate(obj);
-               m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
-            }
-         } else {
-            if (dist < m_relevancyInfo[m_pPeers[i]].hardRadius) {
-               if (obj->IsDirty()) {
-                  m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
-               }
-            } else {
-               m_pReplicationManagersPerPeer[i]->ReplicateDestroy(obj);
-               m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Erase(objId);
-            }
-         }
-      }
-   }
-}
-
 #ifndef _RETAIL
 void ObjectReplicationProtocolLeader::DrawDbgDiagnostics() const
 {
@@ -188,7 +132,7 @@ void ObjectReplicationProtocolLeader::SendStateMsgToClient(PeerId peerId, Networ
 
    for (int i = 0; i < m_pPeers.Size(); ++i) {
       if (m_pPeers[i] != peerId) {
-          continue;
+         continue;
       }
 
       m_pReplicationManagersPerPeer[i]->Write(msg);
@@ -202,30 +146,90 @@ void ObjectReplicationProtocolLeader::SendStateMsgToClient(PeerId peerId, Networ
 
 void ObjectReplicationProtocolLeader::RegisterPeer(PeerId peerId)
 {
-    m_pPeers.PushBack(peerId);
-    UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
-    m_relevancyInfo.Emplace(peerId, ReplicationRelevancyInfo());
+   m_pPeers.PushBack(peerId);
+   UniquePtr<ReplicationActionWriter>& pReplicationManager = m_pReplicationManagersPerPeer.EmplaceBack(MakeUnique<ReplicationActionWriter>(m_pLinkingContext));
+   m_relevancyInfo.Emplace(peerId, ReplicationRelevancyInfo());
 }
 
 void ObjectReplicationProtocolLeader::UnregisterPeer(PeerId peerId)
 {
-    for (int i = 0; i < m_pPeers.Size(); ++i) {
-        if (m_pPeers[i] == peerId) {
-            m_pPeers.Erase(m_pPeers.Begin() + i);
-            m_pReplicationManagersPerPeer.Erase(m_pReplicationManagersPerPeer.Begin() + i);
-            m_relevancyInfo.Erase(peerId);
-            return;
+   for (int i = 0; i < m_pPeers.Size(); ++i) {
+      if (m_pPeers[i] == peerId) {
+         m_pPeers.Erase(m_pPeers.Begin() + i);
+         m_pReplicationManagersPerPeer.Erase(m_pReplicationManagersPerPeer.Begin() + i);
+         m_relevancyInfo.Erase(peerId);
+         return;
+      }
+   }
+}
+
+void ObjectReplicationProtocolLeader::UpdateReplicatedObjectsState()
+{
+    for (auto& obj : m_pReplicationObjects) {
+        if (obj->GetMasterPeerId() != g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId()) {
+            continue;
+        }
+
+        obj->OnUpdate();
+
+        for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
+            auto itr = m_relevancyInfo.Find(m_pPeers[i]);
+            ReplicationRelevancyInfo& relInfo = itr->second;
+
+            const uint32_t objId = m_pLinkingContext->GetId(obj, false);
+
+            const bool isObjReplicatedToPoi = m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Find(objId) != m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.End();
+
+            if (relInfo.pActorPOI == nullptr || !obj->IsUseRelevancy()) {
+                if (!isObjReplicatedToPoi) {
+                    Logger::WriteMsgLog("Send replication action create of NON RELEVANCE object [NetworkId:%u] to peer [PeerId:%u]", objId, m_pPeers[i]);
+
+                    m_pReplicationManagersPerPeer[i]->ReplicateCreate(obj);
+                    m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
+                }
+                else {
+                    if (obj->IsDirty()) {
+                        m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
+                    }
+                }
+
+                continue;
+            }
+
+            const glm::vec3& poiPos = m_relevancyInfo[m_pPeers[i]].pActorPOI->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock()->GetPosition();
+            const float dist = glm::length(poiPos - obj->GetPosition()); // TODO: lengthSqr
+
+            if (!isObjReplicatedToPoi) {
+                if (dist < m_relevancyInfo[m_pPeers[i]].softRadius) {
+                    Logger::WriteMsgLog("Send replication action create of object [NetworkId:%u] to peer [PeerId:%u]", objId, m_pPeers[i]);
+                    m_pReplicationManagersPerPeer[i]->ReplicateCreate(obj);
+                    m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Insert(objId);
+                }
+            }
+            else {
+                if (dist < m_relevancyInfo[m_pPeers[i]].hardRadius) {
+                    if (obj->IsDirty()) {
+                        m_pReplicationManagersPerPeer[i]->ReplicateUpdate(obj);
+                    }
+                }
+                else {
+                    m_pReplicationManagersPerPeer[i]->ReplicateDestroy(obj);
+                    m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Erase(objId);
+                }
+            }
         }
     }
 }
 
 void ObjectReplicationProtocolLeader::OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager)
 {
-    for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-        if (m_pReplicationManagersPerPeer[i]->GetNumOfCachedHeaders() > 0) {
-            SendStateMsgToClient(m_pPeers[i], pNetworkMessagesManager);
-        }
-    }
+   UpdateReplicatedObjectsState();
+
+   for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
+      if (m_pReplicationManagersPerPeer[i]->GetNumOfCachedHeaders() > 0) {
+         SendStateMsgToClient(m_pPeers[i], pNetworkMessagesManager);
+      }
+   }
 }
 
 /***ObjectReplicationProtocolReader***/
@@ -234,93 +238,91 @@ static ObjectReplicationProtocolFollower* g_pObjectReplicationReaderProtocol;
 
 ObjectReplicationProtocolFollower* ObjectReplicationProtocolFollower::Get()
 {
-    Assert(g_pObjectReplicationReaderProtocol != nullptr, "You are trying to get ObjectReplicationProtocolReader before it creation");
+   Assert(g_pObjectReplicationReaderProtocol != nullptr, "You are trying to get ObjectReplicationProtocolReader before it creation");
 
-    return g_pObjectReplicationReaderProtocol;
+   return g_pObjectReplicationReaderProtocol;
 }
 
 ObjectReplicationProtocolFollower::ObjectReplicationProtocolFollower()
-    : m_pLinkingContext(MakeShared<NewtworkObjectLinkingContexts>())
+   : m_pLinkingContext(MakeShared<NewtworkObjectLinkingContexts>())
 {
-    if (g_pObjectReplicationReaderProtocol) {
-        Logger::WriteErrorLog("Attempting to create two global ObjectReplicationProtocolReaders! The old one will be destroyed and overwritten with this one.\n");
-    }
+   if (g_pObjectReplicationReaderProtocol) {
+      Logger::WriteErrorLog("Attempting to create two global ObjectReplicationProtocolReaders! The old one will be destroyed and overwritten with this one.\n");
+   }
 
-    g_pObjectReplicationReaderProtocol = this;
+   g_pObjectReplicationReaderProtocol = this;
 }
 
 ObjectReplicationProtocolFollower::~ObjectReplicationProtocolFollower()
 {
-    if (g_pObjectReplicationReaderProtocol == this) {
-        g_pObjectReplicationReaderProtocol = nullptr;
-    }
+   if (g_pObjectReplicationReaderProtocol == this) {
+      g_pObjectReplicationReaderProtocol = nullptr;
+   }
 }
 
 void ObjectReplicationProtocolFollower::ReceiveMessage(InputMemoryBitStream& stream)
 {
-    uint32_t numOfHeaders;
-    Deserialize(stream, numOfHeaders);
+   uint32_t numOfHeaders;
+   Deserialize(stream, numOfHeaders);
 
-    for (int i = 0; i < numOfHeaders; ++i) {
-        ProcessReplicationHeader(stream);
-    }
+   for (int i = 0; i < numOfHeaders; ++i) {
+      ProcessReplicationHeader(stream);
+   }
 }
 
 void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitStream& stream)
 {
-    ReplicationHeader rh;
-    rh.Read(stream);
+   ReplicationHeader rh;
+   rh.Read(stream);
 
-    if (rh.GetMasterPeerId() == g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId())
-    {
-        Logger::WriteErrorLog("ObjectReplicationProtocolFollower got update for owned entity with newtworkId %d. Update skipped.", rh.GetNetworkId());
-        return;
-    }
+   if (rh.GetMasterPeerId() == g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId()) {
+      Logger::WriteErrorLog("ObjectReplicationProtocolFollower got update for owned entity with newtworkId %d. Update skipped.", rh.GetNetworkId());
+      return;
+   }
 
-    switch (rh.GetReplicationAction()) {
-    case ReplicationAction::Create:
-    {
-        const uint32_t id = ByteSwap(rh.GetClassId());
-        Logger::WriteMsgLog("Create replicated object [ClassId: %.4s] - [NetworkID: %u]", reinterpret_cast<const char*>(&id), rh.GetNetworkId());
+   switch (rh.GetReplicationAction()) {
+      case ReplicationAction::Create:
+         {
+            const uint32_t id = ByteSwap(rh.GetClassId());
+            Logger::WriteMsgLog("Create replicated object [ClassId: %.4s] - [NetworkID: %u]", reinterpret_cast<const char*>(&id), rh.GetNetworkId());
 
-        SharedPtr<ReplicationObject> go = NetworkObjectCreationRegistry::Get().Create(rh.GetClassId());
-        m_pLinkingContext->AddObj(go, rh.GetNetworkId());
-        go->SetNetworkId(rh.GetNetworkId());
-        go->Init(rh.GetMasterPeerId());
-        go->Read(stream);
-
-        break;
-    }
-    case ReplicationAction::Update:
-    {
-        SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
-
-        // we might have not received the create yet,
-        // so serialize into a dummy to advance read head
-        if (go) {
+            SharedPtr<ReplicationObject> go = NetworkObjectCreationRegistry::Get().Create(rh.GetClassId());
+            m_pLinkingContext->AddObj(go, rh.GetNetworkId());
+            go->SetNetworkId(rh.GetNetworkId());
+            go->Init(rh.GetMasterPeerId());
             go->Read(stream);
-        }
-        else {
-            uint32_t classId = rh.GetClassId();
-            go = NetworkObjectCreationRegistry::Get().Create(classId);
-            go->Read(stream);
-        }
-        break;
-    }
-    case ReplicationAction::Destroy:
-    {
-        Logger::WriteMsgLog("Delete replicated object [NetworkID: %u]", rh.GetNetworkId());
 
-        SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
-        go->Term();
-        m_pLinkingContext->RemoveObj(go);
+            break;
+         }
+      case ReplicationAction::Update:
+         {
+            SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
 
-        break;
-    }
-    default:
-        // not handled by us
-        break;
-    }
+            // we might have not received the create yet,
+            // so serialize into a dummy to advance read head
+            if (go) {
+               go->Read(stream);
+            } else {
+               uint32_t classId = rh.GetClassId();
+               go = NetworkObjectCreationRegistry::Get().Create(classId);
+               go->Read(stream);
+            }
+            break;
+         }
+      case ReplicationAction::Destroy:
+         {
+            Logger::WriteMsgLog("Delete replicated object [NetworkID: %u]", rh.GetNetworkId());
+
+            SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
+            go->Term();
+            m_pLinkingContext->RemoveObj(go);
+
+            break;
+         }
+      default:
+         // not handled by us
+         break;
+   }
 }
 
 } // namespace BIEngine

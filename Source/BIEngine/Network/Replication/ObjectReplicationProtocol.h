@@ -33,8 +33,6 @@ public:
       return m_pLinkingContext->GetObj(networkId);
    }
 
-   void OnUpdate();
-
 #ifndef _RETAIL
    void DrawDbgDiagnostics() const;
 #endif
@@ -43,6 +41,7 @@ protected:
    virtual void RegisterPeer(PeerId peerId) override;
    virtual void UnregisterPeer(PeerId peerId) override;
 
+   void UpdateReplicatedObjectsState();
    virtual void OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager) override;
 
 private:
