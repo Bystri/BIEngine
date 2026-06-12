@@ -45,7 +45,8 @@ int main(int argc, char* argv[])
       }
    }
 
-   return BIEngine::Run(argc, argv, 60);
+   constexpr int maxFps = 60;
+   return BIEngine::Run(argc, argv, maxFps);
 }
 
 /**********BIGameClientApp**********/

@@ -19,6 +19,7 @@ public:
    static const uint32_t kWelcomeCC = 'WLCM';
    static const uint32_t kEstablishedCC = 'ESTB';
    static constexpr int MAX_PACKETS_PER_FRAME_COUNT = 10;
+   static constexpr float TIME_BETWEEN_SEND_PACKETS_SEC = 1.0f / 15.0f;
 
    virtual ~NetworkManager() {};
 
@@ -46,6 +47,8 @@ protected:
 protected:
    NetworkMessagesManager m_networkMessagesManager;
    Deque<int> m_processedMessagesIds;
+
+   float m_lastTimePacketsSend = 0.0f;
 };
 
 } // namespace BIEngine

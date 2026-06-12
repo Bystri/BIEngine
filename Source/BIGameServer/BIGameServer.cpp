@@ -43,7 +43,8 @@ int main(int argc, char* argv[])
       }
    }
 
-   return BIEngine::Run(argc, argv, 15);
+   constexpr int maxFps = 60;
+   return BIEngine::Run(argc, argv, maxFps);
 }
 
 /**********BIGameServerApp**********/
@@ -159,7 +160,6 @@ void BIServerGameLogic::OnUpdate(BIEngine::GameTimer& gt)
    m_pNavWorld->GetNavCrowd()->UpdateCrowdInfo(m_actors);
    m_pNavWorld->GetNavCrowd()->OnUpdate(gt);
 
-   BIEngine::ObjectReplicationProtocolLeader::Get()->OnUpdate();
    m_pNetworkManager->SendOutgoingPackets(gt);
 }
 

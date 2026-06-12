@@ -18,6 +18,12 @@ void NetworkManager::ProcessIncomingPackets()
 
 void NetworkManager::SendOutgoingPackets(const BIEngine::GameTimer& gt)
 {
+   if (m_lastTimePacketsSend + TIME_BETWEEN_SEND_PACKETS_SEC > gt.TotalTime())
+   {
+       return;
+   }
+
+   m_lastTimePacketsSend = gt.TotalTime();
    m_networkMessagesManager.SendOutgoingPackets(gt);
 }
 
