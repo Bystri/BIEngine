@@ -21,6 +21,8 @@ public:
    virtual const char* GetGameTitle() override { return "BIGameClient"; }
 };
 
+#include <fmod.hpp>
+
 class BIGameClientHumanView : public BIEngine::HumanView {
 public:
    BIGameClientHumanView(unsigned int screenWidth, unsigned int screenHeight)
@@ -28,7 +30,10 @@ public:
    {
    }
 
-   virtual bool Init();
+   virtual bool Init() override;
+   virtual void Shutdown() override;
+
+   virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
 
 private:
    void SetController(BIEngine::SharedPtr<BIGameController> pController)
@@ -36,6 +41,10 @@ private:
       m_pKeyboardHandler = pController;
       m_pPointerHandler = pController;
    }
+
+private:
+    FMOD::System* m_pFMODSystem;
+    FMOD::Sound* m_pMainMusic;
 };
 
 class BIGameClientLogic : public BIEngine::GameLogic {

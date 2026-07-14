@@ -267,10 +267,35 @@ static BIEngine::SharedPtr<BIEngine::Skybox> humanViewCreateSkybox()
    return BIEngine::MakeShared<BIEngine::Skybox>(pTexture, pShaderProgram);
 }
 
+#include <fmod_errors.h>
+
 bool BIGameClientHumanView::Init()
 {
    if (!BIEngine::HumanView::Init()) {
       return false;
+   }
+
+   FMOD::System_Create(&m_pFMODSystem);
+
+   FMOD_RESULT result = m_pFMODSystem->init(100, FMOD_INIT_NORMAL, 0);
+   if (result != FMOD_OK)
+   {
+       BIEngine::Logger::WriteErrorLog(FMOD_ErrorString(result));
+       return false;
+   }
+   
+   result = m_pFMODSystem->createStream("../assets/music/time_for_adventure.mp3", FMOD_DEFAULT, 0, &m_pMainMusic);
+   if (result != FMOD_OK)
+   {
+       BIEngine::Logger::WriteErrorLog(FMOD_ErrorString(result));
+       return false;
+   }
+
+   result = m_pFMODSystem->playSound(m_pMainMusic, nullptr, false, nullptr);
+   if (result != FMOD_OK)
+   {
+       BIEngine::Logger::WriteErrorLog(FMOD_ErrorString(result));
+       return false;
    }
 
    constexpr std::size_t MAX_DIRECTIONAL_LIGHTS_NUM = 1;
@@ -307,4 +332,24 @@ bool BIGameClientHumanView::Init()
    SetController(pGameController);
 
    return true;
+}
+
+void BIGameClientHumanView::Shutdown()
+{
+    if (m_pMainMusic)
+    {
+        m_pMainMusic->release();
+        m_pMainMusic = nullptr;
+    }
+
+    if (m_pFMODSystem)
+    {
+        m_pFMODSystem->release();
+        m_pFMODSystem = nullptr;
+    }
+}
+
+void BIGameClientHumanView::OnUpdate(const BIEngine::GameTimer& gt)
+{
+    m_pFMODSystem->update();
 }
