@@ -4,6 +4,7 @@
     <LocalDebuggerWorkingDirectory>..\..\..\Game\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerCommandArguments>-hp 40000 </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArgumentsHistory>-hp 40000 |</LocalDebuggerCommandArgumentsHistory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerWorkingDirectory>..\..\..\Game\</LocalDebuggerWorkingDirectory>

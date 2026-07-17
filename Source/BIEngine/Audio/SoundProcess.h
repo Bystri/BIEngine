@@ -34,7 +34,7 @@ protected:
    SoundProcess();
 
    virtual void OnInit();
-   virtual void OnUpdate(const GameTimer& gt);
+   virtual void OnUpdate(float dt) override;
 
 protected:
    SharedPtr<ResHandle> m_pHandle;

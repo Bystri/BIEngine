@@ -43,7 +43,7 @@ void SoundProcess::OnInit()
    Play(m_volume, m_isLooping);
 }
 
-void SoundProcess::OnUpdate(const GameTimer& gt)
+void SoundProcess::OnUpdate(float dt)
 {
    if (!IsPlaying()) {
       Succeed();

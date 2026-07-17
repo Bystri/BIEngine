@@ -149,7 +149,6 @@
     <ClCompile Include="..\..\Actors\SkinnedMeshComponent.cpp" />
     <ClCompile Include="..\..\Actors\TransformComponent.cpp" />
     <ClCompile Include="..\..\Audio\Audio.cpp" />
-    <ClCompile Include="..\..\Audio\irrKlangAudio.cpp" />
     <ClCompile Include="..\..\Audio\SoundLoader.cpp" />
     <ClCompile Include="..\..\Audio\SoundProcess.cpp" />
     <ClCompile Include="..\..\EngineCore\GameApp.cpp" />
@@ -281,7 +280,6 @@
     <ClInclude Include="..\..\Actors\SkinnedMeshComponent.h" />
     <ClInclude Include="..\..\Actors\TransformComponent.h" />
     <ClInclude Include="..\..\Audio\Audio.h" />
-    <ClInclude Include="..\..\Audio\irrKlangAudio.h" />
     <ClInclude Include="..\..\Audio\SoundLoader.h" />
     <ClInclude Include="..\..\Audio\SoundProcess.h" />
     <ClInclude Include="..\..\EngineCore\BIEngine.h" />

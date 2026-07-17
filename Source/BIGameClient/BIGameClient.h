@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../BIEngine/EngineCore/BIEngine.h"
+#include "../BIEngine/Audio/SoundProcess.h"
 
 #include "../BIGame/BIDebugMenuController.h"
 #include "../BIGame/BIGameController.h"
@@ -31,9 +32,6 @@ public:
    }
 
    virtual bool Init() override;
-   virtual void Shutdown() override;
-
-   virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
 
 private:
    void SetController(BIEngine::SharedPtr<BIGameController> pController)
@@ -43,8 +41,7 @@ private:
    }
 
 private:
-    FMOD::System* m_pFMODSystem;
-    FMOD::Sound* m_pMainMusic;
+    BIEngine::WeakProcessPtr m_pMainMusicProcess;
 };
 
 class BIGameClientLogic : public BIEngine::GameLogic {

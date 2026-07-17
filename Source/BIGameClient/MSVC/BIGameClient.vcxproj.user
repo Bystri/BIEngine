@@ -4,6 +4,7 @@
     <LocalDebuggerCommandArguments>-pn Player2 -ha 127.0.0.1:40000</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerWorkingDirectory>..\..\..\Game\</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerCommandArgumentsHistory>-pn Player2 -ha 127.0.0.1:40000|</LocalDebuggerCommandArgumentsHistory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerCommandArguments>-pn Player2 -ha 127.0.0.1:40000</LocalDebuggerCommandArguments>

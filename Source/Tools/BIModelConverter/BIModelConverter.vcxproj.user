@@ -3,5 +3,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerCommandArguments>.\Test\Skeleton_Minion.glb .\Test\skeleton_minion Models/dungeon_characters/skeleton_minion</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArgumentsHistory>.\Test\Skeleton_Minion.glb .\Test\skeleton_minion Models/dungeon_characters/skeleton_minion|</LocalDebuggerCommandArgumentsHistory>
   </PropertyGroup>
 </Project>

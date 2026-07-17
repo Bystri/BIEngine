@@ -4,7 +4,7 @@
 #include "../Renderer/ShaderProgram.h"
 #include "../Renderer/ImageLoader.h"
 #include "../EngineCore/GameApp.h"
-#include "../Audio/irrKlangAudio.h"
+#include "../Audio/Audio.h"
 
 namespace BIEngine {
 
@@ -24,7 +24,7 @@ HumanView::~HumanView()
 bool HumanView::Init()
 {
    if (!g_pAudio) {
-      g_pAudio = new irrKlangAudio();
+      g_pAudio = CreateAudioManager();
    }
 
    if (!g_pAudio) {
@@ -62,6 +62,11 @@ void HumanView::Shutdown()
       delete g_pAudio;
       g_pAudio = nullptr;
    }
+}
+
+void HumanView::OnUpdate(const GameTimer& gt)
+{
+    g_pAudio->OnUpdate();
 }
 
 void HumanView::OnPreRender(const GameTimer& gt)

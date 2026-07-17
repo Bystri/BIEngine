@@ -153,9 +153,6 @@
     <ClCompile Include="..\..\Audio\Audio.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Audio\irrKlangAudio.cpp">
-      <Filter>Audio</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Audio\SoundProcess.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
@@ -546,9 +543,6 @@
       <Filter>Actors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Audio\Audio.h">
-      <Filter>Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Audio\irrKlangAudio.h">
       <Filter>Audio</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Audio\SoundProcess.h">

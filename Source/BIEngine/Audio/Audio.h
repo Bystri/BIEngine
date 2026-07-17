@@ -81,6 +81,8 @@ public:
 
    virtual bool Initialize() = 0;
    virtual void Shutdown() = 0;
+
+   virtual void OnUpdate() {}
 };
 
 // Главная аудио система, управляющая аудио-буферами
@@ -108,5 +110,7 @@ protected:
 };
 
 extern AudioManager* g_pAudio;
+
+extern AudioManager* CreateAudioManager();
 
 } // namespace BIEngine

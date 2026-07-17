@@ -23,6 +23,7 @@ public:
 
    const UniquePtr<Scene>& GetScene() const { return m_pScene; }
 
+   virtual void OnUpdate(const GameTimer& gt) override;
    virtual void OnPreRender(const GameTimer& gt) override;
    virtual void OnPostRender(const GameTimer& gt) override;
 

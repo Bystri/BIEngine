@@ -6,14 +6,4 @@
 
 namespace BIEngine {
 
-SharedPtr<IResourceLoader> CreateOGGResourceLoader()
-{
-   return MakeShared<OggResourceLoader>();
-}
-
-SharedPtr<IResourceLoader> CreateWavResourceLoader()
-{
-   return MakeShared<WavResourceLoader>();
-}
-
 } // namespace BIEngine
