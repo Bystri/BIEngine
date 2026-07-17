@@ -68,7 +68,7 @@ protected:
    int m_volume;
 };
 
-class IAudio {
+class IAudioManager {
 public:
    virtual bool Active() = 0;
 
@@ -84,11 +84,11 @@ public:
 };
 
 // Главная аудио система, управляющая аудио-буферами
-class Audio : public IAudio {
+class AudioManager : public IAudioManager {
 public:
-   Audio();
+   AudioManager();
 
-   ~Audio() { Shutdown(); }
+   ~AudioManager() { Shutdown(); }
 
    virtual void StopAllSounds();
    virtual void PauseAllSounds();
@@ -107,6 +107,6 @@ protected:
    bool m_initialized;
 };
 
-extern Audio* g_pAudio;
+extern AudioManager* g_pAudio;
 
 } // namespace BIEngine

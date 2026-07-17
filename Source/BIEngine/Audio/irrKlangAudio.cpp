@@ -30,7 +30,7 @@ bool irrKlangAudio::Initialize()
 void irrKlangAudio::Shutdown()
 {
    if (m_initialized) {
-      Audio::Shutdown();
+      AudioManager::Shutdown();
       if (m_pSoundEngine) {
          m_pSoundEngine->drop();
          m_pSoundEngine = nullptr;

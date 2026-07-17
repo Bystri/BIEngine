@@ -3,16 +3,16 @@
 
 namespace BIEngine {
 
-Audio* g_pAudio = nullptr;
+AudioManager* g_pAudio = nullptr;
 char* gSoundExtentions[] = {".mp3", ".wav", ".midi", ".ogg"};
 
-Audio::Audio()
+AudioManager::AudioManager()
    : m_initialized(false),
      m_allPaused(false)
 {
 }
 
-void Audio::Shutdown()
+void AudioManager::Shutdown()
 {
    AudioBufferList::Iterator itr = m_allSamples.Begin();
 
@@ -23,7 +23,7 @@ void Audio::Shutdown()
    }
 }
 
-void Audio::PauseAllSounds()
+void AudioManager::PauseAllSounds()
 {
    for (auto& audioBuffer : m_allSamples) {
       audioBuffer->Pause();
@@ -32,7 +32,7 @@ void Audio::PauseAllSounds()
    m_allPaused = true;
 }
 
-void Audio::ResumeAllSounds()
+void AudioManager::ResumeAllSounds()
 {
    for (auto& audioBuffer : m_allSamples) {
       audioBuffer->Resume();
@@ -41,7 +41,7 @@ void Audio::ResumeAllSounds()
    m_allPaused = false;
 }
 
-void Audio::StopAllSounds()
+void AudioManager::StopAllSounds()
 {
    for (auto& audioBuffer : m_allSamples) {
       audioBuffer->Stop();
@@ -50,7 +50,7 @@ void Audio::StopAllSounds()
    m_allPaused = false;
 }
 
-bool Audio::HasSoundCard()
+bool AudioManager::HasSoundCard()
 {
    return (g_pAudio && g_pAudio->Active());
 }

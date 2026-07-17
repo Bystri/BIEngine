@@ -29,7 +29,7 @@ private:
    irrklang::ISoundEngine* m_pSoundEngine;
 };
 
-class irrKlangAudio : public Audio {
+class irrKlangAudio : public AudioManager {
 public:
    irrKlangAudio()
       : m_pSoundEngine(nullptr) {}
