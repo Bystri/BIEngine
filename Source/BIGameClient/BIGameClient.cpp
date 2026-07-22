@@ -279,7 +279,7 @@ bool BIGameClientHumanView::Init()
    auto soundHandle = BIEngine::ResCache::Get()->GetHandle("music/time_for_adventure.mp3");
    m_pMainMusicProcess = BIEngine::ProcessManager::Get()->AttachProcess(
         BIEngine::MakeShared<BIEngine::SoundProcess>(
-            soundHandle, 100, true
+            soundHandle, BIEngine::AudioManager::LoadType::STREAMING, 100, true
         ));
 
    constexpr std::size_t MAX_DIRECTIONAL_LIGHTS_NUM = 1;

@@ -4,26 +4,10 @@
 
 namespace BIEngine {
 
-class SoundResourceExtraData;
-
-enum SoundType {
-   SOUND_TYPE_FIRST,
-   SOUND_TYPE_MP3 = SOUND_TYPE_FIRST,
-   SOUND_TYPE_WAVE,
-   SOUND_TYPE_MIDI,
-   SOUND_TYPE_OGG,
-
-   // Счетчик наших доступных форматов. Должен быть последним.
-   SOUND_TYPE_COUNT,
-   SOUND_TYPE_UNKNOWN,
-};
-
-extern char* gSoundExtentions[];
-
 // Буффер загруженного аудио
 class IAudioBuffer {
 public:
-   virtual ~IAudioBuffer() {}
+   virtual ~IAudioBuffer() = default;
 
    virtual SharedPtr<ResHandle> GetResource() = 0;
    virtual bool OnRestore() = 0;
@@ -70,9 +54,15 @@ protected:
 
 class IAudioManager {
 public:
+   enum class LoadType
+   {
+      DECOMPRESS_ON_LOAD,
+      STREAMING
+   };
+
    virtual bool Active() = 0;
 
-   virtual IAudioBuffer* InitAudioBuffer(SharedPtr<ResHandle> handle) = 0;
+   virtual IAudioBuffer* InitAudioBuffer(SharedPtr<ResHandle> handle, LoadType loadType) = 0;
    virtual void ReleaseAudioBuffer(IAudioBuffer* audioBuffer) = 0;
 
    virtual void StopAllSounds() = 0;

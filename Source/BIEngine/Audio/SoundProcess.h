@@ -9,7 +9,7 @@ namespace BIEngine {
 
 class SoundProcess : public Process {
 public:
-   SoundProcess(SharedPtr<ResHandle> pSoundResource, int volume = 100, bool looping = false);
+   SoundProcess(SharedPtr<ResHandle> pSoundResource, IAudioManager::LoadType loadType, int volume = 100, bool looping = false);
    virtual ~SoundProcess();
 
    void Play(const int volume, const bool looping);
@@ -42,6 +42,7 @@ protected:
 
    int m_volume;
    bool m_isLooping;
+   const IAudioManager::LoadType m_loadType;
 };
 
 } // namespace BIEngine

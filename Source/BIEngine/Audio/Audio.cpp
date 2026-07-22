@@ -65,11 +65,11 @@ class fmodAudioManager : public AudioManager {
 public:
     virtual bool Active() { return m_pFMODSystem != nullptr; }
 
-    virtual IAudioBuffer* InitAudioBuffer(SharedPtr<ResHandle> pHandle);
-    virtual void ReleaseAudioBuffer(IAudioBuffer* pAudioBuffer);
+    virtual IAudioBuffer* InitAudioBuffer(SharedPtr<ResHandle> pHandle, LoadType loadType) override;
+    virtual void ReleaseAudioBuffer(IAudioBuffer* pAudioBuffer) override;
 
-    virtual void Shutdown();
-    virtual bool Initialize();
+    virtual void Shutdown() override;
+    virtual bool Initialize() override;
 
     virtual void OnUpdate() override;
 
@@ -79,24 +79,25 @@ protected:
 
 class fmodAudioBuffer : public AudioBuffer {
 public:
-    fmodAudioBuffer(FMOD::System* pSoundEngine, SharedPtr<ResHandle> pResource);
-    virtual bool OnRestore();
+    fmodAudioBuffer(FMOD::System* pSoundEngine, SharedPtr<ResHandle> pResource, IAudioManager::LoadType loadType);
+    virtual bool OnRestore() override;
 
-    virtual bool Play(int volume, bool looping);
-    virtual bool Pause();
-    virtual bool Stop();
-    virtual bool Resume();
+    virtual bool Play(int volume, bool looping) override;
+    virtual bool Pause() override;
+    virtual bool Stop() override;
+    virtual bool Resume() override;
 
-    virtual bool TogglePause();
-    virtual bool IsPlaying();
-    virtual void SetVolume(int volume);
-    virtual void SetPosition(unsigned long newPosition);
+    virtual bool TogglePause() override;
+    virtual bool IsPlaying() override;
+    virtual void SetVolume(int volume) override;
+    virtual void SetPosition(unsigned long newPosition) override;
 
-    virtual float GetProgress();
+    virtual float GetProgress() override;
 
 private:
     FMOD::System* m_pFMODSystem = nullptr;
     FMOD::Sound* m_pFMODSound = nullptr;
+    FMOD::Channel* m_pChannel = nullptr;
 };
 
 bool fmodAudioManager::Initialize()
@@ -144,14 +145,14 @@ void fmodAudioManager::Shutdown()
     }
 }
 
-IAudioBuffer* fmodAudioManager::InitAudioBuffer(SharedPtr<ResHandle> pResHandle)
+IAudioBuffer* fmodAudioManager::InitAudioBuffer(SharedPtr<ResHandle> pResHandle, LoadType loadType)
 {
     if (!m_pFMODSystem)
     {
         return nullptr;
     }
 
-    IAudioBuffer* pAudioBuffer = new fmodAudioBuffer(m_pFMODSystem, pResHandle);
+    IAudioBuffer* pAudioBuffer = new fmodAudioBuffer(m_pFMODSystem, pResHandle, loadType);
     m_allSamples.PushFront(pAudioBuffer);
 
     return pAudioBuffer;
@@ -164,7 +165,7 @@ void fmodAudioManager::ReleaseAudioBuffer(IAudioBuffer* pSampleHandle)
     m_allSamples.Remove(pSampleHandle);
 }
 
-fmodAudioBuffer::fmodAudioBuffer(FMOD::System* pSoundEngine, SharedPtr<ResHandle> pResource)
+fmodAudioBuffer::fmodAudioBuffer(FMOD::System* pSoundEngine, SharedPtr<ResHandle> pResource, IAudioManager::LoadType loadType)
     : AudioBuffer(pResource), m_pFMODSystem(pSoundEngine)
 {
     FMOD_CREATESOUNDEXINFO info;
@@ -172,10 +173,29 @@ fmodAudioBuffer::fmodAudioBuffer(FMOD::System* pSoundEngine, SharedPtr<ResHandle
     info.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
     info.length = pResource->Size();
 
-    FMOD_RESULT result = m_pFMODSystem->createSound(
-        pResource->Buffer(), 
-        FMOD_DEFAULT | FMOD_OPENMEMORY, 
-        &info, &m_pFMODSound);
+    constexpr FMOD_MODE mode = FMOD_DEFAULT | FMOD_OPENMEMORY | FMOD_LOOP_NORMAL;
+
+    FMOD_RESULT result = FMOD_RESULT::FMOD_OK;
+
+    switch (loadType)
+    {
+    case IAudioManager::LoadType::DECOMPRESS_ON_LOAD:
+        result = m_pFMODSystem->createSound(
+            pResource->Buffer(),
+            mode,
+            &info, &m_pFMODSound);
+        break;
+    case IAudioManager::LoadType::STREAMING:
+        result = m_pFMODSystem->createStream(
+            pResource->Buffer(),
+            mode,
+            &info, &m_pFMODSound);
+        break;
+    default:
+        Assert(false, "Unrecognized load type for audio buffer");
+        return;
+    }
+
     if (result != FMOD_OK)
     {
         BIEngine::Logger::WriteErrorLog(FMOD_ErrorString(result));
@@ -200,11 +220,20 @@ bool fmodAudioBuffer::Play(int volume, bool looping)
 
     SetVolume(volume);
 
-    FMOD_RESULT result = m_pFMODSystem->playSound(m_pFMODSound, nullptr, false, nullptr);
+    FMOD_RESULT result = m_pFMODSystem->playSound(m_pFMODSound, nullptr, false, &m_pChannel);
     if (result != FMOD_OK)
     {
         BIEngine::Logger::WriteErrorLog(FMOD_ErrorString(result));
         return false;
+    }
+
+    if (m_isLooping)
+    {
+        m_pChannel->setLoopCount(-1);
+    }
+    else
+    {
+        m_pChannel->setLoopCount(0);
     }
 
     return true;
@@ -218,6 +247,11 @@ bool fmodAudioBuffer::Stop()
     }
 
     m_isPaused = true;
+    if (m_pChannel)
+    {
+        m_pChannel->stop();
+        m_pChannel = nullptr;
+    }
     m_pFMODSound->release();
     m_pFMODSound = nullptr;
 
@@ -226,17 +260,16 @@ bool fmodAudioBuffer::Stop()
 
 bool fmodAudioBuffer::Pause()
 {
-    /*
-    if (!g_pAudio->Active() || !m_pSound)
+    if (!g_pAudio->Active() || !m_pChannel)
+    {
         return false;
+    }
 
     m_isPaused = true;
-    m_pSound->setIsPaused();
-    m_pSound->setPlayPosition(0);
-    return true;
-    */
+    m_pChannel->setPaused(true);
+    m_pChannel->setPosition(0, FMOD_TIMEUNIT_MS);
 
-    return false;
+    return true;
 }
 
 bool fmodAudioBuffer::Resume()
@@ -247,59 +280,58 @@ bool fmodAudioBuffer::Resume()
 
 bool fmodAudioBuffer::TogglePause()
 {
-    /*
     if (!g_pAudio->Active())
+    {
         return false;
+    }
 
     if (m_isPaused)
+    {
         Resume();
+    }
     else
+    {
         Pause();
+    }
 
     return true;
-    */
-
-    return false;
 }
 
 bool fmodAudioBuffer::IsPlaying()
 {
-    /*
-    if (!g_pAudio->Active() || !m_pSound)
+    if (!g_pAudio->Active() || !m_pChannel)
+    {
         return false;
+    }
 
-    bool b = m_pSound->isFinished();
-    return !m_pSound->isFinished() && !m_pSound->getIsPaused();
-    */
-
-    return true;
+    bool paused = false;
+    m_pChannel->getPaused(&paused);
+    return !paused;
 }
 
 // Громкость может быть в диапазоне от 0 до 100
 void fmodAudioBuffer::SetVolume(int volume)
 {
-    /*
-    if (!g_pAudio->Active() || !m_pSound)
+    if (!g_pAudio->Active() || !m_pChannel)
+    {
         return;
+    }
 
     Assert(volume >= 0 && volume <= 100, "Volume must be a number between 0 and 100");
     if (volume < 0 || volume > 100) {
         return;
     }
 
-    float coeff = (float)volume / 100.0f;
-    m_pSound->setVolume(coeff);
-    */
+    const float coeff = static_cast<float>(volume) / 100.0f;
+    m_pChannel->setVolume(coeff);
 }
 
 void fmodAudioBuffer::SetPosition(unsigned long newPosition)
 {
-    /*
-    if (!g_pAudio->Active() || !m_pSound)
+    if (!g_pAudio->Active() || !m_pChannel)
         return;
 
-    m_pSound->setPlayPosition(newPosition);
-    */
+    m_pChannel->setPosition(newPosition, FMOD_TIMEUNIT_MS);
 }
 
 bool fmodAudioBuffer::OnRestore()
@@ -310,17 +342,23 @@ bool fmodAudioBuffer::OnRestore()
 // Возвращает долю величины уже проигранной части музыки. Возвращается в диапазоне от 0.0 до 1.0
 float fmodAudioBuffer::GetProgress()
 {
-    /*
-    if (!g_pAudio->Active() || !m_pSound)
-        return 0.f;
+    if (!g_pAudio->Active() || !m_pChannel)
+    {
+        return 0.0f;
+    }
 
-    float progress = m_pSound->getPlayPosition();
-    float length = m_pSound->getPlayLength();
+    unsigned int length = 0;
+    m_pFMODSound->getLength(&length, FMOD_TIMEUNIT_MS);
 
-    return progress / length;
-    */
+    if (length == 0)
+    {
+        return 0.0f;
+    }
 
-    return 0.0f;
+    unsigned int progress = 0.0f;
+    m_pChannel->getPosition(&progress, FMOD_TIMEUNIT_MS);
+
+    return static_cast<float>(progress) / length;
 }
 
 AudioManager* CreateAudioManager()

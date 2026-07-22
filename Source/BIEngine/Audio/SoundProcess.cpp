@@ -5,8 +5,8 @@
 
 namespace BIEngine {
 
-SoundProcess::SoundProcess(SharedPtr<ResHandle> pResource, int volume, bool looping)
-   : m_pHandle(pResource), m_volume(volume), m_isLooping(looping)
+SoundProcess::SoundProcess(SharedPtr<ResHandle> pResource, IAudioManager::LoadType loadType, int volume, bool looping)
+   : m_pHandle(pResource), m_volume(volume), m_isLooping(looping), m_loadType(loadType)
 {
 }
 
@@ -31,7 +31,7 @@ void SoundProcess::OnInit()
    if (m_pHandle == nullptr)
       return;
 
-   IAudioBuffer* buffer = g_pAudio->InitAudioBuffer(m_pHandle);
+   IAudioBuffer* buffer = g_pAudio->InitAudioBuffer(m_pHandle, m_loadType);
 
    if (!buffer) {
       Fail();
