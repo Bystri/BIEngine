@@ -72,7 +72,6 @@ bool GameApp::Init()
    ResCache::Get()->RegisterLoader(MakeShared<MaterialResourceLoader>());
    ResCache::Get()->RegisterLoader(MakeShared<OggResourceLoader>());
    ResCache::Get()->RegisterLoader(MakeShared<WavResourceLoader>());
-   ResCache::Get()->RegisterLoader(MakeShared<Mp3ResourceLoader>());
 
    // Создаем экземпляр одиночки нашей системы скриптов
    if (!PythonStateManager::Create()) {

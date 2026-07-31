@@ -82,15 +82,18 @@ public:
     fmodAudioBuffer(FMOD::System* pSoundEngine, SharedPtr<ResHandle> pResource, IAudioManager::LoadType loadType);
     virtual bool OnRestore() override;
 
-    virtual bool Play(int volume, bool looping) override;
+    virtual bool Play(float volume, bool looping) override;
     virtual bool Pause() override;
     virtual bool Stop() override;
     virtual bool Resume() override;
 
     virtual bool TogglePause() override;
     virtual bool IsPlaying() override;
-    virtual void SetVolume(int volume) override;
+    virtual void SetVolume(float volume) override;
     virtual void SetPosition(unsigned long newPosition) override;
+
+    virtual void SetFrequency(float frequency) override;
+    virtual float GetFrequency() const override;
 
     virtual float GetProgress() override;
 
@@ -203,7 +206,7 @@ fmodAudioBuffer::fmodAudioBuffer(FMOD::System* pSoundEngine, SharedPtr<ResHandle
     }
 }
 
-bool fmodAudioBuffer::Play(int volume, bool looping)
+bool fmodAudioBuffer::Play(float volume, bool looping)
 {
     if (!g_pAudio->Active())
     {
@@ -218,14 +221,14 @@ bool fmodAudioBuffer::Play(int volume, bool looping)
         return false;
     }
 
-    SetVolume(volume);
-
     FMOD_RESULT result = m_pFMODSystem->playSound(m_pFMODSound, nullptr, false, &m_pChannel);
     if (result != FMOD_OK)
     {
         BIEngine::Logger::WriteErrorLog(FMOD_ErrorString(result));
         return false;
     }
+
+    SetVolume(volume);
 
     if (m_isLooping)
     {
@@ -309,21 +312,45 @@ bool fmodAudioBuffer::IsPlaying()
     return !paused;
 }
 
-// Громкость может быть в диапазоне от 0 до 100
-void fmodAudioBuffer::SetVolume(int volume)
+void fmodAudioBuffer::SetVolume(float volume)
 {
     if (!g_pAudio->Active() || !m_pChannel)
     {
         return;
     }
 
-    Assert(volume >= 0 && volume <= 100, "Volume must be a number between 0 and 100");
-    if (volume < 0 || volume > 100) {
+    Assert(volume >= 0 && volume <= 1.0f, "Volume must be a number between 0.0 and 1.0");
+    if (volume < 0 || volume > 1.0f) {
         return;
     }
 
-    const float coeff = static_cast<float>(volume) / 100.0f;
-    m_pChannel->setVolume(coeff);
+    m_pChannel->setVolume(volume);
+}
+
+void fmodAudioBuffer::SetFrequency(float frequency)
+{
+    if (!g_pAudio->Active() || !m_pChannel)
+    {
+        return;
+    }
+
+    m_pChannel->setFrequency(frequency);
+}
+
+float fmodAudioBuffer::GetFrequency() const
+{
+    if (!g_pAudio->Active() || !m_pChannel)
+    {
+        return 0.0f;
+    }
+
+    float freq = 0.0f;
+    if (m_pChannel->getFrequency(&freq) != FMOD_OK)
+    {
+        return 0.0f;
+    }
+
+    return freq;
 }
 
 void fmodAudioBuffer::SetPosition(unsigned long newPosition)

@@ -12,7 +12,7 @@ public:
    virtual SharedPtr<ResHandle> GetResource() = 0;
    virtual bool OnRestore() = 0;
 
-   virtual bool Play(int volume, bool looping) = 0;
+   virtual bool Play(float volume, bool looping) = 0;
    virtual bool Pause() = 0;
    virtual bool Stop() = 0;
    virtual bool Resume() = 0;
@@ -20,9 +20,11 @@ public:
    virtual bool TogglePause() = 0;
    virtual bool IsPlaying() = 0;
    virtual bool IsLooping() const = 0;
-   virtual void SetVolume(int volume) = 0;
+   virtual void SetVolume(float volume) = 0;
+   virtual float GetVolume() const = 0;
+   virtual void SetFrequency(float frequency) = 0;
+   virtual float GetFrequency() const = 0;
    virtual void SetPosition(unsigned long newPosition) = 0;
-   virtual int GetVolume() const = 0;
    virtual float GetProgress() = 0;
 };
 
@@ -33,7 +35,7 @@ public:
 
    virtual bool IsLooping() const { return m_isLooping; }
 
-   virtual int GetVolume() const { return m_volume; }
+   virtual float GetVolume() const { return m_volume; }
 
 protected:
    explicit AudioBuffer(SharedPtr<ResHandle> resource)
@@ -49,8 +51,10 @@ protected:
 protected:
    bool m_isPaused;
    bool m_isLooping;
-   int m_volume;
+   float m_volume;
 };
+
+
 
 class IAudioManager {
 public:

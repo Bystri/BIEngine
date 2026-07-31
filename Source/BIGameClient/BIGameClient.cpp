@@ -276,10 +276,10 @@ bool BIGameClientHumanView::Init()
       return false;
    }
    
-   auto soundHandle = BIEngine::ResCache::Get()->GetHandle("music/time_for_adventure.mp3");
+   auto soundHandle = BIEngine::ResCache::Get()->GetHandle("music/main_music.ogg");
    m_pMainMusicProcess = BIEngine::ProcessManager::Get()->AttachProcess(
         BIEngine::MakeShared<BIEngine::SoundProcess>(
-            soundHandle, BIEngine::AudioManager::LoadType::STREAMING, 100, true
+            soundHandle, BIEngine::AudioManager::LoadType::STREAMING, 1.0f, true
         ));
 
    constexpr std::size_t MAX_DIRECTIONAL_LIGHTS_NUM = 1;

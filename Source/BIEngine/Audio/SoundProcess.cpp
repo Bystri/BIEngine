@@ -5,8 +5,8 @@
 
 namespace BIEngine {
 
-SoundProcess::SoundProcess(SharedPtr<ResHandle> pResource, IAudioManager::LoadType loadType, int volume, bool looping)
-   : m_pHandle(pResource), m_volume(volume), m_isLooping(looping), m_loadType(loadType)
+SoundProcess::SoundProcess(SharedPtr<ResHandle> pResource, IAudioManager::LoadType loadType, float volume, bool looping)
+   : m_pHandle(pResource), m_isLooping(looping), m_volume(volume), m_loadType(loadType)
 {
 }
 
@@ -19,7 +19,7 @@ SoundProcess::~SoundProcess()
       g_pAudio->ReleaseAudioBuffer(m_pAudioBuffer.Get());
 }
 
-int SoundProcess::GetLengthMilli()
+int SoundProcess::GetLengthMilli() const 
 {
    return 0;
 }
@@ -50,7 +50,7 @@ void SoundProcess::OnUpdate(float dt)
    }
 }
 
-bool SoundProcess::IsPlaying()
+bool SoundProcess::IsPlaying() const
 {
    if (!m_pHandle || !m_pAudioBuffer)
       return false;
@@ -58,14 +58,14 @@ bool SoundProcess::IsPlaying()
    return m_pAudioBuffer->IsPlaying();
 }
 
-void SoundProcess::SetVolume(int volume)
+void SoundProcess::SetVolume(float volume)
 {
    if (m_pAudioBuffer == nullptr) {
       return;
    }
 
-   Assert(volume >= 0 && volume <= 100, "Volume must be a number between 0 and 100");
-   if (volume < 0 || volume > 100) {
+   Assert(volume >= 0 && volume <= 1.0f, "Volume must be a number between 0 and 100");
+   if (volume < 0 || volume > 1.0f) {
       return;
    }
 
@@ -73,7 +73,7 @@ void SoundProcess::SetVolume(int volume)
    m_pAudioBuffer->SetVolume(volume);
 }
 
-int SoundProcess::GetVolume()
+float SoundProcess::GetVolume()
 {
    if (m_pAudioBuffer == nullptr) {
       return 0;
@@ -89,9 +89,9 @@ void SoundProcess::PauseSound()
       m_pAudioBuffer->TogglePause();
 }
 
-void SoundProcess::Play(const int volume, const bool looping)
+void SoundProcess::Play(const float volume, const bool looping)
 {
-   Assert(volume >= 0 && volume <= 100, "Volume must be a number between 0 and 100");
+   Assert(volume >= 0.0 && volume <= 1.0f, "Volume must be a number between 0.0 and 1.0");
 
    if (!m_pAudioBuffer) {
       return;
@@ -107,7 +107,7 @@ void SoundProcess::Stop()
    }
 }
 
-float SoundProcess::GetProgress()
+float SoundProcess::GetProgress() const
 {
    if (m_pAudioBuffer) {
       return m_pAudioBuffer->GetProgress();

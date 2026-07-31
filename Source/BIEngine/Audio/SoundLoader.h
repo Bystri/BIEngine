@@ -30,17 +30,4 @@ public:
    virtual String GetPattern() { return "*.wav"; }
 };
 
-class Mp3ResourceLoader : public IResourceLoader {
-public:
-    virtual bool UseRawFile() { return true; }
-
-    virtual bool DiscardRawBufferAfterLoad() { return false; }
-
-    virtual unsigned int GetLoadedResourceSize(char* rawBuffer, unsigned int rawSize) { return 0u; }
-
-    virtual bool LoadResource(char* rawBuffer, unsigned int rawSize, SharedPtr<ResHandle> pHandle) { return true; }
-
-    virtual String GetPattern() { return "*.mp3"; }
-};
-
 } // namespace BIEngine

@@ -9,24 +9,24 @@ namespace BIEngine {
 
 class SoundProcess : public Process {
 public:
-   SoundProcess(SharedPtr<ResHandle> pSoundResource, IAudioManager::LoadType loadType, int volume = 100, bool looping = false);
+   SoundProcess(SharedPtr<ResHandle> pSoundResource, IAudioManager::LoadType loadType, float volume = 1.0f, bool looping = false);
    virtual ~SoundProcess();
 
-   void Play(const int volume, const bool looping);
+   void Play(const float volume, const bool looping);
    void Stop();
 
    // Задает громкость звука. Громкость может быть от 0 до 100
-   void SetVolume(int volume);
-   int GetVolume();
-   int GetLengthMilli();
+   void SetVolume(float volume);
+   float GetVolume();
+   int GetLengthMilli() const;
 
-   bool IsSoundValid() { return m_pHandle != NULL; }
+   bool IsSoundValid() const { return m_pHandle != NULL; }
 
-   bool IsPlaying();
+   bool IsPlaying() const;
 
-   bool IsLooping() { return m_pAudioBuffer && m_pAudioBuffer->IsLooping(); }
+   bool IsLooping() const { return m_pAudioBuffer && m_pAudioBuffer->IsLooping(); }
 
-   float GetProgress();
+   float GetProgress() const;
    void PauseSound();
 
 protected:
@@ -40,7 +40,7 @@ protected:
    SharedPtr<ResHandle> m_pHandle;
    SharedPtr<IAudioBuffer> m_pAudioBuffer;
 
-   int m_volume;
+   float m_volume;
    bool m_isLooping;
    const IAudioManager::LoadType m_loadType;
 };
