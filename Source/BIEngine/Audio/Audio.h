@@ -1,63 +1,51 @@
-﻿#pragma once
+#pragma once
 
 #include "../ResourceCache/ResCache.h"
 
 namespace BIEngine {
 
-// Буффер загруженного аудио
+class IAudioSound
+{
+public:
+    virtual ~IAudioSound() = default;
+
+    virtual bool Pause() = 0;
+    virtual bool Resume() = 0;
+    virtual bool Stop() = 0;
+
+    virtual bool TogglePause() = 0;
+    virtual bool IsPlaying() = 0;
+    virtual bool IsLooping() const = 0;
+    virtual void SetVolume(float volume) = 0;
+    virtual float GetVolume() const = 0;
+    virtual void SetFrequency(float frequency) = 0;
+    virtual float GetFrequency() const = 0;
+    virtual void SetPosition(unsigned long newPosition) = 0;
+    virtual float GetProgress() = 0;
+};
+
 class IAudioBuffer {
 public:
    virtual ~IAudioBuffer() = default;
 
-   virtual SharedPtr<ResHandle> GetResource() = 0;
-   virtual bool OnRestore() = 0;
+   virtual IAudioSound* Play(float volume, bool looping) = 0;
+   virtual bool Release() = 0;
 
-   virtual bool Play(float volume, bool looping) = 0;
-   virtual bool Pause() = 0;
-   virtual bool Stop() = 0;
-   virtual bool Resume() = 0;
+   void ReleaseAudio(IAudioSound* pAudio);
 
-   virtual bool TogglePause() = 0;
-   virtual bool IsPlaying() = 0;
-   virtual bool IsLooping() const = 0;
-   virtual void SetVolume(float volume) = 0;
-   virtual float GetVolume() const = 0;
-   virtual void SetFrequency(float frequency) = 0;
-   virtual float GetFrequency() const = 0;
-   virtual void SetPosition(unsigned long newPosition) = 0;
-   virtual float GetProgress() = 0;
-};
-
-// Реализация аудио-буфера реализаованная над системой ресурсов движка
-class AudioBuffer : public IAudioBuffer {
-public:
-   virtual SharedPtr<ResHandle> GetResource() { return m_pResource; }
-
-   virtual bool IsLooping() const { return m_isLooping; }
-
-   virtual float GetVolume() const { return m_volume; }
+   void StopAllSounds();
+   void PauseAllSounds();
+   void ResumeAllSounds();
 
 protected:
-   explicit AudioBuffer(SharedPtr<ResHandle> resource)
-   {
-      m_pResource = resource;
-      m_isPaused = false;
-      m_isLooping = false;
-      m_volume = 0;
-   }
-
-   SharedPtr<ResHandle> m_pResource;
-
-protected:
-   bool m_isPaused;
-   bool m_isLooping;
-   float m_volume;
+    using AudioSoundList = List<IAudioSound*>;
+    AudioSoundList m_allSounds;
 };
-
-
 
 class IAudioManager {
 public:
+   virtual ~IAudioManager() = default;
+
    enum class LoadType
    {
       DECOMPRESS_ON_LOAD,
@@ -84,7 +72,7 @@ class AudioManager : public IAudioManager {
 public:
    AudioManager();
 
-   ~AudioManager() { Shutdown(); }
+   virtual ~AudioManager() = default;
 
    virtual void StopAllSounds();
    virtual void PauseAllSounds();
@@ -98,8 +86,8 @@ public:
 protected:
    using AudioBufferList = List<IAudioBuffer*>;
 
-   AudioBufferList m_allSamples;
-   bool m_allPaused;
+   AudioBufferList m_allBuffers;
+   bool m_allPaused = false;
    bool m_initialized;
 };
 

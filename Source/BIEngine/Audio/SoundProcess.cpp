@@ -1,4 +1,4 @@
-﻿#include "SoundProcess.h"
+#include "SoundProcess.h"
 
 #include "Audio.h"
 #include "SoundLoader.h"
@@ -6,30 +6,28 @@
 namespace BIEngine {
 
 SoundProcess::SoundProcess(SharedPtr<ResHandle> pResource, IAudioManager::LoadType loadType, float volume, bool looping)
-   : m_pHandle(pResource), m_isLooping(looping), m_volume(volume), m_loadType(loadType)
+   : m_pHandle(pResource), m_volume(volume), m_isLooping(looping), m_loadType(loadType)
 {
 }
 
 SoundProcess::~SoundProcess()
 {
-   if (IsPlaying())
-      Stop();
+   Stop();
 
-   if (m_pAudioBuffer)
-      g_pAudio->ReleaseAudioBuffer(m_pAudioBuffer.Get());
-}
-
-int SoundProcess::GetLengthMilli() const 
-{
-   return 0;
+   if (m_pAudioBuffer && g_pAudio) {
+      g_pAudio->ReleaseAudioBuffer(m_pAudioBuffer);
+      m_pAudioBuffer = nullptr;
+   }
 }
 
 void SoundProcess::OnInit()
 {
    Process::OnInit();
 
-   if (m_pHandle == nullptr)
+   if (m_pHandle == nullptr || g_pAudio == nullptr) {
+      Fail();
       return;
+   }
 
    IAudioBuffer* buffer = g_pAudio->InitAudioBuffer(m_pHandle, m_loadType);
 
@@ -38,7 +36,7 @@ void SoundProcess::OnInit()
       return;
    }
 
-   m_pAudioBuffer.Reset(buffer);
+   m_pAudioBuffer = buffer;
 
    Play(m_volume, m_isLooping);
 }
@@ -52,65 +50,71 @@ void SoundProcess::OnUpdate(float dt)
 
 bool SoundProcess::IsPlaying() const
 {
-   if (!m_pHandle || !m_pAudioBuffer)
+   if (!m_pHandle || !m_pAudioBuffer || !m_pAudioSound)
       return false;
 
-   return m_pAudioBuffer->IsPlaying();
+   return m_pAudioSound->IsPlaying();
 }
 
 void SoundProcess::SetVolume(float volume)
 {
-   if (m_pAudioBuffer == nullptr) {
-      return;
-   }
-
-   Assert(volume >= 0 && volume <= 1.0f, "Volume must be a number between 0 and 100");
+   Assert(volume >= 0 && volume <= 1.0f, "Volume must be a number between 0.0 and 1.0");
    if (volume < 0 || volume > 1.0f) {
       return;
    }
 
    m_volume = volume;
-   m_pAudioBuffer->SetVolume(volume);
+
+   if (m_pAudioSound) {
+      m_pAudioSound->SetVolume(volume);
+   }
 }
 
 float SoundProcess::GetVolume()
 {
-   if (m_pAudioBuffer == nullptr) {
-      return 0;
+   if (m_pAudioSound == nullptr) {
+      return m_volume;
    }
 
-   m_volume = m_pAudioBuffer->GetVolume();
+   m_volume = m_pAudioSound->GetVolume();
    return m_volume;
 }
 
 void SoundProcess::PauseSound()
 {
-   if (m_pAudioBuffer)
-      m_pAudioBuffer->TogglePause();
+   if (m_pAudioSound) {
+      m_pAudioSound->TogglePause();
+   }
 }
 
 void SoundProcess::Play(const float volume, const bool looping)
 {
-   Assert(volume >= 0.0 && volume <= 1.0f, "Volume must be a number between 0.0 and 1.0");
+   Assert(volume >= 0.0f && volume <= 1.0f, "Volume must be a number between 0.0 and 1.0");
 
-   if (!m_pAudioBuffer) {
+   if (!m_pAudioBuffer || volume < 0.0f || volume > 1.0f) {
       return;
    }
 
-   m_pAudioBuffer->Play(volume, looping);
+   m_volume = volume;
+   m_isLooping = looping;
+   m_pAudioSound = m_pAudioBuffer->Play(volume, looping);
+   if (m_pAudioSound == nullptr && IsAlive()) {
+      Fail();
+   }
 }
 
 void SoundProcess::Stop()
 {
-   if (m_pAudioBuffer) {
-      m_pAudioBuffer->Stop();
+   if (m_pAudioSound) {
+      m_pAudioSound->Stop();
+      m_pAudioSound.Reset();
    }
 }
 
 float SoundProcess::GetProgress() const
 {
-   if (m_pAudioBuffer) {
-      return m_pAudioBuffer->GetProgress();
+   if (m_pAudioSound) {
+      return m_pAudioSound->GetProgress();
    }
 
    return 0.0f;
