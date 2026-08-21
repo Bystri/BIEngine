@@ -107,7 +107,7 @@ void SoundProcess::Stop()
 {
    if (m_pAudioSound) {
       m_pAudioSound->Stop();
-      m_pAudioSound.Reset();
+      m_pAudioBuffer->ReleaseAudio(m_pAudioSound);
    }
 }
 
