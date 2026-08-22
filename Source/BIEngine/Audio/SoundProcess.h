@@ -12,21 +12,16 @@ public:
    SoundProcess(SharedPtr<ResHandle> pSoundResource, float volume = 1.0f, bool looping = false);
    virtual ~SoundProcess();
 
-   void Play(const float volume, const bool looping);
-   void Stop();
+   void TogglePause();
 
    // Задает громкость звука. Громкость может быть от 0.0 до 1.0
    void SetVolume(float volume);
    float GetVolume();
 
    bool IsSoundValid() const { return m_pHandle != nullptr; }
-
    bool IsPlaying() const;
-
    bool IsLooping() const { return m_pAudioSound && m_pAudioSound->IsLooping(); }
-
    float GetProgress() const;
-   void PauseSound();
 
 protected:
    // Не позволяет использовать конструктор по-умолчанию из вне
@@ -34,6 +29,10 @@ protected:
 
    virtual void OnInit();
    virtual void OnUpdate(float dt) override;
+
+private:
+    void Play(const float volume, const bool looping);
+    void Stop();
 
 protected:
    SharedPtr<ResHandle> m_pHandle;

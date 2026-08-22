@@ -66,7 +66,7 @@ float SoundProcess::GetVolume()
    return m_volume;
 }
 
-void SoundProcess::PauseSound()
+void SoundProcess::TogglePause()
 {
    if (m_pAudioSound) {
       m_pAudioSound->TogglePause();
