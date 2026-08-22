@@ -54,14 +54,14 @@ namespace BIEngine
         m_initialized = false;
     }
 
-    IAudioBuffer* fmodAudioManager::InitAudioBuffer(SharedPtr<ResHandle> pResHandle, IAudioBuffer::LoadType loadType)
+    IAudioBuffer* fmodAudioManager::InitAudioBuffer(char* buffer, unsigned int bufferSize, IAudioBuffer::LoadType loadType)
     {
-        if (!m_pFMODSystem || !pResHandle)
+        if (!m_pFMODSystem || !buffer)
         {
             return nullptr;
         }
 
-        fmodAudioBuffer* pAudioBuffer = new fmodAudioBuffer(m_pFMODSystem, pResHandle, loadType);
+        fmodAudioBuffer* pAudioBuffer = new fmodAudioBuffer(m_pFMODSystem, buffer, bufferSize, loadType);
         if (!pAudioBuffer->IsValid()) {
             delete pAudioBuffer;
             return nullptr;

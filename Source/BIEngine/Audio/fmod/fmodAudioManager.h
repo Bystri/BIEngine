@@ -14,7 +14,7 @@ namespace BIEngine
 
         virtual bool Active() { return m_pFMODSystem != nullptr; }
 
-        virtual IAudioBuffer* InitAudioBuffer(SharedPtr<ResHandle> pHandle, IAudioBuffer::LoadType loadType) override;
+        virtual IAudioBuffer* InitAudioBuffer(char* rawBuffer, unsigned int rawSize, IAudioBuffer::LoadType loadType) override;
         virtual void ReleaseAudioBuffer(IAudioBuffer* pAudioBuffer) override;
 
         virtual void Shutdown() override;

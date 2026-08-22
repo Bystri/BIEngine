@@ -13,7 +13,7 @@ namespace BIEngine
 
         virtual bool Active() = 0;
 
-        virtual IAudioBuffer* InitAudioBuffer(SharedPtr<ResHandle> handle, IAudioBuffer::LoadType loadType) = 0;
+        virtual IAudioBuffer* InitAudioBuffer(char* rawBuffer, unsigned int rawSize, IAudioBuffer::LoadType loadType) = 0;
         virtual void ReleaseAudioBuffer(IAudioBuffer* audioBuffer) = 0;
 
         virtual void StopAllSounds() = 0;

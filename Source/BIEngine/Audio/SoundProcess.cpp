@@ -5,19 +5,14 @@
 
 namespace BIEngine {
 
-SoundProcess::SoundProcess(SharedPtr<ResHandle> pResource, IAudioBuffer::LoadType loadType, float volume, bool looping)
-   : m_pHandle(pResource), m_volume(volume), m_isLooping(looping), m_loadType(loadType)
+SoundProcess::SoundProcess(SharedPtr<ResHandle> pResource, float volume, bool looping)
+   : m_pHandle(pResource), m_volume(volume), m_isLooping(looping)
 {
 }
 
 SoundProcess::~SoundProcess()
 {
    Stop();
-
-   if (m_pAudioBuffer && g_pAudio) {
-      g_pAudio->ReleaseAudioBuffer(m_pAudioBuffer);
-      m_pAudioBuffer = nullptr;
-   }
 }
 
 void SoundProcess::OnInit()
@@ -28,15 +23,6 @@ void SoundProcess::OnInit()
       Fail();
       return;
    }
-
-   IAudioBuffer* buffer = g_pAudio->InitAudioBuffer(m_pHandle, m_loadType);
-
-   if (!buffer) {
-      Fail();
-      return;
-   }
-
-   m_pAudioBuffer = buffer;
 
    Play(m_volume, m_isLooping);
 }
@@ -50,7 +36,7 @@ void SoundProcess::OnUpdate(float dt)
 
 bool SoundProcess::IsPlaying() const
 {
-   if (!m_pHandle || !m_pAudioBuffer || !m_pAudioSound)
+   if (!m_pHandle || !m_pAudioSound)
       return false;
 
    return m_pAudioSound->IsPlaying();
@@ -91,13 +77,21 @@ void SoundProcess::Play(const float volume, const bool looping)
 {
    Assert(volume >= 0.0f && volume <= 1.0f, "Volume must be a number between 0.0 and 1.0");
 
-   if (!m_pAudioBuffer || volume < 0.0f || volume > 1.0f) {
+   if (volume < 0.0f || volume > 1.0f) {
       return;
    }
 
    m_volume = volume;
    m_isLooping = looping;
-   m_pAudioSound = m_pAudioBuffer->Play(volume, looping);
+   auto pAudioResExtra = StaticPointerCast<SoundBufferData>(m_pHandle->GetExtra());
+
+   if (pAudioResExtra == nullptr)
+   {
+       Assert(false, "No extra data for Audio Resource was provided");
+       return;
+   }
+
+   m_pAudioSound = pAudioResExtra->GetAudioBuffer()->Play(volume, looping);
    if (m_pAudioSound == nullptr && IsAlive()) {
       Fail();
    }
@@ -107,7 +101,6 @@ void SoundProcess::Stop()
 {
    if (m_pAudioSound) {
       m_pAudioSound->Stop();
-      m_pAudioBuffer->ReleaseAudio(m_pAudioSound);
    }
 }
 

@@ -6,13 +6,13 @@
 namespace BIEngine
 {
 
-    fmodAudioBuffer::fmodAudioBuffer(FMOD::System* pSoundEngine, SharedPtr<ResHandle> pResource, IAudioBuffer::LoadType loadType)
-        : AudioBuffer(), m_pFMODSystem(pSoundEngine), m_pResource(pResource)
+    fmodAudioBuffer::fmodAudioBuffer(FMOD::System* pSoundEngine, char* buffer, unsigned int bufferSize, IAudioBuffer::LoadType loadType)
+        : AudioBuffer(), m_pFMODSystem(pSoundEngine)
     {
         FMOD_CREATESOUNDEXINFO info;
         std::memset(&info, 0, sizeof(FMOD_CREATESOUNDEXINFO));
         info.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
-        info.length = pResource->Size();
+        info.length = bufferSize;
 
         constexpr FMOD_MODE mode = FMOD_DEFAULT | FMOD_OPENMEMORY | FMOD_LOOP_NORMAL;
 
@@ -22,13 +22,13 @@ namespace BIEngine
         {
         case IAudioBuffer::LoadType::DECOMPRESS_ON_LOAD:
             result = m_pFMODSystem->createSound(
-                pResource->Buffer(),
+                buffer,
                 mode,
                 &info, &m_pFMODSound);
             break;
         case IAudioBuffer::LoadType::STREAMING:
             result = m_pFMODSystem->createStream(
-                pResource->Buffer(),
+                buffer,
                 mode,
                 &info, &m_pFMODSound);
             break;
@@ -95,9 +95,10 @@ namespace BIEngine
             return false;
         }
 
+        AudioBuffer::Release();
+
         const FMOD_RESULT result = m_pFMODSound->release();
         m_pFMODSound = nullptr;
-        m_pResource.Reset();
 
         return result == FMOD_OK;
     }

@@ -12,7 +12,7 @@ namespace BIEngine
 
     class fmodAudioBuffer : public AudioBuffer {
     public:
-        fmodAudioBuffer(FMOD::System* pSoundEngine, SharedPtr<ResHandle> pResource, IAudioBuffer::LoadType loadType);
+        fmodAudioBuffer(FMOD::System* pSoundEngine, char* buffer, unsigned int bufferSize, IAudioBuffer::LoadType loadType);
 
         bool IsValid() const { return m_pFMODSound != nullptr; }
 
@@ -22,7 +22,6 @@ namespace BIEngine
     private:
         FMOD::System* m_pFMODSystem = nullptr;
         FMOD::Sound* m_pFMODSound = nullptr;
-        SharedPtr<ResHandle> m_pResource;
     };
 
 }
