@@ -79,6 +79,9 @@
     <Filter Include="!natvis">
       <UniqueIdentifier>{c986a89b-3710-41ba-b857-1204d24d453e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio\fmod">
+      <UniqueIdentifier>{0ea419bf-38d2-4dfa-9102-6d97bc2373d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCore\GameApp.cpp">
@@ -455,6 +458,21 @@
     </ClCompile>
     <ClCompile Include="..\..\Actors\NetworkReplicatedComponent.cpp">
       <Filter>Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Audio\AudioManager.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Audio\AudioBuffer.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Audio\fmod\fmodAudioManager.cpp">
+      <Filter>Audio\fmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Audio\fmod\fmodAudioBuffer.cpp">
+      <Filter>Audio\fmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Audio\fmod\fmodAudioSound.cpp">
+      <Filter>Audio\fmod</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -964,6 +982,24 @@
     </ClInclude>
     <ClInclude Include="..\..\Actors\NetworkReplicatedComponent.h">
       <Filter>Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\AudioManager.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\AudioBuffer.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\AudioSound.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\fmod\fmodAudioManager.h">
+      <Filter>Audio\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\fmod\fmodAudioBuffer.h">
+      <Filter>Audio\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\fmod\fmodAudioSound.h">
+      <Filter>Audio\fmod</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@
 
 namespace BIEngine {
 
-SoundProcess::SoundProcess(SharedPtr<ResHandle> pResource, IAudioManager::LoadType loadType, float volume, bool looping)
+SoundProcess::SoundProcess(SharedPtr<ResHandle> pResource, IAudioBuffer::LoadType loadType, float volume, bool looping)
    : m_pHandle(pResource), m_volume(volume), m_isLooping(looping), m_loadType(loadType)
 {
 }
