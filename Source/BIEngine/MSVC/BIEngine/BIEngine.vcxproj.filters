@@ -474,6 +474,15 @@
     <ClCompile Include="..\..\Audio\fmod\fmodAudioSound.cpp">
       <Filter>Audio\fmod</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Audio\AudioGroupManager.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Audio\fmod\fmodAudioGroup.cpp">
+      <Filter>Audio\fmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Audio\fmod\fmodAudioGroupManager.cpp">
+      <Filter>Audio\fmod</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineCore\GameApp.h">
@@ -999,6 +1008,18 @@
       <Filter>Audio\fmod</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Audio\fmod\fmodAudioSound.h">
+      <Filter>Audio\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\AudioGroup.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\AudioGroupManager.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\fmod\fmodAudioGroup.h">
+      <Filter>Audio\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Audio\fmod\fmodAudioGroupManager.h">
       <Filter>Audio\fmod</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,7 +9,7 @@ namespace BIEngine {
 
 class SoundProcess : public Process {
 public:
-   SoundProcess(SharedPtr<ResHandle> pSoundResource, float volume = 1.0f, bool looping = false);
+   SoundProcess(SharedPtr<ResHandle> pSoundBufferResource, IAudioSound* pSound);
    virtual ~SoundProcess();
 
    void TogglePause();
@@ -24,22 +24,16 @@ public:
    float GetProgress() const;
 
 protected:
-   // Не позволяет использовать конструктор по-умолчанию из вне
-   SoundProcess();
 
    virtual void OnInit();
    virtual void OnUpdate(float dt) override;
 
 private:
-    void Play(const float volume, const bool looping);
     void Stop();
 
 protected:
    SharedPtr<ResHandle> m_pHandle;
-   IAudioSound* m_pAudioSound = nullptr;
-
-   float m_volume;
-   bool m_isLooping;
+   IAudioSound* const m_pAudioSound = nullptr;
 };
 
 } // namespace BIEngine

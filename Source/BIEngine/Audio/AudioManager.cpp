@@ -41,4 +41,8 @@ namespace BIEngine
         m_allPaused = false;
     }
 
+    AudioGroupManager* AudioManager::GetAudioGroupManager()
+    {
+        return m_pAudioGroupManager;
+    }
 }

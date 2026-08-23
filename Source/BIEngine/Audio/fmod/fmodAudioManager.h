@@ -22,6 +22,8 @@ namespace BIEngine
 
         virtual void OnUpdate() override;
 
+        FMOD::System* GetSystem() const { return m_pFMODSystem; }
+
     protected:
         FMOD::System* m_pFMODSystem = nullptr;
     };

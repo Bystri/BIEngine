@@ -150,8 +150,11 @@
     <ClCompile Include="..\..\Actors\TransformComponent.cpp" />
     <ClCompile Include="..\..\Audio\Audio.cpp" />
     <ClCompile Include="..\..\Audio\AudioBuffer.cpp" />
+    <ClCompile Include="..\..\Audio\AudioGroupManager.cpp" />
     <ClCompile Include="..\..\Audio\AudioManager.cpp" />
     <ClCompile Include="..\..\Audio\fmod\fmodAudioBuffer.cpp" />
+    <ClCompile Include="..\..\Audio\fmod\fmodAudioGroup.cpp" />
+    <ClCompile Include="..\..\Audio\fmod\fmodAudioGroupManager.cpp" />
     <ClCompile Include="..\..\Audio\fmod\fmodAudioManager.cpp" />
     <ClCompile Include="..\..\Audio\fmod\fmodAudioSound.cpp" />
     <ClCompile Include="..\..\Audio\SoundLoader.cpp" />
@@ -285,10 +288,14 @@
     <ClInclude Include="..\..\Actors\SkinnedMeshComponent.h" />
     <ClInclude Include="..\..\Actors\TransformComponent.h" />
     <ClInclude Include="..\..\Audio\Audio.h" />
+    <ClInclude Include="..\..\Audio\AudioGroup.h" />
+    <ClInclude Include="..\..\Audio\AudioGroupManager.h" />
     <ClInclude Include="..\..\Audio\AudioManager.h" />
     <ClInclude Include="..\..\Audio\AudioBuffer.h" />
     <ClInclude Include="..\..\Audio\AudioSound.h" />
     <ClInclude Include="..\..\Audio\fmod\fmodAudioBuffer.h" />
+    <ClInclude Include="..\..\Audio\fmod\fmodAudioGroup.h" />
+    <ClInclude Include="..\..\Audio\fmod\fmodAudioGroupManager.h" />
     <ClInclude Include="..\..\Audio\fmod\fmodAudioManager.h" />
     <ClInclude Include="..\..\Audio\fmod\fmodAudioSound.h" />
     <ClInclude Include="..\..\Audio\SoundLoader.h" />

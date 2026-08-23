@@ -30,6 +30,8 @@ namespace BIEngine
 
         virtual float GetProgress() override;
 
+        FMOD::Channel* GetChannel() const { return m_pChannel; }
+
     private:
         FMOD::Sound* const m_pFMODSound = nullptr;
         FMOD::Channel* m_pChannel = nullptr;

@@ -1,6 +1,7 @@
 #include "fmodAudioManager.h"
 
 #include "fmodAudioBuffer.h"
+#include "fmodAudioGroupManager.h"
 #include "../../Utilities/Logger.h"
 
 namespace BIEngine
@@ -31,6 +32,8 @@ namespace BIEngine
             return false;
         }
 
+        m_pAudioGroupManager = new fmodAudioGroupManager();
+
         m_initialized = true;
 
         return true;
@@ -49,6 +52,12 @@ namespace BIEngine
             AudioManager::Shutdown();
             m_pFMODSystem->release();
             m_pFMODSystem = nullptr;
+        }
+
+        if (m_pAudioGroupManager)
+        {
+            delete m_pAudioGroupManager;
+            m_pAudioGroupManager = nullptr;
         }
 
         m_initialized = false;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AudioBuffer.h"
+#include "AudioGroupManager.h"
 #include "../StdLib/SharedPtr.h"
 #include "../ResourceCache/ResCache.h"
 
@@ -23,23 +24,28 @@ namespace BIEngine
         virtual bool Initialize() = 0;
         virtual void Shutdown() = 0;
 
+        virtual AudioGroupManager* GetAudioGroupManager() = 0;
+
         virtual void OnUpdate() = 0;
     };
 
     class AudioManager : public IAudioManager {
     public:
-        virtual ~AudioManager() = default;
+        virtual void StopAllSounds() override;
+        virtual void PauseAllSounds() override;
+        virtual void ResumeAllSounds() override;
 
-        virtual void StopAllSounds();
-        virtual void PauseAllSounds();
-        virtual void ResumeAllSounds();
+        virtual void Shutdown() override;
 
-        virtual void Shutdown();
+        virtual AudioGroupManager* GetAudioGroupManager() override;
 
     protected:
         using AudioBufferList = List<IAudioBuffer*>;
 
         AudioBufferList m_allBuffers;
+
+        AudioGroupManager* m_pAudioGroupManager;
+
         bool m_allPaused = false;
         bool m_initialized = false;
     };

@@ -1,5 +1,6 @@
 ﻿#include "BIGameClient.h"
 
+#include "../BIEngine/Audio/SoundLoader.h"
 #include "../BIEngine/Network/Replication/NetworkObjectCreationRegistry.h"
 #include "../BIEngine/ProcessManager/ProcessManager.h"
 #include "../BIEngine/Graphics/WorldRenderPass.h"
@@ -275,11 +276,19 @@ bool BIGameClientHumanView::Init()
    if (!BIEngine::HumanView::Init()) {
       return false;
    }
+
+   BIEngine::g_pAudio->GetAudioGroupManager()->AddAudioGroup("music");
    
-   auto soundHandle = BIEngine::ResCache::Get()->GetHandle("music/main_music.ogg");
+   auto soundBufferHandle = BIEngine::ResCache::Get()->GetHandle("music/main_music.ogg");
+
+   BIEngine::IAudioBuffer* pAudioBuffer = BIEngine::StaticPointerCast<BIEngine::SoundBufferData>(soundBufferHandle->GetExtra())->GetAudioBuffer();
+   BIEngine::IAudioSound* pAudioSound = pAudioBuffer->Play(1.0f, true);
+
+   BIEngine::g_pAudio->GetAudioGroupManager()->GetGroup("music").Lock()->SetVolume(0.05f);
+   BIEngine::g_pAudio->GetAudioGroupManager()->GetGroup("music").Lock()->ApplyToSound(pAudioSound);
    m_pMainMusicProcess = BIEngine::ProcessManager::Get()->AttachProcess(
         BIEngine::MakeShared<BIEngine::SoundProcess>(
-            soundHandle, 1.0f, true
+            soundBufferHandle, pAudioSound
         ));
 
    constexpr std::size_t MAX_DIRECTIONAL_LIGHTS_NUM = 1;

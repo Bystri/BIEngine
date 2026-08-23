@@ -5,8 +5,8 @@
 
 namespace BIEngine {
 
-SoundProcess::SoundProcess(SharedPtr<ResHandle> pResource, float volume, bool looping)
-   : m_pHandle(pResource), m_volume(volume), m_isLooping(looping)
+SoundProcess::SoundProcess(SharedPtr<ResHandle> pSoundBufferResource, IAudioSound* pSound)
+   : m_pHandle(pSoundBufferResource), m_pAudioSound(pSound)
 {
 }
 
@@ -23,8 +23,6 @@ void SoundProcess::OnInit()
       Fail();
       return;
    }
-
-   Play(m_volume, m_isLooping);
 }
 
 void SoundProcess::OnUpdate(float dt)
@@ -49,8 +47,6 @@ void SoundProcess::SetVolume(float volume)
       return;
    }
 
-   m_volume = volume;
-
    if (m_pAudioSound) {
       m_pAudioSound->SetVolume(volume);
    }
@@ -58,42 +54,13 @@ void SoundProcess::SetVolume(float volume)
 
 float SoundProcess::GetVolume()
 {
-   if (m_pAudioSound == nullptr) {
-      return m_volume;
-   }
-
-   m_volume = m_pAudioSound->GetVolume();
-   return m_volume;
+   return m_pAudioSound->GetVolume();
 }
 
 void SoundProcess::TogglePause()
 {
    if (m_pAudioSound) {
       m_pAudioSound->TogglePause();
-   }
-}
-
-void SoundProcess::Play(const float volume, const bool looping)
-{
-   Assert(volume >= 0.0f && volume <= 1.0f, "Volume must be a number between 0.0 and 1.0");
-
-   if (volume < 0.0f || volume > 1.0f) {
-      return;
-   }
-
-   m_volume = volume;
-   m_isLooping = looping;
-   auto pAudioResExtra = StaticPointerCast<SoundBufferData>(m_pHandle->GetExtra());
-
-   if (pAudioResExtra == nullptr)
-   {
-       Assert(false, "No extra data for Audio Resource was provided");
-       return;
-   }
-
-   m_pAudioSound = pAudioResExtra->GetAudioBuffer()->Play(volume, looping);
-   if (m_pAudioSound == nullptr && IsAlive()) {
-      Fail();
    }
 }
 
