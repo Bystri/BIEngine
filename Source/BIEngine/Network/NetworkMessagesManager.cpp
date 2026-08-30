@@ -136,19 +136,14 @@ void NetworkMessagesManager::ProcessMessages()
       while (!peerInfo.second.messageQueueToRead.Empty()) {
          MessageToRead& msg = peerInfo.second.messageQueueToRead[0];
 
-         static bool dbgBool = false;
-
          if (msg.GetId() < peerInfo.second.expectedMessageId) {
             peerInfo.second.messageQueueToRead.Erase(peerInfo.second.messageQueueToRead.Begin());
             continue;
          }
 
-         if (msg.GetId() > peerInfo.second.expectedMessageId && !dbgBool) {
-            dbgBool = true;
+         if (msg.GetId() > peerInfo.second.expectedMessageId) {
             break;
          }
-
-         dbgBool = true;
 
          m_processedMessagesIds.PushBack(msg.GetId());
 
