@@ -23,6 +23,7 @@ void ReplicationHeader::Write(OutputMemoryBitStream& stream) const
 {
    stream.WriteBits(static_cast<uint32_t>(m_replicationAction), GetRequiredBits<static_cast<int>(ReplicationAction::MAX)>::Value);
 
+   Serialize(stream, m_masterPeerId);
    Serialize(stream, m_networkId);
    if (m_replicationAction == ReplicationAction::Destroy) {
       return;
@@ -38,6 +39,7 @@ void ReplicationHeader::Read(InputMemoryBitStream& stream)
    Deserialize(stream, repAct, GetRequiredBits<static_cast<int>(ReplicationAction::MAX)>::Value);
    m_replicationAction = static_cast<ReplicationAction>(repAct);
 
+   Deserialize(stream, m_masterPeerId);
    Deserialize(stream, m_networkId);
    if (m_replicationAction != ReplicationAction::Destroy) {
       Deserialize(stream, m_classId);

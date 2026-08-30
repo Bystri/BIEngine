@@ -16,6 +16,7 @@ class ReplicationHeader {
 public:
    ReplicationHeader()
       : m_replicationAction(ReplicationAction::Create),
+        m_masterPeerId(INVALID_PEER_ID),
         m_networkId(0)
    {
    }
