@@ -117,6 +117,14 @@ void OutputMemoryBitStream::WriteBits(const void* data, size_t bitCount)
 
 void InputMemoryBitStream::ReadBits(uint8_t& outData, uint32_t bitCount)
 {
+   if (bitCount > 8 || bitCount > GetRemainingBitCount()) {
+      Logger::WriteErrorLog("Attempt to read past the end of InputMemoryBitStream");
+      outData = 0;
+      m_bitHead = m_bitCapacity;
+      m_hasReadError = true;
+      return;
+   }
+
    const uint32_t byteOffset = m_bitHead >> 3;
    const uint32_t bitOffset = m_bitHead & 0x7;
 
@@ -137,6 +145,14 @@ void InputMemoryBitStream::ReadBits(uint8_t& outData, uint32_t bitCount)
 
 void InputMemoryBitStream::ReadBits(void* outData, uint32_t bitCount)
 {
+   if (bitCount > GetRemainingBitCount()) {
+      Logger::WriteErrorLog("Attempt to read past the end of InputMemoryBitStream");
+      std::memset(outData, 0, (bitCount + 7) >> 3);
+      m_bitHead = m_bitCapacity;
+      m_hasReadError = true;
+      return;
+   }
+
    uint8_t* destByte = reinterpret_cast<uint8_t*>(outData);
    // write all the bytes
    while (bitCount > 8) {

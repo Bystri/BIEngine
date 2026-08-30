@@ -89,7 +89,7 @@ protected:
     virtual void ReceiveMessage(InputMemoryBitStream& stream) override;
 
 private:
-   void ProcessReplicationHeader(InputMemoryBitStream& stream);
+   bool ProcessReplicationHeader(InputMemoryBitStream& stream);
 
 private:
    SharedPtr<NewtworkObjectLinkingContexts> m_pLinkingContext;

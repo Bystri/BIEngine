@@ -266,18 +266,23 @@ void ObjectReplicationProtocolFollower::ReceiveMessage(InputMemoryBitStream& str
    Deserialize(stream, numOfHeaders);
 
    for (int i = 0; i < numOfHeaders; ++i) {
-      ProcessReplicationHeader(stream);
+      if (!ProcessReplicationHeader(stream)) {
+         Logger::WriteErrorLog("Malformed object replication message. Remaining replication headers skipped.");
+         return;
+      }
    }
 }
 
-void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitStream& stream)
+bool ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitStream& stream)
 {
    ReplicationHeader rh;
-   rh.Read(stream);
+   if (!rh.Read(stream)) {
+      return false;
+   }
 
    if (rh.GetMasterPeerId() == g_pApp->m_pGameLogic->GetNetworkManager()->GetPeerId()) {
       Logger::WriteErrorLog("ObjectReplicationProtocolFollower got update for owned entity with newtworkId %d. Update skipped.", rh.GetNetworkId());
-      return;
+      return true;
    }
 
    switch (rh.GetReplicationAction()) {
@@ -287,10 +292,20 @@ void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
             Logger::WriteMsgLog("Create replicated object [ClassId: %.4s] - [NetworkID: %u]", reinterpret_cast<const char*>(&id), rh.GetNetworkId());
 
             SharedPtr<ReplicationObject> go = NetworkObjectCreationRegistry::Get().Create(rh.GetClassId());
+            if (go == nullptr) {
+               Logger::WriteErrorLog("Attempt to create an unknown replicated object [ClassId:%u]", rh.GetClassId());
+               break;
+            }
+
             m_pLinkingContext->AddObj(go, rh.GetNetworkId());
             go->SetNetworkId(rh.GetNetworkId());
             go->Init(rh.GetMasterPeerId());
-            go->Read(stream);
+
+            InputMemoryBitStream payloadStream = rh.GetPayloadStream();
+            go->Read(payloadStream);
+            if (payloadStream.HasReadError()) {
+               Logger::WriteErrorLog("Malformed create payload for replicated object [NetworkID:%u]", rh.GetNetworkId());
+            }
 
             break;
          }
@@ -298,14 +313,14 @@ void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
          {
             SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
 
-            // we might have not received the create yet,
-            // so serialize into a dummy to advance read head
             if (go) {
-               go->Read(stream);
+               InputMemoryBitStream payloadStream = rh.GetPayloadStream();
+               go->Read(payloadStream);
+               if (payloadStream.HasReadError()) {
+                  Logger::WriteErrorLog("Malformed update payload for replicated object [NetworkID:%u]", rh.GetNetworkId());
+               }
             } else {
-               uint32_t classId = rh.GetClassId();
-               go = NetworkObjectCreationRegistry::Get().Create(classId);
-               go->Read(stream);
+               Logger::WriteErrorLog("Got update for an unknown replicated object [NetworkID:%u]. Payload skipped.", rh.GetNetworkId());
             }
             break;
          }
@@ -323,6 +338,8 @@ void ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
          // not handled by us
          break;
    }
+
+   return true;
 }
 
 } // namespace BIEngine

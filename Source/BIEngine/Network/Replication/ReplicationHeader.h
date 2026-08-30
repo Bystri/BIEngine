@@ -39,7 +39,12 @@ public:
    uint32_t GetClassId() const { return m_classId; }
 
    void Write(OutputMemoryBitStream& stream) const;
-   void Read(InputMemoryBitStream& stream);
+   bool Read(InputMemoryBitStream& stream);
+
+   InputMemoryBitStream GetPayloadStream() const
+   {
+      return InputMemoryBitStream(m_pPayload, m_payloadBitCount);
+   }
 
 public:
    SharedPtr<ReplicationObject> m_pReplicationObject;
@@ -47,6 +52,8 @@ public:
    PeerId m_masterPeerId;
    uint32_t m_networkId;
    uint32_t m_classId;
+   SharedPtr<char> m_pPayload;
+   uint32_t m_payloadBitCount = 0;
 };
 
 } // namespace BIEngine

@@ -210,10 +210,13 @@ public:
 
    uint32_t GetRemainingBitCount() const { return m_bitCapacity - m_bitHead; }
 
+   bool HasReadError() const { return m_hasReadError; }
+
    void ResetToCapacity(uint32_t byteCapacity)
    {
       m_bitCapacity = byteCapacity << 3;
       m_bitHead = 0;
+      m_hasReadError = false;
    }
 
    void ReadBits(uint8_t& outData, uint32_t bitCount);
@@ -225,6 +228,7 @@ private:
    SharedPtr<char> m_pBuffer;
    uint32_t m_bitHead;
    uint32_t m_bitCapacity;
+   bool m_hasReadError = false;
 };
 
 template <typename T>
