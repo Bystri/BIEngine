@@ -9,7 +9,7 @@ class BINetworkManagerServer : public BIEngine::NetworkManager {
 public:
    bool Init(uint16_t port, int maxClients);
 
-   virtual BIEngine::PeerId GetPeerId() const override { return -1; }
+   virtual BIEngine::PeerId GetPeerId() const override { return 0u; }
 
    virtual void Update(const BIEngine::GameTimer& gt) override;
 
