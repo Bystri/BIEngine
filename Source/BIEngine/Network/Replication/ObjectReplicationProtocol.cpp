@@ -107,9 +107,9 @@ void ObjectReplicationProtocolLeader::AddReplicationObject(SharedPtr<Replication
 
 void ObjectReplicationProtocolLeader::DestroyReplicationObject(SharedPtr<ReplicationObject> pObj)
 {
-   for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
-      const uint32_t objId = m_pLinkingContext->GetId(pObj, false);
+   const uint32_t objId = m_pLinkingContext->GetId(pObj, false);
 
+   for (int i = 0; i < m_pReplicationManagersPerPeer.Size(); ++i) {
       const bool isObjReplicatedToPoi = m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.Find(objId) != m_relevancyInfo[m_pPeers[i]].replicatedObjsSet.End();
 
       if (isObjReplicatedToPoi) {
@@ -124,6 +124,8 @@ void ObjectReplicationProtocolLeader::DestroyReplicationObject(SharedPtr<Replica
          break;
       }
    }
+
+   m_pLinkingContext->RemoveObj(pObj);
 }
 
 void ObjectReplicationProtocolLeader::SendStateMsgToClient(PeerId peerId, NetworkMessagesManager* pNetworkMessagesManager)
@@ -288,8 +290,7 @@ bool ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
    switch (rh.GetReplicationAction()) {
       case ReplicationAction::Create:
          {
-            const uint32_t id = ByteSwap(rh.GetClassId());
-            Logger::WriteMsgLog("Create replicated object [ClassId: %.4s] - [NetworkID: %u]", reinterpret_cast<const char*>(&id), rh.GetNetworkId());
+            Logger::WriteMsgLog("Create replicated object [ClassId: %u] - [NetworkID: %u]", rh.GetClassId(), rh.GetNetworkId());
 
             SharedPtr<ReplicationObject> go = NetworkObjectCreationRegistry::Get().Create(rh.GetClassId());
             if (go == nullptr) {
