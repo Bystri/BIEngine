@@ -32,14 +32,14 @@ void NetworkProtocolsManager::UnregisterPeer(uint32_t peerId)
    }
 }
 
-void NetworkProtocolsManager::ReceiveMeessage(NetworkProtocolType type, InputMemoryBitStream& stream)
+void NetworkProtocolsManager::ReceiveMeessage(PeerId peerId, NetworkProtocolType type, InputMemoryBitStream& stream)
 {
    for (auto& protocol : m_networkProtocols) {
       if (protocol->GetType() != type) {
          continue;
       }
 
-      protocol->ReceiveMessage(stream);
+      protocol->ReceiveMessage(peerId, stream);
       return;
    }
 

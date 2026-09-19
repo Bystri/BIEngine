@@ -23,7 +23,7 @@ protected:
 
    virtual void UnregisterPeer(PeerId peerId) {}
 
-   virtual void ReceiveMessage(InputMemoryBitStream& stream) {}
+   virtual void ReceiveMessage(PeerId peerId, InputMemoryBitStream& stream) {}
    virtual void OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager) {}
 
    virtual const NetworkProtocolType& GetType() const { return sk_ProtocolType; }

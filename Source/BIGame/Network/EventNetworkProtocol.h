@@ -38,5 +38,5 @@ public:
    virtual const BIEngine::NetworkProtocolType& GetType() const override { return sk_ProtocolType; }
 
 protected:
-   virtual void ReceiveMessage(BIEngine::InputMemoryBitStream& inputStream) override;
+   virtual void ReceiveMessage(BIEngine::PeerId peerId, BIEngine::InputMemoryBitStream& inputStream) override;
 };

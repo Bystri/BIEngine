@@ -152,7 +152,7 @@ void NetworkMessagesManager::ProcessMessages()
          uint32_t packetType;
          Deserialize(msg.GetBuffer(), packetType);
 
-         m_protocolsManager.ReceiveMeessage(packetType, msg.GetBuffer());
+         m_protocolsManager.ReceiveMeessage(peerInfo.first, packetType, msg.GetBuffer());
 
          peerInfo.second.messageQueueToRead.Erase(peerInfo.second.messageQueueToRead.Begin());
       }

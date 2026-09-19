@@ -63,7 +63,7 @@ void EventProtocolLeader::StoreEventToForwardDelegate(BIEngine::IEventDataPtr pE
 
 /***EventProtocolReader***/
 
-void EventProtocolFollower::ReceiveMessage(BIEngine::InputMemoryBitStream& inputStream)
+void EventProtocolFollower::ReceiveMessage(BIEngine::PeerId peerId, BIEngine::InputMemoryBitStream& inputStream)
 {
    uint8_t eventCount = 0;
    BIEngine::Deserialize(inputStream, eventCount);

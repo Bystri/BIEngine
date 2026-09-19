@@ -86,7 +86,7 @@ public:
    virtual const NetworkProtocolType& GetType() const override { return sk_ProtocolType; }
 
 protected:
-    virtual void ReceiveMessage(InputMemoryBitStream& stream) override;
+    virtual void ReceiveMessage(PeerId peerId, InputMemoryBitStream& stream) override;
 
 private:
    bool ProcessReplicationHeader(InputMemoryBitStream& stream);

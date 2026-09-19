@@ -124,7 +124,7 @@ void RpcProtocolFollower::ProcessRPC(InputMemoryBitStream& stream)
    m_nameToRPCTable[id](stream);
 }
 
-void RpcProtocolFollower::ReceiveMessage(BIEngine::InputMemoryBitStream& inputStream)
+void RpcProtocolFollower::ReceiveMessage(PeerId peerId, BIEngine::InputMemoryBitStream& inputStream)
 {
    uint32_t cnt;
    Deserialize(inputStream, cnt);

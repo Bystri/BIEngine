@@ -11,7 +11,7 @@ public:
    void RegisterPeer(uint32_t peerId);
    void UnregisterPeer(uint32_t peerId);
 
-   void ReceiveMeessage(NetworkProtocolType type, InputMemoryBitStream& stream);
+   void ReceiveMeessage(PeerId peerId, NetworkProtocolType type, InputMemoryBitStream& stream);
    void OnBeforePacketsSend(NetworkMessagesManager* pNetworkMessagesManager);
 
 private:

@@ -51,7 +51,7 @@ public:
    void RegisterUnwrapFunction(RpcId id, RPCUnwrapFunc func);
 
 protected:
-   virtual void ReceiveMessage(BIEngine::InputMemoryBitStream& inputStream) override;
+   virtual void ReceiveMessage(PeerId peerId, BIEngine::InputMemoryBitStream& inputStream) override;
 
 private:
    void ProcessRPC(InputMemoryBitStream& stream);

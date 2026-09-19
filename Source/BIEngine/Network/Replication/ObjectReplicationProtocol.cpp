@@ -262,7 +262,7 @@ ObjectReplicationProtocolFollower::~ObjectReplicationProtocolFollower()
    }
 }
 
-void ObjectReplicationProtocolFollower::ReceiveMessage(InputMemoryBitStream& stream)
+void ObjectReplicationProtocolFollower::ReceiveMessage(PeerId peerId, InputMemoryBitStream& stream)
 {
    uint32_t numOfHeaders;
    Deserialize(stream, numOfHeaders);
