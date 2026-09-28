@@ -66,8 +66,11 @@ bool TransformReplicationUnit::IsStateChanged()
 
    const bool ret = (glm::length(pos - m_cachedPosition) > 0.01f) || (glm::length(rot - m_cachedRotation) > 0.01f);
 
-   m_cachedPosition = pos;
-   m_cachedRotation = rot;
+   if (ret)
+   {
+       m_cachedPosition = pos;
+       m_cachedRotation = rot;
+   }
 
    return ret;
 }
