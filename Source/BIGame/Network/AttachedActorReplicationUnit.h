@@ -5,6 +5,8 @@
 
 class AttachedActorReplicationUnit : public BIEngine::ReplicationUnit<Player> {
 public:
+   virtual BIEngine::ReplicationUnitTypeId GetTypeId() const override { return 0xb7e09408; }
+
    virtual void Init(BIEngine::ReplicationObject* pRelicationObject, BIEngine::SharedPtr<Player> pObject) override;
    virtual bool IsStateChanged() override;
 

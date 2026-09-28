@@ -5,6 +5,8 @@
 
 class HealthStateReplicationUnit : public BIEngine::ReplicationUnit<BIEngine::Actor> {
 public:
+   virtual BIEngine::ReplicationUnitTypeId GetTypeId() const override { return 0xe45b72f0; }
+
    virtual void Init(BIEngine::ReplicationObject* pRelicationObject, BIEngine::SharedPtr<BIEngine::Actor> pObject) override;
    virtual bool IsStateChanged() override;
 

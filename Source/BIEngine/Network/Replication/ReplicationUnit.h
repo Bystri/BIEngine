@@ -4,11 +4,15 @@
 
 namespace BIEngine {
 
+using ReplicationUnitTypeId = uint32_t;
+
 class ReplicationObject;
 
 template <typename ReplicatedObject>
 class ReplicationUnit {
 public:
+   virtual ReplicationUnitTypeId GetTypeId() const = 0;
+
    virtual ~ReplicationUnit() = default;
 
    virtual void Init(ReplicationObject* pReplicationObject, SharedPtr<ReplicatedObject> pReplicatedObject) 

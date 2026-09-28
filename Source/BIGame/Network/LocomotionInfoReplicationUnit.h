@@ -5,6 +5,8 @@
 
 class LocomotionInfoReplicationUnit : public BIEngine::ReplicationUnit<BIEngine::Actor> {
 public:
+   virtual BIEngine::ReplicationUnitTypeId GetTypeId() const override { return 0x234b9d9d; }
+
    virtual void Init(BIEngine::ReplicationObject* pRelicationObject, BIEngine::SharedPtr<BIEngine::Actor> pObject) override;
    virtual bool IsStateChanged() override;
 

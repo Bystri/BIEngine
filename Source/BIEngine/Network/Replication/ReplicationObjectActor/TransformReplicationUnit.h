@@ -10,6 +10,8 @@ class Process;
 class TransformReplicationUnit : public ReplicationUnit<Actor> {
 
 public:
+   virtual ReplicationUnitTypeId GetTypeId() const override { return 0x7a818985; }
+
    virtual void Init(ReplicationObject* pRelicationObject, SharedPtr<Actor> pActor) override;
 
    virtual bool IsStateChanged() override;
