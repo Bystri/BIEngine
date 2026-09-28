@@ -297,6 +297,12 @@ bool ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
                break;
             }
 
+            if (m_pLinkingContext->GetObj(rh.GetNetworkId()) != nullptr)
+            {
+                Assert(false, "You are trying to create already created Network object [Id: %d]", rh.GetNetworkId());
+                break;
+            }
+
             m_pLinkingContext->AddObj(go, rh.GetNetworkId());
             go->SetNetworkId(rh.GetNetworkId());
             go->Init(rh.GetMasterPeerId());
@@ -329,6 +335,11 @@ bool ObjectReplicationProtocolFollower::ProcessReplicationHeader(InputMemoryBitS
             Logger::WriteMsgLog("Delete replicated object [NetworkID: %u]", rh.GetNetworkId());
 
             SharedPtr<ReplicationObject> go = m_pLinkingContext->GetObj(rh.GetNetworkId());
+            if (go == nullptr)
+            {
+                Assert(false, "You are trying to destroy unknown Network object [Id: %d]", rh.GetNetworkId());
+                break;
+            }
             go->Term();
             m_pLinkingContext->RemoveObj(go);
 
