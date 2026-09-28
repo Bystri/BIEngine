@@ -749,7 +749,11 @@ void Physics3D::SetPosition(const ActorId id, const glm::vec3& position)
 
    if (pRigidBody) {
       btVector3 btVec = Vec3_to_btVector3(position);
-      pRigidBody->translate(btVec);
+
+      btTransform& transform = pRigidBody->getWorldTransform();
+      transform.setOrigin(btVec);
+
+      pRigidBody->setWorldTransform(transform);
    }
 }
 
