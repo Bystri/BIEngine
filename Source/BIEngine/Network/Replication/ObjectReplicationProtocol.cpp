@@ -159,7 +159,6 @@ void ObjectReplicationProtocolLeader::UnregisterPeer(PeerId peerId)
       if (m_pPeers[i] == peerId) {
          m_pPeers.Erase(m_pPeers.Begin() + i);
          m_pReplicationManagersPerPeer.Erase(m_pReplicationManagersPerPeer.Begin() + i);
-         m_relevancyInfo.Erase(peerId);
          return;
       }
    }
