@@ -36,6 +36,8 @@ public:
 
    virtual void Deactivate() {}
 
+   virtual void OnFixedUpdate(float dt) {}
+
    virtual void OnUpdate(const GameTimer& gt) {}
 
    virtual void OnRenderObject(const GameTimer& gt) {}

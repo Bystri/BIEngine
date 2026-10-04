@@ -23,6 +23,8 @@ struct Options {
    String hostAddress = "";
    uint16_t hostPort = 0;
 
+   unsigned int fixedFps = 30;
+
    unsigned int screenWidth = 1024;
    unsigned int screenHeight = 768;
    bool maximazeWindow = false;
@@ -69,6 +71,7 @@ public:
 private:
    GameTimer m_gt;
    uint32_t m_frameNum = 0;
+   float m_fixedUpdateAccumulatedTime = 0.0f;
 };
 
 extern GameApp* g_pApp;

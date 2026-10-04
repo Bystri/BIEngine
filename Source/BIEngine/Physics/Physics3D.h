@@ -42,7 +42,7 @@ public:
    virtual bool Initialize() = 0;
    virtual void SetGravity(const glm::vec3& gravity) = 0;
    virtual void BeforeUpdate(const HashMap<ActorId, SharedPtr<Actor>>& pActorMap) = 0;
-   virtual void OnUpdate(const GameTimer& gt) = 0;
+   virtual void OnUpdate(float dt) = 0;
    virtual void AfterUpdate(const HashMap<ActorId, SharedPtr<Actor>>& pActorMap) = 0;
    virtual void DrawRenderDiagnostics() = 0;
 

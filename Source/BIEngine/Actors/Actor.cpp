@@ -113,6 +113,17 @@ void Actor::OnLevelLoaded()
    }
 }
 
+void Actor::OnFixedUpdate(float dt)
+{
+    if (!m_flags.Test(IS_ACTIVATED_FLAG_IDX)) {
+        return;
+    }
+
+    for (auto it = m_components.Begin(); it != m_components.End(); ++it) {
+        it->second->OnFixedUpdate(dt);
+    }
+}
+
 void Actor::OnUpdate(const GameTimer& gt)
 {
    if (!m_flags.Test(IS_ACTIVATED_FLAG_IDX)) {
@@ -121,10 +132,6 @@ void Actor::OnUpdate(const GameTimer& gt)
 
    for (auto it = m_components.Begin(); it != m_components.End(); ++it) {
       it->second->OnUpdate(gt);
-   }
-
-   for (auto& child : m_children) {
-      child->OnUpdate(gt);
    }
 }
 

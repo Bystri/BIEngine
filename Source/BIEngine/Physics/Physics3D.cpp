@@ -57,7 +57,7 @@ public:
 
    virtual void BeforeUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override {};
 
-   virtual void OnUpdate(const GameTimer& gt) override {}
+   virtual void OnUpdate(float dt) override {}
 
    virtual void AfterUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override {};
 
@@ -180,7 +180,7 @@ public:
    virtual void SetGravity(const glm::vec3& gravity) override;
 
    virtual void BeforeUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override;
-   virtual void OnUpdate(const GameTimer& gt) override;
+   virtual void OnUpdate(float dt) override;
    virtual void AfterUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override;
 
    virtual void DrawRenderDiagnostics() override;
@@ -395,12 +395,9 @@ void Physics3D::BeforeUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap)
    }
 }
 
-void Physics3D::OnUpdate(const GameTimer& gt)
+void Physics3D::OnUpdate(float dt)
 {
-   // Bullet будет проводить симуляцию мира, которая должна была пройти за заданный промежуток времени, но будет делать количество проходов не больше чем MAX_PASSES
-   // То есть, если dt слишком большое, Bullet может остановиться раньше
-   const int MAX_PASSES = 4;
-   m_pDynamicsWorld->stepSimulation(gt.DeltaTime(), MAX_PASSES);
+   m_pDynamicsWorld->stepSimulation(dt, 0);
 }
 
 void Physics3D::AfterUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap)

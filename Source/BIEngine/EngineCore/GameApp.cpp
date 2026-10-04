@@ -142,6 +142,15 @@ void GameApp::Process()
    m_gt.Tick();
 
    ProcessInput(m_gt);
+
+   const float fixedFpsDelta = 1.0f / m_options.fixedFps;
+   m_fixedUpdateAccumulatedTime += m_gt.DeltaTime();
+   while (m_fixedUpdateAccumulatedTime >= fixedFpsDelta)
+   {
+       m_pGameLogic->OnFixedUpdate(fixedFpsDelta);
+       m_fixedUpdateAccumulatedTime -= fixedFpsDelta;
+   }
+
    // Обновление логики
    OnUpdate(m_gt);
    // Отрисовка

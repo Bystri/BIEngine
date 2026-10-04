@@ -30,7 +30,7 @@ public:
    virtual void SetGravity(const glm::vec2& gravity) override {};
    virtual void SyncVisibleScene(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override {};
 
-   virtual void OnUpdate(const GameTimer& gt) override {}
+   virtual void OnUpdate(float dt) override {}
 
    virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngles, const String& densityStr, const String& physicsMaterial) override {}
 
@@ -107,7 +107,7 @@ public:
    // В случае различия, местоположение актера обновляется
    virtual void SyncVisibleScene(const HashMap<ActorId, SharedPtr<Actor>>& actorMap) override;
    // Шаг симуляции
-   virtual void OnUpdate(const GameTimer& gt) override;
+   virtual void OnUpdate(float dt) override;
 
    // Добавляет физический объект в виде круга в физическую симуляцию
    virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial) override;
@@ -236,9 +236,9 @@ void Physics2D::SyncVisibleScene(const HashMap<ActorId, SharedPtr<Actor>>& actor
    }
 }
 
-void Physics2D::OnUpdate(const GameTimer& gt)
+void Physics2D::OnUpdate(float dt)
 {
-   cpSpaceStep(m_cpSpace, gt.DeltaTime());
+   cpSpaceStep(m_cpSpace, dt);
 }
 
 void Physics2D::AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial)

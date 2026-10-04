@@ -24,7 +24,7 @@ public:
    virtual bool Initialize() = 0;
    virtual void SetGravity(const glm::vec2& gravity) = 0;
    virtual void SyncVisibleScene(const HashMap<ActorId, SharedPtr<Actor>>& pActorMap) = 0;
-   virtual void OnUpdate(const GameTimer& gt) = 0;
+   virtual void OnUpdate(float dt) = 0;
 
    // Инициализация физических объектов
    virtual void AddCircle(float radius, BodyType bodyType, ActorId actorId, const glm::vec2& pos, float rotAngle, const String& densityStr, const String& physicsMaterial) = 0;

@@ -49,6 +49,7 @@ public:
    virtual void AddGameView(SharedPtr<IGameView> pView);
    virtual void RemoveGameView(SharedPtr<IGameView> pView);
 
+   virtual void OnFixedUpdate(float dt);
    virtual void OnUpdate(GameTimer& gt);
    virtual void OnRender(const GameTimer& gt);
    virtual void OnRenderDebug(const GameTimer& gt);

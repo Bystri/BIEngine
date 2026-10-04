@@ -118,17 +118,24 @@ void GameLogic::RemoveGameView(SharedPtr<IGameView> pView)
    m_gameViews.Remove(pView);
 }
 
+void GameLogic::OnFixedUpdate(float dt)
+{
+    EventManager::Get()->TickUpdate();
+
+    for (const auto& actor : m_actors) {
+        actor.second->OnFixedUpdate(dt);
+    }
+
+    m_pPhysics2D->OnUpdate(dt);
+    m_pPhysics2D->SyncVisibleScene(m_actors);
+
+    m_pPhysics3D->BeforeUpdate(m_actors);
+    m_pPhysics3D->OnUpdate(dt);
+    m_pPhysics3D->AfterUpdate(m_actors);
+}
+
 void GameLogic::OnUpdate(GameTimer& gt)
 {
-   EventManager::Get()->TickUpdate();
-
-   m_pPhysics2D->OnUpdate(gt);
-   m_pPhysics2D->SyncVisibleScene(m_actors);
-
-   m_pPhysics3D->BeforeUpdate(m_actors);
-   m_pPhysics3D->OnUpdate(gt);
-   m_pPhysics3D->AfterUpdate(m_actors);
-
    ProcessManager::Get()->UpdateProcesses(gt);
 
    for (const auto& actor : m_actors) {

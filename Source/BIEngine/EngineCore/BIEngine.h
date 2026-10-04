@@ -26,13 +26,8 @@ void TerminateImgui();
 
 // Главная функция, с которой начинается работа всего приложения.
 // Перед ее вызовом должен быть инициализирован класс pGameApp
-int Run(int argc, char* argv[], int maxFps)
+int Run(int argc, char* argv[])
 {
-   if (maxFps < 15 || maxFps > 120) {
-      Logger::WriteLog(Logger::LogType::ERROR, "Incorrect maxFps [%d]. Use [15, 120]", maxFps);
-      return -1;
-   }
-
    if (!g_pApp) {
       Logger::WriteLog(Logger::LogType::ERROR, "g_pApp must be initialized");
       return -1;
@@ -74,18 +69,9 @@ int Run(int argc, char* argv[], int maxFps)
       return -1;
    }
 
-   const double fpsLimit = 1.0 / maxFps;
-   double lastFrameTime = 0.0;
-
    // Основной цикл
    while (!glfwWindowShouldClose(window)) {
       const double now = glfwGetTime();
-
-      if ((now - lastFrameTime) < fpsLimit) {
-         continue;
-      }
-
-      lastFrameTime = now;
 
       glfwPollEvents();
 

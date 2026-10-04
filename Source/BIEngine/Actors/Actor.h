@@ -45,6 +45,7 @@ public:
 
    void OnLevelLoaded();
 
+   void OnFixedUpdate(float dt);
    void OnUpdate(const GameTimer& gt);
    void OnRenderObject(const GameTimer& gt);
 
