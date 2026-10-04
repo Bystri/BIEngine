@@ -26,7 +26,7 @@ tinyxml2::XMLElement* CharacterMovementComponent::GenerateXml(tinyxml2::XMLDocum
    return pBaseElement;
 }
 
-void CharacterMovementComponent::OnUpdate(const BIEngine::GameTimer& gt)
+void CharacterMovementComponent::OnFixedUpdate(float dt)
 {
    auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
    const glm::vec3 inputVector = pLocomotionInfoComponent->GetInputVel();
@@ -46,8 +46,7 @@ void CharacterMovementComponent::OnUpdate(const BIEngine::GameTimer& gt)
          targetAngle -= COMPLETE_ANGLE_DEGREE;
       }
 
-      m_orientation = BIEngine::SmoothDamp(m_orientation, targetAngle, m_turnSmoothVelocity, m_turnSmoothTime, gt.DeltaTime(), m_maxAngualerSpeed);
-      pTransformComponent->SetRotation(glm::vec3(0.0f, m_orientation, 0.0f));
+      m_orientation = BIEngine::SmoothDamp(m_orientation, targetAngle, m_turnSmoothVelocity, m_turnSmoothTime, dt, m_maxAngualerSpeed);
    } else {
       m_turnSmoothVelocity = 0.0f;
    }
@@ -59,10 +58,16 @@ void CharacterMovementComponent::OnUpdate(const BIEngine::GameTimer& gt)
    const glm::vec3 desiredVel = glm::vec3(inputVector.x, 0.0f, inputVector.z) * m_maxSpeed;
 
    auto pPhysics3DComponent = GetOwner()->GetComponent<BIEngine::Physics3DComponent>(BIEngine::Physics3DComponent::g_CompId).Lock();
-   const glm::vec3 curVel = pPhysics3DComponent->GetVelocity();
-   pLocomotionInfoComponent->SetCurrentVel(curVel);
+   const glm::vec3 curVel = pLocomotionInfoComponent->GetCurrentVel();
 
-   const float maxSpeedChange = m_maxAccelearation * gt.DeltaTime();
+   const float maxSpeedChange = m_maxAccelearation * dt;
    const glm::vec3 newVel = glm::vec3(BIEngine::MoveTowards(curVel.x, desiredVel.x, maxSpeedChange), 0.0f, BIEngine::MoveTowards(curVel.z, desiredVel.z, maxSpeedChange));
-   pPhysics3DComponent->SetVelocity(newVel);
+   const glm::vec3 newPosition = pTransformComponent->GetPosition() + newVel * dt;
+   const glm::vec3 newRotation = glm::vec3(0.0f, m_orientation, 0.0f);
+
+   if (pPhysics3DComponent->KinematicMove(newPosition, newRotation)) {
+       pTransformComponent->SetPosition(newPosition);
+       pTransformComponent->SetRotation(newRotation);
+       pLocomotionInfoComponent->SetCurrentVel(newVel);
+   }
 }

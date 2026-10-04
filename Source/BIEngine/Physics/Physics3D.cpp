@@ -479,7 +479,7 @@ void Physics3D::AddShape(btCollisionShape* const pShape, const float volume, con
    Assert(m_actorIdToRigidBody.Find(creationParams.actorId) == m_actorIdToRigidBody.End(), "Actor with more than one physics body?");
 
    const float specificGravity = LookupSpecificGravity(creationParams.densityStr);
-   const btScalar mass = volume * specificGravity;
+   const btScalar mass = creationParams.bodyType == BodyType::DYNAMIC ? volume * specificGravity : 0.0f;
 
    MaterialData material(LookupMaterialData(creationParams.physicsMaterial));
 
@@ -501,13 +501,13 @@ void Physics3D::AddShape(btCollisionShape* const pShape, const float volume, con
    rbInfo.m_restitution = material.m_restitution;
    rbInfo.m_friction = material.m_friction;
 
-   // Bullet считаем объекты недвижемыми, если у них нулевая масса
-   if (creationParams.bodyType != BodyType::DYNAMIC) {
-      rbInfo.m_mass = 0;
-   }
-
    btRigidBody* const body = new btRigidBody(rbInfo);
    body->setAngularFactor(Vec3_to_btVector3(creationParams.angularFactor));
+
+   if (creationParams.bodyType == BodyType::KINEMATIC) {
+       body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+       body->setActivationState(DISABLE_DEACTIVATION);
+   }
 
    m_pDynamicsWorld->addRigidBody(body);
 
@@ -597,20 +597,33 @@ void Physics3D::ApplyTorque(const glm::vec3& torque, ActorId aid)
 
 bool Physics3D::KinematicMove(ActorId aid, const glm::vec3& position, const glm::vec3& angles)
 {
-   if (btRigidBody* const body = FindBulletRigidBody(aid)) {
-      body->setActivationState(ACTIVE_TAG);
+    if (btRigidBody* const body = FindBulletRigidBody(aid)) {
+        Assert(body->isKinematicObject(), "KinematicMove can only be used for a kinematic body");
+        if (!body->isKinematicObject()) {
+            return false;
+        }
 
-      glm::mat4 trans = glm::mat4(1.0f);
-      trans = glm::translate(trans, position);
-      trans = glm::rotate(trans, glm::radians(angles.z), glm::vec3(0.0f, 0.0f, 1.0f));
-      trans = glm::rotate(trans, glm::radians(angles.y), glm::vec3(0.0f, 1.0f, 0.0f));
-      trans = glm::rotate(trans, glm::radians(angles.x), glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, position);
+        trans = glm::rotate(trans, glm::radians(angles.z), glm::vec3(0.0f, 0.0f, 1.0f));
+        trans = glm::rotate(trans, glm::radians(angles.y), glm::vec3(0.0f, 1.0f, 0.0f));
+        trans = glm::rotate(trans, glm::radians(angles.x), glm::vec3(1.0f, 0.0f, 0.0f));
 
-      body->setWorldTransform(Mat4x4_to_btTransform(trans));
-      return true;
-   }
+        const btTransform worldTransform = Mat4x4_to_btTransform(trans);
+        body->setWorldTransform(worldTransform);
+        body->setInterpolationWorldTransform(worldTransform);
 
-   return false;
+        ActorMotionState* const motionState = static_cast<ActorMotionState*>(body->getMotionState());
+        Assert(motionState, "Rigid body doesn't have a motion state");
+        if (motionState) {
+            motionState->setWorldTransform(worldTransform);
+        }
+
+        m_pDynamicsWorld->updateSingleAabb(body);
+        return true;
+    }
+
+    return false;
 }
 
 IGamePhysics3D::RaycastInfo Physics3D::Raycast(const glm::vec3& from, const glm::vec3& to)

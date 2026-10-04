@@ -16,7 +16,7 @@ public:
 
    virtual BIEngine::ComponentId GetComponentId() const override { return CharacterMovementComponent::g_CompId; };
 
-   virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
+   virtual void OnFixedUpdate(float dt) override;
 
 private:
    float m_maxSpeed = 5.0f;

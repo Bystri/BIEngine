@@ -31,7 +31,7 @@
 		</PlayerComponent>
 		<Physics3DComponent>
 			<Shape>Capsule</Shape>
-			<BodyType>Dynamic</BodyType>
+			<BodyType>Kinematic</BodyType>
 			<Density>lead</Density>
 			<PhysicsMaterial>Normal</PhysicsMaterial>
 			<Scale w="0.500000" h="1.500000" d="0.000000"/>
