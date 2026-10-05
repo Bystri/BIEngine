@@ -77,7 +77,7 @@ public:
 
    virtual void ApplyTorque(const glm::vec3& torque, ActorId aid) override {}
 
-   virtual bool KinematicMove(ActorId aid, const glm::vec3& position, const glm::vec3& angles) override { return true; }
+   virtual bool Translate(ActorId aid, const glm::vec3& displacement, const glm::vec3& angles) override { return true; }
 
    virtual RaycastInfo Raycast(const glm::vec3& from, const glm::vec3& to) override { return RaycastInfo(); }
 
@@ -166,6 +166,95 @@ struct ActorMotionState : public btMotionState {
    }
 };
 
+#pragma optimize ("",off)
+
+class KinematicSweepCallback final : public btCollisionWorld::ClosestConvexResultCallback {
+public:
+    KinematicSweepCallback(const btCollisionObject* pMovingObject, const btVector3& from, const btVector3& to)
+        : btCollisionWorld::ClosestConvexResultCallback(from, to),
+        m_pMovingObject(pMovingObject),
+        m_sweepDirection(to - from)
+    {
+    }
+
+    virtual bool needsCollision(btBroadphaseProxy* pProxy) const override
+    {
+        if (!btCollisionWorld::ClosestConvexResultCallback::needsCollision(pProxy)) {
+            return false;
+        }
+
+        const btCollisionObject* const pCollisionObject = static_cast<const btCollisionObject*>(pProxy->m_clientObject);
+        return pCollisionObject != m_pMovingObject && pCollisionObject->hasContactResponse();
+    }
+
+    virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace) override
+    {
+        const btVector3 hitNormal = normalInWorldSpace
+            ? convexResult.m_hitNormalLocal
+            : convexResult.m_hitCollisionObject->getWorldTransform().getBasis() * convexResult.m_hitNormalLocal;
+
+        // Ignore contacts which do not oppose the requested movement. This prevents
+        // the floor under a capsule from blocking a horizontal sweep.
+        if (hitNormal.dot(m_sweepDirection) >= -SIMD_EPSILON) {
+            return btScalar(1.0f);
+        }
+
+        return btCollisionWorld::ClosestConvexResultCallback::addSingleResult(convexResult, normalInWorldSpace);
+    }
+
+private:
+    const btCollisionObject* m_pMovingObject;
+    btVector3 m_sweepDirection;
+};
+
+class KinematicPenetrationCallback final : public btCollisionWorld::ContactResultCallback {
+public:
+    explicit KinematicPenetrationCallback(const btCollisionObject* pMovingObject)
+        : m_pMovingObject(pMovingObject)
+    {
+    }
+
+    virtual btScalar addSingleResult(
+        btManifoldPoint& contactPoint,
+        const btCollisionObjectWrapper* pObject0,
+        int partId0,
+        int index0,
+        const btCollisionObjectWrapper* pObject1,
+        int partId1,
+        int index1) override
+    {
+        if (contactPoint.getDistance() >= 0.0f) {
+            return 0.0f;
+        }
+
+        const btCollisionObject* const pCollisionObject0 = pObject0->getCollisionObject();
+        const btCollisionObject* const pCollisionObject1 = pObject1->getCollisionObject();
+        const btCollisionObject* const pOtherObject = pCollisionObject0 == m_pMovingObject ? pCollisionObject1 : pCollisionObject0;
+        if (!pOtherObject->hasContactResponse()) {
+            return 0.0f;
+        }
+
+        const btScalar penetrationDepth = -contactPoint.getDistance();
+        if (penetrationDepth > m_penetrationDepth) {
+            m_penetrationDepth = penetrationDepth;
+            m_recoveryNormal = pCollisionObject0 == m_pMovingObject
+                ? contactPoint.m_normalWorldOnB
+                : -contactPoint.m_normalWorldOnB;
+        }
+
+        return 0.0f;
+    }
+
+    bool HasPenetration() const { return m_penetrationDepth > std::numeric_limits<float>::epsilon(); }
+    btScalar GetPenetrationDepth() const { return m_penetrationDepth; }
+    const btVector3& GetRecoveryNormal() const { return m_recoveryNormal; }
+
+private:
+    const btCollisionObject* m_pMovingObject;
+    btScalar m_penetrationDepth = 0.0f;
+    btVector3 m_recoveryNormal = btVector3(0.0f, 1.0f, 0.0f);
+};
+
 class Physics3D : public IGamePhysics3D {
 public:
    Physics3D();
@@ -198,9 +287,7 @@ public:
 
    virtual RaycastInfo Raycast(const glm::vec3& from, const glm::vec3& to) override;
 
-   // Напрямую задает положение и поворот физического объекта.
-   // Следует быть с этим аккуратнее, так как данная процедура способна сломать физическую симуляцию
-   bool KinematicMove(ActorId aid, const glm::vec3& position, const glm::vec3& angles);
+   bool Translate(ActorId aid, const glm::vec3& displacement, const glm::vec3& angles);
    // Напрямую задает поворот физического объекта.
    // Следует быть с этим аккуратнее, так как данная процедура способна сломать физическую симуляцию
    virtual void RotateY(ActorId actorId, float const deltaAngleRadians);
@@ -595,31 +682,68 @@ void Physics3D::ApplyTorque(const glm::vec3& torque, ActorId aid)
    }
 }
 
-bool Physics3D::KinematicMove(ActorId aid, const glm::vec3& position, const glm::vec3& angles)
+#pragma optimize ("",off)
+
+bool Physics3D::Translate(ActorId aid, const glm::vec3& displacement, const glm::vec3& angles)
 {
     if (btRigidBody* const body = FindBulletRigidBody(aid)) {
-        Assert(body->isKinematicObject(), "KinematicMove can only be used for a kinematic body");
-        if (!body->isKinematicObject()) {
+        btCollisionShape* const collisionShape = body->getCollisionShape();
+        Assert(collisionShape && collisionShape->isConvex(), "A kinematic character requires a convex collision shape");
+        if (!collisionShape || !collisionShape->isConvex()) {
             return false;
         }
 
-        glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::translate(trans, position);
-        trans = glm::rotate(trans, glm::radians(angles.z), glm::vec3(0.0f, 0.0f, 1.0f));
-        trans = glm::rotate(trans, glm::radians(angles.y), glm::vec3(0.0f, 1.0f, 0.0f));
-        trans = glm::rotate(trans, glm::radians(angles.x), glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::mat4 rotationTransform = glm::mat4(1.0f);
+        rotationTransform = glm::rotate(rotationTransform, glm::radians(angles.z), glm::vec3(0.0f, 0.0f, 1.0f));
+        rotationTransform = glm::rotate(rotationTransform, glm::radians(angles.y), glm::vec3(0.0f, 1.0f, 0.0f));
+        rotationTransform = glm::rotate(rotationTransform, glm::radians(angles.x), glm::vec3(1.0f, 0.0f, 0.0f));
 
-        const btTransform worldTransform = Mat4x4_to_btTransform(trans);
-        body->setWorldTransform(worldTransform);
-        body->setInterpolationWorldTransform(worldTransform);
+        btTransform resolvedTransform = body->getWorldTransform();
+        resolvedTransform.setBasis(Mat4x4_to_btTransform(rotationTransform).getBasis());
 
-        ActorMotionState* const motionState = static_cast<ActorMotionState*>(body->getMotionState());
-        Assert(motionState, "Rigid body doesn't have a motion state");
-        if (motionState) {
-            motionState->setWorldTransform(worldTransform);
+        auto applyTransform = [&](const btTransform& transform) {
+            body->setWorldTransform(transform);
+            body->setInterpolationWorldTransform(transform);
+
+            ActorMotionState* const motionState = static_cast<ActorMotionState*>(body->getMotionState());
+            if (motionState) {
+                motionState->setWorldTransform(transform);
+            }
+
+            m_pDynamicsWorld->updateSingleAabb(body);
+        };
+
+        auto configureCallback = [&](auto& callback) {
+            callback.m_collisionFilterGroup = btBroadphaseProxy::DefaultFilter;
+            callback.m_collisionFilterMask = btBroadphaseProxy::AllFilter;
+        };
+
+        btConvexShape* const convexShape = static_cast<btConvexShape*>(collisionShape);
+
+        btVector3 remainingDisplacement = Vec3_to_btVector3(displacement);
+        constexpr int MAX_SWEEP_ITERATIONS = 4;
+        for (int i = 0; i < MAX_SWEEP_ITERATIONS && remainingDisplacement.length2() > std::numeric_limits<float>::epsilon(); ++i) {
+            btTransform targetTransform = resolvedTransform;
+            targetTransform.getOrigin() += remainingDisplacement;
+
+            KinematicSweepCallback sweepCallback(body, resolvedTransform.getOrigin(), targetTransform.getOrigin());
+            configureCallback(sweepCallback);
+            m_pDynamicsWorld->convexSweepTest(convexShape, resolvedTransform, targetTransform, sweepCallback);
+
+            if (!sweepCallback.hasHit()) {
+                resolvedTransform = targetTransform;
+                break;
+            }
+
+            const btScalar movementLength = remainingDisplacement.length();
+            const btScalar travelFraction = btMax(btScalar(0.0f), sweepCallback.m_closestHitFraction);
+            resolvedTransform.getOrigin() += remainingDisplacement * travelFraction;
+
+            remainingDisplacement *= (btScalar(1.0f) - travelFraction);
         }
 
-        m_pDynamicsWorld->updateSingleAabb(body);
+        applyTransform(resolvedTransform);
+
         return true;
     }
 

@@ -210,9 +210,9 @@ void Physics3DComponent::ApplyTorque(const glm::vec3& torque)
    m_gamePhysics->ApplyTorque(torque, GetOwner()->GetId());
 }
 
-bool Physics3DComponent::KinematicMove(const glm::vec3& position, const glm::vec3& rotation)
+bool Physics3DComponent::Translate(const glm::vec3& displ, const glm::vec3& rotation)
 {
-   return m_gamePhysics->KinematicMove(GetOwner()->GetId(), position, rotation);
+   return m_gamePhysics->Translate(GetOwner()->GetId(), displ, rotation);
 }
 
 glm::vec3 Physics3DComponent::GetVelocity() const

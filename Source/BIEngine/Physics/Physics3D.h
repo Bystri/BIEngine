@@ -56,7 +56,9 @@ public:
    // Взаимодейтсвие с физическим миром
    virtual void ApplyForce(const glm::vec3& forceVec, ActorId aid) = 0;
    virtual void ApplyTorque(const glm::vec3& torque, ActorId aid) = 0;
-   virtual bool KinematicMove(ActorId aid, const glm::vec3& position, const glm::vec3& angles) = 0;
+   virtual bool Translate(ActorId aid, const glm::vec3& displacement, const glm::vec3& angles) = 0;
+
+   virtual bool SweepTest(ActorId aid, const glm::vec3& displacement) = 0;
 
    virtual RaycastInfo Raycast(const glm::vec3& from, const glm::vec3& to) = 0;
 

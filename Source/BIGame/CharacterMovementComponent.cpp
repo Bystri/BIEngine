@@ -62,12 +62,10 @@ void CharacterMovementComponent::OnFixedUpdate(float dt)
 
    const float maxSpeedChange = m_maxAccelearation * dt;
    const glm::vec3 newVel = glm::vec3(BIEngine::MoveTowards(curVel.x, desiredVel.x, maxSpeedChange), 0.0f, BIEngine::MoveTowards(curVel.z, desiredVel.z, maxSpeedChange));
-   const glm::vec3 newPosition = pTransformComponent->GetPosition() + newVel * dt;
+   const glm::vec3 displ = newVel * dt;
    const glm::vec3 newRotation = glm::vec3(0.0f, m_orientation, 0.0f);
 
-   if (pPhysics3DComponent->KinematicMove(newPosition, newRotation)) {
-       pTransformComponent->SetPosition(newPosition);
-       pTransformComponent->SetRotation(newRotation);
+   if (pPhysics3DComponent->Translate(displ, newRotation)) {
        pLocomotionInfoComponent->SetCurrentVel(newVel);
    }
 }

@@ -122,14 +122,15 @@ void GameLogic::OnFixedUpdate(float dt)
 {
     EventManager::Get()->TickUpdate();
 
-    for (const auto& actor : m_actors) {
-        actor.second->OnFixedUpdate(dt);
-    }
-
     m_pPhysics2D->OnUpdate(dt);
     m_pPhysics2D->SyncVisibleScene(m_actors);
 
     m_pPhysics3D->BeforeUpdate(m_actors);
+
+    for (const auto& actor : m_actors) {
+        actor.second->OnFixedUpdate(dt);
+    }
+
     m_pPhysics3D->OnUpdate(dt);
     m_pPhysics3D->AfterUpdate(m_actors);
 }

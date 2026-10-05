@@ -25,7 +25,7 @@ public:
 
    void ApplyForce(const glm::vec3& direction);
    void ApplyTorque(const glm::vec3& torque);
-   bool KinematicMove(const glm::vec3& position, const glm::vec3& rotation);
+   bool Translate(const glm::vec3& displ, const glm::vec3& rotation);
 
    void SetVelocity(const glm::vec3& velocity);
    glm::vec3 GetVelocity() const;
