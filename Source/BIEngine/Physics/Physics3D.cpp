@@ -166,7 +166,42 @@ struct ActorMotionState : public btMotionState {
    }
 };
 
-#pragma optimize ("",off)
+static void ApplyPhysicsBodyToActor(BIEngine::Actor& actor, const ActorMotionState& actorMotionState)
+{
+    BIEngine::SharedPtr<BIEngine::TransformComponent> pTransformComponent = actor.GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).Lock();
+    if (!pTransformComponent) {
+        return;
+    }
+
+    glm::mat4 trans = glm::mat4(1.0f);
+    trans = glm::translate(trans, pTransformComponent->GetPosition());
+    glm::vec3 rotationAngles = pTransformComponent->GetRotation();
+    const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(rotationAngles.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(rotationAngles.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(rotationAngles.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+    const glm::mat4 rotationMatrix = transformZ * transformY * transformX;
+    trans *= rotationMatrix;
+
+    if (!glm::all(glm::equal(trans, actorMotionState.m_worldToPositionTransform, glm::epsilon<float>()))) {
+        // We don't pass actorMotionState->m_worldToPositionTransform into Transform Component because it doesn't have a scale
+        btTransform btTrans;
+        actorMotionState.getWorldTransform(btTrans);
+        const glm::vec3 pos = btVector3_to_Vec3(btTrans.getOrigin());
+        glm::vec3 rotation;
+        btQuaternion qtRot = btTrans.getRotation();
+
+        qtRot.getEulerZYX(rotation.z, rotation.y, rotation.x);
+        rotation.x = glm::degrees(rotation.x);
+        rotation.y = glm::degrees(rotation.y);
+        rotation.z = glm::degrees(rotation.z);
+        pTransformComponent->SetPosition(pos);
+        pTransformComponent->SetRotation(rotation);
+
+        SharedPtr<EvtData_Move_Actor> pEvent = MakeShared<EvtData_Move_Actor>(actor.GetId(), pTransformComponent->GetPosition(), pTransformComponent->GetRotation());
+        EventManager::Get()->QueueEvent(pEvent);
+    }
+}
 
 class KinematicSweepCallback final : public btCollisionWorld::ClosestConvexResultCallback {
 public:
@@ -507,37 +542,7 @@ void Physics3D::AfterUpdate(const HashMap<ActorId, SharedPtr<Actor>>& actorMap)
 
       SharedPtr<Actor> pGameActor = actorIt->second;
       if (pGameActor && actorMotionState) {
-         SharedPtr<TransformComponent> pTransformComponent = pGameActor->GetComponent<TransformComponent>(TransformComponent::g_CompId).Lock();
-         if (pTransformComponent) {
-            glm::mat4 trans = glm::mat4(1.0f);
-            trans = glm::translate(trans, pTransformComponent->GetPosition());
-            glm::vec3 rotationAngles = pTransformComponent->GetRotation();
-            const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(rotationAngles.x), glm::vec3(1.0f, 0.0f, 0.0f));
-            const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(rotationAngles.y), glm::vec3(0.0f, 1.0f, 0.0f));
-            const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(rotationAngles.z), glm::vec3(0.0f, 0.0f, 1.0f));
-
-            const glm::mat4 rotationMatrix = transformZ * transformY * transformX;
-            trans *= rotationMatrix;
-
-            if (!glm::all(glm::equal(trans, actorMotionState->m_worldToPositionTransform, glm::epsilon<float>()))) {
-               // We don't pass actorMotionState->m_worldToPositionTransform into Transform Component because it doesn't have a scale
-               btTransform btTrans;
-               actorMotionState->getWorldTransform(btTrans);
-               const glm::vec3 pos = btVector3_to_Vec3(btTrans.getOrigin());
-               glm::vec3 rotation;
-               btQuaternion qtRot = btTrans.getRotation();
-
-               qtRot.getEulerZYX(rotation.z, rotation.y, rotation.x);
-               rotation.x = glm::degrees(rotation.x);
-               rotation.y = glm::degrees(rotation.y);
-               rotation.z = glm::degrees(rotation.z);
-               pTransformComponent->SetPosition(pos);
-               pTransformComponent->SetRotation(rotation);
-
-               SharedPtr<EvtData_Move_Actor> pEvent = MakeShared<EvtData_Move_Actor>(id, pTransformComponent->GetPosition(), pTransformComponent->GetRotation());
-               EventManager::Get()->QueueEvent(pEvent);
-            }
-         }
+          ApplyPhysicsBodyToActor(*pGameActor, *actorMotionState);
       }
    }
 }
@@ -682,10 +687,10 @@ void Physics3D::ApplyTorque(const glm::vec3& torque, ActorId aid)
    }
 }
 
-#pragma optimize ("",off)
-
 bool Physics3D::Translate(ActorId aid, const glm::vec3& displacement, const glm::vec3& angles)
 {
+    constexpr float RECOVERY_OFFSET = 0.02;
+
     if (btRigidBody* const body = FindBulletRigidBody(aid)) {
         btCollisionShape* const collisionShape = body->getCollisionShape();
         Assert(collisionShape && collisionShape->isConvex(), "A kinematic character requires a convex collision shape");
@@ -720,6 +725,26 @@ bool Physics3D::Translate(ActorId aid, const glm::vec3& displacement, const glm:
 
         btConvexShape* const convexShape = static_cast<btConvexShape*>(collisionShape);
 
+        constexpr int MAX_PENETRATION_RECOVERY_ITERATIONS = 4;
+        for (int i = 0; i < MAX_PENETRATION_RECOVERY_ITERATIONS; ++i) {
+            applyTransform(resolvedTransform);
+
+            KinematicPenetrationCallback penetrationCallback(body);
+            configureCallback(penetrationCallback);
+            m_pDynamicsWorld->contactTest(body, penetrationCallback);
+            if (!penetrationCallback.HasPenetration()) {
+                break;
+            }
+
+            btVector3 recoveryNormal = penetrationCallback.GetRecoveryNormal();
+            if (recoveryNormal.length2() <= std::numeric_limits<float>::epsilon()) {
+                break;
+            }
+
+            recoveryNormal.normalize();
+            resolvedTransform.getOrigin() += recoveryNormal * (penetrationCallback.GetPenetrationDepth() + RECOVERY_OFFSET);
+        }
+
         btVector3 remainingDisplacement = Vec3_to_btVector3(displacement);
         constexpr int MAX_SWEEP_ITERATIONS = 4;
         for (int i = 0; i < MAX_SWEEP_ITERATIONS && remainingDisplacement.length2() > std::numeric_limits<float>::epsilon(); ++i) {
@@ -735,14 +760,31 @@ bool Physics3D::Translate(ActorId aid, const glm::vec3& displacement, const glm:
                 break;
             }
 
+            btVector3 hitNormal = sweepCallback.m_hitNormalWorld;
+            hitNormal.normalize();
+
             const btScalar movementLength = remainingDisplacement.length();
-            const btScalar travelFraction = btMax(btScalar(0.0f), sweepCallback.m_closestHitFraction);
+            const btScalar skinFraction = movementLength > std::numeric_limits<float>::epsilon() ? RECOVERY_OFFSET / movementLength : 0.0f;
+            const btScalar travelFraction = btMax(btScalar(0.0f), sweepCallback.m_closestHitFraction - skinFraction);
             resolvedTransform.getOrigin() += remainingDisplacement * travelFraction;
 
-            remainingDisplacement *= (btScalar(1.0f) - travelFraction);
+            btVector3 unresolvedDisplacement = remainingDisplacement * (btScalar(1.0f) - travelFraction);
+            btVector3 slideNormal = hitNormal;
+
+            const btScalar movementIntoSurface = unresolvedDisplacement.dot(slideNormal);
+            if (movementIntoSurface < 0.0f) {
+                unresolvedDisplacement -= slideNormal * movementIntoSurface;
+            }
+
+            remainingDisplacement = unresolvedDisplacement;
         }
 
         applyTransform(resolvedTransform);
+
+        const ActorMotionState* const motionState = static_cast<ActorMotionState*>(body->getMotionState());
+        
+        BIEngine::SharedPtr<BIEngine::Actor> pActor =  g_pApp->m_pGameLogic->GetActor(aid);
+        ApplyPhysicsBodyToActor(*pActor, *motionState);
 
         return true;
     }

@@ -58,8 +58,6 @@ public:
    virtual void ApplyTorque(const glm::vec3& torque, ActorId aid) = 0;
    virtual bool Translate(ActorId aid, const glm::vec3& displacement, const glm::vec3& angles) = 0;
 
-   virtual bool SweepTest(ActorId aid, const glm::vec3& displacement) = 0;
-
    virtual RaycastInfo Raycast(const glm::vec3& from, const glm::vec3& to) = 0;
 
    // Явные способы задать актерам пространственные характеристики
