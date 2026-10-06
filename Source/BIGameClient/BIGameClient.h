@@ -56,6 +56,7 @@ public:
    void NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventData);
 
    virtual void OnUpdate(BIEngine::GameTimer& gt) override;
+   virtual void OnFixedUpdate(float dt) override;
    virtual void OnRenderDebug(const BIEngine::GameTimer& gt) override;
 
 private:

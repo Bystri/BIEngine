@@ -13,8 +13,6 @@ public:
    virtual void Activate() override;
    virtual void Deactivate() override;
 
-   virtual void OnUpdate(const BIEngine::GameTimer& gt) override;
-
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
    virtual BIEngine::ComponentId GetComponentId() const override { return PlayerCommandBinderComponent::g_CompId; };
@@ -22,14 +20,10 @@ public:
    void RequestMeleeAttack();
 
 private:
-   void HandleOnCommandMoveTo(BIEngine::IEventDataPtr pEventData);
-   void HandleOnCommandMove(BIEngine::IEventDataPtr pEventData);
-   void HandleOnCommandTurn(BIEngine::IEventDataPtr pEventData);
+   void HandleOnCommandCharacterInput(BIEngine::IEventDataPtr pEventData);
 
 private:
-   BIEngine::EventManager::DelegateHandler m_onCommandMoveToHandler;
-   BIEngine::EventManager::DelegateHandler m_onCommandMove;
-   BIEngine::EventManager::DelegateHandler m_onCommandTurn;
+   BIEngine::EventManager::DelegateHandler m_onCommandCharacterInput;
 };
 
 static BIEngine::UniquePtr<BIEngine::ActorComponent> CreatePlayerCommandBinderComponent()

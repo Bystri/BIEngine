@@ -7,16 +7,12 @@ const BIEngine::NetworkProtocolType EventProtocolFollower::sk_ProtocolType('EVNT
 
 EventProtocolLeader::EventProtocolLeader()
 {
-   m_storeEventCommandMoveToDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolLeader::StoreEventToForwardDelegate), EvtData_PlayerCommandMoveTo::sk_EventType);
-   m_storeEventCommandMoveDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolLeader::StoreEventToForwardDelegate), EvtData_Move::sk_EventType);
-   m_storeEventCommandTurnDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolLeader::StoreEventToForwardDelegate), EvtData_Turn::sk_EventType);
+   m_storeEventCommandCharacterInputDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolLeader::StoreEventToForwardDelegate), EvtData_CharacterInput::sk_EventType);
 }
 
 EventProtocolLeader::~EventProtocolLeader()
 {
-   BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandMoveToDelegateHandler);
-   BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandMoveDelegateHandler);
-   BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandTurnDelegateHandler);
+   BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandCharacterInputDelegateHandler);
 }
 
 void EventProtocolLeader::RegisterPeer(uint32_t peerId)

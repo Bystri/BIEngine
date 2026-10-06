@@ -21,59 +21,19 @@ tinyxml2::XMLElement* PlayerCommandBinderComponent::GenerateXml(tinyxml2::XMLDoc
 
 void PlayerCommandBinderComponent::Activate()
 {
-   m_onCommandMoveToHandler = BIEngine::EventManager::Get()->AddListener(
-      MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(PlayerCommandBinderComponent::HandleOnCommandMoveTo),
-      EvtData_PlayerCommandMoveTo::sk_EventType);
-
-   m_onCommandMove = BIEngine::EventManager::Get()->AddListener(
-      MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(PlayerCommandBinderComponent::HandleOnCommandMove),
-      EvtData_Move::sk_EventType);
-
-   m_onCommandTurn = BIEngine::EventManager::Get()->AddListener(
-      MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(PlayerCommandBinderComponent::HandleOnCommandTurn),
-      EvtData_Turn::sk_EventType);
+    m_onCommandCharacterInput = BIEngine::EventManager::Get()->AddListener(
+      MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(PlayerCommandBinderComponent::HandleOnCommandCharacterInput),
+       EvtData_CharacterInput::sk_EventType);
 }
 
 void PlayerCommandBinderComponent::Deactivate()
 {
-   BIEngine::EventManager::Get()->RemoveListener(m_onCommandMoveToHandler);
-   BIEngine::EventManager::Get()->RemoveListener(m_onCommandMove);
-   BIEngine::EventManager::Get()->RemoveListener(m_onCommandTurn);
+   BIEngine::EventManager::Get()->RemoveListener(m_onCommandCharacterInput);
 }
 
-void PlayerCommandBinderComponent::OnUpdate(const BIEngine::GameTimer& gt)
+void PlayerCommandBinderComponent::HandleOnCommandCharacterInput(BIEngine::IEventDataPtr pEventData)
 {
-   /*
-   auto pNavAgentComponent = GetOwner()->GetComponent<BIEngine::NavAgentComponent>(BIEngine::NavAgentComponent::g_CompId).Lock();
-   const glm::vec3 desiredInput = pNavAgentComponent->GetDesiredInput();
-   const glm::vec2 desiredDir = glm::normalize(glm::vec2(desiredInput.x, desiredInput.z));
-
-   auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
-   pLocomotionInfoComponent->SetInputDir(desiredDir);
-   pLocomotionInfoComponent->SetInputVel(desiredInput);*/
-}
-
-void PlayerCommandBinderComponent::HandleOnCommandMoveTo(BIEngine::IEventDataPtr pEventData)
-{
-   /*
-   BIEngine::SharedPtr<EvtData_PlayerCommandMoveTo> pCastEventData = BIEngine::StaticPointerCast<EvtData_PlayerCommandMoveTo>(pEventData);
-
-   const uint32_t playerId = GetOwner()->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->GetPlayerId();
-   if (playerId != pCastEventData->GetPlayerId()) {
-      return;
-   }
-
-   const glm::vec3 targetPos = pCastEventData->GetPosToMove();
-   BIEngine::Logger::WriteMsgLog("player %d got move to command to %f %f %f", playerId, targetPos.x, targetPos.y, targetPos.z);
-
-   auto pNavAgentComponent = GetOwner()->GetComponent<BIEngine::NavAgentComponent>(BIEngine::NavAgentComponent::g_CompId).Lock();
-   pNavAgentComponent->SetDestination(targetPos);
-   */
-}
-
-void PlayerCommandBinderComponent::HandleOnCommandMove(BIEngine::IEventDataPtr pEventData)
-{
-   BIEngine::SharedPtr<EvtData_Move> pCastEventData = BIEngine::StaticPointerCast<EvtData_Move>(pEventData);
+   BIEngine::SharedPtr<EvtData_CharacterInput> pCastEventData = BIEngine::StaticPointerCast<EvtData_CharacterInput>(pEventData);
 
    const uint32_t playerId = GetOwner()->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->GetPlayerId();
    if (playerId != pCastEventData->GetPlayerId()) {
@@ -86,17 +46,5 @@ void PlayerCommandBinderComponent::HandleOnCommandMove(BIEngine::IEventDataPtr p
 
    auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
    pLocomotionInfoComponent->SetInputVel(desiredVel);
-}
-
-void PlayerCommandBinderComponent::HandleOnCommandTurn(BIEngine::IEventDataPtr pEventData)
-{
-   BIEngine::SharedPtr<EvtData_Turn> pCastEventData = BIEngine::StaticPointerCast<EvtData_Turn>(pEventData);
-
-   const uint32_t playerId = GetOwner()->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->GetPlayerId();
-   if (playerId != pCastEventData->GetPlayerId()) {
-      return;
-   }
-
-   auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
    pLocomotionInfoComponent->SetInputDir(pCastEventData->GetDesiredDir());
 }

@@ -26,9 +26,7 @@ private:
    BIEngine::DynamicArray<BIEngine::IEventDataPtr> m_eventsToSend;
    BIEngine::DynamicArray<uint32_t> m_peersToSend;
 
-   BIEngine::EventManager::DelegateHandler m_storeEventCommandMoveToDelegateHandler;
-   BIEngine::EventManager::DelegateHandler m_storeEventCommandMoveDelegateHandler;
-   BIEngine::EventManager::DelegateHandler m_storeEventCommandTurnDelegateHandler;
+   BIEngine::EventManager::DelegateHandler m_storeEventCommandCharacterInputDelegateHandler;
 };
 
 class EventProtocolFollower : public BIEngine::NetworkProtocol {

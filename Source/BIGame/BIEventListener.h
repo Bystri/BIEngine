@@ -445,17 +445,20 @@ private:
    BIEngine::ActorId m_actorId = BIEngine::Actor::INVALID_ACTOR_ID;
 };
 
-class EvtData_Move : public BIEngine::BaseEventData {
+class EvtData_CharacterInput : public BIEngine::BaseEventData {
 public:
    static const BIEngine::EventType sk_EventType;
 
-   EvtData_Move()
+   EvtData_CharacterInput()
       : m_playerId(PlayerManager::INVALID_PLAYER_ID), m_desiredHorizontalAmount(0.0f), m_desiredVerticalAmount(0.0f)
    {
    }
 
-   EvtData_Move(PlayerId playerId, float desiredHorizontalAmount, float desiredVerticalAmount)
-      : m_playerId(playerId), m_desiredHorizontalAmount(desiredHorizontalAmount), m_desiredVerticalAmount(desiredVerticalAmount)
+   EvtData_CharacterInput(PlayerId playerId, float desiredHorizontalAmount, float desiredVerticalAmount, const glm::vec2& desiredDir)
+      : m_playerId(playerId), 
+       m_desiredHorizontalAmount(desiredHorizontalAmount), 
+       m_desiredVerticalAmount(desiredVerticalAmount),
+       m_desiredDir(desiredDir)
    {
    }
 
@@ -466,12 +469,12 @@ public:
 
    virtual BIEngine::IEventDataPtr Copy(void) const
    {
-      return BIEngine::MakeShared<EvtData_Move>(m_playerId, m_desiredHorizontalAmount, m_desiredVerticalAmount);
+      return BIEngine::MakeShared<EvtData_CharacterInput>(m_playerId, m_desiredHorizontalAmount, m_desiredVerticalAmount, m_desiredDir);
    }
 
    virtual const char* GetName(void) const
    {
-      return "EvtData_Move";
+      return "EvtData_CharacterInput";
    }
 
    virtual void Write(BIEngine::OutputMemoryBitStream& out) const override
@@ -479,6 +482,7 @@ public:
       Serialize(out, m_playerId);
       Serialize(out, m_desiredHorizontalAmount);
       Serialize(out, m_desiredVerticalAmount);
+      out.WriteBytes(&m_desiredDir.x, sizeof(m_desiredDir));
    }
 
    virtual void Read(BIEngine::InputMemoryBitStream& in) override
@@ -486,6 +490,7 @@ public:
       Deserialize(in, m_playerId);
       Deserialize(in, m_desiredHorizontalAmount);
       Deserialize(in, m_desiredVerticalAmount);
+      in.ReadBytes(&m_desiredDir.x, sizeof(m_desiredDir));
    }
 
    PlayerId GetPlayerId() const { return m_playerId; };
@@ -494,58 +499,13 @@ public:
 
    float GetDesiredVerticalAmount() const { return m_desiredVerticalAmount; }
 
+   const glm::vec2& GetDesiredDir() const { return m_desiredDir; }
+
 private:
    PlayerId m_playerId;
 
    float m_desiredHorizontalAmount = 0.0f;
    float m_desiredVerticalAmount = 0.0f;
-};
-
-class EvtData_Turn : public BIEngine::BaseEventData {
-public:
-   static const BIEngine::EventType sk_EventType;
-
-   EvtData_Turn() = default;
-
-   EvtData_Turn(PlayerId playerId, const glm::vec2& desiredDir)
-      : m_playerId(playerId), m_desiredDir(desiredDir)
-   {
-   }
-
-   virtual const BIEngine::EventType& GetEventType(void) const
-   {
-      return sk_EventType;
-   }
-
-   virtual BIEngine::IEventDataPtr Copy(void) const
-   {
-      return BIEngine::MakeShared<EvtData_Turn>(m_playerId, m_desiredDir);
-   }
-
-   virtual const char* GetName(void) const
-   {
-      return "EvtData_Turn";
-   }
-
-   virtual void Write(BIEngine::OutputMemoryBitStream& out) const override
-   {
-      Serialize(out, m_playerId);
-      out.WriteBytes(&m_desiredDir.x, sizeof(m_desiredDir));
-   }
-
-   virtual void Read(BIEngine::InputMemoryBitStream& in) override
-   {
-      Deserialize(in, m_playerId);
-      in.ReadBytes(&m_desiredDir.x, sizeof(m_desiredDir));
-   }
-
-   PlayerId GetPlayerId() const { return m_playerId; };
-
-   const glm::vec2& GetDesiredDir() const { return m_desiredDir; }
-
-private:
-   PlayerId m_playerId = PlayerManager::INVALID_PLAYER_ID;
-
    glm::vec2 m_desiredDir = glm::vec2(0.0f);
 };
 
@@ -589,61 +549,6 @@ public:
 
 private:
    PlayerId m_playerId = PlayerManager::INVALID_PLAYER_ID;
-};
-
-class EvtData_PlayerCommandMoveTo : public BIEngine::BaseEventData {
-public:
-   static const BIEngine::EventType sk_EventType;
-
-   EvtData_PlayerCommandMoveTo()
-      : m_playerId(PlayerManager::INVALID_PLAYER_ID), m_pos()
-   {
-   }
-
-   EvtData_PlayerCommandMoveTo(PlayerId playerId, const glm::vec3& pos)
-      : m_playerId(playerId), m_pos(pos)
-   {
-   }
-
-   virtual const BIEngine::EventType& GetEventType(void) const
-   {
-      return sk_EventType;
-   }
-
-   virtual BIEngine::IEventDataPtr Copy(void) const
-   {
-      return BIEngine::MakeShared<EvtData_PlayerCommandMoveTo>(m_playerId, m_pos);
-   }
-
-   virtual const char* GetName(void) const
-   {
-      return "EvtData_PlayerCommandMoveTo";
-   }
-
-   virtual void Write(BIEngine::OutputMemoryBitStream& out) const override
-   {
-      Serialize(out, m_playerId);
-      Serialize(out, m_pos.x);
-      Serialize(out, m_pos.y);
-      Serialize(out, m_pos.z);
-   }
-
-   virtual void Read(BIEngine::InputMemoryBitStream& in) override
-   {
-      Deserialize(in, m_playerId);
-      Deserialize(in, m_pos.x);
-      Deserialize(in, m_pos.y);
-      Deserialize(in, m_pos.z);
-   }
-
-   PlayerId GetPlayerId() const { return m_playerId; };
-
-   const glm::vec3& GetPosToMove() const { return m_pos; }
-
-private:
-   PlayerId m_playerId;
-
-   glm::vec3 m_pos;
 };
 
 void BIRegisterEvents();

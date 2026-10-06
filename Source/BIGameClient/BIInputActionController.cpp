@@ -11,7 +11,6 @@ void BIInputActionController::Init(int playerId, BIEngine::SharedPtr<BIEngine::C
    m_pCamera = pCamera;
 
    m_onPointerMoveDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIInputActionController::OnPointerMoveDelegate), EvtData_OnPointerMove::sk_EventType);
-   m_onPointerButtonUpDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIInputActionController::OnPointerButtonUpDelegate), EvtData_OnPointerButtonUp::sk_EventType);
    m_onKeyDownDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIInputActionController::OnKeyDownDelegate), EvtData_OnKeyDown::sk_EventType);
    m_onKeyUpDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(BIInputActionController::OnKeyUpDelegate), EvtData_OnKeyUp::sk_EventType);
 }
@@ -19,7 +18,6 @@ void BIInputActionController::Init(int playerId, BIEngine::SharedPtr<BIEngine::C
 void BIInputActionController::Term()
 {
    BIEngine::EventManager::Get()->RemoveListener(m_onPointerMoveDelegateHandler);
-   BIEngine::EventManager::Get()->RemoveListener(m_onPointerButtonUpDelegateHandler);
    BIEngine::EventManager::Get()->RemoveListener(m_onKeyDownDelegateHandler);
    BIEngine::EventManager::Get()->RemoveListener(m_onKeyUpDelegateHandler);
 }
@@ -31,31 +29,7 @@ void BIInputActionController::OnPointerMoveDelegate(BIEngine::IEventDataPtr pEve
 
    viewportPos.z = 0.0f;
    std::swap(viewportPos.x, viewportPos.y);
-   viewportPos = glm::normalize(viewportPos);
-
-   BIEngine::SharedPtr<EvtData_Turn> pEvent = BIEngine::MakeShared<EvtData_Turn>(m_playerId, viewportPos);
-   BIEngine::EventManager::Get()->QueueEvent(pEvent);
-}
-
-void BIInputActionController::OnPointerButtonUpDelegate(BIEngine::IEventDataPtr pEventData)
-{
-   BIEngine::SharedPtr<EvtData_OnPointerButtonUp> pCastEventData = BIEngine::StaticPointerCast<EvtData_OnPointerButtonUp>(pEventData);
-
-   if (pCastEventData->GetMouseButton() != BIGameController::MouseButton::LEFT) {
-      return;
-   }
-
-   const glm::vec3 worldPos = m_pCamera->ScreenToWorldPoint(glm::vec2(pCastEventData->GetPointerPos().x, pCastEventData->GetPointerPos().y));
-
-   constexpr float RAYCAST_LENGTH = 100.0f;
-   const glm::vec3 raycastDir = glm::normalize(worldPos - m_pCamera->GetPosition());
-
-   const auto raycastInfo = BIEngine::g_pApp->m_pGameLogic->GetGamePhysics3D()->Raycast(m_pCamera->GetPosition(), m_pCamera->GetPosition() + raycastDir * RAYCAST_LENGTH);
-   if (raycastInfo.hasHit) {
-      BIEngine::DebugDraw::Sphere(raycastInfo.hitPosition, 0.5f, BIEngine::COLOR_GREEN, 5.0f);
-      BIEngine::SharedPtr<EvtData_PlayerCommandMoveTo> pEvent = BIEngine::MakeShared<EvtData_PlayerCommandMoveTo>(m_playerId, raycastInfo.hitPosition);
-      BIEngine::EventManager::Get()->QueueEvent(pEvent);
-   }
+   m_desiredDir = glm::normalize(viewportPos);
 }
 
 void BIInputActionController::OnKeyDownDelegate(BIEngine::IEventDataPtr pEventData)
@@ -102,7 +76,7 @@ void BIInputActionController::OnKeyUpDelegate(BIEngine::IEventDataPtr pEventData
    }
 }
 
-void BIInputActionController::OnUpdate()
+void BIInputActionController::OnFixedUpdate()
 {
    if (m_cachedMoveMask != m_currentMoveMask) {
       m_desiredVerticalAmount = 0.0f;
@@ -123,10 +97,10 @@ void BIInputActionController::OnUpdate()
       if (m_currentMoveMask & DirectionMask::Right) {
          m_desiredHorizontalAmount += 1.0f;
       }
-
-      BIEngine::SharedPtr<EvtData_Move> pEvent = BIEngine::MakeShared<EvtData_Move>(m_playerId, m_desiredVerticalAmount, m_desiredHorizontalAmount);
-      BIEngine::EventManager::Get()->QueueEvent(pEvent);
    }
 
    m_cachedMoveMask = m_currentMoveMask;
+
+   BIEngine::SharedPtr<EvtData_CharacterInput> pEvent = BIEngine::MakeShared<EvtData_CharacterInput>(m_playerId, m_desiredVerticalAmount, m_desiredHorizontalAmount, m_desiredDir);
+   BIEngine::EventManager::Get()->QueueEvent(pEvent);
 }

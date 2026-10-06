@@ -168,10 +168,15 @@ void BIGameClientLogic::NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventDat
    m_pCameraManager->FollowActor(pActor);
 }
 
+void BIGameClientLogic::OnFixedUpdate(float dt)
+{
+    m_pInputActionController->OnFixedUpdate();
+
+    GameLogic::OnFixedUpdate(dt);
+}
+
 void BIGameClientLogic::OnUpdate(BIEngine::GameTimer& gt)
 {
-   m_pInputActionController->OnUpdate();
-
    m_pNetworkManager->Update(gt);
    m_pNetworkManager->ProcessIncomingPackets();
    m_pNetworkManager->SendOutgoingPackets(gt);
