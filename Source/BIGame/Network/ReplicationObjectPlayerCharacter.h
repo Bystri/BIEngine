@@ -13,7 +13,7 @@ public:
       : BIEngine::ReplicationObjectActor(
            "actors/player_character_server.xml",
            "actors/player_character_client.xml",
-           std::move(ReplicationUnitArray{BIEngine::MakeShared<BIEngine::TransformReplicationUnit>(), BIEngine::MakeShared<LocomotionInfoReplicationUnit>(), BIEngine::MakeShared<CombatReplicationUnit>()}))
+           std::move(ReplicationUnitArray{BIEngine::MakeShared<BIEngine::TransformReplicationUnit>(false), BIEngine::MakeShared<LocomotionInfoReplicationUnit>(), BIEngine::MakeShared<CombatReplicationUnit>()}))
    {
    }
 };

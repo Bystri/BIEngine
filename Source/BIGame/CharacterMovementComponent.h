@@ -10,8 +10,6 @@ public:
 
    virtual bool Init(tinyxml2::XMLElement* pData) override;
 
-   virtual void Activate() override;
-
    virtual tinyxml2::XMLElement* GenerateXml(tinyxml2::XMLDocument* pDoc) override;
 
    virtual BIEngine::ComponentId GetComponentId() const override { return CharacterMovementComponent::g_CompId; };
@@ -23,9 +21,6 @@ private:
    float m_maxAngualerSpeed = 2000.0f;
    float m_maxAccelearation = 10.0f;
    float m_turnSmoothTime = 0.05f;
-   float m_turnSmoothVelocity = 0.0f;
-
-   float m_orientation = 0.0f;
 };
 
 static BIEngine::UniquePtr<BIEngine::ActorComponent> CreateCharacterMovementComponent()

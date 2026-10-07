@@ -14,7 +14,7 @@ public:
       : BIEngine::ReplicationObjectActor(
            "actors/ai_dummy_character_server.xml",
            "actors/ai_dummy_character_client.xml",
-           std::move(ReplicationUnitArray{BIEngine::MakeShared<BIEngine::TransformReplicationUnit>(), BIEngine::MakeShared<LocomotionInfoReplicationUnit>(), BIEngine::MakeShared<CombatReplicationUnit>(), BIEngine::MakeShared<HealthStateReplicationUnit>()}))
+           std::move(ReplicationUnitArray{BIEngine::MakeShared<BIEngine::TransformReplicationUnit>(true), BIEngine::MakeShared<LocomotionInfoReplicationUnit>(), BIEngine::MakeShared<CombatReplicationUnit>(), BIEngine::MakeShared<HealthStateReplicationUnit>()}))
    {
    }
 };

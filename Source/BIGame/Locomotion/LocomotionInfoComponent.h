@@ -32,12 +32,23 @@ public:
 
    const glm::vec2& GetCurrentDir() const { return m_currentDir; }
 
+   void SetCurrentOrientation(float orientation) { m_currentOrientation = orientation; }
+
+   float GetCurrentOrientation() const { return m_currentOrientation; }
+
+   void SetCurrentAngularVelocity(float angularVelocity) { m_currentAngularVelocity = angularVelocity; }
+
+   float GetCurrentAngularVelocity() const { return m_currentAngularVelocity; }
+
 private:
    glm::vec3 m_inputVelVec = glm::vec3(0.0f);
    glm::vec2 m_inputDirVec = glm::vec2(0.0f);
 
    glm::vec3 m_currentVelocity = glm::vec3(0.0f);
    glm::vec2 m_currentDir = glm::vec2(0.0f);
+
+   float m_currentOrientation = 0.0f;
+   float m_currentAngularVelocity = 0.0f;
 };
 
 static BIEngine::UniquePtr<BIEngine::ActorComponent> CreateLocomotionInfoComponent()

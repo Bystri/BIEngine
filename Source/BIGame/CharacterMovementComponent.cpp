@@ -14,12 +14,6 @@ bool CharacterMovementComponent::Init(tinyxml2::XMLElement* pData)
    return true;
 }
 
-void CharacterMovementComponent::Activate()
-{
-   auto pTransformComponent = GetOwner()->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).Lock();
-   m_orientation = pTransformComponent->GetRotation().y;
-}
-
 tinyxml2::XMLElement* CharacterMovementComponent::GenerateXml(tinyxml2::XMLDocument* pDoc)
 {
    tinyxml2::XMLElement* pBaseElement = pDoc->NewElement(GetComponentId().CStr());
@@ -32,28 +26,34 @@ void CharacterMovementComponent::OnFixedUpdate(float dt)
    const glm::vec3 inputVector = pLocomotionInfoComponent->GetInputVel();
    const glm::vec2 desiredDir = pLocomotionInfoComponent->GetInputDir();
 
+   float orientation = pLocomotionInfoComponent->GetCurrentOrientation();
+   float angularVelocity = pLocomotionInfoComponent->GetCurrentAngularVelocity();
+
    auto pTransformComponent = GetOwner()->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).Lock();
 
    if (glm::length(desiredDir) > std::numeric_limits<float>::epsilon()) {
       float targetAngle = glm::degrees(std::atan2(-desiredDir.y, desiredDir.x));
 
       constexpr float COMPLETE_ANGLE_DEGREE = 360.0f;
-      if (std::abs(targetAngle - m_orientation) > std::abs(targetAngle + COMPLETE_ANGLE_DEGREE - m_orientation)) {
+      if (std::abs(targetAngle - orientation) > std::abs(targetAngle + COMPLETE_ANGLE_DEGREE - orientation)) {
          targetAngle += COMPLETE_ANGLE_DEGREE;
       }
 
-      if (std::abs(targetAngle - m_orientation) > std::abs(targetAngle - COMPLETE_ANGLE_DEGREE - m_orientation)) {
+      if (std::abs(targetAngle - orientation) > std::abs(targetAngle - COMPLETE_ANGLE_DEGREE - orientation)) {
          targetAngle -= COMPLETE_ANGLE_DEGREE;
       }
 
-      m_orientation = BIEngine::SmoothDamp(m_orientation, targetAngle, m_turnSmoothVelocity, m_turnSmoothTime, dt, m_maxAngualerSpeed);
+      orientation = BIEngine::SmoothDamp(orientation, targetAngle, angularVelocity, m_turnSmoothTime, dt, m_maxAngualerSpeed);
    } else {
-      m_turnSmoothVelocity = 0.0f;
+       angularVelocity = 0.0f;
    }
 
    const glm::vec3 charDir = pTransformComponent->GetDir();
-   const glm::vec2 charDir2d = glm::normalize(glm::vec2(charDir.x, charDir.z));
+   const float orientationRad = orientation * 3.14f / 180.0f;
+   const glm::vec2 charDir2d = glm::normalize(glm::vec2(std::cos(orientationRad), std::sin(orientationRad)));
    pLocomotionInfoComponent->SetCurrentDir(charDir2d);
+   pLocomotionInfoComponent->SetCurrentOrientation(orientation);
+   pLocomotionInfoComponent->SetCurrentAngularVelocity(angularVelocity);
 
    const glm::vec3 desiredVel = glm::vec3(inputVector.x, 0.0f, inputVector.z) * m_maxSpeed;
 
@@ -63,7 +63,7 @@ void CharacterMovementComponent::OnFixedUpdate(float dt)
    const float maxSpeedChange = m_maxAccelearation * dt;
    const glm::vec3 newVel = glm::vec3(BIEngine::MoveTowards(curVel.x, desiredVel.x, maxSpeedChange), 0.0f, BIEngine::MoveTowards(curVel.z, desiredVel.z, maxSpeedChange));
    const glm::vec3 displ = newVel * dt;
-   const glm::vec3 newRotation = glm::vec3(0.0f, m_orientation, 0.0f);
+   const glm::vec3 newRotation = glm::vec3(0.0f, orientation, 0.0f);
 
    if (pPhysics3DComponent->Translate(displ, newRotation)) {
        pLocomotionInfoComponent->SetCurrentVel(newVel);

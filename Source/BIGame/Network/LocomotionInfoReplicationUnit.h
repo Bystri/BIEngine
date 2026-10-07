@@ -20,4 +20,6 @@ private:
    glm::vec2 m_cachedCurDir = glm::vec2(0.0f);
    glm::vec3 m_cachedDesiredVel = glm::vec3(0.0f);
    glm::vec2 m_cachedDesiredDir = glm::vec2(0.0f);
+   float m_cachedOrientation = 0.0f;
+   float m_cachedAngularVelocity = 0.0f;
 };

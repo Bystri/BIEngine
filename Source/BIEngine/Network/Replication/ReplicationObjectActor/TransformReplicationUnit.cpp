@@ -99,12 +99,17 @@ void TransformReplicationUnit::Read(InputMemoryBitStream& stream)
       pProcess->Fail();
    }
 
-   m_pInterpolationProcess = BIEngine::ProcessManager::Get()->AttachProcess(
-       MakeShared<InterpolationProcess>(
-           WeakPtr<TransformComponent>(m_pTransformComponent), 
-           pos, 
-           g_pApp->m_pGameLogic->GetNetworkManager()->GetRttForPeer(GetOwner()->GetMasterPeerId()) / 2.0f
-       ));
+   if (ShouldInterpolate()) {
+       m_pInterpolationProcess = BIEngine::ProcessManager::Get()->AttachProcess(
+           MakeShared<InterpolationProcess>(
+               WeakPtr<TransformComponent>(m_pTransformComponent),
+               pos,
+               g_pApp->m_pGameLogic->GetNetworkManager()->GetRttForPeer(GetOwner()->GetMasterPeerId()) / 2.0f
+           ));
+   }
+   else {
+       m_pTransformComponent->SetPosition(pos);
+   }
 
    glm::vec3 rot;
    Deserialize(stream, rot.x);
