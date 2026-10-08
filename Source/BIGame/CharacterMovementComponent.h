@@ -3,6 +3,7 @@
 #include "../BIEngine/Actors/ActorComponent.h"
 #include "../BIEngine/EventManager/EventManager.h"
 #include "../BIEngine/StdLib/UniquePtr.h"
+#include "Movement/MovementTypes.h"
 
 class CharacterMovementComponent : public BIEngine::ActorComponent {
 public:
@@ -17,6 +18,7 @@ public:
    virtual void OnFixedUpdate(float dt) override;
 
    void SimulateInputStep(float dt);
+   void SimulateInputStep(const CharacterInputCommand& command, float dt);
 
    // A replicated remote player may be predicted for a short time after a snapshot.
    void OnRemoteSnapshotReceived();

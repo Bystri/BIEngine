@@ -55,16 +55,16 @@ void EventProtocolLeader::ReceiveMessage(BIEngine::PeerId peerId, BIEngine::Inpu
 {
    CharacterMovementSnapshot snapshot;
    BIEngine::Deserialize(inputStream, snapshot.lastProcessedSequence);
-   BIEngine::Deserialize(inputStream, snapshot.position);
-   BIEngine::Deserialize(inputStream, snapshot.rotation);
-   BIEngine::Deserialize(inputStream, snapshot.velocity);
-   BIEngine::Deserialize(inputStream, snapshot.direction.x);
-   BIEngine::Deserialize(inputStream, snapshot.direction.y);
-   BIEngine::Deserialize(inputStream, snapshot.inputVelocity);
-   BIEngine::Deserialize(inputStream, snapshot.inputDirection.x);
-   BIEngine::Deserialize(inputStream, snapshot.inputDirection.y);
-   BIEngine::Deserialize(inputStream, snapshot.orientation);
-   BIEngine::Deserialize(inputStream, snapshot.angularVelocity);
+   BIEngine::Deserialize(inputStream, snapshot.state.position);
+   BIEngine::Deserialize(inputStream, snapshot.state.rotation);
+   BIEngine::Deserialize(inputStream, snapshot.state.velocity);
+   BIEngine::Deserialize(inputStream, snapshot.state.direction.x);
+   BIEngine::Deserialize(inputStream, snapshot.state.direction.y);
+   BIEngine::Deserialize(inputStream, snapshot.state.inputVelocity);
+   BIEngine::Deserialize(inputStream, snapshot.state.inputDirection.x);
+   BIEngine::Deserialize(inputStream, snapshot.state.inputDirection.y);
+   BIEngine::Deserialize(inputStream, snapshot.state.orientation);
+   BIEngine::Deserialize(inputStream, snapshot.state.angularVelocity);
    if (!inputStream.HasReadError()) {
       Reconcile(snapshot);
    }
@@ -156,19 +156,19 @@ void EventProtocolLeader::Reconcile(const CharacterMovementSnapshot& snapshot)
       m_unacknowledgedEvents.Erase(m_unacknowledgedEvents.Begin());
    }
 
-   transform->SetPosition(snapshot.position);
-   transform->SetRotation(snapshot.rotation);
-   BIEngine::g_pApp->m_pGameLogic->GetGamePhysics3D()->SetPosition(actor->GetId(), snapshot.position);
+   transform->SetPosition(snapshot.state.position);
+   transform->SetRotation(snapshot.state.rotation);
+   BIEngine::g_pApp->m_pGameLogic->GetGamePhysics3D()->SetPosition(actor->GetId(), snapshot.state.position);
    auto physics = actor->GetComponent<BIEngine::Physics3DComponent>(BIEngine::Physics3DComponent::g_CompId).Lock();
    if (physics) {
-      physics->Translate(glm::vec3(0.0f), snapshot.rotation);
+      physics->Translate(glm::vec3(0.0f), snapshot.state.rotation);
    }
-   locomotion->SetCurrentVel(snapshot.velocity);
-   locomotion->SetCurrentDir(snapshot.direction);
-   locomotion->SetInputVel(snapshot.inputVelocity);
-   locomotion->SetInputDir(snapshot.inputDirection);
-   locomotion->SetCurrentOrientation(snapshot.orientation);
-   locomotion->SetCurrentAngularVelocity(snapshot.angularVelocity);
+   locomotion->SetCurrentVel(snapshot.state.velocity);
+   locomotion->SetCurrentDir(snapshot.state.direction);
+   locomotion->SetInputVel(snapshot.state.inputVelocity);
+   locomotion->SetInputDir(snapshot.state.inputDirection);
+   locomotion->SetCurrentOrientation(snapshot.state.orientation);
+   locomotion->SetCurrentAngularVelocity(snapshot.state.angularVelocity);
 
    const float fixedDt = 1.0f / BIEngine::g_pApp->m_options.fixedFps;
    for (const auto& pending : m_unacknowledgedEvents) {
@@ -176,9 +176,11 @@ void EventProtocolLeader::Reconcile(const CharacterMovementSnapshot& snapshot)
          continue;
       }
       auto input = BIEngine::StaticPointerCast<EvtData_CharacterInput>(pending.event);
-      locomotion->SetInputVel(glm::vec3(input->GetDesiredHorizontalAmount(), 0.0f, input->GetDesiredVerticalAmount()));
-      locomotion->SetInputDir(input->GetDesiredDir());
-      movement->SimulateInputStep(fixedDt);
+      CharacterInputCommand command;
+      command.sequence = pending.sequence;
+      command.inputVelocity = glm::vec3(input->GetDesiredHorizontalAmount(), 0.0f, input->GetDesiredVerticalAmount());
+      command.inputDirection = input->GetDesiredDir();
+      movement->SimulateInputStep(command, fixedDt);
    }
 }
 
@@ -233,18 +235,29 @@ void EventProtocolFollower::OnBeforePacketsSend(BIEngine::NetworkMessagesManager
            continue;
         }
 
+        CharacterMovementSnapshot snapshot;
+        snapshot.lastProcessedSequence = binder->GetLastProcessedInputSequence();
+        snapshot.state.position = transform->GetPosition();
+        snapshot.state.rotation = transform->GetRotation();
+        snapshot.state.velocity = locomotion->GetCurrentVel();
+        snapshot.state.direction = locomotion->GetCurrentDir();
+        snapshot.state.inputVelocity = locomotion->GetInputVel();
+        snapshot.state.inputDirection = locomotion->GetInputDir();
+        snapshot.state.orientation = locomotion->GetCurrentOrientation();
+        snapshot.state.angularVelocity = locomotion->GetCurrentAngularVelocity();
+
         BIEngine::OutputMemoryBitStream packet;
-        BIEngine::Serialize(packet, binder->GetLastProcessedInputSequence());
-        BIEngine::Serialize(packet, transform->GetPosition());
-        BIEngine::Serialize(packet, transform->GetRotation());
-        BIEngine::Serialize(packet, locomotion->GetCurrentVel());
-        BIEngine::Serialize(packet, locomotion->GetCurrentDir().x);
-        BIEngine::Serialize(packet, locomotion->GetCurrentDir().y);
-        BIEngine::Serialize(packet, locomotion->GetInputVel());
-        BIEngine::Serialize(packet, locomotion->GetInputDir().x);
-        BIEngine::Serialize(packet, locomotion->GetInputDir().y);
-        BIEngine::Serialize(packet, locomotion->GetCurrentOrientation());
-        BIEngine::Serialize(packet, locomotion->GetCurrentAngularVelocity());
+        BIEngine::Serialize(packet, snapshot.lastProcessedSequence);
+        BIEngine::Serialize(packet, snapshot.state.position);
+        BIEngine::Serialize(packet, snapshot.state.rotation);
+        BIEngine::Serialize(packet, snapshot.state.velocity);
+        BIEngine::Serialize(packet, snapshot.state.direction.x);
+        BIEngine::Serialize(packet, snapshot.state.direction.y);
+        BIEngine::Serialize(packet, snapshot.state.inputVelocity);
+        BIEngine::Serialize(packet, snapshot.state.inputDirection.x);
+        BIEngine::Serialize(packet, snapshot.state.inputDirection.y);
+        BIEngine::Serialize(packet, snapshot.state.orientation);
+        BIEngine::Serialize(packet, snapshot.state.angularVelocity);
 
         pNetworkMessagesManager->SendNetworkMessage(pPeer.peerId, GetType(), packet);
     }

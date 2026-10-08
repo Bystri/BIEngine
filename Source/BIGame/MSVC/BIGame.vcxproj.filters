@@ -42,6 +42,9 @@
     </ClCompile>
     <ClCompile Include="..\CharacterMovementComponent.cpp" />
     <ClCompile Include="..\PlayerCommandBinderComponent.cpp" />
+    <ClCompile Include="..\Movement\CharacterMovementSimulator.cpp">
+      <Filter>Movement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGame.h" />
@@ -99,6 +102,12 @@
     </ClInclude>
     <ClInclude Include="..\CharacterMovementComponent.h" />
     <ClInclude Include="..\PlayerCommandBinderComponent.h" />
+    <ClInclude Include="..\Movement\CharacterMovementSimulator.h">
+      <Filter>Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Movement\MovementTypes.h">
+      <Filter>Movement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.clang-format" />
@@ -113,6 +122,9 @@
     </Filter>
     <Filter Include="Combat">
       <UniqueIdentifier>{305cb468-8bed-415e-a236-74b858185169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Movement">
+      <UniqueIdentifier>{2F69E74A-89A3-4F36-8A57-0D0E16D37D41}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -3,18 +3,7 @@
 #include "../../../BIEngine/EventManager/EventManager.h"
 #include "../../../BIEngine/StdLib/Algorithm.h"
 #include "../BIEventListener.h"
-
-struct CharacterMovementSnapshot {
-   uint32_t lastProcessedSequence = 0;
-   glm::vec3 position = glm::vec3(0.0f);
-   glm::vec3 rotation = glm::vec3(0.0f);
-   glm::vec3 velocity = glm::vec3(0.0f);
-   glm::vec2 direction = glm::vec2(0.0f);
-   glm::vec3 inputVelocity = glm::vec3(0.0f);
-   glm::vec2 inputDirection = glm::vec2(0.0f);
-   float orientation = 0.0f;
-   float angularVelocity = 0.0f;
-};
+#include "../Movement/MovementTypes.h"
 
 class EventProtocolLeader : public BIEngine::NetworkProtocol {
 public:

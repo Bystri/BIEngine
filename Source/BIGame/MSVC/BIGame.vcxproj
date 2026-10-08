@@ -26,6 +26,7 @@
     <ClCompile Include="..\Combat\DamagableComponent.cpp" />
     <ClCompile Include="..\Combat\HealthStateComponent.cpp" />
     <ClCompile Include="..\Locomotion\LocomotionInfoComponent.cpp" />
+    <ClCompile Include="..\Movement\CharacterMovementSimulator.cpp" />
     <ClCompile Include="..\Network\AttachedActorReplicationUnit.cpp" />
     <ClCompile Include="..\Network\BINetworkRPCs.cpp" />
     <ClCompile Include="..\Network\CombatReplicationUnit.cpp" />
@@ -49,6 +50,8 @@
     <ClInclude Include="..\Combat\DamagableComponent.h" />
     <ClInclude Include="..\Combat\HealthStateComponent.h" />
     <ClInclude Include="..\Locomotion\LocomotionInfoComponent.h" />
+    <ClInclude Include="..\Movement\CharacterMovementSimulator.h" />
+    <ClInclude Include="..\Movement\MovementTypes.h" />
     <ClInclude Include="..\Network\AttachedActorReplicationUnit.h" />
     <ClInclude Include="..\Network\BINetworkRPCs.h" />
     <ClInclude Include="..\Network\CombatReplicationUnit.h" />

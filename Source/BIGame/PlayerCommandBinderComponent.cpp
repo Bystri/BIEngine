@@ -1,7 +1,6 @@
 #include "PlayerCommandBinderComponent.h"
 
 #include "../BIGame/BIEventListener.h"
-#include "../BIGame/Locomotion/LocomotionInfoComponent.h"
 #include "../BIEngine/Actors/NavAgentComponent.h"
 #include "../BIEngine/Actors/PlayerComponent.h"
 
@@ -43,26 +42,22 @@ void PlayerCommandBinderComponent::HandleOnCommandCharacterInput(BIEngine::IEven
       return;
    }
 
-   m_pendingCharacterInputs.Push(pCastEventData);
+   CharacterInputCommand command;
+   command.sequence = pCastEventData->GetSequence();
+   command.inputVelocity = glm::vec3(pCastEventData->GetDesiredHorizontalAmount(), 0.0f,
+                                     pCastEventData->GetDesiredVerticalAmount());
+   command.inputDirection = pCastEventData->GetDesiredDir();
+   m_pendingCharacterInputs.Push(command);
 }
 
-bool PlayerCommandBinderComponent::ApplyNextCharacterInput()
+bool PlayerCommandBinderComponent::PopNextCharacterInput(CharacterInputCommand& command)
 {
    if (m_pendingCharacterInputs.Empty()) {
       return false;
    }
 
-   auto input = m_pendingCharacterInputs.Front();
+   command = m_pendingCharacterInputs.Front();
+   m_lastProcessedInputSequence = command.sequence;
    m_pendingCharacterInputs.Pop();
-   m_appliedInputSequence = input->GetSequence();
-
-   auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
-   pLocomotionInfoComponent->SetInputVel(glm::vec3(input->GetDesiredHorizontalAmount(), 0.0f, input->GetDesiredVerticalAmount()));
-   pLocomotionInfoComponent->SetInputDir(input->GetDesiredDir());
    return true;
-}
-
-void PlayerCommandBinderComponent::MarkCharacterInputProcessed()
-{
-   m_lastProcessedInputSequence = m_appliedInputSequence;
 }

@@ -4,6 +4,7 @@
 #include "../BIEngine/EventManager/EventManager.h"
 #include "../BIEngine/StdLib/UniquePtr.h"
 #include "../BIEngine/StdLib/Queue.h"
+#include "Movement/MovementTypes.h"
 
 class EvtData_CharacterInput;
 
@@ -22,8 +23,7 @@ public:
 
    void RequestMeleeAttack();
 
-   bool ApplyNextCharacterInput();
-   void MarkCharacterInputProcessed();
+   bool PopNextCharacterInput(CharacterInputCommand& command);
    uint32_t GetLastProcessedInputSequence() const { return m_lastProcessedInputSequence; }
 
 private:
@@ -31,8 +31,7 @@ private:
 
 private:
    BIEngine::EventManager::DelegateHandler m_onCommandCharacterInput;
-   BIEngine::Queue<BIEngine::SharedPtr<EvtData_CharacterInput>> m_pendingCharacterInputs;
-   uint32_t m_appliedInputSequence = 0;
+   BIEngine::Queue<CharacterInputCommand> m_pendingCharacterInputs;
    uint32_t m_lastProcessedInputSequence = 0;
 };
 
