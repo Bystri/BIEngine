@@ -1,12 +1,11 @@
 #include "EventNetworkProtocol.h"
 
 #include "../../BIEngine/Actors/TransformComponent.h"
-#include "../../BIEngine/Actors/Physics3DComponent.h"
 #include "../../BIEngine/EngineCore/GameApp.h"
 #include "../../BIEngine/Actors/PlayerComponent.h"
 #include "../PlayerCommandBinderComponent.h"
-#include "../CharacterMovementComponent.h"
 #include "../Locomotion/LocomotionInfoComponent.h"
+#include "../Movement/CharacterMovementReconciler.h"
 
 const BIEngine::NetworkProtocolType EventProtocolLeader::sk_ProtocolType('EVNT');
 const BIEngine::NetworkProtocolType EventProtocolFollower::sk_ProtocolType('EVNT');
@@ -45,8 +44,8 @@ void EventProtocolLeader::UnregisterPeer(uint32_t peerId)
    m_peersToSend.Erase(itr);
    if (m_peersToSend.Empty()) {
       m_eventsToSend.Clear();
-      m_unacknowledgedEvents.Clear();
-      m_lastAcknowledgedSequence = 0;
+      m_eventHistory.Clear();
+      m_inputHistory.Clear();
       m_nextSequence = 1;
    }
 }
@@ -66,7 +65,13 @@ void EventProtocolLeader::ReceiveMessage(BIEngine::PeerId peerId, BIEngine::Inpu
    BIEngine::Deserialize(inputStream, snapshot.state.orientation);
    BIEngine::Deserialize(inputStream, snapshot.state.angularVelocity);
    if (!inputStream.HasReadError()) {
-      Reconcile(snapshot);
+      auto actor = m_pLocalPlayerActor.Lock();
+      if (actor) {
+         const float fixedDt = 1.0f / BIEngine::g_pApp->m_options.fixedFps;
+         if (CharacterMovementReconciler::Reconcile(*actor, snapshot, m_inputHistory, fixedDt)) {
+            m_eventHistory.Acknowledge(snapshot.lastProcessedSequence);
+         }
+      }
    }
 }
 
@@ -122,66 +127,23 @@ void EventProtocolLeader::StoreEventToForwardDelegate(BIEngine::IEventDataPtr pE
 
    const uint32_t sequence = m_nextSequence++;
    if (pEventData->GetEventType() == EvtData_CharacterInput::sk_EventType) {
-      BIEngine::StaticPointerCast<EvtData_CharacterInput>(pEventData)->SetSequence(sequence);
+      auto input = BIEngine::StaticPointerCast<EvtData_CharacterInput>(pEventData);
+      input->SetSequence(sequence);
+      CharacterInputCommand command;
+      command.sequence = sequence;
+      command.inputVelocity = glm::vec3(input->GetDesiredHorizontalAmount(), 0.0f, input->GetDesiredVerticalAmount());
+      command.inputDirection = input->GetDesiredDir();
+      m_inputHistory.Record(command);
    }
    PendingEvent pending{sequence, pEventData};
    m_eventsToSend.PushBack(pending);
-   m_unacknowledgedEvents.PushBack(std::move(pending));
+   m_eventHistory.Record(sequence, pEventData);
 }
 
 bool EventProtocolLeader::IsLocalPlayerActor(const BIEngine::Actor* actor) const
 {
    auto localActor = m_pLocalPlayerActor.Lock();
    return localActor && localActor.Get() == actor;
-}
-
-void EventProtocolLeader::Reconcile(const CharacterMovementSnapshot& snapshot)
-{
-   auto actor = m_pLocalPlayerActor.Lock();
-   if (!actor || snapshot.lastProcessedSequence < m_lastAcknowledgedSequence ||
-       snapshot.lastProcessedSequence >= m_nextSequence) {
-      return;
-   }
-
-   auto transform = actor->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).Lock();
-   auto locomotion = actor->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
-   auto movement = actor->GetComponent<CharacterMovementComponent>(CharacterMovementComponent::g_CompId).Lock();
-   if (!transform || !locomotion || !movement) {
-      return;
-   }
-
-   m_lastAcknowledgedSequence = snapshot.lastProcessedSequence;
-   while (!m_unacknowledgedEvents.Empty() &&
-          m_unacknowledgedEvents.Front().sequence <= m_lastAcknowledgedSequence) {
-      m_unacknowledgedEvents.Erase(m_unacknowledgedEvents.Begin());
-   }
-
-   transform->SetPosition(snapshot.state.position);
-   transform->SetRotation(snapshot.state.rotation);
-   BIEngine::g_pApp->m_pGameLogic->GetGamePhysics3D()->SetPosition(actor->GetId(), snapshot.state.position);
-   auto physics = actor->GetComponent<BIEngine::Physics3DComponent>(BIEngine::Physics3DComponent::g_CompId).Lock();
-   if (physics) {
-      physics->Translate(glm::vec3(0.0f), snapshot.state.rotation);
-   }
-   locomotion->SetCurrentVel(snapshot.state.velocity);
-   locomotion->SetCurrentDir(snapshot.state.direction);
-   locomotion->SetInputVel(snapshot.state.inputVelocity);
-   locomotion->SetInputDir(snapshot.state.inputDirection);
-   locomotion->SetCurrentOrientation(snapshot.state.orientation);
-   locomotion->SetCurrentAngularVelocity(snapshot.state.angularVelocity);
-
-   const float fixedDt = 1.0f / BIEngine::g_pApp->m_options.fixedFps;
-   for (const auto& pending : m_unacknowledgedEvents) {
-      if (pending.event->GetEventType() != EvtData_CharacterInput::sk_EventType) {
-         continue;
-      }
-      auto input = BIEngine::StaticPointerCast<EvtData_CharacterInput>(pending.event);
-      CharacterInputCommand command;
-      command.sequence = pending.sequence;
-      command.inputVelocity = glm::vec3(input->GetDesiredHorizontalAmount(), 0.0f, input->GetDesiredVerticalAmount());
-      command.inputDirection = input->GetDesiredDir();
-      movement->SimulateInputStep(command, fixedDt);
-   }
 }
 
 /***EventProtocolReader***/

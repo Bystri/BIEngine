@@ -35,6 +35,9 @@
     <ClCompile Include="..\Network\EventNetworkProtocol.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\Network\OutgoingEventHistory.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
     <ClCompile Include="..\BIFlyCameraSystem.cpp" />
     <ClCompile Include="..\BIGameController.cpp" />
     <ClCompile Include="..\Network\BINetworkRPCs.cpp">
@@ -43,6 +46,12 @@
     <ClCompile Include="..\CharacterMovementComponent.cpp" />
     <ClCompile Include="..\PlayerCommandBinderComponent.cpp" />
     <ClCompile Include="..\Movement\CharacterMovementSimulator.cpp">
+      <Filter>Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Movement\CharacterInputHistory.cpp">
+      <Filter>Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Movement\CharacterMovementReconciler.cpp">
       <Filter>Movement</Filter>
     </ClCompile>
   </ItemGroup>
@@ -94,6 +103,9 @@
     <ClInclude Include="..\Network\EventNetworkProtocol.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\Network\OutgoingEventHistory.h">
+      <Filter>Network</Filter>
+    </ClInclude>
     <ClInclude Include="..\BIDebugMenuController.h" />
     <ClInclude Include="..\BIFlyCameraSystem.h" />
     <ClInclude Include="..\BIGameController.h" />
@@ -106,6 +118,12 @@
       <Filter>Movement</Filter>
     </ClInclude>
     <ClInclude Include="..\Movement\MovementTypes.h">
+      <Filter>Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Movement\CharacterInputHistory.h">
+      <Filter>Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Movement\CharacterMovementReconciler.h">
       <Filter>Movement</Filter>
     </ClInclude>
   </ItemGroup>

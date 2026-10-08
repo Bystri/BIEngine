@@ -26,6 +26,8 @@
     <ClCompile Include="..\Combat\DamagableComponent.cpp" />
     <ClCompile Include="..\Combat\HealthStateComponent.cpp" />
     <ClCompile Include="..\Locomotion\LocomotionInfoComponent.cpp" />
+    <ClCompile Include="..\Movement\CharacterInputHistory.cpp" />
+    <ClCompile Include="..\Movement\CharacterMovementReconciler.cpp" />
     <ClCompile Include="..\Movement\CharacterMovementSimulator.cpp" />
     <ClCompile Include="..\Network\AttachedActorReplicationUnit.cpp" />
     <ClCompile Include="..\Network\BINetworkRPCs.cpp" />
@@ -33,6 +35,7 @@
     <ClCompile Include="..\Network\EventNetworkProtocol.cpp" />
     <ClCompile Include="..\Network\HealthStateReplicationUnit.cpp" />
     <ClCompile Include="..\Network\LocomotionInfoReplicationUnit.cpp" />
+    <ClCompile Include="..\Network\OutgoingEventHistory.cpp" />
     <ClCompile Include="..\PlayerCommandBinderComponent.cpp" />
     <ClCompile Include="..\PlayerManager\PlayerManager.cpp" />
   </ItemGroup>
@@ -50,6 +53,8 @@
     <ClInclude Include="..\Combat\DamagableComponent.h" />
     <ClInclude Include="..\Combat\HealthStateComponent.h" />
     <ClInclude Include="..\Locomotion\LocomotionInfoComponent.h" />
+    <ClInclude Include="..\Movement\CharacterInputHistory.h" />
+    <ClInclude Include="..\Movement\CharacterMovementReconciler.h" />
     <ClInclude Include="..\Movement\CharacterMovementSimulator.h" />
     <ClInclude Include="..\Movement\MovementTypes.h" />
     <ClInclude Include="..\Network\AttachedActorReplicationUnit.h" />
@@ -58,6 +63,7 @@
     <ClInclude Include="..\Network\EventNetworkProtocol.h" />
     <ClInclude Include="..\Network\HealthStateReplicationUnit.h" />
     <ClInclude Include="..\Network\LocomotionInfoReplicationUnit.h" />
+    <ClInclude Include="..\Network\OutgoingEventHistory.h" />
     <ClInclude Include="..\Network\PlayerCharacterReplicationUnits.h" />
     <ClInclude Include="..\Network\ReplicationObjectAiDummyCharacter.h" />
     <ClInclude Include="..\Network\ReplicationObjectPlayer.h" />

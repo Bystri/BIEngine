@@ -3,7 +3,8 @@
 #include "../../../BIEngine/EventManager/EventManager.h"
 #include "../../../BIEngine/StdLib/Algorithm.h"
 #include "../BIEventListener.h"
-#include "../Movement/MovementTypes.h"
+#include "../Movement/CharacterInputHistory.h"
+#include "OutgoingEventHistory.h"
 
 class EventProtocolLeader : public BIEngine::NetworkProtocol {
 public:
@@ -28,8 +29,6 @@ private:
    void NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventData);
    void StoreEventToForwardDelegate(BIEngine::IEventDataPtr pEventData);
 
-   void Reconcile(const CharacterMovementSnapshot& snapshot);
-
 private:
    struct PendingEvent {
        uint32_t sequence;
@@ -37,10 +36,10 @@ private:
    };
 
    BIEngine::DynamicArray<PendingEvent> m_eventsToSend;
-   BIEngine::DynamicArray<PendingEvent> m_unacknowledgedEvents;
+   OutgoingEventHistory m_eventHistory;
+   CharacterInputHistory m_inputHistory;
    BIEngine::DynamicArray<uint32_t> m_peersToSend;
    uint32_t m_nextSequence = 1;
-   uint32_t m_lastAcknowledgedSequence = 0;
 
    BIEngine::EventManager::DelegateHandler m_storeEventCommandCharacterInputDelegateHandler;
    BIEngine::EventManager::DelegateHandler m_newPlayerActorDelegateHandler;
