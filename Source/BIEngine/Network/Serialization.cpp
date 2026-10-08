@@ -172,12 +172,26 @@ void Serialize(OutputMemoryBitStream& stream, const String& data)
    stream.WriteBits(data.Data(), data.Size() * 8);
 }
 
+void Serialize(OutputMemoryBitStream& stream, const glm::vec3& data)
+{
+    Serialize(stream, data.x);
+    Serialize(stream, data.y);
+    Serialize(stream, data.z);
+}
+
 void Deserialize(InputMemoryBitStream& stream, String& data)
 {
    int strSize;
    Deserialize(stream, strSize, sizeof(uint32_t) * 8);
    data.Resize(strSize);
    stream.ReadBits(data.Data(), strSize * 8);
+}
+
+void Deserialize(InputMemoryBitStream& stream, glm::vec3& data)
+{
+    Deserialize(stream, data.x);
+    Deserialize(stream, data.y);
+    Deserialize(stream, data.z);
 }
 
 } // namespace BIEngine

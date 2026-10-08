@@ -3,6 +3,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdint>
+#include <glm/glm.hpp>
 
 #include "../StdLib/SharedPtr.h"
 #include "../StdLib/String.h"
@@ -242,6 +243,7 @@ void Serialize(OutputMemoryBitStream& stream, T data, size_t bitCount = sizeof(T
 }
 
 void Serialize(OutputMemoryBitStream& stream, const String& data);
+void Serialize(OutputMemoryBitStream& stream, const glm::vec3& data);
 
 template <typename T>
 void Deserialize(InputMemoryBitStream& stream, T& inData, size_t bitCount = sizeof(T) * 8)
@@ -255,5 +257,6 @@ void Deserialize(InputMemoryBitStream& stream, T& inData, size_t bitCount = size
 }
 
 void Deserialize(InputMemoryBitStream& stream, String& data);
+void Deserialize(InputMemoryBitStream& stream, glm::vec3& data);
 
 } // namespace BIEngine
