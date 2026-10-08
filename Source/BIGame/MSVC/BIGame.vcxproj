@@ -29,6 +29,9 @@
     <ClCompile Include="..\Movement\CharacterInputHistory.cpp" />
     <ClCompile Include="..\Movement\CharacterMovementReconciler.cpp" />
     <ClCompile Include="..\Movement\CharacterMovementSimulator.cpp" />
+    <ClCompile Include="..\Movement\RemoteCharacterDeadReckoning.cpp" />
+    <ClCompile Include="..\Movement\ServerCharacterInputProcessor.cpp" />
+    <ClCompile Include="..\Movement\ServerCharacterInputQueue.cpp" />
     <ClCompile Include="..\Network\AttachedActorReplicationUnit.cpp" />
     <ClCompile Include="..\Network\BINetworkRPCs.cpp" />
     <ClCompile Include="..\Network\CombatReplicationUnit.cpp" />
@@ -57,6 +60,9 @@
     <ClInclude Include="..\Movement\CharacterMovementReconciler.h" />
     <ClInclude Include="..\Movement\CharacterMovementSimulator.h" />
     <ClInclude Include="..\Movement\MovementTypes.h" />
+    <ClInclude Include="..\Movement\RemoteCharacterDeadReckoning.h" />
+    <ClInclude Include="..\Movement\ServerCharacterInputProcessor.h" />
+    <ClInclude Include="..\Movement\ServerCharacterInputQueue.h" />
     <ClInclude Include="..\Network\AttachedActorReplicationUnit.h" />
     <ClInclude Include="..\Network\BINetworkRPCs.h" />
     <ClInclude Include="..\Network\CombatReplicationUnit.h" />

@@ -28,9 +28,7 @@ void PlayerCommandBinderComponent::Activate()
 void PlayerCommandBinderComponent::Deactivate()
 {
    BIEngine::EventManager::Get()->RemoveListener(m_onCommandCharacterInput);
-   while (!m_pendingCharacterInputs.Empty()) {
-      m_pendingCharacterInputs.Pop();
-   }
+   m_inputQueue.Clear();
 }
 
 void PlayerCommandBinderComponent::HandleOnCommandCharacterInput(BIEngine::IEventDataPtr pEventData)
@@ -47,17 +45,5 @@ void PlayerCommandBinderComponent::HandleOnCommandCharacterInput(BIEngine::IEven
    command.inputVelocity = glm::vec3(pCastEventData->GetDesiredHorizontalAmount(), 0.0f,
                                      pCastEventData->GetDesiredVerticalAmount());
    command.inputDirection = pCastEventData->GetDesiredDir();
-   m_pendingCharacterInputs.Push(command);
-}
-
-bool PlayerCommandBinderComponent::PopNextCharacterInput(CharacterInputCommand& command)
-{
-   if (m_pendingCharacterInputs.Empty()) {
-      return false;
-   }
-
-   command = m_pendingCharacterInputs.Front();
-   m_lastProcessedInputSequence = command.sequence;
-   m_pendingCharacterInputs.Pop();
-   return true;
+   m_inputQueue.Enqueue(command);
 }

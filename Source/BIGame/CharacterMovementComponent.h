@@ -4,6 +4,7 @@
 #include "../BIEngine/EventManager/EventManager.h"
 #include "../BIEngine/StdLib/UniquePtr.h"
 #include "Movement/MovementTypes.h"
+#include "Movement/RemoteCharacterDeadReckoning.h"
 
 class CharacterMovementComponent : public BIEngine::ActorComponent {
 public:
@@ -24,9 +25,7 @@ public:
    void OnRemoteSnapshotReceived();
 
 private:
-   bool IsRemotePlayerOnClient() const;
-   float m_remotePredictionAge = 0.0f;
-   bool m_hasRemoteSnapshot = false;
+   RemoteCharacterDeadReckoning m_remotePrediction;
 
 private:
    float m_maxSpeed = 5.0f;

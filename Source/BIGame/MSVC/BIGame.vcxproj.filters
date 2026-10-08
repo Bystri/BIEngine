@@ -54,6 +54,15 @@
     <ClCompile Include="..\Movement\CharacterMovementReconciler.cpp">
       <Filter>Movement</Filter>
     </ClCompile>
+    <ClCompile Include="..\Movement\RemoteCharacterDeadReckoning.cpp">
+      <Filter>Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Movement\ServerCharacterInputProcessor.cpp">
+      <Filter>Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Movement\ServerCharacterInputQueue.cpp">
+      <Filter>Movement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BIGame.h" />
@@ -124,6 +133,15 @@
       <Filter>Movement</Filter>
     </ClInclude>
     <ClInclude Include="..\Movement\CharacterMovementReconciler.h">
+      <Filter>Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Movement\RemoteCharacterDeadReckoning.h">
+      <Filter>Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Movement\ServerCharacterInputProcessor.h">
+      <Filter>Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Movement\ServerCharacterInputQueue.h">
       <Filter>Movement</Filter>
     </ClInclude>
   </ItemGroup>

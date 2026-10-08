@@ -1,14 +1,12 @@
 #include "CharacterMovementComponent.h"
 
 #include "Movement/CharacterMovementSimulator.h"
+#include "Movement/ServerCharacterInputProcessor.h"
 #include "../BIEngine/Actors/Actor.h"
 #include "../BIEngine/Actors/Physics3DComponent.h"
 #include "../BIEngine/Actors/TransformComponent.h"
 #include "../BIGame/Locomotion/LocomotionInfoComponent.h"
 #include "PlayerCommandBinderComponent.h"
-#include "PlayerManager/PlayerManager.h"
-#include "Network/EventNetworkProtocol.h"
-#include "../BIEngine/Actors/PlayerComponent.h"
 
 const BIEngine::ComponentId CharacterMovementComponent::g_CompId = "CharacterMovementComponent";
 
@@ -32,42 +30,17 @@ void CharacterMovementComponent::OnFixedUpdate(float dt)
       return;
    }
 
-   if (IsRemotePlayerOnClient()) {
-      constexpr float maxPredictionTime = 0.5f;
-      if (m_hasRemoteSnapshot && m_remotePredictionAge < maxPredictionTime) {
-         const float remainingTime = maxPredictionTime - m_remotePredictionAge;
-         const float predictionDt = dt < remainingTime ? dt : remainingTime;
-         SimulateInputStep(predictionDt);
-         m_remotePredictionAge += predictionDt;
-      }
+   if (RemoteCharacterDeadReckoning::IsRemotePlayerOnClient(*GetOwner())) {
+      m_remotePrediction.Predict(*this, dt);
       return;
    }
 
-   // On the server a delayed packet can contain several fixed-step commands.
-   CharacterInputCommand command;
-   while (binder->PopNextCharacterInput(command)) {
-      SimulateInputStep(command, dt);
-   }
-}
-
-bool CharacterMovementComponent::IsRemotePlayerOnClient() const
-{
-   if (!EventProtocolLeader::Get()) {
-      return false;
-   }
-
-   auto player = GetOwner()->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock();
-   if (!player || PlayerManager::Get()->GetLocalPlayerId() == PlayerManager::INVALID_PLAYER_ID) {
-      return false;
-   }
-
-   return player->GetPlayerId() != PlayerManager::Get()->GetLocalPlayerId();
+   ServerCharacterInputProcessor::ProcessPending(binder->GetInputQueue(), *this, dt);
 }
 
 void CharacterMovementComponent::OnRemoteSnapshotReceived()
 {
-   m_hasRemoteSnapshot = true;
-   m_remotePredictionAge = 0.0f;
+   m_remotePrediction.OnSnapshotReceived();
 }
 
 void CharacterMovementComponent::SimulateInputStep(float dt)

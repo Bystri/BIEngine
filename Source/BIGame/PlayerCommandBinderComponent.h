@@ -3,8 +3,7 @@
 #include "../BIEngine/Actors/ActorComponent.h"
 #include "../BIEngine/EventManager/EventManager.h"
 #include "../BIEngine/StdLib/UniquePtr.h"
-#include "../BIEngine/StdLib/Queue.h"
-#include "Movement/MovementTypes.h"
+#include "Movement/ServerCharacterInputQueue.h"
 
 class EvtData_CharacterInput;
 
@@ -23,16 +22,15 @@ public:
 
    void RequestMeleeAttack();
 
-   bool PopNextCharacterInput(CharacterInputCommand& command);
-   uint32_t GetLastProcessedInputSequence() const { return m_lastProcessedInputSequence; }
+   ServerCharacterInputQueue& GetInputQueue() { return m_inputQueue; }
+   uint32_t GetLastProcessedInputSequence() const { return m_inputQueue.GetLastProcessedSequence(); }
 
 private:
    void HandleOnCommandCharacterInput(BIEngine::IEventDataPtr pEventData);
 
 private:
    BIEngine::EventManager::DelegateHandler m_onCommandCharacterInput;
-   BIEngine::Queue<CharacterInputCommand> m_pendingCharacterInputs;
-   uint32_t m_lastProcessedInputSequence = 0;
+   ServerCharacterInputQueue m_inputQueue;
 };
 
 static BIEngine::UniquePtr<BIEngine::ActorComponent> CreatePlayerCommandBinderComponent()
