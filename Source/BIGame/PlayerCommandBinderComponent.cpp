@@ -29,6 +29,9 @@ void PlayerCommandBinderComponent::Activate()
 void PlayerCommandBinderComponent::Deactivate()
 {
    BIEngine::EventManager::Get()->RemoveListener(m_onCommandCharacterInput);
+   while (!m_pendingCharacterInputs.Empty()) {
+      m_pendingCharacterInputs.Pop();
+   }
 }
 
 void PlayerCommandBinderComponent::HandleOnCommandCharacterInput(BIEngine::IEventDataPtr pEventData)
@@ -40,11 +43,26 @@ void PlayerCommandBinderComponent::HandleOnCommandCharacterInput(BIEngine::IEven
       return;
    }
 
-   const glm::vec3 desiredVel = glm::vec3(pCastEventData->GetDesiredHorizontalAmount(), 0.0f, pCastEventData->GetDesiredVerticalAmount());
-   const float desiredVelLength = glm::length(desiredVel);
-   const glm::vec2 desiredDir = glm::normalize(glm::vec2(desiredVel.x, desiredVel.z));
+   m_pendingCharacterInputs.Push(pCastEventData);
+}
+
+bool PlayerCommandBinderComponent::ApplyNextCharacterInput()
+{
+   if (m_pendingCharacterInputs.Empty()) {
+      return false;
+   }
+
+   auto input = m_pendingCharacterInputs.Front();
+   m_pendingCharacterInputs.Pop();
+   m_appliedInputSequence = input->GetSequence();
 
    auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
-   pLocomotionInfoComponent->SetInputVel(desiredVel);
-   pLocomotionInfoComponent->SetInputDir(pCastEventData->GetDesiredDir());
+   pLocomotionInfoComponent->SetInputVel(glm::vec3(input->GetDesiredHorizontalAmount(), 0.0f, input->GetDesiredVerticalAmount()));
+   pLocomotionInfoComponent->SetInputDir(input->GetDesiredDir());
+   return true;
+}
+
+void PlayerCommandBinderComponent::MarkCharacterInputProcessed()
+{
+   m_lastProcessedInputSequence = m_appliedInputSequence;
 }

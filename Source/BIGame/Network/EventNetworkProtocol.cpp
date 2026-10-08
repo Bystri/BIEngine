@@ -3,14 +3,22 @@
 #include "../../BIEngine/Actors/TransformComponent.h"
 #include "../../BIEngine/Actors/Physics3DComponent.h"
 #include "../../BIEngine/EngineCore/GameApp.h"
+#include "../../BIEngine/Actors/PlayerComponent.h"
+#include "../PlayerCommandBinderComponent.h"
+#include "../CharacterMovementComponent.h"
+#include "../Locomotion/LocomotionInfoComponent.h"
 
 const BIEngine::NetworkProtocolType EventProtocolLeader::sk_ProtocolType('EVNT');
 const BIEngine::NetworkProtocolType EventProtocolFollower::sk_ProtocolType('EVNT');
+EventProtocolLeader* EventProtocolLeader::s_pInstance = nullptr;
+EventProtocolFollower* EventProtocolFollower::s_pInstance = nullptr;
 
 /***EventProtocolWriter***/
 
 EventProtocolLeader::EventProtocolLeader()
 {
+   BIEngine::Assert(s_pInstance == nullptr, "Only one event leader can exist");
+   s_pInstance = this;
    m_newPlayerActorDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolLeader::NewPlayerActorDelegate), EvtData_PlayerActor_Created::sk_EventType);
    m_storeEventCommandCharacterInputDelegateHandler = BIEngine::EventManager::Get()->AddListener(MAKE_EVENT_DELEGATE_FROM_MEMBER_FUNC(EventProtocolLeader::StoreEventToForwardDelegate), EvtData_CharacterInput::sk_EventType);
 }
@@ -19,6 +27,7 @@ EventProtocolLeader::~EventProtocolLeader()
 {
    BIEngine::EventManager::Get()->RemoveListener(m_storeEventCommandCharacterInputDelegateHandler);
    BIEngine::EventManager::Get()->RemoveListener(m_newPlayerActorDelegateHandler);
+   s_pInstance = nullptr;
 }
 
 void EventProtocolLeader::RegisterPeer(uint32_t peerId)
@@ -44,14 +53,21 @@ void EventProtocolLeader::UnregisterPeer(uint32_t peerId)
 
 void EventProtocolLeader::ReceiveMessage(BIEngine::PeerId peerId, BIEngine::InputMemoryBitStream& inputStream)
 {
-    BIEngine::Deserialize(inputStream, m_lastAcknowledgedSequence);
-
-    while (!m_unacknowledgedEvents.Empty() &&
-        m_unacknowledgedEvents.Front().sequence <= m_lastAcknowledgedSequence) {
-        m_unacknowledgedEvents.Erase(m_unacknowledgedEvents.Begin());
-    }
-
-    Reconcile();
+   CharacterMovementSnapshot snapshot;
+   BIEngine::Deserialize(inputStream, snapshot.lastProcessedSequence);
+   BIEngine::Deserialize(inputStream, snapshot.position);
+   BIEngine::Deserialize(inputStream, snapshot.rotation);
+   BIEngine::Deserialize(inputStream, snapshot.velocity);
+   BIEngine::Deserialize(inputStream, snapshot.direction.x);
+   BIEngine::Deserialize(inputStream, snapshot.direction.y);
+   BIEngine::Deserialize(inputStream, snapshot.inputVelocity);
+   BIEngine::Deserialize(inputStream, snapshot.inputDirection.x);
+   BIEngine::Deserialize(inputStream, snapshot.inputDirection.y);
+   BIEngine::Deserialize(inputStream, snapshot.orientation);
+   BIEngine::Deserialize(inputStream, snapshot.angularVelocity);
+   if (!inputStream.HasReadError()) {
+      Reconcile(snapshot);
+   }
 }
 
 void EventProtocolLeader::OnBeforePacketsSend(BIEngine::NetworkMessagesManager* pNetworkMessagesManager)
@@ -99,48 +115,98 @@ void EventProtocolLeader::StoreEventToForwardDelegate(BIEngine::IEventDataPtr pE
       return;
    }
 
-   for (const auto& pending : m_unacknowledgedEvents) {
-      if (pending.event == pEventData) {
-         return;
-      }
+   if (pEventData->GetEventType() == EvtData_CharacterInput::sk_EventType &&
+       BIEngine::StaticPointerCast<EvtData_CharacterInput>(pEventData)->GetPlayerId() == PlayerManager::INVALID_PLAYER_ID) {
+      return;
    }
 
    const uint32_t sequence = m_nextSequence++;
+   if (pEventData->GetEventType() == EvtData_CharacterInput::sk_EventType) {
+      BIEngine::StaticPointerCast<EvtData_CharacterInput>(pEventData)->SetSequence(sequence);
+   }
    PendingEvent pending{sequence, pEventData};
    m_eventsToSend.PushBack(pending);
    m_unacknowledgedEvents.PushBack(std::move(pending));
 }
 
-void EventProtocolLeader::Reconcile()
+bool EventProtocolLeader::IsLocalPlayerActor(const BIEngine::Actor* actor) const
+{
+   auto localActor = m_pLocalPlayerActor.Lock();
+   return localActor && localActor.Get() == actor;
+}
+
+void EventProtocolLeader::Reconcile(const CharacterMovementSnapshot& snapshot)
 {
    auto actor = m_pLocalPlayerActor.Lock();
-   if (!actor) {
+   if (!actor || snapshot.lastProcessedSequence < m_lastAcknowledgedSequence ||
+       snapshot.lastProcessedSequence >= m_nextSequence) {
       return;
    }
 
    auto transform = actor->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).Lock();
-   if (!transform) {
+   auto locomotion = actor->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
+   auto movement = actor->GetComponent<CharacterMovementComponent>(CharacterMovementComponent::g_CompId).Lock();
+   if (!transform || !locomotion || !movement) {
       return;
    }
 
-   BIEngine::g_pApp->m_pGameLogic->GetGamePhysics3D()->SetPosition(actor->GetId(), transform->GetPosition());
+   m_lastAcknowledgedSequence = snapshot.lastProcessedSequence;
+   while (!m_unacknowledgedEvents.Empty() &&
+          m_unacknowledgedEvents.Front().sequence <= m_lastAcknowledgedSequence) {
+      m_unacknowledgedEvents.Erase(m_unacknowledgedEvents.Begin());
+   }
+
+   transform->SetPosition(snapshot.position);
+   transform->SetRotation(snapshot.rotation);
+   BIEngine::g_pApp->m_pGameLogic->GetGamePhysics3D()->SetPosition(actor->GetId(), snapshot.position);
    auto physics = actor->GetComponent<BIEngine::Physics3DComponent>(BIEngine::Physics3DComponent::g_CompId).Lock();
    if (physics) {
-      physics->Translate(glm::vec3(0.0f), transform->GetRotation());
+      physics->Translate(glm::vec3(0.0f), snapshot.rotation);
    }
+   locomotion->SetCurrentVel(snapshot.velocity);
+   locomotion->SetCurrentDir(snapshot.direction);
+   locomotion->SetInputVel(snapshot.inputVelocity);
+   locomotion->SetInputDir(snapshot.inputDirection);
+   locomotion->SetCurrentOrientation(snapshot.orientation);
+   locomotion->SetCurrentAngularVelocity(snapshot.angularVelocity);
 
    const float fixedDt = 1.0f / BIEngine::g_pApp->m_options.fixedFps;
    for (const auto& pending : m_unacknowledgedEvents) {
-      BIEngine::EventManager::Get()->TriggerEvent(pending.event);
-      actor->OnFixedUpdate(fixedDt);
+      if (pending.event->GetEventType() != EvtData_CharacterInput::sk_EventType) {
+         continue;
+      }
+      auto input = BIEngine::StaticPointerCast<EvtData_CharacterInput>(pending.event);
+      locomotion->SetInputVel(glm::vec3(input->GetDesiredHorizontalAmount(), 0.0f, input->GetDesiredVerticalAmount()));
+      locomotion->SetInputDir(input->GetDesiredDir());
+      movement->SimulateInputStep(fixedDt);
    }
 }
 
 /***EventProtocolReader***/
 
+EventProtocolFollower::EventProtocolFollower()
+{
+   BIEngine::Assert(s_pInstance == nullptr, "Only one event follower can exist");
+   s_pInstance = this;
+}
+
+EventProtocolFollower::~EventProtocolFollower()
+{
+   s_pInstance = nullptr;
+}
+
+void EventProtocolFollower::BindPlayerActor(BIEngine::PeerId peerId, BIEngine::SharedPtr<BIEngine::Actor> actor)
+{
+   const auto itr = BIEngine::FindIf(m_peersToSend.Begin(), m_peersToSend.End(),
+      [peerId](const PeerInfo& info) { return info.peerId == peerId; });
+   if (itr != m_peersToSend.End()) {
+      itr->playerActor = actor;
+   }
+}
+
 void EventProtocolFollower::RegisterPeer(uint32_t peerId)
 {
-    m_peersToSend.PushBack(PeerInfo{ peerId, 0 });
+    m_peersToSend.PushBack(PeerInfo{ peerId });
 }
 
 void EventProtocolFollower::UnregisterPeer(uint32_t peerId)
@@ -156,8 +222,29 @@ void EventProtocolFollower::UnregisterPeer(uint32_t peerId)
 void EventProtocolFollower::OnBeforePacketsSend(BIEngine::NetworkMessagesManager* pNetworkMessagesManager)
 {
     for (auto& pPeer : m_peersToSend) {
+        auto actor = pPeer.playerActor.Lock();
+        if (!actor) {
+           continue;
+        }
+        auto transform = actor->GetComponent<BIEngine::TransformComponent>(BIEngine::TransformComponent::g_CompId).Lock();
+        auto locomotion = actor->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
+        auto binder = actor->GetComponent<PlayerCommandBinderComponent>(PlayerCommandBinderComponent::g_CompId).Lock();
+        if (!transform || !locomotion || !binder) {
+           continue;
+        }
+
         BIEngine::OutputMemoryBitStream packet;
-        BIEngine::Serialize(packet, pPeer.lastReceivedInputSequence);
+        BIEngine::Serialize(packet, binder->GetLastProcessedInputSequence());
+        BIEngine::Serialize(packet, transform->GetPosition());
+        BIEngine::Serialize(packet, transform->GetRotation());
+        BIEngine::Serialize(packet, locomotion->GetCurrentVel());
+        BIEngine::Serialize(packet, locomotion->GetCurrentDir().x);
+        BIEngine::Serialize(packet, locomotion->GetCurrentDir().y);
+        BIEngine::Serialize(packet, locomotion->GetInputVel());
+        BIEngine::Serialize(packet, locomotion->GetInputDir().x);
+        BIEngine::Serialize(packet, locomotion->GetInputDir().y);
+        BIEngine::Serialize(packet, locomotion->GetCurrentOrientation());
+        BIEngine::Serialize(packet, locomotion->GetCurrentAngularVelocity());
 
         pNetworkMessagesManager->SendNetworkMessage(pPeer.peerId, GetType(), packet);
     }
@@ -174,12 +261,23 @@ void EventProtocolFollower::ReceiveMessage(BIEngine::PeerId peerId, BIEngine::In
    BIEngine::Deserialize(inputStream, eventCount);
 
    while (eventCount > 0) {
-      BIEngine::Deserialize(inputStream, itr->lastReceivedInputSequence);
+      uint32_t sequence = 0;
+      BIEngine::Deserialize(inputStream, sequence);
       BIEngine::EventType eventType;
       BIEngine::Deserialize(inputStream, eventType);
 
       BIEngine::IEventDataPtr pEvent = BIEngine::g_eventFactory.Create(eventType);
       pEvent->Read(inputStream);
+
+      if (eventType == EvtData_CharacterInput::sk_EventType) {
+         auto actor = itr->playerActor.Lock();
+         auto input = BIEngine::StaticPointerCast<EvtData_CharacterInput>(pEvent);
+         if (!actor || actor->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock()->GetPlayerId() != input->GetPlayerId()) {
+            --eventCount;
+            continue;
+         }
+         input->SetSequence(sequence);
+      }
 
       BIEngine::EventManager::Get()->QueueEvent(pEvent);
 

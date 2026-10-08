@@ -501,12 +501,16 @@ public:
 
    const glm::vec2& GetDesiredDir() const { return m_desiredDir; }
 
+   void SetSequence(uint32_t sequence) { m_sequence = sequence; }
+   uint32_t GetSequence() const { return m_sequence; }
+
 private:
    PlayerId m_playerId;
 
    float m_desiredHorizontalAmount = 0.0f;
    float m_desiredVerticalAmount = 0.0f;
    glm::vec2 m_desiredDir = glm::vec2(0.0f);
+   uint32_t m_sequence = 0;
 };
 
 class EvtData_PrimaryAttack : public BIEngine::BaseEventData {

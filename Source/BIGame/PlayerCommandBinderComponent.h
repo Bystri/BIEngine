@@ -3,6 +3,9 @@
 #include "../BIEngine/Actors/ActorComponent.h"
 #include "../BIEngine/EventManager/EventManager.h"
 #include "../BIEngine/StdLib/UniquePtr.h"
+#include "../BIEngine/StdLib/Queue.h"
+
+class EvtData_CharacterInput;
 
 class PlayerCommandBinderComponent : public BIEngine::ActorComponent {
 public:
@@ -19,11 +22,18 @@ public:
 
    void RequestMeleeAttack();
 
+   bool ApplyNextCharacterInput();
+   void MarkCharacterInputProcessed();
+   uint32_t GetLastProcessedInputSequence() const { return m_lastProcessedInputSequence; }
+
 private:
    void HandleOnCommandCharacterInput(BIEngine::IEventDataPtr pEventData);
 
 private:
    BIEngine::EventManager::DelegateHandler m_onCommandCharacterInput;
+   BIEngine::Queue<BIEngine::SharedPtr<EvtData_CharacterInput>> m_pendingCharacterInputs;
+   uint32_t m_appliedInputSequence = 0;
+   uint32_t m_lastProcessedInputSequence = 0;
 };
 
 static BIEngine::UniquePtr<BIEngine::ActorComponent> CreatePlayerCommandBinderComponent()

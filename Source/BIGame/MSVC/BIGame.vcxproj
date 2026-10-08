@@ -55,6 +55,7 @@
     <ClInclude Include="..\Network\EventNetworkProtocol.h" />
     <ClInclude Include="..\Network\HealthStateReplicationUnit.h" />
     <ClInclude Include="..\Network\LocomotionInfoReplicationUnit.h" />
+    <ClInclude Include="..\Network\PlayerCharacterReplicationUnits.h" />
     <ClInclude Include="..\Network\ReplicationObjectAiDummyCharacter.h" />
     <ClInclude Include="..\Network\ReplicationObjectPlayer.h" />
     <ClInclude Include="..\Network\ReplicationObjectPlayerCharacter.h" />

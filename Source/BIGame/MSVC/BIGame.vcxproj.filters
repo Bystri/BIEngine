@@ -64,6 +64,9 @@
     <ClInclude Include="..\Network\LocomotionInfoReplicationUnit.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\Network\PlayerCharacterReplicationUnits.h">
+      <Filter>Network</Filter>
+    </ClInclude>
     <ClInclude Include="..\Network\CombatReplicationUnit.h">
       <Filter>Network</Filter>
     </ClInclude>

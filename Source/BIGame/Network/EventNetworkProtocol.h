@@ -4,6 +4,18 @@
 #include "../../../BIEngine/StdLib/Algorithm.h"
 #include "../BIEventListener.h"
 
+struct CharacterMovementSnapshot {
+   uint32_t lastProcessedSequence = 0;
+   glm::vec3 position = glm::vec3(0.0f);
+   glm::vec3 rotation = glm::vec3(0.0f);
+   glm::vec3 velocity = glm::vec3(0.0f);
+   glm::vec2 direction = glm::vec2(0.0f);
+   glm::vec3 inputVelocity = glm::vec3(0.0f);
+   glm::vec2 inputDirection = glm::vec2(0.0f);
+   float orientation = 0.0f;
+   float angularVelocity = 0.0f;
+};
+
 class EventProtocolLeader : public BIEngine::NetworkProtocol {
 public:
    static const BIEngine::NetworkProtocolType sk_ProtocolType;
@@ -27,7 +39,7 @@ private:
    void NewPlayerActorDelegate(BIEngine::IEventDataPtr pEventData);
    void StoreEventToForwardDelegate(BIEngine::IEventDataPtr pEventData);
 
-   void Reconcile();
+   void Reconcile(const CharacterMovementSnapshot& snapshot);
 
 private:
    struct PendingEvent {
@@ -52,6 +64,11 @@ class EventProtocolFollower : public BIEngine::NetworkProtocol {
 public:
    static const BIEngine::NetworkProtocolType sk_ProtocolType;
 
+   static EventProtocolFollower* Get() { return s_pInstance; }
+   EventProtocolFollower();
+   virtual ~EventProtocolFollower();
+   void BindPlayerActor(BIEngine::PeerId peerId, BIEngine::SharedPtr<BIEngine::Actor> actor);
+
    virtual const BIEngine::NetworkProtocolType& GetType() const override { return sk_ProtocolType; }
 
 protected:
@@ -65,8 +82,9 @@ private:
     struct PeerInfo
     {
         uint32_t peerId = -1;
-        uint32_t lastReceivedInputSequence = 0;
+        BIEngine::WeakPtr<BIEngine::Actor> playerActor;
     };
 
     BIEngine::DynamicArray<PeerInfo> m_peersToSend;
+    static EventProtocolFollower* s_pInstance;
 };

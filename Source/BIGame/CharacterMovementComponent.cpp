@@ -5,6 +5,10 @@
 #include "../BIEngine/Actors/Physics3DComponent.h"
 #include "../BIEngine/Actors/TransformComponent.h"
 #include "../BIGame/Locomotion/LocomotionInfoComponent.h"
+#include "PlayerCommandBinderComponent.h"
+#include "PlayerManager/PlayerManager.h"
+#include "Network/EventNetworkProtocol.h"
+#include "../BIEngine/Actors/PlayerComponent.h"
 
 const BIEngine::ComponentId CharacterMovementComponent::g_CompId = "CharacterMovementComponent";
 
@@ -21,6 +25,52 @@ tinyxml2::XMLElement* CharacterMovementComponent::GenerateXml(tinyxml2::XMLDocum
 }
 
 void CharacterMovementComponent::OnFixedUpdate(float dt)
+{
+   auto binder = GetOwner()->GetComponent<PlayerCommandBinderComponent>(PlayerCommandBinderComponent::g_CompId).Lock();
+   if (!binder) {
+      SimulateInputStep(dt);
+      return;
+   }
+
+   if (IsRemotePlayerOnClient()) {
+      constexpr float maxPredictionTime = 0.5f;
+      if (m_hasRemoteSnapshot && m_remotePredictionAge < maxPredictionTime) {
+         const float remainingTime = maxPredictionTime - m_remotePredictionAge;
+         const float predictionDt = dt < remainingTime ? dt : remainingTime;
+         SimulateInputStep(predictionDt);
+         m_remotePredictionAge += predictionDt;
+      }
+      return;
+   }
+
+   // On the server a delayed packet can contain several fixed-step commands.
+   while (binder->ApplyNextCharacterInput()) {
+      SimulateInputStep(dt);
+      binder->MarkCharacterInputProcessed();
+   }
+}
+
+bool CharacterMovementComponent::IsRemotePlayerOnClient() const
+{
+   if (!EventProtocolLeader::Get()) {
+      return false;
+   }
+
+   auto player = GetOwner()->GetComponent<BIEngine::PlayerComponent>(BIEngine::PlayerComponent::g_CompId).Lock();
+   if (!player || PlayerManager::Get()->GetLocalPlayerId() == PlayerManager::INVALID_PLAYER_ID) {
+      return false;
+   }
+
+   return player->GetPlayerId() != PlayerManager::Get()->GetLocalPlayerId();
+}
+
+void CharacterMovementComponent::OnRemoteSnapshotReceived()
+{
+   m_hasRemoteSnapshot = true;
+   m_remotePredictionAge = 0.0f;
+}
+
+void CharacterMovementComponent::SimulateInputStep(float dt)
 {
    auto pLocomotionInfoComponent = GetOwner()->GetComponent<LocomotionInfoComponent>(LocomotionInfoComponent::g_CompId).Lock();
    const glm::vec3 inputVector = pLocomotionInfoComponent->GetInputVel();

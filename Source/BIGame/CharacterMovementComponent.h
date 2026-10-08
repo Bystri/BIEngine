@@ -16,6 +16,16 @@ public:
 
    virtual void OnFixedUpdate(float dt) override;
 
+   void SimulateInputStep(float dt);
+
+   // A replicated remote player may be predicted for a short time after a snapshot.
+   void OnRemoteSnapshotReceived();
+
+private:
+   bool IsRemotePlayerOnClient() const;
+   float m_remotePredictionAge = 0.0f;
+   bool m_hasRemoteSnapshot = false;
+
 private:
    float m_maxSpeed = 5.0f;
    float m_maxAngualerSpeed = 2000.0f;

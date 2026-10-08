@@ -1,8 +1,7 @@
 #pragma once
 
 #include "../../BIEngine/Network/Replication/ReplicationObjectActor/ReplicationObjectActor.h"
-#include "../../BIEngine/Network/Replication/ReplicationObjectActor/TransformReplicationUnit.h"
-#include "LocomotionInfoReplicationUnit.h"
+#include "PlayerCharacterReplicationUnits.h"
 #include "CombatReplicationUnit.h"
 
 class ReplicationObjectPlayerCharacter : public BIEngine::ReplicationObjectActor {
@@ -13,7 +12,7 @@ public:
       : BIEngine::ReplicationObjectActor(
            "actors/player_character_server.xml",
            "actors/player_character_client.xml",
-           std::move(ReplicationUnitArray{BIEngine::MakeShared<BIEngine::TransformReplicationUnit>(false), BIEngine::MakeShared<LocomotionInfoReplicationUnit>(), BIEngine::MakeShared<CombatReplicationUnit>()}))
+           std::move(ReplicationUnitArray{BIEngine::MakeShared<PlayerTransformReplicationUnit>(), BIEngine::MakeShared<PlayerLocomotionReplicationUnit>(), BIEngine::MakeShared<CombatReplicationUnit>()}))
    {
    }
 };

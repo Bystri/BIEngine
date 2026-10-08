@@ -15,6 +15,7 @@
 #include "../BIGame/Combat/CombatControllerComponent.h"
 #include "../BIGame/Combat/DamagableComponent.h"
 #include "../BIGame/Network/BINetworkRPCs.h"
+#include "../BIGame/Network/EventNetworkProtocol.h"
 #include "../BIGame/PlayerCommandBinderComponent.h"
 #include "../BIGame/CharacterMovementComponent.h"
 
@@ -203,6 +204,7 @@ void BIServerGameLogic::OnNetPeerConnectedDelegate(BIEngine::IEventDataPtr pEven
    RpcWriteSetPlayer(connectedPeerId, pReplicatedPlayer->GetReplicatedObject()->GetId());
 
    pReplicatedPlayer->GetReplicatedObject()->SetPlayableActor(pPlayerActor->GetReplicatedObject());
+   EventProtocolFollower::Get()->BindPlayerActor(connectedPeerId, pPlayerActor->GetReplicatedObject());
 
    constexpr float softReplicationRelevancyRadius = 30.0f;
    constexpr float hardReplicationRelevancyRadius = 40.0f;
